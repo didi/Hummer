@@ -1,0 +1,43 @@
+android {
+
+    defaultConfig {
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_shared'
+                cFlags '-std=c99', '-fstrict-aliasing', "-DCONFIG_VERSION=\\\"${quickJsVersion()}\\\""
+                cppFlags '-std=c++11', '-fstrict-aliasing', "-DCONFIG_VERSION=\\\"${quickJsVersion()}\\\""
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            externalNativeBuild {
+                cmake {
+                    arguments '-DCMAKE_BUILD_TYPE=MinSizeRel'
+                    cFlags '-g0', '-Os', '-fomit-frame-pointer', '-DNDEBUG', '-fvisibility=hidden'
+                    cppFlags '-g0', '-Os', '-fomit-frame-pointer', '-DNDEBUG', '-fvisibility=hidden'
+                }
+            }
+        }
+
+        debug {
+            externalNativeBuild {
+                cmake {
+                    cFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
+                    cppFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
+                }
+            }
+        }
+    }
+
+//    externalNativeBuild {
+//        cmake {
+//            path "src/main/jni/qjs/CMakeLists.txt"
+//        }
+//    }
+}
+
+def quickJsVersion() {
+    return new File(projectDir, "src/main/jni/qjs/quickjs/VERSION").text.trim()
+}

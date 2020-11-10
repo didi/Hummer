@@ -1,0 +1,23 @@
+platform :ios, '10.0'
+#use_frameworks!
+
+target 'Example' do
+  pod 'Hummer', :path => '.', :subspecs => ['Hermes', 'SDWebImageInterceptor', 'YogaKit']
+  pod 'YogaKit', '~> 1.18.0'
+  pod 'Yoga', '~> 1.14.0'
+  pod 'SDWebImage', '~> 5.8.4'
+#  pod 'hermes', :path => '../../hermes-ios'
+#  pod 'llvm', :path => '../../hermes-ios'
+#  pod 'llvm-c', :path => '../../hermes-ios'
+#  pod 'React-jsi', :path => '../../hermes-ios'
+#  pod 'React-jsinspector', :path => '../../hermes-ios'
+
+#  pod 'Folly', :podspec => '../../hermes-ios/Folly.podspec'
+#  pod 'boost-for-react-native'
+#  pod 'DoubleConversion', :podspec => '../../hermes-ios/DoubleConversion.podspec'
+#  pod 'glog', :podspec => '../../hermes-ios/glog.podspec'
+
+  target 'ExampleTests' do
+    inherit! :search_paths
+  end
+end

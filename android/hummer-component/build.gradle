@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply from: '../module.gradle'
+apply from: '../upload.gradle'
+
+android {
+
+    defaultConfig {
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [HUMMER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    api 'com.android.support:recyclerview-v7:28.0.0'
+    api 'com.android.support:support-v4:28.0.0'
+
+    api project(':hummer-sdk')
+    annotationProcessor project(":hummer-compiler")
+
+    // 下拉刷新和加载更多
+    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.1'
+
+    // 轮播控件
+    implementation 'com.zhpan.library:bannerview:2.7.4'
+}
+
+uploadArchives.dependsOn(':hummer-sdk:uploadArchives')

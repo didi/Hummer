@@ -1,0 +1,5 @@
+source 'https://gems.ruby-china.com/'
+
+gem 'rack', '~> 2.2'
+gem 'json', '~> 2.3'
+

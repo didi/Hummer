@@ -1,0 +1,8 @@
+apply plugin: 'java-library'
+apply from: 'upload.gradle'
+
+dependencies {
+    implementation 'com.squareup:javapoet:1.11.1'
+
+    implementation 'com.didi.hummer:hummer-annotation:0.2.2'
+}

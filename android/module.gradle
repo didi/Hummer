@@ -1,0 +1,32 @@
+android {
+    compileSdkVersion VERSION_COMPILE_SDK
+
+    defaultConfig {
+        minSdkVersion VERSION_MIN_SDK
+        targetSdkVersion VERSION_TARGET_SDK
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
+
+//        defaultPublishConfig project.VERSION.endsWith('-SNAPSHOT') ? 'debug' : 'release'
+    }
+
+    dexOptions {
+        javaMaxHeapSize MAX_JVM_SIZE
+        jumboMode = true
+        preDexLibraries = true
+        threadCount = COMPILE_THREAD_NUM
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility = SOURCE_COMPATIBILITY
+        targetCompatibility = TARGET_COMPATIBILITY
+    }
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}

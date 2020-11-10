@@ -1,0 +1,8 @@
+#!/usr/bin/ruby
+
+if $PROGRAM_NAME == __FILE__
+    path = File.expand_path('../', __FILE__)
+    $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path)
+end
+
+require 'server'

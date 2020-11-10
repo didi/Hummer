@@ -1,0 +1,81 @@
+apply plugin: 'com.android.application'
+// DoKit的plugin会拖慢Hummer初始化速度，主要是影响SoLoader.init的速度，需要3s~4s，暂时先移除
+//apply plugin: 'com.didi.dokit'
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        applicationId "com.didi.hummer.demo"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "MOCK_HOST", "\"${getLocalIPv4()}\""
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [HUMMER_MODULE_NAME: project.getName()]
+            }
+        }
+
+        ndk {
+            abiFilters 'armeabi-v7a','x86'
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+//编译前执行启动JS文件服务器脚本，用于下载js文件
+task startRemoteSrv(type: Exec) {
+    workingDir "$projectDir"
+    commandLine 'sh', '../runScript.sh'
+}
+//assemble.dependsOn(startRemoteSrv)
+preBuild.dependsOn(startRemoteSrv)
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+
+    // 解决和第三方库中的support库冲突
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '26.1.0'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.2'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+//    implementation 'com.didi.hummer:hummer:0.2.9'
+    implementation project(':hummer')
+//    annotationProcessor 'com.didi.hummer:hummer-compiler:0.2.9'
+    annotationProcessor project(":hummer-compiler")
+}

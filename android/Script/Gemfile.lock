@@ -1,0 +1,15 @@
+GEM
+  remote: https://gems.ruby-china.com/
+  specs:
+    json (1.8.6)
+    rack (2.0.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  json (~> 1.8.6)
+  rack (~> 2.0.5)
+
+BUNDLED WITH
+   1.17.3

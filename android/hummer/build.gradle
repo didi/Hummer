@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+apply from: '../module.gradle'
+apply from: '../upload.gradle'
+
+android {
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    api project(':hummer-component')
+    api project(':hummer-dev-tools')
+}
+
+uploadArchives.dependsOn(':hummer-component:uploadArchives')
+uploadArchives.dependsOn(':hummer-dev-tools:uploadArchives')

@@ -1,0 +1,33 @@
+buildscript {
+    apply from: rootProject.file('./config.gradle')
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.1'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+//ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2
+def getLocalIPv4() {
+    def p = "ifconfig en0".execute() |
+            "grep inet".execute() |
+            "grep -v inet6".execute() |
+            ["cut", "-d", " ", "-f2"].execute()
+    p.waitFor()
+    return p.text.trim()
+}

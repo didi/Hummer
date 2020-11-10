@@ -1,0 +1,19 @@
+{
+  "name": "@didi/hummer-builtin",
+  "version": "1.0.0",
+  "description": "Hummer 内建代码",
+  "main": "index.js",
+  "scripts": {
+    "build": "hummer-bundler --entry ./src/builtIn.ts",
+    "start": "hummer-bundler --debug --entry ./src/builtIn.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:didi/hummer.git"
+  },
+  "author": "ChasonTang",
+  "license": "ISC",
+  "devDependencies": {
+    "@didi/hummer-bundler": "^3.0.9"
+  }
+}

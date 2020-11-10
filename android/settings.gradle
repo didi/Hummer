@@ -1,0 +1,1 @@
+include ':hummer-demo-app', ':hummer-core', ':hummer-compiler', ':hummer-annotation', ':hummer-sdk', ':hummer-component', ':hummer', ':hummer-dev-tools'

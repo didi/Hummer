@@ -1,0 +1,25 @@
+android {
+
+    defaultConfig {
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_shared'
+                cppFlags '-std=c++14'
+                cppFlags '-DHERMES_ENABLE_DEBUGGER=True'
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jni/hermes/hermes/libs']
+        }
+    }
+
+//    externalNativeBuild {
+//        cmake {
+//            path "src/main/jni/jsc/CMakeLists.txt"
+//        }
+//    }
+
+}

@@ -1,0 +1,59 @@
+//
+//  HMConsole.m
+//  Hummer
+//
+//  Created by 唐佳诚 on 2020/9/7.
+//
+
+#import "HMConsole.h"
+#import "HMExportManager.h"
+#import "HMBaseExecutor.h"
+#import "HMBaseStrongValue.h"
+#import "HMLogger.h"
+
+@implementation HMConsole
+
+HM_EXPORT_CLASS(console, HMConsole)
+
+HM_EXPORT_CLASS_METHOD(log, log)
+
+HM_EXPORT_CLASS_METHOD(info, info)
+
+HM_EXPORT_CLASS_METHOD(warn, warn)
+
+HM_EXPORT_CLASS_METHOD(error, error)
+
+HM_EXPORT_CLASS_METHOD(trace, trace)
+
++ (void)log {
+    [self logToNativeWithLevel:HMLogLevelDebug];
+}
+
++ (void)info {
+    [self logToNativeWithLevel:HMLogLevelInfo];
+}
+
++ (void)warn {
+    [self logToNativeWithLevel:HMLogLevelWarning];
+}
+
++ (void)error {
+    [self logToNativeWithLevel:HMLogLevelError];
+}
+
++ (void)trace {
+    [self logToNativeWithLevel:HMLogLevelTrace];
+}
+
++ (void)logToNativeWithLevel:(HMLogLevel)logLevel {
+    NSMutableString *string = NSMutableString.string;
+    [hm_otherArguments enumerateObjectsUsingBlock:^(HMBaseStrongValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *argString = [obj.executor convertValueToString:obj];
+        if (argString.length > 0) {
+            [string appendString:argString];
+        }
+        [HMLogger printJSLog:string level:logLevel];
+    }];
+}
+
+@end

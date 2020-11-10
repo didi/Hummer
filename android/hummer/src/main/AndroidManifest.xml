@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.didi.hummer">
+
+    <application>
+
+        <activity
+            android:name=".HummerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+    </application>
+
+</manifest>

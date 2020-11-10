@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEFFFFFF"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/layout_console"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_console"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp" />
+
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/btn_clear_log"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="12dp"
+            android:background="@drawable/btn_clear_console_log_bg"
+            android:gravity="center"
+            android:text="清除\n日志"
+            android:textColor="@android:color/white"
+            android:textSize="10dp" />
+
+    </RelativeLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/layout_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone">
+
+        <ScrollView
+            android:id="@+id/layout_info_v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+        </ScrollView>
+
+    </HorizontalScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_gravity="center"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tab_console"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Log"
+            android:textColor="@color/hummer_debug_tab_selector"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="#cccccc" />
+
+        <TextView
+            android:id="@+id/tab_params"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="页面参数"
+            android:textColor="@color/hummer_debug_tab_selector"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="#cccccc" />
+
+        <TextView
+            android:id="@+id/tab_comp_tree"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="视图树"
+            android:textColor="@color/hummer_debug_tab_selector"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="#cccccc" />
+
+        <TextView
+            android:id="@+id/tab_call_stack"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="函数树"
+            android:textColor="@color/hummer_debug_tab_selector"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="#cccccc" />
+
+        <TextView
+            android:id="@+id/tab_performance"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="性能"
+            android:textColor="@color/hummer_debug_tab_selector"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

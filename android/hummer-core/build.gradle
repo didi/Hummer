@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+apply from: '../module.gradle'
+apply from: '../upload.gradle'
+
+if (project.COMPILE_JS_ENGINE == 'All') {
+    apply from: 'build_jsc.gradle'
+    apply from: 'build_quickjs.gradle'
+    apply from: 'build_hermes.gradle'
+} else if (project.COMPILE_JS_ENGINE == 'JSC') {
+    apply from: 'build_jsc.gradle'
+} else if (project.COMPILE_JS_ENGINE == 'QuickJS') {
+    apply from: 'build_quickjs.gradle'
+} else if (project.COMPILE_JS_ENGINE == 'Hermes') {
+    apply from: 'build_hermes.gradle'
+}
+
+android {
+    defaultConfig {
+
+        ndk {
+            abiFilters 'armeabi-v7a','x86'//,'arm64-v8a'//,'x86_64'
+        }
+
+        // 使打包后的aar带有该混淆规则的文件
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            if (project.COMPILE_JS_ENGINE == 'All') {
+                path "src/main/jni/CMakeLists.txt"
+            } else if (project.COMPILE_JS_ENGINE == 'JSC') {
+                path "src/main/jni/jsc/CMakeLists.txt"
+            } else if (project.COMPILE_JS_ENGINE == 'QuickJS') {
+                path "src/main/jni/qjs/CMakeLists.txt"
+            } else if (project.COMPILE_JS_ENGINE == 'Hermes') {
+                path "src/main/jni/hermes/CMakeLists.txt"
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.so'])
+    api 'com.google.code.gson:gson:2.8.5'
+}
