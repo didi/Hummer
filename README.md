@@ -1,9 +1,12 @@
-<div align="center">    
+<div align="left">
+ <a href="http://hummer.didi.cn">
+    <img alt="Hummer" src="https://pt-starimg.didistatic.com/static/starimg/img/qJSiUPdQIn1605061199481.png" width="384" />
+ </a>
+ <br/>
  <img src="https://img.shields.io/badge/license-Apache--2.0-green" align=left />
  <img src="https://img.shields.io/badge/Android-0.3.11-blue.svg" align=left />
  <img src="https://img.shields.io/badge/iOS-0.2.0-yellow.svg" align=left />
  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" align=left />
- <img src="https://pt-starimg.didistatic.com/static/starimg/img/qJSiUPdQIn1605061199481.png" width = "384" height = "150" alt="Hummer" align=left />
 </div>
 
 <br/>
@@ -11,8 +14,7 @@
 <br/>
 <br/>
 <br/>
-<br/>
-<br/>
+
 
 
 ## 简介
