@@ -7,7 +7,7 @@ Thanks for your interest in contributing this project. All issues and pull reque
 Before sending a pull request to this project, please read and follow guidelines:
 
 1. Branch: We only accept pull requests on the `master` branch
-2. Coding style: Follow the coding style used in DoraemonKit
+2. Coding style: Follow the coding style used in Hummer
 3. Commit message: Use English and check your spelling
 4. Test: Make sure to test your code
 
