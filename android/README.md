@@ -1,65 +1,164 @@
-# Hummer 动态化跨端框架（Android端）
+集成到已有Android应用中
+===
 
-## 简介
-Hummer（原名NativeJS）项目是由普惠泛前端团队和R-Lab泛前端团队共同建设的高性能高可用的轻量级动态化跨端解决方案。历时一年多的打磨，目前已经在聚合收银台、代驾跑腿、596等业务上进行了大规模落地，同时在代驾司机端和两轮车业务的部分场景上进行尝试。正如Hummer的名字一样，既像“蜂鸟”般小巧轻盈，又像“悍马”一样动力强劲。
-
-## 特点
-- **轻量级：** 当前Hummer整体编译后只有几百KB的大小，能非常便捷地接入到各App中，并大大缓解各App的包体积压力；
-- **高可用：** 团队自研属性，使得我们对于问题的解决和性能的优化，做到了极速响应，造就了当前低于 0.1‰的crash率；
-- **跨端性：** 基于JSEngine的导出机制，提供统一API，抹平平台差异，实现一套js代码跨三端执行；
-- **动态化：** 通过JS引擎的动态执行能力和JS Bundle的远程下发设施，实现了Hummer的动态更新能力；
-- **高性能：** 得利于原生风格的API设计和基于原生的布局和渲染能力，大大减少了跨域通信损耗，使得Hummer发挥出接近原生的性能体验；
-- **易上手：** 足够简单的架构设计，不到4000行的核心代码，以及偏向原生的开发体验，使得客户端同学的上手难度和维护成本都降至最低；
-
-## 开始体验
-
-### 一、创建一个全新应用
-##### 1. 安装 Hummer CLI
-```
-sudo npm install @didi/hummer-cli -g
-```
-##### 2. 创建项目工程
-```
-hummer create hummer-demo
-```
-##### 3. 安装工程依赖
-```
-cd hummer-demo
-sudo npm i
-```
-##### 4. 运行
-```
-hummer run android/ios/web
-```
-
-### 二、集成到已有Android应用中
-##### 1. 引入 Hummer SDK 依赖包
+### 添加 Hummer SDK 依赖
 ```java
-implementation 'com.didi.hummer:hummer:0.2.33'
+implementation 'com.didi.hummer:hummer:0.3.11'
 ```
 
-##### 2. Application 中初始化
+### Application 中初始化 Hummer
 ```java
 HummerConfig config = new HummerConfig.Builder()
         .setJSLogger((level, msg) -> Log.d("HummerJS", msg))
-        .setExceptionCallback(e -> {
-            Log.e("zdf", "Hummer Exception", e);
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
-        }).builder();
+        .setExceptionCallback(e -> Log.e("HummerException", "Hummer Exception", e))
+        .builder();
 Hummer.init(this, config);
 ```
 
-##### 3. 继承 HummerActivity 实现自己的 Hummer 页面
+### 实现自定义 Hummer 容器页面（可直接继承 HummerActivity）
 ```java
 public class MyHummerActivity extends HummerActivity {
+
+    @Override
+    protected void initHummerRegister(HummerContext context) {
+        super.initHummerRegister(context);
+        // 注册自己项目中的导出组件（如果有自定义导出类的话，否则可以去掉这一段）
+        HummerRegister$$hummer_demo_app.init(context);
+    }
+
     @Override
     protected void renderHummer() {
-         hmRender.renderWithUrl("http://localhost:9292/HelloWorld.js");
+        // 渲染JS页面
+        hmRender.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/index.js");
     }
 }
 ```
 
-##### 4. 添加混淆规则
+### 自定义导出类
+##### 1. 在Module的gradle中加上ModuleName配置
+```java
+android {
+    defaultConfig {
+        ...
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [HUMMER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+}
+```
+
+##### 2. 在Module的gradle中添加编译时注解依赖
+```java
+annotationProcessor 'com.didi.hummer:hummer-compiler:0.2.16'
+```
+
+##### 3. 自定义导出类，看下面例子
+```java
+@Component("TestExportModel")
+public class TestExportModel {
+ 
+    // 可以只注解属性，不实现set和get方法
+    @JsProperty("stringValue")
+    public String stringValue;
+ 
+    // 也可以注解属性，并实现set或者get方法
+    @JsProperty("floatValue")
+    public float floatValue;
+    public void setFloatValue(float value) {
+        floatValue = value;
+    }
+    public float getFloatValue() {
+        return floatValue;
+    }
+ 
+    // 注解Map类型的属性
+    @JsProperty("mapValue")
+    private Map<String, Object> mapValue;
+    public void setMapValue(Map<String, Object> value) {
+        mapValue = value;
+    }
+    public Map<String, Object> getMapValue() {
+        return mapValue;
+    }
+ 
+    // 注解List类型的属性
+    @JsProperty("listValue")
+    private List<String> listValue;
+    public void setListValue(List<String> value) {
+        listValue = value;
+    }
+    public List<String> getListValue() {
+        return listValue;
+    }
+ 
+    // 注解方法
+    @JsMethod("doFunc")
+    public String doFunc(int intValue, float floatValue, HashMap<String, String> mapValue, ArrayList<Object> listValue) {
+        return "[doFunc] intValue: " + intValue + ", floatValue: " + floatValue + ", mapValue: " + mapValue + ", listValue: " + listValue;
+    }
+}
+```
+
+##### 4. Hummer页面初始化时调用组件注册方法
+```java
+HummerRegister$$hummer_demo_app.init(hmContext);
+```
+
+### Bridge用法
+##### 1. Native向JS静态类注册方法
+```java
+HummerContext hmContext = hmRender.getHummerContext();
+hmContext.registerJSFunction("Test.nativeFunc", new ICallback() {
+    @Override
+    public Object call(Object... params) {
+        return "result";
+    }
+});
+```
+> JS中用法：`Test.nativeFunc(111, 222);`
+
+##### 2. Native向JS对象注册方法（只能在渲染页面结束后才能使用）
+```java
+HummerContext hmContext = hmRender.getHummerContext();
+JSValue jsPage = hmContext.getJsPage();
+if (jsPage != null) {
+    hmContext.registerJSFunction(jsPage, "nativeFunc", new ICallback() {
+        @Override
+        public Object call(Object... params) {
+            return "result";
+        }
+    });
+}
+```
+> JS中用法：在RootView中调用 `this.nativeFunc(111, 222);`
+
+##### 3. Native调用JS的全局方法（只能在渲染页面结束后才能使用）
+```java
+HummerContext hmContext = hmRender.getHummerContext();
+hmContext.getJsContext().callFunction("onTest", 111, 222.22, true, "ttt");
+```
+> JS中定义全局方法：`function onTest(a, b, c, d) {};`
+
+##### 4. Native调用JS的Hummer域下的方法（只能在渲染页面结束后才能使用）
+```java
+HummerContext hmContext = hmRender.getHummerContext();
+hmContext.getJsContext().callFunction("Hummer.onTest", 111, 222.22, true, "ttt");
+```
+> JS中定义Hummer域下的方法：`Hummer.onTest = (a, b, c, d) => {};`
+
+##### 5. Native调用JS某个对象的方法（只能在渲染页面结束后才能使用）
+```java
+HummerContext hmContext = hmRender.getHummerContext();
+JSValue jsPage = hmContext.getJsPage();
+if (jsPage != null) {
+    jsPage.callFunction("onTest", 111, 222.22, true, "ttt");
+}
+```
+> JS中在RootView中定义方法：`onTest(a, b, c, d) {};`
+
+### 混淆规则
 ```java
 ## Hummer
 -keep @interface com.didi.hummer.annotation.*
