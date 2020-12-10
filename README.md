@@ -1,10 +1,10 @@
-<div align="center">
+<div align="left">
  <a href="http://hummer.didi.cn">
     <img alt="Hummer" src="https://pt-starimg.didistatic.com/static/starimg/img/qJSiUPdQIn1605061199481.png" width="384" />
  </a>
 </div>
 
-<div align="center">
+<div align="left">
 <img alt="Hummer" src="https://img.shields.io/badge/group-Hummer-blue.svg" />
 <a href="https://github.com/didi/Hummer/blob/master/LICENSE">
     <img alt="license" src="https://img.shields.io/badge/license-Apache%202-green" />
@@ -59,13 +59,14 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 - **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin)
 
 ## QQ 交流群
-<div style="height: 360px">    
- <img src="https://pt-starimg.didistatic.com/static/starimg/img/NRTTJGFlez1607487380167.jpeg" height = "360" alt="QQ 交流群" />
+欢迎加入我们的 QQ 交流群【Hummer&Tenon交流群】(851327307)，有任何 Hummer 使用上的问题和建议，都可以在群里直接反馈，我们会第一时间跟进。
+<div style="height: 200px">    
+ <img src="https://pt-starimg.didistatic.com/static/starimg/img/rvyykc2JhS1607601681131.png" height = "200" alt="QQ 交流群" />
 </div>
 
 ## 友情链接
 1. [DoKit](https://github.com/didi/DoraemonKit) DoraemonKit /'dɔ:ra:'emɔn/，简称DoKit，中文名 哆啦A梦，意味着能够像哆啦A梦一样提供给他的主人各种各样的工具。Just Do Kit
-2. 我们部门的技术公众号（普惠出行产品技术公众号），欢迎关注。**公众号介绍：这里是滴滴出行旗下普惠产品技术团队对外分享的窗口，普惠出行支撑滴滴代驾、货运等业务，建设了Hummer、NodeX、Dokit、卡梅隆等开源项目，始终秉承聚心成事、聚气育人的原则。欢迎各位技术同仁一起交流，共同成长。**  
-<div style="height: 210px">
- <img src="https://pt-starimg.didistatic.com/static/starimg/img/VTF6QQ5BGv1607497926725.jpg" height = "210" alt="普惠技术公众号" />
+2. 我们部门的技术公众号【普惠出行产品技术公众号】，欢迎关注。**公众号介绍：这里是滴滴出行旗下普惠产品技术团队对外分享的窗口，普惠出行支撑滴滴代驾、货运等业务，建设了Hummer、NodeX、Dokit、卡梅隆等开源项目，始终秉承聚心成事、聚气育人的原则。欢迎各位技术同仁一起交流，共同成长。**  
+<div style="height: 200px">
+ <img src="https://pt-starimg.didistatic.com/static/starimg/img/8Nk6ceaAkD1607601919167.jpg" height = "200" alt="普惠技术公众号" />
 </div>
