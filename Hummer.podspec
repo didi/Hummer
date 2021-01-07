@@ -39,7 +39,8 @@ Hummer is a dynamic solution for client.
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
-  s.dependency 'Yoga', '~> 1.14.0'
+  s.dependency 'Yoga', '~> 1.14'
+  s.dependency 'SocketRocket', '~> 0.5.1'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES'
