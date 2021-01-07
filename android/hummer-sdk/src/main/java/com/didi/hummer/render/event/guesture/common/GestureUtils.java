@@ -1,8 +1,10 @@
 package com.didi.hummer.render.event.guesture.common;
 
+import android.content.Context;
 import android.view.MotionEvent;
 
 import com.didi.hummer.render.event.base.Event;
+import com.didi.hummer.render.utility.DPUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +33,7 @@ public class GestureUtils {
         }
     }
 
-    public static Map<String, Float> findPositionInMotionEvent(MotionEvent e) {
+    public static Map<String, Float> findPositionInMotionEvent(Context context, MotionEvent e) {
         Map<String, Float> ret = new HashMap<>();
         ret.put("x", 0f);
         ret.put("y", 0f);
@@ -40,16 +42,16 @@ public class GestureUtils {
             return ret;
         }
 
-        ret.put("x", e.getX());
-        ret.put("y", e.getY());
+        ret.put("x", DPUtil.px2dpF(context, e.getX()));
+        ret.put("y", DPUtil.px2dpF(context, e.getY()));
 
         return ret;
     }
 
-    public static HashMap<String, Float> findTranslationInMotionEvent(float distanceX, float distanceY) {
+    public static HashMap<String, Float> findTranslationInMotionEvent(Context context, float distanceX, float distanceY) {
         HashMap<String, Float> ret = new HashMap<>();
-        ret.put("deltaX", distanceX);
-        ret.put("deltaY", distanceY);
+        ret.put("deltaX", DPUtil.px2dpF(context, distanceX));
+        ret.put("deltaY", DPUtil.px2dpF(context, distanceY));
         return ret;
     }
 }

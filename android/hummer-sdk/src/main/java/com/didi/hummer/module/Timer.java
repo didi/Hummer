@@ -103,7 +103,7 @@ public class Timer implements ILifeCycle {
     }
 
     /**
-     * 设置超时触发事件
+     * 设置计时器超时时间
      * @param callback 超时回调
      * @param timeout 超时时间
      */

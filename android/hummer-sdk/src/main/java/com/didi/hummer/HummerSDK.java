@@ -11,6 +11,8 @@ import com.didi.hummer.adapter.navigator.impl.ActivityStackManager;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.core.util.DebugUtil;
+import com.didi.hummer.plugin.interfaze.IHermesDebugger;
+import com.didi.hummer.plugin.interfaze.IV8Debugger;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
 import com.facebook.soloader.SoLoader;
@@ -45,6 +47,9 @@ public class HummerSDK {
     private static volatile boolean isInited;
 
     private static Map<String, HummerConfig> configs = new HashMap<>();
+
+    private static IV8Debugger v8Debugger;
+    private static IHermesDebugger hermesDebugger;
 
     public static boolean isSupport(Context context, @JsEngine int engine) {
         try {
@@ -108,6 +113,27 @@ public class HummerSDK {
         ActivityStackManager.getInstance().unRegister((Application) appContext);
         configs.clear();
         isInited = false;
+    }
+
+    public static void initV8Debugger(IV8Debugger debugger) {
+        if (v8Debugger == null) {
+            v8Debugger = debugger;
+        }
+    }
+
+    public static IV8Debugger getV8Debugger() {
+        return v8Debugger;
+    }
+
+    public static void initHermesDebugger(IHermesDebugger debugger) {
+        if (hermesDebugger == null) {
+            setJsEngine(HummerSDK.JsEngine.HERMES);
+            hermesDebugger = debugger;
+        }
+    }
+
+    public static IHermesDebugger getHermesDebugger() {
+        return hermesDebugger;
     }
 
     private static void addHummerConfig(HummerConfig config) {

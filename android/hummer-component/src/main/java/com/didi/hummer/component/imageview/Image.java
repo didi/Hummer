@@ -29,6 +29,8 @@ public class Image extends HMBase<RoundedImageView> {
     public void onCreate() {
         super.onCreate();
         getView().setScaleType(ImageView.ScaleType.CENTER);
+        // 默认支持无障碍模式可聚焦
+        getView().setFocusable(true);
     }
 
     /**
@@ -99,10 +101,16 @@ public class Image extends HMBase<RoundedImageView> {
     }
 
     @Override
-    public void setBorderRadius(Object radius) {
+    public void setBorderStyle(String style) {
         if (TextUtils.isEmpty(src)) {
-            super.setBorderRadius(radius);
+            super.setBorderStyle(style);
         }
+        getView().setBorderStyle(style);
+    }
+
+    @Override
+    public void setBorderRadius(Object radius) {
+        super.setBorderRadius(radius);
 
         if (HummerStyleUtils.isPercentValue(radius)) {
             getView().setBorderRadiusPercent(HummerStyleUtils.toPercent(radius) / 100);
@@ -155,6 +163,9 @@ public class Image extends HMBase<RoundedImageView> {
                 break;
             case HummerStyleUtils.Hummer.BORDER_COLOR:
                 setBorderColor((int) value);
+                break;
+            case HummerStyleUtils.Hummer.BORDER_STYLE:
+                setBorderStyle((String) value);
                 break;
             case HummerStyleUtils.Hummer.BORDER_RADIUS:
                 setBorderRadius(value);

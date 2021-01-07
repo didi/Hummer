@@ -1,17 +1,16 @@
 package com.didi.hummer.core.debug;
 
-import android.text.TextUtils;
-
 import com.didi.hummer.core.util.HMLog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 分析并打印影响数据
+ * 分析并打印性能数据
  *
  * Created by XiaoFeng on 2020/3/13.
  */
@@ -19,10 +18,7 @@ public class PerformanceAnalyzer {
 
     private static final String TAG = "HummerDebug";
 
-    private long startTime;
-    private Map<String, TimeCost> firstRenderTimeCostMap = new HashMap<>();
-    private Map<String, TimeCost> totalTimeCostMap = new HashMap<>();
-    private boolean hasRendered;
+    private String strPerformanceFormat = "";
 
     private class TimeCost {
         // 函数调用次数
@@ -36,95 +32,85 @@ public class PerformanceAnalyzer {
         }
     }
 
-    public void startRecordTime() {
-        startTime = System.nanoTime();
-    }
-
-    public void stopRecordTime(String className, String methodName) {
-        String key = className + "." + methodName;
-        TimeCost timeCost = totalTimeCostMap.get(key);
-        if (timeCost == null) {
-            timeCost = new TimeCost();
-            totalTimeCostMap.put(key, timeCost);
-        }
-        timeCost.increase(System.nanoTime() - startTime);
-
-        if (hasRendered && firstRenderTimeCostMap.isEmpty()) {
-            firstRenderTimeCostMap.putAll(totalTimeCostMap);
-            hasRendered = false;
-        }
-
-        if (key.equals("Hummer.render")) {
-            hasRendered = true;
-        }
-    }
-
-    public void printPerformance() {
-        HMLog.d(TAG, " \n" + getPerformanceFormat());
+    public void analyze(List<InvokeTracker> trackerList, long totalCost, String callFrom) {
+        String prefFormat = generatePerformanceFormat(trackerList, totalCost, callFrom);
+        HMLog.i(TAG, " \n" + prefFormat);
+        strPerformanceFormat += prefFormat;
     }
 
     public String getPerformanceFormat() {
-        String totalPerformance = generatePerformance(totalTimeCostMap);
-        if (TextUtils.isEmpty(totalPerformance)) {
-            return "";
-        }
-
-        String firstRenderPerformance = generatePerformance(firstRenderTimeCostMap);
-        if (TextUtils.isEmpty(firstRenderPerformance)) {
-            return
-                "┌─────────────────────────\n" +
-                "│\t耗时统计\n" +
-                "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
-                        totalPerformance +
-                "└─────────────────────────\n";
-        } else {
-            return
-                "┌─────────────────────────\n" +
-                "│\t耗时统计（首次加载）\n" +
-                "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
-                        firstRenderPerformance +
-                "└─────────────────────────\n\n" +
-                "┌─────────────────────────\n" +
-                "│\t耗时统计（总耗时，包括网络刷新等）\n" +
-                "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
-                        totalPerformance +
-                "└─────────────────────────\n\n";
-        }
+        return strPerformanceFormat;
     }
 
-    private String generatePerformance(Map<String, TimeCost> timeCostMap) {
-        if (timeCostMap == null || timeCostMap.isEmpty()) {
-            return null;
+    private String generatePerformanceFormat(List<InvokeTracker> trackerList, long totalCost, String callFrom) {
+        // 生成方法耗时Map
+        long invokeCost = 0;
+        Map<String, TimeCost> timeCostMap = new HashMap<>();
+        for (InvokeTracker tracker : trackerList) {
+            String key = tracker.className + "." + tracker.methodName;
+            TimeCost timeCost = timeCostMap.get(key);
+            if (timeCost == null) {
+                timeCost = new TimeCost();
+                timeCostMap.put(key, timeCost);
+            }
+            long cost = tracker.timeCost();
+            timeCost.increase(cost);
+            invokeCost += cost;
         }
 
-        long totalCost = 0;
-
-        // 排序（倒序）
+        // 方法耗时排序（倒序）
         List<Map.Entry<String, TimeCost>> entryList = new ArrayList<>(timeCostMap.entrySet());
         Collections.sort(entryList, (e1, e2) -> -Long.compare(e1.getValue().cost, e2.getValue().cost));
 
-        // 打印
+        // 排序部分的格式化输出
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, TimeCost> entry : entryList) {
             String funcName = entry.getKey();
             TimeCost costTime = entry.getValue();
-            sb.append("│\t").append(String.format("[%d ms] %s (%d)\n", costTime.cost / 1000000, funcName, costTime.count));
-            totalCost += costTime.cost;
+            if (!funcName.contains("constructor_end")) {
+                sb.append("│\t").append(String.format("[%d ms] %s <%d>\n", costTime.cost / 1000000, funcName, costTime.count));
+            }
         }
-        sb.append("│\t").append(String.format("===> total time cost: %d ms\n", totalCost / 1000000));
 
-        return sb.toString();
+        // 整体格式化输出
+        return "┌─────────────────────────\n" +
+                "│\t耗时统计\n" +
+                "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
+                "│\tcallFrom: " + callFrom + "\n" +
+                "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
+                generateSummaryPerformanceInfo(totalCost, invokeCost) +
+                "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
+                sb +
+                "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
+                generateInvokeCallInfo(trackerList) +
+                "└─────────────────────────\n\n";
     }
 
     /**
-     * 释放
+     * 耗时统计摘要信息
+     *
+     * @return
      */
-    public void release() {
-        if (firstRenderTimeCostMap != null) {
-            firstRenderTimeCostMap.clear();
+    private String generateSummaryPerformanceInfo(long totalCost, long invokeCost) {
+        return "│\t" + String.format("totalCost: %d ms\n", totalCost / 1000000) +
+                "│\t" + String.format("invokeCost: %d ms\n", invokeCost / 1000000) +
+                "│\t" + String.format("otherCost: %d ms\n", (totalCost - invokeCost) / 1000000);
+    }
+
+    /**
+     * invoke方法调用信息
+     *
+     * 如：(39) Text.setStyle([{"fontSize":20}])
+     *
+     * @return
+     */
+    private String generateInvokeCallInfo(List<InvokeTracker> trackerList) {
+        StringBuilder sb = new StringBuilder();
+        for (InvokeTracker tracker : trackerList) {
+            if (!tracker.methodName.equals("constructor_end")) {
+                sb.append("│\t").append(String.format("[%s] (%d) %s.%s(%s)\n", tracker.timeFormat, tracker.objectID, tracker.className, tracker.methodName, tracker.params.length > 0 ? Arrays.toString(tracker.params) : ""));
+            }
         }
-        if (totalTimeCostMap != null) {
-            totalTimeCostMap.clear();
-        }
+        return sb.toString();
     }
 }

@@ -72,5 +72,6 @@ Java_com_didi_hummer_core_engine_jsc_jni_HummerBridge_initHummerBridge(JNIEnv *e
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_HummerBridge_releaseHummerBridge(JNIEnv *env, jobject thiz, jlong js_context) {
+    env->DeleteGlobalRef(HUMMER_BRIDGE_MAP[js_context]);
     HUMMER_BRIDGE_MAP.erase(js_context);
 }

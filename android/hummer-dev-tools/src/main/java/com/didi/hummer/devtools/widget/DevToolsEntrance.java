@@ -72,6 +72,16 @@ public class DevToolsEntrance extends LinearLayout {
     private void initView(Context context) {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
+        setFocusableInTouchMode(true);
+        setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                if (mShow) {
+                    closeDebugView();
+                    return true;
+                }
+            }
+            return false;
+        });
 
         LinearLayout.LayoutParams lpTvJsEngine = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -83,16 +93,6 @@ public class DevToolsEntrance extends LinearLayout {
         tvEntry.setHeight(DPUtil.dp2px(context, 40));
         tvEntry.setGravity(Gravity.CENTER);
         tvEntry.setBackgroundResource(R.drawable.btn_dev_tools_entrance_bg);
-        tvEntry.setFocusableInTouchMode(true);
-        tvEntry.setOnKeyListener((v, keyCode, event) -> {
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                if (mShow) {
-                    closeDebugView();
-                    return true;
-                }
-            }
-            return false;
-        });
         addView(tvEntry, lpTvJsEngine);
 
         TextView tvJsEngine = new TextView(context);
@@ -194,6 +194,7 @@ public class DevToolsEntrance extends LinearLayout {
             createConsoleView();
         }
         mRootView.addView(mConsoleView);
+        requestFocus();
     }
 
     private void createConsoleView() {

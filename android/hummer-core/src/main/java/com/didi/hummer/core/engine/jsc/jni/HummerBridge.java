@@ -1,6 +1,7 @@
 package com.didi.hummer.core.engine.jsc.jni;
 
 import com.didi.hummer.core.debug.HMDebugger;
+import com.didi.hummer.core.debug.InvokeTracker;
 import com.didi.hummer.core.engine.jsc.JSCUtils;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.ExceptionUtil;
@@ -42,11 +43,16 @@ public class HummerBridge {
         Object[] parameters = null;
 
         try {
-            HMDebugger.getInstance().startRecordTime(jsContext);
+            // <for debug>
+            InvokeTracker tracker = HMDebugger.getInstance().startTrack(jsContext);
 
             // 把long型的JS对象指针参数转换为Object或JSValue对象参数
             parameters = JSCUtils.jsValuesToObjects(jsContext, params);
-            HMDebugger.getInstance().track(jsContext, className, objectID, methodName, parameters);
+
+            // <for debug>
+            if (tracker != null) {
+                tracker.track(className, objectID, methodName, parameters);
+            }
 
             // 执行具体的invoke方法，并得到Object类型的返回值
             Object ret = mCallback.onInvoke(className, objectID, methodName, parameters);
@@ -54,7 +60,8 @@ public class HummerBridge {
             // 把Object类型的返回值转换成long型的JS对象指针
             result = JSCUtils.objectToJsValue(jsContext, ret);
 
-            HMDebugger.getInstance().stopRecordTime(jsContext, className, methodName);
+            // <for debug>
+            HMDebugger.getInstance().stopTrack(jsContext, tracker);
         } catch (Exception e) {
             ExceptionUtil.addStackTrace(e, new StackTraceElement(String.format("<<Bridge>> (%d) %s", objectID, className), methodName, Arrays.toString(parameters), -1));
             HummerException.nativeException(jsContext, e);

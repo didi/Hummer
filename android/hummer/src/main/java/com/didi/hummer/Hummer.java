@@ -5,6 +5,8 @@ import android.content.Context;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.context.HummerContextFactory;
 import com.didi.hummer.core.util.HMLog;
+import com.didi.hummer.plugin.interfaze.IHermesDebugger;
+import com.didi.hummer.plugin.interfaze.IV8Debugger;
 import com.didi.hummer.register.HummerRegister$$hummer_component;
 import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.tools.EventTracer;
@@ -32,6 +34,22 @@ public class Hummer {
 
     public static void release() {
         HummerSDK.release();
+    }
+
+    public static void initV8Debugger(IV8Debugger debugger) {
+        HummerSDK.initV8Debugger(debugger);
+    }
+
+    public static IV8Debugger getV8Debugger() {
+        return HummerSDK.getV8Debugger();
+    }
+
+    public static void initHermesDebugger(IHermesDebugger debugger) {
+        HummerSDK.initHermesDebugger(debugger);
+    }
+
+    public static IHermesDebugger getHermesDebugger() {
+        return HummerSDK.getHermesDebugger();
     }
 
     public static HummerContext createContext(HummerLayout container) {

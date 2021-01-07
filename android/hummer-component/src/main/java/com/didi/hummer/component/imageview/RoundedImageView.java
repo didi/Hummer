@@ -5,15 +5,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathEffect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 
@@ -22,9 +27,6 @@ public class RoundedImageView extends AppCompatImageView {
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLORDRAWABLE_DIMENSION = 1;
-
-    private static final int DEFAULT_BORDER_WIDTH = 0;
-    private static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
 
     private final RectF mDrawableRect = new RectF();
     private final RectF mBorderRect = new RectF();
@@ -35,8 +37,9 @@ public class RoundedImageView extends AppCompatImageView {
 
     private final Path roundPath = new Path();
 
-    private int mBorderColor = DEFAULT_BORDER_COLOR;
-    private float mBorderWidth = DEFAULT_BORDER_WIDTH;
+    private int mBorderColor = 0;
+    private float mBorderWidth = Color.TRANSPARENT;
+    private @BorderStyle int mBorderStyle = BorderStyle.NONE;
 
     private Bitmap mBitmap;
     private BitmapShader mBitmapShader;
@@ -76,9 +79,6 @@ public class RoundedImageView extends AppCompatImageView {
 
     public RoundedImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        mBorderWidth = DEFAULT_BORDER_WIDTH;
-        mBorderColor = DEFAULT_BORDER_COLOR;
 
         mReady = true;
 
@@ -121,7 +121,7 @@ public class RoundedImageView extends AppCompatImageView {
             if (mRoundRadius <= 0) {
                 canvas.drawRect(mBorderRect, mBorderPaint);
             } else if (mRoundRadius >= Math.min(mDrawableRect.height() / 2f, mDrawableRect.width() / 2f)) {
-                float radius = mCircleRadius - mBorderWidth / 2f;
+                float radius = mCircleRadius;
                 canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, radius, mBorderPaint);
             } else {
                 roundPath.reset();
@@ -162,6 +162,16 @@ public class RoundedImageView extends AppCompatImageView {
         }
 
         mBorderWidth = borderWidth;
+        setup();
+    }
+
+    public void setBorderStyle(String style) {
+        int borderStyle = getStyle(style);
+        if (mBorderStyle == borderStyle) {
+            return;
+        }
+
+        mBorderStyle = borderStyle;
         setup();
     }
 
@@ -259,6 +269,7 @@ public class RoundedImageView extends AppCompatImageView {
         mBorderPaint.setAntiAlias(true);
         mBorderPaint.setColor(mBorderColor);
         mBorderPaint.setStrokeWidth(mBorderWidth);
+        mBorderPaint.setPathEffect(makePathEffect(mBorderStyle, mBorderWidth));
 
         mBitmapHeight = mBitmap.getHeight();
         mBitmapWidth = mBitmap.getWidth();
@@ -291,5 +302,44 @@ public class RoundedImageView extends AppCompatImageView {
         mShaderMatrix.postTranslate((int) (dx + 0.5f) + mBorderWidth, (int) (dy + 0.5f) + mBorderWidth);
 
         mBitmapShader.setLocalMatrix(mShaderMatrix);
+    }
+
+    @IntDef
+    public @interface BorderStyle {
+        int NONE      = 0;
+        int SOLID     = 1;
+        int DASHED    = 2;
+        int DOTTED    = 3;
+    }
+
+    public static @BorderStyle int getStyle(String styleName) {
+        if (TextUtils.isEmpty(styleName)) {
+            return BorderStyle.SOLID;
+        }
+
+        switch (styleName.toUpperCase()) {
+            case "SOLID":
+                return BorderStyle.SOLID;
+            case "DASHED":
+                return BorderStyle.DASHED;
+            case "DOTTED":
+                return BorderStyle.DOTTED;
+            default:
+                return BorderStyle.NONE;
+        }
+    }
+
+    private @Nullable PathEffect makePathEffect(@BorderStyle int style, float borderWidth) {
+        switch (style) {
+            case BorderStyle.SOLID:
+            default:
+                return null;
+            case BorderStyle.DASHED:
+                return new DashPathEffect(
+                        new float[] {borderWidth * 3, borderWidth * 3, borderWidth * 3, borderWidth * 3}, 0);
+            case BorderStyle.DOTTED:
+                return new DashPathEffect(
+                        new float[] {borderWidth, borderWidth, borderWidth, borderWidth}, 0);
+        }
     }
 }

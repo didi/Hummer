@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.didi.hummer.adapter.http.HttpCallback;
+import com.didi.hummer.adapter.http.HttpResponse;
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 import com.didi.hummer.utils.NetworkUtil;
@@ -36,20 +37,18 @@ public class MainActivity extends Activity {
         mRootView.setOrientation(LinearLayout.VERTICAL);
         mScrollView.addView(mRootView);
 
-        Button b = new Button(this);
-        b.setText("reload");
-        b.setOnClickListener(v -> loadScripts());
-        mRootView.addView(b);
-
         loadScripts();
     }
 
     private void loadScripts() {
-        NetworkUtil.httpGet(Constant.HOST + "all_files", (HttpCallback<List<String>>) response -> {
+        NetworkUtil.httpGet(Constant.HOST + "fileList", (HttpCallback<HttpResponse<List<String>>>) response -> {
             if (response.error != null && response.error.code != 0) {
                 return;
             }
-            List<String> list = response.data;
+            if (response.data == null || response.data.data == null) {
+                return;
+            }
+            List<String> list = response.data.data;
             Collections.sort(list);
             for (String filename : list) {
                 Button b = new Button(MainActivity.this);
@@ -62,6 +61,6 @@ public class MainActivity extends Activity {
                 b.setAllCaps(false);
                 mRootView.addView(b);
             }
-        }, new TypeToken<List<String>>(){}.getType());
+        }, new TypeToken<HttpResponse<List<String>>>(){}.getType());
     }
 }

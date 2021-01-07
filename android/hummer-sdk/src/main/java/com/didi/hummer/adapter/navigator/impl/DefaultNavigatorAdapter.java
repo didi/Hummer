@@ -161,8 +161,9 @@ public class DefaultNavigatorAdapter implements INavigatorAdapter {
         } else {
             // 如果不关闭自身，启动Activity时需要接收回调
             ActivityLauncher.init(context).startActivityForResult(intent, (resultCode, data) -> {
-                if (callback != null) {
-                    callback.onResult(transIntentData(data));
+                Map<String, Object> result = transIntentData(data);
+                if (callback != null && result != null) {
+                    callback.onResult(result);
                 }
             });
         }
@@ -179,9 +180,10 @@ public class DefaultNavigatorAdapter implements INavigatorAdapter {
     }
 
     protected Map<String, Object> transIntentData(Intent intent) {
-        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data = null;
         if (intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
+            data = new HashMap<>();
             Set<String> keys = bundle.keySet();
             for (String key : keys) {
                 Object value = bundle.get(key);

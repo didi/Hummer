@@ -1,0 +1,11 @@
+apply plugin: 'com.novoda.bintray-release'
+
+publish {
+    userOrg = 'hummer'
+    repoName = 'Hummer'
+    groupId = project.GROUP_ID
+    artifactId = project.ARTIFACT_ID
+    publishVersion = project.VERSION
+    desc = '{library description}'
+    website = '{github_url}'
+}

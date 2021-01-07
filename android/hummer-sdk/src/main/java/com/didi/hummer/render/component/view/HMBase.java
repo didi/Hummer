@@ -1,10 +1,15 @@
 package com.didi.hummer.render.component.view;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Looper;
+import android.support.v4.view.AccessibilityDelegateCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -19,7 +24,10 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.lifecycle.ILifeCycle;
+import com.didi.hummer.render.component.anim.AnimViewWrapper;
 import com.didi.hummer.render.component.anim.BasicAnimation;
+import com.didi.hummer.render.component.anim.HummerAnimationUtils;
+import com.didi.hummer.render.component.anim.Transition;
 import com.didi.hummer.render.event.EventManager;
 import com.didi.hummer.render.event.base.Event;
 import com.didi.hummer.render.event.base.TraceEvent;
@@ -35,12 +43,15 @@ import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.YogaAttrUtils;
+import com.didi.hummer.sdk.R;
 import com.didi.hummer.tools.EventTracer;
 import com.facebook.yoga.YogaNode;
 import com.facebook.yoga.YogaPositionType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,13 +75,57 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     private DisplayChangedListener displayChangedListener;
     private HummerLayoutExtendUtils.Position position = HummerLayoutExtendUtils.Position.YOGA;
     private HummerLayoutExtendUtils.Display display = HummerLayoutExtendUtils.Display.YOGA;
+    private AnimViewWrapper animViewWrapper;
 
     public HMBase(HummerContext context, JSValue jsValue, String viewID) {
         this.context = context;
         mJSValue = jsValue;
         mTargetView = createView(context.getContext());
         hummerNode = new HummerNode(this, viewID);
-        backgroundHelper = new BackgroundHelper(context, getView());
+        backgroundHelper = new BackgroundHelper(context, mTargetView);
+        animViewWrapper = new AnimViewWrapper(this);
+
+        ViewCompat.setAccessibilityDelegate(mTargetView, new AccessibilityDelegateCompat() {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+                super.onInitializeAccessibilityNodeInfo(host, info);
+                // 处理 accessibilityLabel 和 accessibilityHint
+                List<String> contents = new ArrayList<>();
+                if (accessibilityLabel != null) {
+                    contents.add(accessibilityLabel);
+                }
+                if (accessibilityHint != null) {
+                    if (accessibilityLabel == null && info.getText() != null) {
+                        contents.add(info.getText().toString());
+                    }
+                    contents.add(accessibilityHint);
+                }
+                if (!contents.isEmpty()) {
+                    info.setContentDescription(TextUtils.join(", ", contents));
+                }
+
+                // 处理 accessibilityRole
+                if (accessibilityRole != null) {
+                    info.setRoleDescription(accessibilityRole);
+                }
+
+                // 处理 accessibilityState
+                if (accessibilityState != null) {
+                    for (String key : accessibilityState.keySet()) {
+                        Object value = accessibilityState.get(key);
+                        if ("selected".equalsIgnoreCase(key)) {
+                            if (value instanceof Boolean) {
+                                info.setSelected((Boolean) value);
+                            }
+                        } else if ("disabled".equalsIgnoreCase(key)) {
+                            if (value instanceof Boolean) {
+                                info.setEnabled(!(Boolean) value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -127,8 +182,12 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         return mTargetView;
     }
 
+    public AnimViewWrapper getAnimViewWrapper() {
+        return animViewWrapper;
+    }
+
     @JsProperty("style")
-    public Map<String, Object> style;
+    public Map<String, Object> style = new HashMap<>();
 
     public void setStyle(Map<String, Object> style) {
         this.style = style;
@@ -154,7 +213,88 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     }
 
     public boolean getEnabled() {
-        return enabled;
+        return getView().isEnabled();
+    }
+
+    /**
+     * 是否响应无障碍焦点（Image/Text/Button等叶子节点默认是true，其余容器组件默认是false）
+     */
+    @JsProperty("accessible")
+    public boolean accessible;
+    public void setAccessible(boolean accessible) {
+        getView().setImportantForAccessibility(accessible ? View.IMPORTANT_FOR_ACCESSIBILITY_YES : View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+    }
+
+    /**
+     * 无障碍标签
+     */
+    @JsProperty("accessibilityLabel")
+    public String accessibilityLabel;
+    public void setAccessibilityLabel(String label) {
+        accessibilityLabel = label;
+    }
+
+    /**
+     * 无障碍提示
+     */
+    @JsProperty("accessibilityHint")
+    public String accessibilityHint;
+    public void setAccessibilityHint(String hint) {
+        accessibilityHint = hint;
+    }
+
+    /**
+     * 无障碍角色
+     *
+     * 目前支持以下几种角色：
+     * none "" （没有角色）
+     * text "文本"
+     * button "按钮"
+     * image "图片"
+     * switch "开关"
+     * input "输入框"
+     * link "链接"
+     * search "搜索框"
+     * key "键盘"
+     */
+    @JsProperty("accessibilityRole")
+    public String accessibilityRole;
+    public void setAccessibilityRole(String role) {
+        Resources r = getContext().getResources();
+        if ("none".equalsIgnoreCase(role)) {
+            accessibilityRole = "";
+        } else if ("text".equalsIgnoreCase(role)) {
+            accessibilityRole = r.getString(R.string.accessibility_role_text);
+        } else if ("button".equalsIgnoreCase(role)) {
+            accessibilityRole = r.getString(R.string.accessibility_role_button);
+        } else if ("image".equalsIgnoreCase(role)) {
+            accessibilityRole = r.getString(R.string.accessibility_role_image);
+        } else if ("switch".equalsIgnoreCase(role)) {
+            accessibilityRole = r.getString(R.string.accessibility_role_switch);
+        } else if ("input".equalsIgnoreCase(role)) {
+            accessibilityRole = r.getString(R.string.accessibility_role_input);
+        } else if ("link".equalsIgnoreCase(role)) {
+            accessibilityRole = r.getString(R.string.accessibility_role_link);
+        } else if ("search".equalsIgnoreCase(role)) {
+            accessibilityRole = r.getString(R.string.accessibility_role_search);
+        } else if ("key".equalsIgnoreCase(role)) {
+            accessibilityRole = r.getString(R.string.accessibility_role_key);
+        } else {
+            accessibilityRole = role;
+        }
+    }
+
+    /**
+     * 无障碍状态
+     *
+     * 目前支持以下几种状态：
+     * selected
+     * disabled
+     */
+    @JsProperty("accessibilityState")
+    public Map<String, Object>  accessibilityState;
+    public void setAccessibilityState(Map<String, Object> state) {
+        accessibilityState = state;
     }
 
     @JsMethod("addEventListener")
@@ -171,7 +311,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
                 if (mEventManager.contains(Event.HM_EVENT_TYPE_TAP)) {
                     TapEvent event = new TapEvent();
                     event.setType(Event.HM_EVENT_TYPE_TAP);
-                    event.setPosition(GestureUtils.findPositionInMotionEvent(null));
+                    event.setPosition(GestureUtils.findPositionInMotionEvent(getContext(), null));
                     event.setTimestamp(System.currentTimeMillis());
                     event.setState(GestureUtils.findStateInMotionEvent(null));
                     event.setTarget(mJSValue);
@@ -229,7 +369,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
                 if (mEventManager.contains(Event.HM_EVENT_TYPE_TAP)) {
                     TapEvent event = new TapEvent();
                     event.setType(Event.HM_EVENT_TYPE_TAP);
-                    event.setPosition(GestureUtils.findPositionInMotionEvent(e));
+                    event.setPosition(GestureUtils.findPositionInMotionEvent(getContext(), e));
                     event.setTimestamp(System.currentTimeMillis());
                     event.setState(GestureUtils.findStateInMotionEvent(e));
                     event.setTarget(mJSValue);
@@ -249,8 +389,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
 
                         event.setType(Event.HM_EVENT_TYPE_PAN);
                         event.setTimestamp(System.currentTimeMillis());
-                        event.setTranslation(GestureUtils.findTranslationInMotionEvent(
-                                DPUtil.px2dp(context, moveX - startX), DPUtil.px2dp(context, moveY - startY)));
+                        event.setTranslation(GestureUtils.findTranslationInMotionEvent(context, moveX - startX, moveY - startY));
                         event.setState(Event.HM_GESTURE_STATE_CHANGED);
                         mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_PAN, event);
                         startX = moveX;
@@ -269,7 +408,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
                 if (mEventManager.contains(Event.HM_EVENT_TYPE_LONG_PRESS)) {
                     LongPressEvent event = new LongPressEvent();
                     event.setType(Event.HM_EVENT_TYPE_LONG_PRESS);
-                    event.setPosition(GestureUtils.findPositionInMotionEvent(e));
+                    event.setPosition(GestureUtils.findPositionInMotionEvent(getContext(), e));
                     event.setTimestamp(System.currentTimeMillis());
                     event.setState(GestureUtils.findStateInMotionEvent(e));
                     event.setTarget(mJSValue);
@@ -347,7 +486,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
                 if (mEventManager.contains(Event.HM_EVENT_TYPE_TOUCH)) {
                     TouchEvent touchEvent = new TouchEvent();
                     touchEvent.setType(Event.HM_EVENT_TYPE_TOUCH);
-                    touchEvent.setPosition(GestureUtils.findPositionInMotionEvent(event));
+                    touchEvent.setPosition(GestureUtils.findPositionInMotionEvent(getContext(), event));
                     touchEvent.setTimestamp(System.currentTimeMillis());
 
                     switch (event.getAction()) {
@@ -416,8 +555,8 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         }
     }
 
-    @JsMethod("getViewRect")
-    public void getViewRect(JSCallback callback) {
+    @JsMethod("getRect")
+    public void getRect(JSCallback callback) {
         if (callback == null) {
             return;
         }
@@ -425,17 +564,18 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         getView().post(() -> {
             Rect rect = new Rect();
             getView().getHitRect(rect);
-            Map<String, Integer> values = new HashMap<>();
-            values.put("width", DPUtil.px2dp(context, getView().getWidth()));
-            values.put("height", DPUtil.px2dp(context, getView().getHeight()));
-            values.put("left", DPUtil.px2dp(context, rect.left));
-            values.put("right", DPUtil.px2dp(context, rect.right));
-            values.put("top", DPUtil.px2dp(context, rect.top));
-            values.put("bottom", DPUtil.px2dp(context, rect.bottom));
+            Map<String, Object> values = new HashMap<>();
+            values.put("width", DPUtil.px2dpF(context, getView().getWidth()));
+            values.put("height", DPUtil.px2dpF(context, getView().getHeight()));
+            values.put("left", DPUtil.px2dpF(context, rect.left));
+            values.put("right", DPUtil.px2dpF(context, rect.right));
+            values.put("top", DPUtil.px2dpF(context, rect.top));
+            values.put("bottom", DPUtil.px2dpF(context, rect.bottom));
             callback.call(values);
         });
     }
 
+    @Deprecated
     @JsMethod("resetStyle")
     public void resetStyle() {
         hummerNode.resetStyle();
@@ -759,6 +899,156 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         return true;
     }
 
+    public final boolean setTransitionStyle(String key, Object value) {
+        switch (key) {
+            case HummerStyleUtils.Hummer.TRANSITION_DURATION:
+                setTransitionDuration(value);
+                break;
+            case HummerStyleUtils.Hummer.TRANSITION_DELAY:
+                setTransitionDelay(value);
+                break;
+            case HummerStyleUtils.Hummer.TRANSITION_TIMING_FUNCTION:
+                setTransitionTimingFunction((String) value);
+                break;
+            case HummerStyleUtils.Hummer.TRANSITION_PROPERTY:
+                setTransitionProperty(value);
+                break;
+            default:
+                return false;
+        }
+        return true;
+
+    }
+
+    private List<Transition> transitions = new ArrayList<>();
+    List<Double> durationList = new ArrayList<>();
+    double transitionDelay = 0;
+    String transitionTimingFunction = null;
+
+//    transitionDuration: 0.5,
+//    transitionDuration: '0.5,1.0',
+//    transitionDuration: [0.5,1.0],
+//    transitionDuration: ['0.5',1.0],
+
+    public void setTransitionDuration(Object transitionDuration) {
+        durationList = new ArrayList<>();
+        if (transitionDuration instanceof List) {
+            for (Object durationObj : ((ArrayList) transitionDuration)) {
+                float duration = HummerStyleUtils.convertNumber(durationObj, false);
+                durationList.add((double) duration);
+            }
+
+        } else if (transitionDuration instanceof String) {
+            String durationStr = (String) transitionDuration;
+            durationStr = durationStr.replace(" ", "");
+            String[] durationStrList = durationStr.split(",");
+            for (String duration : durationStrList) {
+                durationList.add((double) HummerStyleUtils.convertNumber(duration, false));
+            }
+        } else if (transitionDuration instanceof Number) {
+            durationList.add((double) HummerStyleUtils.convertNumber(transitionDuration, false));
+        }
+
+        if (durationList.size() > 0 && transitions != null) {
+            for (int i = 0; i < transitions.size(); i++) {
+                Transition transition = transitions.get(i);
+                transition.setDuration(durationList.get(i % durationList.size()));
+            }
+        }
+    }
+
+    public void setTransitionDelay(Object delay) {
+        transitionDelay = (double) HummerStyleUtils.convertNumber(delay, false);
+
+        if (transitions != null) {
+            for (int i = 0; i < transitions.size(); i++) {
+                Transition transition = transitions.get(i);
+                transition.setDelay(transitionDelay);
+            }
+        }
+    }
+
+    public void setTransitionTimingFunction(String timingFunction) {
+        transitionTimingFunction = timingFunction;
+
+        if (transitions != null) {
+            for (int i = 0; i < transitions.size(); i++) {
+                Transition transition = transitions.get(i);
+                transition.setTimingFunction(transitionTimingFunction);
+            }
+        }
+    }
+
+    public void setTransitionProperty(Object transitionProperty) {
+        transitions = new ArrayList<>();
+
+        if (transitionProperty instanceof String) {
+            String propertyStr = (String) transitionProperty;
+            propertyStr = propertyStr.replace(" ", "");
+            String[] propertyStrList = propertyStr.split(",");
+
+            for (int i = 0; i < propertyStrList.length; i++) {
+
+                String property = propertyStrList[i];
+
+                Transition transition = new Transition(property);
+                transition.setDelay(transitionDelay);
+                transition.setTimingFunction(transitionTimingFunction);
+                if (durationList.size() > 0) {
+                    transition.setDuration(durationList.get(i % durationList.size()));
+                }
+                transitions.add(transition);
+            }
+
+        } else if (transitionProperty instanceof List) {
+            List<String> propertyList = (ArrayList<String>) transitionProperty;
+            if (!propertyList.isEmpty()) {
+                for (int i = 0; i < propertyList.size(); i++) {
+
+                    String property = propertyList.get(i);
+
+                    Transition transition = new Transition(property);
+                    transition.setDelay(transitionDelay);
+                    transition.setTimingFunction(transitionTimingFunction);
+                    if (durationList.size() > 0) {
+                        transition.setDuration(durationList.get(i % durationList.size()));
+                    }
+                    transitions.add(transition);
+                }
+            }
+        }
+    }
+
+    public Transition getTransition(String property) {
+        Transition result = null;
+        for (Transition transition : transitions) {
+            if (property.equals(transition.getProperty())) {
+                result = transition;
+            } else if ("all".equals(transition.getProperty())) {
+                result = transition;
+                break;
+            }
+        }
+
+        // transform 在未设置transition时 使用默认参数 瞬时变化
+        if (HummerStyleUtils.Hummer.TRANSFORM.equals(property)) {
+            if (result == null) {
+                result = new Transition(property);
+            }
+        }
+        return result;
+    }
+
+    public boolean supportTransitionStyle(String style) {
+        for (Transition transition : transitions) {
+            if (style.equals(transition.getProperty())) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     private boolean setPosition(String value) {
         HummerLayoutExtendUtils.Position resultPosition = HummerLayoutExtendUtils.Position.YOGA;
         if (HummerLayoutExtendUtils.Position.FIXED.value().equals(value)) {
@@ -791,6 +1081,59 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         }
         display = resultDisplay;
         return resultDisplay != HummerLayoutExtendUtils.Display.YOGA;
+    }
+
+    List<ObjectAnimator> objectAnimatorList = new ArrayList<>();
+
+    public void handleTransitionStyle(String key, Object value) {
+        List<PropertyValuesHolder> propertyValuesHolderList = new ArrayList<>();
+        if (HummerStyleUtils.Hummer.TRANSFORM.equals(key)) {
+//                    todo 用正则方式取内容
+//                    Pattern pattern = Pattern.compile("(\\w+-*\\w*)([^}]*)");
+//                    Matcher matcher = pattern.matcher((CharSequence) value);
+            String transformStr = value.toString().trim();
+            transformStr = transformStr.replace("),", ");");
+            String[] transformProperty = transformStr.split(";");
+            for (int i = 0; i < transformProperty.length; i++) {
+                String property = transformProperty[i];
+                int leftIndex = property.indexOf("(");
+                int rightIndex = property.indexOf(")");
+
+                String animType = property.substring(0, leftIndex);
+                Object params = HummerStyleUtils.transformValue(property.substring(leftIndex + 1, rightIndex));
+                propertyValuesHolderList.addAll(HummerAnimationUtils.parser(animType, params));
+            }
+
+        } else {
+            propertyValuesHolderList.addAll(HummerAnimationUtils.parser(key, value));
+        }
+
+        ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new AnimViewWrapper(this),
+                propertyValuesHolderList.toArray(new PropertyValuesHolder[propertyValuesHolderList.size()]));
+
+        getTransition(key).warpAnim(anim);
+        if (objectAnimatorList == null) {
+            objectAnimatorList = new ArrayList<>();
+        }
+        objectAnimatorList.add(anim);
+
+    }
+
+    public void runAnimator() {
+        if (objectAnimatorList != null) {
+            getView().post(new Runnable() {
+                @Override
+                public void run() {
+                    for (ObjectAnimator objectAnimator : objectAnimatorList) {
+                        objectAnimator.start();
+                    }
+
+                    // todo 执行完后暂时进行清空 后续加完成的队列，做完成监听
+                    objectAnimatorList.clear();
+                }
+            });
+        }
+
     }
 
     public interface PositionChangedListener {

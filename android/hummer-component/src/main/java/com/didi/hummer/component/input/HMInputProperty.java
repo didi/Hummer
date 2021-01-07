@@ -1,5 +1,6 @@
 package com.didi.hummer.component.input;
 
+import android.content.Context;
 import android.graphics.BlendMode;
 import android.graphics.BlendModeColorFilter;
 import android.graphics.ColorFilter;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -30,11 +32,10 @@ import java.util.LinkedList;
 public class HMInputProperty {
     private final EditText mView;
     private static final InputFilter[] EMPTY_FILTERS = new InputFilter[0];
+    private int defaultInputType;
 
     private boolean isSingleLine;
     private MaxLinesTextWatcher maxLinesTextWatcher = new MaxLinesTextWatcher();
-
-    private int mStagedInputTypeFlags;
 
     public HMInputProperty(EditText editText, boolean singleLine) {
         this.isSingleLine = singleLine;
@@ -46,7 +47,11 @@ public class HMInputProperty {
             mView.setGravity(Gravity.START);
             mView.addTextChangedListener(maxLinesTextWatcher);
         }
-        mStagedInputTypeFlags = editText.getInputType();
+
+        defaultInputType = editText.getInputType();
+        if (defaultInputType == InputType.TYPE_NULL) {
+            defaultInputType = InputType.TYPE_CLASS_TEXT;
+        }
     }
 
     public void setText(String text) {
@@ -65,7 +70,7 @@ public class HMInputProperty {
     }
 
     public void setType(String type) {
-        setStagedInputTypeFlags(0, getInputType(type));
+        mView.setInputType(getInputType(type));
     }
 
     /**
@@ -78,20 +83,20 @@ public class HMInputProperty {
         int inputType;
         switch (type) {
             case NJInputType.EMAIL:
-                inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+                inputType = defaultInputType | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
                 break;
             case NJInputType.NUMBER:
-                inputType = InputType.TYPE_CLASS_NUMBER;
+                inputType = defaultInputType | InputType.TYPE_CLASS_NUMBER;
                 break;
             case NJInputType.TEL:
-                inputType = InputType.TYPE_CLASS_PHONE;
+                inputType = defaultInputType | InputType.TYPE_CLASS_PHONE;
                 break;
             case NJInputType.PASSWORD:
-                inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD;
+                inputType = defaultInputType | InputType.TYPE_TEXT_VARIATION_PASSWORD;
                 break;
             case NJInputType.DEFAULT:
             default:
-                inputType = InputType.TYPE_NULL;
+                inputType = defaultInputType;
                 break;
         }
         return inputType;
@@ -279,6 +284,12 @@ public class HMInputProperty {
 
     public void setReturnKeyType(String type) {
         mView.setImeOptions(getImeOption(type));
+
+        // 刷新键盘
+        InputMethodManager imm = (InputMethodManager) mView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && imm.isActive()) {
+            imm.restartInput(mView);
+        }
     }
 
     private int getImeOption(String type) {
@@ -291,16 +302,9 @@ public class HMInputProperty {
                 return EditorInfo.IME_ACTION_SEND;
             case NJReturnKeyType.NEXT:
                 return EditorInfo.IME_ACTION_NEXT;
+            case NJReturnKeyType.DONE:
             default:
                 return EditorInfo.IME_ACTION_DONE;
-        }
-    }
-
-    public void setSecureTextEntry(boolean password) {
-        if (password) {
-            setStagedInputTypeFlags(InputType.TYPE_NUMBER_VARIATION_PASSWORD | InputType.TYPE_TEXT_VARIATION_PASSWORD, InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        } else {
-            setStagedInputTypeFlags(InputType.TYPE_TEXT_VARIATION_PASSWORD, InputType.TYPE_NUMBER_VARIATION_PASSWORD | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
     }
 
@@ -310,11 +314,6 @@ public class HMInputProperty {
         } else {
             FocusUtil.clearFocus(mView);
         }
-    }
-
-    private void setStagedInputTypeFlags(int flagsToUnset, int flagsToSet) {
-        mStagedInputTypeFlags = (mStagedInputTypeFlags & ~flagsToUnset) | flagsToSet;
-        mView.setInputType(mStagedInputTypeFlags);
     }
 
     private class MaxLinesTextWatcher implements TextWatcher {

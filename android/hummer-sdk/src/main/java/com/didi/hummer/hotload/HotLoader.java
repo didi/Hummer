@@ -108,7 +108,7 @@ public class HotLoader {
         String url = null;
         try {
             JSONObject jo = new JSONObject(wsMsg);
-            url = jo.getString("params");
+            url = jo.getJSONObject("params").getString("url");
         } catch (JSONException e) {
             e.printStackTrace();
         }

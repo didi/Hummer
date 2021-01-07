@@ -50,6 +50,7 @@ public class Button extends HMBase<android.widget.Button> {
         orgTextSize = getView().getTextSize();
         orgTypeface = getView().getTypeface();
         getView().setAllCaps(false);
+        getView().setTypeface(null, Typeface.NORMAL);
         //fixed Button 总是在图层最上层的问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getView().setStateListAnimator(null);
@@ -86,22 +87,36 @@ public class Button extends HMBase<android.widget.Button> {
 
     @JsProperty("pressed")
     private Map<String, Object> pressed;
-
     public void setPressed(Map<String, Object> pressed) {
-        ButtonStyleHelper.fillButtonBackgroundBorderStyle(style, pressed);
-        bgDrawableMap.put(ButtonStyleHelper.KEY_ON_PRESS, ButtonStyleHelper.pickButtonBackgroundDrawable(pressed));
-        textColorMap.put(ButtonStyleHelper.KEY_ON_PRESS, ButtonStyleHelper.pickButtonTextColor(pressed));
+        this.pressed = pressed;
+        mergePressedStyle();
         updateBackground();
     }
 
     @JsProperty("disabled")
     private Map<String, Object> disabled;
-
     public void setDisabled(Map<String, Object> disabled) {
-        ButtonStyleHelper.fillButtonBackgroundBorderStyle(style, disabled);
-        bgDrawableMap.put(ButtonStyleHelper.KEY_ON_DISABLE, ButtonStyleHelper.pickButtonBackgroundDrawable(disabled));
-        textColorMap.put(ButtonStyleHelper.KEY_ON_DISABLE, ButtonStyleHelper.pickButtonTextColor(disabled));
+        this.disabled = disabled;
+        mergeDisabledStyle();
         updateBackground();
+    }
+
+    private void mergePressedStyle() {
+        ButtonStyleHelper.fillButtonPressedAndDisabledStyle(style, pressed);
+        Drawable bgDrawable = ButtonStyleHelper.pickButtonBackgroundDrawable(pressed);
+        if (bgDrawable != null) {
+            bgDrawableMap.put(ButtonStyleHelper.KEY_ON_PRESS, bgDrawable);
+        }
+        textColorMap.put(ButtonStyleHelper.KEY_ON_PRESS, ButtonStyleHelper.pickButtonTextColor(pressed));
+    }
+
+    private void mergeDisabledStyle() {
+        ButtonStyleHelper.fillButtonPressedAndDisabledStyle(style, disabled);
+        Drawable bgDrawable = ButtonStyleHelper.pickButtonBackgroundDrawable(disabled);
+        if (bgDrawable != null) {
+            bgDrawableMap.put(ButtonStyleHelper.KEY_ON_DISABLE, bgDrawable);
+        }
+        textColorMap.put(ButtonStyleHelper.KEY_ON_DISABLE, ButtonStyleHelper.pickButtonTextColor(disabled));
     }
 
     /**
@@ -177,6 +192,8 @@ public class Button extends HMBase<android.widget.Button> {
         if (newStyle.containsKey(ButtonStyleHelper.KEY_TEXT_COLOR)) {
             textColorMap.put(ButtonStyleHelper.KEY_ON_NORMAL, ButtonStyleHelper.pickButtonTextColor(newStyle));
         }
+        mergePressedStyle();
+        mergeDisabledStyle();
         updateBackground();
     }
 

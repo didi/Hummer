@@ -812,7 +812,8 @@ public class BackgroundDrawable extends Drawable {
 
     public void setColor(int color) {
         this.color = color;
-        this.gradientDrawable = null;
+        gradientDrawable = null;
+        drawable = null;
         invalidateSelf();
     }
 
@@ -820,6 +821,7 @@ public class BackgroundDrawable extends Drawable {
         if (colors != null && colors.length > 0) {
             gradientDrawable = new GradientDrawable(transOrientation(deg), colors);
             color = Color.TRANSPARENT;
+            drawable = null;
             invalidateSelf();
         }
     }

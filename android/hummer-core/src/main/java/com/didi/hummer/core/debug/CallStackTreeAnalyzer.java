@@ -35,22 +35,24 @@ public class CallStackTreeAnalyzer {
     private static final String FORMAT_STRING_NORMAL_H = "─";
     private static final String FORMAT_STRING_NORMAL_V = "│";
 
+    private String strCallStackTreeFormat = "";
+
     /**
      * 根据记录的trace点，分析得出函数调用树
      */
-    private TreeNode analyzeTree(List<TraceInfo> traceList) {
-        if (traceList == null || traceList.isEmpty()) {
+    private TreeNode analyzeTree(List<InvokeTracker> trackerList) {
+        if (trackerList == null || trackerList.isEmpty()) {
             return null;
         }
 
         Stack<TreeNode> stack = new Stack<>();
         List<TreeNode> cacheNodeList = new ArrayList<>();
 
-        for (TraceInfo info : traceList) {
-            TreeNode node = new TreeNode(info.objectID, info.className + "." + info.methodName);
-            node.timestamp = info.timestamp;
+        for (InvokeTracker tracker : trackerList) {
+            TreeNode node = new TreeNode(tracker.objectID, tracker.className + "." + tracker.methodName);
+            node.timestamp = tracker.timestamp;
 
-            if ("constructor_end".equals(info.methodName)) {
+            if ("constructor_end".equals(tracker.methodName)) {
                 TreeNode topNode = stack.pop();
                 topNode.isClosed = true;
             } else {
@@ -64,30 +66,30 @@ public class CallStackTreeAnalyzer {
                     }
                 }
 
-                if ("constructor".equals(info.methodName)) {
+                if ("constructor".equals(tracker.methodName)) {
                     stack.push(node);
-                } else if ("setStyle".equals(info.methodName)
-                        || "setText".equals(info.methodName)
-                        || "setSrc".equals(info.methodName)) {
-                    if (info.params.length > 0) {
-                        node.tag = String.valueOf(info.params[0]);
+                } else if ("setStyle".equals(tracker.methodName)
+                        || "setText".equals(tracker.methodName)
+                        || "setSrc".equals(tracker.methodName)) {
+                    if (tracker.params.length > 0) {
+                        node.tag = String.valueOf(tracker.params[0]);
                     }
-                } else if ("appendChild".equals(info.methodName)
-                        || "removeChild".equals(info.methodName)) {
-                    long childId = ((Number) info.params[0]).longValue();
+                } else if ("appendChild".equals(tracker.methodName)
+                        || "removeChild".equals(tracker.methodName)) {
+                    long childId = ((Number) tracker.params[0]).longValue();
                     node.tag = String.valueOf(childId);
-                } else if ("insertBefore".equals(info.methodName)
-                        || "replaceChild".equals(info.methodName)) {
-                    long childId1 = ((Number) info.params[0]).longValue();
-                    long childId2 = ((Number) info.params[0]).longValue();
+                } else if ("insertBefore".equals(tracker.methodName)
+                        || "replaceChild".equals(tracker.methodName)) {
+                    long childId1 = ((Number) tracker.params[0]).longValue();
+                    long childId2 = ((Number) tracker.params[0]).longValue();
                     node.tag = String.format("%d, %d", childId1, childId2);
-                } else if ("Hummer".equals(info.className) && "render".equals(info.methodName)) {
-                    long childId = ((Number) info.params[0]).longValue();
+                } else if ("Hummer".equals(tracker.className) && "render".equals(tracker.methodName)) {
+                    long childId = ((Number) tracker.params[0]).longValue();
                     node.tag = String.valueOf(childId);
-                } else if ("Hummer".equals(info.className) && "console.log".equals(info.methodName)) {
+                } else if ("Hummer".equals(tracker.className) && "console.log".equals(tracker.methodName)) {
                     node.name = "console.log";
-                    if (info.params.length > 0) {
-                        node.tag = String.valueOf(info.params[0]);
+                    if (tracker.params.length > 0) {
+                        node.tag = String.valueOf(tracker.params[0]);
                     }
                 }
             }
@@ -106,21 +108,29 @@ public class CallStackTreeAnalyzer {
     }
 
     /**
-     * 打印函数调用树
+     * 记录invoke调用的点
      */
-    public void printTree(List<TraceInfo> traceList) {
-        HMLog.d(TAG, " \n" + generateNodeTree(traceList));
+    public void analyze(List<InvokeTracker> trackerList) {
+        strCallStackTreeFormat = generateNodeTreeFormat(trackerList);
+        HMLog.i(TAG, " \n" + strCallStackTreeFormat);
+    }
+
+    /**
+     * 获取组件树字符串
+     */
+    public String getCallStackTreeFormat() {
+        return strCallStackTreeFormat;
     }
 
     /**
      * 生成函数调用树字符串
      */
-    public String generateNodeTree(List<TraceInfo> traceList) {
+    public String generateNodeTreeFormat(List<InvokeTracker> trackerList) {
         return
                 "┌─────────────────────────\n" +
                 "│\t函数调用树\n" +
                 "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
-                generateNodeTree(analyzeTree(traceList), 0, 0) +
+                generateNodeTree(analyzeTree(trackerList), 0, 0) +
                 "└─────────────────────────\n";
     }
 

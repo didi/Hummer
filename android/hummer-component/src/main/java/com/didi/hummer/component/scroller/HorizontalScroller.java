@@ -1,11 +1,14 @@
 package com.didi.hummer.component.scroller;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsMethod;
+import com.didi.hummer.annotation.JsProperty;
+import com.didi.hummer.component.R;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
@@ -15,7 +18,10 @@ import com.didi.hummer.render.event.view.ScrollEvent;
 import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.render.style.HummerLayoutExtendUtils;
 import com.didi.hummer.render.style.HummerStyleUtils;
+import com.didi.hummer.render.utility.DPUtil;
 import com.facebook.yoga.YogaFlexDirection;
+import com.facebook.yoga.YogaOverflow;
+import com.facebook.yoga.YogaUnit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +49,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
 
     @Override
     protected HScrollView createViewInstance(Context context) {
-        return new HScrollView(context);
+        return (HScrollView) LayoutInflater.from(context).inflate(R.layout.horizontal_scroll_view, null, false);
     }
 
     @Override
@@ -52,17 +58,23 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         initScrollView();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getView().release();
+    }
+
     private void initScrollView() {
         layout = new HummerLayout(getContext());
         layout.getYogaNode().setFlexDirection(YogaFlexDirection.ROW);
-        layout.setOnSizeChangeListener((w, h, oldw, oldh) -> getYogaNode().dirty());
         getView().addView(layout);
+
+        getYogaNode().setOverflow(YogaOverflow.SCROLL);
+        getYogaNode().setMeasureFunction(null);
+        getYogaNode().addChildAt(layout.getYogaNode(), 0);
 
         // 默认隐藏滚动条
         getView().setHorizontalScrollBarEnabled(false);
-
-        // 使ScrollView的最大高度限制在屏幕范围之内，不超出屏幕
-        getYogaNode().setFlexShrink(1);
 
         getView().setOnScrollListener(new OnScrollListener() {
             @Override
@@ -109,10 +121,10 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
                 }
                 scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
                 scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_SCROLL);
-                scrollEvent.setOffsetX(x);
-                scrollEvent.setOffsetY(y);
-                scrollEvent.setDx(dx);
-                scrollEvent.setDy(dy);
+                scrollEvent.setOffsetX(DPUtil.px2dpF(getContext(), x));
+                scrollEvent.setOffsetY(DPUtil.px2dpF(getContext(), y));
+                scrollEvent.setDx(DPUtil.px2dpF(getContext(), dx));
+                scrollEvent.setDy(DPUtil.px2dpF(getContext(), dy));
                 scrollEvent.setTimestamp(System.currentTimeMillis());
                 mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
             }
@@ -130,13 +142,25 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         });
     }
 
+    private void adjustWidthAndHeight() {
+        if (getYogaNode().getWidth().unit == YogaUnit.AUTO) {
+            layout.getYogaNode().setWidthAuto();
+        } else {
+            layout.getYogaNode().setWidthPercent(100);
+        }
+        if (getYogaNode().getHeight().unit == YogaUnit.AUTO) {
+            layout.getYogaNode().setHeightAuto();
+        } else {
+            layout.getYogaNode().setHeightPercent(100);
+        }
+    }
+
     @JsMethod("appendChild")
     public void appendChild(HMBase child) {
         if (child == null) {
             return;
         }
 
-        getYogaNode().dirty();
         child.getJSValue().protect();
         child.setPositionChangedListener(this);
         children.add(child);
@@ -151,6 +175,8 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         }
 
         layout.addView(finalChild);
+
+        adjustWidthAndHeight();
     }
 
     @JsMethod("removeChild")
@@ -162,7 +188,6 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         child.getJSValue().unprotect();
         child.setPositionChangedListener(null);
         children.remove(child);
-        getYogaNode().dirty();
 
         // fixed 布局操作
         if (fixedNoneBoxMap.containsKey(child)) {
@@ -173,12 +198,12 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         }
 
         layout.removeView(child);
+
+        adjustWidthAndHeight();
     }
 
     @JsMethod("removeAll")
     public void removeAll() {
-        getYogaNode().dirty();
-
         // fixed
         for (Map.Entry<HMBase, FixedNoneBox> entry : fixedNoneBoxMap.entrySet()) {
             HMBase hmBase = entry.getKey();
@@ -195,6 +220,8 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         children.clear();
 
         layout.removeAllViews();
+
+        adjustWidthAndHeight();
     }
 
     @JsMethod("insertBefore")
@@ -203,7 +230,6 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
             return;
         }
 
-        getYogaNode().dirty();
         child.getJSValue().protect();
         child.setPositionChangedListener(this);
         children.add(child);
@@ -223,6 +249,8 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
 
         // 默认处理
         layout.insertBefore(finalChild, finalExisting);
+
+        adjustWidthAndHeight();
     }
 
     @JsMethod("replaceChild")
@@ -231,7 +259,6 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
             return;
         }
 
-        getYogaNode().dirty();
         child.getJSValue().protect();
         child.setPositionChangedListener(this);
         old.getJSValue().unprotect();
@@ -255,8 +282,11 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
 
         // 默认处理
         layout.replaceView(finalChild, finalOld);
+
+        adjustWidthAndHeight();
     }
 
+    @Deprecated
     @JsMethod("getElementById")
     public HMBase getSubview(String viewID) {
         HMBase result = layout.getViewById(viewID);
@@ -279,40 +309,49 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         return result;
     }
 
+    @Deprecated
     @JsMethod("layout")
     public void layout() {
         layout.requestLayout();
     }
 
-    @JsAttribute("overflow")
-    public void setOverflow(String overflow) {
-        boolean needClip = "hidden".equals(overflow);
-        layout.setNeedClipChildren(needClip);
-    }
-
-    @JsAttribute("hideScrollBar")
+    /**
+     * 是否显示滚动条（默认false）
+     */
+    @JsProperty("showScrollBar")
+    private boolean showScrollBar;
     public void setShowScrollBar(boolean isShow) {
         getView().setHorizontalScrollBarEnabled(isShow);
     }
 
+    /**
+     * 是否有回弹效果（默认true，暂时先空实现）
+     */
+    @JsProperty("bounces")
+    public boolean bounces;
+
     @JsMethod("scrollTo")
-    public void scrollTo(int x, int y) {
-        getView().smoothScrollTo(x, y);
+    public void scrollTo(Object x, Object y) {
+        int nX = (int) HummerStyleUtils.convertNumber(x);
+        int nY = (int) HummerStyleUtils.convertNumber(y);
+        getView().smoothScrollTo(nX, nY);
     }
 
     @JsMethod("scrollBy")
-    public void scrollBy(int dx, int dy) {
-        getView().smoothScrollBy(dx, dy);
+    public void scrollBy(Object dx, Object dy) {
+        int nDx = (int) HummerStyleUtils.convertNumber(dx);
+        int nDy = (int) HummerStyleUtils.convertNumber(dy);
+        getView().smoothScrollBy(nDx, nDy);
     }
 
     @JsMethod("scrollToTop")
     public void scrollToTop() {
-        getView().fullScroll(View.FOCUS_UP);
+        getView().fullScroll(View.FOCUS_LEFT);
     }
 
     @JsMethod("scrollToBottom")
     public void scrollToBottom() {
-        getView().fullScroll(View.FOCUS_DOWN);
+        getView().fullScroll(View.FOCUS_RIGHT);
     }
 
     @JsMethod("setOnScrollToTopListener")
@@ -360,17 +399,5 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
     public void resetStyle() {
         super.resetStyle();
         setShowScrollBar(false);
-    }
-
-    @Override
-    public boolean setStyle(String key, Object value) {
-        switch (key) {
-            case HummerStyleUtils.Hummer.SHOW_SCROLL_BAR:
-                setShowScrollBar((boolean) value);
-                break;
-            default:
-                return false;
-        }
-        return true;
     }
 }

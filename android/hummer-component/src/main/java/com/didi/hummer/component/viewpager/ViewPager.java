@@ -210,11 +210,14 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
     public List<Object> mData = new ArrayList<>();
 
     public void setData(List<Object> data) {
-        if (data == null || data.isEmpty()) {
-            throw new RuntimeException("data is null or empty");
+        if (data == null) {
+            if (mData == null) {
+                return;
+            }
+            data = new ArrayList<>();
         }
 
-        if (!(data.get(0) instanceof String) && mOnItemViewCallback == null) {
+        if (!data.isEmpty() && !(data.get(0) instanceof String) && mOnItemViewCallback == null) {
             throw new RuntimeException("please set onItemView callback first");
         }
 

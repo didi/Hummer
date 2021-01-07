@@ -21,7 +21,7 @@ public abstract class Event implements Serializable {
 
     private String type;
 //    private JSValue target;
-    private int state;
+    private Object state;
     private long timestamp;
 
     public void setType(String type) {
@@ -33,7 +33,7 @@ public abstract class Event implements Serializable {
 //        this.target = target;
     }
 
-    public void setState(int state) {
+    public void setState(Object state) {
         this.state = state;
     }
 

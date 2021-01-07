@@ -26,7 +26,7 @@ public class CyclePagerAdapter extends ReusePagerAdapter<CyclePagerAdapter.ViewH
     private Context mContext;
     private ObjectPool mInstanceManager;
 
-    private List<Object> mList;
+    private List<Object> mList = new ArrayList<>();
 
     private boolean mIsCanLoop;
     private OnItemClickListener mOnItemClickListener;

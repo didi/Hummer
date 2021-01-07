@@ -7,13 +7,13 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.didi.hummer.HummerSDK;
-import com.didi.hummer.core.debug.HMDebugger;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.util.DebugUtil;
+import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.module.notifycenter.NotifyCenter;
@@ -29,7 +29,6 @@ import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.utils.AppUtils;
 import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.BarUtils;
-import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.utils.ScreenUtils;
 
 import java.util.Arrays;
@@ -116,7 +115,6 @@ public class HummerContext extends ContextWrapper {
         HummerException.addJSContextExceptionCallback(mJsContext, e -> {
             ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Bundle>>", "", jsSourcePath, -1));
             HummerSDK.getException(namespace).onException(e);
-            HMDebugger.getInstance().printDebugInfo(mJsContext.getIdentify());
         });
 
         registerInvoker(new HummerInvoker());
@@ -192,13 +190,12 @@ public class HummerContext extends ContextWrapper {
 
             if (mContent != null) {
                 mContent.removeAllViews();
-                mContent.addView(base.getView());
+                mContent.addView(base);
             }
 
             startIfNeed();
             resumeIfNeed();
         }
-        HMDebugger.getInstance().printDebugInfo(mJsContext.getIdentify());
     }
 
     public HummerLayout getContainer() {
@@ -355,7 +352,7 @@ public class HummerContext extends ContextWrapper {
         // 使每个funcName和一个jsValue绑定
         String funcKey = funcName + host.getIdentify();
         mNativeCallbacks.put(funcKey, callback);
-        JSCallback jsValue = (JSCallback) evaluateJavaScript(makeJSFunction(funcKey));
+        JSCallback jsValue = (JSCallback) mJsContext.evaluateJavaScript(makeJSFunction(funcKey));
         host.set(funcName, jsValue);
     }
 
@@ -374,10 +371,10 @@ public class HummerContext extends ContextWrapper {
             funcKey.append(item);
             if (i < items.length - 1) {
                 // 确保函数名前面的作用域路径上的变量都是已定义的
-                evaluateJavaScript(String.format("if (typeof(%s) == 'undefined') %s = {}", funcKey, funcKey));
+                mJsContext.evaluateJavaScript(String.format("if (typeof(%s) == 'undefined') %s = {}", funcKey, funcKey));
             } else if (funcPath.equals(funcKey.toString())) {
                 // 在JS中注册对应的方法
-                evaluateJavaScript(funcKey + " = " + makeJSFunction(funcKey.toString()));
+                mJsContext.evaluateJavaScript(funcKey + " = " + makeJSFunction(funcKey.toString()));
             }
         }
     }
@@ -423,11 +420,11 @@ public class HummerContext extends ContextWrapper {
     }
 
     private void initEnv(Map<String, Object> envs) {
-        evaluateJavaScript(String.format("Hummer.env = %s", HMGsonUtil.toJson(envs)));
+        mJsContext.evaluateJavaScript(String.format("Hummer.env = %s", HMGsonUtil.toJson(envs)));
     }
 
     public void updateEnv(String key, String value) {
-        evaluateJavaScript(String.format("Hummer.env.%s = %s", key, value));
+        mJsContext.evaluateJavaScript(String.format("Hummer.env.%s = %s", key, value));
     }
 
     private void initEnvironmentVariables() {

@@ -1,0 +1,24 @@
+apply plugin: 'com.android.library'
+apply from: '../module.gradle'
+apply from: 'upload.gradle'
+
+android {
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    // Hummer SDK
+    api project(':hummer-sdk')
+    // Hummer Plugin Interface
+    implementation 'com.didi.hummer:hummer-plugin-interface:0.0.1'
+
+    // J2V8 debugger
+    implementation 'com.github.AlexTrotsenko:j2v8-debugger:0.2.3'
+}

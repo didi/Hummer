@@ -35,11 +35,13 @@ public class ComponentTreeAnalyzer {
     private static final String FORMAT_STRING_NORMAL_H = "─";
     private static final String FORMAT_STRING_NORMAL_V = "│";
 
+    private String strComponentTreeFormat = "";
+
     /**
      * 根据记录的trace点，分析得出组件树
      */
-    private TreeNode analyzeTree(List<TraceInfo> traceList) {
-        if (traceList == null || traceList.isEmpty()) {
+    private TreeNode analyzeTree(List<InvokeTracker> trackerList) {
+        if (trackerList == null || trackerList.isEmpty()) {
             return null;
         }
 
@@ -47,10 +49,10 @@ public class ComponentTreeAnalyzer {
         Stack<TreeNode> stack = new Stack<>();
         Map<Long, TreeNode> cacheNodeMap = new LinkedHashMap<>();
 
-        for (TraceInfo info : traceList) {
-            if ("constructor".equals(info.methodName)) {
-                TreeNode node = new TreeNode(info.objectID, info.className);
-                node.timestamp = info.timestamp;
+        for (InvokeTracker tracker : trackerList) {
+            if ("constructor".equals(tracker.methodName)) {
+                TreeNode node = new TreeNode(tracker.objectID, tracker.className);
+                node.timestamp = tracker.timestamp;
                 cacheNodeMap.put(node.id, node);
 
                 if (!stack.isEmpty()) {
@@ -62,19 +64,19 @@ public class ComponentTreeAnalyzer {
                     }
                 }
                 stack.push(node);
-            } else if ("constructor_end".equals(info.methodName)) {
+            } else if ("constructor_end".equals(tracker.methodName)) {
                 TreeNode topNode = stack.pop();
                 topNode.isClosed = true;
             } else {
-                if ("setText".equals(info.methodName) || "setSrc".equals(info.methodName)) {
-                    TreeNode node = cacheNodeMap.get(info.objectID);
-                    if (node != null && info.params.length > 0) {
-                        node.tag = String.valueOf(info.params[0]);
+                if ("setText".equals(tracker.methodName) || "setSrc".equals(tracker.methodName)) {
+                    TreeNode node = cacheNodeMap.get(tracker.objectID);
+                    if (node != null && tracker.params.length > 0) {
+                        node.tag = String.valueOf(tracker.params[0]);
                     }
-                } else if ("appendChild".equals(info.methodName)) {
-                    TreeNode node = cacheNodeMap.get(info.objectID);
+                } else if ("appendChild".equals(tracker.methodName)) {
+                    TreeNode node = cacheNodeMap.get(tracker.objectID);
                     if (node != null) {
-                        long childId = ((Number) info.params[0]).longValue();
+                        long childId = ((Number) tracker.params[0]).longValue();
                         TreeNode childNode = cacheNodeMap.get(childId);
                         if (childNode != null) {
                             // 移除虚拟父亲
@@ -89,10 +91,10 @@ public class ComponentTreeAnalyzer {
                             childNode.parent = node;
                         }
                     }
-                } else if ("removeChild".equals(info.methodName)) {
-                    TreeNode node = cacheNodeMap.get(info.objectID);
+                } else if ("removeChild".equals(tracker.methodName)) {
+                    TreeNode node = cacheNodeMap.get(tracker.objectID);
                     if (node != null) {
-                        long childId = ((Number) info.params[0]).longValue();
+                        long childId = ((Number) tracker.params[0]).longValue();
                         TreeNode childNode = cacheNodeMap.get(childId);
                         if (childNode != null) {
                             // 移除虚拟父亲
@@ -109,8 +111,8 @@ public class ComponentTreeAnalyzer {
                             node.remove(childNode);
                         }
                     }
-                } else if ("Hummer".equals(info.className) && "render".equals(info.methodName)) {
-                    long childId = ((Number) info.params[0]).longValue();
+                } else if ("Hummer".equals(tracker.className) && "render".equals(tracker.methodName)) {
+                    long childId = ((Number) tracker.params[0]).longValue();
                     TreeNode childNode = cacheNodeMap.get(childId);
                     if (childNode != null) {
                         rootNode = childNode;
@@ -137,21 +139,29 @@ public class ComponentTreeAnalyzer {
     }
 
     /**
-     * 打印组件树
+     * 记录invoke调用的点
      */
-    public void printTree(List<TraceInfo> traceList) {
-        HMLog.d(TAG, " \n" + generateNodeTree(traceList));
+    public void analyze(List<InvokeTracker> trackerList) {
+        strComponentTreeFormat = generateNodeTreeFormat(trackerList);
+        HMLog.i(TAG, " \n" + strComponentTreeFormat);
+    }
+
+    /**
+     * 获取组件树字符串
+     */
+    public String getComponentTreeFormat() {
+        return strComponentTreeFormat;
     }
 
     /**
      * 生成组件树字符串
      */
-    public String generateNodeTree(List<TraceInfo> traceList) {
+    private String generateNodeTreeFormat(List<InvokeTracker> trackerList) {
         return
                 "┌─────────────────────────\n" +
                 "│\t视图树\n" +
                 "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
-                generateNodeTree(analyzeTree(traceList), 0, 0) +
+                generateNodeTree(analyzeTree(trackerList), 0, 0) +
                 "└─────────────────────────\n";
     }
 

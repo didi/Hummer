@@ -2,4 +2,14 @@
 <resources>
     <string name="app_name">hummersdk</string>
     <string name="permission_rationale_message">You have rejected us to apply for authorization, please agree to authorization, otherwise the function can\'t be used normally!</string>
+
+    <!-- 无障碍 -->
+    <string name="accessibility_role_text">Text</string>
+    <string name="accessibility_role_button">Button</string>
+    <string name="accessibility_role_image">Image</string>
+    <string name="accessibility_role_switch">Switch</string>
+    <string name="accessibility_role_input">Input</string>
+    <string name="accessibility_role_link">Link</string>
+    <string name="accessibility_role_search">Search</string>
+    <string name="accessibility_role_key">Keyboard</string>
 </resources>

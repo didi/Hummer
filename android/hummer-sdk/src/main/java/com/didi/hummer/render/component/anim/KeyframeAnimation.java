@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * 关键帧动画组件
- *
+ * <p>
  * Created by XiaoFeng on 2019/3/27.
  */
 @Component("KeyframeAnimation")
@@ -40,6 +40,35 @@ public class KeyframeAnimation extends BasicAnimation {
     }
 
     @Override
+    public void start(HMBase base) {
+        View view = base.getView();
+        if ("position".equalsIgnoreCase(animType)) {
+            animTranslation(view);
+        } else if ("opacity".equalsIgnoreCase(animType)) {
+            animAlpha(view);
+        } else if ("scale".equalsIgnoreCase(animType)) {
+            animScale(view, DIRECTION_XY);
+        } else if ("scaleX".equalsIgnoreCase(animType)) {
+            animScale(view, DIRECTION_X);
+        } else if ("scaleY".equalsIgnoreCase(animType)) {
+            animScale(view, DIRECTION_Y);
+        } else if ("rotationX".equalsIgnoreCase(animType)) {
+            animRotation(view, AXIS_X);
+        } else if ("rotationY".equalsIgnoreCase(animType)) {
+            animRotation(view, AXIS_Y);
+        } else if ("rotationZ".equalsIgnoreCase(animType)) {
+            animRotation(view, AXIS_Z);
+        } else if ("backgroundColor".equalsIgnoreCase(animType)) {
+            animBackgroundColor(base);
+        } else if ("width".equalsIgnoreCase(animType)) {
+            animWidth(base);
+        } else if ("height".equalsIgnoreCase(animType)) {
+            animHeight(base);
+        } else if ("skew".equalsIgnoreCase(animType)) {
+            animSkew(base);
+        }
+    }
+
     protected void animTranslation(View view) {
         if (keyframes == null) {
             return;
@@ -60,15 +89,14 @@ public class KeyframeAnimation extends BasicAnimation {
         PropertyValuesHolder frameYHolder = PropertyValuesHolder.ofKeyframe("translationY", frameYArray);
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(view, frameXHolder, frameYHolder);
         animator = anim;
-        anim.setDuration(getAnimDuration());
+        anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
         anim.setRepeatCount(repeatCount);
-        anim.setStartDelay(getAnimDelay());
-        anim.setInterpolator(getInterpolator());
+        anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
+        anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
         anim.start();
     }
 
-    @Override
     protected void animScale(View view, int direction) {
         if (keyframes == null) {
             return;
@@ -103,15 +131,14 @@ public class KeyframeAnimation extends BasicAnimation {
         }
 
         animator = anim;
-        anim.setDuration(getAnimDuration());
+        anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
         anim.setRepeatCount(repeatCount);
-        anim.setStartDelay(getAnimDelay());
-        anim.setInterpolator(getInterpolator());
+        anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
+        anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
         anim.start();
     }
 
-    @Override
     protected void animRotation(View view, int axis) {
         if (keyframes == null) {
             return;
@@ -141,15 +168,15 @@ public class KeyframeAnimation extends BasicAnimation {
         PropertyValuesHolder frameHolder = PropertyValuesHolder.ofKeyframe(animName, frameArray);
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(view, frameHolder);
         animator = anim;
-        anim.setDuration(getAnimDuration());
+        anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
         anim.setRepeatCount(repeatCount);
-        anim.setStartDelay(getAnimDelay());
-        anim.setInterpolator(getInterpolator());
+        anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
+        anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
+        anim.addListener(animatorListener);
         anim.addListener(animatorListener);
         anim.start();
     }
 
-    @Override
     protected void animAlpha(View view) {
         if (keyframes == null) {
             return;
@@ -165,15 +192,14 @@ public class KeyframeAnimation extends BasicAnimation {
         PropertyValuesHolder frameHolder = PropertyValuesHolder.ofKeyframe("alpha", frameArray);
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(view, frameHolder);
         animator = anim;
-        anim.setDuration(getAnimDuration());
+        anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
         anim.setRepeatCount(repeatCount);
-        anim.setStartDelay(getAnimDelay());
-        anim.setInterpolator(getInterpolator());
+        anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
+        anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
         anim.start();
     }
 
-    @Override
     protected void animBackgroundColor(HMBase base) {
         if (keyframes == null) {
             return;
@@ -189,16 +215,15 @@ public class KeyframeAnimation extends BasicAnimation {
         PropertyValuesHolder frameHolder = PropertyValuesHolder.ofKeyframe("backgroundColor", frameArray);
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(base.getBackgroundHelper(), frameHolder);
         animator = anim;
-        anim.setDuration(getAnimDuration());
         anim.setEvaluator(new ArgbEvaluator());
+        anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
         anim.setRepeatCount(repeatCount);
-        anim.setStartDelay(getAnimDelay());
-        anim.setInterpolator(getInterpolator());
+        anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
+        anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
         anim.start();
     }
 
-    @Override
     protected void animWidth(HMBase base) {
         if (keyframes == null) {
             return;
@@ -212,17 +237,16 @@ public class KeyframeAnimation extends BasicAnimation {
         }
 
         PropertyValuesHolder frameHolder = PropertyValuesHolder.ofKeyframe("width", frameArray);
-        ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new ViewWrapper(base), frameHolder);
+        ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new AnimViewWrapper(base), frameHolder);
         animator = anim;
-        anim.setDuration(getAnimDuration());
+        anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
         anim.setRepeatCount(repeatCount);
-        anim.setStartDelay(getAnimDelay());
-        anim.setInterpolator(getInterpolator());
+        anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
+        anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
         anim.start();
     }
 
-    @Override
     protected void animHeight(HMBase base) {
         if (keyframes == null) {
             return;
@@ -236,12 +260,40 @@ public class KeyframeAnimation extends BasicAnimation {
         }
 
         PropertyValuesHolder frameHolder = PropertyValuesHolder.ofKeyframe("height", frameArray);
-        ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new ViewWrapper(base), frameHolder);
+        ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new AnimViewWrapper(base), frameHolder);
         animator = anim;
-        anim.setDuration(getAnimDuration());
+        anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
         anim.setRepeatCount(repeatCount);
-        anim.setStartDelay(getAnimDelay());
-        anim.setInterpolator(getInterpolator());
+        anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
+        anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
+        anim.addListener(animatorListener);
+        anim.start();
+    }
+
+    protected void animSkew(HMBase base) {
+        if (keyframes == null) {
+            return;
+        }
+
+        Keyframe[] frameXArray = new Keyframe[keyframes.size()];
+        Keyframe[] frameYArray = new Keyframe[keyframes.size()];
+        for (int i = 0; i < keyframes.size(); i++) {
+            KeyFrame kf = keyframes.get(i);
+            Object[] array = trans2Array(kf.value);
+            Keyframe frameX = Keyframe.ofFloat(kf.percent, (float) Math.tan(Math.toRadians(HummerStyleUtils.convertNumber(array[0], false))));
+            Keyframe frameY = Keyframe.ofFloat(kf.percent, (float) Math.tan(Math.toRadians(HummerStyleUtils.convertNumber(array[1], false))));
+            frameXArray[i] = frameX;
+            frameYArray[i] = frameY;
+        }
+
+        PropertyValuesHolder holderX = PropertyValuesHolder.ofKeyframe("skewX", frameXArray);
+        PropertyValuesHolder holderY = PropertyValuesHolder.ofKeyframe("skewY", frameYArray);
+        ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new AnimViewWrapper(base), holderX, holderY);
+        animator = anim;
+        anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
+        anim.setRepeatCount(repeatCount);
+        anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
+        anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
         anim.start();
     }
