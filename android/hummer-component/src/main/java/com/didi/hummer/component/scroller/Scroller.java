@@ -1,12 +1,13 @@
 package com.didi.hummer.component.scroller;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.didi.hummer.annotation.Component;
-import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.annotation.JsProperty;
+import com.didi.hummer.component.R;
 import com.didi.hummer.component.refresh.HummerFooter;
 import com.didi.hummer.component.refresh.HummerHeader;
 import com.didi.hummer.component.refresh.LoadMoreState;
@@ -20,6 +21,11 @@ import com.didi.hummer.render.event.view.ScrollEvent;
 import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.render.style.HummerLayoutExtendUtils;
 import com.didi.hummer.render.style.HummerStyleUtils;
+import com.didi.hummer.render.utility.DPUtil;
+import com.didi.hummer.render.utility.YogaNodeUtil;
+import com.facebook.yoga.YogaNode;
+import com.facebook.yoga.YogaOverflow;
+import com.facebook.yoga.YogaUnit;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
@@ -54,11 +60,13 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
     @Override
     protected SmartRefreshLayout createViewInstance(Context context) {
-        scrollView = new VScrollView(context);
+        scrollView = (VScrollView) LayoutInflater.from(context).inflate(R.layout.scroll_view, null, false);
+        scrollView.setClipChildren(false);
 
         refreshLayout = new SmartRefreshLayout(context);
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableLoadMore(false);
+        refreshLayout.setEnableOverScrollDrag(true); // 默认有回弹效果
         refreshLayout.setRefreshContent(scrollView);
 
         hummerHeader = new HummerHeader(context);
@@ -117,16 +125,26 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         initScrollView();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        scrollView.release();
+    }
+
     private void initScrollView() {
         layout = new HummerLayout(getContext());
-        layout.setOnSizeChangeListener((w, h, oldw, oldh) -> getYogaNode().dirty());
         scrollView.addView(layout);
+
+        YogaNode scrollViewNode = YogaNodeUtil.createYogaNode();
+        scrollViewNode.setData(scrollView);
+        scrollViewNode.addChildAt(layout.getYogaNode(), 0);
+        scrollViewNode.setOverflow(YogaOverflow.SCROLL);
+        getYogaNode().setMeasureFunction(null);
+        getYogaNode().setFlexShrink(1);
+        getYogaNode().addChildAt(scrollViewNode, 0);
 
         // 默认隐藏滚动条
         scrollView.setVerticalScrollBarEnabled(false);
-
-        // 使ScrollView的最大高度限制在屏幕范围之内，不超出屏幕
-        getYogaNode().setFlexShrink(1);
 
         scrollView.setOnScrollListener(new OnScrollListener() {
             @Override
@@ -173,10 +191,10 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
                 }
                 scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
                 scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_SCROLL);
-                scrollEvent.setOffsetX(x);
-                scrollEvent.setOffsetY(y);
-                scrollEvent.setDx(dx);
-                scrollEvent.setDy(dy);
+                scrollEvent.setOffsetX(DPUtil.px2dpF(getContext(), x));
+                scrollEvent.setOffsetY(DPUtil.px2dpF(getContext(), y));
+                scrollEvent.setDx(DPUtil.px2dpF(getContext(), dx));
+                scrollEvent.setDy(DPUtil.px2dpF(getContext(), dy));
                 scrollEvent.setTimestamp(System.currentTimeMillis());
                 mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
             }
@@ -194,13 +212,25 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         });
     }
 
+    private void adjustWidthAndHeight() {
+        if (getYogaNode().getWidth().unit == YogaUnit.AUTO) {
+            layout.getYogaNode().setWidthAuto();
+        } else {
+            layout.getYogaNode().setWidthPercent(100);
+        }
+        if (getYogaNode().getHeight().unit == YogaUnit.AUTO) {
+            layout.getYogaNode().setHeightAuto();
+        } else {
+            layout.getYogaNode().setHeightPercent(100);
+        }
+    }
+
     @JsMethod("appendChild")
     public void appendChild(HMBase child) {
         if (child == null) {
             return;
         }
-        
-        getYogaNode().dirty();
+
         child.getJSValue().protect();
         child.setPositionChangedListener(this);
         children.add(child);
@@ -215,6 +245,8 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         }
 
         layout.addView(finalChild);
+
+        adjustWidthAndHeight();
     }
 
     @JsMethod("removeChild")
@@ -226,7 +258,6 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         child.getJSValue().unprotect();
         child.setPositionChangedListener(null);
         children.remove(child);
-        getYogaNode().dirty();
 
         // fixed 布局操作
         if (fixedNoneBoxMap.containsKey(child)) {
@@ -237,12 +268,12 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         }
 
         layout.removeView(child);
+
+        adjustWidthAndHeight();
     }
 
     @JsMethod("removeAll")
     public void removeAll() {
-        getYogaNode().dirty();
-
         // fixed
         for (Map.Entry<HMBase, FixedNoneBox> entry : fixedNoneBoxMap.entrySet()) {
             HMBase hmBase = entry.getKey();
@@ -259,6 +290,8 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         children.clear();
 
         layout.removeAllViews();
+
+        adjustWidthAndHeight();
     }
 
     @JsMethod("insertBefore")
@@ -267,7 +300,6 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
             return;
         }
 
-        getYogaNode().dirty();
         child.getJSValue().protect();
         child.setPositionChangedListener(this);
         children.add(child);
@@ -287,6 +319,8 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
         // 默认处理
         layout.insertBefore(finalChild, finalExisting);
+
+        adjustWidthAndHeight();
     }
 
     @JsMethod("replaceChild")
@@ -295,7 +329,6 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
             return;
         }
 
-        getYogaNode().dirty();
         child.getJSValue().protect();
         child.setPositionChangedListener(this);
         old.getJSValue().unprotect();
@@ -319,8 +352,11 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
         // 默认处理
         layout.replaceView(finalChild, finalOld);
+
+        adjustWidthAndHeight();
     }
 
+    @Deprecated
     @JsMethod("getElementById")
     public HMBase getSubview(String viewID) {
 
@@ -344,18 +380,17 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         return result;
     }
 
+    @Deprecated
     @JsMethod("layout")
     public void layout() {
         layout.requestLayout();
     }
 
-    @JsAttribute("overflow")
-    public void setOverflow(String overflow) {
-        boolean needClip = "hidden".equals(overflow);
-        layout.setNeedClipChildren(needClip);
-    }
-
-    @JsAttribute("hideScrollBar")
+    /**
+     * 是否显示滚动条（默认false）
+     */
+    @JsProperty("showScrollBar")
+    private boolean showScrollBar;
     public void setShowScrollBar(boolean isShow) {
         scrollView.setVerticalScrollBarEnabled(isShow);
     }
@@ -405,14 +440,27 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         }
     }
 
+    /**
+     * 是否有回弹效果（默认true）
+     */
+    @JsProperty("bounces")
+    public boolean bounces;
+    public void setBounces(boolean bounces) {
+        refreshLayout.setEnableOverScrollDrag(bounces);
+    }
+
     @JsMethod("scrollTo")
-    public void scrollTo(int x, int y) {
-        scrollView.smoothScrollTo(x, y);
+    public void scrollTo(Object x, Object y) {
+        int nX = (int) HummerStyleUtils.convertNumber(x);
+        int nY = (int) HummerStyleUtils.convertNumber(y);
+        scrollView.smoothScrollTo(nX, nY);
     }
 
     @JsMethod("scrollBy")
-    public void scrollBy(int dx, int dy) {
-        scrollView.smoothScrollBy(dx, dy);
+    public void scrollBy(Object dx, Object dy) {
+        int nDx = (int) HummerStyleUtils.convertNumber(dx);
+        int nDy = (int) HummerStyleUtils.convertNumber(dy);
+        scrollView.smoothScrollBy(nDx, nDy);
     }
 
     @JsMethod("scrollToTop")
@@ -470,17 +518,5 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
     public void resetStyle() {
         super.resetStyle();
         setShowScrollBar(false);
-    }
-
-    @Override
-    public boolean setStyle(String key, Object value) {
-        switch (key) {
-            case HummerStyleUtils.Hummer.SHOW_SCROLL_BAR:
-                setShowScrollBar((boolean) value);
-                break;
-            default:
-                return false;
-        }
-        return true;
     }
 }

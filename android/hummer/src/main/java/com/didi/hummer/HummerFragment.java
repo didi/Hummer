@@ -133,6 +133,17 @@ public class HummerFragment extends Fragment {
         hmRender = new HummerRender(hmContainer, getNamespace(), getDevToolsConfig());
         initHummerRegister(hmRender.getHummerContext());
         hmRender.setJsPageInfo(page);
+        hmRender.setRenderCallback(new HummerRender.HummerRenderCallback() {
+            @Override
+            public void onSucceed(HummerContext hmContext, JSValue jsPage) {
+                onPageRenderSucceed(hmContext, jsPage);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                onPageRenderFailed(e);
+            }
+        });
     }
 
     /**
@@ -168,17 +179,7 @@ public class HummerFragment extends Fragment {
      */
     protected void renderHummer() {
         if (page.isHttpUrl()) {
-            hmRender.renderWithUrl(page.url, new HummerRender.HummerRenderCallback() {
-                @Override
-                public void onSucceed(HummerContext hmContext, JSValue jsPage) {
-                    onPageRenderSucceed(hmContext, jsPage);
-                }
-
-                @Override
-                public void onFailed(Exception e) {
-                    onPageRenderFailed(e);
-                }
-            });
+            hmRender.renderWithUrl(page.url);
         } else if (page.url.startsWith("/")) {
             hmRender.renderWithFile(page.url);
         } else {

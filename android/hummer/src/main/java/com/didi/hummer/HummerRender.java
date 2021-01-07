@@ -37,6 +37,7 @@ public class HummerRender {
     private HummerContext hmContext;
     private AtomicBoolean isDestroyed = new AtomicBoolean(false);
     private HotLoader hotLoader;
+    private HummerRenderCallback renderCallback;
 
     public interface HummerRenderCallback {
         void onSucceed(HummerContext hmContext, JSValue jsPage);
@@ -83,6 +84,7 @@ public class HummerRender {
         isDestroyed.set(true);
 
         if (DebugUtil.isDebuggable()) {
+            HummerDebugger.release(hmContext);
             if (hotLoader != null) {
                 hotLoader.destroy();
             }
@@ -106,51 +108,50 @@ public class HummerRender {
 
         hmContext.setJsSourcePath(sourcePath);
         hmContext.evaluateJavaScript(js, sourcePath);
+
+        if (renderCallback != null) {
+            if (getHummerContext().getJsPage() != null) {
+                renderCallback.onSucceed(getHummerContext(), getHummerContext().getJsPage());
+            } else {
+                renderCallback.onFailed(new RuntimeException("Page is empty!"));
+            }
+        }
     }
 
     public void renderWithUrl(String url) {
-        this.renderWithUrl(url, null);
-    }
-
-    public void renderWithUrl(String url, HummerRenderCallback callback) {
         if (TextUtils.isEmpty(url) || isDestroyed.get()) {
             return;
         }
 
         NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
             if (isDestroyed.get()) {
-                if (callback != null) {
-                    callback.onFailed(new RuntimeException("Page is destroyed!"));
+                if (renderCallback != null) {
+                    renderCallback.onFailed(new RuntimeException("Page is destroyed!"));
                 }
                 return;
             }
 
             if (response == null) {
-                if (callback != null) {
-                    callback.onFailed(new RuntimeException("Http response is empty!"));
+                if (renderCallback != null) {
+                    renderCallback.onFailed(new RuntimeException("Http response is empty!"));
                 }
                 return;
             }
 
             if (response.error.code != 0) {
-                if (callback != null) {
-                    callback.onFailed(new RuntimeException(String.format("Http response error: %d, %s", response.error.code, response.error.msg)));
+                if (renderCallback != null) {
+                    renderCallback.onFailed(new RuntimeException(String.format("Http response error: %d, %s", response.error.code, response.error.msg)));
                 }
                 return;
             }
 
             render(response.data, url);
-
-            if (callback != null) {
-                if (getHummerContext().getJsPage() != null) {
-                    callback.onSucceed(getHummerContext(), getHummerContext().getJsPage());
-                } else {
-                    callback.onFailed(new RuntimeException("Page is empty!"));
-                }
-            }
         });
 
         if (DebugUtil.isDebuggable()) {
+            // 调试插件
+            HummerDebugger.init(hmContext, url);
+
             // 热更新
             if (hotLoader == null) {
                 hotLoader = new HotLoader();
@@ -160,7 +161,17 @@ public class HummerRender {
     }
 
     public void renderWithAssets(String assetsPath) {
-        if (TextUtils.isEmpty(assetsPath) || isDestroyed.get()) {
+        if (isDestroyed.get()) {
+            if (renderCallback != null) {
+                renderCallback.onFailed(new RuntimeException("Page is destroyed!"));
+            }
+            return;
+        }
+
+        if (TextUtils.isEmpty(assetsPath)) {
+            if (renderCallback != null) {
+                renderCallback.onFailed(new RuntimeException("assetsPath is empty!"));
+            }
             return;
         }
 
@@ -172,7 +183,17 @@ public class HummerRender {
     }
 
     public void renderWithFile(String jsFilePath) {
-        if (TextUtils.isEmpty(jsFilePath) || isDestroyed.get()) {
+        if (isDestroyed.get()) {
+            if (renderCallback != null) {
+                renderCallback.onFailed(new RuntimeException("Page is destroyed!"));
+            }
+            return;
+        }
+
+        if (TextUtils.isEmpty(jsFilePath)) {
+            if (renderCallback != null) {
+                renderCallback.onFailed(new RuntimeException("js file path is empty!"));
+            }
             return;
         }
 
@@ -184,10 +205,25 @@ public class HummerRender {
     }
 
     public void renderWithFile(File jsFile) {
-        if (jsFile == null || !jsFile.exists() || isDestroyed.get()) {
+        if (isDestroyed.get()) {
+            if (renderCallback != null) {
+                renderCallback.onFailed(new RuntimeException("Page is destroyed!"));
+            }
             return;
         }
+
+        if (jsFile == null || !jsFile.exists()) {
+            if (renderCallback != null) {
+                renderCallback.onFailed(new RuntimeException("js file is not exists!"));
+            }
+            return;
+        }
+
         render(FileUtil.readFile(jsFile), JsSourceUtil.JS_SOURCE_PREFIX_FILE + jsFile.getAbsolutePath());
+    }
+
+    public void setRenderCallback(HummerRenderCallback renderCallback) {
+        this.renderCallback = renderCallback;
     }
 
     /**
@@ -227,7 +263,7 @@ public class HummerRender {
         }
         // 使用JSContext.getJSValue的方式目前拿不到Object类型的数据，所以只能先用下面的方法代替
 //        return hmContext.getJsContext().getJSValue("Hummer").getJSValue("pageResult").jsonValueOf(new TypeToken<Map<String, Object>>(){}.getType());
-        Object result = hmContext.evaluateJavaScript("JSON.stringify(Hummer.pageResult)");
+        Object result = hmContext.getJsContext().evaluateJavaScript("JSON.stringify(Hummer.pageResult)");
         if (result instanceof String) {
             return HMGsonUtil.fromJson((String) result, new TypeToken<Map<String, Object>>(){}.getType());
         }

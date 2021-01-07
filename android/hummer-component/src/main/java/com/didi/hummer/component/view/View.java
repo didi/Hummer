@@ -7,6 +7,7 @@ import com.didi.hummer.component.imageview.Image;
 import com.didi.hummer.component.list.List;
 import com.didi.hummer.component.scroller.HorizontalScroller;
 import com.didi.hummer.component.scroller.Scroller;
+import com.didi.hummer.component.viewpager.ViewPager;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.render.component.view.HMBase;
@@ -29,21 +30,18 @@ public class View extends HummerLayoutExtendView {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        // 默认改成子View可以超出父容器，和iOS保持对齐
-        getView().setClipChildren(false);
-    }
-
-    @Override
     @JsMethod("appendChild")
     public void appendChild(HMBase child) {
         super.appendChild(child);
 
+        if (child == null) {
+            return;
+        }
+
         hummerNode.appendChild(child.getNode());
 
         // 以下控件需要限制子元素超出父容器
-        if (child instanceof Image || child instanceof Scroller || child instanceof HorizontalScroller || child instanceof List) {
+        if (child instanceof Image || child instanceof Scroller || child instanceof HorizontalScroller || child instanceof List || child instanceof ViewPager) {
             getView().setClipChildren(true);
         }
     }
@@ -52,6 +50,10 @@ public class View extends HummerLayoutExtendView {
     @JsMethod("removeChild")
     public void removeChild(HMBase child) {
         super.removeChild(child);
+
+        if (child == null) {
+            return;
+        }
 
         hummerNode.removeChild(child.getNode());
     }
@@ -69,6 +71,10 @@ public class View extends HummerLayoutExtendView {
     public void insertBefore(HMBase child, HMBase existing) {
         super.insertBefore(child, existing);
 
+        if (child == null || existing == null) {
+            return;
+        }
+
         hummerNode.insertBefore(child.getNode(), existing.getNode());
     }
 
@@ -77,15 +83,21 @@ public class View extends HummerLayoutExtendView {
     public void replaceChild(HMBase child, HMBase old) {
         super.replaceChild(child, old);
 
+        if (child == null || old == null) {
+            return;
+        }
+
         hummerNode.replaceChild(child.getNode(), old.getNode());
     }
 
     @Override
+    @Deprecated
     @JsMethod("getElementById")
     public HMBase getElementById(String viewID) {
         return super.getElementById(viewID);
     }
 
+    @Deprecated
     @JsMethod("layout")
     public void layout() {
         getView().requestLayout();

@@ -4,11 +4,11 @@ import android.graphics.Color;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
+import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.RemUtil;
 import com.didi.hummer.render.utility.YogaAttrUtils;
-import com.didi.hummer.core.util.ExceptionUtil;
 import com.facebook.yoga.YogaAlign;
 import com.facebook.yoga.YogaDirection;
 import com.facebook.yoga.YogaDisplay;
@@ -20,6 +20,7 @@ import com.facebook.yoga.YogaPositionType;
 import com.facebook.yoga.YogaWrap;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,149 +31,156 @@ import java.util.Map;
 public class HummerStyleUtils {
 
     class Yoga {
-        static final String JUSTIFY_CONTENT          = "justifyContent";
-        static final String ALIGN_CONTENT            = "alignContent";
-        static final String ALIGN_ITEMS              = "alignItems";
-        static final String ALIGN_SELF               = "alignSelf";
-        static final String ASPECT_RATIO             = "aspectRatio";
-        static final String BORDER                   = "border";
-        static final String BORDER_ALL               = "borderAll";
-        static final String BORDER_LEFT              = "borderLeft";
-        static final String BORDER_RIGHT             = "borderRight";
-        static final String BORDER_TOP               = "borderTop";
-        static final String BORDER_BOTTOM            = "borderBottom";
-        static final String BORDER_START             = "borderStart";
-        static final String BORDER_END               = "borderEnd";
-        static final String BORDER_HORIZONTAL        = "borderHorizontal";
-        static final String BORDER_VERTICAL          = "borderVertical";
-        static final String DIRECTION                = "direction";
-        static final String DISPLAY                  = "display";
-        static final String FLEX                     = "flex";
-        static final String FLEX_BASIS               = "flexBasis";
-        static final String FLEX_DIRECTION           = "flexDirection";
-        static final String FLEX_GROW                = "flexGrow";
-        static final String FLEX_SHRINK              = "flexShrink";
-        static final String FLEX_WRAP                = "flexWrap";
-        static final String WIDTH                    = "width";
-        static final String HEIGHT                   = "height";
-        static final String MAX_WIDTH                = "maxWidth";
-        static final String MAX_HEIGHT               = "maxHeight";
-        static final String MIN_WIDTH                = "minWidth";
-        static final String MIN_HEIGHT               = "minHeight";
-        static final String MARGIN                   = "margin";
-        static final String MARGIN_ALL               = "marginAll";
-        static final String MARGIN_LEFT              = "marginLeft";
-        static final String MARGIN_RIGHT             = "marginRight";
-        static final String MARGIN_TOP               = "marginTop";
-        static final String MARGIN_BOTTOM            = "marginBottom";
-        static final String MARGIN_START             = "marginStart";
-        static final String MARGIN_END               = "marginEnd";
-        static final String MARGIN_HORIZONTAL        = "marginHorizontal";
-        static final String MARGIN_VERTICAL          = "marginVertical";
-        static final String PADDING                  = "padding";
-        static final String PADDING_ALL              = "paddingAll";
-        static final String PADDING_BOTTOM           = "paddingBottom";
-        static final String PADDING_END              = "paddingEnd";
-        static final String PADDING_LEFT             = "paddingLeft";
-        static final String PADDING_RIGHT            = "paddingRight";
-        static final String PADDING_START            = "paddingStart";
-        static final String PADDING_TOP              = "paddingTop";
-        static final String PADDING_HORIZONTAL       = "paddingHorizontal";
-        static final String PADDING_VERTICAL         = "paddingVertical";
-        static final String POSITION                 = "position";
-        static final String POSITION_TYPE            = "positionType";
-        static final String POSITION_ALL             = "positionAll";
-        static final String POSITION_LEFT            = "positionLeft";
-        static final String POSITION_RIGHT           = "positionRight";
-        static final String POSITION_TOP             = "positionTop";
-        static final String POSITION_BOTTOM          = "positionBottom";
-        static final String POSITION_START           = "positionStart";
-        static final String POSITION_END             = "positionEnd";
-        static final String POSITION_HORIZONTAL      = "positionHorizontal";
-        static final String POSITION_VERTICAL        = "positionVertical";
-        static final String LEFT                     = "left";
-        static final String RIGHT                    = "right";
-        static final String TOP                      = "top";
-        static final String BOTTOM                   = "bottom";
-        static final String START                    = "start";
-        static final String END                      = "end";
+        static final String JUSTIFY_CONTENT = "justifyContent";
+        static final String ALIGN_CONTENT = "alignContent";
+        static final String ALIGN_ITEMS = "alignItems";
+        static final String ALIGN_SELF = "alignSelf";
+        static final String ASPECT_RATIO = "aspectRatio";
+        static final String BORDER = "border";
+        static final String BORDER_ALL = "borderAll";
+        static final String BORDER_LEFT = "borderLeft";
+        static final String BORDER_RIGHT = "borderRight";
+        static final String BORDER_TOP = "borderTop";
+        static final String BORDER_BOTTOM = "borderBottom";
+        static final String BORDER_START = "borderStart";
+        static final String BORDER_END = "borderEnd";
+        static final String BORDER_HORIZONTAL = "borderHorizontal";
+        static final String BORDER_VERTICAL = "borderVertical";
+        static final String DIRECTION = "direction";
+        static final String DISPLAY = "display";
+        static final String FLEX = "flex";
+        static final String FLEX_BASIS = "flexBasis";
+        static final String FLEX_DIRECTION = "flexDirection";
+        static final String FLEX_GROW = "flexGrow";
+        static final String FLEX_SHRINK = "flexShrink";
+        static final String FLEX_WRAP = "flexWrap";
+        static final String WIDTH = "width";
+        static final String HEIGHT = "height";
+        static final String MAX_WIDTH = "maxWidth";
+        static final String MAX_HEIGHT = "maxHeight";
+        static final String MIN_WIDTH = "minWidth";
+        static final String MIN_HEIGHT = "minHeight";
+        static final String MARGIN = "margin";
+        static final String MARGIN_ALL = "marginAll";
+        static final String MARGIN_LEFT = "marginLeft";
+        static final String MARGIN_RIGHT = "marginRight";
+        static final String MARGIN_TOP = "marginTop";
+        static final String MARGIN_BOTTOM = "marginBottom";
+        static final String MARGIN_START = "marginStart";
+        static final String MARGIN_END = "marginEnd";
+        static final String MARGIN_HORIZONTAL = "marginHorizontal";
+        static final String MARGIN_VERTICAL = "marginVertical";
+        static final String PADDING = "padding";
+        static final String PADDING_ALL = "paddingAll";
+        static final String PADDING_BOTTOM = "paddingBottom";
+        static final String PADDING_END = "paddingEnd";
+        static final String PADDING_LEFT = "paddingLeft";
+        static final String PADDING_RIGHT = "paddingRight";
+        static final String PADDING_START = "paddingStart";
+        static final String PADDING_TOP = "paddingTop";
+        static final String PADDING_HORIZONTAL = "paddingHorizontal";
+        static final String PADDING_VERTICAL = "paddingVertical";
+        static final String POSITION = "position";
+        static final String POSITION_TYPE = "positionType";
+        static final String POSITION_ALL = "positionAll";
+        static final String POSITION_LEFT = "positionLeft";
+        static final String POSITION_RIGHT = "positionRight";
+        static final String POSITION_TOP = "positionTop";
+        static final String POSITION_BOTTOM = "positionBottom";
+        static final String POSITION_START = "positionStart";
+        static final String POSITION_END = "positionEnd";
+        static final String POSITION_HORIZONTAL = "positionHorizontal";
+        static final String POSITION_VERTICAL = "positionVertical";
+        static final String LEFT = "left";
+        static final String RIGHT = "right";
+        static final String TOP = "top";
+        static final String BOTTOM = "bottom";
+        static final String START = "start";
+        static final String END = "end";
     }
 
     public class Hummer {
         // HMBase
-        public static final String BACKGROUND_COLOR          = "backgroundColor";
-        public static final String BACKGROUND_IMAGE          = "backgroundImage";
-        public static final String BORDER_STYLE              = "borderStyle";
-        public static final String BORDER_STYLE_L            = "borderLeftStyle";
-        public static final String BORDER_STYLE_T            = "borderTopStyle";
-        public static final String BORDER_STYLE_R            = "borderRightStyle";
-        public static final String BORDER_STYLE_B            = "borderBottomStyle";
-        public static final String BORDER_WIDTH              = "borderWidth";
-        public static final String BORDER_WIDTH_L            = "borderLeftWidth";
-        public static final String BORDER_WIDTH_T            = "borderTopWidth";
-        public static final String BORDER_WIDTH_R            = "borderRightWidth";
-        public static final String BORDER_WIDTH_B            = "borderBottomWidth";
-        public static final String BORDER_COLOR              = "borderColor";
-        public static final String BORDER_COLOR_L            = "borderLeftColor";
-        public static final String BORDER_COLOR_T            = "borderTopColor";
-        public static final String BORDER_COLOR_R            = "borderRightColor";
-        public static final String BORDER_COLOR_B            = "borderBottomColor";
-        public static final String BORDER_RADIUS             = "borderRadius";
-        public static final String BORDER_RADIUS_TL          = "borderTopLeftRadius";
-        public static final String BORDER_RADIUS_TR          = "borderTopRightRadius";
-        public static final String BORDER_RADIUS_BR          = "borderBottomRightRadius";
-        public static final String BORDER_RADIUS_BL          = "borderBottomLeftRadius";
-        public static final String SHADOW                    = "shadow";
-        public static final String OPACITY                   = "opacity";
-        public static final String VISIBILITY                = "visibility";
-        public static final String Z_INDEX                   = "zIndex";
-        public static final String POSITION                  = "position";
-        public static final String POSITION_TYPE             = "positionType";
-        public static final String DISPLAY                   = "display";
+        public static final String BACKGROUND_COLOR = "backgroundColor";
+        public static final String BACKGROUND_IMAGE = "backgroundImage";
+        public static final String BORDER_STYLE = "borderStyle";
+        public static final String BORDER_STYLE_L = "borderLeftStyle";
+        public static final String BORDER_STYLE_T = "borderTopStyle";
+        public static final String BORDER_STYLE_R = "borderRightStyle";
+        public static final String BORDER_STYLE_B = "borderBottomStyle";
+        public static final String BORDER_WIDTH = "borderWidth";
+        public static final String BORDER_WIDTH_L = "borderLeftWidth";
+        public static final String BORDER_WIDTH_T = "borderTopWidth";
+        public static final String BORDER_WIDTH_R = "borderRightWidth";
+        public static final String BORDER_WIDTH_B = "borderBottomWidth";
+        public static final String BORDER_COLOR = "borderColor";
+        public static final String BORDER_COLOR_L = "borderLeftColor";
+        public static final String BORDER_COLOR_T = "borderTopColor";
+        public static final String BORDER_COLOR_R = "borderRightColor";
+        public static final String BORDER_COLOR_B = "borderBottomColor";
+        public static final String BORDER_RADIUS = "borderRadius";
+        public static final String BORDER_RADIUS_TL = "borderTopLeftRadius";
+        public static final String BORDER_RADIUS_TR = "borderTopRightRadius";
+        public static final String BORDER_RADIUS_BR = "borderBottomRightRadius";
+        public static final String BORDER_RADIUS_BL = "borderBottomLeftRadius";
+        public static final String SHADOW = "shadow";
+        public static final String OPACITY = "opacity";
+        public static final String VISIBILITY = "visibility";
+        public static final String Z_INDEX = "zIndex";
+        public static final String POSITION = "position";
+        public static final String POSITION_TYPE = "positionType";
+        public static final String DISPLAY = "display";
 
         // View
-        public static final String OVERFLOW                  = "overflow";
+        public static final String OVERFLOW = "overflow";
 
         // Text/Button
-        public static final String COLOR                     = "color";
-        public static final String FONT_SIZE                 = "fontSize";
-        public static final String FONT_FAMILY               = "fontFamily";
-        public static final String FONT_WEIGHT               = "fontWeight";
-        public static final String FONT_STYLE                = "fontStyle";
-        public static final String TEXT_ALIGN                = "textAlign";
-        public static final String TEXT_DECORATION           = "textDecoration";
-        public static final String TEXT_OVERFLOW             = "textOverflow";
-        public static final String TEXT_LINE_CLAMP           = "textLineClamp";
-        public static final String LETTER_SPACING            = "letterSpacing";
-        public static final String LINE_SPACING_MULTI        = "lineSpacingMulti";
+        public static final String COLOR = "color";
+        public static final String FONT_SIZE = "fontSize";
+        public static final String FONT_FAMILY = "fontFamily";
+        public static final String FONT_WEIGHT = "fontWeight";
+        public static final String FONT_STYLE = "fontStyle";
+        public static final String TEXT_ALIGN = "textAlign";
+        public static final String TEXT_DECORATION = "textDecoration";
+        public static final String TEXT_OVERFLOW = "textOverflow";
+        public static final String TEXT_LINE_CLAMP = "textLineClamp";
+        public static final String LETTER_SPACING = "letterSpacing";
+        public static final String LINE_SPACING_MULTI = "lineSpacingMulti";
 
         // Input/TextArea
-        public static final String TYPE                      = "type";
-        public static final String PLACEHOLDER_COLOR         = "placeholderColor";
-        public static final String PLACEHOLDER_FONT_SIZE     = "placeholderFontSize";
-        public static final String CURSOR_COLOR              = "cursorColor";
-        public static final String MAX_LENGTH                = "maxLength";
-        public static final String RETURN_KEY_TYPE           = "returnKeyType";
+        public static final String TYPE = "type";
+        public static final String PLACEHOLDER_COLOR = "placeholderColor";
+        public static final String PLACEHOLDER_FONT_SIZE = "placeholderFontSize";
+        public static final String CURSOR_COLOR = "cursorColor";
+        public static final String MAX_LENGTH = "maxLength";
+        public static final String RETURN_KEY_TYPE = "returnKeyType";
 
         // Image
-        public static final String RESIZE                    = "resize";
+        public static final String RESIZE = "resize";
 
         // Switch
-        public static final String ON_COLOR                  = "onColor";
-        public static final String OFF_COLOR                 = "offColor";
-        public static final String THUMB_COLOR               = "thumbColor";
+        public static final String ON_COLOR = "onColor";
+        public static final String OFF_COLOR = "offColor";
+        public static final String THUMB_COLOR = "thumbColor";
 
         // List
-        public static final String MODE                      = "mode";
-        public static final String SCROLL_DIRECTION          = "scrollDirection";
-        public static final String COLUMN                    = "column";
-        public static final String LINE_SPACING              = "lineSpacing";
-        public static final String ITEM_SPACING              = "itemSpacing";
-        public static final String LEFT_SPACING              = "leftSpacing";
-        public static final String RIGHT_SPACING             = "rightSpacing";
-        public static final String TOP_SPACING               = "topSpacing";
-        public static final String BOTTOM_SPACING            = "bottomSpacing";
-        public static final String SHOW_SCROLL_BAR           = "showScrollBar";
+        public static final String MODE = "mode";
+        public static final String SCROLL_DIRECTION = "scrollDirection";
+        public static final String COLUMN = "column";
+        public static final String LINE_SPACING = "lineSpacing";
+        public static final String ITEM_SPACING = "itemSpacing";
+        public static final String LEFT_SPACING = "leftSpacing";
+        public static final String RIGHT_SPACING = "rightSpacing";
+        public static final String TOP_SPACING = "topSpacing";
+        public static final String BOTTOM_SPACING = "bottomSpacing";
+
+        // Transform｜Transition
+        public static final String TRANSFORM = "transform";
+        public static final String TRANSITION = "transition";
+        public static final String TRANSITION_DELAY = "transitionDelay";
+        public static final String TRANSITION_DURATION = "transitionDuration";
+        public static final String TRANSITION_PROPERTY = "transitionProperty";
+        public static final String TRANSITION_TIMING_FUNCTION = "transitionTimingFunction";
     }
 
     private final static List<String> YOGA_STYLES = Arrays.asList(
@@ -250,7 +258,6 @@ public class HummerStyleUtils {
     private final static List<String> NON_DP_STYLES = new LinkedList<>(Arrays.asList(
             Yoga.ASPECT_RATIO,
             Yoga.FLEX,
-            Yoga.FLEX_BASIS,
             Yoga.FLEX_GROW,
             Yoga.FLEX_SHRINK,
             Hummer.OPACITY,
@@ -259,6 +266,17 @@ public class HummerStyleUtils {
             Hummer.LINE_SPACING_MULTI,
             Hummer.MAX_LENGTH,
             Hummer.COLUMN
+    ));
+
+    /**
+     * 数值类型的属性白名单（不需要dp转换）
+     */
+    private final static List<String> TRANSITION_STYLES = new LinkedList<>(Arrays.asList(
+            Yoga.WIDTH,
+            Yoga.HEIGHT,
+            Hummer.BACKGROUND_COLOR,
+            Hummer.OPACITY,
+            Hummer.TRANSFORM
     ));
 
     /**
@@ -284,9 +302,13 @@ public class HummerStyleUtils {
 
     // 设置控件样式
     static void applyStyle(boolean needIntercept, HMBase view, Map style) {
+
+
         if (view == null || style == null) {
             return;
         }
+
+        Map<String, Object> transitionStyle = new HashMap<>();
         for (Object k : style.keySet()) {
             String key = String.valueOf(k);
             Object value = style.get(k);
@@ -299,10 +321,17 @@ public class HummerStyleUtils {
                 if (view.setHummerStyle(key, value)) {
                     continue;
                 }
+            } else if (key.startsWith(Hummer.TRANSITION)) {
+                // transition 参数跳过  在最后处理
+                transitionStyle.put(key, value);
+                continue;
             }
 
             try {
-                if (isYogaStyle(key)) {
+                // transform 必须走 animator 进行变化
+                if (Hummer.TRANSFORM.equals(key) || (isTransitionStyle(key) && (view.supportTransitionStyle("all") || view.supportTransitionStyle(key)))) {
+                    view.handleTransitionStyle(key, value);
+                } else if (isYogaStyle(key)) {
                     // 处理Yoga支持样式
                     applyYogaStyle(view.getYogaNode(), key, value); // 耗时1ms
                 } else {
@@ -316,6 +345,36 @@ public class HummerStyleUtils {
             }
         }
         view.getView().requestLayout();
+
+        // 设置transition样式
+        for (Object k : transitionStyle.keySet()) {
+            String key = String.valueOf(k);
+            Object value = style.get(k);
+
+            view.setTransitionStyle(key, value);
+        }
+
+        view.runAnimator();
+
+    }
+
+    private static final String[] paramNames = new String[]{"x", "y", "z"};
+
+    public static Object transformValue(Object object) {
+
+        if (object == null) {
+            return object;
+        }
+        String value = object.toString();
+        if (!value.contains(",")) {
+            return object;
+        }
+        String[] params = value.split(",");
+        Map map = new HashMap();
+        for (int i = 0; i < params.length; i++) {
+            map.put(paramNames[i], params[i]);
+        }
+        return map;
     }
 
     /**
@@ -349,6 +408,17 @@ public class HummerStyleUtils {
         node.setPosition(YogaEdge.ALL, 0);
         node.setPositionType(YogaPositionType.RELATIVE);
     }
+
+    /**
+     * 判断是否是Transition支持的样式
+     *
+     * @param key
+     * @return
+     */
+    private static boolean isTransitionStyle(String key) {
+        return TRANSITION_STYLES.contains(key);
+    }
+
 
     /**
      * 判断是否是Yoga自带的flexbox属性
@@ -810,7 +880,7 @@ public class HummerStyleUtils {
 
     /**
      * 转换颜色值
-     *
+     * <p>
      * '#FF000060' -> 0x60FF0000
      * 'linear-gradient(90deg #FF000060 #00FF0060)' -> [90, 0x60FF0000, 0x6000FF00]
      *
@@ -841,7 +911,7 @@ public class HummerStyleUtils {
 
     /**
      * 转换数值
-     *
+     * <p>
      * 0.2 -> 0.2
      * '0.2' -> 0.2
      * 10 -> 30 (px)

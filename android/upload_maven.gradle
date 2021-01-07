@@ -1,0 +1,61 @@
+apply plugin: 'maven'
+
+// 加载 local.properties 资源
+Properties properties = new Properties()
+InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream() ;
+properties.load( inputStream )
+
+// 读取 local.properties 中的属性
+def RELEASE_REPOSITORY_URL = properties.getProperty('RELEASE_REPOSITORY_URL')
+def SNAPSHOT_REPOSITORY_URL = properties.getProperty('SNAPSHOT_REPOSITORY_URL')
+def USERNAME = properties.getProperty('USERNAME')
+def PASSWORD = properties.getProperty('PASSWORD')
+
+uploadArchives {
+    doFirst {
+        def repositoryUrl = project.VERSION.endsWith('-SNAPSHOT') ? SNAPSHOT_REPOSITORY_URL : RELEASE_REPOSITORY_URL
+        System.out.println("start upload：" + repositoryUrl + project.GROUP_ID.replace(".", "/") + "/" + project.ARTIFACT_ID + "/" + project.VERSION)
+    }
+
+    repositories {
+        mavenDeployer {
+            pom.project {
+                groupId project.GROUP_ID
+                artifactId project.ARTIFACT_ID
+                version project.VERSION
+            }
+
+            def parentProjectName = project.getParent().getName()
+
+            pom.withXml {
+                def node = it.asElement()
+                def nodeList = node.getElementsByTagName('dependency')
+                for (int i = 0; i < nodeList.length; i++) {
+                    def dependencyItem = nodeList.item(i)
+
+                    def child = dependencyItem.firstChild
+                    while (child) {
+                        if (child.nodeName == "groupId") {
+                            if (child.textContent == parentProjectName) {
+                                child.setTextContent(project.GROUP_ID)
+                            }
+                        }
+                        if (child.nodeName == "version") {
+                            if (child.textContent == "unspecified") {
+                                child.setTextContent(project.VERSION)
+                            }
+                        }
+                        child = child.nextSibling
+                    }
+                }
+            }
+
+            repository(url: RELEASE_REPOSITORY_URL) {
+                authentication(userName: USERNAME, password: PASSWORD)
+            }
+            snapshotRepository(url: SNAPSHOT_REPOSITORY_URL) {
+                authentication(userName: USERNAME, password: PASSWORD)
+            }
+        }
+    }
+}

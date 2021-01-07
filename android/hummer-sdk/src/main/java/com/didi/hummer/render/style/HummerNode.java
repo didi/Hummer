@@ -6,11 +6,10 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.didi.hummer.render.component.view.HMBase;
+import com.didi.hummer.render.utility.YogaNodeUtil;
 import com.facebook.yoga.YogaNode;
 import com.facebook.yoga.android.YogaLayout;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,29 +44,9 @@ public class HummerNode {
         if (view instanceof YogaLayout) {
             node = ((YogaLayout) view).getYogaNode();
         } else {
-            node = createYogaNode();
+            node = YogaNodeUtil.createYogaNode();
             node.setData(view);
             node.setMeasureFunction(new YogaLayout.ViewMeasureFunction());
-        }
-        return node;
-    }
-
-    /**
-     * 为了兼容Hummer和RN共存的情况下，RN中Yoga版本过低的问题（新老版本创建YogaNode的方式不同）
-     *
-     * @return
-     */
-    private YogaNode createYogaNode() {
-        YogaNode node = null;
-        if ((YogaNode.class.getModifiers() & Modifier.ABSTRACT) != 0) {
-            // 新版（YogaNode是abstract类）
-            node = YogaNode.create();
-        } else {
-            // 旧版（YogaNode是普通类）
-            try {
-                Constructor<?> constructor = YogaNode.class.getDeclaredConstructor();
-                node = (YogaNode) constructor.newInstance();
-            } catch (Exception e2) {}
         }
         return node;
     }

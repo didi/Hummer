@@ -1,5 +1,45 @@
 # Release Nodes
 
+### 0.3.15
+- 支持块级内存自动回收；
+- 增加默认HummerFragment容器；
+- Scroller组件支持了下拉刷新和加载更多功能；
+- 新增Hermes引擎版调试工具；
+- 增强【开发工具】按钮和内部功能；
+- debug模式下支持代码热更新（需配合最新版CLI工具）；
+- 其他众多问题修复；
+
+### 0.2.42
+- 支持CSS样式动画；
+- 支持无障碍相关属性；
+- 处理Gson解析时部分字段类型不匹配的问题；
+- Scroller和List组件支持bounces属性（默认有回弹效果），和iOS保持一致；
+
+### 0.2.41
+- 重新修复键盘type和returnType重复设置无效的问题，并修复了设置type为'default'时Input不可聚焦的问题；
+- 修复Scroller组件和Image组件无障碍模式下焦点获取相关的问题；
+
+### 0.2.40
+- 修复输入框键盘type和returnType重复设置无效的问题；
+- 修复Scroller组件和List组件子视图阴影被裁切的问题；
+- 去除Scroller组件和List组件滚动到边缘时的默认半月阴影；
+
+### 0.2.39
+- 修复容器组件设置overflow:'hidden'之后还是无法裁剪子视图的问题；
+- 解决Scroller组件内存泄露问题；
+- 解决Scroller组件state错误问题；
+- 修复List组件第一次加载时scroll事件被异常触发的问题；
+- 【开发工具】优化调整性能统计方式的输出展示；
+
+### 0.2.38
+- 适配Android10，targetSdkVersion和compileSdkVersion升级到29，Input组件光标适配Android10的用法；
+- 基础控件新增getViewRect接口；
+- 支持width和height动画；
+- 去除入容器设置圆角裁剪子元素的逻辑，和iOS保持对齐；
+- Image组件支持单边圆角（只是简单处理了下圆角的情况）；
+- 修复Scroller组件的scroll事件的state不准确的问题；
+- 【统一单位】所有事件相关的回调中，单位都统一成dp；所有scrollTo和scrollBy单位都支持3种单位；
+
 ### 0.2.37
 - 优化错误异常的堆栈信息，增加bridge的类名和方法名；
 - 修复NotifyCenter从JS发送消息给Native时无法解析的问题；

@@ -80,6 +80,9 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
             case 3:
                 updateCallStack();
                 break;
+            case 4:
+                updatePerformance();
+                break;
             default:
                 break;
         }
@@ -185,21 +188,21 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
 
     private void updateParameters() {
         StringBuilder builder = new StringBuilder();
-        Object env = hummerContext.evaluateJavaScript("JSON.stringify(Hummer.env)");
+        Object env = hummerContext.getJsContext().evaluateJavaScript("JSON.stringify(Hummer.env)");
         if (env != null) {
             builder.append("Hummer.env: ");
             builder.append(JSONFormat.format(String.valueOf(env)));
             builder.append("\n\n\n");
         }
 
-        Object pageInfo = hummerContext.evaluateJavaScript("JSON.stringify(Hummer.pageInfo)");
+        Object pageInfo = hummerContext.getJsContext().evaluateJavaScript("JSON.stringify(Hummer.pageInfo)");
         if (pageInfo != null) {
             builder.append("Hummer.pageInfo: ");
             builder.append(JSONFormat.format(String.valueOf(pageInfo)));
             builder.append("\n\n\n");
         }
 
-        Object pageResult = hummerContext.evaluateJavaScript("JSON.stringify(Hummer.pageResult)");
+        Object pageResult = hummerContext.getJsContext().evaluateJavaScript("JSON.stringify(Hummer.pageResult)");
         if (pageResult != null) {
             builder.append("Hummer.pageResult: ");
             builder.append(JSONFormat.format(String.valueOf(pageResult)));

@@ -31,7 +31,13 @@ public class ButtonStyleHelper {
     public final static int KEY_ON_PRESS = 1;
     public final static int KEY_ON_DISABLE = 2;
 
-    public static void fillButtonBackgroundBorderStyle(Map<String, Object> fullStyle, Map<String, Object> subStyle) {
+    public static void fillButtonPressedAndDisabledStyle(Map<String, Object> fullStyle, Map<String, Object> subStyle) {
+        if (fullStyle == null || subStyle == null) {
+            return;
+        }
+        if (fullStyle.containsKey(KEY_BACKGROUND_COLOR) && !subStyle.containsKey(KEY_BACKGROUND_COLOR)) {
+            subStyle.put(KEY_BACKGROUND_COLOR, fullStyle.get(KEY_BACKGROUND_COLOR));
+        }
         if (fullStyle.containsKey(KEY_BORDER_WIDTH) && !subStyle.containsKey(KEY_BORDER_WIDTH)) {
             subStyle.put(KEY_BORDER_WIDTH, fullStyle.get(KEY_BORDER_WIDTH));
         }
@@ -44,9 +50,15 @@ public class ButtonStyleHelper {
         if (fullStyle.containsKey(KEY_BORDER_STYLE) && !subStyle.containsKey(KEY_BORDER_STYLE)) {
             subStyle.put(KEY_BORDER_STYLE, fullStyle.get(KEY_BORDER_STYLE));
         }
+        if (fullStyle.containsKey(KEY_TEXT_COLOR) && !subStyle.containsKey(KEY_TEXT_COLOR)) {
+            subStyle.put(KEY_TEXT_COLOR, fullStyle.get(KEY_TEXT_COLOR));
+        }
     }
 
-    public static Drawable pickButtonBackgroundDrawable(Map style) {
+    public static Drawable pickButtonBackgroundDrawable(Map<String, Object> style) {
+        if (style == null) {
+            return null;
+        }
         Object bgColor = null;
         if (style.containsKey(KEY_BACKGROUND_COLOR)) {
             bgColor = style.get(KEY_BACKGROUND_COLOR);
@@ -113,6 +125,9 @@ public class ButtonStyleHelper {
 
     public static int pickButtonTextColor(Map<String, Object> style) {
         int color = Color.BLACK;
+        if (style == null) {
+            return color;
+        }
         if (style.containsKey(KEY_TEXT_COLOR)) {
             Object object = style.get(KEY_TEXT_COLOR);
             if (object instanceof String) {

@@ -3,7 +3,7 @@
 
 ### 添加 Hummer SDK 依赖
 ```java
-implementation 'com.didi.hummer:hummer:0.3.11'
+implementation 'com.didi.hummer:hummer:0.3.15'
 ```
 
 ### Application 中初始化 Hummer

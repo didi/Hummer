@@ -16,6 +16,7 @@ public class HMGsonUtil {
             .registerTypeAdapter(List.class, adapter)
             .registerTypeAdapter(new TypeToken<Map<String, Object>>(){}.getType(), adapter)
             .registerTypeAdapter(new TypeToken<List<Object>>(){}.getType(), adapter)
+            .registerTypeAdapterFactory(new GsonTypeAdapterFactory())
             .create();
 
     public static Gson gson() {

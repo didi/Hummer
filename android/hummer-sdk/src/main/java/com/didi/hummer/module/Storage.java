@@ -15,21 +15,37 @@ public class Storage {
 
     @JsMethod("set")
     public static void set(HummerContext context, String key, String value) {
-        HummerAdapter.getStorageAdapter(context.getNamespace()).set(key, value);
+       set(context.getNamespace(), key, value);
     }
 
     @JsMethod("get")
     public static Object get(HummerContext context, String key) {
-        return HummerAdapter.getStorageAdapter(context.getNamespace()).get(key);
+        return get(context.getNamespace(), key);
     }
 
     @JsMethod("remove")
     public static void remove(HummerContext context, String key) {
-        HummerAdapter.getStorageAdapter(context.getNamespace()).remove(key);
+        remove(context.getNamespace(), key);
     }
 
     @JsMethod("exist")
     public static boolean exist(HummerContext context, String key) {
-        return HummerAdapter.getStorageAdapter(context.getNamespace()).exist(key);
+        return exist(context.getNamespace(), key);
+    }
+
+    public static void set(String namespace, String key, String value) {
+        HummerAdapter.getStorageAdapter(namespace).set(key, value);
+    }
+
+    public static Object get(String namespace, String key) {
+        return HummerAdapter.getStorageAdapter(namespace).get(key);
+    }
+
+    public static void remove(String namespace, String key) {
+        HummerAdapter.getStorageAdapter(namespace).remove(key);
+    }
+
+    public static boolean exist(String namespace, String key) {
+        return HummerAdapter.getStorageAdapter(namespace).exist(key);
     }
 }

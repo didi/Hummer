@@ -139,7 +139,9 @@ var printLog = function printLog(funcName) {
         var msg = '';
         if (msgs.length == 1) {
             var m = msgs[0];
-            if (m instanceof Object) {
+            if (m instanceof Function) {
+                msg = m.toString();
+            } else if (m instanceof Object) {
                 msg = JSON.stringify(m);
             } else if (typeof m === 'undefined') {
                 msg = 'undefined';
@@ -154,7 +156,9 @@ var printLog = function printLog(funcName) {
                     msg = msg.concat(', ');
                 }
                 var _m = msgs[i];
-                if (_m instanceof Object) {
+                if (_m instanceof Function) {
+                    msg = msg.concat(_m.toString());
+                } else if (_m instanceof Object) {
                     msg = msg.concat(JSON.stringify(_m));
                 } else if (typeof _m === 'undefined') {
                     msg = msg.concat('undefined');
@@ -318,6 +322,52 @@ var Base = function () {
         },
         get: function get() {
             return this._enabled;
+        }
+    }, {
+        key: 'accessible',
+        set: function set(arg) {
+            this._accessible = arg;
+            invoke(this.className, this.objID, "setAccessible", arg);
+        },
+        get: function get() {
+            return this._accessible;
+        }
+    }, {
+        key: 'accessibilityLabel',
+        set: function set(arg) {
+            this._accessibilityLabel = arg;
+            invoke(this.className, this.objID, "setAccessibilityLabel", arg);
+        },
+        get: function get() {
+            return this._accessibilityLabel;
+        }
+    }, {
+        key: 'accessibilityHint',
+        set: function set(arg) {
+            this._accessibilityHint = arg;
+            invoke(this.className, this.objID, "setAccessibilityHint", arg);
+        },
+        get: function get() {
+            return this._accessibilityHint;
+        }
+    }, {
+        key: 'accessibilityRole',
+        set: function set(arg) {
+            this._accessibilityRole = arg;
+            invoke(this.className, this.objID, "setAccessibilityRole", arg);
+        },
+        get: function get() {
+            return this._accessibilityRole;
+        }
+    }, {
+        key: 'accessibilityState',
+        set: function set(arg) {
+            this._accessibilityState = arg;
+            arg = transSingleArg(arg);
+            invoke(this.className, this.objID, "setAccessibilityState", arg);
+        },
+        get: function get() {
+            return this._accessibilityState;
         }
     }]);
 

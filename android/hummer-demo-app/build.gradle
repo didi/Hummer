@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-// DoKit的plugin会拖慢Hummer初始化速度，主要是影响SoLoader.init的速度，需要3s~4s，暂时先移除
 //apply plugin: 'com.didi.dokit'
 
 android {
@@ -45,7 +44,7 @@ android {
 //编译前执行启动JS文件服务器脚本，用于下载js文件
 task startRemoteSrv(type: Exec) {
     workingDir "$projectDir"
-    commandLine 'sh', '../runScript.sh'
+    commandLine 'sh', '../openTerminal.sh'
 }
 //assemble.dependsOn(startRemoteSrv)
 preBuild.dependsOn(startRemoteSrv)
@@ -78,4 +77,20 @@ dependencies {
     implementation project(':hummer')
 //    annotationProcessor 'com.didi.hummer:hummer-compiler:0.2.9'
     annotationProcessor project(":hummer-compiler")
+
+//    debugImplementation project(':v8-debugger')
+//    debugImplementation project(':hermes-debugger')
+//    debugImplementation 'com.didi.hummer:v8-debugger:0.0.1-SNAPSHOT'
+//    debugImplementation 'com.didi.hummer:hermes-debugger:0.0.1-SNAPSHOT'
+
+    // native crash 堆栈捕获
+//    implementation 'com.iqiyi.xcrash:xcrash-android-lib:2.4.8'
+
+    // leakcanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+
+    // DoKit
+//    debugImplementation 'com.didichuxing.doraemonkit:doraemonkit:3.0_beta2'
+//    debugImplementation 'com.didichuxing.doraemonkit:doraemonkit-leakcanary:3.0_beta2'
+//    releaseImplementation 'com.didichuxing.doraemonkit:doraemonkit-no-op:3.0_beta2'
 }

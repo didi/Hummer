@@ -47,6 +47,22 @@ public abstract class BaseInvoker<T> implements Invoker {
             case "setEnabled":
                 base.setEnabled((boolean) params[0]);
                 break;
+            case "setAccessible":
+                base.setAccessible((boolean) params[0]);
+                break;
+            case "setAccessibilityLabel":
+                base.setAccessibilityLabel(String.valueOf(params[0]));
+                break;
+            case "setAccessibilityHint":
+                base.setAccessibilityHint(String.valueOf(params[0]));
+                break;
+            case "setAccessibilityRole":
+                base.setAccessibilityRole(String.valueOf(params[0]));
+                break;
+            case "setAccessibilityState":
+                Map<String, Object> stateMap = HMJsonUtil.toMap(String.valueOf(params[0]));
+                base.setAccessibilityState(stateMap);
+                break;
             case "addEventListener": {
                 String eventName = String.valueOf(params[0]);
                 JSCallback callback = (JSCallback) params[1];
@@ -75,8 +91,8 @@ public abstract class BaseInvoker<T> implements Invoker {
                 base.removeAllAnimation();
                 break;
             }
-            case "getViewRect": {
-                base.getViewRect((JSCallback) params[0]);
+            case "getRect": {
+                base.getRect((JSCallback) params[0]);
                 break;
             }
             case "resetStyle": {

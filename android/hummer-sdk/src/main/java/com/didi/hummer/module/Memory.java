@@ -23,35 +23,51 @@ public class Memory {
 
     @JsMethod("set")
     public static void set(HummerContext context, String key, Object value) {
-        Map<String, Object> memoryStore = memoryStoreMap.get(context.getNamespace());
-        if (memoryStore == null) {
-            memoryStore = new ConcurrentHashMap<>();
-            memoryStoreMap.put(context.getNamespace(), memoryStore);
-        }
-        memoryStore.put(key, value);
+        set(context.getNamespace(), key, value);
     }
 
     @JsMethod("get")
     public static Object get(HummerContext context, String key) {
-        Map<String, Object> memoryStore = memoryStoreMap.get(context.getNamespace());
+        return get(context.getNamespace(), key);
+    }
+
+    @JsMethod("remove")
+    public static void remove(HummerContext context, String key) {
+        remove(context.getNamespace(), key);
+    }
+
+    @JsMethod("exist")
+    public static boolean exist(HummerContext context, String key) {
+        return exist(context.getNamespace(), key);
+    }
+
+    public static void set(String namespace, String key, Object value) {
+        Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
+        if (memoryStore == null) {
+            memoryStore = new ConcurrentHashMap<>();
+            memoryStoreMap.put(namespace, memoryStore);
+        }
+        memoryStore.put(key, value);
+    }
+
+    public static Object get(String namespace, String key) {
+        Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
         if (memoryStore == null) {
             return null;
         }
         return memoryStore.get(key);
     }
 
-    @JsMethod("remove")
-    public static void remove(HummerContext context, String key) {
-        Map<String, Object> memoryStore = memoryStoreMap.get(context.getNamespace());
+    public static void remove(String namespace, String key) {
+        Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
         if (memoryStore == null) {
             return;
         }
         memoryStore.remove(key);
     }
 
-    @JsMethod("exist")
-    public static boolean exist(HummerContext context, String key) {
-        Map<String, Object> memoryStore = memoryStoreMap.get(context.getNamespace());
+    public static boolean exist(String namespace, String key) {
+        Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
         if (memoryStore == null) {
             return false;
         }

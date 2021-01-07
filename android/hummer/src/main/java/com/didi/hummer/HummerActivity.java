@@ -1,11 +1,11 @@
 package com.didi.hummer;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
@@ -36,13 +36,11 @@ public class HummerActivity extends AppCompatActivity {
         initData();
         initView();
 
-        if (page != null && !TextUtils.isEmpty(page.url)) {
+        if (page != null) {
             initHummer();
             renderHummer();
         } else {
-            String errMsg = "page url is empty";
-            onPageRenderFailed(new RuntimeException(errMsg));
-            Toast.makeText(this, errMsg, Toast.LENGTH_SHORT).show();
+            onPageRenderFailed(new RuntimeException("page is null"));
         }
     }
 
@@ -80,10 +78,14 @@ public class HummerActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
-        if (hmRender != null) {
-            setResult(0, hmRender.getJsPageResultIntent());
-        }
+        setPageResult();
         super.finish();
+    }
+
+    protected void setPageResult() {
+        if (hmRender != null) {
+            setResult(Activity.RESULT_OK, hmRender.getJsPageResultIntent());
+        }
     }
 
     @Override
@@ -100,6 +102,9 @@ public class HummerActivity extends AppCompatActivity {
      */
     protected void initData() {
         page = getPageInfo();
+        if (page == null) {
+            page = new NavPage();
+        }
     }
 
     /**
@@ -124,6 +129,17 @@ public class HummerActivity extends AppCompatActivity {
         hmRender = new HummerRender(hmContainer, getNamespace(), getDevToolsConfig());
         initHummerRegister(hmRender.getHummerContext());
         hmRender.setJsPageInfo(page);
+        hmRender.setRenderCallback(new HummerRender.HummerRenderCallback() {
+            @Override
+            public void onSucceed(HummerContext hmContext, JSValue jsPage) {
+                onPageRenderSucceed(hmContext, jsPage);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                onPageRenderFailed(e);
+            }
+        });
     }
 
     /**
@@ -158,18 +174,12 @@ public class HummerActivity extends AppCompatActivity {
      * 渲染Hummer页面
      */
     protected void renderHummer() {
-        if (page.isHttpUrl()) {
-            hmRender.renderWithUrl(page.url, new HummerRender.HummerRenderCallback() {
-                @Override
-                public void onSucceed(HummerContext hmContext, JSValue jsPage) {
-                    onPageRenderSucceed(hmContext, jsPage);
-                }
+        if (page == null || TextUtils.isEmpty(page.url)) {
+            return;
+        }
 
-                @Override
-                public void onFailed(Exception e) {
-                    onPageRenderFailed(e);
-                }
-            });
+        if (page.isHttpUrl()) {
+            hmRender.renderWithUrl(page.url);
         } else if (page.url.startsWith("/")) {
             hmRender.renderWithFile(page.url);
         } else {

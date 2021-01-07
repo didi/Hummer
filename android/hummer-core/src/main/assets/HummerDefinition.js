@@ -61,7 +61,9 @@ const printLog = (funcName, ...msgs) => {
         let msg = '';
         if (msgs.length == 1) {
             let m = msgs[0];
-            if (m instanceof Object) {
+            if (m instanceof Function) {
+                msg = m.toString();
+            } else if (m instanceof Object) {
                 msg = JSON.stringify(m);
             } else if (typeof m === 'undefined') {
                 msg = 'undefined';
@@ -76,7 +78,9 @@ const printLog = (funcName, ...msgs) => {
                     msg = msg.concat(', ');
                 }
                 let m = msgs[i];
-                if (m instanceof Object) {
+                if (m instanceof Function) {
+                    msg = msg.concat(m.toString());
+                } else if (m instanceof Object) {
                     msg = msg.concat(JSON.stringify(m));
                 } else if (typeof m === 'undefined') {
                     msg = msg.concat('undefined');
@@ -177,6 +181,52 @@ class Base {
         return this._enabled;
     }
 
+    set accessible(arg) {
+        this._accessible = arg;
+        invoke(this.className, this.objID, "setAccessible", arg);
+    }
+
+    get accessible() {
+        return this._accessible;
+    }
+
+    set accessibilityLabel(arg) {
+        this._accessibilityLabel = arg;
+        invoke(this.className, this.objID, "setAccessibilityLabel", arg);
+    }
+
+    get accessibilityLabel() {
+        return this._accessibilityLabel;
+    }
+
+    set accessibilityHint(arg) {
+        this._accessibilityHint = arg;
+        invoke(this.className, this.objID, "setAccessibilityHint", arg);
+    }
+
+    get accessibilityHint() {
+        return this._accessibilityHint;
+    }
+
+    set accessibilityRole(arg) {
+        this._accessibilityRole = arg;
+        invoke(this.className, this.objID, "setAccessibilityRole", arg);
+    }
+
+    get accessibilityRole() {
+        return this._accessibilityRole;
+    }
+
+    set accessibilityState(arg) {
+        this._accessibilityState = arg;
+        arg = transSingleArg(arg);
+        invoke(this.className, this.objID, "setAccessibilityState", arg);
+    }
+
+    get accessibilityState() {
+        return this._accessibilityState;
+    }
+
     addEventListener(...args) {
         invoke(this.className, this.objID, "addEventListener", ...args);
     }
@@ -199,8 +249,8 @@ class Base {
         invoke(this.className, this.objID, "removeAllAnimation");
     }
 
-    getViewRect(arg) {
-        invoke(this.className, this.objID, "getViewRect", arg);
+    getRect(arg) {
+        invoke(this.className, this.objID, "getRect", arg);
     }
 
     resetStyle() {

@@ -45,6 +45,7 @@ public class Input extends HMBase<EditText> {
         orgTextSize = getView().getTextSize();
         orgTypeface = getView().getTypeface();
         getView().setBackgroundColor(Color.TRANSPARENT);
+        getView().setImeOptions(EditorInfo.IME_ACTION_DONE);
         getView().addTextChangedListener(mTextWatcher);
         getView().setOnFocusChangeListener(mOnFocusChangeListener);
         getView().setOnEditorActionListener(mOnEditorActionListener);
@@ -265,6 +266,7 @@ public class Input extends HMBase<EditText> {
     @JsAttribute("fontSize")
     public void setFontSize(float fontSize) {
         mProperty.setFontSize(fontSize);
+        requestLayout();
     }
 
     /**
@@ -272,9 +274,11 @@ public class Input extends HMBase<EditText> {
      *
      * @param fontSize
      */
+    @Deprecated
     @JsAttribute("placeholderFontSize")
     public void setPlaceholderFontSize(float fontSize) {
         mProperty.setPlaceholderFontSize(fontSize);
+        requestLayout();
     }
 
     /**
@@ -306,6 +310,7 @@ public class Input extends HMBase<EditText> {
         getView().setTextSize(TypedValue.COMPLEX_UNIT_PX, orgTextSize);
         getView().setTypeface(orgTypeface);
         setType(NJInputType.DEFAULT);
+        setReturnKeyType(NJReturnKeyType.DONE);
         setTextAlign(NJTextAlign.LEFT);
         mProperty.resetCursorColor();
     }

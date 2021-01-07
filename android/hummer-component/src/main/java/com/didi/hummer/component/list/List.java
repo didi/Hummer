@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
@@ -29,6 +30,8 @@ import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.event.view.ScrollEvent;
 import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer.render.utility.DPUtil;
+import com.didi.hummer.render.utility.YogaNodeUtil;
+import com.facebook.yoga.YogaNode;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.Map;
@@ -56,7 +59,6 @@ public class List extends HMBase<SmartRefreshLayout> {
     private int rightSpacing;
     private int topSpacing;
     private int bottomSpacing;
-    private boolean showScrollBar;
 
     private SmartRefreshLayout refreshLayout;
     private HummerHeader hummerHeader;
@@ -80,16 +82,7 @@ public class List extends HMBase<SmartRefreshLayout> {
             }
 
             if (!isScrollStarted) {
-                isScrollStarted = true;
-                // 开始滑动
-                scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
-                scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_BEGAN);
-                scrollEvent.setOffsetX(0);
-                scrollEvent.setOffsetY(0);
-                scrollEvent.setDx(0);
-                scrollEvent.setDy(0);
-                scrollEvent.setTimestamp(System.currentTimeMillis());
-                mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
+                return;
             }
 
             int offsetX = recyclerView.computeHorizontalScrollOffset();
@@ -97,10 +90,10 @@ public class List extends HMBase<SmartRefreshLayout> {
 
             scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
             scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_SCROLL);
-            scrollEvent.setOffsetX(offsetX);
-            scrollEvent.setOffsetY(offsetY);
-            scrollEvent.setDx(dx);
-            scrollEvent.setDy(dy);
+            scrollEvent.setOffsetX(DPUtil.px2dpF(getContext(), offsetX));
+            scrollEvent.setOffsetY(DPUtil.px2dpF(getContext(), offsetY));
+            scrollEvent.setDx(DPUtil.px2dpF(getContext(), dx));
+            scrollEvent.setDy(DPUtil.px2dpF(getContext(), dy));
             scrollEvent.setTimestamp(System.currentTimeMillis());
             mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
         }
@@ -112,16 +105,37 @@ public class List extends HMBase<SmartRefreshLayout> {
                 return;
             }
 
-            if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-                scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
-                scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_SCROLL_UP);
-                scrollEvent.setTimestamp(System.currentTimeMillis());
-                mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
-            } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
-                scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_ENDED);
-                scrollEvent.setTimestamp(System.currentTimeMillis());
-                mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
+            switch (newState) {
+                case RecyclerView.SCROLL_STATE_IDLE:
+                    isScrollStarted = false;
+                    scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
+                    scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_ENDED);
+                    scrollEvent.setOffsetX(0);
+                    scrollEvent.setOffsetY(0);
+                    scrollEvent.setDx(0);
+                    scrollEvent.setDy(0);
+                    scrollEvent.setTimestamp(System.currentTimeMillis());
+                    mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
+                    break;
+                case RecyclerView.SCROLL_STATE_DRAGGING:
+                    isScrollStarted = true;
+                    scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
+                    scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_BEGAN);
+                    scrollEvent.setOffsetX(0);
+                    scrollEvent.setOffsetY(0);
+                    scrollEvent.setDx(0);
+                    scrollEvent.setDy(0);
+                    scrollEvent.setTimestamp(System.currentTimeMillis());
+                    mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
+                    break;
+                case RecyclerView.SCROLL_STATE_SETTLING:
+                    scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
+                    scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_SCROLL_UP);
+                    scrollEvent.setTimestamp(System.currentTimeMillis());
+                    mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
+                    break;
+                default:
+                    break;
             }
         }
     };
@@ -143,6 +157,8 @@ public class List extends HMBase<SmartRefreshLayout> {
     protected SmartRefreshLayout createViewInstance(Context context) {
         // 这里不用代码new一个RecyclerView，而是通过xml，是为了解决设置scrollerbar显示无效的问题
         recyclerView = (RecyclerView) LayoutInflater.from(context).inflate(R.layout.recycler_view, null, false);
+        recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        recyclerView.setClipChildren(false);
         recyclerView.setOnTouchListener((v, event) -> {
             // 手指按下时，如果有键盘已弹出，则把键盘消失掉
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -154,6 +170,7 @@ public class List extends HMBase<SmartRefreshLayout> {
         refreshLayout = new SmartRefreshLayout(context);
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableLoadMore(false);
+        refreshLayout.setEnableOverScrollDrag(true); // 默认有回弹效果
         refreshLayout.setRefreshContent(recyclerView);
 
         hummerHeader = new HummerHeader(context);
@@ -211,10 +228,17 @@ public class List extends HMBase<SmartRefreshLayout> {
     public void onCreate() {
         super.onCreate();
         recyclerView.addOnScrollListener(mOnScrollListener);
+        adapter = new HMListAdapter(getContext(), instanceManager);
+
+        YogaNode recyclerViewNode = YogaNodeUtil.createYogaNode();
+        recyclerViewNode.setData(recyclerView);
+        recyclerViewNode.setFlexGrow(1);
+        getYogaNode().setMeasureFunction(null);
+        getYogaNode().addChildAt(recyclerViewNode, 0);
     }
 
     private void bindRecyclerViewIfNeed() {
-        if (adapter != null) {
+        if (layoutManager != null) {
             return;
         }
 
@@ -233,7 +257,6 @@ public class List extends HMBase<SmartRefreshLayout> {
             recyclerView.setHorizontalScrollBarEnabled(showScrollBar);
         }
 
-        adapter = new HMListAdapter(getContext(), instanceManager);
         recyclerView.setAdapter(adapter);
     }
 
@@ -351,11 +374,6 @@ public class List extends HMBase<SmartRefreshLayout> {
         this.bottomSpacing = spacing;
     }
 
-    @JsAttribute("showScrollBar")
-    public void setShowScrollBar(boolean hidden) {
-        this.showScrollBar = hidden;
-    }
-
     @JsProperty("refreshView")
     private HMBase refreshView;
     public void setRefreshView(HMBase view) {
@@ -400,6 +418,29 @@ public class List extends HMBase<SmartRefreshLayout> {
         adapter.setUpdateCallback(onUpdate);
     }
 
+    /**
+     * 是否显示滚动条（默认false）
+     */
+    @JsProperty("showScrollBar")
+    private boolean showScrollBar;
+    public void setShowScrollBar(boolean isShow) {
+        showScrollBar = isShow;
+        if (direction == DIRECTION_VERTICAL) {
+            recyclerView.setVerticalScrollBarEnabled(isShow);
+        } else if (direction == DIRECTION_HORIZONTAL) {
+            recyclerView.setHorizontalScrollBarEnabled(isShow);
+        }
+    }
+
+    /**
+     * 是否有回弹效果（默认true）
+     */
+    @JsProperty("bounces")
+    public boolean bounces;
+    public void setBounces(boolean bounces) {
+        refreshLayout.setEnableOverScrollDrag(bounces);
+    }
+
     @JsMethod("refresh")
     public void refresh(int count) {
         refreshLayout.setNoMoreData(false);
@@ -431,13 +472,17 @@ public class List extends HMBase<SmartRefreshLayout> {
     }
 
     @JsMethod("scrollTo")
-    public void scrollTo(int x, int y) {
-        recyclerView.scrollTo(x, y);
+    public void scrollTo(Object x, Object y) {
+        int nX = (int) HummerStyleUtils.convertNumber(x);
+        int nY = (int) HummerStyleUtils.convertNumber(y);
+        recyclerView.scrollTo(nX, nY);
     }
 
     @JsMethod("scrollBy")
-    public void scrollBy(int dx, int dy) {
-        recyclerView.scrollBy(dx, dy);
+    public void scrollBy(Object dx, Object dy) {
+        int nDx = (int) HummerStyleUtils.convertNumber(dx);
+        int nDy = (int) HummerStyleUtils.convertNumber(dy);
+        recyclerView.scrollBy(nDx, nDy);
     }
 
     @JsMethod("scrollToPosition")
@@ -464,7 +509,7 @@ public class List extends HMBase<SmartRefreshLayout> {
                 setScrollDirection(String.valueOf(value));
                 break;
             case HummerStyleUtils.Hummer.COLUMN:
-                setColumn((int) value);
+                setColumn((int) (float) value);
                 break;
             case HummerStyleUtils.Hummer.LINE_SPACING:
                 setLineSpacing((int) (float) value);
@@ -483,9 +528,6 @@ public class List extends HMBase<SmartRefreshLayout> {
                 break;
             case HummerStyleUtils.Hummer.BOTTOM_SPACING:
                 setBottomSpacing((int) (float) value);
-                break;
-            case HummerStyleUtils.Hummer.SHOW_SCROLL_BAR:
-                setShowScrollBar((boolean) value);
                 break;
             default:
                 return false;

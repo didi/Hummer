@@ -136,6 +136,7 @@ public class Text extends HMBase<TextView> {
         }
         this.fontWeight = fontWeight.toLowerCase();
         processTextTypeface(this.fontWeight, this.fontStyle);
+        requestLayout();
     }
 
     @JsAttribute("fontStyle")
@@ -145,6 +146,7 @@ public class Text extends HMBase<TextView> {
         }
         this.fontStyle = fontStyle.toLowerCase();
         processTextTypeface(this.fontWeight, this.fontStyle);
+        requestLayout();
     }
 
     private void processTextTypeface(String fontWeight, String fontStyle) {

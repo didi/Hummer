@@ -1,55 +1,10 @@
-apply plugin: 'maven'
-
-// 如果打JSC的包，加一下后缀
-if (project.COMPILE_JS_ENGINE.equals('All') || project.COMPILE_JS_ENGINE.equals('JSC')) {
-    project.ARTIFACT_ID += "-with-jsc"
-}
-
-uploadArchives {
-    doFirst {
-        def repositoryUrl = project.VERSION.endsWith('-SNAPSHOT') ? project.SNAPSHOT_REPOSITORY_URL : project.RELEASE_REPOSITORY_URL
-        System.out.println("start upload：" + repositoryUrl + project.GROUP_ID.replace(".", "/") + "/" + project.ARTIFACT_ID + "/" + project.VERSION)
+if (project.publishArchivesType == '1') {
+    // 如果打JSC的包，加一下后缀
+    if (project.COMPILE_JS_ENGINE.equals('All') || project.COMPILE_JS_ENGINE.equals('JSC')) {
+        project.ARTIFACT_ID += "-with-jsc"
     }
 
-    repositories {
-        mavenDeployer {
-            pom.project {
-                groupId project.GROUP_ID
-                artifactId project.ARTIFACT_ID
-                version project.VERSION
-            }
-
-            def parentProjectName = project.getParent().getName()
-
-            pom.withXml {
-                def node = it.asElement()
-                def nodeList = node.getElementsByTagName('dependency')
-                for (int i = 0; i < nodeList.length; i++) {
-                    def dependencyItem = nodeList.item(i)
-
-                    def child = dependencyItem.firstChild
-                    while (child) {
-                        if (child.nodeName == "groupId") {
-                            if (child.textContent == parentProjectName) {
-                                child.setTextContent(project.GROUP_ID)
-                            }
-                        }
-                        if (child.nodeName == "version") {
-                            if (child.textContent == "unspecified") {
-                                child.setTextContent(project.VERSION)
-                            }
-                        }
-                        child = child.nextSibling
-                    }
-                }
-            }
-
-            repository(url: project.RELEASE_REPOSITORY_URL) {
-                authentication(userName: project.USERNAME, password: project.PASSWORD)
-            }
-            snapshotRepository(url: project.SNAPSHOT_REPOSITORY_URL) {
-                authentication(userName: project.USERNAME, password: project.PASSWORD)
-            }
-        }
-    }
+    apply from: '../upload_maven.gradle'
+} else if (project.publishArchivesType == '2') {
+    apply from: '../upload_jcenter.gradle'
 }

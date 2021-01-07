@@ -14,6 +14,7 @@ import com.facebook.yoga.android.YogaLayout;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * 对YogaLayout做了一层封装，修复了YogaLayout的一些bug，支持了Hummer中对view的添加和删除等操作
@@ -36,6 +37,11 @@ public class HummerLayout extends YogaLayout {
     private Path mViewPath = new Path();
 
     /**
+     * 视图圆角信息获取器，用于动态获取视图圆角信息
+     */
+    private Callable<float[]> cornerRadiiGetter;
+
+    /**
      * 保留上一次的子View，用于支持display:inline
      */
     private HMBase lastChild;
@@ -51,15 +57,21 @@ public class HummerLayout extends YogaLayout {
     private OnSizeChangeListener onSizeChangeListener;
 
     public HummerLayout(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public HummerLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public HummerLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    private void init(Context context) {
+        // 默认改成子View可以超出父容器，和iOS保持对齐
+        setClipChildren(false);
     }
 
     public void setOnSizeChangeListener(OnSizeChangeListener listener) {
@@ -144,12 +156,23 @@ public class HummerLayout extends YogaLayout {
             } else if (view instanceof YogaLayout) {
                 continue;
             } else {
-                applyLayoutRecursive(
-                        node.getChildAt(i),
-                        xOffset + node.getLayoutX(),
-                        yOffset + node.getLayoutY());
+                // 修复Scroller或List组件中间夹有原生ViewGroup的布局计算问题
+//                applyLayoutRecursive(
+//                        node.getChildAt(i),
+//                        xOffset + node.getLayoutX(),
+//                        yOffset + node.getLayoutY());
+                applyLayoutRecursive(node.getChildAt(i), xOffset, yOffset);
             }
         }
+    }
+
+    /**
+     * 视图圆角信息获取器
+     *
+     * @param cornerRadiiGetter
+     */
+    public void setCornerRadiiGetter(Callable<float[]> cornerRadiiGetter) {
+        this.cornerRadiiGetter = cornerRadiiGetter;
     }
 
     /**
@@ -172,7 +195,22 @@ public class HummerLayout extends YogaLayout {
         if (needClipChildren) {
             mClipBounds.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
             mViewPath.reset();
-            mViewPath.addRect(mClipBounds, Path.Direction.CW);
+
+            // 获取视图圆角信息
+            float[] cornerRadii = null;
+            try {
+                if (cornerRadiiGetter != null) {
+                    cornerRadii = cornerRadiiGetter.call();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (cornerRadii != null) {
+                mViewPath.addRoundRect(mClipBounds, cornerRadii, Path.Direction.CW);
+            } else {
+                mViewPath.addRect(mClipBounds, Path.Direction.CW);
+            }
             canvas.clipPath(mViewPath);
         }
     }
