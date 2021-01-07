@@ -360,7 +360,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     // TODO(唐佳诚): 考虑 UINavigationBar SafeArea 的调整
     CGSize viewportSize = self.bounds.size;
     
-    //在 Y 轴是否需要适配计算。
+    // 在 Y 轴是否需要适配计算。
     BOOL fitsinViewportY = oldContentSize.height <= viewportSize.height && newContentSize.height <= viewportSize.height;
     // 新老的 contentsize 都没有超过当前 view 的高度，则不需要进行计算。
     if (newContentSize.height < oldContentSize.height && !fitsinViewportY) {
@@ -398,7 +398,17 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
 #pragma mark <override>
 
 - (void)hummerSetFrame:(CGRect)frame {
-    [super hummerSetFrame:frame];
+    CGRect currentFrame = CGRectMake(self.center.x - self.bounds.size.width / 2, self.center.y - self.bounds.size.height / 2, self.bounds.size.width, self.bounds.size.height);
+    if (!CGRectEqualToRect(frame, currentFrame)) {
+        // 备份 bounds.origin
+        CGPoint oldBoundsOrigin = self.bounds.origin;
+        // 必定会修改 bounds.origin
+        [super hummerSetFrame:frame];
+        // 还原 bounds.origin
+        CGRect bounds = self.bounds;
+        bounds.origin = oldBoundsOrigin;
+        self.bounds = bounds;
+    }
     CGSize newContentSize = [self getNewContentSize];
     if (!CGSizeEqualToSize(newContentSize, self.contentSize)) {
         // When contentSize is set manually, ScrollView internals will reset
