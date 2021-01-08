@@ -37,30 +37,30 @@ static NSString *const BASE64HEADERPREFIX = @"data:";
 @interface UIView ()
 @property (nonatomic, weak, nullable) id<HMImageLoaderOperation> hm_webImageOperation;
 
-@property (nonatomic, nullable, strong) JSValue *accessible;
+@property (nonatomic, nullable, strong) JSValue *hmAccessible;
 
 @property (nonatomic, nullable, strong) JSValue *hmAccessibilityLabel;
 
 @property (nonatomic, nullable, strong) JSValue *hmAccessibilityHint;
 
-@property (nonatomic, nullable, strong) JSValue *accessibilityRole;
+@property (nonatomic, nullable, strong) JSValue *hmAccessibilityRole;
 
-@property (nonatomic, nullable, strong) JSValue *accessibilityState;
+@property (nonatomic, nullable, strong) JSValue *hmAccessibilityState;
 
 @end
 NS_ASSUME_NONNULL_END
 
 @implementation UIView (HMDom)
 
-- (JSValue *)accessible {
+- (JSValue *)hmAccessible {
     return [JSValue valueWithBool:self.isAccessibilityElement inContext:self.hmContext];
 }
 
-- (void)setAccessible:(JSValue *)accessible {
+- (void)setHmAccessible:(JSValue *)accessible {
     self.isAccessibilityElement = accessible.toBool;
 }
 
-HM_EXPORT_PROPERTY(accessible, accessible, setAccessible:)
+HM_EXPORT_PROPERTY(accessible, hmAccessible, setHmAccessible:)
 
 - (JSValue *)hmAccessibilityLabel {
     return [JSValue valueWithObject:self.accessibilityLabel inContext:self.hmContext];
@@ -80,13 +80,13 @@ HM_EXPORT_PROPERTY(accessibilityLabel, hmAccessibilityLabel, setHmAccessibilityL
     self.accessibilityHint = hmAccessibilityHint.toString;
 }
 
-HM_EXPORT_PROPERTY(accessibilityHint, accessibilityHint, setAccessibilityHint:)
+HM_EXPORT_PROPERTY(accessibilityHint, hmAccessibilityHint, setHmAccessibilityHint:)
 
-- (JSValue *)accessibilityRole {
+- (JSValue *)hmAccessibilityRole {
     return [JSValue valueWithUndefinedInContext:self.hmContext];
 }
 
-- (void)setAccessibilityRole:(JSValue *)accessibilityRole {
+- (void)setHmAccessibilityRole:(JSValue *)accessibilityRole {
     id json = accessibilityRole.toObject;
     const UIAccessibilityTraits AccessibilityRolesMask = UIAccessibilityTraitNone | UIAccessibilityTraitButton | UIAccessibilityTraitLink | UIAccessibilityTraitSearchField | UIAccessibilityTraitImage | UIAccessibilityTraitKeyboardKey | UIAccessibilityTraitStaticText | UIAccessibilityTraitAdjustable | UIAccessibilityTraitHeader | UIAccessibilityTraitSummaryElement | HummerSwitchAccessibilityTrait;
     // 清空
@@ -98,13 +98,13 @@ HM_EXPORT_PROPERTY(accessibilityHint, accessibilityHint, setAccessibilityHint:)
     }
 }
 
-HM_EXPORT_PROPERTY(accessibilityRole, accessibilityRole, setAccessibilityRole:)
+HM_EXPORT_PROPERTY(accessibilityRole, hmAccessibilityRole, setHmAccessibilityRole:)
 
-- (JSValue *)accessibilityState {
+- (JSValue *)hmAccessibilityState {
     return [JSValue valueWithUndefinedInContext:self.hmContext];
 }
 
-- (void)setAccessibilityState:(JSValue *)accessibilityState {
+- (void)setHmAccessibilityState:(JSValue *)accessibilityState {
     id json = accessibilityState.toObject;
     NSDictionary<NSString *, id> *state = json ? [HMConverter NSDictionary:json] : nil;
     NSMutableDictionary<NSString *, id> *newState = [[NSMutableDictionary<NSString *, id> alloc] init];
@@ -136,7 +136,7 @@ HM_EXPORT_PROPERTY(accessibilityRole, accessibilityRole, setAccessibilityRole:)
     }
 }
 
-HM_EXPORT_PROPERTY(accessibilityState, accessibilityState, setAccessibilityState:)
+HM_EXPORT_PROPERTY(accessibilityState, hmAccessibilityState, setHmAccessibilityState:)
 
 HM_EXPORT_PROPERTY(style, hm_style, hm_setStyle:)
 
