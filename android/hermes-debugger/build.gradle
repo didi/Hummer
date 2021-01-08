@@ -45,6 +45,6 @@ android {
 
 dependencies {
     implementation 'com.didi.hummer:hummer-plugin-interface:0.0.1'
-    implementation 'com.didi.hummer:hermes-inspector:0.0.1-SNAPSHOT'
+    implementation 'com.didi.hummer:hermes-inspector:0.0.1'
 //    implementation project(":hermes-inspector")
 }
