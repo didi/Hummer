@@ -12,7 +12,7 @@
 		18D61C5025A7167B008D2CB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18D61C4E25A7167B008D2CB0 /* Main.storyboard */; };
 		18D61C5225A7167D008D2CB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18D61C5125A7167D008D2CB0 /* Assets.xcassets */; };
 		18D61C5525A7167D008D2CB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18D61C5325A7167D008D2CB0 /* LaunchScreen.storyboard */; };
-		18D61C6025A7167D008D2CB0 /* ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D61C5F25A7167D008D2CB0 /* ExampleTests.swift */; };
+		18D61CA425A72C27008D2CB0 /* HMShadowViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D61CA325A72C27008D2CB0 /* HMShadowViewTests.swift */; };
 		6C898FFE362028AC8D2C6206 /* Pods_ExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8157E83167E022E48C977CB /* Pods_ExampleTests.framework */; };
 		9F3AF26D6C1BB7721D11DAB5 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B3C7D56BF7D3BEC73AD93D /* Pods_Example.framework */; };
 /* End PBXBuildFile section */
@@ -37,8 +37,8 @@
 		18D61C5425A7167D008D2CB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18D61C5625A7167D008D2CB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D61C5B25A7167D008D2CB0 /* ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		18D61C5F25A7167D008D2CB0 /* ExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleTests.swift; sourceTree = "<group>"; };
 		18D61C6125A7167D008D2CB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18D61CA325A72C27008D2CB0 /* HMShadowViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMShadowViewTests.swift; sourceTree = "<group>"; };
 		559F7EA7CE5381777E8E4463 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		7CAD6C948C3385750B4EF928 /* Pods-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleTests.release.xcconfig"; path = "Target Support Files/Pods-ExampleTests/Pods-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		B6B3C7D56BF7D3BEC73AD93D /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,7 +102,7 @@
 		18D61C5E25A7167D008D2CB0 /* ExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				18D61C5F25A7167D008D2CB0 /* ExampleTests.swift */,
+				18D61CA325A72C27008D2CB0 /* HMShadowViewTests.swift */,
 				18D61C6125A7167D008D2CB0 /* Info.plist */,
 			);
 			path = ExampleTests;
@@ -322,7 +322,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18D61C6025A7167D008D2CB0 /* ExampleTests.swift in Sources */,
+				18D61CA425A72C27008D2CB0 /* HMShadowViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
