@@ -1,7 +1,6 @@
 ---
 name: "🐛 Bug Report"
 about: Report a reproducible bug or regression in Hummer.
-title: ''
 labels: 'Needs: Triage :mag:'
 ---
 请提供所要求的所有资料。不遵循此格式的问题可能会停滞。
