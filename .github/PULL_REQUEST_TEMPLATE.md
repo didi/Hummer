@@ -12,5 +12,4 @@
 
 ## Test Plan
 
-<!-- Demonstrate the code is solid. Example: The exact commands you ran and their output, screenshots / videos if the pull request changes the user interface. -->
 <!-- 证明代码是可靠的。示例：您运行的确切命令及其输出、屏幕截图/视频（如果拉取请求更改了用户界面）。 -->
