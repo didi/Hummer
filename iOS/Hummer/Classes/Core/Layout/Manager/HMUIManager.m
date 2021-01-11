@@ -146,7 +146,7 @@ NS_ASSUME_NONNULL_END
                     frame = (CGRect) {
                             .origin = {
                                     .x = (CGRectGetMinX(frame) + inlineView.frame.origin.x),
-                                    .y = (CGRectGetMinX(frame) + inlineView.frame.origin.y),
+                                    .y = (CGRectGetMinY(frame) + inlineView.frame.origin.y),
                             },
                             .size = frame.size
                     };
