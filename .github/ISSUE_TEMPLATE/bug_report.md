@@ -2,7 +2,7 @@
 name: "\U0001F41B Bug Report"
 about: Report a reproducible bug or regression in Hummer.
 title: ''
-labels: "Needs: Triage \U0001F50D"
+labels: "bug, Needs: Triage \U0001F50D"
 assignees: ''
 
 ---
