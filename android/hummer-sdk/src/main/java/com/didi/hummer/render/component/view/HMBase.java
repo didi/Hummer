@@ -15,6 +15,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 
 import com.didi.hummer.annotation.JsAttribute;
@@ -292,9 +293,20 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
      * disabled
      */
     @JsProperty("accessibilityState")
-    public Map<String, Object>  accessibilityState;
+    public Map<String, Object> accessibilityState;
     public void setAccessibilityState(Map<String, Object> state) {
         accessibilityState = state;
+        if (accessibilityState != null) {
+            for (String key : accessibilityState.keySet()) {
+                Object value = accessibilityState.get(key);
+                if ("selected".equalsIgnoreCase(key)) {
+                    if (value instanceof Boolean && (Boolean) value) {
+                        // 直接send在某些机型上会不起作用，所以这里加一个post
+                        getView().post(() -> getView().sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED));
+                    }
+                }
+            }
+        }
     }
 
     @JsMethod("addEventListener")
