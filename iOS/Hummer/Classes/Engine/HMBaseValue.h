@@ -7,15 +7,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class HMBaseExecutor;
-
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol HMBaseValueProtocol
 
 @required
 
-@property (nonatomic, weak, readonly) HMBaseExecutor *executor;
+@property (nonatomic, weak, readonly, nullable) id <HMBaseValueProtocol> executor;
 
 @property (nonatomic, assign, readonly) BOOL isUndefined;
 
@@ -34,21 +32,21 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) BOOL isArray;
 
-- (nullable instancetype)initWithExecutor:(nullable HMBaseExecutor *)executor;
+- (nullable instancetype)initWithExecutor:(nullable id <HMBaseValueProtocol>)executor;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithObject:(id)value inContext:(HMBaseExecutor *)context;
++ (nullable id <HMBaseValueProtocol>)valueWithObject:(id)value inContext:(id <HMBaseValueProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithBool:(BOOL)value inContext:(HMBaseExecutor *)context;
++ (nullable id <HMBaseValueProtocol>)valueWithBool:(BOOL)value inContext:(id <HMBaseValueProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithDouble:(double)value inContext:(HMBaseExecutor *)context;
++ (nullable id <HMBaseValueProtocol>)valueWithDouble:(double)value inContext:(id <HMBaseValueProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithInt32:(int32_t)value inContext:(HMBaseExecutor *)context;
++ (nullable id <HMBaseValueProtocol>)valueWithInt32:(int32_t)value inContext:(id <HMBaseValueProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithUInt32:(uint32_t)value inContext:(HMBaseExecutor *)context;
++ (nullable id <HMBaseValueProtocol>)valueWithUInt32:(uint32_t)value inContext:(id <HMBaseValueProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithNullInContext:(HMBaseExecutor *)context;
++ (nullable id <HMBaseValueProtocol>)valueWithNullInContext:(id <HMBaseValueProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithUndefinedInContext:(HMBaseExecutor *)context;
++ (nullable id <HMBaseValueProtocol>)valueWithUndefinedInContext:(id <HMBaseValueProtocol>)context;
 
 - (nullable id)toObject;
 
@@ -100,11 +98,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMBaseValue : NSObject <HMBaseValueProtocol>
 
-@property (nonatomic, weak, readonly) HMBaseExecutor *executor;
+@property (nonatomic, weak, readonly, nullable) id <HMBaseValueProtocol> executor;
 
 - (nullable instancetype)init;
 
-- (nullable instancetype)initWithExecutor:(nullable HMBaseExecutor *)executor NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithExecutor:(nullable id <HMBaseValueProtocol>)executor NS_DESIGNATED_INITIALIZER;
 
 @end
 
