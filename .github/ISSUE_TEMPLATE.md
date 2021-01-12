@@ -1,8 +1,12 @@
 ---
-name: "🐛 Bug Report"
+name: "\U0001F41B Bug Report"
 about: Report a reproducible bug or regression in Hummer.
-labels: 'Needs: Triage :mag:'
+title: ''
+labels: "Needs: Triage \U0001F50D"
+assignees: ''
+
 ---
+
 请提供所要求的所有资料。不遵循此格式的问题可能会停滞。
 
 ## 描述
