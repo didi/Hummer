@@ -31,16 +31,24 @@ Hummer is a dynamic solution for client.
   s.ios.deployment_target = '9.0'
   
   s.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
-    
-  s.resource_bundles = {
-    'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
-  }
+
+  s.default_subspec        = "Core"
+
+  s.subspec "Core" do |ss|
+    ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,mm,cpp}'
+    ss.exclude_files = 'iOS/Hummer/Classes/Engine/Hermes/*.{h,mm,m}'
+    ss.resource_bundles = {
+      'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
+    }
+    ss.frameworks = 'JavaScriptCore'
+
+    ss.dependency 'Yoga', '~> 1.14'
+    ss.dependency 'SocketRocket', '~> 0.5.1'
+  end
   
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
-  s.dependency 'Yoga', '~> 1.14'
-  s.dependency 'SocketRocket', '~> 0.5.1'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES'
