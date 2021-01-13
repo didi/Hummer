@@ -1,13 +1,18 @@
 package com.didi.hummer.adapter.imageloader.impl;
 
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.imageloader.DrawableCallback;
 import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
@@ -31,11 +36,20 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     @Override
     public void setGif(String url, int repeatCount, ImageView view) {
         // 设置为无限循环
-        if (repeatCount == 0) {
-            repeatCount = -1;
-        }
+        final int fRepeatCount = repeatCount == 0 ? GifDrawable.LOOP_FOREVER : repeatCount;
         try {
-            Glide.with(view.getContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(new GlideDrawableImageViewTarget(view, repeatCount));
+            Glide.with(view.getContext()).asGif().load(url).listener(new RequestListener<GifDrawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                    resource.setLoopCount(fRepeatCount);
+                    return false;
+                }
+            }).into(view);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,11 +67,20 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     @Override
     public void setGif(int resId, int repeatCount, ImageView view) {
         // 设置为无限循环
-        if (repeatCount == 0) {
-            repeatCount = -1;
-        }
+        final int fRepeatCount = repeatCount == 0 ? GifDrawable.LOOP_FOREVER : repeatCount;
         try {
-            Glide.with(view.getContext()).load(resId).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(new GlideDrawableImageViewTarget(view, repeatCount));
+            Glide.with(view.getContext()).asGif().load(resId).listener(new RequestListener<GifDrawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                    resource.setLoopCount(fRepeatCount);
+                    return false;
+                }
+            }).into(view);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,9 +89,14 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     @Override
     public void loadDrawable(String url, DrawableCallback callback) {
         try {
-            Glide.with(HummerSDK.appContext).load(url).into(new SimpleTarget<GlideDrawable>() {
+            Glide.with(HummerSDK.appContext).load(url).into(new CustomTarget<Drawable>() {
                 @Override
-                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     if (callback != null) {
                         callback.onDrawableLoaded(resource);
                     }
@@ -82,9 +110,14 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     @Override
     public void loadDrawable(int resId, DrawableCallback callback) {
         try {
-            Glide.with(HummerSDK.appContext).load(resId).into(new SimpleTarget<GlideDrawable>() {
+            Glide.with(HummerSDK.appContext).load(resId).into(new CustomTarget<Drawable>() {
                 @Override
-                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     if (callback != null) {
                         callback.onDrawableLoaded(resource);
                     }
