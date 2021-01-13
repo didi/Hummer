@@ -21,10 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * 注意：如果闭包不返回任何值，会导致崩溃
  */
-typedef id _Nullable (^HMClosureType)(NSArray *_Nullable value);
+typedef id _Nullable (^HMFunctionType)(NSArray *_Nullable value);
 
-// 兼容类型
-typedef HMClosureType HMFuncCallback;
+// 兼容以前代码
+typedef HMFunctionType HMFuncCallback;
 
 @class HMExceptionModel;
 
@@ -43,10 +43,80 @@ typedef HMClosureType HMFuncCallback;
 - (nullable id <HMBaseValueProtocol>)evaluateScript:(nullable NSString *)script withSourceURL:(nullable NSURL *)sourceURL;
 
 /// 使用下标获取属性
-/// @param key 可以为 HMBaseValue，也可以为字符串，当前只支持字符串，如果支持 Number 等，改成 id<NSCopying>
+/// @param key 可以为 id<HMBaseValueProtocol>，也可以为字符串，当前只支持字符串，如果支持 Number 等，改成 id<NSCopying>
 - (nullable id <HMBaseValueProtocol>)objectForKeyedSubscript:(id)key;
 
 - (void)setObject:(nullable id)object forKeyedSubscript:(id)key;
+
+#pragma mark - 私有代码 业务方请勿使用
+
+#pragma mark - 类型判断
+
+/// nil 参数被认为是 JavaScript undefined
+
+- (BOOL)valueIsNullOrUndefined:(nullable id <HMBaseValueProtocol>)value;
+
+- (BOOL)valueIsBoolean:(nullable id <HMBaseValueProtocol>)value;
+
+/// 布尔类型不是数字
+/// @param value id<HMBaseValueProtocol>
+- (BOOL)valueIsNumber:(nullable id <HMBaseValueProtocol>)value;
+
+/// new String() 是对象不是标量
+/// @param value id<HMBaseValueProtocol>
+- (BOOL)valueIsString:(nullable id <HMBaseValueProtocol>)value;
+
+/// 单纯判断是否为 JavaScript Object
+/// @param value id<HMBaseValueProtocol>
+- (BOOL)valueIsObject:(nullable id <HMBaseValueProtocol>)value DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，业务方实际上需要的是判断是否为字典");
+
+/// 包括 Proxy 代理的 Array
+/// @param value id<HMBaseValueProtocol>
+- (BOOL)valueIsArray:(nullable id <HMBaseValueProtocol>)value;
+
+#pragma mark - 私有方法 业务方请勿调用
+
+#pragma mark - 新增类型判断
+
+- (BOOL)valueIsDictionary:(nullable id <HMBaseValueProtocol>)value DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，直接转换成 dictionary + 判空");
+
+- (BOOL)valueIsNativeObject:(nullable id <HMBaseValueProtocol>)value;
+
+- (BOOL)valueIsFunction:(nullable id <HMBaseValueProtocol>)value;
+
+#pragma mark - Native -> JavaScriptCore
+
+- (nullable id <HMBaseValueProtocol>)convertToValueWithObject:(nullable id)object;
+
+- (nullable id <HMBaseValueProtocol>)convertToValueWithNumber:(nullable NSNumber *)number;
+
+#pragma mark - JavaScriptCore -> Native
+
+- (nullable id)convertToObjectWithValue:(nullable id <HMBaseValueProtocol>)value isPortableConvert:(BOOL)isPortableConvert;
+
+- (nullable NSNumber *)convertToNumberWithValue:(nullable id <HMBaseValueProtocol>)value;
+
+- (nullable NSString *)convertToStringWithValue:(nullable id <HMBaseValueProtocol>)value;
+
+- (nullable NSArray *)convertToArrayWithValue:(nullable id <HMBaseValueProtocol>)value isPortableConvert:(BOOL)isPortableConvert;
+
+- (nullable NSDictionary<NSString *, id> *)convertToDictionaryWithValue:(nullable id <HMBaseValueProtocol>)value isPortableConvert:(BOOL)isPortableConvert;
+
+- (nullable NSObject *)convertToNativeObjectWithValue:(nullable id <HMBaseValueProtocol>)value;
+
+- (nullable HMFunctionType)convertToFunctionWithValue:(nullable id <HMBaseValueProtocol>)value;
+
+#pragma mark - Misc
+
+- (BOOL)compareWithValue:(nullable id <HMBaseValueProtocol>)value anotherValue:(nullable id <HMBaseValueProtocol>)anotherValue;
+
+- (nullable id <HMBaseValueProtocol>)callWithValue:(nullable id <HMBaseValueProtocol>)value arguments:(nullable NSArray *)arguments;
+
+- (nullable id <HMBaseValueProtocol>)invokeMethodWithValue:(nullable id <HMBaseValueProtocol>)value method:(NSString *)method withArguments:(nullable NSArray *)arguments;
+
+- (nullable id <HMBaseValueProtocol>)getWithValue:(nullable id <HMBaseValueProtocol>)value propertyName:(nullable NSString *)propertyName;
+
+- (void)setWithValue:(nullable id <HMBaseValueProtocol>)value propertyName:(nullable NSString *)propertyName propertyObject:(nullable id)propertyObject;
 
 @optional
 
