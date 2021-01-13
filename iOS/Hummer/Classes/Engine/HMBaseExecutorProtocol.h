@@ -28,7 +28,7 @@ typedef HMFunctionType HMFuncCallback;
 
 @class HMExceptionModel;
 
-@protocol HMBaseExecutorProtocol
+@protocol HMBaseExecutorProtocol <NSObject>
 
 @required
 
@@ -131,5 +131,15 @@ typedef HMFunctionType HMFuncCallback;
 - (void)setObject:(nullable id)obj atIndexedSubscript:(NSUInteger)idx;
 
 @end
+
+//FOUNDATION_EXPORT NSArray<id<HMBaseValueProtocol>> *_Nullable hm_otherArguments;
+
+//FOUNDATION_EXPORT id<HMBaseExecutorProtocol> _Nullable hm_currentExecutor;
+
+FOUNDATION_EXPORT NSMapTable<NSValue *, id <HMBaseExecutorProtocol>> *_Nullable HMExecutorMap;
+
+FOUNDATION_EXPORT void HMAssertMainQueue(void);
+
+FOUNDATION_EXPORT void HMSafeMainThread(dispatch_block_t _Nullable block);
 
 NS_ASSUME_NONNULL_END
