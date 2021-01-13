@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @required
 
-@property (readonly, strong, nullable, nonatomic) id <HMBaseWeakValueProtocol> value;
+@property (readonly, strong, nullable, nonatomic) id <HMBaseValueProtocol> value;
 
-+ (id <HMBaseWeakValueProtocol>)managedValueWithValue:(id <HMBaseValueProtocol>)value;
++ (nullable id <HMBaseWeakValueProtocol>)managedValueWithValue:(nullable id <HMBaseValueProtocol>)value;
 
-- (instancetype)initWithValue:(id <HMBaseValueProtocol>)value;
+- (nullable instancetype)initWithValue:(nullable id <HMBaseValueProtocol>)value;
 
 @end
 
