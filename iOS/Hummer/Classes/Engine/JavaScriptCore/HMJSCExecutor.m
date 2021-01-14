@@ -11,6 +11,7 @@
 #import "HMJSCStrongValue.h"
 #import "NSObject+Hummer.h"
 #import "HMExportClass.h"
+#import "HMJSCWeakValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,7 +37,7 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 @interface HMJSCExecutor ()
 
-@property(nonatomic, assign) JSGlobalContextRef contextRef;
+@property (nonatomic, assign) JSGlobalContextRef contextRef;
 
 - (BOOL)valueRefIsNativeObject:(nullable JSValueRef)valueRef;
 
@@ -789,6 +790,28 @@ NS_ASSUME_NONNULL_END
     } else {
         return [self convertNativeObjectToValueRef:object];
     }
+}
+
+- (nullable id <HMBaseWeakValueProtocol>)createWeakValueWithStrongValue:(HMBaseValue *)strongValue {
+    return [[HMJSCWeakValue alloc] initWithValue:strongValue];
+}
+
+- (NSString *)name {
+    JSStringRef stringRef = JSGlobalContextCopyName(self.contextRef);
+    if (!stringRef) {
+        return nil;
+    }
+
+    return CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, stringRef));
+}
+
+- (void)setName:(NSString *)name {
+    if (name.length == 0) {
+        name = @"Hummer JSContext";
+    }
+    JSStringRef stringRef = JSStringCreateWithCFString((__bridge CFStringRef) name);
+    JSGlobalContextSetName(self.contextRef, stringRef);
+    JSStringRelease(stringRef);
 }
 
 - (nullable HMFunctionType)convertValueRefToFunction:(JSValueRef)valueRef {
