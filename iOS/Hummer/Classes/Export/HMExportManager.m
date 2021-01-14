@@ -44,10 +44,6 @@ static id _sharedInstance = nil;
     return self;
 }
 
-- (void)loadExportClasses {
-    [self loadAllExportedComponent];
-}
-
 - (void)loadAllExportedComponent {
     if (self.jsClasses.count > 0 || self.objcClasses.count > 0) {
         return;
@@ -124,14 +120,6 @@ static id _sharedInstance = nil;
             HMLogError(@"没有导出组件");
         }
     }
-}
-
-- (nullable HMExportClass *)exportClassForObjC:(nullable NSString *)objcClass {
-    if (objcClass.length == 0) {
-        return nil;
-    }
-    
-    return self.objcClasses[objcClass];
 }
 
 @end

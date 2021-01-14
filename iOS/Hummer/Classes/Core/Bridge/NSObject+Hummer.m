@@ -29,7 +29,7 @@
         return nil;
     }
     
-    return weakValue;
+    return weakValue.value;
 }
 
 - (void)setHmValue:(HMBaseValue *)value {

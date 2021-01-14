@@ -14,6 +14,10 @@ id <HMBaseExecutorProtocol> _Nullable HMCurrentExecutor = nil;
 
 NSMapTable<NSValue *, id <HMBaseExecutorProtocol>> *HMExecutorMap = nil;
 
+NSString *const HUMMER_RETAIN_TEMPLATE = @"持有 %@";
+
+NSString *const HUMMER_CREATE_TEMPLATE = @"创建 %@";
+
 void HMAssertMainQueue(void) {
     HMAssert(NSThread.isMainThread, @"This function must be called on the main queue");
 }

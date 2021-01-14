@@ -93,14 +93,14 @@ class HummerBase extends Object {
     initialize(...args: [unknown]) { args }
 }
 
-globalThis.hummerCreateClosure = (object: unknown) => {
-    const closureValue = (...args: [unknown]) => {
-        return globalThis.hummerCallClosure(object, ...args);
+globalThis.hummerCreateFunction = (object: unknown) => {
+    const functionValue = (...args: [unknown]) => {
+        return globalThis.hummerCallFunction(object, ...args);
     }
-    // 给原生 convertValueRefToClosure 方法使用
-    closureValue._privateClosure = object;
+    // 给原生 convertValueRefToFunction 方法使用
+    functionValue._privateFunction = object;
 
-    return closureValue;
+    return functionValue;
 }
 
 globalThis.hummerCreateObject = (privatePointer: unknown, jsClassName: string) => {

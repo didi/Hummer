@@ -70,10 +70,6 @@ static const HMExportStruct __hm_export_class_##jsClass##__ = {#jsClass, #objcCl
 
 - (void)loadAllExportedComponent;
 
-- (void)loadExportClasses DEPRECATED_MSG_ATTRIBUTE("使用 - loadAllExportedComponent 替代");
-
-- (nullable HMExportClass *)exportClassForObjC:(nullable NSString *)objcClass DEPRECATED_MSG_ATTRIBUTE("使用 objcClasses 替代");
-
 @end
 
 NS_ASSUME_NONNULL_END
