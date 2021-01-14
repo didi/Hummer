@@ -49,23 +49,23 @@ NS_ASSUME_NONNULL_END
     return [self.executor valueIsArray:self];
 }
 
-+ (nullable id <HMBaseValueProtocol>)valueWithObject:(id)value inContext:(id <HMBaseExecutorProtocol>)context {
++ (nullable HMBaseValue *)valueWithObject:(id)value inContext:(id <HMBaseExecutorProtocol>)context {
     return [context convertToValueWithObject:value];
 }
 
-+ (nullable id <HMBaseValueProtocol>)valueWithBool:(BOOL)value inContext:(id <HMBaseExecutorProtocol>)context {
++ (nullable HMBaseValue *)valueWithBool:(BOOL)value inContext:(id <HMBaseExecutorProtocol>)context {
     return [context convertToValueWithNumber:@(value)];
 }
 
-+ (nullable id <HMBaseValueProtocol>)valueWithDouble:(double)value inContext:(id <HMBaseExecutorProtocol>)context {
++ (nullable HMBaseValue *)valueWithDouble:(double)value inContext:(id <HMBaseExecutorProtocol>)context {
     return [context convertToValueWithNumber:@(value)];
 }
 
-+ (nullable id <HMBaseValueProtocol>)valueWithInt32:(int32_t)value inContext:(id <HMBaseExecutorProtocol>)context {
++ (nullable HMBaseValue *)valueWithInt32:(int32_t)value inContext:(id <HMBaseExecutorProtocol>)context {
     return [context convertToValueWithNumber:@(value)];
 }
 
-+ (nullable id <HMBaseValueProtocol>)valueWithUInt32:(uint32_t)value inContext:(id <HMBaseExecutorProtocol>)context {
++ (nullable HMBaseValue *)valueWithUInt32:(uint32_t)value inContext:(id <HMBaseExecutorProtocol>)context {
     return [context convertToValueWithNumber:@(value)];
 }
 
@@ -81,11 +81,11 @@ NS_ASSUME_NONNULL_END
     return [self.executor valueIsFunction:self];
 }
 
-+ (nullable id <HMBaseValueProtocol>)valueWithNullInContext:(id)context {
++ (nullable HMBaseValue *)valueWithNullInContext:(id)context {
     return nil;
 }
 
-+ (nullable id <HMBaseValueProtocol>)valueWithUndefinedInContext:(id)context {
++ (nullable HMBaseValue *)valueWithUndefinedInContext:(id)context {
     return nil;
 }
 
@@ -166,15 +166,15 @@ NS_ASSUME_NONNULL_END
     return [self.executor compareWithValue:self anotherValue:other];
 }
 
-- (nullable id <HMBaseValueProtocol>)callWithArguments:(NSArray *)arguments {
+- (nullable HMBaseValue *)callWithArguments:(NSArray *)arguments {
     return [self.executor callWithValue:self arguments:arguments];
 }
 
-- (nullable id <HMBaseValueProtocol>)invokeMethod:(NSString *)method withArguments:(NSArray *)arguments {
+- (nullable HMBaseValue *)invokeMethod:(NSString *)method withArguments:(NSArray *)arguments {
     return [self.executor invokeMethodWithValue:self method:method withArguments:arguments];
 }
 
-- (nullable id <HMBaseValueProtocol>)objectForKeyedSubscript:(id)key {
+- (nullable HMBaseValue *)objectForKeyedSubscript:(id)key {
     if (![key isKindOfClass:NSString.class]) {
         HMLogError(KeyIsNotString);
 

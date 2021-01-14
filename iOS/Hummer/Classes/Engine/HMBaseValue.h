@@ -9,9 +9,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol HMBaseValueProtocol <NSObject>
+@class HMBaseValue;
 
-@required
+@protocol HMBaseValueOptionalProtocol
+
+@optional
+/**
+ * 暂时不实现
+ */
+- (nullable HMBaseValue *)objectAtIndexedSubscript:(NSUInteger)index;
+
+- (void)setObject:(nullable id)object atIndexedSubscript:(NSUInteger)index;
+
+@end
+
+@interface HMBaseValue : NSObject <HMBaseValueOptionalProtocol>
 
 @property (nonatomic, weak, readonly, nullable) id <HMBaseExecutorProtocol> executor;
 
@@ -50,21 +62,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 构造方法
 
-- (nullable instancetype)initWithExecutor:(nullable id <HMBaseExecutorProtocol>)executor;
++ (nullable HMBaseValue *)valueWithObject:(nullable id)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithObject:(nullable id)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
++ (nullable HMBaseValue *)valueWithBool:(BOOL)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithBool:(BOOL)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
++ (nullable HMBaseValue *)valueWithDouble:(double)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithDouble:(double)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
++ (nullable HMBaseValue *)valueWithInt32:(int32_t)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithInt32:(int32_t)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
++ (nullable HMBaseValue *)valueWithUInt32:(uint32_t)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
 
-+ (nullable id <HMBaseValueProtocol>)valueWithUInt32:(uint32_t)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
++ (nullable HMBaseValue *)valueWithNullInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口，空实现");
 
-+ (nullable id <HMBaseValueProtocol>)valueWithNullInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口，空实现");
-
-+ (nullable id <HMBaseValueProtocol>)valueWithUndefinedInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口，空实现");
++ (nullable HMBaseValue *)valueWithUndefinedInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口，空实现");
 
 #pragma mark - 转换方法
 
@@ -119,35 +129,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// JavaScript ===
 /// @param value 值
-- (BOOL)isEqualToObject:(nullable id <HMBaseValueProtocol>)value;
+- (BOOL)isEqualToObject:(nullable HMBaseValue *)value;
 
 /// 纯函数
-- (nullable id <HMBaseValueProtocol>)callWithArguments:(nullable NSArray *)arguments;
+- (nullable HMBaseValue *)callWithArguments:(nullable NSArray *)arguments;
 
 /// 包含 this 指针
-- (nullable id <HMBaseValueProtocol>)invokeMethod:(NSString *)method withArguments:(nullable NSArray *)arguments;
+- (nullable HMBaseValue *)invokeMethod:(NSString *)method withArguments:(nullable NSArray *)arguments;
 
 /**
- * 先支持字符串，后支持 id<HMBaseValueProtocol>
+ * 先支持字符串，后支持 HMBaseValue *
  */
-- (nullable id <HMBaseValueProtocol>)objectForKeyedSubscript:(id)key;
+- (nullable HMBaseValue *)objectForKeyedSubscript:(id)key;
 
 - (void)setObject:(nullable id)object forKeyedSubscript:(id)key;
-
-@optional
-
-/**
- * 暂时不实现
- */
-- (nullable id <HMBaseValueProtocol>)objectAtIndexedSubscript:(NSUInteger)index;
-
-- (void)setObject:(nullable id)object atIndexedSubscript:(NSUInteger)index;
-
-@end
-
-@interface HMBaseValue : NSObject <HMBaseValueProtocol>
-
-@property (nonatomic, weak, readonly, nullable) id <HMBaseExecutorProtocol> executor;
 
 // 不能用可失败构造函数重载非可失败构造函数
 - (instancetype)init NS_UNAVAILABLE;

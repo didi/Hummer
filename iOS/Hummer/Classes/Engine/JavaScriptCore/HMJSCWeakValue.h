@@ -14,11 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMJSCWeakValue : NSObject <HMBaseWeakValueProtocol>
 
-@property (readonly, strong, nullable, nonatomic) id <HMBaseValueProtocol> value;
+@property (readonly, strong, nullable, nonatomic) HMBaseValue *value;
 
 - (instancetype)init NS_UNAVAILABLE;
 
-- (nullable instancetype)initWithValue:(nullable id <HMBaseValueProtocol>)value NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithValue:(nullable HMBaseValue *)value NS_DESIGNATED_INITIALIZER;
 
 @end
 

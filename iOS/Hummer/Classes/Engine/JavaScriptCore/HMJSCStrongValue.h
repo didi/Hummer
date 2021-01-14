@@ -6,13 +6,19 @@
 //
 
 #import <Hummer/HMBaseValue.h>
-#import <Hummer/HMJSCValue.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HMJSCStrongValue : HMBaseValue <HMJSCValue>
+@interface HMJSCStrongValue : HMBaseValue
+
+@property (nonatomic, assign, nullable, readonly) JSValueRef valueRef;
+
++ (nullable instancetype)valueWithJSValueRef:(nullable JSValueRef)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
 
 - (nullable instancetype)initWithValueRef:(nullable JSValueRef)valueRef executor:(nullable id <HMBaseExecutorProtocol>)executor NS_DESIGNATED_INITIALIZER;
+
+- (void)forceUnprotectWithGlobalContextRef:(nullable JSGlobalContextRef)globalContextRef;
 
 @end
 

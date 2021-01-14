@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol HMBaseValueProtocol;
+@class HMBaseValue;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @required
 
-@property (readonly, strong, nullable, nonatomic) id <HMBaseValueProtocol> value;
+@property (readonly, strong, nullable, nonatomic) HMBaseValue *value;
 
-+ (nullable id <HMBaseWeakValueProtocol>)managedValueWithValue:(nullable id <HMBaseValueProtocol>)value;
++ (nullable id <HMBaseWeakValueProtocol>)managedValueWithValue:(nullable HMBaseValue *)value;
 
-- (nullable instancetype)initWithValue:(nullable id <HMBaseValueProtocol>)value;
+- (nullable instancetype)initWithValue:(nullable HMBaseValue *)value;
 
 @end
 
