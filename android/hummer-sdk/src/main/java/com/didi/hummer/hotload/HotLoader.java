@@ -8,6 +8,7 @@ import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.websocket.OnWebSocketEventListener;
 import com.didi.hummer.adapter.websocket.impl.DefaultWebSocketAdapter;
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.pool.ComponentPool;
 import com.didi.hummer.utils.NetworkUtil;
 
 import org.json.JSONException;
@@ -32,6 +33,7 @@ public class HotLoader {
 
         HotLoaderCallback callback = msg -> {
             if (url != null && url.equalsIgnoreCase(msg)) {
+                context.onRefresh();
                 NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
                     context.evaluateJavaScript(response.data, url);
                     Toast.makeText(context, "页面已刷新", Toast.LENGTH_SHORT).show();
