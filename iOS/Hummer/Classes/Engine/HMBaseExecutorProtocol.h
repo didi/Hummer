@@ -10,8 +10,11 @@
 @class HMBaseValue;
 
 @protocol HMBaseWeakValueProtocol;
+@class HMExceptionModel;
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef void (^HMExceptionHandler)(HMExceptionModel *exceptionModel);
 
 /**
  * 如果是原生给 JS 的闭包，由 JS 调用，参数为 NSArray<HMBaseValue *> *，返回值为 id

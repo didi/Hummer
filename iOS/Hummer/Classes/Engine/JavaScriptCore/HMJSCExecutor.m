@@ -36,7 +36,7 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 @interface HMJSCExecutor ()
 
-@property (nonatomic, assign) JSGlobalContextRef contextRef;
+@property(nonatomic, assign) JSGlobalContextRef contextRef;
 
 - (BOOL)valueRefIsNativeObject:(nullable JSValueRef)valueRef;
 
@@ -571,7 +571,7 @@ NS_ASSUME_NONNULL_END
     HMAssertMainQueue();
     if ([object hmValue].context == self && [[object hmValue] isKindOfClass:HMJSCStrongValue.class]) {
         // 先判断 hmValue，这样后续的闭包转换和原生组件导出可以减少调用
-        // 做严格判断，同上下文才能复用 hm_value
+        // 做严格判断，同上下文才能复用 hmValue
         HMJSCStrongValue *strongValue = (HMJSCStrongValue *) [object hmValue];
         return strongValue.valueRef;
     }
@@ -623,7 +623,7 @@ NS_ASSUME_NONNULL_END
     HMAssertMainQueue();
     if ([function hmValue].context == self && [[function hmValue] isKindOfClass:HMJSCStrongValue.class]) {
         // 先判断 hmValue，这样后续的闭包转换和原生组件导出可以减少调用
-        // 做严格判断，同上下文才能复用 hm_value
+        // 做严格判断，同上下文才能复用 hmValue
         HMJSCStrongValue *strongValue = (HMJSCStrongValue *) [function hmValue];
         return strongValue.valueRef;
     }
@@ -761,19 +761,15 @@ NS_ASSUME_NONNULL_END
 
 - (nullable JSValueRef)convertObjectToValueRef:(id)object {
     HMAssertMainQueue();
-    if ([object isKindOfClass:HMJSCWeakValue.class] || [object isKindOfClass:HMJSCStrongValue.class]) {
-        if (!((id <HMJSCValue>) object).valueRef) {
-            // 无效值
-            return JSValueMakeUndefined(self.contextRef);
-        }
-
-        if (((HMBaseValue *) object).executor != self) {
+    if ([object isKindOfClass:HMJSCStrongValue.class]) {
+        HMJSCStrongValue *strongValue = object;
+        if (strongValue.context != self) {
             // JSValueRef -> 对象 -> JSValueRef
-            return [self convertObjectToValueRef:[((HMJSCExecutor *) ((HMBaseValue *) object).executor) convertValueRefToObject:((id <HMJSCValue>) object).valueRef isPortableConvert:NO]];
+            return [self convertObjectToValueRef:strongValue.toObject];
         }
 
         // 业务方已经转好，直接添加就行
-        return ((id <HMJSCValue>) object).valueRef;
+        return strongValue.valueRef;
     } else if ([object isKindOfClass:NSNumber.class]) {
         return [self convertNumberToValueRef:object];
     } else if ([object isKindOfClass:NSString.class]) {
@@ -782,12 +778,14 @@ NS_ASSUME_NONNULL_END
         return [self convertArrayToValueRef:(NSArray *) object];
     } else if ([object isKindOfClass:NSDictionary.class]) {
         return [self convertDictionaryToValueRef:(NSDictionary<NSString *, id> *) object];
-    } else if ([object hm_value].executor == self && [[object hm_value] isValid]) {
-        // 先判断 hm_value，这样后续的闭包转换和原生组件导出可以减少调用
-        // 做严格判断，同上下文才能复用 hm_value
-        return ((HMJSCWeakValue *) [object hm_value]).valueRef;
+    } else if ([object hmValue].context == self) {
+        // 先判断 hmValue，这样后续的闭包转换和原生组件导出可以减少调用
+        // 做严格判断，同上下文才能复用 hmValue
+        HMJSCStrongValue *strongValue = (HMJSCStrongValue *) [object hmValue];
+
+        return strongValue.valueRef;
     } else if ([object isKindOfClass:NSClassFromString(@"NSBlock")]) {
-        return [self convertClosureToValueRef:object];
+        return [self convertFunctionToValueRef:object];
     } else {
         return [self convertNativeObjectToValueRef:object];
     }

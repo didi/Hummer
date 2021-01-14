@@ -7,6 +7,7 @@
 
 #import "HMBaseExecutorProtocol.h"
 #import "HMUtility.h"
+#import "HMExceptionModel.h"
 
 NSArray<HMBaseValue *> *_Nullable HMOtherArguments = nil;
 
