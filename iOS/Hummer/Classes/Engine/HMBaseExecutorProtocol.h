@@ -89,6 +89,7 @@ typedef HMFunctionType HMFuncCallback;
 
 #pragma mark - Native -> JavaScriptCore
 
+/// 下面两个函数都是 HMBaseValue 类方法要求
 - (nullable HMBaseValue *)convertToValueWithObject:(nullable id)object;
 
 - (nullable HMBaseValue *)convertToValueWithNumber:(nullable NSNumber *)number;

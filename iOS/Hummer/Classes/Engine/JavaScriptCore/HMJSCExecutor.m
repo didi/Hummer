@@ -39,6 +39,8 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 @property (nonatomic, assign) JSGlobalContextRef contextRef;
 
+- (BOOL)valueRefIsArray:(nullable JSValueRef)valueRef;
+
 - (BOOL)valueRefIsNativeObject:(nullable JSValueRef)valueRef;
 
 - (BOOL)valueRefIsFunction:(nullable JSValueRef)valueRef;
@@ -69,6 +71,12 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 - (nullable JSValueRef)convertObjectToValueRef:(nullable id)object;
 
 - (nullable HMFunctionType)convertValueRefToFunction:(nullable JSValueRef)valueRef;
+
+- (nullable NSArray *)convertValueRefToArray:(nullable JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert;
+
+- (nullable NSDictionary<NSString *, id> *)convertValueRefToDictionary:(nullable JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert;
+
+- (nullable id)convertValueRefToObject:(nullable JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert;
 
 @end
 
@@ -218,11 +226,11 @@ NS_ASSUME_NONNULL_END
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
     HMAssertMainQueue();
-//    if (!strongValue.valueRef) {
-    // strongValue.valueRef == NULL，后续 JSObjectCallAsFunction 要求不为空
-//        return NO;
-//    }
 
+    return [self valueRefIsArray:strongValue.valueRef];
+}
+
+- (BOOL)valueRefIsArray:(nullable JSValueRef)valueRef {
     JSObjectRef globalObjectRef = JSContextGetGlobalObject(self.contextRef);
     JSStringRef arrayString = JSStringCreateWithUTF8CString("Array");
     JSValueRef exception = NULL;
@@ -241,13 +249,13 @@ NS_ASSUME_NONNULL_END
         return NO;
     }
     JSObjectRef arrayConstructorObjectRef = JSValueToObject(self.contextRef, arrayConstructorValue, &exception);
-    if (exception) {
+    if (exception || !arrayConstructorObjectRef) {
         HMLogError(JSArrayConstructorNotFound);
 
         return NO;
     }
     JSStringRef isArrayString = JSStringCreateWithUTF8CString("isArray");
-    // JSObjectGetProperty 保证空安全
+    // JSObjectGetProperty 要求对象不为空
     JSValueRef isArrayValue =
             JSObjectGetProperty(self.contextRef, arrayConstructorObjectRef, isArrayString, &exception);
     JSStringRelease(isArrayString);
@@ -268,7 +276,7 @@ NS_ASSUME_NONNULL_END
         return NO;
     }
     JSValueRef arguments[] = {
-            strongValue.valueRef
+            valueRef
     };
     JSValueRef result = JSObjectCallAsFunction(self.contextRef, isArray, NULL, 1, arguments, &exception);
     if (exception) {
@@ -418,7 +426,7 @@ NS_ASSUME_NONNULL_END
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
-    if (exception) {
+    if (exception || !objectRef) {
         return nil;
     }
     JSStringRef privatePropertyName = JSStringCreateWithUTF8CString("_private");
@@ -460,7 +468,7 @@ NS_ASSUME_NONNULL_END
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, *errorObject, &exception);
-    if (!objectRef) {
+    if (exception || !objectRef) {
         HMLogError(@"valueRef 转换 JSObjectRef 失败");
 
         return NO;
@@ -682,7 +690,7 @@ NS_ASSUME_NONNULL_END
         JSValueRef exception = NULL;
         if (!arrayRef) {
             arrayRef = JSObjectMakeArray(self.contextRef, 0, NULL, &exception);
-            if (exception) {
+            if (exception || !arrayRef) {
                 // continue
                 return;
             }
@@ -760,6 +768,10 @@ NS_ASSUME_NONNULL_END
     return [self convertValueRefToFunction:strongValue.valueRef];
 }
 
+- (nullable HMBaseValue *)convertToValueWithObject:(id)object {
+    return [[HMJSCStrongValue alloc] initWithValueRef:[self convertObjectToValueRef:object] executor:self];
+}
+
 - (nullable JSValueRef)convertObjectToValueRef:(id)object {
     HMAssertMainQueue();
     if ([object isKindOfClass:HMJSCStrongValue.class]) {
@@ -803,6 +815,15 @@ NS_ASSUME_NONNULL_END
     }
 
     return CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, stringRef));
+}
+
+- (nullable NSArray *)convertToArrayWithValue:(HMBaseValue *)value isPortableConvert:(BOOL)isPortableConvert {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self convertValueRefToArray:strongValue.valueRef isPortableConvert:isPortableConvert];
 }
 
 - (void)setName:(NSString *)name {
@@ -891,6 +912,158 @@ NS_ASSUME_NONNULL_END
     [functionType setHmValue:valueWrapper];
 
     return functionType;
+}
+
+- (nullable NSArray *)convertValueRefToArray:(JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert {
+    HMAssertMainQueue();
+    if (![self valueRefIsArray:valueRef]) {
+        return nil;
+    }
+    JSValueRef exception = NULL;
+    JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
+    if (exception || !objectRef) {
+        return nil;
+    }
+    JSStringRef lengthPropertyName = JSStringCreateWithUTF8CString("length");
+    JSValueRef lengthValueRef = JSObjectGetProperty(self.contextRef, objectRef, lengthPropertyName, &exception);
+    JSStringRelease(lengthPropertyName);
+    if (exception || !JSValueIsNumber(self.contextRef, lengthValueRef)) {
+        HMLogError(@"array.length 不是数字");
+
+        return nil;
+    }
+    unsigned int length = (unsigned int) JSValueToNumber(self.contextRef, lengthValueRef, NULL);
+    NSMutableArray *resultArray = nil;
+    for (unsigned int i = 0; i < length; ++i) {
+        JSValueRef indexValue = JSObjectGetPropertyAtIndex(self.contextRef, objectRef, i, &exception);
+        if (exception) {
+            exception = NULL;
+
+            continue;
+        }
+        id resultObject = [self convertValueRefToObject:indexValue isPortableConvert:isPortableConvert];
+        if (resultObject) {
+            if (!resultArray) {
+                resultArray = [NSMutableArray arrayWithCapacity:length];
+            }
+            [resultArray addObject:resultObject];
+        }
+    }
+
+    return resultArray.copy;
+}
+
+- (nullable NSDictionary<NSString *, id> *)convertToDictionaryWithValue:(HMBaseValue *)value isPortableConvert:(BOOL)isPortableConvert {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self convertValueRefToDictionary:strongValue.valueRef isPortableConvert:isPortableConvert];
+}
+
+- (nullable NSDictionary<NSString *, id> *)convertValueRefToDictionary:(JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert {
+    HMAssertMainQueue();
+    if (!JSValueIsObject(self.contextRef, valueRef)) {
+        return nil;
+    }
+    // 1. 是对象
+    // 2. 不是数组
+    // 3. 不是闭包
+    // 4. 不是原生对象
+    if ([self valueRefIsArray:valueRef]) {
+        return nil;
+    }
+    if ([self valueRefIsFunction:valueRef]) {
+        return nil;
+    }
+    if ([self valueRefIsNativeObject:valueRef]) {
+        return nil;
+    }
+    JSValueRef exception = NULL;
+    JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
+    // JSObjectCopyPropertyNames 要求非空对象
+    if (exception || !objectRef) {
+        return nil;
+    }
+    // 字典转换
+    JSPropertyNameArrayRef propertyNameArrayRef = JSObjectCopyPropertyNames(self.contextRef, objectRef);
+    size_t count = JSPropertyNameArrayGetCount(propertyNameArrayRef);
+    NSMutableDictionary<NSString *, id> *resultDictionary = nil;
+    for (size_t i = 0; i < count; ++i) {
+        JSStringRef propertyName = JSPropertyNameArrayGetNameAtIndex(propertyNameArrayRef, i);
+        NSString *propertyNameString = CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, propertyName));
+        if (propertyNameString.length == 0) {
+            // key 不能为 nil
+            continue;
+        }
+        JSValueRef propertyValueRef = JSObjectGetProperty(self.contextRef, objectRef, propertyName, &exception);
+        if (exception) {
+            exception = NULL;
+
+            continue;
+        }
+        id objectValue = [self convertValueRefToObject:propertyValueRef isPortableConvert:isPortableConvert];
+        if (objectValue) {
+            if (!resultDictionary) {
+                resultDictionary = [NSMutableDictionary dictionaryWithCapacity:count];
+            }
+            resultDictionary[propertyNameString] = objectValue;
+        }
+    }
+    JSPropertyNameArrayRelease(propertyNameArrayRef);
+
+    return resultDictionary.copy;
+}
+
+- (nullable id)convertToObjectWithValue:(HMBaseValue *)value isPortableConvert:(BOOL)isPortableConvert {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self convertValueRefToObject:strongValue.valueRef isPortableConvert:isPortableConvert];
+}
+
+- (nullable id)convertValueRefToObject:(JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert {
+    if (JSValueIsNull(self.contextRef, valueRef) || JSValueIsUndefined(self.contextRef, valueRef)) {
+        return nil;
+    }
+
+    id returnValue = [self convertValueRefToString:valueRef];
+    if (returnValue) {
+        return returnValue;
+    }
+    returnValue = [self convertValueRefToNumber:valueRef];
+    if (returnValue) {
+        return returnValue;
+    }
+
+    if (isPortableConvert) {
+        // 原生对象
+        returnValue = [self convertValueRefToNativeObject:valueRef];
+        if (returnValue) {
+            return returnValue;
+        }
+
+        // 闭包需要比字典优先判断
+        returnValue = [self convertValueRefToFunction:valueRef];
+        if (returnValue) {
+            return returnValue;
+        }
+    }
+
+    returnValue = [self convertValueRefToArray:valueRef isPortableConvert:isPortableConvert];
+    if (returnValue) {
+        return returnValue;
+    }
+
+    returnValue = [self convertValueRefToDictionary:valueRef isPortableConvert:isPortableConvert];
+    if (returnValue) {
+        return returnValue;
+    }
+
+    return nil;
 }
 
 @end
