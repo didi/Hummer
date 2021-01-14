@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMBaseValue : NSObject <HMBaseValueOptionalProtocol>
 
-@property (nonatomic, weak, readonly, nullable) id <HMBaseExecutorProtocol> executor;
+@property (nonatomic, weak, readonly, nullable) id <HMBaseExecutorProtocol> context;
 
 #pragma mark - 类型判断
 

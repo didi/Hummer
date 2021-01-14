@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMBaseValue ()
 
-@property (nonatomic, weak, nullable) id <HMBaseExecutorProtocol> executor;
+@property (nonatomic, weak, nullable) id <HMBaseExecutorProtocol> context;
 
 @end
 
@@ -22,31 +22,31 @@ NS_ASSUME_NONNULL_END
 @implementation HMBaseValue
 
 - (BOOL)isUndefined {
-    return [self.executor valueIsNullOrUndefined:self];
+    return [self.context valueIsNullOrUndefined:self];
 }
 
 - (BOOL)isNull {
-    return [self.executor valueIsNullOrUndefined:self];
+    return [self.context valueIsNullOrUndefined:self];
 }
 
 - (BOOL)isBoolean {
-    return [self.executor valueIsBoolean:self];
+    return [self.context valueIsBoolean:self];
 }
 
 - (BOOL)isNumber {
-    return [self.executor valueIsNumber:self];
+    return [self.context valueIsNumber:self];
 }
 
 - (BOOL)isString {
-    return [self.executor valueIsString:self];
+    return [self.context valueIsString:self];
 }
 
 - (BOOL)isObject {
-    return [self.executor valueIsObject:self];
+    return [self.context valueIsObject:self];
 }
 
 - (BOOL)isArray {
-    return [self.executor valueIsArray:self];
+    return [self.context valueIsArray:self];
 }
 
 + (nullable HMBaseValue *)valueWithObject:(id)value inContext:(id <HMBaseExecutorProtocol>)context {
@@ -70,15 +70,15 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)isDictionary {
-    return [self.executor valueIsDictionary:self];
+    return [self.context valueIsDictionary:self];
 }
 
 - (BOOL)isNativeObject {
-    return [self.executor valueIsNativeObject:self];
+    return [self.context valueIsNativeObject:self];
 }
 
 - (BOOL)isFunction {
-    return [self.executor valueIsFunction:self];
+    return [self.context valueIsFunction:self];
 }
 
 + (nullable HMBaseValue *)valueWithNullInContext:(id)context {
@@ -90,7 +90,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (nullable id)toObject {
-    return [self.executor convertToObjectWithValue:self isPortableConvert:NO];
+    return [self.context convertToObjectWithValue:self isPortableConvert:NO];
 }
 
 - (BOOL)toBool {
@@ -110,35 +110,35 @@ NS_ASSUME_NONNULL_END
 }
 
 - (nullable NSNumber *)toNumber {
-    return [self.executor convertToNumberWithValue:self];
+    return [self.context convertToNumberWithValue:self];
 }
 
 - (nullable NSString *)toString {
-    return [self.executor convertToStringWithValue:self];
+    return [self.context convertToStringWithValue:self];
 }
 
 - (nullable NSArray *)toArray {
-    return [self.executor convertToArrayWithValue:self isPortableConvert:NO];
+    return [self.context convertToArrayWithValue:self isPortableConvert:NO];
 }
 
 - (nullable NSDictionary<NSString *, id> *)toDictionary {
-    return [self.executor convertToDictionaryWithValue:self isPortableConvert:NO];
+    return [self.context convertToDictionaryWithValue:self isPortableConvert:NO];
 }
 
 - (nullable id)toPortableObject {
-    return [self.executor convertToObjectWithValue:self isPortableConvert:YES];
+    return [self.context convertToObjectWithValue:self isPortableConvert:YES];
 }
 
 - (nullable NSDictionary<NSString *, NSObject *> *)toPortableDictionary {
-    return [self.executor convertToDictionaryWithValue:self isPortableConvert:YES];
+    return [self.context convertToDictionaryWithValue:self isPortableConvert:YES];
 }
 
 - (nullable NSArray<NSObject *> *)toPortableArray {
-    return [self.executor convertToArrayWithValue:self isPortableConvert:YES];
+    return [self.context convertToArrayWithValue:self isPortableConvert:YES];
 }
 
 - (nullable NSObject *)toNativeObject {
-    return [self.executor convertToNativeObjectWithValue:self];
+    return [self.context convertToNativeObjectWithValue:self];
 }
 
 - (BOOL)hm_isArray {
@@ -159,19 +159,19 @@ NS_ASSUME_NONNULL_END
 }
 
 - (nullable HMFunctionType)toFunction {
-    return [self.executor convertToFunctionWithValue:self];
+    return [self.context convertToFunctionWithValue:self];
 }
 
 - (BOOL)isEqualToObject:(id)other {
-    return [self.executor compareWithValue:self anotherValue:other];
+    return [self.context compareWithValue:self anotherValue:other];
 }
 
 - (nullable HMBaseValue *)callWithArguments:(NSArray *)arguments {
-    return [self.executor callWithValue:self arguments:arguments];
+    return [self.context callWithValue:self arguments:arguments];
 }
 
 - (nullable HMBaseValue *)invokeMethod:(NSString *)method withArguments:(NSArray *)arguments {
-    return [self.executor invokeMethodWithValue:self method:method withArguments:arguments];
+    return [self.context invokeMethodWithValue:self method:method withArguments:arguments];
 }
 
 - (nullable HMBaseValue *)objectForKeyedSubscript:(id)key {
@@ -181,7 +181,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    return [self.executor getWithValue:self propertyName:key];
+    return [self.context getWithValue:self propertyName:key];
 }
 
 - (void)setObject:(id)object forKeyedSubscript:(id)key {
@@ -191,7 +191,7 @@ NS_ASSUME_NONNULL_END
         return;
     }
 
-    [self.executor setWithValue:self propertyName:key propertyObject:object];
+    [self.context setWithValue:self propertyName:key propertyObject:object];
 }
 
 - (instancetype)initWithExecutor:(id)executor {
@@ -199,7 +199,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     self = [super init];
-    _executor = executor;
+    _context = executor;
 
     return self;
 }

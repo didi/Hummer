@@ -36,9 +36,7 @@ typedef HMFunctionType HMFuncCallback;
 
 @property (nonatomic, copy, nullable) void (^exceptionHandler)(HMExceptionModel *exception);
 
-+ (nullable id <HMBaseExecutorProtocol>)currentContext;
-
-+ (nullable NSArray<HMBaseValue *> *)currentArguments;
++ (nullable id <HMBaseExecutorProtocol>)currentContext DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，使用 HMCurrentExecutor 替代");;
 
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)script withSourceURL:(nullable NSURL *)sourceURL;
 
@@ -132,9 +130,9 @@ typedef HMFunctionType HMFuncCallback;
 
 @end
 
-//FOUNDATION_EXPORT NSArray<HMBaseValue *> *_Nullable hm_otherArguments;
+FOUNDATION_EXPORT NSArray<HMBaseValue *> *_Nullable HMOtherArguments;
 
-//FOUNDATION_EXPORT id<HMBaseExecutorProtocol> _Nullable hm_currentExecutor;
+FOUNDATION_EXPORT id <HMBaseExecutorProtocol> _Nullable HMCurrentExecutor;
 
 FOUNDATION_EXPORT NSMapTable<NSValue *, id <HMBaseExecutorProtocol>> *_Nullable HMExecutorMap;
 

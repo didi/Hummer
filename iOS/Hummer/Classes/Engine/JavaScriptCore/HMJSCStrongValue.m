@@ -52,11 +52,11 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc {
 //    JSValueRef valueRef = self.valueRef;
-    if (!self.executor) {
+    if (!self.context) {
         return;
     }
     JSValueRef valueRef = self.valueRef;
-    __weak HMJSCExecutor *jscExecutor = self.executor;
+    __weak HMJSCExecutor *jscExecutor = self.context;
     HMSafeMainThread(^{
         if (!jscExecutor) {
             return;

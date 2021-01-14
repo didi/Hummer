@@ -8,9 +8,9 @@
 #import "HMBaseExecutorProtocol.h"
 #import "HMUtility.h"
 
-//NSArray<id<HMBaseValueProtocol>> *_Nullable hm_otherArguments = nil;
+NSArray<HMBaseValue *> *_Nullable HMOtherArguments = nil;
 
-//id<HMBaseExecutorProtocol> _Nullable hm_currentExecutor = nil;
+id <HMBaseExecutorProtocol> _Nullable HMCurrentExecutor = nil;
 
 NSMapTable<NSValue *, id <HMBaseExecutorProtocol>> *HMExecutorMap = nil;
 

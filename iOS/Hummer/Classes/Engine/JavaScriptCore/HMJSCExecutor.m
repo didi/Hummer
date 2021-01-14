@@ -9,6 +9,7 @@
 #import "HMLogger.h"
 #import "HMExceptionModel.h"
 #import "HMJSCStrongValue.h"
+#import "NSObject+Hummer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,16 +37,36 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 @property (nonatomic, assign) JSGlobalContextRef contextRef;
 
-- (nullable NSNumber *)convertToNumberWithValueRef:(nullable JSValueRef)valueRef;
-
-- (nullable NSString *)convertToStringWithValueRef:(nullable JSValueRef)valueRef;
-
 - (BOOL)valueRefIsNativeObject:(nullable JSValueRef)valueRef;
+
+- (BOOL)valueRefIsFunction:(nullable JSValueRef)valueRef;
+
+- (BOOL)valueRefIsDictionary:(nullable JSValueRef)valueRef;
 
 - (nullable NSObject *)convertValueRefToNativeObject:(nullable JSValueRef)valueRef;
 
+- (nullable NSString *)convertValueRefToString:(nullable JSValueRef)valueRef;
+
+- (nullable NSNumber *)convertValueRefToNumber:(nullable JSValueRef)valueRef;
+
 /// 业务代码打 exception，Hummer 内部代码异常情况打日志
 - (BOOL)popExceptionWithErrorObject:(JSValueRef _Nullable *_Nullable)errorObject;
+
+- (JSValueRef)convertNumberToValueRef:(nullable NSNumber *)number;
+
+- (JSValueRef)convertStringToValueRef:(nullable NSString *)stringValue;
+
+- (JSValueRef)convertNativeObjectToValueRef:(nullable NSObject *)object;
+
+- (JSValueRef)convertClosureToValueRef:(nullable id)closure;
+
+- (JSValueRef)convertArrayToValueRef:(nullable NSArray *)array;
+
+- (JSValueRef)convertDictionaryToValueRef:(nullable NSDictionary<NSString *, id> *)dictionary;
+
+- (JSValueRef)convertObjectToValueRef:(nullable id)object;
+
+- (nullable HMFunctionType)convertValueRefToFunction:(nullable JSValueRef)valueRef;
 
 @end
 
@@ -135,8 +156,8 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)valueIsNullOrUndefined:(nullable HMBaseValue *)value {
-    // JavaScriptCore 判断标量，也需要保证 value.executor == self
-    if (value.executor != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+    // JavaScriptCore 判断标量，也需要保证 value.context == self
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return YES;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
@@ -149,7 +170,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)valueIsBoolean:(HMBaseValue *)value {
-    if (value.executor != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return NO;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
@@ -160,7 +181,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)valueIsNumber:(HMBaseValue *)value {
-    if (value.executor != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return NO;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
@@ -170,7 +191,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)valueIsString:(HMBaseValue *)value {
-    if (value.executor != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return NO;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
@@ -180,7 +201,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)valueIsObject:(HMBaseValue *)value {
-    if (value.executor != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return NO;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
@@ -190,7 +211,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)valueIsArray:(HMBaseValue *)value {
-    if (value.executor != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return NO;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
@@ -258,17 +279,134 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)valueIsNativeObject:(HMBaseValue *)value {
-    if (value.executor != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return NO;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
-    HMAssertMainQueue();
 
     return [self valueRefIsNativeObject:strongValue.valueRef];
 }
 
 - (BOOL)valueRefIsNativeObject:(nullable JSValueRef)valueRef {
     return (BOOL) [self convertValueRefToNativeObject:valueRef];
+}
+
+- (BOOL)valueIsFunction:(HMBaseValue *)value {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return NO;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self valueRefIsFunction:strongValue.valueRef];
+}
+
+- (BOOL)valueRefIsFunction:(JSValueRef)valueRef {
+    HMAssertMainQueue();
+    if (!JSValueIsObject(self.contextRef, valueRef)) {
+        return NO;
+    }
+    JSValueRef exception = NULL;
+    JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
+    if (exception) {
+        return NO;
+    }
+    if (!JSObjectIsFunction(self.contextRef, objectRef)) {
+        return NO;
+    }
+
+    return YES;
+}
+
+- (BOOL)valueIsDictionary:(HMBaseValue *)value {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return NO;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self valueRefIsDictionary:strongValue.valueRef];
+}
+
+- (BOOL)valueRefIsDictionary:(JSValueRef)valueRef {
+    HMAssertMainQueue();
+    // 1. 是对象
+    // 2. 不是数组
+    // 3. 不是闭包
+    // 4. 不是原生对象
+    if (!JSValueIsObject(self.contextRef, valueRef)) {
+        return NO;
+    }
+    if (JSValueIsArray(self.contextRef, valueRef)) {
+        return NO;
+    }
+    if ([self valueRefIsFunction:valueRef]) {
+        return NO;
+    }
+    if ([self valueRefIsNativeObject:valueRef]) {
+        return NO;
+    }
+
+    return YES;
+}
+
+- (nullable NSNumber *)convertToNumberWithValue:(HMBaseValue *)value {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self convertValueRefToNumber:strongValue.valueRef];
+}
+
+- (nullable NSObject *)convertToNativeObjectWithValue:(HMBaseValue *)value {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self convertValueRefToNativeObject:strongValue.valueRef];
+}
+
+- (nullable NSString *)convertToStringWithValue:(HMBaseValue *)value {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self convertValueRefToString:strongValue.valueRef];
+}
+
+- (nullable NSString *)convertValueRefToString:(JSValueRef)valueRef {
+    HMAssertMainQueue();
+    // JSValueToStringCopy 有慢路径，因此先判断
+    if (!JSValueIsString(self.contextRef, valueRef)) {
+        return nil;
+    }
+    JSValueRef exception = NULL;
+    JSStringRef stringRef = JSValueToStringCopy(self.contextRef, valueRef, &exception);
+    // 空指针会返回 "" 空字符串，因此最好先判断一下
+    if (exception || !stringRef) {
+        return nil;
+    }
+    NSString *stringValue = CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, stringRef));
+    JSStringRelease(stringRef);
+
+    return stringValue;
+}
+
+- (nullable NSNumber *)convertValueRefToNumber:(JSValueRef)valueRef {
+    HMAssertMainQueue();
+    if (JSValueIsNumber(self.contextRef, valueRef)) {
+        // new Number() 是对象不是数字
+        double numberValue = JSValueToNumber(self.contextRef, valueRef, NULL);
+
+        return @(numberValue);
+    } else if (JSValueIsBoolean(self.contextRef, valueRef)) {
+        bool boolValue = JSValueToBoolean(self.contextRef, valueRef);
+
+        return @(boolValue);
+    }
+
+    return nil;
 }
 
 - (nullable NSObject *)convertValueRefToNativeObject:(nullable JSValueRef)valueRef {
@@ -358,11 +496,11 @@ NS_ASSUME_NONNULL_END
     }
 
     HMExceptionModel *errorModel = [[HMExceptionModel alloc] init];
-    errorModel.column = [self convertToNumberWithValueRef:columnValueRef];
-    errorModel.line = [self convertToNumberWithValueRef:lineValueRef];
-    errorModel.message = [self convertToStringWithValueRef:messageValueRef];
-    errorModel.name = [self convertToStringWithValueRef:nameValueRef];
-    errorModel.stack = [self convertToStringWithValueRef:stackValueRef];
+    errorModel.column = [self convertValueRefToNumber:columnValueRef];
+    errorModel.line = [self convertValueRefToNumber:lineValueRef];
+    errorModel.message = [self convertValueRefToString:messageValueRef];
+    errorModel.name = [self convertValueRefToString:nameValueRef];
+    errorModel.stack = [self convertValueRefToString:stackValueRef];
 
     if (self.exceptionHandler) {
         self.exceptionHandler(errorModel);
@@ -377,6 +515,144 @@ NS_ASSUME_NONNULL_END
     JSStringRelease(stackString);
 
     return YES;
+}
+
++ (nullable id <HMBaseExecutorProtocol>)currentContext {
+    return HMCurrentExecutor;
+}
+
+- (BOOL)compareWithValue:(HMBaseValue *)value anotherValue:(HMBaseValue *)anotherValue {
+    // 仿照原生 [object isEqual:anotherObject]，如果 object 为空，最终为 NO
+    if ([self valueIsNullOrUndefined:value] || [self valueIsNullOrUndefined:anotherValue]) {
+        return NO;
+    }
+    if (value.context != self || anotherValue.context != self || ![value isKindOfClass:HMJSCStrongValue.class] || ![anotherValue isKindOfClass:HMJSCStrongValue.class]) {
+        return NO;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+    HMJSCStrongValue *anotherStrongValue = (HMJSCStrongValue *) anotherValue;
+
+    // 如果两个都为 NULL，则等价于 JavaScript: null === null => true
+    return JSValueIsStrictEqual(self.contextRef, strongValue.valueRef, anotherStrongValue.valueRef);
+}
+
+- (nullable HMBaseValue *)convertToValueWithNumber:(NSNumber *)number {
+    return [[HMJSCStrongValue alloc] initWithValueRef:[self convertNumberToValueRef:number] executor:self];
+}
+
+- (JSValueRef)convertNumberToValueRef:(NSNumber *)number {
+    HMAssertMainQueue();
+    if (!number) {
+        return JSValueMakeUndefined(self.contextRef);
+    }
+    if (strcmp(number.objCType, @encode(BOOL)) == 0) {
+        return JSValueMakeBoolean(self.contextRef, number.boolValue);
+    } else {
+        return JSValueMakeNumber(self.contextRef, number.doubleValue);
+    }
+}
+
+- (JSValueRef)convertStringToValueRef:(NSString *)stringValue {
+    HMAssertMainQueue();
+    if (!stringValue) {
+        return JSValueMakeUndefined(self.contextRef);
+    }
+    // JSStringCreateWithCFString 如果传递 nil 会创建 "" 空字符串
+    JSStringRef stringRef = JSStringCreateWithCFString((__bridge CFStringRef) (stringValue));
+    JSValueRef inlineValueRef = JSValueMakeString(self.contextRef, stringRef);
+    JSStringRelease(stringRef);
+
+    return inlineValueRef;
+}
+
+- (nullable HMFunctionType)convertToFunctionWithValue:(HMBaseValue *)value {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+
+    return [self convertValueRefToFunction:strongValue.valueRef];
+}
+
+- (nullable HMFunctionType)convertValueRefToFunction:(JSValueRef)valueRef {
+    HMAssertMainQueue();
+    if (!JSValueIsObject(self.contextRef, valueRef)) {
+        return nil;
+    }
+    JSValueRef exception = NULL;
+    JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
+    if (exception) {
+        return nil;
+    }
+    if (!JSObjectIsFunction(self.contextRef, objectRef)) {
+        return nil;
+    }
+
+    JSStringRef privateStringRef = JSStringCreateWithUTF8CString("_privateClosure");
+    JSValueRef privateValueRef = JSObjectGetProperty(self.contextRef, objectRef, privateStringRef, &exception);
+    JSStringRelease(privateStringRef);
+    if (exception) {
+        return nil;
+    }
+
+    // 是原先原生转成的 JS 闭包
+    if (JSValueIsObject(self.contextRef, privateValueRef)) {
+        JSObjectRef privateObjectRef = JSValueToObject(self.contextRef, valueRef, &exception);
+        if (!exception && privateObjectRef && JSObjectGetPrivate(privateObjectRef) && [(__bridge id) JSObjectGetPrivate(privateObjectRef) isKindOfClass:NSClassFromString(@"NSBlock")]) {
+            // 本次 JS 闭包是原生返回，复用原先的闭包
+            return (__bridge HMFunctionType _Nullable) JSObjectGetPrivate(privateObjectRef);
+        }
+    }
+
+    HMJSCStrongValue *valueWrapper = [[HMJSCStrongValue alloc] initWithValueRef:valueRef executor:self];
+    // 出于主线程不阻塞原则，返回值只能使用回调返回
+    HMFunctionType functionType = ^(NSArray *_Nullable argumentArray) {
+        HMAssertMainQueue();
+        if (valueWrapper.context) {
+            // 当前还未被销毁
+            // 重新判断一次 valueRef
+            HMJSCExecutor *executor = (HMJSCExecutor *) valueWrapper.context;
+            if (!JSValueIsObject(executor.contextRef, valueWrapper.valueRef)) {
+                return (HMJSCStrongValue *) nil;
+            }
+            JSValueRef inlineException = NULL;
+            JSObjectRef inlineObjectRef = JSValueToObject(executor.contextRef, valueWrapper.valueRef, &inlineException);
+            if (inlineException) {
+                return (HMJSCStrongValue *) nil;
+            }
+            if (!JSObjectIsFunction(executor.contextRef, inlineObjectRef)) {
+                return (HMJSCStrongValue *) nil;
+            }
+
+            // 转参数
+            __block JSValueRef *valueRefArray = NULL;
+            __block size_t count = 0;
+            [argumentArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                // TODO(ChasonTang): 实现 - convertObjectToValueRef:
+                JSValueRef inlineValueRef = NULL; // [context convertObjectToValueRef:obj];
+                if (inlineValueRef) {
+                    // 增长或者创建
+                    count += 1;
+                    // TODO(ChasonTang): 处理 realloc 错误
+                    valueRefArray = realloc(valueRefArray, count * sizeof(JSValueRef));
+                    valueRefArray[count - 1] = inlineValueRef;
+                }
+            }];
+            JSValueRef returnValueRef = JSObjectCallAsFunction(executor.contextRef, inlineObjectRef, NULL, count, valueRefArray, &inlineException);
+            free(valueRefArray);
+            // 业务代码需要抛出异常
+            [executor popExceptionWithErrorObject:&inlineException];
+            if (returnValueRef) {
+                return [[HMJSCStrongValue alloc] initWithValueRef:returnValueRef executor:executor];
+            }
+        }
+
+        return (HMJSCStrongValue *) nil;
+    };
+    // TODO(ChasonTang): 去除 id 转换
+    [functionType setHmValue:(id) valueWrapper];
+
+    return functionType;
 }
 
 @end

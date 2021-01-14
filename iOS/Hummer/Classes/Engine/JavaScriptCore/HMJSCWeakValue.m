@@ -26,10 +26,10 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
-    if (!strongValue.executor || ![strongValue.executor isKindOfClass:HMJSCExecutor.class]) {
+    if (!strongValue.context || ![strongValue.context isKindOfClass:HMJSCExecutor.class]) {
         return nil;
     }
-    HMJSCExecutor *jscExecutor = strongValue.executor;
+    HMJSCExecutor *jscExecutor = strongValue.context;
     self = [super init];
     _managedValue = [JSManagedValue managedValueWithValue:[JSValue valueWithJSValueRef:strongValue.valueRef inContext:[JSContext contextWithJSGlobalContextRef:jscExecutor.contextRef]]];
 
