@@ -71,3 +71,8 @@ commit.template
 .externalNativeBuild/
 
 repo/
+
+# Hummer
+hermes-debugger
+hermes-inspector
+v8-debugger
