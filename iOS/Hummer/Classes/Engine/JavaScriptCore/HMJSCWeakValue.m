@@ -36,10 +36,6 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
-+ (id <HMBaseWeakValueProtocol>)managedValueWithValue:(HMBaseValue *)value {
-    return [[HMJSCWeakValue alloc] initWithValue:value];
-}
-
 - (HMBaseValue *)value {
     if (!self.managedValue.value.JSValueRef || !self.managedValue.value.context.JSGlobalContextRef) {
         return nil;

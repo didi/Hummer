@@ -8,8 +8,10 @@
 #import "HMLocation.h"
 #import "HMExportManager.h"
 #import <CoreLocation/CoreLocation.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 #import "HMUtility.h"
+#import "HMJSCWeakValue.h"
+#import "HMJSCExecutor.h"
+#import "NSObject+Hummer.h"
 
 typedef NS_ENUM(NSInteger, HMLocationManagerState) {
     HMLocationManagerStateUnknown   = 0,
@@ -24,8 +26,8 @@ typedef NS_ENUM(NSInteger, HMLocationManagerState) {
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) CLLocation *lastLocation;
 @property (nonatomic, strong) dispatch_source_t timer;
-@property (nonatomic,   copy) HMFuncCallback errorCallback;
-@property (nonatomic,   copy) HMFuncCallback locationCallback;
+@property (nonatomic, copy) HMFunctionType errorCallback;
+@property (nonatomic, copy) HMFunctionType locationCallback;
 
 @end
 
@@ -40,12 +42,12 @@ HM_EXPORT_METHOD(getLastLocation, __getLastLocation:)
 HM_EXPORT_METHOD(startLocation, __startLocation:interval:distance:)
 HM_EXPORT_METHOD(stopLocation, __stopLocation)
 
-- (void)__onError:(HMFuncCallback)errorCallback
+- (void)__onError:(HMFunctionType)errorCallback
 {
     self.errorCallback = errorCallback;
 }
 
-- (void)__getLastLocation:(HMFuncCallback)locCallback
+- (void)__getLastLocation:(HMFunctionType)locCallback
 {
     HMExecOnMainQueue(^{
         NSDictionary *locInfo = [self dataWithLocation:self.lastLocation];
@@ -53,11 +55,11 @@ HM_EXPORT_METHOD(stopLocation, __stopLocation)
     });
 }
 
-- (void)__startLocation:(HMFuncCallback)locCallback interval:(JSValue *)jsInterval distance:(JSValue *)jsDistance
+- (void)__startLocation:(HMFunctionType)locCallback interval:(HMBaseValue *)jsInterval distance:(HMBaseValue *)jsDistance
 {
     self.locationCallback = locCallback;
-    double interval = jsInterval.isNumber ? jsInterval.toDouble : 1000 * 60;
-    double distance = jsDistance.isNumber ? jsDistance.toDouble : 0;
+    double interval = jsInterval.toNumber ? jsInterval.toNumber.doubleValue : 1000 * 60;
+    double distance = jsDistance.toNumber ? jsDistance.toNumber.doubleValue : 0;
     [self startLocationTimerWithInterval:interval];
     [self startLocationWithDistance:distance];
 }
@@ -192,8 +194,8 @@ HM_EXPORT_METHOD(stopLocation, __stopLocation)
         [self stopLocationTimer];
     } else if (state == HMLocationManagerStateFailued) {
         HMExecOnMainQueue(^{
-            NSArray *errorData = @[@(state),message?:@""];
-            HM_SafeRunBlock(self.errorCallback,errorData);
+//            NSArray *errorData = @[@(state),message?:@""];
+            HM_SafeRunBlock(self.errorCallback, @[@(state), message ?: @""]);
         });
     }
     

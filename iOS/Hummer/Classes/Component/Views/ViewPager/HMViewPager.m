@@ -7,10 +7,9 @@
 
 #import "HMViewPager.h"
 // MARK: -
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 // MARK: -
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "UIView+HMDom.h"
 #import "NSObject+Hummer.h"
 #import "HMAttrManager.h"
@@ -244,12 +243,12 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     NSLog(@"HMMMMM set current index -> itemChangedCallback");
 }
 
-- (JSValue *)data
+- (HMBaseValue *)data
 {
-    return [JSValue valueWithObject:self.dataList inContext:self.hmValue.context];
+    return [HMBaseValue valueWithObject:self.dataList inContext:self.hmValue.context];
 }
 
-- (void)setData:(JSValue *)value
+- (void)setData:(HMBaseValue *)value
 {
     if (!value) {
         NSLog(@"%s Invalid value type.", __func__);
@@ -550,7 +549,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
         return cell;
     }
     
-    JSValue *cellJSValue = cell.contentView.subviews.lastObject.hmValue;
+    HMBaseValue *cellJSValue = cell.contentView.subviews.lastObject.hmValue;
     
     // update existing view
     if (cellJSValue) {
@@ -560,7 +559,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     }
     
     // append new view
-    JSValue *value = self.itemUpdatedCallback(@[@(index)]);
+    HMBaseValue *value = self.itemUpdatedCallback(@[@(index)]);
     UIView *jsView = value.hm_toObjCObject;
     if (jsView && [jsView isKindOfClass:UIView.class]) {
         if (jsView.superview) {

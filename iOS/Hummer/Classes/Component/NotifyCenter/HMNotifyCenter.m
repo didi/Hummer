@@ -7,8 +7,8 @@
 
 #import "HMNotifyCenter.h"
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
+#import <Hummer/HMBaseValue.h>
 
 @interface HMNotifyCenter()
 
@@ -37,7 +37,7 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
 
 #pragma mark - Export Method
 
-- (void)removeEvent:(JSValue *)value callback:(JSValue *)callback {
+- (void)removeEvent:(HMBaseValue *)value callback:(HMBaseValue *)callback {
     if (!value)  {
         return;
     }
@@ -52,11 +52,11 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
         [self.eventCallbackMap removeObjectForKey:name];
     } else {
         // try to remove a specific listener
-        __block JSManagedValue *targetValue = nil;
-        [callbacks enumerateObjectsUsingBlock:^(JSManagedValue *_Nonnull obj,
+        __block HMBaseValue *targetValue = nil;
+        [callbacks enumerateObjectsUsingBlock:^(HMBaseValue *_Nonnull obj,
                                                 NSUInteger idx,
                                                 BOOL * _Nonnull stop) {
-            if ([obj.value isEqual:callback]) {
+            if ([obj isEqualToObject:callback]) {
                 targetValue = obj;
                 *stop = YES;
             }
@@ -73,13 +73,12 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
     }
 }
 
-- (void)addEvent:(JSValue *)value callback:(JSValue *)callback {
+- (void)addEvent:(HMBaseValue *)value callback:(HMBaseValue *)callback {
     if (!value || !callback)  { return; }
     NSString *name = value.toString;
     if (![name isKindOfClass:[NSString class]]) {
         return;
     }
-    [callback hm_retainedJSValue];
     NSMutableArray *callbacks = self.eventCallbackMap[name];
     
     if (!callbacks) {
@@ -90,11 +89,10 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
                                                      name:name
                                                    object:nil];
     }
-    JSManagedValue *callbackValue = [JSManagedValue managedValueWithValue:callback];
-    [callbacks addObject:callbackValue];
+    [callbacks addObject:callback];
 }
 
-- (void)postEvent:(JSValue *)value object:(JSValue *)valueObjc {
+- (void)postEvent:(HMBaseValue *)value object:(HMBaseValue *)valueObjc {
     NSString *name = value.toString;
     [[NSNotificationCenter defaultCenter] postNotificationName:name
                                                         object:valueObjc
@@ -108,43 +106,20 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
     NSString *name = center.name;
     NSArray *callbacks = [self.eventCallbackMap[name] copy];
     id notificationObject = center.object;
-    if ([notificationObject isKindOfClass:JSValue.class]) {
+    if ([notificationObject isKindOfClass:HMBaseValue.class]) {
         // 通知有可能是其他页面传入的，如果不做判断，callWithArguments: 会导致崩溃，因为不同的虚拟机之间不能传递值
-        JSValue *notificationValue = notificationObject;
-        if (notificationValue.context.virtualMachine != self.hmContext.virtualMachine) {
+        HMBaseValue *notificationValue = notificationObject;
+        if (notificationValue.context != self.hmValue.context) {
             // 需要复制转换
             // 因此不能支持复制 OBJC 对象
-            if (notificationValue.isObject) {
-                id object = notificationValue.toObject;
-                if ([object isKindOfClass:NSDictionary.class]) {
-                    object = ((NSDictionary *) object).copy;
-                }
-                notificationObject = [JSValue valueWithObject:object inContext:self.hmContext];
-            } else if (notificationValue.isDate) {
-                notificationObject = [JSValue valueWithObject:notificationValue.toDate.copy inContext:self.hmContext];
-            } else if (notificationValue.isNull) {
-                notificationObject = [JSValue valueWithNullInContext:self.hmContext];
-            } else if (notificationValue.isBoolean) {
-                notificationObject = [JSValue valueWithBool:notificationValue.toBool inContext:self.hmContext];
-            } else if (notificationValue.isArray) {
-                notificationObject = [JSValue valueWithObject:notificationValue.toArray.copy inContext:self.hmContext];
-            } else if (notificationValue.isNumber) {
-                notificationObject = [JSValue valueWithObject:notificationValue.toNumber.copy inContext:self.hmContext];
-            } else if (notificationValue.isString) {
-                notificationObject = [JSValue valueWithObject:notificationValue.toString.copy inContext:self.hmContext];
-            } else if (notificationValue.isUndefined) {
-                notificationObject = [JSValue valueWithUndefinedInContext:self.hmContext];
-            } else {
-                notificationObject = nil;
-            }
+            notificationObject = notificationValue.toPortableObject;
         }
     }
-    [callbacks enumerateObjectsUsingBlock:^(JSManagedValue * _Nonnull callbackValue,
+    [callbacks enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull callbackValue,
                                             NSUInteger idx,
                                             BOOL * _Nonnull stop) {
         NSArray *arguments = notificationObject ? @[notificationObject] : @[];
-        JSValue *callback = callbackValue.value;
-        [callback callWithArguments:arguments];
+        [callbackValue callWithArguments:arguments];
     }];
 }
 

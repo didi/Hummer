@@ -10,8 +10,9 @@
 #import "HMExportManager.h"
 #import "HMRouterProtocol.h"
 #import "HMInterceptor.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMContainerModel.h"
+#import <Hummer/HMBaseValue.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)popToRootPage:(BOOL)animated;
 
-+ (void)popBackWithCount:(nullable JSValue *)count pageInfo:(nullable JSValue *)pageInfo;
++ (void)popBackWithCount:(nullable HMBaseValue *)count pageInfo:(nullable HMBaseValue *)pageInfo;
 
 @end
 
@@ -107,15 +108,14 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     [HMNavigator.sharedInstance.schemeMapper removeScheme:scheme nameSpace:nameSpace];
 }
 
-+ (void)openPage:(JSValue *)params callback:(HMFuncCallback)callback {
++ (void)openPage:(HMBaseValue *)params callback:(HMFuncCallback)callback {
     NSDictionary *pageParameterDictionary = params.toDictionary;
     id urlObject = pageParameterDictionary[@"url"];
     if (![urlObject isKindOfClass:NSString.class] || ((NSString *) urlObject).length == 0) {
         NSAssert(NO, @"url 必须传入");
         return;
     }
-    JSContext *jsctx = [JSContext currentContext] ? : params.context;
-    HMJSContext *context = [HMJSGlobal.globalObject currentContext:jsctx];
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
     
     NSURL *url = [NSURL URLWithString:urlObject];
     if (url.scheme.length == 0) {
@@ -172,7 +172,7 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     });
 }
 
-+ (void)__popPage:(JSValue *)params {
++ (void)__popPage:(HMBaseValue *)params {
     BOOL animated = YES;
     if (params.isObject) {
         NSDictionary *parameterDictionary = params.toDictionary;
@@ -186,7 +186,7 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     [self popPage:animated];
 }
 
-+ (void)__popToPage:(JSValue *)params {
++ (void)__popToPage:(HMBaseValue *)params {
     if (!params.isObject) {
         return;
     }
@@ -207,7 +207,7 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     [self popToPage:pageID animated:animated];
 }
 
-+ (void)__popToRootPage:(JSValue *)params {
++ (void)__popToRootPage:(HMBaseValue *)params {
     BOOL animated = YES;
     if (!params.isObject) {
         NSDictionary *parameterDictioinary = params.toDictionary;
@@ -220,7 +220,7 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     [self popToRootPage:animated];
 }
 
-+ (void)__popBackWithCount:(JSValue *)count pageInfo:(JSValue *)pageInfo {
++ (void)__popBackWithCount:(HMBaseValue *)count pageInfo:(HMBaseValue *)pageInfo {
     NSParameterAssert(count);
     NSParameterAssert(pageInfo);
     __block uint32_t countValue = count.toUInt32;

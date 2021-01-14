@@ -17,8 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, strong, nullable, nonatomic) HMBaseValue *value;
 
-+ (nullable id <HMBaseWeakValueProtocol>)managedValueWithValue:(nullable HMBaseValue *)value;
-
 - (nullable instancetype)initWithValue:(nullable HMBaseValue *)value;
 
 @end

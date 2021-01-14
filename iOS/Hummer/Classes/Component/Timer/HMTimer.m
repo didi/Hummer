@@ -9,8 +9,9 @@
 
 @interface HMTimer ()
 
-@property (nonatomic, strong) dispatch_source_t timer;
-@property (nonatomic, assign) BOOL isClearTimeout;
+@property (nonatomic, strong, nullable) dispatch_source_t timer;
+
+@property (nonatomic, assign) BOOL isClearedTimeout;
 
 @end
 
@@ -24,24 +25,21 @@ HM_EXPORT_METHOD(setTimeout, setCallback:timeout:)
 HM_EXPORT_METHOD(clearTimeout, clearTimeout)
 
 - (void)dealloc {
-    if (self.timer) { dispatch_source_cancel(self.timer); self.timer = nil;}
+    [self clearInterval];
 }
 
-- (void)setCallback:(HMFuncCallback)callback interval:(NSTimeInterval)interval {
-    
-    if (!callback) { return; }
-    
+- (void)setCallback:(HMFunctionType)callback interval:(NSTimeInterval)interval {
     [self clearInterval];
+
+    if (!callback) {
+        return;
+    }
     
-    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
-                                        0,
-                                        0,
-                                        dispatch_get_main_queue());
-    uint64_t intervalNanoseconds = interval*1000*1000;
-    dispatch_time_t start = dispatch_walltime(DISPATCH_TIME_NOW, intervalNanoseconds);
-    dispatch_source_set_timer(self.timer, start, intervalNanoseconds, 0);
+    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    int64_t intervalNanoseconds = interval * NSEC_PER_MSEC;
+    dispatch_source_set_timer(self.timer, dispatch_time(DISPATCH_TIME_NOW, intervalNanoseconds), intervalNanoseconds, 0);
     
-    __weak typeof(self)weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     dispatch_source_set_event_handler(self.timer, ^() {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (weakSelf && callback) {
@@ -55,24 +53,29 @@ HM_EXPORT_METHOD(clearTimeout, clearTimeout)
 #pragma mark - Export Method
 
 - (void)clearInterval {
-    if (self.timer) { dispatch_source_cancel(self.timer); self.timer = nil;}
+    if (self.timer) {
+        dispatch_source_cancel(self.timer);
+        self.timer = nil;
+    }
 }
 
-- (void)setCallback:(HMFuncCallback)callback timeout:(NSTimeInterval)interval  {
+- (void)setCallback:(HMFunctionType)callback timeout:(NSTimeInterval)interval  {
+    if (!callback) {
+        return;
+    }
     
-    if (!callback) { return; }
+    self.isClearedTimeout = NO;
     
-    self.isClearTimeout = NO;
-    __weak typeof(self)weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval/1000.f * NSEC_PER_SEC)),
-                   dispatch_get_main_queue(),
-                   ^{
-        if (weakSelf && !weakSelf.isClearTimeout && callback) { callback(nil); }
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+        if (weakSelf && !weakSelf.isClearedTimeout && callback) {
+            callback(nil);
+        }
     });
 }
 
 - (void)clearTimeout {
-    self.isClearTimeout = YES;
+    self.isClearedTimeout = YES;
 }
 
 @end

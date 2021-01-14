@@ -8,7 +8,6 @@
 #import "HMImageView.h"
 #import "HMExportManager.h"
 #import "HMAttrManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
 #import "HMInterceptor.h"
@@ -30,11 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)src;
 
-- (void)setSrc:(nullable JSValue *)src;
+- (void)setSrc:(nullable HMBaseValue *)src;
 
 - (NSInteger)gifRepeatCount;
 
-- (void)setGifRepeatCount:(nullable JSValue *)src;
+- (void)setGifRepeatCount:(nullable HMBaseValue *)src;
 
 @end
 
@@ -71,13 +70,13 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
 }
 
 
-- (void)setGifSrc:(JSValue *)src {
+- (void)setGifSrc:(HMBaseValue *)src {
     NSString *srcString = src.toString;
     HMImageLoaderContext *context = @{HMImageManagerContextAnimatedImageClass:@"HMAnimatedImage"};
     [self realSetSrc:srcString context:context];
 }
 
-- (void)setSrc:(JSValue *)src {
+- (void)setSrc:(HMBaseValue *)src {
     NSString *srcString = src.toString;
     if ([srcString hasSuffix:@".gif"]) {
         [self setGifSrc:src];
@@ -129,7 +128,7 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
     return self.animationRepeatCount;
 }
 
-- (void)setGifRepeatCount:(JSValue *)src {
+- (void)setGifRepeatCount:(HMBaseValue *)src {
     self.animationRepeatCount = src.toNumber.intValue;
 }
 

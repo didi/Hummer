@@ -8,8 +8,8 @@
 #import "HMLongPressEvent.h"
 #import "HMExportManager.h"
 #import "NSObject+Hummer.h"
-#import "JSValue+Hummer.h"
 #import "HMUtility.h"
+#import "HMBaseValue.h"
 
 @interface HMLongPressEvent()
 
@@ -34,11 +34,11 @@ HM_EXPORT_PROPERTY(state, __state, __setState:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__state {
-    return [JSValue valueWithObject:@(self.gesture.state) inContext:self.hmContext];
+- (NSNumber *)__state {
+    return @(self.gesture.state);
 }
 
-- (void)__setState:(__unused JSValue *)state {
+- (void)__setState:(__unused HMBaseValue *)state {
     NSAssert(NO, @"cannot set read only property");
 }
 

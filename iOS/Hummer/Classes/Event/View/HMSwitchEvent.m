@@ -7,8 +7,8 @@
 
 #import "HMSwitchEvent.h"
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
+#import "HMBaseValue.h"
 
 NSString * const kHMSwitchType = @"type";
 NSString * const kHMSwitchState = @"state";
@@ -31,11 +31,11 @@ HM_EXPORT_PROPERTY(state, __state, __setState:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__state {
-    return [JSValue valueWithObject:@(self.state) inContext:self.hmContext];
+- (NSNumber *)__state {
+    return @(self.state);
 }
 
-- (void)__setState:(__unused JSValue *)state {
+- (void)__setState:(__unused HMBaseValue *)state {
     NSAssert(NO, @"cannot set read only property");
 }
 

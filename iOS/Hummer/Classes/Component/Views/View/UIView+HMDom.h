@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HMImageLoaderDefine.h"
+#import <Hummer/HMBaseValue.h>
 
 @class HMCornerRadiusModel;
 @class HMGradientColor;
@@ -59,17 +60,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)hm_layoutIfNeeded;
 
-- (void)hm_addSubview:(JSValue *)subview;
+- (void)hm_addSubview:(HMBaseValue *)subview;
 
-- (void)hm_removeSubview:(JSValue *)child;
+- (void)hm_removeSubview:(HMBaseValue *)child;
 
 - (void)hm_removeAllSubviews;
 
-- (void)hm_replaceSubview:(JSValue *)newChild withNode:(JSValue *)oldChild;
+- (void)hm_replaceSubview:(HMBaseValue *)newChild withNode:(HMBaseValue *)oldChild;
 
-- (void)hm_insertBefore:(JSValue *)newChild withNode:(JSValue *)oldChild;
+- (void)hm_insertBefore:(HMBaseValue *)newChild withNode:(HMBaseValue *)oldChild;
 
-- (nullable JSValue *)hm_getSubViewByID:(nullable JSValue *)viewId DEPRECATED_MSG_ATTRIBUTE("废弃接口，属于浏览器 DOM 移植概念");
+- (nullable HMBaseValue *)hm_getSubViewByID:(nullable HMBaseValue *)viewId DEPRECATED_MSG_ATTRIBUTE("废弃接口，属于浏览器 DOM 移植概念");
 
 - (void)hm_fallbackWithBorderModelCollection:(nullable HMBorderModelCollection *)borderModelCollection;
 
@@ -111,11 +112,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSNumber *)hm_enabled;
 
-- (void)hm_setEnabled:(JSValue *)enabledValue;
+- (void)hm_setEnabled:(HMBaseValue *)enabledValue;
 
 - (nullable NSDictionary<NSString *, NSObject *> *)hm_style;
 
-- (void)hm_setStyle:(JSValue *)style;
+- (void)hm_setStyle:(HMBaseValue *)style;
 
 - (void)hm_configureWithTarget:(id)target cssAttribute:(NSString *)cssAttribute value:(id)value converterManager:(id)converterManager;
 

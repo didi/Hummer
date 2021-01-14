@@ -6,14 +6,14 @@
 //
 
 #import "HMXViewPager.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMAttrManager.h"
 #import "HMConverter.h"
 #import "UIView+HMRenderObject.h"
 #import "UIImageView+HMImageLoader.h"
+#import "HMBaseValue.h"
 
 @interface HMXCycleScrollCell : UICollectionViewCell
 @property(nonatomic, strong) UIImageView *imageView;
@@ -203,11 +203,11 @@ HM_EXPORT_ATTRIBUTE(autoPlay,autoPlay, HMNumberToNSInteger:)
 
 HM_EXPORT_PROPERTY(data, data, setData:)
 
-- (JSValue *)data {
-    return [JSValue valueWithObject:self.dataList inContext:self.hmValue.context];
+- (HMBaseValue *)data {
+    return [HMBaseValue valueWithObject:self.dataList inContext:self.hmValue.context];
 }
 
-- (void)setData:(JSValue *)value {
+- (void)setData:(HMBaseValue *)value {
     NSArray *ary = value.hm_toObjCObject;
     NSMutableArray * list = [NSMutableArray array];
     if(ary && [ary isKindOfClass:[NSArray class]]) {
@@ -263,9 +263,9 @@ HM_EXPORT_METHOD(setCurrentItem, setCurrentItem:)
     __weak __typeof(self)weakSelf = self;
     cell.updateCallBack = ^(HMXCycleScrollCell *mCell) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
-        JSValue *cellJSValue = mCell.contentView.subviews.lastObject.hmValue;
+        HMBaseValue *cellJSValue = mCell.contentView.subviews.lastObject.hmValue;
         if (!cellJSValue) {
-            JSValue * value = strongSelf.itemUpdatedCallback(@[@(indexPath.item%_dataList.count)]);
+            HMBaseValue * value = strongSelf.itemUpdatedCallback(@[@(indexPath.item%_dataList.count)]);
             UIView * jsView = value.hm_toObjCObject;
             NSLog(@"jsView = %@",jsView);
             NSAssert([jsView isKindOfClass:[UIView class]], @"JSValue can't be turned to view");

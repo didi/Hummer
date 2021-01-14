@@ -6,7 +6,6 @@
 //
 
 #import "UIView+HMEvent.h"
-#import "JSValue+Hummer.h"
 #import <objc/runtime.h>
 #import "HMExportManager.h"
 #import "NSObject+Hummer.h"
@@ -16,6 +15,7 @@
 #import "HMPinchEvent.h"
 #import "HMLongPressEvent.h"
 #import "HMJSGlobal.h"
+#import "HMBaseValue.h"
 
 @import ObjectiveC.runtime;
 
@@ -116,8 +116,8 @@ static IMP swizzleImp(Class clazz, SEL fromSel, IMP toImp) {
 HM_EXPORT_METHOD(addEventListener, hm_addEvent:withListener:)
 HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
 
-- (NSMutableDictionary<NSString *, NSMutableArray<JSManagedValue *> *> *)hm_eventTable {
-    NSMutableDictionary<NSString *, NSMutableArray<JSManagedValue *> *> *eventTable = objc_getAssociatedObject(self, _cmd);
+- (NSMutableDictionary<NSString *, NSMutableArray<HMBaseValue *> *> *)hm_eventTable {
+    NSMutableDictionary<NSString *, NSMutableArray<HMBaseValue *> *> *eventTable = objc_getAssociatedObject(self, _cmd);
     if(!eventTable){
         eventTable = [NSMutableDictionary dictionary];
         objc_setAssociatedObject(self, _cmd, eventTable, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -143,21 +143,6 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
 - (void)setHm_eventObj:(HMBaseEvent *)hm_eventObj
 {
     objc_setAssociatedObject(self, @"hm_eventObj", hm_eventObj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (JSValue *)hm_eventVal
-{
-    JSManagedValue *eventVal = objc_getAssociatedObject(self, @"hm_eventVal");
-    return eventVal.value;
-}
-
-- (void)setHm_eventVal:(JSValue *)hm_eventVal
-{
-    JSManagedValue *managedValue = nil;
-    if (hm_eventVal) {
-        managedValue = [JSManagedValue managedValueWithValue:hm_eventVal];
-    }
-    objc_setAssociatedObject(self, @"hm_eventVal", managedValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)hm_isGestureEventName:(NSString *)eventName {
@@ -204,22 +189,21 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
 - (void)hm_onEventGesture:(UIGestureRecognizer *)gesture {
     if (!self.hm_eventObj) {
         Class objcClass = [self hm_eventClassWithGesture:gesture];
-        self.hm_eventVal = [JSValue hm_valueWithClass:objcClass inContext:self.hmContext];
-        self.hm_eventObj = [self.hm_eventVal hm_toObjCObject];
+        self.hm_eventObj = [[objcClass alloc] init];
     }
     [self.hm_eventObj updateEvent:self withContext:gesture];
     
     if (gesture.hm_eventName) {
-        NSMutableArray<JSManagedValue *> *callbacks = [self hm_gestureCallbacksForEvent:gesture.hm_eventName];
+        NSMutableArray<HMBaseValue *> *callbacks = [self hm_gestureCallbacksForEvent:gesture.hm_eventName];
         
         for (int i = 0; i < callbacks.count; i++) {
-            JSManagedValue *listener = callbacks[i];
-            [listener.value callWithArguments:self.hm_eventVal ? @[self.hm_eventVal] : @[]];
+            HMBaseValue *listener = callbacks[i];
+            [listener callWithArguments:@[self.hm_eventObj]];
         }
     }
 }
 
-- (NSMutableArray<JSManagedValue *> *)hm_gestureCallbacksForEvent:(NSString *)eventName {
+- (NSMutableArray<HMBaseValue *> *)hm_gestureCallbacksForEvent:(NSString *)eventName {
     if (!eventName) return nil;
     NSMutableArray *gestureCallbacks = [self.hm_eventTable objectForKey:eventName];
     if (!gestureCallbacks) {
@@ -239,7 +223,7 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
     return gestureRecognizers;
 }
 
-- (NSMutableArray<JSManagedValue *> *)hm_listenerArrayForEvent:(NSString *)eventName {
+- (NSMutableArray<HMBaseValue *> *)hm_listenerArrayForEvent:(NSString *)eventName {
     if (!eventName) return nil;
     NSMutableArray *array = [self.hm_eventTable objectForKey:eventName];
     if (!array) {
@@ -250,19 +234,19 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
 }
 
 - (BOOL)hm_hasListenerForEvent:(NSString *)eventName {
-    NSMutableArray<JSManagedValue *> *array = [self.hm_eventTable objectForKey:eventName];
+    NSMutableArray<HMBaseValue *> *array = [self.hm_eventTable objectForKey:eventName];
     
     return array.count > 0;
 }
 
 - (void)hm_notifyWithEventName:(NSString *)eventName argument:(nullable id)argument {
     if (![self hm_isGestureEventName:eventName]) {
-        NSArray<JSManagedValue *> *listenerArray = [self hm_listenerArrayForEvent:eventName];
-        [listenerArray enumerateObjectsUsingBlock:^(JSManagedValue *obj, NSUInteger idx, BOOL *stop) {
+        NSArray<HMBaseValue *> *listenerArray = [self hm_listenerArrayForEvent:eventName];
+        [listenerArray enumerateObjectsUsingBlock:^(HMBaseValue *obj, NSUInteger idx, BOOL *stop) {
             if (argument) {
-                [obj.value callWithArguments:@[argument]];
+                [obj callWithArguments:@[argument]];
             } else {
-                [obj.value callWithArguments:@[]];
+                [obj callWithArguments:@[]];
             }
         }];
     } else {
@@ -312,12 +296,12 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
 }
 
 - (void)hm_notifyEvent:(NSString *)eventName
-             withValue:(JSValue *)value
+             withValue:(HMBaseEvent *)value
           withArgument:(id)argument {
     if (!eventName) return;
     // 虽然传入了 value，但是新架构已经不在使用，而是直接传入 Map 作为参数，新事件建议不需要再继承 HMBaseEvent
     if (!self.hm_eventObj) {
-        self.hm_eventObj = [value hm_toObjCObject];
+        self.hm_eventObj = value;
     }
     [self.hm_eventObj updateEvent:self withContext:argument];
     
@@ -327,19 +311,17 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
         return;
     }
     
-    NSMutableArray<JSManagedValue *> *array = [self hm_listenerArrayForEvent:eventName];
-    for (JSManagedValue *listener in array) {
-        [listener.value callWithArguments:(argument ? @[argument] : @[])];
+    NSMutableArray<HMBaseValue *> *array = [self hm_listenerArrayForEvent:eventName];
+    for (HMBaseValue *listener in array) {
+        [listener callWithArguments:(argument ? @[argument] : @[])];
     }
 }
 
 #pragma mark - Export Method
 
-- (void)hm_addEvent:(JSValue *)eventName withListener:(JSValue *)listener {
+- (void)hm_addEvent:(HMBaseValue *)eventName withListener:(HMBaseValue *)listener {
     if (!eventName || !listener) return;
     
-    [listener hm_retainedJSValue];
-
     NSString *nameStr = [eventName toString];
     if ([self hm_isGestureEventName:nameStr]) {
         Class clazz = [self hm_gestureClassForEvent:nameStr];
@@ -371,41 +353,35 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
             [recognizers addObject:gesture];
         }
         
-        NSMutableArray<JSManagedValue *> *callbacks = [self hm_gestureCallbacksForEvent:nameStr];
-        JSManagedValue *callback = [JSManagedValue managedValueWithValue:listener];
-        [callbacks addObject:callback];
+        NSMutableArray<HMBaseValue *> *callbacks = [self hm_gestureCallbacksForEvent:nameStr];
+        [callbacks addObject:listener];
     } else {
-        NSMutableArray<JSManagedValue *> *array = [self hm_listenerArrayForEvent:nameStr];
-        JSManagedValue *managedValue = [JSManagedValue managedValueWithValue:listener];
-        [array addObject:managedValue];
+        NSMutableArray<HMBaseValue *> *array = [self hm_listenerArrayForEvent:nameStr];
+        [array addObject:listener];
     }
 }
 
-- (void)hm_removeEvent:(JSValue *)eventName withListener:(JSValue *)listener {
+- (void)hm_removeEvent:(HMBaseValue *)eventName withListener:(HMBaseValue *)listener {
     if (!eventName) return;
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:self.hmContext];
     NSString *nameStr = [eventName toString];
     if ([self hm_isGestureEventName:nameStr]) {
-        NSMutableArray<JSManagedValue *> *callbacks = [self hm_gestureCallbacksForEvent:nameStr];
+        NSMutableArray<HMBaseValue *> *callbacks = [self hm_gestureCallbacksForEvent:nameStr];
         if (listener && !listener.isNull) {
             // remove a specific listener
             NSUInteger index = NSNotFound;
             for (int i = 0; i < callbacks.count; i++) {
-                JSManagedValue *callback = callbacks[i];
-                if ([listener isEqual:callback.value]) {
+                HMBaseValue *callback = callbacks[i];
+                if ([listener isEqualToObject:callback]) {
                     index = i;
                     break;
                 }
             }
             if (index != NSNotFound) {
-                [context removeValue:listener];
                 [callbacks removeObjectAtIndex:index];
             }
         } else {
             // remove all listeners
-            [callbacks enumerateObjectsUsingBlock:^(JSManagedValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [context removeValue:obj.value];
-            }];
             [callbacks removeAllObjects];
         }
         if (callbacks.count == 0) {
@@ -419,11 +395,10 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
     } else {
         if (listener && !listener.isNull) {
             // remove a specific listener
-            [context removeValue:listener];
-            NSMutableArray<JSManagedValue *> *array = [self hm_listenerArrayForEvent:nameStr];
+            NSMutableArray<HMBaseValue *> *array = [self hm_listenerArrayForEvent:nameStr];
             __block NSUInteger index = NSNotFound;
-            [array enumerateObjectsUsingBlock:^(JSManagedValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([obj.value isEqualToObject:listener]) {
+            [array enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([obj isEqualToObject:listener]) {
                     index = idx;
                     *stop = YES;
                 }
@@ -433,10 +408,7 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
             }
         } else {
             // remove all listeners
-            NSMutableArray<JSManagedValue *> *array = [self hm_listenerArrayForEvent:nameStr];
-            [array enumerateObjectsUsingBlock:^(JSManagedValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [context removeValue:obj.value];
-            }];
+            NSMutableArray<HMBaseValue *> *array = [self hm_listenerArrayForEvent:nameStr];
             [array removeAllObjects];
             [self.hm_eventTable removeObjectForKey:nameStr];
         }

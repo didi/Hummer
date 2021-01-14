@@ -1,5 +1,5 @@
 //
-//  HMBaseExecutor.h
+//  HMBaseExecutorProtocol.h
 //  Hummer
 //
 //  Created by 唐佳诚 on 2020/8/3.
@@ -8,6 +8,8 @@
 #import <Foundation/Foundation.h>
 
 @class HMBaseValue;
+
+@protocol HMBaseWeakValueProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -115,6 +117,8 @@ typedef HMFunctionType HMFuncCallback;
 - (nullable HMBaseValue *)getWithValue:(nullable HMBaseValue *)value propertyName:(nullable NSString *)propertyName;
 
 - (void)setWithValue:(nullable HMBaseValue *)value propertyName:(nullable NSString *)propertyName propertyObject:(nullable id)propertyObject;
+
+- (nullable id <HMBaseWeakValueProtocol>)createWeakValueWithStrongValue:(nullable HMBaseValue *)strongValue;
 
 @optional
 

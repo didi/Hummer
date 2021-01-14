@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_END
  #pragma mark - Call Hummer
 
  ///  调用JS方法
- - (JSValue *)callJSWithFunc:(NSString *)func arguments:(NSArray *)arguments;
+ - (HMBaseValue *)callJSWithFunc:(NSString *)func arguments:(NSArray *)arguments;
 
 
 

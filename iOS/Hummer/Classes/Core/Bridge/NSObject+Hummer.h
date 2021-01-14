@@ -8,12 +8,21 @@
 #import "HMJSObject.h"
 #import "HMExportManager.h"
 
+@class HMBaseWeakValue;
+
+@protocol HMBaseExecutorProtocol;
+
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSObject (Hummer) <HMJSObject>
 
-@property (nonatomic, strong) JSValue *hmValue;
-@property (nonatomic, weak) JSContext *hmContext;
+/**
+ * 原生导出对象或者闭包才有，这个 property 限制了原生对象和闭包只能在一个 JSContext 中
+ */
+@property (nonatomic, weak, nullable) HMBaseValue *hmValue;
 
-- (void)hm_callJSFinalize;
-- (void)hm_retainedJSValue;
+@property (nonatomic, weak, nullable) id <HMBaseExecutorProtocol> hmContext;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -15,10 +15,9 @@
     [HMInterceptor loadExportInterceptor];
     
     [HMReporter reportPerformanceWithBlock:^(dispatch_block_t  _Nonnull finishBlock) {
-        [[HMExportManager sharedInstance] loadExportClasses];
-        if (finishBlock) { finishBlock(); }
-        
-        NSUInteger jsClassCount = [[HMExportManager sharedInstance] allExportJSClasses].count;
+        [HMExportManager.sharedInstance loadAllExportedComponent];
+        finishBlock ? finishBlock() : nil;
+        NSUInteger jsClassCount = HMExportManager.sharedInstance.jsClasses.count;
         [HMReporter reportValue:@(jsClassCount) forKey:HMExportClassesCount];
     } forKey:HMExportClasses];
     
@@ -32,28 +31,11 @@
     [[HMJSGlobal globalObject] addGlobalEnviroment:params];
 }
 
-+ (void)addGlobalScript:(NSString *)script
-             inRootView:(nonnull UIView *)rootView {
-    HMJSContext *context = [HMJSContext contextInRootView:rootView];
-    [context addGlobalScript:script];
-}
-
 + (void)evaluateScript:(NSString *)jsScript
               fileName:(NSString *)fileName
             inRootView:(UIView *)rootView {
     HMJSContext *context = [HMJSContext contextInRootView:rootView];
     [context evaluateScript:jsScript fileName:fileName];
-}
-
-+ (void)evaluateScript:(NSString *)jsScript
-              fileName:(NSString *)fileName
-                pageID:(NSString *)pageID
-            inRootView:(UIView *)rootView {
-    
-    HMJSContext *context = [HMJSContext contextInRootView:rootView
-                                                   pageID:pageID];
-    [context evaluateScript:jsScript
-                   fileName:fileName];
 }
 
 @end

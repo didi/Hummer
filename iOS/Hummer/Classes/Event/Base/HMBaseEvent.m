@@ -7,7 +7,6 @@
 
 #import "HMBaseEvent.h"
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "UIView+HMEvent.h"
 #import "NSObject+Hummer.h"
 
@@ -29,7 +28,7 @@ HM_EXPORT_PROPERTY(type, __type, __setType:)
 HM_EXPORT_PROPERTY(target, __target, __setTarget:)
 HM_EXPORT_PROPERTY(timestamp, __timestamp, __setTimestamp:)
 
-- (instancetype)initWithHMValues:(NSArray *)values {
+- (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values {
     self = [super initWithHMValues:values];
     if(self){
         _timestamp = [[NSDate date] timeIntervalSince1970];
@@ -43,27 +42,27 @@ HM_EXPORT_PROPERTY(timestamp, __timestamp, __setTimestamp:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__type {
-    return [JSValue valueWithObject:self.type inContext:self.hmContext];
+- (NSString *)__type {
+    return self.type;
 }
 
-- (void)__setType:(__unused JSValue *)type {
+- (void)__setType:(__unused HMBaseValue *)type {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__target {
-    return ((NSObject *)self.target).hmValue;
+- (HMBaseValue *)__target {
+    return (HMBaseValue *)((NSObject *)self.target).hmValue;
 }
 
-- (void)__setTarget:(__unused JSValue *)target {
+- (void)__setTarget:(__unused HMBaseValue *)target {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__timestamp {
-    return [JSValue valueWithDouble:self.timestamp inContext:self.hmContext];
+- (NSNumber *)__timestamp {
+    return @(self.timestamp);
 }
 
-- (void)__setTimestamp:(__unused JSValue *)timestamp {
+- (void)__setTimestamp:(__unused HMBaseValue *)timestamp {
     NSAssert(NO, @"cannot set read only property");
 }
 

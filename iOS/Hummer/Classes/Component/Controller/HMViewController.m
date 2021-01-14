@@ -8,7 +8,8 @@
 #import "HMViewController.h"
 #import "Hummer.h"
 #import "HMJSGlobal.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
+#import "HMBaseValue.h"
 
 #if __has_include("SRWebSocket.h")
 #import "SRWebSocket.h"
@@ -146,7 +147,7 @@
 - (void)didMoveToParentViewController:(UIViewController *)parent {
     if (!parent) {
         id pageResult = nil;
-        JSValue * jsPageResult = self.pageView.hmContext[@"Hummer"][@"pageResult"];
+        HMBaseValue * jsPageResult = self.pageView.hmContext[@"Hummer"][@"pageResult"];
         if (!jsPageResult.isNull || !jsPageResult.isUndefined) {
             if (jsPageResult.isObject) {
                 pageResult = jsPageResult.toObject;
@@ -166,8 +167,8 @@
 
 #pragma mark - Call Hummer
 
-- (JSValue *)callJSWithFunc:(NSString *)func arguments:(NSArray *)arguments {
-    JSValue * page = self.pageView.hmValue;
+- (HMBaseValue *)callJSWithFunc:(NSString *)func arguments:(NSArray *)arguments {
+    HMBaseValue * page = self.pageView.hmValue;
     if ([page hasProperty:func]) {
         return [page invokeMethod:func withArguments:arguments];
     }

@@ -8,8 +8,8 @@
 #import "HMTapEvent.h"
 #import "HMExportManager.h"
 #import "NSObject+Hummer.h"
-#import "JSValue+Hummer.h"
 #import "HMUtility.h"
+#import "HMBaseValue.h"
 
 @interface HMTapEvent()
 
@@ -38,21 +38,19 @@ HM_EXPORT_PROPERTY(state, __state, __setState:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__position {
-    NSDictionary *dict = @{@"x": [NSString stringWithFormat:@"%.0f", self.position.x],
-                           @"y": [NSString stringWithFormat:@"%.0f", self.position.y]};
-    return [JSValue valueWithObject:dict inContext:self.hmContext];
+- (NSDictionary<NSString *, NSString *> *)__position {
+    return @{@"x": [NSString stringWithFormat:@"%.0f", self.position.x], @"y": [NSString stringWithFormat:@"%.0f", self.position.y]};
 }
 
-- (void)__setPosition:(__unused JSValue *)position {
+- (void)__setPosition:(__unused HMBaseValue *)position {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__state {
-    return [JSValue valueWithObject:@(self.gesture.state) inContext:self.hmContext];
+- (NSNumber *)__state {
+    return @(self.gesture.state);
 }
 
-- (void)__setState:(__unused JSValue *)state {
+- (void)__setState:(__unused HMBaseValue *)state {
     NSAssert(NO, @"cannot set read only property");
 }
 

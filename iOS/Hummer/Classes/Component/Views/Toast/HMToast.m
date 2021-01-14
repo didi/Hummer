@@ -7,9 +7,9 @@
 
 #import "HMToast.h"
 #import "HMExportManager.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import "UIView+HMToast.h"
-#import "JSValue+Hummer.h"
+#import "HMBaseValue.h"
 
 @implementation HMToast
 
@@ -21,7 +21,7 @@ HM_EXPORT_METHOD(show, __showWithText:duration:)
 
 HM_EXPORT_METHOD(custom, __showWithView:duration:)
 
-+ (void)__showWithText:(JSValue *)jsText duration:(JSValue *)jsTime
++ (void)__showWithText:(HMBaseValue *)jsText duration:(HMBaseValue *)jsTime
 {
     NSString *text = jsText.isString ? jsText.toString : @"";
     NSInteger time = jsTime.isNumber ? jsTime.toInt32 : 2000;
@@ -29,7 +29,7 @@ HM_EXPORT_METHOD(custom, __showWithView:duration:)
     [[UIApplication sharedApplication].keyWindow hm_showToastWithText:text duration:duration];
 }
 
-+ (void)__showWithView:(JSValue *)jsView duration:(JSValue *)jsTime
++ (void)__showWithView:(HMBaseValue *)jsView duration:(HMBaseValue *)jsTime
 {
     UIView *view = jsView.hm_toObjCObject;
     if (!view) {

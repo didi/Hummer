@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak, readonly, nullable) id <HMBaseExecutorProtocol> context;
 
+- (BOOL)hasProperty:(nullable NSString *)propertyString DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，存在潜在性能问题");
+
 #pragma mark - 类型判断
 
 /// isUndefined 和 isNull 实际上是一样的，因为原生不需要区分

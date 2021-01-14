@@ -7,11 +7,11 @@
 
 #import "HMDialog.h"
 #import "HMExportManager.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMUtility.h"
-#import "JSValue+Hummer.h"
 #import "UIView+HMRenderObject.h"
 #import "UIView+HMDom.h"
+#import "HMBaseExecutorProtocol.h"
 
 static NSInteger kHMDialogPopoverViewTag = 517212;
 
@@ -250,7 +250,7 @@ HM_EXPORT_PROPERTY(cancelable, __isCancelabled, __setCancelabled:)
     return self.isCancelabled;
 }
 
-- (void)__setCancelabled:(JSValue *)value {
+- (void)__setCancelabled:(HMBaseValue *)value {
     if(!value.isBoolean) {
         return;
     }
@@ -273,7 +273,7 @@ static HMDialogPopoverView *_popover;
 //   }
 //}
 
-- (void)__customWithView:(JSValue *)jsView
+- (void)__customWithView:(HMBaseValue *)jsView
 {
     UIView *view = jsView.hm_toObjCObject;
     if (!view) {
@@ -335,7 +335,7 @@ static HMDialogPopoverView *_popover;
 
 //static HMPopoverViewController *_popover;
 //
-//- (void)__customWithView:(JSValue *)jsView
+//- (void)__customWithView:(HMBaseValue *)jsView
 //{
 //    UIView *view = jsView.hm_toObjCObject;
 //    if (!view) {
@@ -398,7 +398,7 @@ static HMDialogPopoverView *_popover;
 * @param btnText 按钮内容
 * @param callback 按钮点击回调
 */
-- (void)__alertWithMessage:(JSValue *)jsMsg btnText:(JSValue *)jsBtnText callback:(HMFuncCallback)callback
+- (void)__alertWithMessage:(HMBaseValue *)jsMsg btnText:(HMBaseValue *)jsBtnText callback:(HMFuncCallback)callback
 {
     NSString *title = jsMsg.isString ? jsMsg.toString : @"";
     NSString *btnText = jsBtnText.isString ? jsBtnText.toString : @"确认";
@@ -410,7 +410,7 @@ static HMDialogPopoverView *_popover;
     }];
 }
 
-- (void)__confirmWithTitle:(JSValue *)jsTitle message:(JSValue *)jsMsg okBtnText:(JSValue *)jsOkBtnText cancelBtnText:(JSValue *)jsCancelBtnText okCallback:(HMFuncCallback)okCallback cancelCallback:(HMFuncCallback)cancelCallback
+- (void)__confirmWithTitle:(HMBaseValue *)jsTitle message:(HMBaseValue *)jsMsg okBtnText:(HMBaseValue *)jsOkBtnText cancelBtnText:(HMBaseValue *)jsCancelBtnText okCallback:(HMFuncCallback)okCallback cancelCallback:(HMFuncCallback)cancelCallback
 {
     NSString *title = jsTitle.isString ? jsTitle.toString : @"";
     NSString *message = jsMsg.isString ? jsMsg.toString : nil;

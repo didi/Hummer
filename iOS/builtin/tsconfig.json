@@ -11,6 +11,7 @@
 
     "target": "ESNext",
     "lib": ["ESNext"],
+    "types": [],
     "isolatedModules": true,
     "esModuleInterop": true,
     "declaration": true,

@@ -9,11 +9,11 @@
 #import "HMExportManager.h"
 #import "HMAttrManager.h"
 #import "HMConverter.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
 #import "UIView+HMEvent.h"
 #import "HMSwitchEvent.h"
+#import "HMBaseValue.h"
 
 @implementation HMSwitch
 
@@ -38,22 +38,23 @@ HM_EXPORT_ATTRIBUTE(thumbColor, thumbTintColor, HMStringToColor:)
 }
 
 - (void)switchDidChanged {
-    JSValue *value = [JSValue hm_valueWithClass:[HMSwitchEvent class] inContext:self.hmContext];
+
     NSDictionary *dict = @{kHMSwitchType:@"switch",kHMSwitchState:@(self.isOn)};
-    [self hm_notifyEvent:HMSwitchEventName withValue:value withArgument:dict];
+    [self hm_notifyWithEventName:HMSwitchEventName argument:dict];
 }
 
 #pragma mark - Export Property
 
-- (JSValue *)__isOn {
-    return [JSValue valueWithBool:self.isOn inContext:self.hmContext];
+- (BOOL)__isOn {
+    return self.isOn;
 }
 
-- (void)__setOn:(JSValue *)on {
-    if (!on || on.isNull) {
+- (void)__setOn:(HMBaseValue *)on {
+    NSNumber *num_on = [on toNumber];
+    if (!num_on) {
         return;
     }
-    BOOL newValue = on.toBool;
+    BOOL newValue = [num_on boolValue];
     if (newValue == self.isOn) {
         return;
     }
@@ -61,7 +62,7 @@ HM_EXPORT_ATTRIBUTE(thumbColor, thumbTintColor, HMStringToColor:)
     [self switchDidChanged];
 }
 
-- (void)hm_addEvent:(JSValue *)eventName withListener:(JSValue *)listener {
+- (void)hm_addEvent:(HMBaseValue *)eventName withListener:(HMBaseValue *)listener {
     if(!eventName || !listener) return;
     
     NSString *nameStr = [eventName toString];
@@ -74,7 +75,7 @@ HM_EXPORT_ATTRIBUTE(thumbColor, thumbTintColor, HMStringToColor:)
     [super hm_addEvent:eventName withListener:listener];
 }
 
-- (void)hm_removeEvent:(JSValue *)eventName withListener:(JSValue *)listener {
+- (void)hm_removeEvent:(HMBaseValue *)eventName withListener:(HMBaseValue *)listener {
     if(!eventName || !listener) return;
     
     NSString *nameStr = [eventName toString];

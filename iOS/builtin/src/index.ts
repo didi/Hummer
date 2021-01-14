@@ -12,7 +12,7 @@ interface LoaderClassModel {
 
 globalThis.__GLOBAL__ = globalThis;
 
-globalThis.hummerValueStorageAdd = (value: any) => {
+globalThis.hummerValueStorageAdd = (value: unknown) => {
     if (!value) {
         return;
     }
@@ -29,7 +29,7 @@ globalThis.hummerValueStorageAdd = (value: any) => {
     }
 }
 
-globalThis.hummerValueStorageDelete = (value: any) => {
+globalThis.hummerValueStorageDelete = (value: unknown) => {
     if (!value) {
         return;
     }
@@ -44,21 +44,22 @@ globalThis.hummerValueStorageDelete = (value: any) => {
     }
 }
 
-function isString(value: any) {
+function isString(value: unknown) {
     return typeof value === 'string' && value.length > 0;
 }
 
 globalThis.exportedClassNameCache = Symbol();
 
 class HummerBase extends Object {
-    readonly _private: any
+    readonly _private: unknown
 
-    constructor(...args: [any]) {
+    constructor(...args: [unknown]) {
         super();
         let className = this.constructor.name;
         if (isString(this.constructor[globalThis.exportedClassNameCache]) && globalThis.exporedComponentMap?.get(this.constructor[globalThis.exportedClassNameCache])) {
             // 直接使用缓存类名
             className = this.constructor[globalThis.exportedClassNameCache];
+            // eslint-disable-next-line no-prototype-builtins
             if (Object.getPrototypeOf(this.constructor.prototype).constructor[globalThis.exportedClassNameCache] && this.constructor.hasOwnProperty(globalThis.exportedClassNameCache)) {
                 // 原型链上已经缓存并且自身也重复缓存则删除自身缓存
                 delete this.constructor[globalThis.exportedClassNameCache];
@@ -88,11 +89,12 @@ class HummerBase extends Object {
         this.initialize(...args);
     }
 
-    initialize(..._args: [any]) { }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    initialize(...args: [unknown]) { args }
 }
 
-globalThis.hummerCreateClosure = (object: any) => {
-    const closureValue = (...args: [any]) => {
+globalThis.hummerCreateClosure = (object: unknown) => {
+    const closureValue = (...args: [unknown]) => {
         return globalThis.hummerCallClosure(object, ...args);
     }
     // 给原生 convertValueRefToClosure 方法使用
@@ -101,7 +103,7 @@ globalThis.hummerCreateClosure = (object: any) => {
     return closureValue;
 }
 
-globalThis.hummerCreateObject = (privatePointer: any, jsClassName: string) => {
+globalThis.hummerCreateObject = (privatePointer: unknown, jsClassName: string) => {
     // Object.create 不会执行构造函数
     const newObject = Object.create(globalThis[jsClassName].prototype);
     newObject._private = privatePointer;
@@ -109,6 +111,7 @@ globalThis.hummerCreateObject = (privatePointer: any, jsClassName: string) => {
     return newObject;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 globalThis.hummerLoadClass = (loaderModel?: Object) => {
     if (!loaderModel) {
         // 提示错误信息
@@ -121,7 +124,7 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
         interface StackModel {
             jsClassName: string,
             value: LoaderClassModel,
-            // jsClass: new (...args: [any]) => any
+            // jsClass: new (...args: [unknown]) => unknown
         }
         let stackArray: Array<StackModel> | undefined;
 
@@ -133,7 +136,8 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
             if (!value) {
                 return;
             }
-            let jsClass: new (...args: [any]) => any = HummerBase;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            let jsClass: new (...args: [unknown]) => any = HummerBase;
             if (value.superClassName && isString(value.superClassName) && loaderModel[value.superClassName]) {
                 // 有父类
                 if (!globalThis.exporedComponentMap?.get(value.superClassName)) {
@@ -164,7 +168,7 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
                 const inlineJSClassName = jsClassName;
                 const prototypeOrClsss = value.isClass ? jsClass : jsClass?.prototype;
                 if (value.isMethod) {
-                    prototypeOrClsss[value.nameString] = function (...args: [any]) {
+                    prototypeOrClsss[value.nameString] = function (...args: [unknown]) {
                         if (value.isClass) {
                             return globalThis.hummerCall(inlineJSClassName, value.nameString, ...args);
                         } else {
@@ -180,7 +184,7 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
                                 return globalThis.hummerGetProperty(this._private, inlineJSClassName, value.nameString);
                             }
                         },
-                        set: function (newValue: any) {
+                        set: function (newValue: unknown) {
                             if (value.isClass) {
                                 return globalThis.hummerSetProperty(inlineJSClassName, value.nameString, newValue);
                             } else {
@@ -214,7 +218,7 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
         globalThis.Hummer.notifyCenter = new NotifyCenter();
     }
 
-    globalThis.setInterval = (handler: (...args: any[]) => void, timeout?: number) => {
+    globalThis.setInterval = (handler: (...args: unknown[]) => void, timeout?: number) => {
         const timer = new Timer();
         globalThis.hummerValueStorageAdd(timer);
         timer.setInterval(handler, timeout);
@@ -227,7 +231,7 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
         globalThis.hummerValueStorageDelete(timer);
     }
 
-    globalThis.setTimeout = (handler: (...args: any[]) => void, timeout?: number) => {
+    globalThis.setTimeout = (handler: (...args: unknown[]) => void, timeout?: number) => {
         const timer = new Timer();
         globalThis.hummerValueStorageAdd(timer);
         timer.setTimeout(() => {
@@ -252,14 +256,14 @@ globalThis.Memory = new class Memory {
         }
         return key + '_type_hm'
     }
-    set(key: string, value: any) {
+    set(key: string, value: unknown) {
         if (!key) {
             return
         }
-        let tk = this.typedKey(key)
+        const tk = this.typedKey(key)
 
         if (value instanceof View) {
-            let vid = value.viewID
+            const vid = value.viewID
             MemoryProxy.set(key, vid)
             MemoryProxy.set(tk, 'view')
             return
@@ -270,7 +274,7 @@ globalThis.Memory = new class Memory {
             return
         }
         if ((value instanceof Array) || (value instanceof Object)) {
-            let str = JSON.stringify(value)
+            const str = JSON.stringify(value)
             MemoryProxy.set(key, str)
             MemoryProxy.set(tk, 'object')
             return
@@ -281,11 +285,11 @@ globalThis.Memory = new class Memory {
         if (!key) {
             return
         }
-        let value = MemoryProxy.get(key)
-        let tk = this.typedKey(key)
-        let typeValue = MemoryProxy.get(tk)
+        const value = MemoryProxy.get(key)
+        const tk = this.typedKey(key)
+        const typeValue = MemoryProxy.get(tk)
         if (typeValue && typeValue === 'object') {
-            let obj = JSON.parse(value)
+            const obj = JSON.parse(value)
             return obj
         }
         return value
@@ -294,13 +298,13 @@ globalThis.Memory = new class Memory {
         if (!key) {
             return
         }
-        let tk = this.typedKey(key)
+        const tk = this.typedKey(key)
         MemoryProxy.remove(key)
         MemoryProxy.remove(tk)
     }
-    exist(key: any) {
+    exist(key: unknown) {
         return MemoryProxy.exist(key)
     }
 };
 
-export {}
+export { }

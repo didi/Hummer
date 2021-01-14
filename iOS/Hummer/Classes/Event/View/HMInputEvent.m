@@ -7,9 +7,8 @@
 
 #import "HMInputEvent.h"
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
-
+#import "HMBaseValue.h"
 
 NSString * const kHMInputType = @"type";
 NSString * const kHMInputState = @"state";
@@ -18,7 +17,7 @@ NSString * const kHMInputText = @"text";
 @interface HMInputEvent()
 
 @property (nonatomic, assign) NSInteger state;
-@property (nonatomic, strong) NSString *text;
+@property (nonatomic, copy, nullable) NSString *text;
 
 @end
 
@@ -37,19 +36,20 @@ HM_EXPORT_PROPERTY(state, __state, __setState:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__state {
-    return [JSValue valueWithObject:@(self.state) inContext:self.hmContext];
+- (NSNumber *)__state {
+    return @(self.state);
 }
 
-- (void)__setState:(__unused JSValue *)state {
+- (void)__setState:(__unused HMBaseValue *)state {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__text {
-    return [JSValue valueWithObject:self.text ?:@"" inContext:self.hmContext];
+- (NSString *)__text {
+    // 引擎分离架构改造的时候将这里变成了 nullable
+    return self.text;
 }
 
-- (void)__setText:(__unused JSValue *)text {
+- (void)__setText:(__unused HMBaseValue *)text {
     NSAssert(NO, @"cannot set read only property");
 }
 

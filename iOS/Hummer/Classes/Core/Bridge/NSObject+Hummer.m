@@ -9,71 +9,38 @@
 
 #import <objc/runtime.h>
 #import "HMJSGlobal.h"
+#import "HMBaseValue.h"
+#import "HMJSCExecutor.h"
+#import "HMJSCWeakValue.h"
+#import "HMBaseWeakValueProtocol.h"
 
 @implementation NSObject (Hummer)
 
-@dynamic hmValue, hmContext;
-
-HM_EXPORT_METHOD(retained, retainedValue:finalizeCallback:)
-
-- (instancetype)initWithHMValues:(__unused NSArray *)values {
-    self = [self init];
-    return self;
+- (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values {
+    return [self init];
 }
 
-- (void)hm_callJSFinalize {
-    if ([self respondsToSelector:@selector(callFinialize)]) {
-        [self callFinialize];
+- (HMBaseValue *)hmValue {
+    id <HMBaseWeakValueProtocol> weakValue = objc_getAssociatedObject(self, _cmd);
+    // 不存在了
+    if (!weakValue.value) {
+        objc_setAssociatedObject(self, _cmd, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+        return nil;
     }
-    HMFuncCallback finalize = [self finalizeCallBack];
-    if (finalize) { finalize(nil); }
+    
+    return weakValue;
 }
 
-- (void)hm_retainedJSValue {
-    if ([self isKindOfClass:[JSValue class]]) {
-        [[[HMJSGlobal globalObject] currentContext:((JSValue*)self).context] retainedValue:self];
+- (void)setHmValue:(HMBaseValue *)value {
+    if (!value.context) {
+        return;
     }
-}
-#pragma mark - Getter & Setter
-
-- (JSValue *)hmValue {
-    id (^block)(void) = objc_getAssociatedObject(self, _cmd);
-    JSValue *value = block ? block() : nil;
-    return value;
+    objc_setAssociatedObject(self, @selector(hm_value), [value.context createWeakValueWithStrongValue:value], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)setHmValue:(JSValue *)value {
-    __weak typeof(value) weakValue = value;
-    id (^block)(void) = ^(){ return weakValue;};
-    objc_setAssociatedObject(self,
-                             @selector(hmValue),
-                             block,
-                             OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (HMFuncCallback)finalizeCallBack {
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setFinalizeCallback:(HMFuncCallback)finalize {
-    objc_setAssociatedObject(self,
-                             @selector(finalizeCallBack),
-                             finalize,
-                             OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (JSContext *)hmContext {
+- (id <HMBaseExecutorProtocol>)hmContext {
     return self.hmValue.context;
-}
-
-#pragma mark - Export Method
-
-- (void)retainedValue:(JSValue *)value
-     finalizeCallback:(HMFuncCallback)finalize {
-    if (!value || !finalize) { return; }
-    self.hmValue = value; [self setFinalizeCallback:finalize];
-    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:value.context];
-    [context retainedValue:value];
 }
 
 @end

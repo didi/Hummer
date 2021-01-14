@@ -10,7 +10,6 @@
 #import "HMExportManager.h"
 #import "HMAttrManager.h"
 #import "HMConverter.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
 #import "HMInputEvent.h"
@@ -153,28 +152,28 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
 
 #pragma mark - Export Property
 
-- (JSValue *)__text {
-    return [JSValue valueWithObject:self.text inContext:self.hmContext];
+- (HMBaseValue *)__text {
+    return [HMBaseValue valueWithObject:self.text inContext:self.hmContext];
 }
 
-- (void)__setText:(JSValue *)text {
+- (void)__setText:(HMBaseValue *)text {
     self.text = text.toString;
     [self togglePlaceholder];
     [self hm_markDirty];
 }
 
-- (JSValue *)__placeholder {
-    return [JSValue valueWithObject:self.placeholderText inContext:self.hmContext];
+- (HMBaseValue *)__placeholder {
+    return [HMBaseValue valueWithObject:self.placeholderText inContext:self.hmContext];
 }
 
-- (void)__setPlaceholder:(JSValue *)placeholder {
+- (void)__setPlaceholder:(HMBaseValue *)placeholder {
     self.placeholderText = placeholder.toString;
     [self togglePlaceholder];
     [self hm_markDirty];
 }
 
-- (JSValue *)__focused {
-    return [JSValue valueWithBool:self.isFirstResponder inContext:self.hmContext];
+- (HMBaseValue *)__focused {
+    return [HMBaseValue valueWithBool:self.isFirstResponder inContext:self.hmContext];
 }
 
 - (void)__setFocused:(BOOL)focused {
@@ -230,15 +229,15 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
 #pragma mark - UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(__unused UITextView *)textView {
-    JSValue *value = [JSValue hm_valueWithClass:[HMInputEvent class] inContext:self.hmContext];
+    HMInputEvent *inputEvent = [[HMInputEvent alloc] init];
     NSDictionary *dict = @{kHMInputType:@"input",kHMInputState:@(HMInputEventBegan), kHMInputText:self.text?:@""};
-    [self hm_notifyEvent:HMInputEventName withValue:value withArgument:dict];
+    [self hm_notifyEvent:HMInputEventName withValue:inputEvent withArgument:dict];
 }
 
 - (void)textViewDidEndEditing:(__unused UITextView *)textView {
-    JSValue *value = [JSValue hm_valueWithClass:[HMInputEvent class] inContext:self.hmContext];
+    HMInputEvent *inputEvent = [[HMInputEvent alloc] init];
     NSDictionary *dict = @{kHMInputType:@"input",kHMInputState:@(HMInputEventEnded), kHMInputText:self.text?:@""};
-    [self hm_notifyEvent:HMInputEventName withValue:value withArgument:dict];
+    [self hm_notifyEvent:HMInputEventName withValue:inputEvent withArgument:dict];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {

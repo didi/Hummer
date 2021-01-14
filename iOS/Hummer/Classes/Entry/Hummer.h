@@ -12,7 +12,6 @@
 #import "HMJavaScriptLoader.h"
 #import "HMInterceptor.h"
 #import "HMJSObject.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,15 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)addGlobalEnvironment:(NSDictionary *)params;
 
-+ (void)addGlobalScript:(NSString *)script inRootView:(UIView *)rootView;
-
 + (void)evaluateScript:(NSString *)jsScript
               fileName:(NSString *)fileName
-            inRootView:(UIView *)rootView;
-
-+ (void)evaluateScript:(NSString *)jsScript
-              fileName:(NSString *)fileName
-                pageID:(NSString *)pageID
             inRootView:(UIView *)rootView;
 
 @end
