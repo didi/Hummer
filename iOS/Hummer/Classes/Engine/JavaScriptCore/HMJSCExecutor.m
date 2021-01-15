@@ -42,6 +42,8 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 @property (nonatomic, assign) JSGlobalContextRef contextRef;
 
+@property (nonatomic, nullable, copy) NSHashTable<HMJSCStrongValue *> *strongValueReleasePool;
+
 - (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable JSObjectRef)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName;
 
 // const JSValueRef[] 是 JavaScriptCore 函数签名要求
