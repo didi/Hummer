@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSObject *> *pageInfo;
 
+@property (nonatomic, copy, nullable) HMFunctionType setTitle;
+
 + (instancetype)globalObject;
 
 - (nullable HMJSContext *)currentContext:(id <HMBaseExecutorProtocol>)context;

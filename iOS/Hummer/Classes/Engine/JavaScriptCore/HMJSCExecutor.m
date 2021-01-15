@@ -175,7 +175,9 @@ JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObje
         if (!argumentArray) {
             argumentArray = [NSMutableArray arrayWithCapacity:argumentCount - 2];
         }
-        [argumentArray addObject:value];
+        if (value) {
+            [argumentArray addObject:value];
+        }
     }
 
     HMCurrentExecutor = executor;
@@ -243,10 +245,14 @@ JSValueRef _Nullable hummerCallFunction(JSContextRef ctx, JSObjectRef function, 
         if (!mutableArgumentArray) {
             mutableArgumentArray = [NSMutableArray arrayWithCapacity:argumentCount - 1];
         }
-        [mutableArgumentArray addObject:jsValue];
+        if (jsValue) {
+            [mutableArgumentArray addObject:jsValue];
+        }
     }
+    HMCurrentExecutor = executor;
     HMFunctionType closure = (__bridge HMFunctionType) JSObjectGetPrivate(objectRef);
     id returnObject = closure(mutableArgumentArray.copy);
+    HMCurrentExecutor = nil;
     if (!returnObject) {
         return NULL;
     }
@@ -556,7 +562,9 @@ void hummerFinalize(JSObjectRef object) {
         if (!otherArguments) {
             otherArguments = [NSMutableArray arrayWithCapacity:argumentCount - methodSignature.numberOfArguments];
         }
-        [otherArguments addObject:hummerValue];
+        if (hummerValue) {
+            [otherArguments addObject:hummerValue];
+        }
     }
     // 存储额外参数
     HMOtherArguments = otherArguments.copy;
