@@ -1412,7 +1412,7 @@ void hummerFinalize(JSObjectRef object) {
         valueRefArray = realloc(valueRefArray, count * sizeof(JSValueRef));
         valueRefArray[count - 1] = inlineValueRef;
     }];
-    JSValueRef returnValueRef = JSObjectCallAsFunction(self.contextRef, functionObjectRef, NULL, count, valueRefArray, &exception);
+    JSValueRef returnValueRef = JSObjectCallAsFunction(self.contextRef, functionObjectRef, thisObjectRef, count, valueRefArray, &exception);
     free(valueRefArray);
     // 业务代码需要抛出异常
     [self popExceptionWithErrorObject:&exception];
