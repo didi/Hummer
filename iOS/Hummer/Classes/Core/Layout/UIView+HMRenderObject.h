@@ -44,7 +44,7 @@ FOUNDATION_EXTERN UIView *_Nullable hm_yoga_get_root_view(UIView *_Nullable curr
 /**
  *  兼容 YogaKit 的布局判断问题 仅在 HMLayoutEngineYogaKit 时生效
  */
-- (void)hm_disableIncludedInLayout DEPRECATED_MSG_ATTRIBUTE("YogaKit 遗留，已经废弃");
+- (void)hm_disableIncludedInLayout DEPRECATED_MSG_ATTRIBUTE("YogaKit 遗留，已经废弃，业务方可以直接删除");
 
 - (void)hm_configureLayoutWithBlock:(nullable HMLayoutConfigurationBlock)block;
 

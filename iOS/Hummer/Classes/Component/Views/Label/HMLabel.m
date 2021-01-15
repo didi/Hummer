@@ -9,7 +9,6 @@
 #import "HMExportManager.h"
 #import "HMAttrManager.h"
 #import "HMConverter.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "UIView+HMDom.h"
 #import "HMAttributesBuilder.h"
@@ -94,11 +93,11 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
 
 #pragma mark - Export Property
 
-- (JSValue *)__text {
-    return [JSValue valueWithObject:self.text inContext:self.hmContext];
+- (HMBaseValue *)__text {
+    return [HMBaseValue valueWithObject:self.text inContext:self.hmContext];
 }
 
-- (void)__setText:(JSValue *)value {
+- (void)__setText:(HMBaseValue *)value {
     // do not support other kind of value
     if (!value.isString) {
         return;
@@ -116,11 +115,11 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
     [self hm_markDirty];
 }
 
-- (JSValue *)__formattedText {
-    return [JSValue valueWithObject:self.formattedText inContext:self.hmContext];
+- (HMBaseValue *)__formattedText {
+    return [HMBaseValue valueWithObject:self.formattedText inContext:self.hmContext];
 }
 
-- (void)__setFormattedText:(JSValue *)value {
+- (void)__setFormattedText:(HMBaseValue *)value {
     [self removeBuilder];
     
     self.formattedText = [value toString];
@@ -134,11 +133,11 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
     [self hm_markDirty];
 }
 
-- (JSValue *)__richText {
-    return [JSValue valueWithObject:self.text inContext:self.hmContext];
+- (HMBaseValue *)__richText {
+    return [HMBaseValue valueWithObject:self.text inContext:self.hmContext];
 }
 
-- (void)__setRichText:(JSValue *)value {
+- (void)__setRichText:(HMBaseValue *)value {
     // do not support other kind of value
     if (!value.isArray && !value.isObject) {
         return;

@@ -8,11 +8,11 @@
 #import "HMBasicAnimation.h"
 #import "NSObject+Hummer.h"
 #import <objc/runtime.h>
-#import "JSValue+Hummer.h"
 #import "HMUtility.h"
 #import "HMAnimationConverter.h"
 #import "UIView+HMRenderObject.h"
 #import "UIView+HMDom.h"
+#import "HMBaseExecutorProtocol.h"
 
 static NSString *const kHMAnimationEventStart = @"start";   // 动画开始事件
 static NSString *const kHMAnimationEventEnd = @"end";       // 动画结束事件
@@ -210,30 +210,30 @@ HM_EXPORT_METHOD(on, on:callback:)
 
 #pragma mark <js export>
 
-- (JSValue *)animValue {
+- (HMBaseValue *)animValue {
     return nil;
 }
 
-- (void)setAnimValue:(JSValue *)value {
+- (void)setAnimValue:(HMBaseValue *)value {
     id animationValue = [HMAnimationConverter convertAnimationValue:value.hm_toObjCObject
                                                             keyPath:self.animationKeyPath];
     
     self.property = [[HMBasicAnimationProperty alloc] initWithKey:self.animationKeyPath propertyValue:animationValue];
 }
 
-- (JSValue *)__duration {
-    return [JSValue valueWithDouble:self.duration inContext:self.hmContext];
+- (HMBaseValue *)__duration {
+    return [HMBaseValue valueWithDouble:self.duration inContext:self.hmContext];
 }
 
-- (void)__setDuration:(JSValue *)value {
+- (void)__setDuration:(HMBaseValue *)value {
     self.duration = [value.toNumber doubleValue];
 }
 
-- (JSValue *)__repeatCount {
-    return [JSValue valueWithInt32:self.repeatCount inContext:self.hmContext];
+- (HMBaseValue *)__repeatCount {
+    return [HMBaseValue valueWithInt32:self.repeatCount inContext:self.hmContext];
 }
 
-- (void)__setRepeatCount:(JSValue *)value {
+- (void)__setRepeatCount:(HMBaseValue *)value {
     float repeatCount = [value.toNumber floatValue];
     if (repeatCount < 0) {
         repeatCount = MAXFLOAT;
@@ -241,27 +241,27 @@ HM_EXPORT_METHOD(on, on:callback:)
     [self setRepeatCount:repeatCount];
 }
 
-- (JSValue *)__delay {
-    return [JSValue valueWithDouble:self.delay inContext:self.hmContext];
+- (HMBaseValue *)__delay {
+    return [HMBaseValue valueWithDouble:self.delay inContext:self.hmContext];
 }
 
-- (void)__setDelay:(JSValue *)value{
+- (void)__setDelay:(HMBaseValue *)value{
     
     self.delay = [value.toNumber floatValue];
 }
 
 
-- (JSValue *)__getTimingFunction {
+- (HMBaseValue *)__getTimingFunction {
     return [self getTimingFunctionName].hmValue;
 }
 
-- (void)__setTimingFunction:(JSValue *)value {
+- (void)__setTimingFunction:(HMBaseValue *)value {
     if ([value isString]) {
         [self setTimingFunctionName:value.toString];
     }
 }
 
-- (void)on:(JSValue *)value callback:(HMFuncCallback)callback{
+- (void)on:(HMBaseValue *)value callback:(HMFuncCallback)callback{
     if ([value isString]) {
         NSString *event = value.toString;
         if ([event isEqualToString:kHMAnimationEventStart]) {
@@ -290,7 +290,7 @@ HM_EXPORT_METHOD(on, on:callback:)
             NSMutableArray *args = NSMutableArray.new;
             if (self.hmValue) {
                 [args addObject:self.hmValue];
-                [args addObject:[JSValue valueWithBool:finished inContext:self.hmValue.context]];
+                [args addObject:[HMBaseValue valueWithBool:finished inContext:self.hmValue.context]];
             } else {
                 HMLogDebug(@"class [%@] JSValue is nil", [self class]);
             }

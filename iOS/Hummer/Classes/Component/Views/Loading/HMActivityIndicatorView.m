@@ -9,7 +9,7 @@
 #import "HMExportManager.h"
 #import "HMAttrManager.h"
 #import "HMConverter.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMUtility.h"
 #import "UIView+HMRenderObject.h"
 

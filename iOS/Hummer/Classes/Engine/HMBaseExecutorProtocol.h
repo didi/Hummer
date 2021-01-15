@@ -1,5 +1,5 @@
 //
-//  HMBaseExecutor.h
+//  HMBaseExecutorProtocol.h
 //  Hummer
 //
 //  Created by 唐佳诚 on 2020/8/3.
@@ -7,15 +7,20 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol HMBaseValueProtocol;
+@class HMBaseValue;
+
+@protocol HMBaseWeakValueProtocol;
+@class HMExceptionModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^HMExceptionHandler)(HMExceptionModel *exceptionModel);
+
 /**
- * 如果是原生给 JS 的闭包，由 JS 调用，参数为 NSArray<id<HMBaseValueProtocol>> *，返回值为 id
- * 如果是 JS 给原生的闭包，由原生调用，参数为 NSArray *，返回值为 id<HMBaseValueProtocol>
+ * 如果是原生给 JS 的闭包，由 JS 调用，参数为 NSArray<HMBaseValue *> *，返回值为 id
+ * 如果是 JS 给原生的闭包，由原生调用，参数为 NSArray *，返回值为 HMBaseValue *
  * 如果是原生给 JS 的闭包，由原生调用，参数为 NSArray *，返回值为 id，不考虑
- * 如果是 JS 给原生的闭包，由 JS 调用，参数为 NSArray<id<HMBaseValueProtocol>> *，返回值为 id<HMBaseValueProtocol>，不考虑
+ * 如果是 JS 给原生的闭包，由 JS 调用，参数为 NSArray<HMBaseValue *> *，返回值为 HMBaseValue *，不考虑
  * 未来需要探测 block 参数
  * 并支持任意类型参数
  *
@@ -32,19 +37,17 @@ typedef HMFunctionType HMFuncCallback;
 
 @required
 
-@property (nonatomic, readonly, strong) id <HMBaseValueProtocol> globalObject;
+@property (nonatomic, readonly, strong) HMBaseValue *globalObject;
 
 @property (nonatomic, copy, nullable) void (^exceptionHandler)(HMExceptionModel *exception);
 
-+ (nullable id <HMBaseExecutorProtocol>)currentContext;
++ (nullable id <HMBaseExecutorProtocol>)currentContext DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，使用 HMCurrentExecutor 替代");;
 
-+ (nullable NSArray<id <HMBaseValueProtocol>> *)currentArguments;
-
-- (nullable id <HMBaseValueProtocol>)evaluateScript:(nullable NSString *)script withSourceURL:(nullable NSURL *)sourceURL;
+- (nullable HMBaseValue *)evaluateScript:(nullable NSString *)script withSourceURL:(nullable NSURL *)sourceURL;
 
 /// 使用下标获取属性
-/// @param key 可以为 id<HMBaseValueProtocol>，也可以为字符串，当前只支持字符串，如果支持 Number 等，改成 id<NSCopying>
-- (nullable id <HMBaseValueProtocol>)objectForKeyedSubscript:(id)key;
+/// @param key 可以为 HMBaseValue *，也可以为字符串，当前只支持字符串，如果支持 Number 等，改成 id<NSCopying>
+- (nullable HMBaseValue *)objectForKeyedSubscript:(id)key;
 
 - (void)setObject:(nullable id)object forKeyedSubscript:(id)key;
 
@@ -54,69 +57,72 @@ typedef HMFunctionType HMFuncCallback;
 
 /// nil 参数被认为是 JavaScript undefined
 
-- (BOOL)valueIsNullOrUndefined:(nullable id <HMBaseValueProtocol>)value;
+- (BOOL)valueIsNullOrUndefined:(nullable HMBaseValue *)value;
 
-- (BOOL)valueIsBoolean:(nullable id <HMBaseValueProtocol>)value;
+- (BOOL)valueIsBoolean:(nullable HMBaseValue *)value;
 
 /// 布尔类型不是数字
-/// @param value id<HMBaseValueProtocol>
-- (BOOL)valueIsNumber:(nullable id <HMBaseValueProtocol>)value;
+/// @param value HMBaseValue *
+- (BOOL)valueIsNumber:(nullable HMBaseValue *)value;
 
 /// new String() 是对象不是标量
-/// @param value id<HMBaseValueProtocol>
-- (BOOL)valueIsString:(nullable id <HMBaseValueProtocol>)value;
+/// @param value HMBaseValue *
+- (BOOL)valueIsString:(nullable HMBaseValue *)value;
 
 /// 单纯判断是否为 JavaScript Object
-/// @param value id<HMBaseValueProtocol>
-- (BOOL)valueIsObject:(nullable id <HMBaseValueProtocol>)value DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，业务方实际上需要的是判断是否为字典");
+/// @param value HMBaseValue *
+- (BOOL)valueIsObject:(nullable HMBaseValue *)value DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，业务方实际上需要的是判断是否为字典");
 
 /// 包括 Proxy 代理的 Array
-/// @param value id<HMBaseValueProtocol>
-- (BOOL)valueIsArray:(nullable id <HMBaseValueProtocol>)value;
+/// @param value HMBaseValue *
+- (BOOL)valueIsArray:(nullable HMBaseValue *)value;
 
 #pragma mark - 私有方法 业务方请勿调用
 
 #pragma mark - 新增类型判断
 
-- (BOOL)valueIsDictionary:(nullable id <HMBaseValueProtocol>)value DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，直接转换成 dictionary + 判空");
+- (BOOL)valueIsDictionary:(nullable HMBaseValue *)value DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，直接转换成 dictionary + 判空");
 
-- (BOOL)valueIsNativeObject:(nullable id <HMBaseValueProtocol>)value;
+- (BOOL)valueIsNativeObject:(nullable HMBaseValue *)value;
 
-- (BOOL)valueIsFunction:(nullable id <HMBaseValueProtocol>)value;
+- (BOOL)valueIsFunction:(nullable HMBaseValue *)value;
 
 #pragma mark - Native -> JavaScriptCore
 
-- (nullable id <HMBaseValueProtocol>)convertToValueWithObject:(nullable id)object;
+/// 下面两个函数都是 HMBaseValue 类方法要求
+- (nullable HMBaseValue *)convertToValueWithObject:(nullable id)object;
 
-- (nullable id <HMBaseValueProtocol>)convertToValueWithNumber:(nullable NSNumber *)number;
+- (nullable HMBaseValue *)convertToValueWithNumber:(nullable NSNumber *)number;
 
 #pragma mark - JavaScriptCore -> Native
 
-- (nullable id)convertToObjectWithValue:(nullable id <HMBaseValueProtocol>)value isPortableConvert:(BOOL)isPortableConvert;
+- (nullable id)convertToObjectWithValue:(nullable HMBaseValue *)value isPortableConvert:(BOOL)isPortableConvert;
 
-- (nullable NSNumber *)convertToNumberWithValue:(nullable id <HMBaseValueProtocol>)value;
+- (nullable NSNumber *)convertToNumberWithValue:(nullable HMBaseValue *)value;
 
-- (nullable NSString *)convertToStringWithValue:(nullable id <HMBaseValueProtocol>)value;
+- (nullable NSString *)convertToStringWithValue:(nullable HMBaseValue *)value;
 
-- (nullable NSArray *)convertToArrayWithValue:(nullable id <HMBaseValueProtocol>)value isPortableConvert:(BOOL)isPortableConvert;
+- (nullable NSArray *)convertToArrayWithValue:(nullable HMBaseValue *)value isPortableConvert:(BOOL)isPortableConvert;
 
-- (nullable NSDictionary<NSString *, id> *)convertToDictionaryWithValue:(nullable id <HMBaseValueProtocol>)value isPortableConvert:(BOOL)isPortableConvert;
+- (nullable NSDictionary<NSString *, id> *)convertToDictionaryWithValue:(nullable HMBaseValue *)value isPortableConvert:(BOOL)isPortableConvert;
 
-- (nullable NSObject *)convertToNativeObjectWithValue:(nullable id <HMBaseValueProtocol>)value;
+- (nullable NSObject *)convertToNativeObjectWithValue:(nullable HMBaseValue *)value;
 
-- (nullable HMFunctionType)convertToFunctionWithValue:(nullable id <HMBaseValueProtocol>)value;
+- (nullable HMFunctionType)convertToFunctionWithValue:(nullable HMBaseValue *)value;
 
 #pragma mark - Misc
 
-- (BOOL)compareWithValue:(nullable id <HMBaseValueProtocol>)value anotherValue:(nullable id <HMBaseValueProtocol>)anotherValue;
+- (BOOL)compareWithValue:(nullable HMBaseValue *)value anotherValue:(nullable HMBaseValue *)anotherValue;
 
-- (nullable id <HMBaseValueProtocol>)callWithValue:(nullable id <HMBaseValueProtocol>)value arguments:(nullable NSArray *)arguments;
+- (nullable HMBaseValue *)callWithValue:(nullable HMBaseValue *)value arguments:(nullable NSArray *)arguments;
 
-- (nullable id <HMBaseValueProtocol>)invokeMethodWithValue:(nullable id <HMBaseValueProtocol>)value method:(NSString *)method withArguments:(nullable NSArray *)arguments;
+- (nullable HMBaseValue *)invokeMethodWithValue:(nullable HMBaseValue *)value method:(NSString *)method withArguments:(nullable NSArray *)arguments;
 
-- (nullable id <HMBaseValueProtocol>)getWithValue:(nullable id <HMBaseValueProtocol>)value propertyName:(nullable NSString *)propertyName;
+- (nullable HMBaseValue *)getWithValue:(nullable HMBaseValue *)value propertyName:(nullable NSString *)propertyName;
 
-- (void)setWithValue:(nullable id <HMBaseValueProtocol>)value propertyName:(nullable NSString *)propertyName propertyObject:(nullable id)propertyObject;
+- (void)setWithValue:(nullable HMBaseValue *)value propertyName:(nullable NSString *)propertyName propertyObject:(nullable id)propertyObject;
+
+- (nullable id <HMBaseWeakValueProtocol>)createWeakValueWithStrongValue:(nullable HMBaseValue *)strongValue;
 
 @optional
 
@@ -126,20 +132,52 @@ typedef HMFunctionType HMFuncCallback;
 /**
  * 下面两个先不实现，暂时不满足
  */
-- (nullable id <HMBaseValueProtocol>)objectAtIndexedSubscript:(NSUInteger)idx;
+- (nullable HMBaseValue *)objectAtIndexedSubscript:(NSUInteger)idx;
 
 - (void)setObject:(nullable id)obj atIndexedSubscript:(NSUInteger)idx;
 
 @end
 
-//FOUNDATION_EXPORT NSArray<id<HMBaseValueProtocol>> *_Nullable hm_otherArguments;
+FOUNDATION_EXPORT NSArray<HMBaseValue *> *_Nullable HMOtherArguments;
 
-//FOUNDATION_EXPORT id<HMBaseExecutorProtocol> _Nullable hm_currentExecutor;
+FOUNDATION_EXPORT id <HMBaseExecutorProtocol> _Nullable HMCurrentExecutor;
 
 FOUNDATION_EXPORT NSMapTable<NSValue *, id <HMBaseExecutorProtocol>> *_Nullable HMExecutorMap;
 
 FOUNDATION_EXPORT void HMAssertMainQueue(void);
 
 FOUNDATION_EXPORT void HMSafeMainThread(dispatch_block_t _Nullable block);
+
+FOUNDATION_EXPORT NSString *const HUMMER_RETAIN_TEMPLATE;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CREATE_TEMPLATE;
+
+FOUNDATION_EXPORT NSString *const HUMMER_OPAQUE_POINTER_IS_NULL;
+
+FOUNDATION_EXPORT NSString *const HUMMER_DESTROY_TEMPLATE;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CALL_PARAMETER_ERROR;
+
+FOUNDATION_EXPORT NSString *const HUMMER_DOWNGRADE_TO_CLASS_CALL;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CREATE_CLASS_NOT_FOUND;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CALL_NATIVE_TARGET_ERROR;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CALL_NATIVE_SELECTOR_ERROR;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CALL_NATIVE_METHOD_SIGNATURE_ERROR;
+
+FOUNDATION_EXPORT NSString *const HUMMER_UN_SUPPORT_TYPE_TEMPLATE;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CREATE_ERROR;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CAN_NOT_CREATE_NATIVE_OBJECT;
+
+FOUNDATION_EXPORT NSString *const HUMMER_CALL_CLOSURE_MUST_HAVE_PARAMETER;
+
+FOUNDATION_EXPORT NSString *const HUMMER_FIRST_PARAMETER_NOT_NATIVE_CLOSURE;
+
+FOUNDATION_EXPORT NSString *const HUMMER_GET_SET_ERROR;
 
 NS_ASSUME_NONNULL_END

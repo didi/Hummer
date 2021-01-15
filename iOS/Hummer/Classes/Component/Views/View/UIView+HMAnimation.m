@@ -7,9 +7,8 @@
 
 #import "UIView+HMAnimation.h"
 #import "HMExportManager.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import <QuartzCore/QuartzCore.h>
-#import "JSValue+Hummer.h"
 #import "CAAnimation+Exp.h"
 #import <objc/runtime.h>
 #import "HMAnimationManager.h"
@@ -24,7 +23,7 @@ HM_EXPORT_METHOD(addAnimation, hm_addAnimation:forKey:)
 HM_EXPORT_METHOD(removeAnimationForKey, hm_removeAnimationForKey:)
 HM_EXPORT_METHOD(removeAllAnimation, hm_removeAllAnimation)
 
-- (void)hm_addAnimation:(JSValue *)animation forKey:(JSValue *)keyPath {
+- (void)hm_addAnimation:(HMBaseValue *)animation forKey:(HMBaseValue *)keyPath {
     id anim = animation.hm_toObjCObject;
     NSString *key = keyPath.toString;
     if (!anim) {
@@ -60,7 +59,7 @@ HM_EXPORT_METHOD(removeAllAnimation, hm_removeAllAnimation)
     }
 }
 
-- (void)hm_removeAnimationForKey:(JSValue *)keyPath {
+- (void)hm_removeAnimationForKey:(HMBaseValue *)keyPath {
     NSString *key = keyPath.toString;
     if (key) {
         [self.layer removeAnimationForKey:key];

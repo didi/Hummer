@@ -10,12 +10,12 @@
 #import "HMExportManager.h"
 #import "HMAttrManager.h"
 #import "HMConverter.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
 #import "HMInputEvent.h"
 #import "UIView+HMEvent.h"
 #import "UIView+HMDom.h"
+#import "HMBaseValue.h"
 
 @interface HMInput() <UITextFieldDelegate>
 
@@ -122,25 +122,27 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
 
 #pragma mark - Export Property
 
-- (JSValue *)__text {
-    return [JSValue valueWithObject:self.text inContext:self.hmContext];
+- (NSString *)__text {
+    return self.text;
 }
 
-- (void)__setText:(JSValue *)text {
+- (void)__setText:(HMBaseValue *)text {
     [self setText:[text toString]];
     [self hm_markDirty];
 }
 
-- (void)__setPlaceholder:(JSValue *)placeholder {
+- (void)__setPlaceholder:(HMBaseValue *)placeholder {
     [self setPlaceholder:[placeholder toString]];
 }
 
-- (JSValue *)__focused {
-    return [JSValue valueWithBool:!self.isFirstResponder inContext:self.hmContext];
+- (BOOL )__focused {
+    return !self.isFirstResponder;
 }
 
-- (void)__setFocused:(JSValue *)focused {
-    BOOL theFocused = [focused toBool];
+- (void)__setFocused:(HMBaseValue *)focused {
+    NSNumber *num_focused = [focused toNumber];
+    if (!num_focused) {return;}
+    BOOL theFocused = [num_focused boolValue];
     if (theFocused) {
         [self becomeFirstResponder];
     } else {
@@ -205,22 +207,18 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(__unused UITextField *)textField {
-    JSValue *value = [JSValue hm_valueWithClass:[HMInputEvent class]
-                                      inContext:self.hmContext];
-    NSDictionary *dict = @{kHMInputType:@"input",
+    NSDictionary *dict = @{kHMInputType:HMInputEventName,
                            kHMInputState:@(HMInputEventBegan),
                            kHMInputText:self.text?:@"",};
-    [self hm_notifyEvent:HMInputEventName withValue:value withArgument:dict];
+    [self hm_notifyWithEventName:HMInputEventName argument:dict];
 }
 
 - (void)textFieldDidEndEditing:(__unused UITextField *)textField {
     // send `Input Event End` event
-    JSValue *value = [JSValue hm_valueWithClass:[HMInputEvent class]
-                                      inContext:self.hmContext];
-    NSDictionary *dict = @{kHMInputType:@"input",
+    NSDictionary *dict = @{kHMInputType:HMInputEventName,
                            kHMInputState:@(HMInputEventEnded),
                            kHMInputText:self.text?:@""};
-    [self hm_notifyEvent:HMInputEventName withValue:value withArgument:dict];
+    [self hm_notifyWithEventName:HMInputEventName argument:dict];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

@@ -9,4 +9,8 @@
 
 @implementation HMExportProperty
 
+- (SEL)getTestSelector {
+    return self.propertyGetterSelector;
+}
+
 @end

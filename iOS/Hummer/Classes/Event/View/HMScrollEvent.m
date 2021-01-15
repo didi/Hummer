@@ -7,8 +7,8 @@
 
 #import "HMScrollEvent.h"
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
+#import "HMBaseValue.h"
 
 NSString * const kHMScrollState     = @"state";
 NSString * const kHMScrollDeltaX    = @"deltaX";
@@ -45,43 +45,43 @@ HM_EXPORT_PROPERTY(state, __state, __setState:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__state {
-    return [JSValue valueWithObject:@(self.state) inContext:self.hmContext];
+- (NSNumber *)__state {
+    return @(self.state);
 }
 
-- (void)__setState:(__unused JSValue *)state {
+- (void)__setState:(__unused HMBaseValue *)state {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__deltaX {
-    return [JSValue valueWithDouble:self.deltaX inContext:self.hmContext];
+- (NSNumber *)__deltaX {
+    return @(self.deltaX);
 }
 
-- (void)__setDeltaX:(__unused JSValue *)deltaX {
+- (void)__setDeltaX:(__unused HMBaseValue *)deltaX {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__deltaY {
-    return [JSValue valueWithDouble:self.deltaY inContext:self.hmContext];
+- (NSNumber *)__deltaY {
+    return @(self.deltaY);
 }
 
-- (void)__setDeltaY:(__unused JSValue *)deltaY {
+- (void)__setDeltaY:(__unused HMBaseValue *)deltaY {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__offsetx {
-    return [JSValue valueWithDouble:self.offsetx inContext:self.hmContext];
+- (NSNumber *)__offsetx {
+    return @(self.offsetx);
 }
 
-- (void)__setOffsetx:(__unused JSValue *)deltaX {
+- (void)__setOffsetx:(__unused HMBaseValue *)deltaX {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__offsety {
-    return [JSValue valueWithDouble:self.offsety inContext:self.hmContext];
+- (NSNumber *)__offsety {
+    return @(self.offsety);
 }
 
-- (void)__setOffsety:(__unused JSValue *)deltaY {
+- (void)__setOffsety:(__unused HMBaseValue *)deltaY {
     NSAssert(NO, @"cannot set read only property");
 }
 

@@ -1,0 +1,14 @@
+{
+    "plugins": [
+        [
+            "babel-plugin-polyfill-corejs3",
+            {
+                "method": "usage-pure",
+                "targets": {
+                    "ios": 9
+                },
+                "shippedProposals": true
+            }
+        ]
+    ]
+}

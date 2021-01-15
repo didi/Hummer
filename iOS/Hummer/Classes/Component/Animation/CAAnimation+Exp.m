@@ -7,12 +7,13 @@
 
 #import "CAAnimation+Exp.h"
 #import "HMExportManager.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+
 #import <objc/runtime.h>
 #import <NSObject+Hummer.h>
 #import "HMUtility.h"
-#import "JSValue+Hummer.h"
 #import "HMAnimationConverter.h"
+#import "HMBaseExecutorProtocol.h"
+#import <Hummer/HMBaseValue.h>
 
 #define kHMBasicAnimationEventStart    @"start"      // 动画开始事件
 #define kHMBasicAnimationEventEnd      @"end"        // 动画结束事件
@@ -64,17 +65,17 @@ HM_EXPORT_METHOD(on, on:callback:)
     self.timingFunction = [HMAnimationConverter convertMediaTimingFunction:timingFunctionName];
 }
 
-- (JSValue *)__getTimingFunction {
+- (HMBaseValue *)__getTimingFunction {
     return [self getTimingFunctionName].hmValue;
 }
 
-- (void)__setTimingFunction:(JSValue *)value {
+- (void)__setTimingFunction:(HMBaseValue *)value {
     if ([value isString]) {
         [self setTimingFunctionName:value.toString];
     }
 }
 
-- (void)on:(JSValue *)value callback:(HMFuncCallback)callback{
+- (void)on:(HMBaseValue *)value callback:(HMFuncCallback)callback{
     if ([value isString]) {
         NSString *event = value.toString;
         if ([event isEqualToString:kHMBasicAnimationEventStart]) {
@@ -111,7 +112,7 @@ HM_EXPORT_METHOD(on, on:callback:)
             NSMutableArray *args = NSMutableArray.new;
             if (self.hmValue) {
                 [args addObject:self.hmValue];
-                [args addObject:[JSValue valueWithBool:flag inContext:self.hmValue.context]];
+                [args addObject:[HMBaseValue valueWithBool:flag inContext:self.hmValue.context]];
             } else {
                 HMLogDebug(@"class [%@] JSValue is nil", [self class]);
             }

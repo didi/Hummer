@@ -9,7 +9,6 @@
 #import "HMExportManager.h"
 #import "HMAttrManager.h"
 #import "HMConverter.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "UIView+HMEvent.h"
 #import "HMTapEvent.h"
@@ -18,10 +17,10 @@
 #import "UIView+HMDom.h"
 #import "UIView+HMAttribute.h"
 #import "HMUtility.h"
+#import "HMBaseValue.h"
 
 @interface HMButton()
 
-@property (nonatomic, strong) JSValue *listener;
 @property (nonatomic, assign) NSTextAlignment textAlign;
 
 @property (nonatomic, copy) NSString *fontFamily;
@@ -96,32 +95,29 @@ HM_EXPORT_ATTRIBUTE(color, textColor, HMStringToColor:)
     return @(self.enabled);
 }
 
-- (void)hm_setEnabled:(JSValue *)enabledValue {
-    BOOL enabled = [enabledValue toBool];
-    self.enabled = enabled;
+- (void)hm_setEnabled:(BOOL)enabledValue {
+    self.enabled = enabledValue;
 }
 
-- (void)__setText:(JSValue *)value {
+- (void)__setText:(HMBaseValue *)value {
     NSString *title = [value toString];
     [self setTitle:title forState:UIControlStateNormal];
     [self hm_markDirty];
 }
 
-- (JSValue *)__text {
-    NSString *title = [self titleForState:UIControlStateNormal];
-    return [JSValue valueWithObject:title inContext:self.hmContext];
+- (NSString *)__text {
+    return [self titleForState:UIControlStateNormal];
 }
 
-- (JSValue *)__disabled {
+- (NSDictionary<NSString *, id> *)__disabled {
     UIColor *bgColor = self.disabledBackgroundColor ?: self.normalBackgroundColor;
     UIColor *titleColor = self.disabledTitleColor ?: self.normalTitleColor;
-    NSDictionary *dict = @{@"backgroundColor": [HMConverter HMColorToString:bgColor],
+    return @{@"backgroundColor": [HMConverter HMColorToString:bgColor],
                            @"color": [HMConverter HMColorToString:titleColor]};
-    return [JSValue valueWithObject:dict inContext:self.hmContext];
 }
 
-- (void)__setDisabled:(JSValue *)disabled {
-    NSDictionary *dict = [disabled toObject];
+- (void)__setDisabled:(HMBaseValue *)disabled {
+    NSDictionary<NSString *, id> *dict = [disabled toDictionary];
     if(dict[@"backgroundColor"]){
         self.disabledBackgroundColor = [HMConverter HMStringToColor:dict[@"backgroundColor"]];
     }
@@ -130,16 +126,15 @@ HM_EXPORT_ATTRIBUTE(color, textColor, HMStringToColor:)
     }
 }
 
-- (JSValue *)__pressed {
+- (NSDictionary<NSString *, id> *)__pressed {
     UIColor *bgColor = self.pressBackgroundColor?:self.normalBackgroundColor;
     UIColor *titleColor = self.pressTitleColor?:self.normalTitleColor;
-    NSDictionary *dict = @{@"backgroundColor": [HMConverter HMColorToString:bgColor],
+    return @{@"backgroundColor": [HMConverter HMColorToString:bgColor],
                            @"color":[HMConverter HMColorToString:titleColor]};
-    return [JSValue valueWithObject:dict inContext:self.hmContext];
 }
 
-- (void)__setPressed:(JSValue *)pressed {
-    NSDictionary *dict = [pressed toObject];
+- (void)__setPressed:(HMBaseValue *)pressed {
+    NSDictionary *dict = [pressed toDictionary];
     if(dict[@"backgroundColor"]){
         self.pressBackgroundColor = [HMConverter HMStringToColor:dict[@"backgroundColor"]];
     }

@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 #import <QuartzCore/QuartzCore.h>
 
 NS_ASSUME_NONNULL_BEGIN

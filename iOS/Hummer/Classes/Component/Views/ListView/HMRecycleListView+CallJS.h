@@ -7,6 +7,7 @@
 
 #import "HMRecycleListView.h"
 #import "HMExportManager.h"
+#import <Hummer/HMBaseExecutorProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

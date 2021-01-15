@@ -1,61 +1,60 @@
 //
-//  HMJSContext.h
+//  HMNGJSContext.h
 //  Hummer
 //
-//  Copyright © 2019年 didi. All rights reserved.
+//  Created by 唐佳诚 on 2020/7/15.
 //
 
+#import <Foundation/Foundation.h>
 
-#import <JavaScriptCore/JavaScriptCore.h>
-#import <UIKit/UIKit.h>
+@class HMBaseValue;
+
+@protocol HMBaseExecutorProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 @class HMJSContext;
 @protocol HMJSContextDelegate <NSObject>
-
-@optional
-- (void)context:(HMJSContext *)context didRenderPage:(JSValue *)page;
+- (void)context:(HMJSContext *)context didRenderPage:(HMBaseValue *)page;
 
 @end
 @interface HMJSContext : NSObject
 
-
-/// 设置自身业务线的命名空间；
-/// 当Hummer查找插件时，或者Navigator模块查找注册的构造器时，会采用该命名空间作为唯一标示；
-/// 当该值为空时，Hummer会忽略上下文，保持原先的处理逻辑；
+/**
+ * 设置自身业务线的命名空间
+ * 当 Hummer 查找插件时，或者 Navigator 模块查找注册的构造器时，会采用该命名空间作为唯一标示
+ * 当该值为空时，Hummer 会忽略上下文，保持原先的处理逻辑
+ */
 @property (nonatomic, copy, nullable) NSString *nameSpace;
 
-@property (nonatomic, nullable, copy) NSString *pageID;
+@property (nonatomic, nullable, copy) NSString *pageId;
 
-/// `evaluateScript:fileName:` 方法会对该属性进行赋值
+/**
+ * 只读
+ */
 @property (nonatomic, nullable, copy) NSURL *url;
 
+NS_ASSUME_NONNULL_END
+
 @property (nonatomic, weak) id<HMJSContextDelegate> delegate;
-@property (nonatomic, weak, readonly) UIView *rootView;
-@property (nonatomic, strong, readonly) JSContext *context;
-@property (nonatomic, strong) JSManagedValue *notifyManagedValue;
 
-- (instancetype)init NS_UNAVAILABLE;
+@property (nonatomic, nullable, strong) HMBaseValue *componentView;
 
-- (instancetype)initWithPageID:(NSString *)pageID;
+@property (nonatomic, nullable, copy) void(^renderCompletion)(void);
+
+@property (nonatomic, weak, readonly, nullable) UIView *rootView;
+
+@property (nonatomic, strong) id <HMBaseExecutorProtocol>context;
+
+@property (nonatomic, strong, nullable) HMBaseValue *notifyManagedValue;
 
 + (instancetype)contextInRootView:(UIView *)rootView;
 
-- (JSValue *)evaluateScript:(NSString *)jsScript fileName:(nullable NSString *)fileName;
-
-+ (instancetype)contextInRootView:(UIView *)rootView
-                           pageID:(NSString *)pageID;
-
-
 /**
- * 强持JSValue，防止js对象被GC了
- * @param value JSValue
+ * 只能调用一次
+ * @param javaScriptString 脚本字符串
+ * @param fileName 文件名
+ * @return JSValue
  */
-- (void)retainedValue:(JSValue *)value;
-- (void)addGlobalScript:(NSString *)script;
-- (void)registerJSClasses;
+- (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName;
 
-- (void)removeValue:(JSValue *)value;
 @end
-
-NS_ASSUME_NONNULL_END

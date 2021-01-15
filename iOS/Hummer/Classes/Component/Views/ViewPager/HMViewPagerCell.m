@@ -7,9 +7,8 @@
 
 #import "HMViewPagerCell.h"
 #import "UIView+HMRenderObject.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMAttrManager.h"
 #import "HMConverter.h"

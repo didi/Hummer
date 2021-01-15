@@ -8,8 +8,8 @@
 #import "CAAnimation+Timing.h"
 #import "HMExportManager.h"
 #import <objc/runtime.h>
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
+#import "HMBaseValue.h"
 
 @implementation CAAnimation (Timing)
 
@@ -19,12 +19,11 @@ HM_EXPORT_PROPERTY(delay, delay, setDelay:)
 
 #pragma mark - Export Property
 
-- (JSValue *)__duration {
-    
-    return [JSValue valueWithDouble:[self.facadeDuration doubleValue] inContext:self.hmContext];
+- (HMBaseValue *)__duration {
+    return [HMBaseValue valueWithDouble:[self.facadeDuration doubleValue] inContext:self.hmContext];
 }
 
-- (void)__setDuration:(JSValue *)value {
+- (void)__setDuration:(HMBaseValue *)value {
     NSNumber *num = value.toNumber;
     self.facadeDuration = num;
     if (!num || [num doubleValue] == 0) {
@@ -38,11 +37,11 @@ HM_EXPORT_PROPERTY(delay, delay, setDelay:)
     [self setDuration:[num doubleValue]];
 }
 
-- (JSValue *)__repeatCount {
-    return [JSValue valueWithInt32:self.repeatCount inContext:self.hmContext];
+- (HMBaseValue *)__repeatCount {
+    return [HMBaseValue valueWithInt32:self.repeatCount inContext:self.hmContext];
 }
 
-- (void)__setRepeatCount:(JSValue *)value {
+- (void)__setRepeatCount:(HMBaseValue *)value {
     float repeatCount = [value.toNumber floatValue];
     if (repeatCount < 0) {
         repeatCount = MAXFLOAT;
@@ -50,11 +49,11 @@ HM_EXPORT_PROPERTY(delay, delay, setDelay:)
     [self setRepeatCount:repeatCount];
 }
 
-- (JSValue *)delay {
+- (HMBaseValue *)delay {
     return nil;
 }
 
-- (void)setDelay:(JSValue *)value {
+- (void)setDelay:(HMBaseValue *)value {
     float delay = [value.toNumber floatValue];
     self.beginTime = CACurrentMediaTime() + delay;
 }

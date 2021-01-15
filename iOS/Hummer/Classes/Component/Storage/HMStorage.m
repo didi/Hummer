@@ -10,6 +10,7 @@
 #import "NSString+Hummer.h"
 #import "HMExportManager.h"
 #import "HMJSGlobal.h"
+#import "HMBaseValue.h"
 
 @implementation HMStorage
 
@@ -25,7 +26,7 @@ HM_EXPORT_METHOD(remove,__removeObjectForKey:)
 
 HM_EXPORT_METHOD(exist,__existForKey:)
 
-+ (NSNumber *)__set:(JSValue *)key object:(JSValue*)object {
++ (NSNumber *)__set:(HMBaseValue *)key object:(HMBaseValue *)object {
     if (object.isUndefined || object.isNull  || !key.isString) {
         return @(NO);
     }
@@ -38,8 +39,6 @@ HM_EXPORT_METHOD(exist,__existForKey:)
         data = object.toString;
     } else if (object.isArray) {
         data = object.toArray;
-    } else if (object.isDate) {
-        data  = object.toDate;
     } else if (object.isObject) {
         data  = object.toObject;
     }
@@ -50,21 +49,21 @@ HM_EXPORT_METHOD(exist,__existForKey:)
     return @NO;
 }
 
-+ (id<NSCoding>)__getObjectForKey:(JSValue *)key {
++ (id<NSCoding>)__getObjectForKey:(HMBaseValue *)key {
     if (!key.isString) {
         return nil;
     }
     return [HMStorage ObjectForKey:key.toString];
 }
 
-+ (NSNumber *)__removeObjectForKey:(JSValue *)key {
++ (NSNumber *)__removeObjectForKey:(HMBaseValue *)key {
     if (!key.isString) {
         return @(NO);
     }
     return @([HMStorage removeForKey:key.toString]);
 }
 
-+ (NSNumber *)__existForKey:(JSValue *)key {
++ (NSNumber *)__existForKey:(HMBaseValue *)key {
     if (!key.isString) {
         return @(false);
     }

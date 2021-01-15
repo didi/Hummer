@@ -7,9 +7,8 @@
 
 #import "HMScrollView.h"
 #import "HMExportManager.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMUtility.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMScrollEvent.h"
 #import "UIView+HMEvent.h"
@@ -86,7 +85,7 @@ HM_EXPORT_PROPERTY(bounces, hummerBounces, setHummerBounces:)
 
 - (instancetype)initWithHMValues:(NSArray *)values {
     if(self = [super initWithHMValues:values]) {
-        JSValue * value = values.firstObject;
+        HMBaseValue * value = values.firstObject;
         if(value && value.isObject){
             NSDictionary * dict = value.toDictionary;
             self.pagingEnabled = [dict[@"pagingEnabled"] integerValue] > 0;
@@ -107,7 +106,7 @@ HM_EXPORT_PROPERTY(inset, __contentInset, __setContentInset:)
     return @{@"top":@(self.contentInset.top),@"left":@(self.contentInset.left),@"bottom":@(self.contentInset.bottom),@"right":@(self.contentInset.right)};
 }
 
-- (void)__setContentInset:(JSValue *) value {
+- (void)__setContentInset:(HMBaseValue *) value {
     if(!value.isObject){
         return;
     }
@@ -150,7 +149,7 @@ HM_EXPORT_METHOD(setOnScrollToBottomListener, onScrollToBottom:)
 
 HM_EXPORT_METHOD(scrollTo, scrollToX:Y:)
 
-- (void)scrollToX:(JSValue *)xValue Y:(JSValue *)yValue {
+- (void)scrollToX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue {
     CGFloat offsetX = HMPointWithString(xValue.toString);
     CGFloat offsetY = HMPointWithString(yValue.toString);
     CGFloat x = MIN(MAX(0, offsetX), self.contentSize.width - self.frame.size.width);
@@ -160,7 +159,7 @@ HM_EXPORT_METHOD(scrollTo, scrollToX:Y:)
 
 HM_EXPORT_METHOD(scrollBy, scrollByX:Y:)
 
-- (void)scrollByX:(JSValue *)xValue Y:(JSValue *)yValue {
+- (void)scrollByX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue {
     CGFloat offsetX = HMPointWithString(xValue.toString);
     CGFloat offsetY = HMPointWithString(yValue.toString);
     
@@ -205,14 +204,13 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
 
 - (void)scrollViewWillBeginDragging:(__unused UIScrollView *)scrollView {
     HMExecOnMainQueue(^{
-        JSValue *value = [JSValue hm_valueWithClass:[HMScrollEvent class]
-                                          inContext:self.hmContext];
+        HMScrollEvent *scrollEvent = [[HMScrollEvent alloc] init];
         NSDictionary *args = @{kHMScrollState:@(HMScrollEventBegan),
                                kHMScrollDeltaX:@(0),
                                kHMScrollDeltaY:@(0),
                                kHMScrollOffsetX:@(0),
                                kHMScrollOffsetY:@(0)};
-        [self hm_notifyEvent:HMScrollEventName withValue:value withArgument:args];
+        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
     });
 }
 
@@ -222,14 +220,14 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
     HMExecOnMainQueue(^{
-        JSValue *value = [JSValue hm_valueWithClass:[HMScrollEvent class]
-                                          inContext:self.hmContext];
+        HMScrollEvent *scrollEvent = [[HMScrollEvent alloc] init];
+
         NSDictionary *args = @{kHMScrollState:@(HMScrollEventScroll),
                                kHMScrollDeltaX:@(deltaX),
                                kHMScrollDeltaY:@(deltaY),
                                kHMScrollOffsetX:@(contentOffset.x),
                                kHMScrollOffsetY:@(contentOffset.y)};
-        [self hm_notifyEvent:HMScrollEventName withValue:value withArgument:args];
+        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
     });
 }
 
@@ -239,14 +237,13 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
     HMExecOnMainQueue(^{
-        JSValue *value = [JSValue hm_valueWithClass:[HMScrollEvent class]
-                                          inContext:self.hmContext];
+        HMScrollEvent *scrollEvent = [[HMScrollEvent alloc] init];
         NSDictionary *args = @{kHMScrollState:@(HMScrollEventEndedDragging),
                                kHMScrollDeltaX:@(deltaX),
                                kHMScrollDeltaY:@(deltaY),
                                kHMScrollOffsetX:@(contentOffset.x),
                                kHMScrollOffsetY:@(contentOffset.y)};
-        [self hm_notifyEvent:HMScrollEventName withValue:value withArgument:args];
+        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
         [self checkIFTopOrBottom];
     });
     if (!decelerate) {
@@ -260,14 +257,13 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
     HMExecOnMainQueue(^{
-        JSValue *value = [JSValue hm_valueWithClass:[HMScrollEvent class]
-                                          inContext:self.hmContext];
+        HMScrollEvent *scrollEvent = [[HMScrollEvent alloc] init];
         NSDictionary *args = @{kHMScrollState:@(HMScrollEventEndedDecelerating),
                                kHMScrollDeltaX:@(deltaX),
                                kHMScrollDeltaY:@(deltaY),
                                kHMScrollOffsetX:@(contentOffset.x),
                                kHMScrollOffsetY:@(contentOffset.y)};
-        [self hm_notifyEvent:HMScrollEventName withValue:value withArgument:args];
+        [self hm_notifyEvent:HMScrollEventName withValue:scrollView withArgument:args];
         [self checkIFTopOrBottom];
     });
 }
@@ -462,18 +458,18 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
     [self.loadView reset];
 }
 
-- (void)endLoad:(JSValue *)nextLoadEnabled {
+- (void)endLoad:(HMBaseValue *)nextLoadEnabled {
     BOOL enabled = nextLoadEnabled.toBool;
     [self.loadView endLoad:enabled];
 }
 
 
-- (JSValue *)__refreshView {
+- (HMBaseValue *)__refreshView {
     UIView *refreshView = self.refreshView.contentView.subviews.firstObject;
     return refreshView.hmValue;
 }
 
-- (void)__setRefreshView:(JSValue *)value {
+- (void)__setRefreshView:(HMBaseValue *)value {
     
     UIView *subView = value.hm_toObjCObject;
     BOOL isValueKindOfView = [subView isKindOfClass:[UIView class]];
@@ -508,12 +504,12 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
     [self.refreshView setFreshHeight:ceil(size.height)];
 }
 
-- (JSValue *)__loadMoreView {
+- (HMBaseValue *)__loadMoreView {
     UIView *loadMoreView = self.loadView.contentView.subviews.firstObject;
     return loadMoreView.hmValue;
 }
 
-- (void)__setLoadMoreView:(JSValue *)value {
+- (void)__setLoadMoreView:(HMBaseValue *)value {
     
     UIView *subView = value.hm_toObjCObject;
     BOOL isValueKindOfView = [subView isKindOfClass:[UIView class]];

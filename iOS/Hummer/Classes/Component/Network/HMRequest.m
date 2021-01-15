@@ -8,11 +8,12 @@
 #import "HMRequest.h"
 #import "HMUtility.h"
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMExportManager.h"
 #import "HMInterceptor.h"
 #import "HMResponse.h"
+#import "HMBaseExecutorProtocol.h"
+#import <Hummer/HMBaseValue.h>
 
 @interface HMRequest()
 
@@ -91,9 +92,7 @@ HM_EXPORT_METHOD(send, send:)
             
             return;
         }
-        JSValue *value = [JSValue hm_valueWithClass:[HMResponse class]
-                                          inContext:weakSelf.hmContext];
-        HMResponse *response = [value hm_toObjCObject];
+        HMResponse *response = [[HMResponse alloc] init];
         response.error = error; response.status = resp.statusCode;
         response.header = [resp allHeaderFields];
         NSString *string = [[NSString alloc] initWithData:data
@@ -101,8 +100,7 @@ HM_EXPORT_METHOD(send, send:)
         response.data = HMJSONDecode(string);
         
         if(callback) {
-            HMAssert(value, @"JSValue must not be nil");
-            callback(value?@[value]:@[]);
+            callback(response);
         }
 
     });
@@ -129,43 +127,43 @@ HM_EXPORT_METHOD(send, send:)
 
 #pragma mark - Export Property
 
-- (JSValue *)__url {
-    return [JSValue valueWithObject:self.url inContext:self.hmContext];
+- (HMBaseValue *)__url {
+    return [HMBaseValue valueWithObject:self.url inContext:self.hmContext];
 }
 
-- (void)__setUrl:(JSValue *)host {
+- (void)__setUrl:(HMBaseValue *)host {
     self.url = [host toString];
 }
 
-- (JSValue *)__method {
-    return [JSValue valueWithObject:self.method inContext:self.hmContext];
+- (HMBaseValue *)__method {
+    return [HMBaseValue valueWithObject:self.method inContext:self.hmContext];
 }
 
-- (void)__setMethod:(JSValue *)method {
+- (void)__setMethod:(HMBaseValue *)method {
     self.method = [method toString];
 }
 
-- (JSValue *)__timeout {
-    return [JSValue valueWithDouble:self.timeout inContext:self.hmContext];
+- (HMBaseValue *)__timeout {
+    return [HMBaseValue valueWithDouble:self.timeout inContext:self.hmContext];
 }
 
-- (void)__setTimeout:(JSValue *)timeout {
+- (void)__setTimeout:(HMBaseValue *)timeout {
     self.timeout = [[timeout toNumber] floatValue];
 }
 
-- (JSValue *)__header {
-    return [JSValue valueWithObject:self.header inContext:self.hmContext];
+- (HMBaseValue *)__header {
+    return [HMBaseValue valueWithObject:self.header inContext:self.hmContext];
 }
 
-- (void)__setHeader:(JSValue *)header {
+- (void)__setHeader:(HMBaseValue *)header {
     self.header = [header toObject];
 }
 
-- (JSValue *)__param {
-    return [JSValue valueWithObject:self.param inContext:self.hmContext];
+- (HMBaseValue *)__param {
+    return [HMBaseValue valueWithObject:self.param inContext:self.hmContext];
 }
 
-- (void)__setParam:(JSValue *)param {
+- (void)__setParam:(HMBaseValue *)param {
     self.param = [param toObject];
 }
 

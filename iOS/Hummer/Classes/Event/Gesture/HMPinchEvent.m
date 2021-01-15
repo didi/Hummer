@@ -9,7 +9,7 @@
 #import "HMExportManager.h"
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
-#import "JSValue+Hummer.h"
+#import "HMBaseValue.h"
 
 @interface HMPinchEvent()
 
@@ -37,19 +37,19 @@ HM_EXPORT_PROPERTY(state, __state, __setState:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__scale {
-    return [JSValue valueWithDouble:self.scale inContext:self.hmContext];
+- (NSNumber *)__scale {
+    return @(self.scale);
 }
 
-- (void)__setScale:(__unused JSValue *)scale {
+- (void)__setScale:(__unused HMBaseValue *)scale {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__state {
-    return [JSValue valueWithObject:@(self.gesture.state) inContext:self.hmContext];
+- (NSNumber *)__state {
+    return @(self.gesture.state);
 }
 
-- (void)__setState:(__unused JSValue *)state {
+- (void)__setState:(__unused HMBaseValue *)state {
     NSAssert(NO, @"cannot set read only property");
 }
 

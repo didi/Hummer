@@ -11,6 +11,7 @@
 #import "HMImageManager.h"
 #import "WeakPointerWrapper.h"
 #import <objc/runtime.h>
+#import <Hummer/HMBaseValue.h>
 
 @implementation UIView (HMImageLoader)
 

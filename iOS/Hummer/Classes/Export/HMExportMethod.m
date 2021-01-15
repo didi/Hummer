@@ -9,4 +9,8 @@
 
 @implementation HMExportMethod
 
+- (SEL)getTestSelector {
+    return self.selector;
+}
+
 @end

@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMNavigator : NSObject
 
-+ (void)openPage:(JSValue *)params callback:(nullable HMFuncCallback)callback;
++ (void)openPage:(HMBaseValue *)params callback:(nullable HMFuncCallback)callback;
 
 /**
  * @brief 注册 scheme，用于解决 hummer://Unipay 这样的路径解析，默认会处理以下内容
@@ -54,11 +54,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)removePageBuilderForScheme:(NSString *)scheme;
 + (void)removePageBuilderForScheme:(NSString *)scheme nameSpace:(nullable NSString *)nameSpace;
 
-+ (void)__popPage:(nullable JSValue *)params;
++ (void)__popPage:(nullable HMBaseValue *)params;
 
-+ (void)__popToPage:(JSValue *)params;
++ (void)__popToPage:(HMBaseValue *)params;
 
-+ (void)__popToRootPage:(JSValue *)params;
++ (void)__popToRootPage:(HMBaseValue *)params;
 
 + (instancetype)sharedInstance;
 

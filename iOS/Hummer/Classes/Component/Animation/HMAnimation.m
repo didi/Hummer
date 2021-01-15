@@ -7,14 +7,12 @@
 
 #import "HMAnimation.h"
 #import "HMExportManager.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import <QuartzCore/CAAnimation.h>
-#import "JSValue+Hummer.h"
 #import <UIKit/UIKit.h>
 #import "HMAnimationConverter.h"
 #import "HMUtility.h"
-
-
+#import <Hummer/HMBaseValue.h>
 
 @interface HMKeyframeAnimation ()<CAAnimationDelegate>
 
@@ -48,11 +46,11 @@ HM_EXPORT_PROPERTY(keyframes, keyframes, setKeyframes:)
 
 #pragma mark - Export Property
 
-- (JSValue *)keyframes {
+- (HMBaseValue *)keyframes {
     return nil;
 }
 
-- (void)setKeyframes:(JSValue *)value {
+- (void)setKeyframes:(HMBaseValue *)value {
     NSArray *keyframes = value.toArray;
     if (keyframes.count <= 0) return;
     

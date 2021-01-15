@@ -1,0 +1,17 @@
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "ios": 9
+                },
+                "shippedProposals": true
+            }
+        ],
+        "@babel/preset-typescript"
+    ],
+    "plugins": [
+        "@babel/plugin-transform-runtime"
+    ]
+}

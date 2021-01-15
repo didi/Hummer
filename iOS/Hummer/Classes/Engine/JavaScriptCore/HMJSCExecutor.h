@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMJSCExecutor : NSObject <HMBaseExecutorProtocol>
 
-@property (nonatomic, copy, nullable) void (^exceptionHandler)(HMExceptionModel *exception);
+@property (nonatomic, copy, nullable) HMExceptionHandler exceptionHandler;
 
 @end
 

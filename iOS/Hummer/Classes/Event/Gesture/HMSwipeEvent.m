@@ -9,6 +9,7 @@
 #import "HMExportManager.h"
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
+#import "HMBaseValue.h"
 
 @interface HMSwipeEvent()
 
@@ -37,19 +38,19 @@ HM_EXPORT_PROPERTY(state, __state, __setState:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__direction {
-    return [JSValue valueWithInt32:self.direction inContext:self.hmContext];
+- (NSNumber *)__direction {
+    return @(self.direction);
 }
 
-- (void)__setDirection:(__unused JSValue *)direction {
+- (void)__setDirection:(__unused HMBaseValue *)direction {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__state {
-    return [JSValue valueWithObject:@(self.gesture.state) inContext:self.hmContext];
+- (NSNumber *)__state {
+    return @(self.gesture.state);
 }
 
-- (void)__setState:(__unused JSValue *)state {
+- (void)__setState:(__unused HMBaseValue *)state {
     NSAssert(NO, @"cannot set read only property");
 }
 

@@ -10,7 +10,6 @@
 #import "HMAttrManager.h"
 #import "HMExportManager.h"
 #import "NSObject+Hummer.h"
-#import "JSValue+Hummer.h"
 #import "UIView+HMDom.h"
 #import "HMConverter.h"
 #import "HMRecycleListView+CallJS.h"
@@ -199,9 +198,9 @@ HM_EXPORT_PROPERTY(loadMoreView, __loadMoreView, __setLoadMoreView:)
 HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
 
 
-JSValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback callback,
+HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback callback,
                                                           NSArray *params) {
-    JSValue *result;
+    HMBaseValue *result;
     if (callback) { result = callback(params.copy); }
     return result;
 };
@@ -321,12 +320,12 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
 
 #pragma mark - Export Property (Refresh | LoadMore)
 
-- (JSValue *)__refreshView {
+- (HMBaseValue *)__refreshView {
     UIView *refreshView = self.refreshView.contentView.subviews.firstObject;
     return refreshView.hmValue;
 }
 
-- (void)__setRefreshView:(JSValue *)value {
+- (void)__setRefreshView:(HMBaseValue *)value {
     BOOL isVertical = HMScrollDirectionVertical == self.direction;
     NSAssert(isVertical, @"Can't set refresh view when direction is not vertical");
     if (!isVertical) { return; }
@@ -364,12 +363,12 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     [self.refreshView setFreshHeight:ceil(size.height)];
 }
 
-- (JSValue *)__loadMoreView {
+- (HMBaseValue *)__loadMoreView {
     UIView *loadMoreView = self.loadView.contentView.subviews.firstObject;
     return loadMoreView.hmValue;
 }
 
-- (void)__setLoadMoreView:(JSValue *)value {
+- (void)__setLoadMoreView:(HMBaseValue *)value {
     BOOL isVertical = HMScrollDirectionVertical == self.direction;
     NSAssert(isVertical, @"Can't set load view when direction is not vertical");
     if (!isVertical) { return; }
@@ -487,12 +486,12 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     [self.loadView reset];
 }
 
-- (void)endLoad:(JSValue *)nextLoadEnabled {
+- (void)endLoad:(HMBaseValue *)nextLoadEnabled {
     BOOL enabled = nextLoadEnabled.toBool;
     [self.loadView endLoad:enabled];
 }
 
-- (void)refresh:(JSValue *)countValue {
+- (void)refresh:(HMBaseValue *)countValue {
     NSInteger count = countValue.toNumber.integerValue;
     self.cellCount = count;
     
@@ -500,7 +499,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     [self reloadData];
 }
 
-- (void)scrollToIndex:(JSValue *)value {
+- (void)scrollToIndex:(HMBaseValue *)value {
     NSInteger row = value.toNumber.integerValue;
     
     BOOL isRowValid = row < self.cellCount;
@@ -515,7 +514,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
                          animated:YES];
 }
 
-- (void)scrollToX:(JSValue *)xValue Y:(JSValue *)yValue {
+- (void)scrollToX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue {
     CGFloat offsetX = HMPointWithString(xValue.toString);
     CGFloat offsetY = HMPointWithString(yValue.toString);
     
@@ -523,7 +522,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     [self setContentOffset:offset animated:YES];
 }
 
-- (void)scrollByX:(JSValue *)xValue Y:(JSValue *)yValue {
+- (void)scrollByX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue {
     CGFloat offsetX = HMPointWithString(xValue.toString);
     CGFloat offsetY = HMPointWithString(yValue.toString);
     
@@ -560,8 +559,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
 }
 
 - (void)scrollViewWillBeginDragging:(__unused UIScrollView *)scrollView {
-    JSValue *value = [JSValue hm_valueWithClass:[HMScrollEvent class]
-                                      inContext:self.hmContext];
+    HMScrollEvent *value = [[HMScrollEvent alloc] init];
     NSDictionary *args = @{kHMScrollState:@(HMScrollEventBegan),
                            kHMScrollDeltaX:@(0),
                            kHMScrollDeltaY:@(0),
@@ -576,8 +574,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
     
-    JSValue *value = [JSValue hm_valueWithClass:[HMScrollEvent class]
-                                      inContext:self.hmContext];
+    HMScrollEvent *value = [[HMScrollEvent alloc] init];
     NSDictionary *args = @{kHMScrollState:@(HMScrollEventScroll),
                            kHMScrollDeltaX:@(deltaX),
                            kHMScrollDeltaY:@(deltaY),
@@ -594,8 +591,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
     
-    JSValue *value = [JSValue hm_valueWithClass:[HMScrollEvent class]
-                                      inContext:self.hmContext];
+    HMScrollEvent *value = [[HMScrollEvent alloc] init];
     NSDictionary *args = @{kHMScrollState:@(HMScrollEventEndedDragging),
                            kHMScrollDeltaX:@(deltaX),
                            kHMScrollDeltaY:@(deltaY),
@@ -610,8 +606,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
     
-    JSValue *value = [JSValue hm_valueWithClass:[HMScrollEvent class]
-                                      inContext:self.hmContext];
+    HMScrollEvent *value = [[HMScrollEvent alloc] init];
     NSDictionary *args = @{kHMScrollState:@(HMScrollEventEndedDecelerating),
                            kHMScrollDeltaX:@(deltaX),
                            kHMScrollDeltaY:@(deltaY),
@@ -638,7 +633,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     
     // 1. 获取 cell 的重用标识
     if (self.cellTypeCallback) {
-        JSValue *value = __executeBlock(self.cellTypeCallback, @[@(row)]);
+        HMBaseValue *value = __executeBlock(self.cellTypeCallback, @[@(row)]);
         NSNumber *identifierNumber = value.hm_toObjCObject;
         
         BOOL isValueNumber = [identifierNumber isKindOfClass:[NSNumber class]];
@@ -660,7 +655,7 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     _InnerCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier
                                                                                forIndexPath:indexPath];
     // 3. 获取在 JS 环境中创建的实际展示的 view 对应的 jsValue
-    JSValue *cellJSValue = cell.contentView.subviews.lastObject.hmValue;
+    HMBaseValue *cellJSValue = cell.contentView.subviews.lastObject.hmValue;
     
     // 4. 如果 value 为空，则在 JS 环境中进行创建
     if (!cellJSValue) {

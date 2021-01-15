@@ -6,10 +6,8 @@
 //
 
 #import "HMLocalStorage.h"
-
+#import "HMBaseValue.h"
 #import "HMExportManager.h"
-
-#import <JavaScriptCore/JavaScriptCore.h>
 
 @implementation HMLocalStorage
 
@@ -19,8 +17,8 @@ HM_EXPORT_METHOD(setItem, setItem:value:)
 HM_EXPORT_METHOD(getItem, getItem:)
 HM_EXPORT_METHOD(removeItem, removeItem:)
 
-- (NSNumber *)setItem:(JSValue *)key
-                value:(JSValue *)value {
+- (NSNumber *)setItem:(HMBaseValue *)key
+                value:(HMBaseValue *)value {
     NSString *keyString = [key toString];
     NSDictionary *valueObject = [value toDictionary];
     if (!keyString ||
@@ -34,7 +32,7 @@ HM_EXPORT_METHOD(removeItem, removeItem:)
     return @(succeed);
 }
 
-- (NSDictionary *)getItem:(JSValue *)key {
+- (NSDictionary *)getItem:(HMBaseValue *)key {
     NSString *keyString = [key toString];
     
     NSString *path = [self pathForItem:keyString];
@@ -42,7 +40,7 @@ HM_EXPORT_METHOD(removeItem, removeItem:)
     return object;
 }
 
-- (NSNumber *)removeItem:(JSValue *)key {
+- (NSNumber *)removeItem:(HMBaseValue *)key {
     NSString *keyString = [key toString];
     
     NSString *path = [self pathForItem:keyString];

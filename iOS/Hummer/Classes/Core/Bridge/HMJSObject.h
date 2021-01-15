@@ -5,23 +5,24 @@
 //  Copyright © 2019年 didi. All rights reserved.
 //
 
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Foundation/Foundation.h>
 
-@protocol HMJSObject <NSObject>
+NS_ASSUME_NONNULL_BEGIN
 
-@optional
-/**
- * 复制方法（对象如果是 Native 创建，导出给前端使用的情况下，需要实现该方法）
- * @param object : 同类型对象
- **/
-- (void)copyFromObject:(id)object;
+@class HMBaseValue;
+
+@protocol HMJSObject
 
 @required
 
-- (instancetype)initWithHMValues:(NSArray *)values;
-
-@optional
-
-- (void)callFinialize;
+/**
+ * 初始化构造函数
+ * TODO(唐佳诚): NSArray 改成 NSArray<HMBaseValue *> *
+ * @param values NSArray<HMBaseValue *> *
+ * @return OC 对象，可空
+ */
+- (nullable instancetype)initWithHMValues:(nullable NSArray<__kindof HMBaseValue *> *)values;
 
 @end
+
+NS_ASSUME_NONNULL_END

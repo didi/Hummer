@@ -7,9 +7,9 @@
 
 #import "HMResponse.h"
 #import "HMExportManager.h"
-#import "JSValue+Hummer.h"
 #import "NSObject+Hummer.h"
 #import "HMInterceptor.h"
+#import "HMBaseValue.h"
 
 @implementation HMResponse
 
@@ -37,42 +37,42 @@ HM_EXPORT_PROPERTY(error, __error, __setError:)
 
 #pragma mark - Export Method
 
-- (JSValue *)__status {
-    return [JSValue valueWithObject:@(self.status) inContext:self.hmContext];
+- (HMBaseValue *)__status {
+    return [HMBaseValue valueWithObject:@(self.status) inContext:self.hmContext];
 }
 
 
-- (void)__setStatus:(__unused JSValue *)status {
+- (void)__setStatus:(__unused HMBaseValue *)status {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__header {
-    return [JSValue valueWithObject:self.header inContext:self.hmContext];
+- (HMBaseValue *)__header {
+    return [HMBaseValue valueWithObject:self.header inContext:self.hmContext];
 }
 
-- (void)__setHeader:(__unused JSValue *)header {
+- (void)__setHeader:(__unused HMBaseValue *)header {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__data {
+- (HMBaseValue *)__data {
     NSDictionary *data = [self responseData];
-    return [JSValue valueWithObject:data inContext:self.hmContext];
+    return [HMBaseValue valueWithObject:data inContext:self.hmContext];
 }
 
-- (void)__setData:(__unused JSValue *)data {
+- (void)__setData:(__unused HMBaseValue *)data {
     NSAssert(NO, @"cannot set read only property");
 }
 
-- (JSValue *)__error {
+- (HMBaseValue *)__error {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setValue:@(self.error.code) forKey:@"code"];
     if(self.error.userInfo){
         [dict setValuesForKeysWithDictionary:self.error.userInfo];
     }
-    return [JSValue valueWithObject:dict inContext:self.hmContext];
+    return [HMBaseValue valueWithObject:dict inContext:self.hmContext];
 }
 
-- (void)__setError:(__unused JSValue *)error {
+- (void)__setError:(__unused HMBaseValue *)error {
     NSAssert(NO, @"cannot set read only property");
 }
 

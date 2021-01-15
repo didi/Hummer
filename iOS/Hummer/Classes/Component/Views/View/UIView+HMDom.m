@@ -7,11 +7,10 @@
 
 #import "UIView+HMDom.h"
 #import "HMExportManager.h"
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMConverter.h"
 #import "UIView+Hummer.h"
 #import <objc/runtime.h>
-#import "JSValue+Hummer.h"
 #import "HMUtility.h"
 #import "NSObject+Hummer.h"
 #import "HMCornerRadiusModel.h"
@@ -37,56 +36,56 @@ static NSString *const BASE64HEADERPREFIX = @"data:";
 @interface UIView ()
 @property (nonatomic, weak, nullable) id<HMImageLoaderOperation> hm_webImageOperation;
 
-@property (nonatomic, nullable, strong) JSValue *hmAccessible;
+@property (nonatomic, nullable, strong) HMBaseValue *hmAccessible;
 
-@property (nonatomic, nullable, strong) JSValue *hmAccessibilityLabel;
+@property (nonatomic, nullable, strong) HMBaseValue *hmAccessibilityLabel;
 
-@property (nonatomic, nullable, strong) JSValue *hmAccessibilityHint;
+@property (nonatomic, nullable, strong) HMBaseValue *hmAccessibilityHint;
 
-@property (nonatomic, nullable, strong) JSValue *hmAccessibilityRole;
+@property (nonatomic, nullable, strong) HMBaseValue *hmAccessibilityRole;
 
-@property (nonatomic, nullable, strong) JSValue *hmAccessibilityState;
+@property (nonatomic, nullable, strong) HMBaseValue *hmAccessibilityState;
 
 @end
 NS_ASSUME_NONNULL_END
 
 @implementation UIView (HMDom)
 
-- (JSValue *)hmAccessible {
-    return [JSValue valueWithBool:self.isAccessibilityElement inContext:self.hmContext];
+- (HMBaseValue *)hmAccessible {
+    return [HMBaseValue valueWithBool:self.isAccessibilityElement inContext:self.hmContext];
 }
 
-- (void)setHmAccessible:(JSValue *)accessible {
+- (void)setHmAccessible:(HMBaseValue *)accessible {
     self.isAccessibilityElement = accessible.toBool;
 }
 
 HM_EXPORT_PROPERTY(accessible, hmAccessible, setHmAccessible:)
 
-- (JSValue *)hmAccessibilityLabel {
-    return [JSValue valueWithObject:self.accessibilityLabel inContext:self.hmContext];
+- (HMBaseValue *)hmAccessibilityLabel {
+    return [HMBaseValue valueWithObject:self.accessibilityLabel inContext:self.hmContext];
 }
 
-- (void)setHmAccessibilityLabel:(JSValue *)hmAccessibilityLabel {
+- (void)setHmAccessibilityLabel:(HMBaseValue *)hmAccessibilityLabel {
     self.accessibilityLabel = hmAccessibilityLabel.toString;
 }
 
 HM_EXPORT_PROPERTY(accessibilityLabel, hmAccessibilityLabel, setHmAccessibilityLabel:)
 
-- (JSValue *)hmAccessibilityHint {
-    return [JSValue valueWithObject:self.accessibilityHint inContext:self.hmContext];
+- (HMBaseValue *)hmAccessibilityHint {
+    return [HMBaseValue valueWithObject:self.accessibilityHint inContext:self.hmContext];
 }
 
-- (void)setHmAccessibilityHint:(JSValue *)hmAccessibilityHint {
+- (void)setHmAccessibilityHint:(HMBaseValue *)hmAccessibilityHint {
     self.accessibilityHint = hmAccessibilityHint.toString;
 }
 
 HM_EXPORT_PROPERTY(accessibilityHint, hmAccessibilityHint, setHmAccessibilityHint:)
 
-- (JSValue *)hmAccessibilityRole {
-    return [JSValue valueWithUndefinedInContext:self.hmContext];
+- (HMBaseValue *)hmAccessibilityRole {
+    return [HMBaseValue valueWithUndefinedInContext:self.hmContext];
 }
 
-- (void)setHmAccessibilityRole:(JSValue *)accessibilityRole {
+- (void)setHmAccessibilityRole:(HMBaseValue *)accessibilityRole {
     id json = accessibilityRole.toObject;
     const UIAccessibilityTraits AccessibilityRolesMask = UIAccessibilityTraitNone | UIAccessibilityTraitButton | UIAccessibilityTraitLink | UIAccessibilityTraitSearchField | UIAccessibilityTraitImage | UIAccessibilityTraitKeyboardKey | UIAccessibilityTraitStaticText | UIAccessibilityTraitAdjustable | UIAccessibilityTraitHeader | UIAccessibilityTraitSummaryElement | HummerSwitchAccessibilityTrait;
     // 清空
@@ -100,11 +99,11 @@ HM_EXPORT_PROPERTY(accessibilityHint, hmAccessibilityHint, setHmAccessibilityHin
 
 HM_EXPORT_PROPERTY(accessibilityRole, hmAccessibilityRole, setHmAccessibilityRole:)
 
-- (JSValue *)hmAccessibilityState {
-    return [JSValue valueWithUndefinedInContext:self.hmContext];
+- (HMBaseValue *)hmAccessibilityState {
+    return [HMBaseValue valueWithUndefinedInContext:self.hmContext];
 }
 
-- (void)setHmAccessibilityState:(JSValue *)accessibilityState {
+- (void)setHmAccessibilityState:(HMBaseValue *)accessibilityState {
     id json = accessibilityState.toObject;
     NSDictionary<NSString *, id> *state = json ? [HMConverter NSDictionary:json] : nil;
     NSMutableDictionary<NSString *, id> *newState = [[NSMutableDictionary<NSString *, id> alloc] init];
@@ -1006,7 +1005,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     return @(self.userInteractionEnabled);
 }
 
-- (void)hm_setEnabled:(JSValue *)enabledValue {
+- (void)hm_setEnabled:(HMBaseValue *)enabledValue {
     self.userInteractionEnabled = enabledValue.toBool;
 }
 
@@ -1014,7 +1013,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     return self.hm_styleStore;
 }
 
-- (void)hm_setStyle:(JSValue *)style {
+- (void)hm_setStyle:(HMBaseValue *)style {
     id styleObject = style.toDictionary;
     NSDictionary *styleDic = nil;
     if ([styleObject isKindOfClass:NSDictionary.class]) {
@@ -1221,8 +1220,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     NSString *vid = nil;
     if ([viewID isKindOfClass:NSString.class]) {
         vid = viewID;
-    } else if ([viewID isKindOfClass:JSValue.class]) {
-        JSValue *jsv = (JSValue *)viewID;
+    } else if ([viewID isKindOfClass:HMBaseValue.class]) {
+        HMBaseValue *jsv = (HMBaseValue *)viewID;
         if (jsv.isString) {
             vid = jsv.toString;
         }
@@ -1232,7 +1231,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
 
 #pragma mark - Export Method
 
-- (void)hm_addSubview:(JSValue *)subview {
+- (void)hm_addSubview:(HMBaseValue *)subview {
     id viewObject = subview.hm_toObjCObject;
     UIView *view = nil;
     if ([viewObject isKindOfClass:UIView.class]) {
@@ -1255,7 +1254,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     [view hm_processFixedPositionWithContext:[HMJSGlobal.globalObject currentContext:subview.context]];
 }
 
-- (void)hm_removeSubview:(JSValue *)child {
+- (void)hm_removeSubview:(HMBaseValue *)child {
     id viewObject = child.hm_toObjCObject;
     UIView *view = nil;
     if ([viewObject isKindOfClass:UIView.class]) {
@@ -1298,7 +1297,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     [self hm_markDirty];
 }
 
-- (void)hm_replaceSubview:(JSValue *)newChild withNode:(JSValue *)oldChild {
+- (void)hm_replaceSubview:(HMBaseValue *)newChild withNode:(HMBaseValue *)oldChild {
     id newViewObject = newChild.hm_toObjCObject;
     id oldViewObject = oldChild.hm_toObjCObject;
     UIView *newView = nil;
@@ -1330,7 +1329,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     [self hm_markDirty];
 }
 
-- (void)hm_insertBefore:(JSValue *)newChild withNode:(JSValue *)oldChild {
+- (void)hm_insertBefore:(HMBaseValue *)newChild withNode:(HMBaseValue *)oldChild {
     id newViewObject = newChild.hm_toObjCObject;
     id oldViewObject = oldChild.hm_toObjCObject;
     UIView *newView = nil;
@@ -1355,7 +1354,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     [self hm_markDirty];
 }
 
-- (JSValue *)hm_getSubViewByID:(JSValue *)viewID {
+- (HMBaseValue *)hm_getSubViewByID:(HMBaseValue *)viewID {
     for (UIView *view in self.subviews) {
         if ([view.viewID isEqualToString:viewID.toString]) {
             return view.hmValue;
