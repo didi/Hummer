@@ -263,7 +263,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
                                kHMScrollDeltaY:@(deltaY),
                                kHMScrollOffsetX:@(contentOffset.x),
                                kHMScrollOffsetY:@(contentOffset.y)};
-        [self hm_notifyEvent:HMScrollEventName withValue:scrollView withArgument:args];
+        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
         [self checkIFTopOrBottom];
     });
 }

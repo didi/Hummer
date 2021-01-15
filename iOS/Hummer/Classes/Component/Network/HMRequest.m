@@ -100,7 +100,7 @@ HM_EXPORT_METHOD(send, send:)
         response.data = HMJSONDecode(string);
         
         if(callback) {
-            callback(response);
+            callback(@[response]);
         }
 
     });

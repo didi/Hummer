@@ -95,8 +95,8 @@ HM_EXPORT_ATTRIBUTE(color, textColor, HMStringToColor:)
     return @(self.enabled);
 }
 
-- (void)hm_setEnabled:(BOOL)enabledValue {
-    self.enabled = enabledValue;
+- (void)hm_setEnabled:(HMBaseValue *)enabledValue {
+    self.enabled = enabledValue.toBool;
 }
 
 - (void)__setText:(HMBaseValue *)value {

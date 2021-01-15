@@ -259,7 +259,7 @@ JSValueRef _Nullable hummerGetProperty(JSContextRef ctx, JSObjectRef function, J
     return [executor hummerGetSetPropertyWithArgumentCount:argumentCount arguments:arguments isSetter:NO];
 }
 
-JSValueRef hummerSetProperty(JSContextRef _Nullable ctx, JSObjectRef _Nullable function, JSObjectRef _Nullable thisObject, size_t argumentCount, const JSValueRef _Nullable arguments[], JSValueRef *_Nullable exception) {
+JSValueRef hummerSetProperty(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
     HMAssertMainQueue();
     HMJSCExecutor *executor = (HMJSCExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:JSContextGetGlobalContext(ctx)]];
 
