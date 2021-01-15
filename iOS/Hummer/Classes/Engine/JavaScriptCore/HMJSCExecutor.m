@@ -1304,6 +1304,31 @@ void hummerFinalize(JSObjectRef object) {
     return [[HMJSCStrongValue alloc] initWithValueRef:[self callWithFunctionObject:functionObjectRef thisObject:objectRef argumentArray:arguments] executor:self];
 }
 
+- (void)dealloc {
+    HMAssertMainQueue();
+    NSEnumerator<HMJSCStrongValue *> *strongValueEnumerator = self.strongValueReleasePool.objectEnumerator;
+    HMJSCStrongValue *strongValue = nil;
+    while ((strongValue = strongValueEnumerator.nextObject)) {
+        [strongValue forceUnprotectWithGlobalContextRef:self.contextRef];
+    }
+
+    JSGlobalContextRelease(self.contextRef);
+    NSEnumerator<id <HMBaseExecutorProtocol>> *enumerator = HMExecutorMap.objectEnumerator;
+    id <HMBaseExecutorProtocol> value = nil;
+    BOOL isNoExecutor = YES;
+    while ((value = enumerator.nextObject)) {
+        if ([value isKindOfClass:self.class] && value != self) {
+            isNoExecutor = NO;
+            break;
+        }
+    }
+
+    if (isNoExecutor) {
+        virtualMachineRef ? JSContextGroupRelease(virtualMachineRef) : nil;
+        virtualMachineRef = nil;
+    }
+}
+
 - (void)setName:(NSString *)name {
     if (name.length == 0) {
         name = @"Hummer JSContext";
