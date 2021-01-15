@@ -7,7 +7,6 @@ target 'Example' do
 
   # Pods for Example
   pod 'Hummer', :path => '..'
-  pod 'SocketRocket', '~> 0.5.1'
 
   target 'ExampleTests' do
     inherit! :search_paths
