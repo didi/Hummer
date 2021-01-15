@@ -146,6 +146,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setObject:(nullable id)object forKeyedSubscript:(id)key;
 
+- (void)setValue:(nullable id)value forProperty:(nullable NSString *)property;
+
 // 不能用可失败构造函数重载非可失败构造函数
 - (instancetype)init NS_UNAVAILABLE;
 

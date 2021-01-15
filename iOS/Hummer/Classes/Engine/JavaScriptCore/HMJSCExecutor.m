@@ -898,10 +898,6 @@ void hummerFinalize(JSObjectRef object) {
     return YES;
 }
 
-+ (nullable id <HMBaseExecutorProtocol>)currentContext {
-    return HMCurrentExecutor;
-}
-
 - (BOOL)compareWithValue:(HMBaseValue *)value anotherValue:(HMBaseValue *)anotherValue {
     // 仿照原生 [object isEqual:anotherObject]，如果 object 为空，最终为 NO
     if ([self valueIsNullOrUndefined:value] || [self valueIsNullOrUndefined:anotherValue]) {

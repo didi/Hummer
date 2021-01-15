@@ -210,4 +210,8 @@ NS_ASSUME_NONNULL_END
     return !value.isUndefined && !value.isNull;
 }
 
+- (void)setValue:(id)value forProperty:(NSString *)property {
+    [self.context setWithValue:self propertyName:property propertyObject:value];
+}
+
 @end
