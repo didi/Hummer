@@ -72,8 +72,8 @@ NS_ASSUME_NONNULL_END
     NSBundle *resourceBundle = [NSBundle bundleWithPath:resourceBundlePath];
     NSAssert(resourceBundle, @"Hummer.bundle 不存在");
     // TODO(唐佳诚): 修改文件名
-    NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:@"builtIn" bundle:resourceBundle];
-    NSAssert(dataAsset, @"builtIn dataset 无法在 xcassets 中搜索到");
+    NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:@"builtin" bundle:resourceBundle];
+    NSAssert(dataAsset, @"builtin dataset 无法在 xcassets 中搜索到");
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
     
 //    _context = [[HMHermesExecutor alloc] init];
@@ -99,7 +99,7 @@ NS_ASSUME_NONNULL_END
             // TODO(唐佳诚): 补上 namespace 功能
         }];
     };
-    [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"http://localhost:8080/builtIn.js"]];
+    [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"http://localhost:8080/builtin.js"]];
 
     NSMutableDictionary *classes = [NSMutableDictionary new];
     // 可以使用模型替代字典，转 JSON，做缓存
