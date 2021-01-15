@@ -5,6 +5,7 @@
 //  Created by 唐佳诚 on 2021/1/13.
 //
 
+#import <objc/runtime.h>
 #import "HMJSCExecutor+Private.h"
 #import "HMLogger.h"
 #import "HMExceptionModel.h"
@@ -12,6 +13,8 @@
 #import "NSObject+Hummer.h"
 #import "HMExportClass.h"
 #import "HMJSCWeakValue.h"
+#import "HMEncoding.h"
+#import "NSInvocation+Hummer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -38,6 +41,13 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 @interface HMJSCExecutor ()
 
 @property (nonatomic, assign) JSGlobalContextRef contextRef;
+
+- (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable JSObjectRef)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName;
+
+// const JSValueRef[] 是 JavaScriptCore 函数签名要求
+- (nullable JSValueRef)hummerCallNativeWithArgumentCount:(size_t)argumentCount arguments:(const JSValueRef _Nonnull[])arguments target:(nullable id)target selector:(nullable SEL)selector methodSignature:(nullable NSMethodSignature *)methodSignature;
+
+- (nullable JSValueRef)hummerGetSetPropertyWithArgumentCount:(size_t)argumentCount arguments:(const JSValueRef _Nonnull[])arguments isSetter:(BOOL)isSetter;
 
 - (BOOL)valueRefIsArray:(nullable JSValueRef)valueRef;
 
@@ -72,6 +82,8 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 - (nullable HMFunctionType)convertValueRefToFunction:(nullable JSValueRef)valueRef;
 
+- (nullable JSValueRef)callWithFunctionObject:(nullable JSObjectRef)functionObjectRef thisObject:(nullable JSObjectRef)thisObjectRef argumentArray:(nullable NSArray *)argumentArray;
+
 - (nullable NSArray *)convertValueRefToArray:(nullable JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert;
 
 - (nullable NSDictionary<NSString *, id> *)convertValueRefToDictionary:(nullable JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert;
@@ -81,6 +93,193 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 @end
 
 NS_ASSUME_NONNULL_END
+
+JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception) {
+    HMAssertMainQueue();
+    // 可以使用 callback 代替同步
+    // 类方法参数必须大于等于三个
+    if (argumentCount < 2) {
+        HMLogError(HUMMER_CALL_PARAMETER_ERROR);
+
+        return NULL;
+    }
+    // 判断第一个参数是否为 Object 来确定调用的是类方法还是实例方法
+    JSObjectRef objectRef = NULL;
+    if (JSValueIsObject(ctx, arguments[0])) {
+        objectRef = JSValueToObject(ctx, arguments[0], exception);
+        // 发生 exception 可以降级到类方法来调用
+        // JSValueRef *exception 必定存在
+        if (*exception) {
+            HMLogWarning(HUMMER_DOWNGRADE_TO_CLASS_CALL);
+            *exception = NULL;
+        }
+    }
+    // 成员方法参数必须大于等于三个
+    if (objectRef && argumentCount < 3) {
+        HMLogError(HUMMER_CALL_PARAMETER_ERROR);
+
+        return NULL;
+    }
+    HMJSCExecutor *executor = (HMJSCExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:JSContextGetGlobalContext(ctx)]];
+    NSString *className = [executor convertValueRefToString:arguments[objectRef ? 1 : 0]];
+    NSString *functionName = [executor convertValueRefToString:arguments[objectRef ? 2 : 1]];
+    // this 指针
+    // 是否为函数类型
+    // NSValue - valueWithPointer: nullable
+    id target = nil;
+    SEL selector = nil;
+    NSMethodSignature *methodSignature = nil;
+
+    // 最后一个参数无效
+    [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
+
+    return [executor hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
+}
+
+JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception) {
+    HMAssertMainQueue();
+    if (argumentCount < 2) {
+        HMLogError(HUMMER_CREATE_ERROR);
+
+        return NULL;
+    }
+    HMJSCExecutor *executor = (HMJSCExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:JSContextGetGlobalContext(ctx)]];
+    NSString *className = [executor convertValueRefToString:arguments[0]];
+    // 隐含 executor 不为空
+    if (className.length == 0) {
+        HMLogError(HUMMER_CREATE_ERROR);
+
+        return NULL;
+    }
+
+    HMExportClass *exportClass = HMExportManager.sharedInstance.jsClasses[className];
+    NSString *objcClassName = exportClass.className;
+    if (objcClassName.length == 0) {
+        HMLogError(HUMMER_CREATE_CLASS_NOT_FOUND, className);
+
+        return NULL;
+    }
+    Class clazz = NSClassFromString(objcClassName);
+    if (!clazz) {
+        HMLogError(HUMMER_CREATE_CLASS_NOT_FOUND, className);
+
+        return NULL;
+    }
+    // 创建对象
+    NSObject *opaquePointer = NULL;
+    NSMutableArray<HMBaseValue *> *argumentArray = nil;
+    for (int i = 2; i < argumentCount; ++i) {
+        HMBaseValue *value = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i] executor:executor];
+        if (!argumentArray) {
+            argumentArray = [NSMutableArray arrayWithCapacity:argumentCount - 2];
+        }
+        [argumentArray addObject:value];
+    }
+
+    HMCurrentExecutor = executor;
+    // 支持 HMJSObject，如果不支持则回退 init
+    // 不判断 argumentCount > 2，因为 UIView 必须调用 HMJSObject 初始化方法
+    if ([clazz conformsToProtocol:@protocol(HMJSObject)]) {
+        opaquePointer = (id) [(id) [clazz alloc] initWithHMValues:argumentArray];
+    } else {
+        HMOtherArguments = argumentArray.copy;
+        opaquePointer = [[clazz alloc] init];
+    }
+    HMCurrentExecutor = nil;
+    HMOtherArguments = nil;
+    if (!opaquePointer) {
+        HMLogError(HUMMER_CAN_NOT_CREATE_NATIVE_OBJECT, className);
+
+        return NULL;
+    }
+    // 关联 hm_value
+    opaquePointer.hmValue = [[HMJSCStrongValue alloc] initWithValueRef:arguments[1] executor:executor];
+    // 引用计数 +1
+    CFRetain((__bridge CFTypeRef) opaquePointer);
+    HMLogDebug(HUMMER_CREATE_TEMPLATE, className);
+    JSClassDefinition hostObjectClassDef = kJSClassDefinitionEmpty;
+    hostObjectClassDef.version = 0;
+    hostObjectClassDef.attributes = kJSClassAttributeNoAutomaticPrototype;
+    hostObjectClassDef.finalize = hummerFinalize;
+    JSClassRef hostObjectClass = JSClassCreate(&hostObjectClassDef);
+
+    // 填充不透明指针
+    JSObjectRef objectRef = JSObjectMake(ctx, hostObjectClass, (__bridge void *) opaquePointer);
+    JSClassRelease(hostObjectClass);
+
+    return objectRef;
+}
+
+JSValueRef _Nullable hummerCallFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception) {
+    HMAssertMainQueue();
+    if (argumentCount == 0) {
+        HMLogError(HUMMER_CALL_CLOSURE_MUST_HAVE_PARAMETER);
+
+        return NULL;
+    }
+    if (!JSValueIsObject(ctx, arguments[0])) {
+        HMLogError(HUMMER_FIRST_PARAMETER_NOT_NATIVE_CLOSURE);
+
+        return NULL;
+    }
+    JSObjectRef objectRef = JSValueToObject(ctx, arguments[0], exception);
+    if (!objectRef) {
+        HMLogError(HUMMER_FIRST_PARAMETER_NOT_NATIVE_CLOSURE);
+
+        return NULL;
+    }
+    if (![(__bridge id) JSObjectGetPrivate(objectRef) isKindOfClass:NSClassFromString(@"NSBlock")]) {
+        HMLogError(HUMMER_FIRST_PARAMETER_NOT_NATIVE_CLOSURE);
+
+        return NULL;
+    }
+    // 转参数
+    HMJSCExecutor *executor = (HMJSCExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:JSContextGetGlobalContext(ctx)]];
+    NSMutableArray<HMBaseValue *> *mutableArgumentArray = nil;
+    for (int i = 1; i < argumentCount; ++i) {
+        HMBaseValue *jsValue = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i] executor:executor];
+        if (!mutableArgumentArray) {
+            mutableArgumentArray = [NSMutableArray arrayWithCapacity:argumentCount - 1];
+        }
+        [mutableArgumentArray addObject:jsValue];
+    }
+    HMFunctionType closure = (__bridge HMFunctionType) JSObjectGetPrivate(objectRef);
+    id returnObject = closure(mutableArgumentArray.copy);
+    if (!returnObject) {
+        return NULL;
+    }
+
+    return [executor convertObjectToValueRef:returnObject];
+}
+
+JSValueRef _Nullable hummerGetProperty(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception) {
+    HMAssertMainQueue();
+    HMJSCExecutor *executor = (HMJSCExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:JSContextGetGlobalContext(ctx)]];
+
+    return [executor hummerGetSetPropertyWithArgumentCount:argumentCount arguments:arguments isSetter:NO];
+}
+
+JSValueRef hummerSetProperty(JSContextRef _Nullable ctx, JSObjectRef _Nullable function, JSObjectRef _Nullable thisObject, size_t argumentCount, const JSValueRef _Nullable arguments[], JSValueRef *_Nullable exception) {
+    HMAssertMainQueue();
+    HMJSCExecutor *executor = (HMJSCExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:JSContextGetGlobalContext(ctx)]];
+
+    return [executor hummerGetSetPropertyWithArgumentCount:argumentCount arguments:arguments isSetter:YES];
+}
+
+void hummerFinalize(JSObjectRef object) {
+    HMAssertMainQueue();
+    void *opaquePointer = JSObjectGetPrivate(object);
+    assert(opaquePointer != NULL);
+    if (opaquePointer) {
+        // 不透明指针可能为原生对象，也可能为闭包
+        // 清空 hm_value
+        [((__bridge id) opaquePointer) setHmValue:nil];
+        HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
+        CFRelease(opaquePointer);
+    } else {
+        HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
+    }
+}
 
 @implementation HMJSCExecutor
 
@@ -165,6 +364,104 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable JSObjectRef)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName {
+    HMAssertMainQueue();
+    if (!target || !selector || !methodSignature || functionPropertyName.length == 0 || jsClassName.length == 0) {
+        return;
+    }
+    HMExportClass *exportClass = HMExportManager.sharedInstance.jsClasses[jsClassName];
+    HMExportBaseClass *exportBaseClass = nil;
+    if (!objectRef) {
+        // class
+        if (exportClass.className.length == 0) {
+            HMLogError(HUMMER_CREATE_CLASS_NOT_FOUND, jsClassName);
+
+            return;
+        }
+        (*target) = NSClassFromString(exportClass.className);
+        exportBaseClass = [exportClass methodOrPropertyWithName:functionPropertyName isClass:YES];
+    } else {
+        // instance
+        // 获取不透明指针
+        void *opaquePointer = JSObjectGetPrivate(objectRef);
+        if (!opaquePointer || ![((__bridge id) opaquePointer) isKindOfClass:NSObject.class]) {
+            return;
+        }
+        NSObject *nativeObject = (__bridge NSObject *) opaquePointer;
+        (*target) = nativeObject;
+        exportBaseClass = [exportClass methodOrPropertyWithName:functionPropertyName isClass:NO];
+    }
+    if ([exportBaseClass isKindOfClass:HMExportMethod.class]) {
+        // 方法
+        HMExportMethod *exportMethod = (HMExportMethod *) exportBaseClass;
+        (*selector) = exportMethod.selector;
+        (*methodSignature) = !objectRef ? [*target methodSignatureForSelector:exportMethod.selector] : [[(*target) class] instanceMethodSignatureForSelector:exportMethod.selector];
+    } else {
+        // 属性
+        // isSetter 只有属性才生效
+        HMExportProperty *exportProperty = (HMExportProperty *) exportBaseClass;
+        (*selector) = isSetter ? exportProperty.propertySetterSelector : exportProperty.propertyGetterSelector;
+        (*methodSignature) = !objectRef ? [*target methodSignatureForSelector:(*selector)] : [[(*target) class] instanceMethodSignatureForSelector:(*selector)];
+    }
+}
+
+- (JSValueRef)hummerGetSetPropertyWithArgumentCount:(size_t)argumentCount arguments:(const JSValueRef _Nonnull[])arguments isSetter:(BOOL)isSetter {
+    HMAssertMainQueue();
+    if (isSetter) {
+        if (argumentCount < 3) {
+            HMLogError(HUMMER_GET_SET_ERROR);
+
+            return NULL;
+        }
+    } else {
+        if (argumentCount < 2) {
+            HMLogError(HUMMER_GET_SET_ERROR);
+
+            return NULL;
+        }
+    }
+    JSObjectRef objectRef = NULL;
+    if (JSValueIsObject(self.contextRef, arguments[0])) {
+        JSValueRef exception = NULL;
+        objectRef = JSValueToObject(self.contextRef, arguments[0], &exception);
+        if (exception) {
+            HMLogWarning(HUMMER_DOWNGRADE_TO_CLASS_CALL);
+        }
+    }
+    if (objectRef) {
+        if (isSetter) {
+            if (argumentCount < 4) {
+                HMLogError(HUMMER_GET_SET_ERROR);
+
+                return NULL;
+            }
+        } else {
+            if (argumentCount < 3) {
+                HMLogError(HUMMER_GET_SET_ERROR);
+
+                return NULL;
+            }
+        }
+    }
+
+    NSString *className = [self convertValueRefToString:arguments[objectRef ? 1 : 0]];
+    if (className.length == 0) {
+        return NULL;
+    }
+    NSString *propertyName = [self convertValueRefToString:arguments[objectRef ? 2 : 1]];
+    if (propertyName.length == 0) {
+        return NULL;
+    }
+
+    id target = nil;
+    SEL selector = nil;
+    NSMethodSignature *methodSignature = nil;
+
+    [self hummerExtractExportWithFunctionPropertyName:propertyName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:isSetter jsClassName:className];
+
+    return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
+}
+
 - (BOOL)valueIsNullOrUndefined:(nullable HMBaseValue *)value {
     // JavaScriptCore 判断标量，也需要保证 value.context == self
     if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
@@ -228,6 +525,80 @@ NS_ASSUME_NONNULL_END
     HMAssertMainQueue();
 
     return [self valueRefIsArray:strongValue.valueRef];
+}
+
+- (JSValueRef)hummerCallNativeWithArgumentCount:(size_t)argumentCount arguments:(JSValueRef const[])arguments target:(id)target selector:(SEL)selector methodSignature:(NSMethodSignature *)methodSignature {
+    HMAssertMainQueue();
+    if (!target) {
+        HMLogError(HUMMER_CALL_NATIVE_TARGET_ERROR);
+
+        return NULL;
+    }
+    if (!selector) {
+        HMLogError(HUMMER_CALL_NATIVE_SELECTOR_ERROR);
+
+        return NULL;
+    }
+    if (!methodSignature) {
+        HMLogError(HUMMER_CALL_NATIVE_METHOD_SIGNATURE_ERROR);
+
+        return NULL;
+    }
+    BOOL isClass = object_isClass(target);
+    NSMutableArray<HMBaseValue *> *otherArguments = nil;
+    HMCurrentExecutor = self;
+    // 隐含着 numerOfArguments + 0/1 <= argumentCount
+    for (NSUInteger i = methodSignature.numberOfArguments + (isClass ? 0 : 1); i < argumentCount; ++i) {
+        // 多余的转数组
+        HMBaseValue *hummerValue = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i] executor:HMCurrentExecutor];
+        if (!otherArguments) {
+            otherArguments = [NSMutableArray arrayWithCapacity:argumentCount - methodSignature.numberOfArguments];
+        }
+        [otherArguments addObject:hummerValue];
+    }
+    // 存储额外参数
+    HMOtherArguments = otherArguments.copy;
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+    invocation.target = target;
+    invocation.selector = selector;
+    // 后续做循环，都是临时变量，如果不做 retain，会导致野指针
+    [invocation retainArguments];
+
+    // 参数
+    // 本质为 MIN(methodSignature.numberOfArguments, argumentCount - (isClass : 0 : 1))，主要为了防止无符号数字溢出
+    for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + (isClass ? 0 : 1), argumentCount) - (isClass ? 0 : 1); ++i) {
+        const char *objCType = [methodSignature getArgumentTypeAtIndex:i];
+        HMEncodingType type = HMEncodingGetType(objCType);
+        id param = nil;
+        if (type == HMEncodingTypeBlock) {
+            // Block
+            param = [(HMJSCExecutor *) HMCurrentExecutor convertValueRefToFunction:arguments[i + (isClass ? 0 : 1)]];
+        } else if (type == HMEncodingTypeObject) {
+            // HMJSCValue
+            param = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i + (isClass ? 0 : 1)] executor:HMCurrentExecutor];
+        } else if (HMEncodingTypeIsCNumber(type)) {
+            // js 只存在 double 和 bool 类型，但原生需要区分具体类型。
+            param = [(HMJSCExecutor *) HMCurrentExecutor convertValueRefToNumber:arguments[i + (isClass ? 0 : 1)]];
+        } else {
+            HMLogError(HUMMER_UN_SUPPORT_TYPE_TEMPLATE, objCType);
+        }
+        [invocation hm_setArgument:param atIndex:i encodingType:type];
+    }
+    [invocation invoke];
+    HMOtherArguments = nil;
+    // 返回值
+    JSValueRef returnValueRef = NULL;
+    const char *objCReturnType = methodSignature.methodReturnType;
+    HMEncodingType returnType = HMEncodingGetType(objCReturnType);
+    if (returnType != HMEncodingTypeVoid && returnType != HMEncodingTypeUnknown) {
+        id returnObject = [invocation hm_getReturnValueObject];
+        if (returnObject) {
+            returnValueRef = [(HMJSCExecutor *) HMCurrentExecutor convertObjectToValueRef:returnObject];
+        }
+    }
+    HMCurrentExecutor = nil;
+
+    return returnValueRef;
 }
 
 - (BOOL)valueRefIsArray:(nullable JSValueRef)valueRef {
@@ -616,6 +987,7 @@ NS_ASSUME_NONNULL_END
                 };
                 JSStringRelease(jsClassNameString);
                 returnValueRef = JSObjectCallAsFunction(self.contextRef, hummerCreateObjectFunctionObjectRef, NULL, 2, args, &exception);
+                // Hummer 内置代码
                 [self popExceptionWithErrorObject:&exception];
                 if (returnValueRef) {
                     HMLogDebug(HUMMER_RETAIN_TEMPLATE, className);
@@ -804,6 +1176,65 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (nullable HMBaseValue *)objectForKeyedSubscript:(id)key {
+    if (![key isKindOfClass:NSString.class]) {
+        return nil;
+    }
+
+    return self.globalObject[key];
+}
+
+- (void)setObject:(id)object forKeyedSubscript:(id)key {
+    if (![key isKindOfClass:NSString.class]) {
+        return;
+    }
+
+    self.globalObject[key] = object;
+}
+
+- (nullable HMBaseValue *)getWithValue:(HMBaseValue *)value propertyName:(NSString *)propertyName {
+    if (![value isKindOfClass:HMJSCStrongValue.class] || propertyName.length == 0) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+    HMAssertMainQueue();
+    if (!JSValueIsObject(self.contextRef, strongValue.valueRef)) {
+        return nil;
+    }
+    JSValueRef exception = NULL;
+    JSObjectRef objectRef = JSValueToObject(self.contextRef, strongValue.valueRef, &exception);
+    if (exception || !objectRef) {
+        return nil;
+    }
+    JSStringRef stringRef = JSStringCreateWithCFString((__bridge CFStringRef) propertyName);
+    JSValueRef valueRef = JSObjectGetProperty(self.contextRef, objectRef, stringRef, &exception);
+    JSStringRelease(stringRef);
+    if (exception) {
+        return nil;
+    }
+
+    return [[HMJSCStrongValue alloc] initWithValueRef:valueRef executor:self];
+}
+
+- (void)setWithValue:(HMBaseValue *)value propertyName:(NSString *)propertyName propertyObject:(id)propertyObject {
+    HMAssertMainQueue();
+    if (![value isKindOfClass:HMJSCStrongValue.class] || propertyName.length == 0) {
+        return;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+    if (!JSValueIsObject(self.contextRef, strongValue.valueRef)) {
+        return;
+    }
+    JSValueRef exception = NULL;
+    JSObjectRef objectRef = JSValueToObject(self.contextRef, strongValue.valueRef, &exception);
+    if (exception || !objectRef) {
+        return;
+    }
+    JSStringRef stringRef = JSStringCreateWithCFString((__bridge CFStringRef) propertyName);
+    JSObjectSetProperty(self.contextRef, objectRef, stringRef, [self convertObjectToValueRef:propertyObject], kJSPropertyAttributeNone, NULL);
+    JSStringRelease(stringRef);
+}
+
 - (nullable id <HMBaseWeakValueProtocol>)createWeakValueWithStrongValue:(HMBaseValue *)strongValue {
     return [[HMJSCWeakValue alloc] initWithValue:strongValue];
 }
@@ -824,6 +1255,53 @@ NS_ASSUME_NONNULL_END
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
 
     return [self convertValueRefToArray:strongValue.valueRef isPortableConvert:isPortableConvert];
+}
+
+- (nullable HMBaseValue *)callWithValue:(HMBaseValue *)value arguments:(NSArray *)arguments {
+    HMAssertMainQueue();
+    if (![value isKindOfClass:HMJSCStrongValue.class]) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+    if (!JSValueIsObject(self.contextRef, strongValue.valueRef)) {
+        return nil;
+    }
+    JSValueRef exception = NULL;
+    JSObjectRef objectRef = JSValueToObject(self.contextRef, strongValue.valueRef, &exception);
+    if (exception || !JSObjectIsFunction(self.contextRef, objectRef)) {
+        return nil;
+    }
+
+    return [[HMJSCStrongValue alloc] initWithValueRef:[self callWithFunctionObject:objectRef thisObject:NULL argumentArray:arguments] executor:self];
+}
+
+- (nullable HMBaseValue *)invokeMethodWithValue:(HMBaseValue *)value method:(NSString *)method withArguments:(NSArray *)arguments {
+    HMAssertMainQueue();
+    if (![value isKindOfClass:HMJSCStrongValue.class] || method.length == 0) {
+        return nil;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+    if (!JSValueIsObject(self.contextRef, strongValue.valueRef)) {
+        return nil;
+    }
+    JSValueRef exception = NULL;
+    JSObjectRef objectRef = JSValueToObject(self.contextRef, strongValue.valueRef, &exception);
+    if (exception || !objectRef) {
+        return nil;
+    }
+
+    JSStringRef stringRef = JSStringCreateWithCFString((__bridge CFStringRef) method);
+    JSValueRef valueRef = JSObjectGetProperty(self.contextRef, objectRef, stringRef, &exception);
+    JSStringRelease(stringRef);
+    if (exception || !JSValueIsObject(self.contextRef, valueRef)) {
+        return nil;
+    }
+    JSObjectRef functionObjectRef = JSValueToObject(self.contextRef, valueRef, &exception);
+    if (exception || !JSObjectIsFunction(self.contextRef, functionObjectRef)) {
+        return nil;
+    }
+
+    return [[HMJSCStrongValue alloc] initWithValueRef:[self callWithFunctionObject:functionObjectRef thisObject:objectRef argumentArray:arguments] executor:self];
 }
 
 - (void)setName:(NSString *)name {
@@ -885,23 +1363,7 @@ NS_ASSUME_NONNULL_END
                 return (HMJSCStrongValue *) nil;
             }
 
-            // 转参数
-            __block JSValueRef *valueRefArray = NULL;
-            __block size_t count = 0;
-            [argumentArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                JSValueRef inlineValueRef = [executor convertObjectToValueRef:obj];
-//                if (inlineValueRef) {
-                // 增长或者创建
-                count += 1;
-                // TODO(ChasonTang): 处理 realloc 错误
-                valueRefArray = realloc(valueRefArray, count * sizeof(JSValueRef));
-                valueRefArray[count - 1] = inlineValueRef;
-//                }
-            }];
-            JSValueRef returnValueRef = JSObjectCallAsFunction(executor.contextRef, inlineObjectRef, NULL, count, valueRefArray, &inlineException);
-            free(valueRefArray);
-            // 业务代码需要抛出异常
-            [executor popExceptionWithErrorObject:&inlineException];
+            JSValueRef returnValueRef = [executor callWithFunctionObject:inlineObjectRef thisObject:NULL argumentArray:argumentArray];
             if (returnValueRef) {
                 return [[HMJSCStrongValue alloc] initWithValueRef:returnValueRef executor:executor];
             }
@@ -912,6 +1374,27 @@ NS_ASSUME_NONNULL_END
     [functionType setHmValue:valueWrapper];
 
     return functionType;
+}
+
+- (nullable JSValueRef)callWithFunctionObject:(nullable JSObjectRef)functionObjectRef thisObject:(nullable JSObjectRef)thisObjectRef argumentArray:(nullable NSArray *)argumentArray {
+    JSValueRef exception = NULL;
+    // 转参数
+    __block JSValueRef *valueRefArray = NULL;
+    __block size_t count = 0;
+    [argumentArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        JSValueRef inlineValueRef = [self convertObjectToValueRef:obj];
+        // 增长或者创建
+        count += 1;
+        // TODO(ChasonTang): 处理 realloc 错误
+        valueRefArray = realloc(valueRefArray, count * sizeof(JSValueRef));
+        valueRefArray[count - 1] = inlineValueRef;
+    }];
+    JSValueRef returnValueRef = JSObjectCallAsFunction(self.contextRef, functionObjectRef, NULL, count, valueRefArray, &exception);
+    free(valueRefArray);
+    // 业务代码需要抛出异常
+    [self popExceptionWithErrorObject:&exception];
+
+    return returnValueRef;
 }
 
 - (nullable NSArray *)convertValueRefToArray:(JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert {
