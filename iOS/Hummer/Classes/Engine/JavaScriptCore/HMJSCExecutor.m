@@ -470,18 +470,24 @@ void hummerFinalize(JSObjectRef object) {
     return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
 }
 
-- (BOOL)valueIsNullOrUndefined:(nullable HMBaseValue *)value {
-    // JavaScriptCore 判断标量，也需要保证 value.context == self
+- (BOOL)valueIsNull:(HMBaseValue *)value {
     if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
-        return YES;
+        return NO;
     }
     HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
-    if (!strongValue.valueRef) {
-        return YES;
-    }
     HMAssertMainQueue();
+    
+    return JSValueIsNull(self.contextRef, strongValue.valueRef);
+}
 
-    return JSValueIsUndefined(self.contextRef, strongValue.valueRef) || JSValueIsNull(self.contextRef, strongValue.valueRef);
+- (BOOL)valueIsUndefined:(HMBaseValue *)value {
+    if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
+        return NO;
+    }
+    HMJSCStrongValue *strongValue = (HMJSCStrongValue *) value;
+    HMAssertMainQueue();
+    
+    return JSValueIsUndefined(self.contextRef, strongValue.valueRef);
 }
 
 - (BOOL)valueIsBoolean:(HMBaseValue *)value {
@@ -910,7 +916,7 @@ void hummerFinalize(JSObjectRef object) {
 
 - (BOOL)compareWithValue:(HMBaseValue *)value anotherValue:(HMBaseValue *)anotherValue {
     // 仿照原生 [object isEqual:anotherObject]，如果 object 为空，最终为 NO
-    if ([self valueIsNullOrUndefined:value] || [self valueIsNullOrUndefined:anotherValue]) {
+    if ([self valueIsNull:value] || [self valueIsUndefined:value]) {
         return NO;
     }
     if (value.context != self || anotherValue.context != self || ![value isKindOfClass:HMJSCStrongValue.class] || ![anotherValue isKindOfClass:HMJSCStrongValue.class]) {
@@ -1161,6 +1167,8 @@ void hummerFinalize(JSObjectRef object) {
 
         // 业务方已经转好，直接添加就行
         return strongValue.valueRef;
+    } else if (object == NSNull.null) {
+        return JSValueMakeNull(self.contextRef);
     } else if ([object isKindOfClass:NSNumber.class]) {
         return [self convertNumberToValueRef:object];
     } else if ([object isKindOfClass:NSString.class]) {
@@ -1447,7 +1455,7 @@ void hummerFinalize(JSObjectRef object) {
         return nil;
     }
     unsigned int length = (unsigned int) JSValueToNumber(self.contextRef, lengthValueRef, NULL);
-    NSMutableArray *resultArray = nil;
+    NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:length];
     for (unsigned int i = 0; i < length; ++i) {
         JSValueRef indexValue = JSObjectGetPropertyAtIndex(self.contextRef, objectRef, i, &exception);
         if (exception) {
@@ -1457,10 +1465,10 @@ void hummerFinalize(JSObjectRef object) {
         }
         id resultObject = [self convertValueRefToObject:indexValue isPortableConvert:isPortableConvert];
         if (resultObject) {
-            if (!resultArray) {
-                resultArray = [NSMutableArray arrayWithCapacity:length];
-            }
             [resultArray addObject:resultObject];
+        } else {
+            // 兼容 JavaScriptCore toObject 实现，如果是数组，undefined 也转换为 NSNull.null，但是字典没有这个逻辑
+            [resultArray addObject:NSNull.null];
         }
     }
 
@@ -1503,7 +1511,7 @@ void hummerFinalize(JSObjectRef object) {
     // 字典转换
     JSPropertyNameArrayRef propertyNameArrayRef = JSObjectCopyPropertyNames(self.contextRef, objectRef);
     size_t count = JSPropertyNameArrayGetCount(propertyNameArrayRef);
-    NSMutableDictionary<NSString *, id> *resultDictionary = nil;
+    NSMutableDictionary<NSString *, id> *resultDictionary = [NSMutableDictionary dictionaryWithCapacity:count];
     for (size_t i = 0; i < count; ++i) {
         JSStringRef propertyName = JSPropertyNameArrayGetNameAtIndex(propertyNameArrayRef, i);
         NSString *propertyNameString = CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, propertyName));
@@ -1519,9 +1527,6 @@ void hummerFinalize(JSObjectRef object) {
         }
         id objectValue = [self convertValueRefToObject:propertyValueRef isPortableConvert:isPortableConvert];
         if (objectValue) {
-            if (!resultDictionary) {
-                resultDictionary = [NSMutableDictionary dictionaryWithCapacity:count];
-            }
             resultDictionary[propertyNameString] = objectValue;
         }
     }
@@ -1540,8 +1545,13 @@ void hummerFinalize(JSObjectRef object) {
 }
 
 - (nullable id)convertValueRefToObject:(JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert {
-    if (JSValueIsNull(self.contextRef, valueRef) || JSValueIsUndefined(self.contextRef, valueRef)) {
+    if (JSValueIsUndefined(self.contextRef, valueRef)) {
         return nil;
+    }
+    
+    // 兼容需要
+    if (JSValueIsNull(self.contextRef, valueRef)) {
+        return NSNull.null;
     }
 
     id returnValue = [self convertValueRefToString:valueRef];
@@ -1553,7 +1563,7 @@ void hummerFinalize(JSObjectRef object) {
         return returnValue;
     }
 
-    if (isPortableConvert) {
+    if (!isPortableConvert) {
         // 原生对象
         returnValue = [self convertValueRefToNativeObject:valueRef];
         if (returnValue) {

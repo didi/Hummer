@@ -31,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 类型判断
 
-/// isUndefined 和 isNull 实际上是一样的，因为原生不需要区分
 @property (nonatomic, assign, readonly) BOOL isUndefined;
 
 @property (nonatomic, assign, readonly) BOOL isNull;

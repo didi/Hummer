@@ -22,11 +22,11 @@ NS_ASSUME_NONNULL_END
 @implementation HMBaseValue
 
 - (BOOL)isUndefined {
-    return [self.context valueIsNullOrUndefined:self];
+    return [self.context valueIsUndefined:self];
 }
 
 - (BOOL)isNull {
-    return [self.context valueIsNullOrUndefined:self];
+    return [self.context valueIsNull:self];
 }
 
 - (BOOL)isBoolean {
