@@ -363,9 +363,11 @@ void hummerFinalize(JSObjectRef object) {
     if (sourceRef) {
         JSStringRelease(sourceRef);
     }
-    [self popExceptionWithErrorObject:&exception];
+    if ([self popExceptionWithErrorObject:&exception]) {
+        return nil;
+    }
     // null undefined ==> nil
-    if (result && !JSValueIsUndefined(self.contextRef, result) && !JSValueIsNull(self.contextRef, result)) {
+    if (!JSValueIsUndefined(self.contextRef, result) && !JSValueIsNull(self.contextRef, result)) {
         return [[HMJSCStrongValue alloc] initWithValueRef:result executor:self];
     } else {
         return nil;
@@ -432,9 +434,7 @@ void hummerFinalize(JSObjectRef object) {
     if (JSValueIsObject(self.contextRef, arguments[0])) {
         JSValueRef exception = NULL;
         objectRef = JSValueToObject(self.contextRef, arguments[0], &exception);
-        if (exception) {
-            HMLogWarning(HUMMER_DOWNGRADE_TO_CLASS_CALL);
-        }
+        [self popExceptionWithErrorObject:&exception];
     }
     if (objectRef) {
         if (isSetter) {
@@ -623,9 +623,9 @@ void hummerFinalize(JSObjectRef object) {
     JSValueRef exception = NULL;
     JSValueRef arrayConstructorValue = JSObjectGetProperty(self.contextRef, globalObjectRef, arrayString, &exception);
     JSStringRelease(arrayString);
-    if (exception) {
+    if ([self popExceptionWithErrorObject:&exception]) {
         // 用户不关心，所以可以不考虑抛出，直接在这里吃掉并打日志
-        HMLogError(JSArrayConstructorNotFound);
+//        HMLogError(JSArrayConstructorNotFound);
 
         return NO;
     }
@@ -636,8 +636,8 @@ void hummerFinalize(JSObjectRef object) {
         return NO;
     }
     JSObjectRef arrayConstructorObjectRef = JSValueToObject(self.contextRef, arrayConstructorValue, &exception);
-    if (exception || !arrayConstructorObjectRef) {
-        HMLogError(JSArrayConstructorNotFound);
+    if ([self popExceptionWithErrorObject:&exception] || !arrayConstructorObjectRef) {
+//        HMLogError(JSArrayConstructorNotFound);
 
         return NO;
     }
@@ -646,19 +646,14 @@ void hummerFinalize(JSObjectRef object) {
     JSValueRef isArrayValue =
             JSObjectGetProperty(self.contextRef, arrayConstructorObjectRef, isArrayString, &exception);
     JSStringRelease(isArrayString);
-    if (exception) {
-        HMLogError(IsArrayNotFound);
-
-        return NO;
-    }
-    if (!JSValueIsObject(self.contextRef, isArrayValue)) {
-        HMLogError(IsArrayNotFound);
+    if ([self popExceptionWithErrorObject:&exception] || !JSValueIsObject(self.contextRef, isArrayValue)) {
+//        HMLogError(IsArrayNotFound);
 
         return NO;
     }
     JSObjectRef isArray = JSValueToObject(self.contextRef, isArrayValue, &exception);
-    if (exception) {
-        HMLogError(IsArrayNotFound);
+    if ([self popExceptionWithErrorObject:&exception]) {
+//        HMLogError(IsArrayNotFound);
 
         return NO;
     }
@@ -666,8 +661,8 @@ void hummerFinalize(JSObjectRef object) {
             valueRef
     };
     JSValueRef result = JSObjectCallAsFunction(self.contextRef, isArray, NULL, 1, arguments, &exception);
-    if (exception) {
-        HMLogError(@"isArray 抛出错误");
+    if ([self popExceptionWithErrorObject:&exception]) {
+//        HMLogError(@"isArray 抛出错误");
 
         return NO;
     }
@@ -704,7 +699,7 @@ void hummerFinalize(JSObjectRef object) {
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
-    if (exception) {
+    if ([self popExceptionWithErrorObject:&exception]) {
         return NO;
     }
     if (!JSObjectIsFunction(self.contextRef, objectRef)) {
@@ -813,20 +808,20 @@ void hummerFinalize(JSObjectRef object) {
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
-    if (exception || !objectRef) {
+    if ([self popExceptionWithErrorObject:&exception] || !objectRef) {
         return nil;
     }
     JSStringRef privatePropertyName = JSStringCreateWithUTF8CString("_private");
     JSValueRef privateValueRef = JSObjectGetProperty(self.contextRef, objectRef, privatePropertyName, &exception);
     JSStringRelease(privatePropertyName);
-    if (exception) {
+    if ([self popExceptionWithErrorObject:&exception]) {
         return nil;
     }
     if (!JSValueIsObject(self.contextRef, privateValueRef)) {
         return nil;
     }
     JSObjectRef privateObjectRef = JSValueToObject(self.contextRef, privateValueRef, &exception);
-    if (exception || !privateObjectRef) {
+    if ([self popExceptionWithErrorObject:&exception] || !privateObjectRef) {
         return nil;
     }
     // JSObjectGetPrivate 必须为非空
@@ -976,9 +971,9 @@ void hummerFinalize(JSObjectRef object) {
         JSValueRef exception = NULL;
         JSValueRef hummerCreateObjectFunction = JSObjectGetProperty(self.contextRef, JSContextGetGlobalObject(self.contextRef), hummerCreateObjectString, &exception);
         JSStringRelease(hummerCreateObjectString);
-        if (!exception && JSValueIsObject(self.contextRef, hummerCreateObjectFunction)) {
+        if (![self popExceptionWithErrorObject:&exception] && JSValueIsObject(self.contextRef, hummerCreateObjectFunction)) {
             JSObjectRef hummerCreateObjectFunctionObjectRef = JSValueToObject(self.contextRef, hummerCreateObjectFunction, &exception);
-            if (!exception && JSObjectIsFunction(self.contextRef, hummerCreateObjectFunctionObjectRef)) {
+            if (![self popExceptionWithErrorObject:&exception] && JSObjectIsFunction(self.contextRef, hummerCreateObjectFunctionObjectRef)) {
                 JSStringRef jsClassNameString = JSStringCreateWithCFString((__bridge CFStringRef) (exportClass.jsClass));
                 // 引用计数 +1
                 CFRetain((__bridge CFTypeRef) object);
@@ -1026,9 +1021,9 @@ void hummerFinalize(JSObjectRef object) {
         JSValueRef exception = NULL;
         JSValueRef createFunctionFunction = JSObjectGetProperty(self.contextRef, JSContextGetGlobalObject(self.contextRef), hummerCreateFunction, &exception);
         JSStringRelease(hummerCreateFunction);
-        if (createFunctionFunction && JSValueIsObject(self.contextRef, createFunctionFunction)) {
+        if (![self popExceptionWithErrorObject:&exception] && JSValueIsObject(self.contextRef, createFunctionFunction)) {
             JSObjectRef createFunctionFunctionObjectRef = JSValueToObject(self.contextRef, createFunctionFunction, &exception);
-            if (!exception && JSObjectIsFunction(self.contextRef, createFunctionFunctionObjectRef)) {
+            if (![self popExceptionWithErrorObject:&exception] && JSObjectIsFunction(self.contextRef, createFunctionFunctionObjectRef)) {
                 // 引用计数 +1
                 CFRetain((__bridge CFTypeRef) function);
                 HMLogDebug(HUMMER_CREATE_TEMPLATE, [function class]);
@@ -1064,7 +1059,7 @@ void hummerFinalize(JSObjectRef object) {
     if (array && array.count == 0) {
         JSValueRef exception = NULL;
         arrayRef = JSObjectMakeArray(self.contextRef, 0, NULL, &exception);
-        if (exception) {
+        if ([self popExceptionWithErrorObject:&exception]) {
             return NULL;
         }
     }
@@ -1074,7 +1069,7 @@ void hummerFinalize(JSObjectRef object) {
         JSValueRef exception = NULL;
         if (!arrayRef) {
             arrayRef = JSObjectMakeArray(self.contextRef, 0, NULL, &exception);
-            if (exception || !arrayRef) {
+            if ([self popExceptionWithErrorObject:&exception] || !arrayRef) {
                 // continue
                 return;
             }
@@ -1082,11 +1077,11 @@ void hummerFinalize(JSObjectRef object) {
         JSStringRef pushPropertyName = JSStringCreateWithUTF8CString("push");
         JSValueRef pushFunctionValueRef = JSObjectGetProperty(self.contextRef, arrayRef, pushPropertyName, &exception);
         JSStringRelease(pushPropertyName);
-        if (exception || !JSValueIsObject(self.contextRef, pushFunctionValueRef)) {
+        if ([self popExceptionWithErrorObject:&exception] || !JSValueIsObject(self.contextRef, pushFunctionValueRef)) {
             return;
         }
         JSObjectRef objectRef = JSValueToObject(self.contextRef, pushFunctionValueRef, &exception);
-        if (exception) {
+        if ([self popExceptionWithErrorObject:&exception]) {
             return;
         }
         if (JSObjectIsFunction(self.contextRef, objectRef)) {
@@ -1095,7 +1090,8 @@ void hummerFinalize(JSObjectRef object) {
                     inlineValueRef
             };
             // 忽略异常
-            JSObjectCallAsFunction(self.contextRef, objectRef, arrayRef, 1, argArray, NULL);
+            JSObjectCallAsFunction(self.contextRef, objectRef, arrayRef, 1, argArray, &exception);
+            [self popExceptionWithErrorObject:&exception];
         }
     }];
 
@@ -1119,24 +1115,25 @@ void hummerFinalize(JSObjectRef object) {
             JSStringRef objectStringRef = JSStringCreateWithUTF8CString("Object");
             JSValueRef objectConstructor = JSObjectGetProperty(self.contextRef, globalThis, objectStringRef, &exception);
             JSStringRelease(objectStringRef);
-            if (exception || !JSValueIsObject(self.contextRef, objectConstructor)) {
+            if ([self popExceptionWithErrorObject:&exception] || !JSValueIsObject(self.contextRef, objectConstructor)) {
                 // continue
                 return;
             }
             JSObjectRef objectConstructorObjectRef = JSValueToObject(self.contextRef, objectConstructor, &exception);
-            if (exception || !JSObjectIsConstructor(self.contextRef, objectConstructorObjectRef)) {
+            if ([self popExceptionWithErrorObject:&exception] || !JSObjectIsConstructor(self.contextRef, objectConstructorObjectRef)) {
                 return;
             }
             objectRef = JSObjectCallAsConstructor(self.contextRef, objectConstructorObjectRef, 0, NULL, &exception);
             // JSObjectSetProperty 需要 objectRef 为非空
-            if (exception || !objectRef) {
+            if ([self popExceptionWithErrorObject:&exception] || !objectRef) {
                 // continue
                 return;
             }
         }
         JSStringRef propertyName = JSStringCreateWithUTF8CString(key.UTF8String);
         // 忽略异常
-        JSObjectSetProperty(self.contextRef, objectRef, propertyName, inlineValueRef, kJSPropertyAttributeNone, NULL);
+        JSObjectSetProperty(self.contextRef, objectRef, propertyName, inlineValueRef, kJSPropertyAttributeNone, &exception);
+        [self popExceptionWithErrorObject:&exception];
         JSStringRelease(propertyName);
     }];
 
@@ -1217,13 +1214,13 @@ void hummerFinalize(JSObjectRef object) {
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, strongValue.valueRef, &exception);
-    if (exception || !objectRef) {
+    if ([self popExceptionWithErrorObject:&exception] || !objectRef) {
         return nil;
     }
     JSStringRef stringRef = JSStringCreateWithCFString((__bridge CFStringRef) propertyName);
     JSValueRef valueRef = JSObjectGetProperty(self.contextRef, objectRef, stringRef, &exception);
     JSStringRelease(stringRef);
-    if (exception) {
+    if ([self popExceptionWithErrorObject:&exception]) {
         return nil;
     }
 
@@ -1241,11 +1238,12 @@ void hummerFinalize(JSObjectRef object) {
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, strongValue.valueRef, &exception);
-    if (exception || !objectRef) {
+    if ([self popExceptionWithErrorObject:&exception] || !objectRef) {
         return;
     }
     JSStringRef stringRef = JSStringCreateWithCFString((__bridge CFStringRef) propertyName);
-    JSObjectSetProperty(self.contextRef, objectRef, stringRef, [self convertObjectToValueRef:propertyObject], kJSPropertyAttributeNone, NULL);
+    JSObjectSetProperty(self.contextRef, objectRef, stringRef, [self convertObjectToValueRef:propertyObject], kJSPropertyAttributeNone, &exception);
+    [self popExceptionWithErrorObject:&exception];
     JSStringRelease(stringRef);
 }
 
@@ -1282,7 +1280,7 @@ void hummerFinalize(JSObjectRef object) {
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, strongValue.valueRef, &exception);
-    if (exception || !JSObjectIsFunction(self.contextRef, objectRef)) {
+    if ([self popExceptionWithErrorObject:&exception] || !JSObjectIsFunction(self.contextRef, objectRef)) {
         return nil;
     }
 
@@ -1300,18 +1298,18 @@ void hummerFinalize(JSObjectRef object) {
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, strongValue.valueRef, &exception);
-    if (exception || !objectRef) {
+    if ([self popExceptionWithErrorObject:&exception] || !objectRef) {
         return nil;
     }
 
     JSStringRef stringRef = JSStringCreateWithCFString((__bridge CFStringRef) method);
     JSValueRef valueRef = JSObjectGetProperty(self.contextRef, objectRef, stringRef, &exception);
     JSStringRelease(stringRef);
-    if (exception || !JSValueIsObject(self.contextRef, valueRef)) {
+    if ([self popExceptionWithErrorObject:&exception] || !JSValueIsObject(self.contextRef, valueRef)) {
         return nil;
     }
     JSObjectRef functionObjectRef = JSValueToObject(self.contextRef, valueRef, &exception);
-    if (exception || !JSObjectIsFunction(self.contextRef, functionObjectRef)) {
+    if ([self popExceptionWithErrorObject:&exception] || !JSObjectIsFunction(self.contextRef, functionObjectRef)) {
         return nil;
     }
 
@@ -1359,7 +1357,7 @@ void hummerFinalize(JSObjectRef object) {
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
-    if (exception) {
+    if ([self popExceptionWithErrorObject:&exception]) {
         return nil;
     }
     if (!JSObjectIsFunction(self.contextRef, objectRef)) {
@@ -1369,14 +1367,14 @@ void hummerFinalize(JSObjectRef object) {
     JSStringRef privateStringRef = JSStringCreateWithUTF8CString("_privateFunction");
     JSValueRef privateValueRef = JSObjectGetProperty(self.contextRef, objectRef, privateStringRef, &exception);
     JSStringRelease(privateStringRef);
-    if (exception) {
+    if ([self popExceptionWithErrorObject:&exception]) {
         return nil;
     }
 
     // 是原先原生转成的 JS 闭包
     if (JSValueIsObject(self.contextRef, privateValueRef)) {
         JSObjectRef privateObjectRef = JSValueToObject(self.contextRef, valueRef, &exception);
-        if (!exception && privateObjectRef && JSObjectGetPrivate(privateObjectRef) && [(__bridge id) JSObjectGetPrivate(privateObjectRef) isKindOfClass:NSClassFromString(@"NSBlock")]) {
+        if (![self popExceptionWithErrorObject:&exception] && privateObjectRef && JSObjectGetPrivate(privateObjectRef) && [(__bridge id) JSObjectGetPrivate(privateObjectRef) isKindOfClass:NSClassFromString(@"NSBlock")]) {
             // 本次 JS 闭包是原生返回，复用原先的闭包
             return (__bridge HMFunctionType _Nullable) JSObjectGetPrivate(privateObjectRef);
         }
@@ -1395,7 +1393,7 @@ void hummerFinalize(JSObjectRef object) {
             }
             JSValueRef inlineException = NULL;
             JSObjectRef inlineObjectRef = JSValueToObject(executor.contextRef, valueWrapper.valueRef, &inlineException);
-            if (inlineException) {
+            if ([self popExceptionWithErrorObject:&inlineException]) {
                 return (HMJSCStrongValue *) nil;
             }
             if (!JSObjectIsFunction(executor.contextRef, inlineObjectRef)) {
@@ -1443,24 +1441,23 @@ void hummerFinalize(JSObjectRef object) {
     }
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
-    if (exception || !objectRef) {
+    if ([self popExceptionWithErrorObject:&exception] || !objectRef) {
         return nil;
     }
     JSStringRef lengthPropertyName = JSStringCreateWithUTF8CString("length");
     JSValueRef lengthValueRef = JSObjectGetProperty(self.contextRef, objectRef, lengthPropertyName, &exception);
     JSStringRelease(lengthPropertyName);
-    if (exception || !JSValueIsNumber(self.contextRef, lengthValueRef)) {
+    if ([self popExceptionWithErrorObject:&exception] || !JSValueIsNumber(self.contextRef, lengthValueRef)) {
         HMLogError(@"array.length 不是数字");
 
         return nil;
     }
-    unsigned int length = (unsigned int) JSValueToNumber(self.contextRef, lengthValueRef, NULL);
+    
+    unsigned int length = [self convertValueRefToNumber:lengthValueRef].unsignedIntValue;
     NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:length];
     for (unsigned int i = 0; i < length; ++i) {
         JSValueRef indexValue = JSObjectGetPropertyAtIndex(self.contextRef, objectRef, i, &exception);
-        if (exception) {
-            exception = NULL;
-
+        if ([self popExceptionWithErrorObject:&exception]) {
             continue;
         }
         id resultObject = [self convertValueRefToObject:indexValue isPortableConvert:isPortableConvert];
@@ -1505,7 +1502,7 @@ void hummerFinalize(JSObjectRef object) {
     JSValueRef exception = NULL;
     JSObjectRef objectRef = JSValueToObject(self.contextRef, valueRef, &exception);
     // JSObjectCopyPropertyNames 要求非空对象
-    if (exception || !objectRef) {
+    if ([self popExceptionWithErrorObject:&exception] || !objectRef) {
         return nil;
     }
     // 字典转换
@@ -1520,9 +1517,7 @@ void hummerFinalize(JSObjectRef object) {
             continue;
         }
         JSValueRef propertyValueRef = JSObjectGetProperty(self.contextRef, objectRef, propertyName, &exception);
-        if (exception) {
-            exception = NULL;
-
+        if ([self popExceptionWithErrorObject:&exception]) {
             continue;
         }
         id objectValue = [self convertValueRefToObject:propertyValueRef isPortableConvert:isPortableConvert];

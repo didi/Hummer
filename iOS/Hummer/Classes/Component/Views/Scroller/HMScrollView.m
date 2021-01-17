@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_END
 
 @implementation HMScrollView
 
+HM_EXPORT_CLASS(HMScrollView, HMScrollView)
+
 HM_EXPORT_PROPERTY(showScrollBar, showScrollBar, setShowScrollBar:)
 
 - (BOOL)showScrollBar {
