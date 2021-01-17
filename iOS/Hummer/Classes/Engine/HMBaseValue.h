@@ -73,9 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable HMBaseValue *)valueWithUInt32:(uint32_t)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
 
-+ (nullable HMBaseValue *)valueWithNullInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口，空实现");
++ (nullable HMBaseValue *)valueWithNullInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口");
 
-+ (nullable HMBaseValue *)valueWithUndefinedInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口，空实现");
++ (nullable HMBaseValue *)valueWithUndefinedInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口");
 
 #pragma mark - 转换方法
 
