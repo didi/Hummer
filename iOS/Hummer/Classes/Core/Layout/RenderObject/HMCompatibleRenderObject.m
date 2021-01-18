@@ -6,6 +6,7 @@
 //
 
 #import "HMCompatibleRenderObject.h"
+#import "HMScrollView.h"
 
 CGFloat HMSanitizeMeasurement(CGFloat constrainedSize, CGFloat measuredSize, YOGA_TYPE_WRAPPER(YGMeasureMode) measureMode) {
     CGFloat result;
@@ -69,7 +70,7 @@ YOGA_TYPE_WRAPPER(YGSize) HMCompatibleMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) node,
 - (nullable NSArray <HMRenderObject *>*)layoutSubviewsWithContext:(HMLayoutContext)layoutContext {
 
     NSArray *affectedObjects = [super layoutSubviewsWithContext:layoutContext];
-    if ([self.view isKindOfClass:UIScrollView.class] && affectedObjects.count>0) {
+    if ([self.view isKindOfClass:HMScrollView.class] && affectedObjects.count>0) {
         [layoutContext.affectedShadowViews addObject:self];
     }
     return affectedObjects;
