@@ -8,7 +8,6 @@
 
 #import "HMRenderObject.h"
 #import "HMUtility.h"
-#import "HMYogaUtility.h"
 #import "UIView+HMRenderObject.h"
 #import "HMUIManager.h"
 
@@ -186,7 +185,7 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
 // 返回当前节点下，是否存在子节点需要更新布局。
 // 在某些场景下(scroll)，虽然当前容器的布局可能未发生改变，但需要更新内部布局(contentSize)
 
-- (nullable NSArray <HMRenderObject *>*)layoutSubviewsWithContext:(HMLayoutContext)layoutContext {
+- (nullable NSArray <HMRenderObject *> *)layoutSubviewsWithContext:(HMLayoutContext)layoutContext {
     HMLayoutMetrics layoutMetrics = self.layoutMetrics;
 
     // YGZeroOutLayoutRecursivly 递归设置 { 0, 0 } 后，如果是 absolute 元素，按照原来的 YogaKit 逻辑还是可能继续显示的
@@ -201,7 +200,7 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
         if (!HMUseDoubleAttributeControlHidden) {
             HMAssert(!YOGA_TYPE_WRAPPER(YGNodeIsDirty)(childYogaNode), @"Attempt to get layout metrics from dirtied Yoga node.");
         }
-        
+
         if (!YOGA_TYPE_WRAPPER(YGNodeGetHasNewLayout)(childYogaNode)) {
             continue;
         }
@@ -218,7 +217,7 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
 
         // Recursive call.
         NSArray *childAffectedObjects = [childShadowView layoutSubviewsWithContext:layoutContext];
-        if (childAffectedObjects.count>0) {
+        if (childAffectedObjects.count > 0) {
             [affectedObjects addObjectsFromArray:childAffectedObjects];
         }
     }
@@ -230,47 +229,17 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
 }
 
 - (CGSize)sizeThatFitsMaximumSize:(CGSize)maximumSize {
-    float maxWidth = HMYogaFloatFromCoreGraphicsFloat(maximumSize.width);
-    float maxHeight = HMYogaFloatFromCoreGraphicsFloat(maximumSize.height);
-    YOGA_TYPE_WRAPPER(YGNodeRef) clonedYogaNode = YOGA_TYPE_WRAPPER(YGNodeClone)(self.yogaNode);
-    YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(clonedYogaNode, maxWidth, maxHeight, HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
-    CGSize measuredSize = (CGSize) {
-            HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetWidth)(clonedYogaNode)),
-            HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetHeight)(clonedYogaNode)),
-    };
-    hm_yoga_node_free_recursive(clonedYogaNode);
-    
-    return measuredSize;
+    return [self sizeThatFitsMinimumSize:CGSizeZero maximumSize:maximumSize];
 }
 
 - (CGSize)sizeThatFitsMinimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize {
     YOGA_TYPE_WRAPPER(YGNodeRef) clonedYogaNode = YOGA_TYPE_WRAPPER(YGNodeClone)(self.yogaNode);
-    YOGA_TYPE_WRAPPER(YGNodeRef) constraintYogaNode = YOGA_TYPE_WRAPPER(YGNodeNewWithConfig)([[self class] yogaConfig]);
-
-    YOGA_TYPE_WRAPPER(YGNodeInsertChild)(constraintYogaNode, clonedYogaNode, 0);
-
-    YOGA_TYPE_WRAPPER(YGNodeStyleSetMinWidth)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(minimumSize.width));
-    YOGA_TYPE_WRAPPER(YGNodeStyleSetMinHeight)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(minimumSize.height));
-    YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxWidth)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(maximumSize.width));
-    YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxHeight)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(maximumSize.height));
-
-    YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(
-            constraintYogaNode,
-                                             YOGA_TYPE_WRAPPER(YGUndefined),
-                                             YOGA_TYPE_WRAPPER(YGUndefined),
-            HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
-
+    YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(clonedYogaNode, YOGA_TYPE_WRAPPER(YGUndefined), YOGA_TYPE_WRAPPER(YGUndefined), HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
     CGSize measuredSize = (CGSize) {
-            HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetWidth)(constraintYogaNode)),
-            HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetHeight)(constraintYogaNode)),
+            MIN(MAX(HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetWidth)(clonedYogaNode)), minimumSize.width), maximumSize.width),
+            MIN(MAX(HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetHeight)(clonedYogaNode)), minimumSize.height), maximumSize.height),
     };
-    // 如果使用如下代码会泄漏
-//    YGNodeRemoveChild(constraintYogaNode, clonedYogaNode);
-//    YGNodeFree(constraintYogaNode);
-//    YGNodeFree(clonedYogaNode);
-    // 使用以下代码会过度释放
-//    YGNodeFreeRecursive(constraintYogaNode);
-    hm_yoga_node_free_recursive(constraintYogaNode);
+    hm_yoga_node_free_recursive(clonedYogaNode);
 
     return measuredSize;
 }
@@ -411,7 +380,7 @@ static inline YOGA_TYPE_WRAPPER(YGSize) HMShadowViewMeasure(YOGA_TYPE_WRAPPER(YG
 
 - (UIEdgeInsets)paddingAsInsets {
     YOGA_TYPE_WRAPPER(YGNodeRef) yogaNode = self.yogaNode;
-    
+
     return (UIEdgeInsets) {HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetPadding)(yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop))),
             HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetPadding)(yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft))),
             HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetPadding)(yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom))),
@@ -420,7 +389,7 @@ static inline YOGA_TYPE_WRAPPER(YGSize) HMShadowViewMeasure(YOGA_TYPE_WRAPPER(YG
 
 - (UIEdgeInsets)borderAsInsets {
     YOGA_TYPE_WRAPPER(YGNodeRef) yogaNode = self.yogaNode;
-    
+
     return (UIEdgeInsets) {HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetBorder)(yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop))),
             HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetBorder)(yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft))),
             HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetBorder)(yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom))),
@@ -535,10 +504,10 @@ HM_STYLE_PROPERTY(AspectRatio, aspectRatio, AspectRatio, float)
     if (owner) {
         //if owner == nullptr。YGNodeGetContext 会导致 crash
         HMRenderObject *shadowView = (__bridge HMRenderObject *) YOGA_TYPE_WRAPPER(YGNodeGetContext)(owner);
-        
+
         return shadowView;
     }
-    
+
     return nil;
 }
 

@@ -299,11 +299,11 @@ void hummerFinalize(JSObjectRef object) {
     if (!HMExecutorMap) {
         HMExecutorMap = NSMapTable.strongToWeakObjectsMapTable;
     }
-//    if (!virtualMachineRef) {
-//        virtualMachineRef = JSContextGroupCreate();
-//    }
-//    _contextRef = JSGlobalContextCreateInGroup(virtualMachineRef, NULL);
-    _contextRef = JSGlobalContextCreate(NULL);
+    if (!virtualMachineRef) {
+        virtualMachineRef = JSContextGroupCreate();
+    }
+    _contextRef = JSGlobalContextCreateInGroup(virtualMachineRef, NULL);
+//    _contextRef = JSGlobalContextCreate(NULL);
     [HMExecutorMap setObject:self forKey:[NSValue valueWithPointer:_contextRef]];
 
     // 注入对象

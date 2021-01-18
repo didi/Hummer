@@ -38,7 +38,7 @@ FOUNDATION_EXTERN UIView *_Nullable hm_yoga_get_root_view(UIView *_Nullable curr
 
 - (CGSize)hm_sizeThatFits:(CGSize)size;
 
-- (CGSize)hm_sizeThatFitsMinimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize DEPRECATED_MSG_ATTRIBUTE("该方法会导致计算出的大小包含 margin，或者如果节点本身为 absolute，没法自撑开，业务方最好使用 - hm_sizeThatFits: 替代，并且将自撑开大小结果和业务方需要的 minWidth/Height 做比较");
+- (CGSize)hm_sizeThatFitsMinimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize;
 
 - (void)hm_applyLayoutPreservingOrigin:(BOOL)preserveOrigin affectedShadowViews:(nullable NSHashTable<id<HMLayoutStyleProtocol>> *)affectedShadowViews;
 /**
