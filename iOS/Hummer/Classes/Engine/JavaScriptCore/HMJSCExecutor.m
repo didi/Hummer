@@ -277,18 +277,20 @@ JSValueRef hummerSetProperty(JSContextRef ctx, JSObjectRef function, JSObjectRef
 }
 
 void hummerFinalize(JSObjectRef object) {
-    HMAssertMainQueue();
-    void *opaquePointer = JSObjectGetPrivate(object);
-    assert(opaquePointer != NULL);
-    if (opaquePointer) {
-        // 不透明指针可能为原生对象，也可能为闭包
-        // 清空 hm_value
-        [((__bridge id) opaquePointer) setHmValue:nil];
-        HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
-        CFRelease(opaquePointer);
-    } else {
-        HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
-    }
+    // 网络请求销毁通常都在异步线程，所以加一重保证
+    HMSafeMainThread(^{
+        void *opaquePointer = JSObjectGetPrivate(object);
+        assert(opaquePointer != NULL);
+        if (opaquePointer) {
+            // 不透明指针可能为原生对象，也可能为闭包
+            // 清空 hm_value
+            [((__bridge id) opaquePointer) setHmValue:nil];
+            HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
+            CFRelease(opaquePointer);
+        } else {
+            HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
+        }
+    });
 }
 
 @implementation HMJSCExecutor
