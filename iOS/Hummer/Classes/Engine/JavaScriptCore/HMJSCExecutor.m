@@ -199,7 +199,6 @@ JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObje
     // 关联 hm_value
     opaquePointer.hmValue = [[HMJSCStrongValue alloc] initWithValueRef:arguments[1] executor:executor];
     // 引用计数 +1
-    CFRetain((__bridge CFTypeRef) opaquePointer);
     HMLogDebug(HUMMER_CREATE_TEMPLATE, className);
     JSClassDefinition hostObjectClassDef = kJSClassDefinitionEmpty;
     hostObjectClassDef.version = 0;
@@ -209,6 +208,9 @@ JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObje
 
     // 填充不透明指针
     JSObjectRef objectRef = JSObjectMake(ctx, hostObjectClass, (__bridge void *) opaquePointer);
+    if (objectRef) {
+        CFRetain((__bridge CFTypeRef) opaquePointer);
+    }
     JSClassRelease(hostObjectClass);
 
     return objectRef;
@@ -297,10 +299,11 @@ void hummerFinalize(JSObjectRef object) {
     if (!HMExecutorMap) {
         HMExecutorMap = NSMapTable.strongToWeakObjectsMapTable;
     }
-    if (!virtualMachineRef) {
-        virtualMachineRef = JSContextGroupCreate();
-    }
-    _contextRef = JSGlobalContextCreateInGroup(virtualMachineRef, NULL);
+//    if (!virtualMachineRef) {
+//        virtualMachineRef = JSContextGroupCreate();
+//    }
+//    _contextRef = JSGlobalContextCreateInGroup(virtualMachineRef, NULL);
+    _contextRef = JSGlobalContextCreate(NULL);
     [HMExecutorMap setObject:self forKey:[NSValue valueWithPointer:_contextRef]];
 
     // 注入对象
@@ -930,7 +933,7 @@ void hummerFinalize(JSObjectRef object) {
 
 - (JSValueRef)convertNumberToValueRef:(NSNumber *)number {
     HMAssertMainQueue();
-    if (!number) {
+    if (number == nil) {
         return NULL;
     }
     if (strcmp(number.objCType, @encode(BOOL)) == 0) {
@@ -976,7 +979,6 @@ void hummerFinalize(JSObjectRef object) {
             if (![self popExceptionWithErrorObject:&exception] && JSObjectIsFunction(self.contextRef, hummerCreateObjectFunctionObjectRef)) {
                 JSStringRef jsClassNameString = JSStringCreateWithCFString((__bridge CFStringRef) (exportClass.jsClass));
                 // 引用计数 +1
-                CFRetain((__bridge CFTypeRef) object);
                 JSClassDefinition hostObjectClassDef = kJSClassDefinitionEmpty;
                 hostObjectClassDef.version = 0;
                 hostObjectClassDef.attributes = kJSClassAttributeNoAutomaticPrototype;
@@ -985,6 +987,9 @@ void hummerFinalize(JSObjectRef object) {
 
                 // 填充不透明指针
                 JSObjectRef objectRef = JSObjectMake(self.contextRef, hostObjectClass, (__bridge void *) object);
+                if (objectRef) {
+                    CFRetain((__bridge CFTypeRef) object);
+                }
                 JSClassRelease(hostObjectClass);
 
                 // 第一个参数是 private 对象，第二个参数是导出对象 JS 类名
@@ -1025,7 +1030,6 @@ void hummerFinalize(JSObjectRef object) {
             JSObjectRef createFunctionFunctionObjectRef = JSValueToObject(self.contextRef, createFunctionFunction, &exception);
             if (![self popExceptionWithErrorObject:&exception] && JSObjectIsFunction(self.contextRef, createFunctionFunctionObjectRef)) {
                 // 引用计数 +1
-                CFRetain((__bridge CFTypeRef) function);
                 HMLogDebug(HUMMER_CREATE_TEMPLATE, [function class]);
                 JSClassDefinition hostObjectClassDef = kJSClassDefinitionEmpty;
                 hostObjectClassDef.version = 0;
@@ -1035,6 +1039,9 @@ void hummerFinalize(JSObjectRef object) {
 
                 // 填充不透明指针
                 JSObjectRef objectRef = JSObjectMake(self.contextRef, hostObjectClass, (__bridge void *) function);
+                if (objectRef) {
+                    CFRetain((__bridge CFTypeRef) function);
+                }
                 JSClassRelease(hostObjectClass);
 
                 JSValueRef args[] = {
