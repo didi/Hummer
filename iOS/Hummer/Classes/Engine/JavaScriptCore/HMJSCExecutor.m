@@ -1400,7 +1400,7 @@ void hummerFinalize(JSObjectRef object) {
             }
             JSValueRef inlineException = NULL;
             JSObjectRef inlineObjectRef = JSValueToObject(executor.contextRef, valueWrapper.valueRef, &inlineException);
-            if ([self popExceptionWithErrorObject:&inlineException]) {
+            if ([executor popExceptionWithErrorObject:&inlineException]) {
                 return (HMJSCStrongValue *) nil;
             }
             if (!JSObjectIsFunction(executor.contextRef, inlineObjectRef)) {
