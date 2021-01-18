@@ -59,10 +59,6 @@
     return [NSURL URLWithString:self];
 }
 
-- (nullable NSString *)hm_asString{
-    return self;
-}
-
 - (nullable NSURL *)hm_asFileUrl {
     if ([self hasPrefix:@"file:"]) {
         return [self hm_asUrl];

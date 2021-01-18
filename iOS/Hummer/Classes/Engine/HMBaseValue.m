@@ -22,11 +22,11 @@ NS_ASSUME_NONNULL_END
 @implementation HMBaseValue
 
 - (BOOL)isUndefined {
-    return [self.context valueIsNullOrUndefined:self];
+    return [self.context valueIsUndefined:self];
 }
 
 - (BOOL)isNull {
-    return [self.context valueIsNullOrUndefined:self];
+    return [self.context valueIsNull:self];
 }
 
 - (BOOL)isBoolean {
@@ -81,8 +81,8 @@ NS_ASSUME_NONNULL_END
     return [self.context valueIsFunction:self];
 }
 
-+ (nullable HMBaseValue *)valueWithNullInContext:(id)context {
-    return nil;
++ (nullable HMBaseValue *)valueWithNullInContext:(id <HMBaseExecutorProtocol>)context {
+    return [context convertToValueWithObject:NSNull.null];
 }
 
 + (nullable HMBaseValue *)valueWithUndefinedInContext:(id)context {
@@ -208,6 +208,10 @@ NS_ASSUME_NONNULL_END
     HMBaseValue *value = self.context[propertyString];
 
     return !value.isUndefined && !value.isNull;
+}
+
+- (void)setValue:(id)value forProperty:(NSString *)property {
+    [self.context setWithValue:self propertyName:property propertyObject:value];
 }
 
 @end

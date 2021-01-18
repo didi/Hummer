@@ -27,6 +27,8 @@
 
 @implementation CAAnimation (Base)
 
+HM_EXPORT_CLASS(CAAnimation, CAAnimation)
+
 HM_EXPORT_PROPERTY(timingFunction, __getTimingFunction, __setTimingFunction:)
 HM_EXPORT_METHOD(on, on:callback:)
 

@@ -31,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 类型判断
 
-/// isUndefined 和 isNull 实际上是一样的，因为原生不需要区分
 @property (nonatomic, assign, readonly) BOOL isUndefined;
 
 @property (nonatomic, assign, readonly) BOOL isNull;
@@ -74,9 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable HMBaseValue *)valueWithUInt32:(uint32_t)value inContext:(nullable id <HMBaseExecutorProtocol>)context;
 
-+ (nullable HMBaseValue *)valueWithNullInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口，空实现");
++ (nullable HMBaseValue *)valueWithNullInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口");
 
-+ (nullable HMBaseValue *)valueWithUndefinedInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口，空实现");
++ (nullable HMBaseValue *)valueWithUndefinedInContext:(nullable id <HMBaseExecutorProtocol>)context DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，业务方不存在需求，废弃接口");
 
 #pragma mark - 转换方法
 
@@ -145,6 +144,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable HMBaseValue *)objectForKeyedSubscript:(id)key;
 
 - (void)setObject:(nullable id)object forKeyedSubscript:(id)key;
+
+- (void)setValue:(nullable id)value forProperty:(nullable NSString *)property;
 
 // 不能用可失败构造函数重载非可失败构造函数
 - (instancetype)init NS_UNAVAILABLE;

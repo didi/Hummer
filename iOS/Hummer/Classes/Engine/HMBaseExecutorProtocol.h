@@ -41,8 +41,6 @@ typedef HMFunctionType HMFuncCallback;
 
 @property (nonatomic, copy, nullable) void (^exceptionHandler)(HMExceptionModel *exception);
 
-+ (nullable id <HMBaseExecutorProtocol>)currentContext DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，使用 HMCurrentExecutor 替代");;
-
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)script withSourceURL:(nullable NSURL *)sourceURL;
 
 /// 使用下标获取属性
@@ -55,9 +53,9 @@ typedef HMFunctionType HMFuncCallback;
 
 #pragma mark - 类型判断
 
-/// nil 参数被认为是 JavaScript undefined
+- (BOOL)valueIsNull:(nullable HMBaseValue *)value;
 
-- (BOOL)valueIsNullOrUndefined:(nullable HMBaseValue *)value;
+- (BOOL)valueIsUndefined:(nullable HMBaseValue *)value;
 
 - (BOOL)valueIsBoolean:(nullable HMBaseValue *)value;
 
@@ -112,6 +110,7 @@ typedef HMFunctionType HMFuncCallback;
 
 #pragma mark - Misc
 
+/// 如果非同一个 VM 比较，会直接返回 NO，不是同一个 VM，不需要做任何比较
 - (BOOL)compareWithValue:(nullable HMBaseValue *)value anotherValue:(nullable HMBaseValue *)anotherValue;
 
 - (nullable HMBaseValue *)callWithValue:(nullable HMBaseValue *)value arguments:(nullable NSArray *)arguments;

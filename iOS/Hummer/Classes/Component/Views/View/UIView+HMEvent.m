@@ -363,7 +363,6 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
 
 - (void)hm_removeEvent:(HMBaseValue *)eventName withListener:(HMBaseValue *)listener {
     if (!eventName) return;
-    HMJSContext *context = [HMJSGlobal.globalObject currentContext:self.hmContext];
     NSString *nameStr = [eventName toString];
     if ([self hm_isGestureEventName:nameStr]) {
         NSMutableArray<HMBaseValue *> *callbacks = [self hm_gestureCallbacksForEvent:nameStr];

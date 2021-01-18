@@ -24,9 +24,6 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 
 @interface HMJSGlobal ()
 
-// void (^)(NSString *title)
-@property (nonatomic, copy, nullable) HMFunctionType setTitle;
-
 @property (nonatomic, nullable, strong) HMNotifyCenter *notifyCenter;
 
 - (NSDictionary<NSString *, NSObject *> *)getEnvironmentInfo;
@@ -67,13 +64,13 @@ NS_ASSUME_NONNULL_END
 
 HM_EXPORT_CLASS(Hummer, HMJSGlobal)
 
+HM_EXPORT_CLASS_PROPERTY(setTitle, setTitle, setSetTitle:)
+
 HM_EXPORT_CLASS_PROPERTY(env, env, setEnv:)
 
 HM_EXPORT_CLASS_PROPERTY(notifyCenter, notifyCenter, setNotifyCenter:)
 
 HM_EXPORT_CLASS_PROPERTY(pageInfo, pageInfo, setPageInfo:)
-
-HM_EXPORT_CLASS_PROPERTY(setTitle, setTitle, setSetTitle:)
 
 HM_EXPORT_CLASS_METHOD(render, render:)
 

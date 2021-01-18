@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_END
 
 @implementation HMScrollView
 
+HM_EXPORT_CLASS(HMScrollView, HMScrollView)
+
 HM_EXPORT_PROPERTY(showScrollBar, showScrollBar, setShowScrollBar:)
 
 - (BOOL)showScrollBar {
@@ -263,7 +265,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
                                kHMScrollDeltaY:@(deltaY),
                                kHMScrollOffsetX:@(contentOffset.x),
                                kHMScrollOffsetY:@(contentOffset.y)};
-        [self hm_notifyEvent:HMScrollEventName withValue:scrollView withArgument:args];
+        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
         [self checkIFTopOrBottom];
     });
 }

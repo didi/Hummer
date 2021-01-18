@@ -43,7 +43,7 @@ Hummer is a dynamic solution for client.
     ss.frameworks = 'JavaScriptCore'
 
     ss.dependency 'Yoga', '~> 1.14'
-    ss.dependency 'SocketRocket', '~> 0.5.1'
+    ss.dependency 'SocketRocket', '~> 0.1'
   end
   
   # s.public_header_files = 'Pod/Classes/**/*.h'

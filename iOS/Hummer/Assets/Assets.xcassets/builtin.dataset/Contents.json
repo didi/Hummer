@@ -1,0 +1,13 @@
+{
+  "data" : [
+    {
+      "filename" : "builtin.js",
+      "idiom" : "universal",
+      "universal-type-identifier" : "com.netscape.javascript-source"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

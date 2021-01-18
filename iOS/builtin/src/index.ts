@@ -243,7 +243,9 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
     }
 
     globalThis.clearTimeout = (timer: Timer) => {
-        timer.clearTimeout();
+        if (!timer) {
+            return;
+        }
         globalThis.hummerValueStorageDelete(timer);
     }
 }
