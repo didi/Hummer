@@ -51,7 +51,6 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)dealloc {
-//    JSValueRef valueRef = self.valueRef;
     if (!self.context) {
         return;
     }
