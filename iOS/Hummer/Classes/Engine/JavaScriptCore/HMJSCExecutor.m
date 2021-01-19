@@ -277,20 +277,18 @@ JSValueRef hummerSetProperty(JSContextRef ctx, JSObjectRef function, JSObjectRef
 }
 
 void hummerFinalize(JSObjectRef object) {
-    // 网络请求销毁通常都在异步线程，所以加一重保证
-    HMSafeMainThread(^{
-        void *opaquePointer = JSObjectGetPrivate(object);
-        assert(opaquePointer != NULL);
-        if (opaquePointer) {
-            // 不透明指针可能为原生对象，也可能为闭包
-            // 清空 hm_value
-            [((__bridge id) opaquePointer) setHmValue:nil];
-            HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
-            CFRelease(opaquePointer);
-        } else {
-            HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
-        }
-    });
+    HMAssertMainQueue();
+    void *opaquePointer = JSObjectGetPrivate(object);
+    assert(opaquePointer != NULL);
+    if (opaquePointer) {
+        // 不透明指针可能为原生对象，也可能为闭包
+        // 清空 hm_value
+        [((__bridge id) opaquePointer) setHmValue:nil];
+        HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
+        CFRelease(opaquePointer);
+    } else {
+        HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
+    }
 }
 
 @implementation HMJSCExecutor
@@ -1327,18 +1325,18 @@ void hummerFinalize(JSObjectRef object) {
 
 - (void)dealloc {
     HMAssertMainQueue();
-    NSEnumerator<HMJSCStrongValue *> *strongValueEnumerator = self.strongValueReleasePool.objectEnumerator;
+    NSEnumerator<HMJSCStrongValue *> *strongValueEnumerator = _strongValueReleasePool.objectEnumerator;
     HMJSCStrongValue *strongValue = nil;
     while ((strongValue = strongValueEnumerator.nextObject)) {
-        [strongValue forceUnprotectWithGlobalContextRef:self.contextRef];
+        [strongValue forceUnprotectWithGlobalContextRef:_contextRef];
     }
 
-    JSGlobalContextRelease(self.contextRef);
+    JSGlobalContextRelease(_contextRef);
     NSEnumerator<id <HMBaseExecutorProtocol>> *enumerator = HMExecutorMap.objectEnumerator;
     id <HMBaseExecutorProtocol> value = nil;
     BOOL isNoExecutor = YES;
     while ((value = enumerator.nextObject)) {
-        if ([value isKindOfClass:self.class] && value != self) {
+        if ([value isKindOfClass:HMJSCExecutor.class] && value != self) {
             isNoExecutor = NO;
             break;
         }
