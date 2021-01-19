@@ -21,6 +21,15 @@ NS_ASSUME_NONNULL_END
 
 @implementation HMJSCWeakValue
 
+- (void)dealloc {
+    // JSManagedValue dealloc 可能触发堆 GC
+    __block JSManagedValue *managedValue = _managedValue;
+    HMSafeMainThread(^{
+        // 防止编译器优化
+        managedValue = nil;
+    });
+}
+
 - (instancetype)initWithValue:(HMBaseValue *)value {
     if (!value || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return nil;
