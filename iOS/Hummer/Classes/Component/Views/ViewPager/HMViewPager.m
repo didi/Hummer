@@ -232,10 +232,6 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     // update current index
     NSUInteger currentLocation = self.currentIndex - (self.currentIndex % dc);
     NSUInteger targetIndex = currentLocation + position;
-    NSUInteger nextLocation = currentLocation + dc;
-    if (!(targetIndex >= self.currentIndex && targetIndex < nextLocation)) {
-        targetIndex = nextLocation + position;
-    }
     self.currentIndex = targetIndex;
     [self setupStartDragOffset];
     [self scrollToIndex:self.currentIndex animated:YES];
