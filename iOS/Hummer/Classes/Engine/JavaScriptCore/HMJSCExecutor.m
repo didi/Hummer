@@ -1434,6 +1434,7 @@ void hummerFinalize(JSObjectRef object) {
         valueRefArray[count - 1] = inlineValueRef;
     }];
     JSValueRef returnValueRef = JSObjectCallAsFunction(self.contextRef, functionObjectRef, thisObjectRef, count, valueRefArray, &exception);
+    // free 空指针安全
     free(valueRefArray);
     // 业务代码需要抛出异常
     [self popExceptionWithErrorObject:&exception];
