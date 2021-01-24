@@ -48,12 +48,10 @@ HM_EXPORT_CLASS_METHOD(trace, trace)
 + (void)logToNativeWithLevel:(HMLogLevel)logLevel {
     NSMutableString *string = NSMutableString.string;
     [HMOtherArguments enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *argString = obj.toString;
-        if (argString.length > 0) {
-            [string appendString:argString];
-        }
-        [HMLogger printJSLog:string level:logLevel];
+        id argString = obj.toObject;
+        [string appendFormat:@"%@", argString];
     }];
+    [HMLogger printJSLog:string level:logLevel];
 }
 
 @end
