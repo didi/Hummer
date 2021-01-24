@@ -15,6 +15,10 @@ Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_createJSContextNative
     // 加入缓存
     JSCCache::addJsContextRef(jsContextRef);
 
+    // 还未真正实现Recycler类注入，临时先这么写
+    JSStringRef jsScript = JSStringCreateWithUTF8CString("class Recycler {}");
+    JSEvaluateScript(jsContextRef, jsScript, nullptr, nullptr, 0, nullptr);
+
     return reinterpret_cast<jlong>(jsContextRef);
 }
 
