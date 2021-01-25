@@ -170,16 +170,18 @@
 }
 
 - (void)endRefresh {
-    [UIView animateWithDuration:0.25 animations:^{
-        UIEdgeInsets inset = self.scrollView.contentInset;
-        inset.top = 0;
-        self.scrollView.contentInset = inset;
-    }];
-    self.state = HMRefreshTypeNormal;
-    if (self.stateChangedBlock) {
-        self.stateChangedBlock(HMRefreshTypeNormal);
-    }
-    [self layoutContentView];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.25 animations:^{
+            UIEdgeInsets inset = self.scrollView.contentInset;
+            inset.top = 0;
+            self.scrollView.contentInset = inset;
+        }];
+        self.state = HMRefreshTypeNormal;
+        if (self.stateChangedBlock) {
+            self.stateChangedBlock(HMRefreshTypeNormal);
+        }
+        [self layoutContentView];
+    });
 }
 
 - (void)beginRefresh {
