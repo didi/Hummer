@@ -1,5 +1,5 @@
 {
-  "name": "tenon-next",
+  "name": "tenon",
   "private": true,
   "devDependencies": {
     "@rollup/plugin-commonjs": "^13.0.0",
@@ -23,7 +23,7 @@
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.3"
   },
-  "description": "tenon next 升级版",
+  "description": "tenon 核心仓库",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -36,10 +36,6 @@
     "pub": "npm run build && npm run clean:lock && npx lerna publish --conventional-commits  --no-push && git push --tags",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
     "clean:lock": "rm -rf ./package-lock.json && rm -rf ./packages/**/package-lock.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@git.xiaojukeji.com:tenon/tenon-next.git"
   },
   "author": "duanlikang",
   "license": "ISC",
