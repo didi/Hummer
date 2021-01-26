@@ -1,0 +1,25 @@
+{
+  "name": "@hummer/tenon-compiler",
+  "version": "1.0.1",
+  "description": "Tenon编译时",
+  "author": "duanlikang",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/tenon-compiler.cjs.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@hummer/tenon-utils": "^1.0.0",
+    "@vue/compiler-core": "^3.0.1"
+  }
+}

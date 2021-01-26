@@ -1,0 +1,47 @@
+{
+  "name": "tenon-next",
+  "private": true,
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-json": "^4.0.0",
+    "@rollup/plugin-node-resolve": "^8.0.0",
+    "@rollup/plugin-replace": "^2.3.3",
+    "@rollup/plugin-strip": "^2.0.0",
+    "@types/jest": "^26.0.0",
+    "@types/node": "13.11.1",
+    "@types/puppeteer": "^2.0.0",
+    "@typescript-eslint/parser": "^3.2.0",
+    "execa": "^4.0.3",
+    "jest": "^26.0.1",
+    "lerna": "^3.18.3",
+    "rollup": "^2.16.1",
+    "rollup-plugin-external-globals": "^0.5.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.9.3"
+  },
+  "description": "tenon next 升级版",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "prewatch": "npm run bootstrap",
+    "dev": "node ./scripts/dev",
+    "build": "node ./scripts/build",
+    "test": "node scripts/build.js && jest --runInBand",
+    "publish-dnpm": "node ./scripts/publish.js",
+    "pub": "npm run build && npm run clean:lock && npx lerna publish --conventional-commits  --no-push && git push --tags",
+    "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
+    "clean:lock": "rm -rf ./package-lock.json && rm -rf ./packages/**/package-lock.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.xiaojukeji.com:tenon/tenon-next.git"
+  },
+  "author": "duanlikang",
+  "license": "ISC",
+  "dependencies": {}
+}
