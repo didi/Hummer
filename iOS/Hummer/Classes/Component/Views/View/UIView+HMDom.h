@@ -126,6 +126,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)hm_processFixedPositionWithContext:(HMJSContext *)context;
 
++ (void)hm_reSortFixedView:(HMJSContext *)context;
+
+
 /**
  * @brief 重要的设置 frame 的方法，避免直接设置 frame 影响动画等
  */

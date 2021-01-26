@@ -22,6 +22,15 @@
 
 @implementation UIView(HMAttribute)
 
+- (CGFloat)hm_zIndex {
+    return [objc_getAssociatedObject(self, _cmd) floatValue];
+}
+
+
+- (void)setHm_zIndex:(CGFloat)hm_zIndex {
+    objc_setAssociatedObject(self, @selector(hm_zIndex), @(hm_zIndex), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 #pragma mark - Export Attribute visible
 
 HM_EXPORT_ATTRIBUTE(opacity, alpha, HMNumberToCGFloat:)
@@ -32,9 +41,9 @@ HM_EXPORT_ATTRIBUTE(visibility, hidden, HMStringToViewHidden:)
 
 HM_EXPORT_ATTRIBUTE(zIndex, __zIndex, HMNumberToNSInteger:)
 - (void)set__zIndex:(NSUInteger)index {
+    self.hm_zIndex = index;
     self.layer.zPosition = index;
 }
-
 #pragma mark - Export Attribute Border
 
 HM_EXPORT_ATTRIBUTE(borderWidth, __borderWidth, HMStringToNumberArray:)
