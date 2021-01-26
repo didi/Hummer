@@ -61,9 +61,9 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 - (nullable NSObject *)convertValueRefToNativeObject:(nullable JSValueRef)valueRef;
 
-- (nullable NSString *)convertValueRefToString:(nullable JSValueRef)valueRef;
+- (nullable NSString *)convertValueRefToString:(nullable JSValueRef)valueRef isForce:(BOOL)isForce;
 
-- (nullable NSNumber *)convertValueRefToNumber:(nullable JSValueRef)valueRef;
+- (nullable NSNumber *)convertValueRefToNumber:(nullable JSValueRef)valueRef isForce:(BOOL)isForce;
 
 /// 业务代码打 exception，Hummer 内部代码异常情况打日志
 - (BOOL)popExceptionWithErrorObject:(JSValueRef _Nullable *_Nullable)errorObject;
@@ -743,7 +743,7 @@ void hummerFinalize(JSObjectRef object) {
     return YES;
 }
 
-- (nullable NSNumber *)convertToNumberWithValue:(HMBaseValue *)value {
+- (nullable NSNumber *)convertToNumberWithValue:(HMBaseValue *)value isForce:(BOOL)isForce {
     if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return nil;
     }
@@ -761,7 +761,7 @@ void hummerFinalize(JSObjectRef object) {
     return [self convertValueRefToNativeObject:strongValue.valueRef];
 }
 
-- (nullable NSString *)convertToStringWithValue:(HMBaseValue *)value {
+- (nullable NSString *)convertToStringWithValue:(HMBaseValue *)value isForce:(BOOL)isForce {
     if (value.context != self || ![value isKindOfClass:HMJSCStrongValue.class]) {
         return nil;
     }
@@ -770,10 +770,10 @@ void hummerFinalize(JSObjectRef object) {
     return [self convertValueRefToString:strongValue.valueRef];
 }
 
-- (nullable NSString *)convertValueRefToString:(JSValueRef)valueRef {
+- (nullable NSString *)convertValueRefToString:(JSValueRef)valueRef isForce:(BOOL)isForce {
     HMAssertMainQueue();
     // JSValueToStringCopy 有慢路径，因此先判断
-    if (!JSValueIsString(self.contextRef, valueRef)) {
+    if (!isForce && !JSValueIsString(self.contextRef, valueRef)) {
         return nil;
     }
     JSValueRef exception = NULL;
@@ -788,17 +788,19 @@ void hummerFinalize(JSObjectRef object) {
     return stringValue;
 }
 
-- (nullable NSNumber *)convertValueRefToNumber:(JSValueRef)valueRef {
+- (nullable NSNumber *)convertValueRefToNumber:(JSValueRef)valueRef isForce:(BOOL)isForce {
     HMAssertMainQueue();
-    if (JSValueIsNumber(self.contextRef, valueRef)) {
+    if (JSValueIsBoolean(self.contextRef, valueRef)) {
+        bool boolValue = JSValueToBoolean(self.contextRef, valueRef);
+
+        return @(boolValue);
+    } else if (!isForce && !JSValueIsNumber(self.contextRef, valueRef)) {
+        return nil;
+    } else {
         // new Number() 是对象不是数字
         double numberValue = JSValueToNumber(self.contextRef, valueRef, NULL);
 
         return @(numberValue);
-    } else if (JSValueIsBoolean(self.contextRef, valueRef)) {
-        bool boolValue = JSValueToBoolean(self.contextRef, valueRef);
-
-        return @(boolValue);
     }
 
     return nil;

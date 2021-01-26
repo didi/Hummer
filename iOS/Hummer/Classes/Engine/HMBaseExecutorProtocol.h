@@ -96,9 +96,9 @@ typedef HMFunctionType HMFuncCallback;
 
 - (nullable id)convertToObjectWithValue:(nullable HMBaseValue *)value isPortableConvert:(BOOL)isPortableConvert;
 
-- (nullable NSNumber *)convertToNumberWithValue:(nullable HMBaseValue *)value;
+- (nullable NSNumber *)convertToNumberWithValue:(nullable HMBaseValue *)value isForce:(BOOL)isForce;
 
-- (nullable NSString *)convertToStringWithValue:(nullable HMBaseValue *)value;
+- (nullable NSString *)convertToStringWithValue:(nullable HMBaseValue *)value isForce:(BOOL)isForce;
 
 - (nullable NSArray *)convertToArrayWithValue:(nullable HMBaseValue *)value isPortableConvert:(BOOL)isPortableConvert;
 
