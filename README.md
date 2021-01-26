@@ -49,6 +49,14 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 | Android | iOS |
 | ---- | ---- |
 | ![HummerCode](https://pt-starimg.didistatic.com/static/starimg/img/dfed6eHxTQ1607423220944.png) | ![TenonCode](https://pt-starimg.didistatic.com/static/starimg/img/mGMzF3X8F31607423224147.png) |
+## 关联仓库
+| 仓库      |  说明   |
+| :-------- | :------ |
+| [Hummer CLI](https://github.com/OrangeLab/hummer-cli) | Hummer CLI 工具库  |
+| [Tenon Loader](https://github.com/OrangeLab/tenon-loader)   | Tenon Vue Loader  |
+| [Hummer CLI Template](https://github.com/OrangeLab/hummer-cli-template)   | Hummer CLI 的模板仓库  |
+| [Tenon Plugins ](https://github.com/OrangeLab/tenon-plugins)   | Tenon 的插件库  |
+
 
 ## 协议
 <img alt="Apache-2.0 license" src="https://www.apache.org/img/ASF20thAnniversary.jpg" width="128">
