@@ -110,11 +110,11 @@ NS_ASSUME_NONNULL_END
 }
 
 - (nullable NSNumber *)toNumber {
-    return [self.context convertToNumberWithValue:self];
+    return [self.context convertToNumberWithValue:self isForce:YES];
 }
 
 - (nullable NSString *)toString {
-    return [self.context convertToStringWithValue:self];
+    return [self.context convertToStringWithValue:self isForce:YES];
 }
 
 - (nullable NSArray *)toArray {
