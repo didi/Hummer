@@ -26,6 +26,8 @@ HMAssociatedPropertyGetterDeclaration(decoration, HMViewDecoration)
 
 - (void)set__borderWidth:(NSArray<NSNumber *> *)list;
 
+- (CGFloat)hm_zIndex;
+
 @end
 
 NS_ASSUME_NONNULL_END

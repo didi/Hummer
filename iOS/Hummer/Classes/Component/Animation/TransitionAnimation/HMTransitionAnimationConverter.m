@@ -91,10 +91,12 @@
     transformFuncStr = [transformFuncStr stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^(translate|(scale(X|Y)?)|(rotate((X|Y|Z){1}))|skew)" options:NSRegularExpressionCaseInsensitive error:&error];
-    HMAssert(!error, @"HMTransitionAnimationTransfromFunc generate regex error!");
+    if (error) {
+        HMLogError(@"HMTransitionAnimationTransfromFunc generate regex error!");
+    }
     NSRange rang = [regex rangeOfFirstMatchInString:transformFuncStr options:0 range:NSMakeRange(0, transformFuncStr.length)];
     if (rang.location == NSNotFound) {
-        HMAssert(NO, @"HMTransitionAnimationTransfromFunc transform function name error!");
+        HMLogError(@"HMTransitionAnimationTransfromFunc transform function name error!");
         return nil;
     }
     NSString *funcName = [transformFuncStr substringWithRange:rang];

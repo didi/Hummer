@@ -212,6 +212,7 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
     if (context.renderCompletion) {
         context.renderCompletion();
     }
+    [UIView hm_reSortFixedView:context];
 }
 
 - (void)setBasicWidth:(HMBaseValue *)basicWidth {

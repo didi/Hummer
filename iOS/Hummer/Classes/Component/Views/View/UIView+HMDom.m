@@ -29,6 +29,8 @@
 #import "HMTransitionAnimation.h"
 #import "UIView+HMImageLoader.h"
 #import "NSObject+Hummer.h"
+#import "UIView+HMAttribute.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -1064,8 +1066,6 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         }
     }
 
-    [self hm_processFixedPositionWithContext:[HMJSGlobal.globalObject currentContext:style.context]];
-
     NSMutableDictionary *transitionAnimations = NSMutableDictionary.dictionary;
     [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
         [layoutInfo enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj, BOOL *stop) {
@@ -1086,6 +1086,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         }
     }];
     
+    // 设置样式之后，根据zindex 处理fixed
+    [self hm_processFixedPositionWithContext:[HMJSGlobal.globalObject currentContext:style.context]];
     // 将动画相关信息记录到transitionAnimation
     [self.hm_transitionAnimation addAnimations:transitionAnimations];
     
@@ -1185,6 +1187,35 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         [self.hm_fixedPositionLastContainerView hm_markDirty];
         self.hm_fixedPositionLastContainerView = nil;
     }
+    if (self.superview == context.rootView) {
+        [UIView hm_reSortFixedView:context];
+    }
+}
+
++ (void)hm_reSortFixedView:(HMJSContext *)context{
+    
+    NSArray *rootSubViews = context.rootView.subviews;
+    NSMutableArray *fixedViews = [[NSMutableArray alloc] init];
+    for (UIView *subview in rootSubViews) {
+        
+        if (subview.hm_isFixedPosition) {
+            [fixedViews addObject:subview];
+            [subview removeFromSuperview];
+        }
+    }
+    if (fixedViews.count <= 0) {return;}
+    [fixedViews sortUsingComparator:^NSComparisonResult(UIView *view1, UIView *view2) {
+     
+        if (view1.hm_zIndex > view2.hm_zIndex) {
+            return NSOrderedDescending;
+        }else if (view1.hm_zIndex < view2.hm_zIndex) {
+            return NSOrderedAscending;
+        }
+        return NSOrderedSame;
+    }];
+    for (UIView *sortedView in fixedViews) {
+        [context.rootView addSubview:sortedView];
+    }
 }
 
 - (void)hm_markDirty {
@@ -1230,29 +1261,6 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
 }
 
 #pragma mark - Export Method
-
-- (void)hm_addSubview:(HMBaseValue *)subview {
-    id viewObject = subview.hm_toObjCObject;
-    UIView *view = nil;
-    if ([viewObject isKindOfClass:UIView.class]) {
-        view = viewObject;
-    }
-    if (!view) {
-        HMLogError(@"参数必须为视图");
-
-        return;
-    }
-
-    if (view.superview) {
-        UIView *parent = view.superview;
-        [view removeFromSuperview];
-        [parent hm_markDirty];
-    }
-    [self addSubview:view];
-    [self hm_markDirty];
-
-    [view hm_processFixedPositionWithContext:[HMJSGlobal.globalObject currentContext:subview.context]];
-}
 
 - (void)hm_removeSubview:(HMBaseValue *)child {
     id viewObject = child.hm_toObjCObject;
@@ -1326,9 +1334,50 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     [oldView removeFromSuperview];
 
     [self insertSubview:newView atIndex:index];
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:newChild.context];
+    [newView hm_processFixedPositionWithContext:context];
+    [self hm_markDirty];
+}
+- (void)hm_addSubview:(HMBaseValue *)subview {
+    [self _hm_insertNode:subview beforeNode:nil];
+}
+
+/**
+ * 当 oldChild 为 nil，则相当于 hm_addSubview 。
+ */
+- (void)_hm_insertNode:(HMBaseValue *)newChild beforeNode:(nullable HMBaseValue *)oldChild {
+
+    id newViewObject = newChild.hm_toObjCObject;
+    id oldViewObject = oldChild.hm_toObjCObject;
+    UIView *newView = nil;
+    UIView *oldView = nil;
+    if ([newViewObject isKindOfClass:UIView.class]) {
+        newView = newViewObject;
+    }
+    if ([oldViewObject isKindOfClass:UIView.class]) {
+        oldView = oldViewObject;
+    }
+    // 目标视图不能为空，如果 oldChild 为空，则 addsubview
+    if (!newView) {
+        HMLogError(@"参数必须为视图");
+        return;
+    }
+    if (newView.superview && newView.superview != self) {
+        UIView *parent = newView.superview;
+        [newView removeFromSuperview];
+        [parent hm_markDirty];
+    }
+    if (newView && oldView){
+        [self insertSubview:newView belowSubview:oldView];
+    }else{
+        [self addSubview:newView];
+    }
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:newChild.context];
+    [newView hm_processFixedPositionWithContext:context];
     [self hm_markDirty];
 }
 
+// 保持该方法行为与之前一致。
 - (void)hm_insertBefore:(HMBaseValue *)newChild withNode:(HMBaseValue *)oldChild {
     id newViewObject = newChild.hm_toObjCObject;
     id oldViewObject = oldChild.hm_toObjCObject;
@@ -1342,16 +1391,9 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     }
     if (!newView || !oldView) {
         HMLogError(@"参数必须为视图");
-
         return;
     }
-    if (newView.superview && newView.superview != self) {
-        UIView *parent = newView.superview;
-        [newView removeFromSuperview];
-        [parent hm_markDirty];
-    }
-    [self insertSubview:newView belowSubview:oldView];
-    [self hm_markDirty];
+    [self _hm_insertNode:newChild beforeNode:oldChild];
 }
 
 - (HMBaseValue *)hm_getSubViewByID:(HMBaseValue *)viewID {
