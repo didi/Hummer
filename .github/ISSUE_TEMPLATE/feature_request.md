@@ -2,13 +2,12 @@
 name: "\U0001F680 Feature Request"
 about: I have a specific suggestion for Hummer!
 title: ''
-labels: "enhancement, Needs: Triage \U0001F50D"
+labels: "Needs: Triage \U0001F50D, enhancement"
 assignees: ''
 
 ---
 
 ## 功能请求
-
 <!-- 如果您想实现一个拉取请求，请勾选此项，我们非常乐意帮助您完成此过程！ -->
 - [ ] 我想要完成此功能
 
