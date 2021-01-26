@@ -184,7 +184,6 @@
         return;
     }
     
-//    NSString *wsURLStr = @"ws://172.23.163.148:9000/";
     NSURL *wsURL = [NSURL URLWithString:wsURLStr];
     if (wsURL) {
         SRWebSocket *webSocket = [[SRWebSocket alloc] initWithURL:wsURL];
