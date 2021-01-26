@@ -1,0 +1,25 @@
+{
+  "name": "@hummer/tenon",
+  "version": "1.7.3",
+  "description": "Tenon运行时",
+  "author": "duanlikang",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/tenon.es.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@hummer/tenon-compiler": "^1.0.0",
+    "@hummer/tenon-vue": "^1.0.0"
+  }
+}

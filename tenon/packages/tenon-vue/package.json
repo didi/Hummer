@@ -1,0 +1,29 @@
+{
+  "name": "@hummer/tenon-vue",
+  "version": "1.0.0",
+  "description": "Tenon运行时",
+  "author": "duanlikang <duanlikang@didichuxing.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/tenon-vue.es.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@hummer/tenon-utils": "^1.0.0",
+    "@vue/reactivity": "^3.0.1",
+    "@vue/runtime-core": "^3.0.1"
+  },
+  "devDependencies": {
+    "@hummer/hummer-front": "^1.0.0"
+  }
+}
