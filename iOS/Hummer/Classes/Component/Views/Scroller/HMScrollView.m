@@ -155,7 +155,8 @@ HM_EXPORT_METHOD(scrollTo, scrollToX:Y:)
     CGFloat offsetX = HMPointWithString(xValue.toString);
     CGFloat offsetY = HMPointWithString(yValue.toString);
     CGFloat x = MIN(MAX(0, offsetX), self.contentSize.width - self.frame.size.width);
-    CGPoint offset = CGPointMake(x, offsetY);
+    CGFloat y = MIN(MAX(0, offsetY), self.contentSize.height - self.frame.size.height);
+    CGPoint offset = CGPointMake(x, y);
     [self setContentOffset:offset animated:YES];
 }
 
@@ -167,7 +168,9 @@ HM_EXPORT_METHOD(scrollBy, scrollByX:Y:)
     
     CGPoint offset = self.contentOffset;
     offset = CGPointMake(offset.x + offsetX, offset.y + offsetY);
-    [self setContentOffset:offset animated:YES];
+    CGFloat x = MIN(MAX(0, offset.x), self.contentSize.width - self.frame.size.width);
+    CGFloat y = MIN(MAX(0, offset.y), self.contentSize.height - self.frame.size.height);
+    [self setContentOffset:CGPointMake(x, y) animated:YES];
 }
 
 HM_EXPORT_METHOD(scrollToTop, scrollToTop)
