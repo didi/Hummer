@@ -10,17 +10,32 @@
 #import "NSObject+Hummer.h"
 #import <Hummer/HMBaseValue.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HMNotifyCenter()
 
-@property (nonatomic, strong) NSMutableDictionary *eventCallbackMap;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerMap;
+
+- (void)removeEvent:(nullable HMBaseValue *)value callback:(nullable HMBaseValue *)callback;
+
+- (void)addEvent:(nullable HMBaseValue *)value callback:(nullable HMBaseValue *)callback;
+
+- (void)notify:(nullable NSNotification *)center;
+
+- (void)postEvent:(nullable HMBaseValue *)value object:(nullable HMBaseValue *)valueObjc;
+
 @end
+
+NS_ASSUME_NONNULL_END
 
 @implementation HMNotifyCenter
 
 HM_EXPORT_CLASS(NotifyCenter, HMNotifyCenter)
 
 HM_EXPORT_METHOD(addEventListener, addEvent:callback:)
+
 HM_EXPORT_METHOD(removeEventListener, removeEvent:callback:)
+
 HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
 
 - (void)dealloc {
@@ -29,98 +44,143 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
-        _eventCallbackMap = [[NSMutableDictionary alloc] init];
-    }
+    _eventHandlerMap = [[NSMutableDictionary alloc] init];
+    
     return self;
 }
 
 #pragma mark - Export Method
 
 - (void)removeEvent:(HMBaseValue *)value callback:(HMBaseValue *)callback {
-    if (!value)  {
-        return;
-    }
     NSString *name = value.toString;
-    if (![name isKindOfClass:[NSString class]]) {
+    if (name.length == 0) {
         return;
     }
-    NSMutableArray *callbacks = self.eventCallbackMap[name];
-    if (!callback) {
-        // remove all listener
-        [callbacks removeAllObjects];
-        [self.eventCallbackMap removeObjectForKey:name];
-    } else {
+    NSMutableDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerDictionary = self.eventHandlerMap.mutableCopy;
+    self.eventHandlerMap = nil;
+    NSMutableArray<HMBaseValue *> *callbackArray = eventHandlerDictionary[name].mutableCopy;
+    eventHandlerDictionary[name] = nil;
+    if (callback) {
         // try to remove a specific listener
-        __block HMBaseValue *targetValue = nil;
-        [callbacks enumerateObjectsUsingBlock:^(HMBaseValue *_Nonnull obj,
-                                                NSUInteger idx,
-                                                BOOL * _Nonnull stop) {
-            if ([obj isEqualToObject:callback]) {
-                targetValue = obj;
-                *stop = YES;
+        __block NSIndexSet *indexSet = nil;
+        [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isEqualToObject:callback] || !obj.context) {
+                NSMutableIndexSet *mutableIndexSet = indexSet.mutableCopy;
+                indexSet = nil;
+                if (!mutableIndexSet) {
+                    mutableIndexSet = NSMutableIndexSet.indexSet;
+                }
+                [mutableIndexSet addIndex:idx];
+                indexSet = mutableIndexSet.copy;
             }
         }];
-        if (targetValue) {
-            [callbacks removeObject:targetValue];
+        if (indexSet) {
+            [callbackArray removeObjectsAtIndexes:indexSet];
         }
-    }
-    if (callbacks.count == 0) {
-        self.eventCallbackMap[name] = nil;
+        if (callbackArray.count == 0) {
+            callbackArray = nil;
+            [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                            name:name
+                                                          object:nil];
+        }
+        eventHandlerDictionary[name] = callbackArray.copy;
+    } else {
         [[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:name
                                                       object:nil];
     }
+    if (eventHandlerDictionary.count == 0) {
+        eventHandlerDictionary = nil;
+    }
+    self.eventHandlerMap = eventHandlerDictionary;
 }
 
 - (void)addEvent:(HMBaseValue *)value callback:(HMBaseValue *)callback {
-    if (!value || !callback)  { return; }
     NSString *name = value.toString;
-    if (![name isKindOfClass:[NSString class]]) {
+    if (name.length == 0 || !callback) {
         return;
     }
-    NSMutableArray *callbacks = self.eventCallbackMap[name];
+    NSMutableDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerDictionary = self.eventHandlerMap.mutableCopy;
+    self.eventHandlerMap = nil;
+    NSMutableArray<HMBaseValue *> *callbackArray = eventHandlerDictionary[name].mutableCopy;
+    eventHandlerDictionary[name] = nil;
     
-    if (!callbacks) {
-        callbacks = [[NSMutableArray alloc] init];
-        self.eventCallbackMap[name] = callbacks;
+    if (!callbackArray) {
+        callbackArray = [NSMutableArray array];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(notify:)
                                                      name:name
                                                    object:nil];
     }
-    [callbacks addObject:callback];
+    [callbackArray addObject:callback];
+    eventHandlerDictionary[name] = callbackArray.copy;
+    self.eventHandlerMap = eventHandlerDictionary;
 }
 
 - (void)postEvent:(HMBaseValue *)value object:(HMBaseValue *)valueObjc {
     NSString *name = value.toString;
+    if (name.length == 0) {
+        return;
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:name
                                                         object:valueObjc
                                                       userInfo:nil];
 }
 
 - (void)notify:(NSNotification *)center {
-    if (!self.hmContext) {
-        return;
-    }
     NSString *name = center.name;
-    NSArray *callbacks = [self.eventCallbackMap[name] copy];
     id notificationObject = center.object;
-    if ([notificationObject isKindOfClass:HMBaseValue.class]) {
-        // 通知有可能是其他页面传入的，如果不做判断，callWithArguments: 会导致崩溃，因为不同的虚拟机之间不能传递值
-        HMBaseValue *notificationValue = notificationObject;
-        if (notificationValue.context != self.hmValue.context) {
-            // 需要复制转换
-            // 因此不能支持复制 OBJC 对象
-            notificationObject = notificationValue.toPortableObject;
+    __block id portableObject = nil;
+    __block NSIndexSet *indexSet = nil;
+    [self.eventHandlerMap[name] enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (!obj.context) {
+            NSMutableIndexSet *mutableIndexSet = indexSet.mutableCopy;
+            indexSet = nil;
+            if (!mutableIndexSet) {
+                mutableIndexSet = NSMutableIndexSet.indexSet;
+            }
+            [mutableIndexSet addIndex:idx];
+            indexSet = mutableIndexSet.copy;
+            
+            return;
         }
-    }
-    [callbacks enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull callbackValue,
-                                            NSUInteger idx,
-                                            BOOL * _Nonnull stop) {
-        NSArray *arguments = notificationObject ? @[notificationObject] : @[];
-        [callbackValue callWithArguments:arguments];
+        // 1. 普通对象 -> 直接返回
+        // 2. HMBaseValue
+        //   1. 同一个 Context -> HMBaseValue;
+        //   2. 不同 Context -> portableObject;
+        if (![notificationObject isKindOfClass:HMBaseValue.class]) {
+            [obj callWithArguments:@[notificationObject]];
+        } else {
+            if (((HMBaseValue *) notificationObject).context == obj.context) {
+                [obj callWithArguments:@[notificationObject]];
+            } else {
+                if (!portableObject) {
+                    portableObject = ((HMBaseValue *) notificationObject).toPortableObject;
+                }
+                [obj callWithArguments:@[portableObject]];
+            }
+        }
     }];
+    if (indexSet) {
+        NSMutableDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerDictionary = self.eventHandlerMap.mutableCopy;
+        self.eventHandlerMap = nil;
+        NSMutableArray<HMBaseValue *> *callbackArray = eventHandlerDictionary[name].mutableCopy;
+        eventHandlerDictionary[name] = nil;
+        
+        [callbackArray removeObjectsAtIndexes:indexSet];
+        
+        if (callbackArray.count == 0) {
+            callbackArray = nil;
+            [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                            name:name
+                                                          object:nil];
+        }
+        eventHandlerDictionary[name] = callbackArray.copy;
+        if (eventHandlerDictionary.count == 0) {
+            eventHandlerDictionary = nil;
+        }
+        self.eventHandlerMap = eventHandlerDictionary;
+    }
 }
 
 @end
