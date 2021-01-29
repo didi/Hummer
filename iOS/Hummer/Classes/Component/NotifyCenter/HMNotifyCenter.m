@@ -197,7 +197,9 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
             }
         }];
         
-        [callbackArray removeObjectsAtIndexes:newIndexSet];
+        if (newIndexSet) {
+            [callbackArray removeObjectsAtIndexes:newIndexSet];
+        }
         
         if (callbackArray.count == 0) {
             callbackArray = nil;
