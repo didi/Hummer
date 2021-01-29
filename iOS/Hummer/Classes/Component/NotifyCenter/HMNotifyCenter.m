@@ -105,6 +105,22 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
     NSMutableArray<HMBaseValue *> *callbackArray = eventHandlerDictionary[name].mutableCopy;
     eventHandlerDictionary[name] = nil;
     
+//    __block NSIndexSet *indexSet = nil;
+//    [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        if (!obj.context) {
+//            NSMutableIndexSet *mutableIndexSet = indexSet.mutableCopy;
+//            indexSet = nil;
+//            if (!mutableIndexSet) {
+//                mutableIndexSet = NSMutableIndexSet.indexSet;
+//            }
+//            [mutableIndexSet addIndex:idx];
+//            indexSet = mutableIndexSet.copy;
+//        }
+//    }];
+//    if (indexSet) {
+//        [callbackArray removeObjectsAtIndexes:indexSet];
+//    }
+    
     if (!callbackArray) {
         callbackArray = [NSMutableArray array];
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -131,8 +147,17 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
     NSString *name = center.name;
     id notificationObject = center.object;
     __block id portableObject = nil;
+    __block NSIndexSet *indexSet = nil;
     [self.eventHandlerMap[name] enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (!obj.context) {
+            NSMutableIndexSet *mutableIndexSet = indexSet.mutableCopy;
+            indexSet = nil;
+            if (!mutableIndexSet) {
+                mutableIndexSet = NSMutableIndexSet.indexSet;
+            }
+            [mutableIndexSet addIndex:idx];
+            indexSet = mutableIndexSet.copy;
+            
             return;
         }
         // 1. 普通对象 -> 直接返回
@@ -152,6 +177,40 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
             }
         }
     }];
+    if (indexSet) {
+        NSMutableDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerDictionary = self.eventHandlerMap.mutableCopy;
+        self.eventHandlerMap = nil;
+        NSMutableArray<HMBaseValue *> *callbackArray = eventHandlerDictionary[name].mutableCopy;
+        eventHandlerDictionary[name] = nil;
+        
+        __block NSIndexSet *newIndexSet = nil;
+        // 判断是否超出范围
+        [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            if (idx < callbackArray.count) {
+                NSMutableIndexSet *mutableIndexSet = newIndexSet.mutableCopy;
+                newIndexSet = nil;
+                if (!mutableIndexSet) {
+                    mutableIndexSet = NSMutableIndexSet.indexSet;
+                }
+                [mutableIndexSet addIndex:idx];
+                newIndexSet = mutableIndexSet.copy;
+            }
+        }];
+        
+        [callbackArray removeObjectsAtIndexes:newIndexSet];
+        
+        if (callbackArray.count == 0) {
+            callbackArray = nil;
+            [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                            name:name
+                                                          object:nil];
+        }
+        eventHandlerDictionary[name] = callbackArray.copy;
+        if (eventHandlerDictionary.count == 0) {
+            eventHandlerDictionary = nil;
+        }
+        self.eventHandlerMap = eventHandlerDictionary;
+    }
 }
 
 @end
