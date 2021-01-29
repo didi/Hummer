@@ -149,7 +149,7 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
         //   1. 同一个 Context -> HMBaseValue;
         //   2. 不同 Context -> portableObject;
         if (![notificationObject isKindOfClass:HMBaseValue.class]) {
-            [obj callWithArguments:@[notificationObject]];
+            [obj callWithArguments:notificationObject ? @[notificationObject] : nil];
         } else {
             if (((HMBaseValue *) notificationObject).context == obj.context) {
                 [obj callWithArguments:@[notificationObject]];
@@ -157,7 +157,7 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
                 if (!portableObject) {
                     portableObject = ((HMBaseValue *) notificationObject).toPortableObject;
                 }
-                [obj callWithArguments:@[portableObject]];
+                [obj callWithArguments:portableObject ? @[portableObject] : nil];
             }
         }
     }];
