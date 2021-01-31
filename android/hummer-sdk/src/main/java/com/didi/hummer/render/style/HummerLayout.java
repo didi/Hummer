@@ -161,7 +161,7 @@ public class HummerLayout extends YogaLayout {
 //                        node.getChildAt(i),
 //                        xOffset + node.getLayoutX(),
 //                        yOffset + node.getLayoutY());
-                applyLayoutRecursive(node.getChildAt(i), xOffset, yOffset);
+//                applyLayoutRecursive(node.getChildAt(i), xOffset, yOffset);
             }
         }
     }

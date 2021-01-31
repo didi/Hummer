@@ -11,6 +11,7 @@
 #include "HummerJNI.h"
 #include <string>
 #include "JSException.h"
+#include "JSCCache.h"
 
 
 class TypeConvertor {

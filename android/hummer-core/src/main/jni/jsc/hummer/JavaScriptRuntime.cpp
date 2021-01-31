@@ -5,17 +5,32 @@
 #include "../JavaScriptCore/include/JavaScript.h"
 #include "HummerJNI.h"
 #include "TypeConvertor.h"
+#include "JSCCache.h"
 
 extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_createJSContextNative(JNIEnv *env, jclass clazz) {
-    return reinterpret_cast<jlong>(JSGlobalContextCreate(nullptr));
+    JSGlobalContextRef jsContextRef = JSGlobalContextCreate(nullptr);
+
+    // 加入缓存
+    JSCCache::addJsContextRef(jsContextRef);
+
+    // 还未真正实现Recycler类注入，临时先这么写
+    JSStringRef jsScript = JSStringCreateWithUTF8CString("class Recycler {}");
+    JSEvaluateScript(jsContextRef, jsScript, nullptr, nullptr, 0, nullptr);
+
+    return reinterpret_cast<jlong>(jsContextRef);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_destroyJSContextNative(JNIEnv *env, jclass clazz, jlong jsContext) {
-    JSGlobalContextRelease(reinterpret_cast<JSGlobalContextRef>(jsContext));
+    auto jsContextRef = reinterpret_cast<JSGlobalContextRef>(jsContext);
+
+    // 删除缓存（用于标记已释放）
+    JSCCache::removeJsContextRef(jsContextRef);
+
+    JSGlobalContextRelease(jsContextRef);
 }
 
 extern "C"
@@ -42,7 +57,7 @@ Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_evaluateJavaScriptNat
     if (exception) reportException(jsContext, exception);
 
     env->ReleaseStringUTFChars(script, charScript);
-    env->ReleaseStringUTFChars(script, charScriptId);
+    env->ReleaseStringUTFChars(scriptId, charScriptId);
     JSStringRelease(jsScript);
     JSStringRelease(jsScriptId);
     return ret;

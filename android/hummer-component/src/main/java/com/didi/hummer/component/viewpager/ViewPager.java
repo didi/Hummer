@@ -73,6 +73,9 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
             }
         });
 
+        // 去除边缘半月阴影
+        getView().getViewPager().setOverScrollMode(View.OVER_SCROLL_NEVER);
+
         getView().setScrollDuration(1000)
                 .setCanLoop(false)
                 .setIndicatorVisibility(View.GONE)

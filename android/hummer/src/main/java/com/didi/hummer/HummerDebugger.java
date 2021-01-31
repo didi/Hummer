@@ -42,7 +42,7 @@ public class HummerDebugger {
     private static void initRefreshView(HummerContext context, String url) {
         FloatLayout floatLayout = new FloatLayout(context);
         floatLayout.setOnClickListener(v -> {
-            ((ComponentPool) context.getObjectPool()).onDestroy();
+            context.onRefresh();
             NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
                 context.evaluateJavaScript(response.data, url);
                 Toast.makeText(context, "页面已刷新", Toast.LENGTH_SHORT).show();

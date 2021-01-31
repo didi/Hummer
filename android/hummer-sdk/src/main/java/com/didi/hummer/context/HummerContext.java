@@ -177,6 +177,18 @@ public class HummerContext extends ContextWrapper {
         return back();
     }
 
+    /**
+     * 用于调式的时候刷新用
+     *
+     * @return
+     */
+    public void onRefresh() {
+        stop();
+        pause();
+        destroy();
+        NotifyCenter.release(mJsContext);
+    }
+
     protected void releaseJSContext() {
         HMLog.d("HummerNative", "HummerContext.releaseJSContext");
         mJsContext.release();

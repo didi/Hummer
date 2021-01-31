@@ -160,7 +160,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_TypeConvertor_isJSContextValid(JNIEnv *env, jclass clazz, jlong js_context) {
     auto jsContext = reinterpret_cast<JSContextRef>(js_context);
-    return static_cast<jboolean>(jsContext != nullptr);
+    return JSCCache::findJSContextRef(jsContext) && static_cast<jboolean>(jsContext != nullptr);
 }
 
 extern "C"
@@ -168,7 +168,7 @@ JNIEXPORT jboolean JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_TypeConvertor_isJSValueValid(JNIEnv *env, jclass clazz, jlong js_context, jlong js_value) {
     auto jsContext = reinterpret_cast<JSContextRef>(js_context);
     auto jsValue = reinterpret_cast<JSObjectRef>(js_value);
-    return static_cast<jboolean>(jsContext != nullptr && !JSValueIsNull(jsContext, jsValue) && !JSValueIsUndefined(jsContext, jsValue));
+    return JSCCache::findJSContextRef(jsContext) && static_cast<jboolean>(jsContext != nullptr && !JSValueIsNull(jsContext, jsValue) && !JSValueIsUndefined(jsContext, jsValue));
 }
 
 extern "C"
