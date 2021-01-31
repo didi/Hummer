@@ -6,7 +6,6 @@ import android.content.pm.ApplicationInfo;
 import android.support.annotation.IntDef;
 import android.text.TextUtils;
 
-import com.blankj.utilcode.util.Utils;
 import com.didi.hummer.adapter.navigator.impl.ActivityStackManager;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.exception.ExceptionCallback;
@@ -15,6 +14,7 @@ import com.didi.hummer.plugin.interfaze.IHermesDebugger;
 import com.didi.hummer.plugin.interfaze.IV8Debugger;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
+import com.didi.hummer.utils.blankj.Utils;
 import com.facebook.soloader.SoLoader;
 import com.getkeepsafe.relinker.ReLinker;
 

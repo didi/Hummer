@@ -43,9 +43,6 @@ dependencies {
 
     // OkHttp
     api 'com.squareup.okhttp3:okhttp:3.10.0'
-
-    // AndroidUtilCode
-    api 'com.blankj:utilcode:1.28.4'
 }
 
 uploadArchives.dependsOn(':hummer-core:uploadArchives')
