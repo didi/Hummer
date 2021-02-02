@@ -35,19 +35,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable, strong) HMNotifyCenter *notifyCenter;
 
-NS_ASSUME_NONNULL_END
+@property (nonatomic, strong) id <HMBaseExecutorProtocol>context;
 
-@property (nonatomic, weak) id<HMJSContextDelegate> delegate;
+@property (nonatomic, weak, readonly, nullable) UIView *rootView;
 
 @property (nonatomic, nullable, strong) HMBaseValue *componentView;
 
 @property (nonatomic, nullable, copy) void(^renderCompletion)(void);
 
-@property (nonatomic, weak, readonly, nullable) UIView *rootView;
-
-@property (nonatomic, strong) id <HMBaseExecutorProtocol>context;
-
-+ (instancetype)contextInRootView:(UIView *)rootView;
++ (instancetype)contextInRootView:(nullable UIView *)rootView;
 
 /**
  * 只能调用一次
@@ -56,5 +52,9 @@ NS_ASSUME_NONNULL_END
  * @return JSValue
  */
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName;
+
+NS_ASSUME_NONNULL_END
+
+@property (nonatomic, weak) id <HMJSContextDelegate> delegate;
 
 @end
