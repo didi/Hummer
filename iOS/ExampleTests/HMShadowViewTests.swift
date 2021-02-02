@@ -43,9 +43,8 @@ private final class HMShadowViewTests: QuickSpec {
             YGNodeStyleSetHeight(parentView?.yogaNode, 440)
         }
         
-        it("testFlexWrap") {
+        it("testFlexWrapSizeThatFits") {
             let layoutView = _shadowView { (node) in
-                YGNodeStyleSetWidth(node, 414)
                 YGNodeStyleSetFlexWrap(node, .wrap)
                 YGNodeStyleSetFlexDirection(node, .row)
             }
@@ -67,9 +66,8 @@ private final class HMShadowViewTests: QuickSpec {
             layoutView.insertSubview(topView, at: 0)
             layoutView.insertSubview(centerView, at: 1)
             layoutView.insertSubview(bottomView, at: 2)
-//            parentView.insertSubview(layoutView, at: 0)
-            let size = layoutView.sizeThatFitsMinimumSize(CGSize(width: 0, height: 0), maximumSize: CGSize(width: 500, height: CGFloat.greatestFiniteMagnitude))
-            print("\(size)")
+            let size = layoutView.sizeThatFitsMinimumSize(CGSize(width: 0, height: 0), maximumSize: CGSize(width: 400, height: CGFloat.greatestFiniteMagnitude))
+            expect(size == CGSize(width: 400, height: 300)).to(beTrue())
         }
 
         // Just a basic sanity test to ensure css-layout is applied correctly in the context of our shadow view hierarchy.
