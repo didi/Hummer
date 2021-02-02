@@ -996,8 +996,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
 #pragma mark - Export Property
 
 - (void)hm_getRect:(HMFuncCallback)callBack {
-    
-    HMExecOnMainQueue(^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+//    HMExecOnMainQueue(^{
         NSDictionary *dic = [HMLayoutUtils rectForView:self];
         HM_SafeRunBlock(callBack,@[dic]);
     });

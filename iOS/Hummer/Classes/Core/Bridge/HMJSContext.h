@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class HMBaseValue;
+@class HMBaseValue, HMNotifyCenter;
 
 @protocol HMBaseExecutorProtocol;
 
@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, nullable, copy) NSURL *url;
 
+@property (nonatomic, nullable, strong) HMNotifyCenter *notifyCenter;
+
 NS_ASSUME_NONNULL_END
 
 @property (nonatomic, weak) id<HMJSContextDelegate> delegate;
@@ -44,8 +46,6 @@ NS_ASSUME_NONNULL_END
 @property (nonatomic, weak, readonly, nullable) UIView *rootView;
 
 @property (nonatomic, strong) id <HMBaseExecutorProtocol>context;
-
-@property (nonatomic, strong, nullable) HMBaseValue *notifyManagedValue;
 
 + (instancetype)contextInRootView:(UIView *)rootView;
 

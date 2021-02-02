@@ -11,8 +11,8 @@
 #import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMBaseValue.h"
 
-#if __has_include("SRWebSocket.h")
-#import "SRWebSocket.h"
+#if __has_include(<SocketRocket/SRWebSocket.h>)
+#import <SocketRocket/SRWebSocket.h>
 #endif
 
 @interface HMViewController ()
@@ -176,7 +176,7 @@
 }
 
 #ifdef DEBUG
-#if __has_include("SRWebSocket.h")
+#if __has_include(<SocketRocket/SRWebSocket.h>)
 
 - (void)openWebSocketWithUrl:(NSString *)wsURLStr
 {

@@ -24,17 +24,17 @@
             @"bottom": @0,
         };
     }
-    CGPoint origin = view.frame.origin;
+//    CGPoint origin = view.frame.origin;
     
-    CGSize size = [view hm_sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
+//    CGSize size = [view hm_sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
     
     return @{
-        @"width": @(size.width),
-        @"height": @(size.height),
-        @"left": @(origin.x),
-        @"right": @(origin.x + size.width),
-        @"top": @(origin.y),
-        @"bottom": @(origin.y + size.height)
+        @"width": @(view.frame.size.width),
+        @"height": @(view.frame.size.height),
+        @"left": @(view.frame.origin.x),
+        @"right": @(view.frame.origin.x + view.frame.size.width),
+        @"top": @(view.frame.origin.y),
+        @"bottom": @(view.frame.origin.y + view.frame.size.height)
     };
 }
 

@@ -24,8 +24,6 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 
 @interface HMJSGlobal ()
 
-@property (nonatomic, nullable, strong) HMNotifyCenter *notifyCenter;
-
 - (NSDictionary<NSString *, NSObject *> *)getEnvironmentInfo;
 
 - (void)render:(nullable HMBaseValue *)page;
@@ -77,13 +75,17 @@ HM_EXPORT_CLASS_METHOD(render, render:)
 HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
 
 + (HMNotifyCenter *)notifyCenter {
-    // TODO(唐佳诚): 优化单例缓存
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
     
-    return HMJSGlobal.globalObject.notifyCenter;
+    return context.notifyCenter;
 }
 
 + (void)setNotifyCenter:(HMBaseValue *)notifyCenter {
-    HMJSGlobal.globalObject.notifyCenter = (HMNotifyCenter *) notifyCenter.toNativeObject;
+    id notifyCenterObject = notifyCenter.toNativeObject;
+    if ([notifyCenterObject isKindOfClass:HMNotifyCenter.class]) {
+        HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+        context.notifyCenter = notifyCenterObject;
+    }
 }
 
 + (NSDictionary<NSString *,NSObject *> *)pageInfo {
