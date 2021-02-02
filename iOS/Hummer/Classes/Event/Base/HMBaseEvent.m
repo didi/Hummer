@@ -9,6 +9,7 @@
 #import "HMExportManager.h"
 #import "UIView+HMEvent.h"
 #import "NSObject+Hummer.h"
+#import "HMUtility.h"
 
 NSString * const HMLongPressEventName   = @"longPress";
 NSString * const HMTapEventName         = @"tap";
@@ -47,7 +48,7 @@ HM_EXPORT_PROPERTY(timestamp, __timestamp, __setTimestamp:)
 }
 
 - (void)__setType:(__unused HMBaseValue *)type {
-    NSAssert(NO, @"cannot set read only property");
+    HMLogError(@"cannot set read only property");
 }
 
 - (HMBaseValue *)__target {
@@ -55,7 +56,7 @@ HM_EXPORT_PROPERTY(timestamp, __timestamp, __setTimestamp:)
 }
 
 - (void)__setTarget:(__unused HMBaseValue *)target {
-    NSAssert(NO, @"cannot set read only property");
+    HMLogError(@"cannot set read only property");
 }
 
 - (NSNumber *)__timestamp {
@@ -63,7 +64,7 @@ HM_EXPORT_PROPERTY(timestamp, __timestamp, __setTimestamp:)
 }
 
 - (void)__setTimestamp:(__unused HMBaseValue *)timestamp {
-    NSAssert(NO, @"cannot set read only property");
+    HMLogError(@"cannot set read only property");
 }
 
 @end
