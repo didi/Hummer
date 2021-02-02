@@ -234,13 +234,68 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
 
 - (CGSize)sizeThatFitsMinimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize {
     YOGA_TYPE_WRAPPER(YGNodeRef) clonedYogaNode = YOGA_TYPE_WRAPPER(YGNodeClone)(self.yogaNode);
-    YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(clonedYogaNode, YOGA_TYPE_WRAPPER(YGUndefined), YOGA_TYPE_WRAPPER(YGUndefined), HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
-    CGSize measuredSize = (CGSize) {
-            MIN(MAX(HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetWidth)(clonedYogaNode)), minimumSize.width), maximumSize.width),
-            MIN(MAX(HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetHeight)(clonedYogaNode)), minimumSize.height), maximumSize.height),
+    
+    YOGA_TYPE_WRAPPER(YGValue) width;
+    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
+        width = YOGA_TYPE_WRAPPER(YGNodeStyleGetWidth(clonedYogaNode));
+        if (width.unit == YGUnitPercent) {
+            YGNodeStyleSetWidthAuto(clonedYogaNode);
+        }
+    }
+    YOGA_TYPE_WRAPPER(YGValue) height;
+    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
+        height = YOGA_TYPE_WRAPPER(YGNodeStyleGetHeight(clonedYogaNode));
+        if (height.unit == YGUnitPercent) {
+            YGNodeStyleSetHeightAuto(clonedYogaNode);
+        }
+    }
+    YOGA_TYPE_WRAPPER(YGValue) minWidth;
+    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
+        minWidth = YOGA_TYPE_WRAPPER(YGNodeStyleGetMinWidth(clonedYogaNode));
+        if (minWidth.unit == YGUnitPercent) {
+            YGNodeStyleSetMinWidth(clonedYogaNode, YGUndefined);
+        }
+    }
+    YOGA_TYPE_WRAPPER(YGValue) minHeight;
+    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
+        minHeight = YOGA_TYPE_WRAPPER(YGNodeStyleGetMinHeight(clonedYogaNode));
+        if (minHeight.unit == YGUnitPercent) {
+            YGNodeStyleSetMinHeight(clonedYogaNode, YGUndefined);
+        }
+    }
+    YOGA_TYPE_WRAPPER(YGValue) maxWidth;
+    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
+        maxWidth = YOGA_TYPE_WRAPPER(YGNodeStyleGetMaxWidth(clonedYogaNode));
+        if (maxWidth.unit == YGUnitPercent) {
+            YGNodeStyleSetMaxWidth(clonedYogaNode, YGUndefined);
+        }
+    }
+    YOGA_TYPE_WRAPPER(YGValue) maxHeight;
+    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
+        maxHeight = YOGA_TYPE_WRAPPER(YGNodeStyleGetMaxHeight(clonedYogaNode));
+        if (maxHeight.unit == YGUnitPercent) {
+            YGNodeStyleSetMaxHeight(clonedYogaNode, YGUndefined);
+        }
+    }
+    
+    YOGA_TYPE_WRAPPER(YGNodeRef) constraintYogaNode = YOGA_TYPE_WRAPPER(YGNodeNewWithConfig)([[self class] yogaConfig]);
+    
+    YOGA_TYPE_WRAPPER(YGNodeInsertChild)(constraintYogaNode, clonedYogaNode, 0);
+    
+    YOGA_TYPE_WRAPPER(YGNodeStyleSetMinWidth)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(minimumSize.width));
+    YOGA_TYPE_WRAPPER(YGNodeStyleSetMinHeight)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(minimumSize.height));
+    YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxWidth)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(maximumSize.width));
+    YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxHeight)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(maximumSize.height));
+    
+    YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(constraintYogaNode, YGUndefined, YGUndefined, HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
+    
+    CGSize measuredSize = (CGSize){
+        HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetWidth)(constraintYogaNode)),
+        HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetHeight)(constraintYogaNode)),
     };
-    hm_yoga_node_free_recursive(clonedYogaNode);
 
+    HMYogaNodeFreeRecursive(constraintYogaNode);
+    
     return measuredSize;
 }
 

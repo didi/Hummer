@@ -8,7 +8,7 @@
 #include "HMYogaUtility.h"
 
 extern "C" {
-void hm_yoga_node_free_recursive(const YOGA_TYPE_WRAPPER(YGNodeRef) root) {
+void HMYogaNodeFreeRecursive(const YOGA_TYPE_WRAPPER(YGNodeRef) root) {
     if (!root) {
         assert(false);
 
@@ -24,7 +24,7 @@ void hm_yoga_node_free_recursive(const YOGA_TYPE_WRAPPER(YGNodeRef) root) {
         } else {
             // 公司内部 YogaKit 1.7.0 YGNodeRemoveChild 会触发 clone，但是由于前面的注释原因，调用 remove 实际上不会触发 clone
             YOGA_TYPE_WRAPPER(YGNodeRemoveChild)(root, child);
-            hm_yoga_node_free_recursive(child);
+            HMYogaNodeFreeRecursive(child);
         }
     }
     // 剩下都是指向原 owner 的 child，YGNodeFree 会破坏它们，因此需要先 removeAll，removeAll 方法取第一个 child 判断是否 parent/owner 是自身，由于剩下都是 weak 指向的 child，因此直接会 reset vector

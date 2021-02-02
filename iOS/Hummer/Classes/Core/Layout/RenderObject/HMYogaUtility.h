@@ -19,6 +19,6 @@
 #define YOGA_TYPE_WRAPPER(type) type
 #endif
 
-FOUNDATION_EXPORT void hm_yoga_node_free_recursive(const YOGA_TYPE_WRAPPER(YGNodeRef) root);
+FOUNDATION_EXPORT void HMYogaNodeFreeRecursive(const YOGA_TYPE_WRAPPER(YGNodeRef) root);
 
 #endif /* HMYogaUtility_hpp */

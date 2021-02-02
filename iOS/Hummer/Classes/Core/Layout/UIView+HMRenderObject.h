@@ -17,10 +17,17 @@ typedef NS_ENUM(NSUInteger, HMLayoutEngine) {
     HMLayoutEngineRenderObjectCompatible
 };
 
+typedef NS_ENUM(NSUInteger, HMSizeThatFitsMode) {
+    HMSizeThatFitsModePreferNative = 0,
+    HMSizeThatFitsModePreferWeb
+};
+
 FOUNDATION_EXTERN YOGA_TYPE_WRAPPER(YGValue) HMPointValueMake(CGFloat value);
 FOUNDATION_EXTERN YOGA_TYPE_WRAPPER(YGValue) HMPercentValueMake(CGFloat value);
 
 FOUNDATION_EXTERN HMLayoutEngine hm_get_layout_engine(void);
+
+FOUNDATION_EXTERN HMSizeThatFitsMode HMGetSizeThatFitsMode(void);
 
 FOUNDATION_EXTERN void hm_change_layout_engine(HMLayoutEngine layoutEngine);
 

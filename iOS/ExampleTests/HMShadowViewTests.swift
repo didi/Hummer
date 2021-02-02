@@ -39,9 +39,59 @@ private final class HMShadowViewTests: QuickSpec {
 
         beforeEach {
             parentView = HMRenderObject()
-            YGNodeStyleSetFlexDirection(parentView?.yogaNode, .column)
             YGNodeStyleSetWidth(parentView?.yogaNode, 440)
             YGNodeStyleSetHeight(parentView?.yogaNode, 440)
+        }
+        
+        it("testPercentWidthOrHeightSizeThatFits") {
+            YGNodeStyleSetWidthPercent(parentView?.yogaNode, 100)
+            YGNodeStyleSetHeightPercent(parentView?.yogaNode, 100)
+            let topView = _shadowView { (node) in
+                YGNodeStyleSetWidth(node, 100)
+                YGNodeStyleSetHeight(node, 100)
+            }
+            
+            let centerView = _shadowView { (node) in
+                YGNodeStyleSetWidth(node, 150)
+                YGNodeStyleSetHeight(node, 100)
+            }
+            
+            let bottomView = _shadowView { (node) in
+                YGNodeStyleSetWidth(node, 200)
+                YGNodeStyleSetHeight(node, 100)
+            }
+            parentView?.insertSubview(topView, at: 0)
+            parentView?.insertSubview(centerView, at: 1)
+            parentView?.insertSubview(bottomView, at: 2)
+            let size = parentView?.sizeThatFitsMinimumSize(CGSize(width: 0, height: 0), maximumSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+            expect(size == CGSize(width: 200, height: 300)).to(beTrue())
+        }
+        
+        it("testFlexWrapSizeThatFits") {
+            let layoutView = _shadowView { (node) in
+                YGNodeStyleSetFlexWrap(node, .wrap)
+                YGNodeStyleSetFlexDirection(node, .row)
+            }
+            
+            let topView = _shadowView { (node) in
+                YGNodeStyleSetWidth(node, 300)
+                YGNodeStyleSetHeight(node, 100)
+            }
+            
+            let centerView = _shadowView { (node) in
+                YGNodeStyleSetWidth(node, 300)
+                YGNodeStyleSetHeight(node, 100)
+            }
+            
+            let bottomView = _shadowView { (node) in
+                YGNodeStyleSetWidth(node, 300)
+                YGNodeStyleSetHeight(node, 100)
+            }
+            layoutView.insertSubview(topView, at: 0)
+            layoutView.insertSubview(centerView, at: 1)
+            layoutView.insertSubview(bottomView, at: 2)
+            let size = layoutView.sizeThatFitsMinimumSize(CGSize(width: 0, height: 0), maximumSize: CGSize(width: 400, height: CGFloat.greatestFiniteMagnitude))
+            expect(size == CGSize(width: 400, height: 300)).to(beTrue())
         }
 
         // Just a basic sanity test to ensure css-layout is applied correctly in the context of our shadow view hierarchy.
