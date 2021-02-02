@@ -1,5 +1,18 @@
 # Release Nodes
 
+### 0.3.18
+- 去除对 blankj.utilcode 库的依赖，减小包体积，减少sdk接入时的冲突；
+- 处理NotifyCenter遍历过程中删除的case；
+- 修复Image组件在没有设置宽高的情况下设置远程图片无法自撑开的问题；
+- 修复Scroller组件的子控件无法设置百分比和flexGrow等属性的问题；
+
+### 0.3.16
+- glide 版本升级到 4.9.0
+- 支持CSS样式动画；
+- 支持无障碍相关属性；
+- 处理Gson解析时部分字段类型不匹配的问题；
+- Scroller和List组件支持bounces属性（默认有回弹效果），和iOS保持一致；
+
 ### 0.3.15
 - 支持块级内存自动回收；
 - 增加默认HummerFragment容器；
