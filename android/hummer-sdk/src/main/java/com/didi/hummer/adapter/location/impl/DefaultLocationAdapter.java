@@ -7,12 +7,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.didi.hummer.adapter.location.ILocationAdapter;
 import com.didi.hummer.adapter.location.LocationCallback;
 import com.didi.hummer.sdk.R;
-import com.didi.hummer.utils.LocationUtils;
+import com.didi.hummer.utils.blankj.LocationUtils;
+import com.didi.hummer.utils.blankj.PermissionConstants;
+import com.didi.hummer.utils.blankj.PermissionUtils;
 
 /**
  * 默认定位信息获取

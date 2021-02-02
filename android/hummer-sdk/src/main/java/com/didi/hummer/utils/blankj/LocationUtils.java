@@ -1,4 +1,4 @@
-package com.didi.hummer.utils;
+package com.didi.hummer.utils.blankj;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +13,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.RequiresPermission;
 
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.Utils;
+import com.didi.hummer.core.util.HMLog;
 
 import java.io.IOException;
 import java.util.List;
@@ -162,7 +161,7 @@ public final class LocationUtils {
         if (mLocationManager == null
                 || (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
                 && !mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))) {
-            LogUtils.d("LocationUtils", "无法定位，请打开定位服务");
+            HMLog.d("LocationUtils", "无法定位，请打开定位服务");
             return false;
         }
         mListener = listener;
@@ -366,13 +365,13 @@ public final class LocationUtils {
             }
             switch (status) {
                 case LocationProvider.AVAILABLE:
-                    LogUtils.d("LocationUtils", "当前GPS状态为可见状态");
+                    HMLog.d("LocationUtils", "当前GPS状态为可见状态");
                     break;
                 case LocationProvider.OUT_OF_SERVICE:
-                    LogUtils.d("LocationUtils", "当前GPS状态为服务区外状态");
+                    HMLog.d("LocationUtils", "当前GPS状态为服务区外状态");
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    LogUtils.d("LocationUtils", "当前GPS状态为暂停服务状态");
+                    HMLog.d("LocationUtils", "当前GPS状态为暂停服务状态");
                     break;
                 default:
                     break;

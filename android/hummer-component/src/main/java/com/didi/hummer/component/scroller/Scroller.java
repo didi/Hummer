@@ -62,6 +62,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
     protected SmartRefreshLayout createViewInstance(Context context) {
         scrollView = (VScrollView) LayoutInflater.from(context).inflate(R.layout.scroll_view, null, false);
         scrollView.setClipChildren(false);
+        scrollView.setFillViewport(true);
 
         refreshLayout = new SmartRefreshLayout(context);
         refreshLayout.setEnableRefresh(false);

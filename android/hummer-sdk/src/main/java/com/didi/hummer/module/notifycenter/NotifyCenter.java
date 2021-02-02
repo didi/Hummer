@@ -8,10 +8,10 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class NotifyCenter {
 
@@ -50,12 +50,13 @@ public class NotifyCenter {
 
         Map<String, List<JSCallback>> notifyMap = globalNotifyMap.get(contextId);
         if (notifyMap == null) {
-            notifyMap = new HashMap<>();
+            notifyMap = new ConcurrentHashMap<>();
             globalNotifyMap.put(contextId, notifyMap);
         }
         List<JSCallback> cbList = notifyMap.get(key);
         if (cbList == null) {
-            cbList = new ArrayList<>();
+            // 这里用CopyOnWriteArrayList，防止遍历的时候去做删除操作
+            cbList = new CopyOnWriteArrayList<>();
             notifyMap.put(key, cbList);
         }
         if (!cbList.contains(jsCallback)) {
