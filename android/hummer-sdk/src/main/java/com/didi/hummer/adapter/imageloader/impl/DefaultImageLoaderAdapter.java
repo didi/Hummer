@@ -16,6 +16,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.imageloader.DrawableCallback;
 import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
+import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
 
 /**
  * 默认图片加载适配器
@@ -120,6 +121,48 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     if (callback != null) {
                         callback.onDrawableLoaded(resource);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getImageSize(String url, ImageSizeCallback callback) {
+        try {
+            Glide.with(HummerSDK.appContext).load(url).into(new CustomTarget<Drawable>() {
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    if (callback != null) {
+                        callback.onSizeReady(resource.getIntrinsicWidth(), resource.getIntrinsicHeight());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getImageSize(int resId, ImageSizeCallback callback) {
+        try {
+            Glide.with(HummerSDK.appContext).load(resId).into(new CustomTarget<Drawable>() {
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    if (callback != null) {
+                        callback.onSizeReady(resource.getIntrinsicWidth(), resource.getIntrinsicHeight());
                     }
                 }
             });

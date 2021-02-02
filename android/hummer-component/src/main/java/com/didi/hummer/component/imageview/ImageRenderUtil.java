@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
+import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.render.utility.YogaResUtils;
 import com.didi.hummer.utils.JsSourceUtil;
@@ -21,8 +22,24 @@ public class ImageRenderUtil {
         renderImage(context, imageView, imageSrc, false, 0);
     }
 
+    public static void renderImage(HummerContext context, ImageView imageView, String imageSrc, ImageSizeCallback callback) {
+        renderImage(context, imageView, imageSrc, false, 0);
+
+        if (callback != null) {
+            getImageLoader(context).getImageSize(imageSrc, callback);
+        }
+    }
+
     public static void renderGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount) {
         renderImage(context, imageView, imageSrc, true, repeatCount);
+    }
+
+    public static void renderGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount, ImageSizeCallback callback) {
+        renderImage(context, imageView, imageSrc, true, repeatCount);
+
+        if (callback != null) {
+            getImageLoader(context).getImageSize(imageSrc, callback);
+        }
     }
 
     private static void renderImage(HummerContext context, ImageView imageView, String imageSrc, boolean isGif, int repeatCount) {

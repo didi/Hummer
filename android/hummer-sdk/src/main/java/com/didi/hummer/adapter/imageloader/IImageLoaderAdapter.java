@@ -58,4 +58,20 @@ public interface IImageLoaderAdapter {
      * @param callback
      */
     void loadDrawable(int resId, DrawableCallback callback);
+
+    /**
+     * 获取图片宽高
+     *
+     * @param url
+     * @param callback
+     */
+    void getImageSize(String url, ImageSizeCallback callback);
+
+    /**
+     * 获取图片宽高
+     *
+     * @param resId
+     * @param callback
+     */
+    void getImageSize(int resId, ImageSizeCallback callback);
 }
