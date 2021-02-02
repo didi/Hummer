@@ -19,14 +19,20 @@
 static const char SHADOW_VIEW_KEY;
 
 // 默认兼容模式
-static HMLayoutEngine _layoutEngine = HMLayoutEngineRenderObjectCompatible;
+static HMLayoutEngine layoutEngine = HMLayoutEngineRenderObjectCompatible;
+
+static HMSizeThatFitsMode sizeThatFitsMode = HMSizeThatFitsModePreferNative;
+
+HMSizeThatFitsMode HMGetSizeThatFitsMode() {
+    return sizeThatFitsMode;
+}
 
 HMLayoutEngine hm_get_layout_engine() {
-    return _layoutEngine;
+    return layoutEngine;
 }
 
 void hm_change_layout_engine(HMLayoutEngine layoutEngine) {
-    _layoutEngine = layoutEngine;
+    layoutEngine = layoutEngine;
 }
 
 YOGA_TYPE_WRAPPER(YGValue) HMPointValueMake(CGFloat value) {
