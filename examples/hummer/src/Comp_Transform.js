@@ -9,6 +9,20 @@ class RootView extends View {
             paddingTop: 10,
         };
 
+        var animView = new View();
+        animView.style = {
+            top: 60,
+            left: 10,
+            width: 120,
+            height: 120,
+            backgroundColor: "#FF000080",
+            borderRadius: 10,
+            transitionDelay: '5',
+            transitionDuration: ['5'],
+            transitionProperty: 'all',
+            transitionTimingFunction: 'linear'
+        };
+
         var isKeyFrame = false;
 
         var layout0 = new View();
@@ -35,7 +49,9 @@ class RootView extends View {
         };
         button1.text = "平移 (position)";
         button1.addEventListener("tap", (event) => {
-            animTranslation();
+            animView.style = {
+                transform: 'translate(200px,200px)'
+            };
         });
 
         var button2 = new Button();
@@ -46,7 +62,9 @@ class RootView extends View {
         };
         button2.text = "缩放 (scale)";
         button2.addEventListener("tap", (event) => {
-            animScale("scale");
+            animView.style = {
+                transform: 'scale(0.5,5)'
+            };
         });
 
         var button3 = new Button();
@@ -55,9 +73,11 @@ class RootView extends View {
             height: 40,
             fontSize: 16,
         };
-        button3.text = "缩放 (scaleX)";
+        button3.text = "旋转 (rotate)";
         button3.addEventListener("tap", (event) => {
-            animScale("scaleX");
+            animView.style = {
+                transform: 'rotateY(180)'
+            };
         });
 
         var button4 = new Button();
@@ -66,9 +86,11 @@ class RootView extends View {
             height: 40,
             fontSize: 16,
         };
-        button4.text = "缩放 (scaleY)";
+        button4.text = "错切 (skew)";
         button4.addEventListener("tap", (event) => {
-            animScale("scaleY");
+            animView.style = {
+                transform: 'skew(30, 20)'
+            };
         });
 
         var button5 = new Button();
@@ -77,10 +99,13 @@ class RootView extends View {
             height: 40,
             fontSize: 16,
         };
-        button5.text = "旋转 (rotationX)";
+        button5.text = "宽度(width)";
         button5.addEventListener("tap", (event) => {
-            animRotation("rotationX");
+            animView.style = {
+                width: 200,
+            };
         });
+
 
         var button6 = new Button();
         button6.style = {
@@ -88,9 +113,11 @@ class RootView extends View {
             height: 40,
             fontSize: 16,
         };
-        button6.text = "旋转 (rotationY)";
+        button6.text = "高度(height)";
         button6.addEventListener("tap", (event) => {
-            animRotation("rotationY");
+            animView.style = {
+                height: 100,
+            };
         });
 
         var button7 = new Button();
@@ -99,12 +126,15 @@ class RootView extends View {
             height: 40,
             fontSize: 16,
         };
-        button7.text = "旋转 (rotationZ)";
+        button7.text = "宽度和高度";
         button7.addEventListener("tap", (event) => {
-            animRotation("rotationZ");
+            animView.style = {
+                height: "100px",
+                width: "200px",
+            };
         });
 
-        var button8 = new Button("button8");
+        var button8 = new Button();
         button8.style = {
             width: 150,
             height: 40,
@@ -112,7 +142,9 @@ class RootView extends View {
         };
         button8.text = "透明度 (opacity)";
         button8.addEventListener("tap", (event) => {
-            animAlpha();
+            animView.style = {
+                opacity: 0.5,
+            };
         });
 
         var button9 = new Button();
@@ -123,7 +155,9 @@ class RootView extends View {
         };
         button9.text = "背景颜色渐变";
         button9.addEventListener("tap", (event) => {
-            animBackgroundColor();
+            animView.style = {
+                backgroundColor: "#0000ff80",
+            };
         });
 
         var button10 = new Button();
@@ -132,9 +166,15 @@ class RootView extends View {
             height: 40,
             fontSize: 16,
         };
-        button10.text = "宽度和高度";
+        button10.text = "所有一起执行";
         button10.addEventListener("tap", (event) => {
-            animWidthHeight();
+            animView.style = {
+                transform: 'translate(20,20),scale(0.5,5),rotateY(180),skew(30, 20)',
+                height: 100,
+                width: 200,
+                opacity: 0.5,
+                backgroundColor: "#0000ff80",
+            };
         });
 
         var button31 = new Button();
@@ -159,15 +199,7 @@ class RootView extends View {
             animView.removeAllAnimation();
         });
 
-        var animView = new View();
-        animView.style = {
-            top: 60,
-            left: 10,
-            width: 120,
-            height: 120,
-            backgroundColor: "#FF000080",
-            borderRadius: 10,
-        };
+
 
         layout1.appendChild(button1);
         layout1.appendChild(button2);
@@ -179,6 +211,7 @@ class RootView extends View {
         layout1.appendChild(button8);
         layout1.appendChild(button9);
         layout1.appendChild(button10);
+
         layout2.appendChild(button31);
         layout2.appendChild(button32);
 
@@ -375,6 +408,42 @@ class RootView extends View {
             anim2.duration = 1;
             animView.addAnimation(anim2, "xx2");
         }
+        function animSkew() {
+            var anim;
+
+            if (!isKeyFrame) {
+                anim = new BasicAnimation("skew");
+                anim.value = { x: 45, y: 60 };
+                anim.easing = "linear";
+            } else {
+                anim = new KeyframeAnimation("skew");
+                anim.keyframes = [{
+                    percent: 0,
+                    value: { x: 0, y: 0 },
+                    easing: "linear"
+                }, {
+                    percent: 0.2,
+                    value: { x: 30, y: 0 },
+                    easing: "linear"
+                }, {
+                    percent: 0.6,
+                    value: { x: 0, y: 30 },
+                    easing: "linear"
+                }, {
+                    percent: 0.8,
+                    value: { x: 30, y: 30 },
+                    easing: "linear"
+                }, {
+                    percent: 1.0,
+                    value: { x: 0, y: 0 },
+                    easing: "linear"
+                }];
+            }
+            anim.duration = 1;
+            animView.addAnimation(anim, "xx1");
+
+        }
+
     }
 }
 

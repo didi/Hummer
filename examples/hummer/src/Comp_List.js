@@ -27,8 +27,10 @@ class RootView extends View {
             leftSpacing: 10,
             rightSpacing: 10,
             bottomSpacing: 10,
-//            showScrollBar: true,
         };
+//        this.listView.showScrollBar = true;
+//        this.listView.bounces = false;
+
         this.listView.onRegister = position => {
             console.log("TypeCallback: position = " + position);
             if (position % 2 === 0) {

@@ -40,7 +40,7 @@ class RootView extends View {
         };
         btn1.addEventListener('tap', e => {
             let request = new Request();
-            request.url = 'https://page-daily.kuaidadi.com/data/freightDriverConfig.node';
+            request.url = 'http://x.x.x.x:9292/all_files';
             request.method = 'GET';
             request.send(response => {
                 console.log('method: ' + request.method);

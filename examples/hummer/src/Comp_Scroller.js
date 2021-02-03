@@ -10,8 +10,9 @@ class RootView extends View {
         this.scroll.style = {
             width: '100%',
             height: '100%',
-//            showScrollBar: true,
         }
+//        this.scroll.showScrollBar = true;
+//        this.scroll.bounces = false;
 
         for (let i = 0; i < 10; i++) {
             let item = new Text();

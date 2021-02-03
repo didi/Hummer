@@ -1,17 +1,13 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
-
+    constructor() {
+        super();
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
+            width: '100%',
+            height: '100%',
         };
 
         let scroll = new HorizontalScroller();
-        scroll.style = {
-            width: Hummer.env.availableWidth,
-//            showScrollBar: true,
-        }
+//        scroll.showScrollBar = true;
 
         for (let i = 0; i < 20; i++) {
             let item = new Text();

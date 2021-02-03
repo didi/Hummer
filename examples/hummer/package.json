@@ -1,0 +1,14 @@
+{
+  "name": "hm_hello",
+  "version": "1.0.0",
+  "description": "Hummer Project",
+  "scripts": {
+    "build": "hummer build",
+    "dev": "hummer dev",
+    "debug": "npm run dev & hummer debug"
+  },
+  "dependencies": {
+    "@hummer/hummer-front": "^1.0.0"
+  },
+  "devDependencies": {}
+}

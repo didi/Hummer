@@ -263,7 +263,7 @@ class RootView extends View {
         };
 
         this.loadResImage(layout, 'loading', true);
-        this.loadRemoteImage(layout, 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585673195144&di=4b6e209630c71ca20e130f96f8e6d45b&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fc67bcdfe10d5201067157ff7376414c6a9f9900437c69-EndxN7_fw658', true);
+        this.loadRemoteImage(layout, 'https://pt-starimg.didistatic.com/static/starimg/img/Jol6rzZIH41610532807417.gif', true);
 
         this.appendChild(titleView);
         this.appendChild(layout);
