@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.core.BuildConfig;
 import com.didi.hummer.core.debug.HMDebugger;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.bean.LogBean;
@@ -188,6 +189,10 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
 
     private void updateParameters() {
         StringBuilder builder = new StringBuilder();
+        builder.append("Hummer SDK Version: ");
+        builder.append(BuildConfig.VERSION_NAME);
+        builder.append("\n\n\n");
+
         Object env = hummerContext.getJsContext().evaluateJavaScript("JSON.stringify(Hummer.env)");
         if (env != null) {
             builder.append("Hummer.env: ");
