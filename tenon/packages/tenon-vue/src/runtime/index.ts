@@ -5,6 +5,7 @@ import { patchProp } from './patchProp'
 import document from './nodes/document'
 import {PageOptions} from './nodes'
 import {install} from './api'
+import {initPageLifeCycle} from './helper/lifecycle-helper'
 
 export {
   use,
@@ -54,6 +55,8 @@ export const createRootContainer = (options: PageOptions):Page => {
 }
 
 export function render(App:any){
+  let startTime = (new Date()).getTime();
+
   let {pageConfig} = App;
   let app = createApp(App);
   install(app);
@@ -67,23 +70,9 @@ export function render(App:any){
     app.use(plugin)
   })
   let instance = app.mount(container);
-  // Page Lifecycle InJect
-  // TODO 优化页面生命周期的注入代码
-  container.onLoad = () => {
-    App.onLoad && App.onLoad.call(instance)
-  }
-  container.onShow = () => {
-    App.onShow && App.onShow.call(instance)
-  };
-  container.onHide = () => {
-    App.onHide && App.onHide.call(instance)
-  };
-  container.onUnload = () => {
-    App.onUnload && App.onUnload.call(instance)
-  };
-  container.onBack = () => {
-    return App.onBack && App.onBack.call(instance)
-  };
-
+  initPageLifeCycle(container, instance, App)
   container.render();
+
+  let endTime = (new Date()).getTime();
+  console.log(`Render Time:${endTime - startTime}ms`)
 }
