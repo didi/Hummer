@@ -235,46 +235,30 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
 - (CGSize)sizeThatFitsMinimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize {
     YOGA_TYPE_WRAPPER(YGNodeRef) clonedYogaNode = YOGA_TYPE_WRAPPER(YGNodeClone)(self.yogaNode);
     
-    YOGA_TYPE_WRAPPER(YGValue) width;
     if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
-        width = YOGA_TYPE_WRAPPER(YGNodeStyleGetWidth(clonedYogaNode));
-        if (width.unit == YGUnitPercent) {
-            YGNodeStyleSetWidthAuto(clonedYogaNode);
+        YOGA_TYPE_WRAPPER(YGValue) width = YOGA_TYPE_WRAPPER(YGNodeStyleGetWidth(clonedYogaNode));
+        if (width.unit == YOGA_TYPE_WRAPPER(YGUnitPercent)) {
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetWidthAuto)(clonedYogaNode);
         }
-    }
-    YOGA_TYPE_WRAPPER(YGValue) height;
-    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
-        height = YOGA_TYPE_WRAPPER(YGNodeStyleGetHeight(clonedYogaNode));
-        if (height.unit == YGUnitPercent) {
-            YGNodeStyleSetHeightAuto(clonedYogaNode);
+        YOGA_TYPE_WRAPPER(YGValue) height = YOGA_TYPE_WRAPPER(YGNodeStyleGetHeight(clonedYogaNode));
+        if (height.unit == YOGA_TYPE_WRAPPER(YGUnitPercent)) {
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetHeightAuto)(clonedYogaNode);
         }
-    }
-    YOGA_TYPE_WRAPPER(YGValue) minWidth;
-    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
-        minWidth = YOGA_TYPE_WRAPPER(YGNodeStyleGetMinWidth(clonedYogaNode));
-        if (minWidth.unit == YGUnitPercent) {
-            YGNodeStyleSetMinWidth(clonedYogaNode, YGUndefined);
+        YOGA_TYPE_WRAPPER(YGValue) minWidth = YOGA_TYPE_WRAPPER(YGNodeStyleGetMinWidth(clonedYogaNode));
+        if (minWidth.unit == YOGA_TYPE_WRAPPER(YGUnitPercent)) {
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMinWidth)(clonedYogaNode, YOGA_TYPE_WRAPPER(YGUndefined));
         }
-    }
-    YOGA_TYPE_WRAPPER(YGValue) minHeight;
-    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
-        minHeight = YOGA_TYPE_WRAPPER(YGNodeStyleGetMinHeight(clonedYogaNode));
-        if (minHeight.unit == YGUnitPercent) {
-            YGNodeStyleSetMinHeight(clonedYogaNode, YGUndefined);
+        YOGA_TYPE_WRAPPER(YGValue) minHeight = YOGA_TYPE_WRAPPER(YGNodeStyleGetMinHeight(clonedYogaNode));
+        if (minHeight.unit == YOGA_TYPE_WRAPPER(YGUnitPercent)) {
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMinHeight)(clonedYogaNode, YOGA_TYPE_WRAPPER(YGUndefined));
         }
-    }
-    YOGA_TYPE_WRAPPER(YGValue) maxWidth;
-    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
-        maxWidth = YOGA_TYPE_WRAPPER(YGNodeStyleGetMaxWidth(clonedYogaNode));
-        if (maxWidth.unit == YGUnitPercent) {
-            YGNodeStyleSetMaxWidth(clonedYogaNode, YGUndefined);
+        YOGA_TYPE_WRAPPER(YGValue) maxWidth = YOGA_TYPE_WRAPPER(YGNodeStyleGetMaxWidth(clonedYogaNode));
+        if (maxWidth.unit == YOGA_TYPE_WRAPPER(YGUnitPercent)) {
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxWidth)(clonedYogaNode, YOGA_TYPE_WRAPPER(YGUndefined));
         }
-    }
-    YOGA_TYPE_WRAPPER(YGValue) maxHeight;
-    if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
-        maxHeight = YOGA_TYPE_WRAPPER(YGNodeStyleGetMaxHeight(clonedYogaNode));
-        if (maxHeight.unit == YGUnitPercent) {
-            YGNodeStyleSetMaxHeight(clonedYogaNode, YGUndefined);
+        YOGA_TYPE_WRAPPER(YGValue) maxHeight = YOGA_TYPE_WRAPPER(YGNodeStyleGetMaxHeight(clonedYogaNode));
+        if (maxHeight.unit == YOGA_TYPE_WRAPPER(YGUnitPercent)) {
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxHeight)(clonedYogaNode, YOGA_TYPE_WRAPPER(YGUndefined));
         }
     }
     
@@ -287,7 +271,7 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
     YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxWidth)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(maximumSize.width));
     YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxHeight)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(maximumSize.height));
     
-    YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(constraintYogaNode, YGUndefined, YGUndefined, HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
+    YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(constraintYogaNode, YOGA_TYPE_WRAPPER(YGUndefined), YOGA_TYPE_WRAPPER(YGUndefined), HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
     
     CGSize measuredSize = (CGSize){
         HMCoreGraphicsFloatFromYogaFloat(YOGA_TYPE_WRAPPER(YGNodeLayoutGetWidth)(constraintYogaNode)),
