@@ -2,7 +2,6 @@
   "name": "@hummer/tenon-vue",
   "version": "1.0.0",
   "description": "Tenon运行时",
-  "author": "duanlikang <duanlikang@didichuxing.com>",
   "homepage": "",
   "license": "ISC",
   "main": "dist/tenon-vue.es.js",

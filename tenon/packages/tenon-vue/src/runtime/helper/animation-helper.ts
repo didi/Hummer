@@ -16,7 +16,10 @@ export enum AnimationStyle {
   ROTATIONY = 'rotationY',
   ROTATIONZ = 'rotationZ',
   OPACITY = 'opacity',
-  BACKGROUND_COLOR = 'backgroundColor'
+  BACKGROUND_COLOR = 'backgroundColor',
+  WIDTH = 'width',
+  HEIGHT = 'height'
+
 }
 
 export type Animation =  KeyframeAnimation | BasicAnimation | StepAnimation
@@ -196,6 +199,12 @@ function transformStyle(styles:any){
         break;
       case AnimationStyle.BACKGROUND_COLOR:
         styles[key] = getColor(styles[key])
+        break;
+      case AnimationStyle.WIDTH:
+        styles[key] = transformUnitValue(styles[key])
+        break;
+      case AnimationStyle.HEIGHT:
+        styles[key] = transformUnitValue(styles[key])
         break;
       default:
         break;

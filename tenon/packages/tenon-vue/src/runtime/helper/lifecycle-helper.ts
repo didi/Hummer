@@ -1,6 +1,3 @@
-import {Page} from '../nodes'
-// import {PageComponent} from './page-helper'
-
 interface LifeCycleMixins {
   onLoad: Array<any>,
   onShow: Array<any>,
@@ -8,6 +5,14 @@ interface LifeCycleMixins {
   onUnload: Array<any>,
   onBack: Array<any>
 }
+enum LifeCycleEnum {
+  ONLOAD = 'onLoad',
+  ONSHOW = 'onShow',
+  ONHIDE = 'onHide',
+  ONUNLOAD = 'onUnload',
+  ONBACK = 'onBack'
+}
+const LIFECYCLE = [LifeCycleEnum.ONLOAD, LifeCycleEnum.ONSHOW, LifeCycleEnum.ONHIDE, LifeCycleEnum.ONUNLOAD, LifeCycleEnum.ONBACK]
 
 /**
  * 初始化页面生命周期
@@ -15,62 +20,42 @@ interface LifeCycleMixins {
  * @param instance 组件实例
  * @param config Options
  */
-export const initPageLifeCycle = (container:Page, instance: any, config:any) => {
-  let {mixins, extends:extendOptions} = config
-  let lifeCycleMixins : LifeCycleMixins | null = null
-  if(mixins){
+export const initPageLifeCycle = (container: any, instance: any, config: any) => {
+  let { mixins, extends: extendOptions } = config
+  let lifeCycleMixins: any = {
+    onLoad: [],
+    onShow: [],
+    onHide: [],
+    onUnload: [],
+    onBack: []  
+  }
+  if (mixins) {
     lifeCycleMixins = applyPageMixin(config)
   }
-  container.onLoad = () => {
-    extendOptions && applyLifeCycle(instance, extendOptions.onLoad)
-    lifeCycleMixins?.onLoad.forEach((func: Function) => {
-      applyLifeCycle(instance, func)
-    })
-    applyLifeCycle(instance, config.onLoad)
-  }
-  container.onShow = () => {
-    extendOptions && applyLifeCycle(instance, extendOptions.onShow)
-    lifeCycleMixins?.onShow.forEach((func: Function) => {
-      applyLifeCycle(instance, func)
-    })
-    applyLifeCycle(instance, config.onShow)
-  };
-  container.onHide = () => {
-    extendOptions && applyLifeCycle(instance, extendOptions.onHide)
-    lifeCycleMixins?.onHide.forEach((func: Function) => {
-      applyLifeCycle(instance, func)
-    })
-    applyLifeCycle(instance, config.onHide)
-  };
-  container.onUnload = () => {
-    extendOptions && applyLifeCycle(instance, extendOptions.onUnload)
-    lifeCycleMixins?.onUnload.forEach((func: Function) => {
-      applyLifeCycle(instance, func)
-    })
-    applyLifeCycle(instance, config.onUnload)
-  };
-  container.onBack = () => {
-    extendOptions && applyLifeCycle(instance, extendOptions.onBack)
-    lifeCycleMixins?.onBack.forEach((func: Function) => {
-      applyLifeCycle(instance, func)
-    })
-    applyLifeCycle(instance, config.onBack)
-  };
+  LIFECYCLE.forEach((lifecycle:string) => {
+    container[lifecycle] = () => {
+      extendOptions && applyLifeCycle(instance, extendOptions[lifecycle])
+      lifeCycleMixins[lifecycle].forEach((func: Function) => {
+        applyLifeCycle(instance, func)
+      })
+      applyLifeCycle(instance, config[lifecycle])
+    }
+  })
 }
 
-function applyPageMixin(config:any):(LifeCycleMixins | null){
-  if(!config.mixins || config.mixins.length === 0){
+function applyPageMixin(config: any): (LifeCycleMixins | null) {
+  if (!config.mixins || config.mixins.length === 0) {
     return null
   }
-  let lifeCycleMixins : LifeCycleMixins = {
+  let lifeCycleMixins: LifeCycleMixins = {
     onLoad: [],
     onShow: [],
     onHide: [],
     onUnload: [],
     onBack: []
   }
-  config.mixins.forEach((mixin:any) => {
-    let {onLoad, onShow, onHide, onUnload, onBack} = mixin
+  config.mixins.forEach((mixin: any) => {
+    let { onLoad, onShow, onHide, onUnload, onBack } = mixin
     onLoad && lifeCycleMixins.onLoad.push(onLoad)
     onShow && lifeCycleMixins.onShow.push(onShow)
     onHide && lifeCycleMixins.onHide.push(onHide)
@@ -80,6 +65,6 @@ function applyPageMixin(config:any):(LifeCycleMixins | null){
   return lifeCycleMixins
 }
 
-function applyLifeCycle(instance:any, func: Function){
+function applyLifeCycle(instance: any, func: Function) {
   func && func.apply(instance);
 }

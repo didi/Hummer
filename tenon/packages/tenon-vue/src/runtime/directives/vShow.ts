@@ -48,6 +48,6 @@ export const vShow: ObjectDirective<VShowElement> = {
 function setDisplay(el: VShowElement, value: unknown): void {
   el.setStyle({
     display: value ? el._vod : 'none',
-    flexDirection: el.style.flexDirection? el.style.flexDirection : 'column'
+    "flex-direction": el.style.flexDirection? el.style.flexDirection : 'column'
   })
 }
