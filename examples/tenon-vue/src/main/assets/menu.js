@@ -43,4 +43,7 @@ export const Menu =  [{
 },{
   url: './animation-transition.js',
   name: 'Animation Transition'
+},{
+  url: './lifecycle.js',
+  name: 'Lifecycle'
 }]
