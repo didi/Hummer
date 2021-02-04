@@ -4,6 +4,9 @@ import com.didi.hummer.render.event.base.Event;
 
 import java.util.Map;
 
+/**
+ * 单击事件
+ */
 public class TapEvent extends Event {
 
     private Map<String, Float> position;

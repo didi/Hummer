@@ -110,28 +110,4 @@ public class EventManager implements ILifeCycle, IEventListener {
     public boolean isEmpty() {
         return mEventListeners == null || mEventListeners.isEmpty();
     }
-
-    /**
-     * 是否是基础的触摸事件转化的事件，包括以下5个
-     *
-     * Event.HM_EVENT_TYPE_TAP
-     * Event.HM_EVENT_TYPE_LONG_PRESS
-     * Event.HM_EVENT_TYPE_SWIPE
-     * Event.HM_EVENT_TYPE_PINCH
-     * Event.HM_EVENT_TYPE_PAN
-     *
-     * @return
-     */
-    public boolean hasBasicTouchEvent() {
-        if (mEventListeners == null) {
-            return false;
-        }
-        for (String event : mEventListeners.keySet()) {
-            List<JSCallback> callbacks = mEventListeners.get(event);
-            if (Event.isBasicTouchEvent(event) && callbacks != null && !callbacks.isEmpty()) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

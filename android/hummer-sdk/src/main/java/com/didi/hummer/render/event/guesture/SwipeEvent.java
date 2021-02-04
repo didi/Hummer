@@ -2,6 +2,9 @@ package com.didi.hummer.render.event.guesture;
 
 import com.didi.hummer.render.event.base.Event;
 
+/**
+ * 轻扫手势事件
+ */
 public class SwipeEvent extends Event {
 
     public static final int DIRECTION_RIGHT     = 1;

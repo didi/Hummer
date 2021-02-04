@@ -40,12 +40,4 @@ public abstract class Event implements Serializable {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
-
-    public static boolean isBasicTouchEvent(String event) {
-        return HM_EVENT_TYPE_TAP.equals(event)
-                || HM_EVENT_TYPE_LONG_PRESS.equals(event)
-                || HM_EVENT_TYPE_SWIPE.equals(event)
-                || HM_EVENT_TYPE_PINCH.equals(event)
-                || HM_EVENT_TYPE_PAN.equals(event);
-    }
 }
