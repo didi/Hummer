@@ -40,7 +40,7 @@
           :data="list"
           @refresh="handleRefresh"
           @loadMore="handleLoadMore"
-          mode="grid"
+          mode="waterfall"
         >
           <template v-slot:refresh>
             <view>
