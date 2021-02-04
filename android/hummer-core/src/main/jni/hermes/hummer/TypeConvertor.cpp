@@ -181,8 +181,11 @@ extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_TypeConvertor_isJSValueValid(JNIEnv *env, jclass clazz, jlong runtimeId, jlong js_value) {
     auto runtime = RUNTIME(runtimeId);
+    if (runtime == nullptr) {
+        return false;
+    }
     auto jsValue = VALUE(*runtime, js_value);
-    return static_cast<jboolean>(runtime != nullptr && !jsValue.isNull() && !jsValue.isUndefined());
+    return static_cast<jboolean>(!jsValue.isNull() && !jsValue.isUndefined());
 }
 
 extern "C"
