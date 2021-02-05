@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.os.Looper;
 import android.support.v4.view.AccessibilityDelegateCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
@@ -53,6 +52,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     private Map<String, BasicAnimation> animMap = new HashMap<>();
     protected BackgroundHelper backgroundHelper;
     protected EventManager mEventManager;
+    protected HMGestureEventDetector hmGestureEventDetector;
     protected JSValue mJSValue;
     private InlineBox inlineBox;
     private PositionChangedListener positionChangedListener;
@@ -116,12 +116,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     public void onCreate() {
         mEventManager = new EventManager();
         mEventManager.onCreate();
-
-        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
-            HMGestureEventDetector.init(this);
-        } else {
-            getView().post(() -> HMGestureEventDetector.init(this));
-        }
+        hmGestureEventDetector = new HMGestureEventDetector(this);
     }
 
     @Override
@@ -299,6 +294,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     @JsMethod("addEventListener")
     public void addEventListener(String eventName, JSCallback callback) {
         mEventManager.addEventListener(eventName, callback);
+        hmGestureEventDetector.initClickListener(eventName);
     }
 
     @JsMethod("removeEventListener")

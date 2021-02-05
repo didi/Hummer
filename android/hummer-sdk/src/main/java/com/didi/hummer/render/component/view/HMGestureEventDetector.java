@@ -1,6 +1,8 @@
 package com.didi.hummer.render.component.view;
 
 import android.content.Context;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -24,33 +26,44 @@ import java.util.Map;
 /**
  * 手势事件管理类
  *
+ * 关于事件传递规则：
+ * iOS：父子关系：事件穿透；兄弟关系：事件拦截
+ * Android：父子关系：事件穿透；兄弟关系：事件穿透
+ * Button始终是不能穿透的
+ *
  * Created by XiaoFeng on 2021/2/4.
  */
 class HMGestureEventDetector {
 
-    private HummerContext context;
+    private Context context;
+    private HummerContext hummerContext;
     private View view;
     private String viewId;
     private EventManager eventManager;
+    private GestureDetector mGestureDetector;
+    private ScaleGestureDetector mScaleGestureDetector;
     private MotionEvent latestMotionEvent;
 
     public HMGestureEventDetector(HMBase base) {
-        this.context = (HummerContext) base.getContext();
+        if (base == null || base.getView() == null) {
+            return;
+        }
+
+        this.hummerContext = (HummerContext) base.getContext();
         this.eventManager = base.getEventManager();
         this.view = base.getView();
         this.viewId = base.getViewID();
-        initEventListener();
-    }
+        this.context = view.getContext();
 
-    public static HMGestureEventDetector init(HMBase base) {
-        return new HMGestureEventDetector(base);
-    }
-
-    private void initEventListener() {
-        if (context == null || eventManager == null || view == null) {
-            return;
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            init();
+        } else {
+            view.post(this::init);
         }
-        GestureDetector mGestureDetector = new GestureDetector(view.getContext(), new GestureDetector.SimpleOnGestureListener() {
+    }
+
+    private void init() {
+        mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 if (eventManager.contains(Event.HM_EVENT_TYPE_SWIPE)) {
@@ -73,12 +86,13 @@ class HMGestureEventDetector {
                         event.setDirection(SwipeEvent.DIRECTION_DOWN);
                     }
                     eventManager.dispatchEvent(Event.HM_EVENT_TYPE_SWIPE, event);
+                    return true;
                 }
-                return true;
+                return false;
             }
         });
 
-        ScaleGestureDetector mScaleGestureDetector = new ScaleGestureDetector(view.getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
                 if (eventManager.contains(Event.HM_EVENT_TYPE_PINCH)) {
@@ -87,8 +101,9 @@ class HMGestureEventDetector {
                     PinchEvent event = makePinchEvent(latestMotionEvent);
                     event.setScale(scale);
                     eventManager.dispatchEvent(Event.HM_EVENT_TYPE_PINCH, event);
+                    return true;
                 }
-                return true;
+                return false;
             }
         });
 
@@ -100,7 +115,9 @@ class HMGestureEventDetector {
             public boolean onTouch(View v, MotionEvent event) {
                 // 埋点
                 Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TOUCH, view, viewId);
-                EventTracer.traceEvent(context.getNamespace(), params);
+                EventTracer.traceEvent(hummerContext.getNamespace(), params);
+
+                latestMotionEvent = event;
 
                 TouchEvent touchEvent = null;
                 if (eventManager.contains(Event.HM_EVENT_TYPE_TOUCH)) {
@@ -113,93 +130,94 @@ class HMGestureEventDetector {
                 }
 
                 switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        if (touchEvent != null) {
-                            touchEvent.setState(Event.HM_GESTURE_STATE_BEGAN);
-                        }
+                    case MotionEvent.ACTION_DOWN:
                         if (panEvent != null) {
                             downX = event.getRawX();
                             downY = event.getRawY();
-                            panEvent.setState(Event.HM_GESTURE_STATE_BEGAN);
                         }
                         break;
-                    }
-                    case MotionEvent.ACTION_MOVE: {
-                        float moveX = event.getRawX();
-                        float moveY = event.getRawY();
-
-                        if (touchEvent != null) {
-                            touchEvent.setState(Event.HM_GESTURE_STATE_CHANGED);
-                        }
+                    case MotionEvent.ACTION_MOVE:
                         if (panEvent != null) {
-                            panEvent.setState(Event.HM_GESTURE_STATE_CHANGED);
-                            panEvent.setTranslation(GestureUtils.findTranslationInMotionEvent(view.getContext(), moveX - downX, moveY - downY));
+                            float moveX = event.getRawX();
+                            float moveY = event.getRawY();
+                            panEvent.setTranslation(GestureUtils.findTranslationInMotionEvent(context, moveX - downX, moveY - downY));
                             downX = moveX;
                             downY = moveY;
                         }
                         break;
-                    }
-                    case MotionEvent.ACTION_UP: {
-                        if (touchEvent != null) {
-                            touchEvent.setState(Event.HM_GESTURE_STATE_ENDED);
-                        }
-                        if (panEvent != null) {
-                            panEvent.setState(Event.HM_GESTURE_STATE_ENDED);
-                        }
-                        break;
-                    }
-                    case MotionEvent.ACTION_CANCEL: {
-                        if (touchEvent != null) {
-                            touchEvent.setState(Event.HM_GESTURE_STATE_CANCELLED);
-                        }
-                        if (panEvent != null) {
-                            panEvent.setState(Event.HM_GESTURE_STATE_CANCELLED);
-                        }
-                        break;
-                    }
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
                     default:
                         break;
                 }
 
+                boolean isTouchConsumed = false;
                 if (touchEvent != null) {
+                    isTouchConsumed = true;
                     eventManager.dispatchEvent(Event.HM_EVENT_TYPE_TOUCH, touchEvent);
                 }
                 if (panEvent != null) {
+                    isTouchConsumed = true;
                     eventManager.dispatchEvent(Event.HM_EVENT_TYPE_PAN, panEvent);
                 }
 
-                if (eventManager.contains(Event.HM_EVENT_TYPE_PINCH) || eventManager.contains(Event.HM_EVENT_TYPE_SWIPE)) {
-                    latestMotionEvent = event;
-                    return mGestureDetector.onTouchEvent(event) && mScaleGestureDetector.onTouchEvent(event);
+                /**
+                 * 如果设置了单击或长按事件，则这里不消费事件，之后会在View.onTouchEvent中自动消费掉本事件
+                 */
+                boolean isClickable = eventManager.contains(Event.HM_EVENT_TYPE_TAP)
+                        || eventManager.contains(Event.HM_EVENT_TYPE_LONG_PRESS);
+                if (isClickable) {
+                    return false;
                 }
 
-                return false;
+                /**
+                 * 如果没有设置单击或长按事件，则看是否设置了其他Touch相关事件
+                 */
+                if (eventManager.contains(Event.HM_EVENT_TYPE_SWIPE)) {
+                    mGestureDetector.onTouchEvent(event);
+                    isTouchConsumed = true;
+                }
+                if (eventManager.contains(Event.HM_EVENT_TYPE_PINCH)) {
+                    mScaleGestureDetector.onTouchEvent(event);
+                    isTouchConsumed = true;
+                }
+                return isTouchConsumed;
             }
         };
         view.setOnTouchListener(touchListener);
+    }
 
-        view.setOnClickListener((v) -> {
-            // 埋点
-            Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TAP, view, viewId);
-            EventTracer.traceEvent(context.getNamespace(), params);
+    public void initClickListener(String eventName) {
+        if (hummerContext == null || eventManager == null || view == null || TextUtils.isEmpty(eventName)) {
+            return;
+        }
 
-            if (eventManager.contains(Event.HM_EVENT_TYPE_TAP)) {
-                TapEvent event = makeTapEvent(context, latestMotionEvent);
-                eventManager.dispatchEvent(Event.HM_EVENT_TYPE_TAP, event);
-            }
-        });
+        if (eventName.equals(Event.HM_EVENT_TYPE_TAP)) {
+            view.setOnClickListener((v) -> {
+                // 埋点
+                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TAP, view, viewId);
+                EventTracer.traceEvent(hummerContext.getNamespace(), params);
 
-        view.setOnLongClickListener((v) -> {
-            // 埋点
-            Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_LONG_PRESS, view, viewId);
-            EventTracer.traceEvent(context.getNamespace(), params);
+                if (eventManager.contains(Event.HM_EVENT_TYPE_TAP)) {
+                    TapEvent event = makeTapEvent(view.getContext(), latestMotionEvent);
+                    eventManager.dispatchEvent(Event.HM_EVENT_TYPE_TAP, event);
+                }
+            });
+        }
 
-            if (eventManager.contains(Event.HM_EVENT_TYPE_LONG_PRESS)) {
-                LongPressEvent event = makeLongPressEvent(context, latestMotionEvent);
-                eventManager.dispatchEvent(Event.HM_EVENT_TYPE_LONG_PRESS, event);
-            }
-            return true;
-        });
+        if (eventName.equals(Event.HM_EVENT_TYPE_LONG_PRESS)) {
+            view.setOnLongClickListener((v) -> {
+                // 埋点
+                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_LONG_PRESS, view, viewId);
+                EventTracer.traceEvent(hummerContext.getNamespace(), params);
+
+                if (eventManager.contains(Event.HM_EVENT_TYPE_LONG_PRESS)) {
+                    LongPressEvent event = makeLongPressEvent(view.getContext(), latestMotionEvent);
+                    eventManager.dispatchEvent(Event.HM_EVENT_TYPE_LONG_PRESS, event);
+                }
+                return true;
+            });
+        }
     }
 
     private TouchEvent makeTouchEvent(Context context, MotionEvent event) {
