@@ -28,4 +28,22 @@ export const Menu =  [{
 },{
   url: './ex-component-viewpager.js',
   name: 'Component Viewpager'
+},{
+  url: './directive-v-show.js',
+  name: 'Diractive v-show'
+},{
+  url: './directive-v-if.js',
+  name: 'Diractive v-if'
+},{
+  url: './animation-basic.js',
+  name: 'Animation Basic'
+},{
+  url: './animation-keyframe.js',
+  name: 'Animation Keyframe'
+},{
+  url: './animation-transition.js',
+  name: 'Animation Transition'
+},{
+  url: './lifecycle.js',
+  name: 'Lifecycle'
 }]

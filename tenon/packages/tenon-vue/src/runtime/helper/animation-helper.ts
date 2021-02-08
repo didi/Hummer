@@ -16,7 +16,10 @@ export enum AnimationStyle {
   ROTATIONY = 'rotationY',
   ROTATIONZ = 'rotationZ',
   OPACITY = 'opacity',
-  BACKGROUND_COLOR = 'backgroundColor'
+  BACKGROUND_COLOR = 'backgroundColor',
+  WIDTH = 'width',
+  HEIGHT = 'height'
+
 }
 
 export type Animation =  KeyframeAnimation | BasicAnimation | StepAnimation
@@ -54,6 +57,7 @@ export interface StepAnimation{
   onEnd?: Function,
 }
 
+
 /**
  * 帧动画处理
  * @param element Hummer Element
@@ -65,6 +69,9 @@ export function handleKeyframeAnimation(node:any, animation: KeyframeAnimation){
   let styles = keyframes[0].styles
   styles = transformStyle(styles);
   let len = Object.keys(styles).length;
+  if(!id){
+    id = animationId++;
+  }
   // 获取需要添加动画的样式
   Object.keys(styles).forEach((key, index) => {
     const ani = new __GLOBAL__.KeyframeAnimation(key);
@@ -85,17 +92,15 @@ export function handleKeyframeAnimation(node:any, animation: KeyframeAnimation){
     repeatCount && (ani.repeatCount = repeatCount);
     if(index === 0){
       onStart && ani.on("start", () => {
-        // TODO onStart函数，支持This指针的正确传递；暂时函数动画传递this，使用箭头函数
         onStart && onStart();
       });
     }
     onEnd && ani.on("end", () => {
-      // TODO onEnd函数，支持This指针的正确传递；暂时函数动画传递this，使用箭头函数
       if(--len <= 0){
         onEnd && onEnd();
       }
     });
-    element.addAnimation(ani, id || 'id'+index);
+    element.addAnimation(ani, id + "_" +key);
   })
 }
 
@@ -122,12 +127,10 @@ export function handleBasicAnimation(node:any, animation: BasicAnimation){
     // 多个样式，只针对第一个样式的动画，添加事件
     if(index === 0){
       onStart && ani.on("start", () => {
-        // TODO onStart函数，支持This指针的正确传递；暂时函数动画传递this，使用箭头函数
         onStart && onStart();
       });
     }
     onEnd && ani.on("end", () => {
-      // TODO onEnd函数，支持This指针的正确传递；暂时函数动画传递this，使用箭头函数
       if(--len <= 0){
         onEnd && onEnd();
       }
@@ -197,6 +200,12 @@ function transformStyle(styles:any){
       case AnimationStyle.BACKGROUND_COLOR:
         styles[key] = getColor(styles[key])
         break;
+      case AnimationStyle.WIDTH:
+        styles[key] = transformUnitValue(styles[key])
+        break;
+      case AnimationStyle.HEIGHT:
+        styles[key] = transformUnitValue(styles[key])
+        break;
       default:
         break;
     }
@@ -215,4 +224,16 @@ function handleDuration(duration:number){
  */
 function handleDelay(delay:number){
   return delay / 1000
+}
+
+export const handleAnimation = (context:any, animation:Animation) =>{
+  if((animation as KeyframeAnimation).keyframes){
+    handleKeyframeAnimation(context, animation as KeyframeAnimation)
+  }
+  if((animation as BasicAnimation).styles){
+    handleBasicAnimation(context, animation as BasicAnimation)
+  }
+  if((animation as StepAnimation).steps){
+    handleStepAnimation(context, animation as StepAnimation)
+  }
 }

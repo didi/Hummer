@@ -7,7 +7,11 @@ const DefaultDisplay = 'flex';
 
 export const vShow: ObjectDirective<VShowElement> = {
   beforeMount(el, { value }, { transition }) {
-    el._vod = el.style.display === 'none' ? '' : el.style.display || DefaultDisplay
+    if(el.style.display === 'none'){
+      el._vod = ''
+    }else {
+      el._vod = el.style.display || DefaultDisplay
+    }
     if (transition && value) {
       transition.beforeEnter(el)
     } else {
@@ -43,6 +47,7 @@ export const vShow: ObjectDirective<VShowElement> = {
 
 function setDisplay(el: VShowElement, value: unknown): void {
   el.setStyle({
-    display: value ? el._vod : 'none'
+    display: value ? el._vod : 'none',
+    "flex-direction": el.style.flexDirection? el.style.flexDirection : 'column'
   })
 }
