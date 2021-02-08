@@ -112,8 +112,8 @@ class RootView extends View {
     loadMore() {
         if (this.page < 1000) {
             setTimeout(() => {
-                this.listView.stopLoadMore(true);
                 this.listView.refresh(ITEM_COUNT * this.page);
+                this.listView.stopLoadMore(true);
             }, 300);
         } else {
             this.listView.stopLoadMore(false);

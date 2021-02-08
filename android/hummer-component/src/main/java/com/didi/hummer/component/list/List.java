@@ -217,7 +217,7 @@ public class List extends HMBase<SmartRefreshLayout> {
 
             @Override
             public void onLoadFinished() {
-                isLoadingMore = false;
+
             }
         });
 
@@ -467,8 +467,6 @@ public class List extends HMBase<SmartRefreshLayout> {
         if (loadMoreCallback != null) {
             loadMoreCallback.call(enable ? LoadMoreState.IDLE : LoadMoreState.NO_MORE_DATA);
         }
-
-        isLoadingMore = false;
     }
 
     @JsMethod("scrollTo")
