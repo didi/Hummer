@@ -4,65 +4,6 @@
       <text class="demo-title">Component List!</text>
     </view>
     <view class="demo-item">
-      <text class="demo-item-title">普通列表</text>
-      <view class="demo-box">
-        <ex-list
-          class="list"
-          :data="list"
-          @refresh="handleRefresh"
-          @loadMore="handleLoadMore"
-        >
-          <template v-slot:refresh>
-            <view>
-              <text>Refresh View</text>
-            </view>
-          </template>
-          <template v-slot:loadmore>
-            <view>
-              <text>Load More View</text>
-            </view>
-          </template>
-          <template v-slot:item="item">
-            <view class="list-item" @tap="handleItemTap(item)">
-              <text>index: {{item.index}}</text>
-              <text>item: {{item.data.name}}</text>
-              <text class="default-text">I Am Default View!</text>
-            </view>
-          </template>
-        </ex-list>
-      </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">瀑布流列表</text>
-      <view class="demo-box">
-        <ex-list
-          class="list"
-          :data="list"
-          @refresh="handleRefresh"
-          @loadMore="handleLoadMore"
-          mode="waterfall"
-        >
-          <template v-slot:refresh>
-            <view>
-              <text>Refresh View</text>
-            </view>
-          </template>
-          <template v-slot:loadmore>
-            <view>
-              <text>Load More View</text>
-            </view>
-          </template>
-          <template v-slot:item="item">
-            <view class="list-item" @tap="handleItemTap(item)">
-              <text>index: {{item.index}}</text>
-              <text>item: {{item.data.name}}</text>
-              <text class="default-text">I Am Default View!</text>
-            </view>
-          </template>
-        </ex-list>
-      </view>
-    </view>
-    <view class="demo-item">
       <text class="demo-item-title">自定义渲染列表</text>
       <view class="demo-box">
         <ex-list
