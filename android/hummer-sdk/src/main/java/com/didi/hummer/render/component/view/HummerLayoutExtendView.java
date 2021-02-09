@@ -45,6 +45,21 @@ public abstract class HummerLayoutExtendView extends HMBase<HummerLayout>
         getView().setCornerRadiiGetter(() -> backgroundHelper.getBorderRadii());
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // 释放所有子控件
+        if (!children.isEmpty()) {
+            for (HMBase child : children) {
+                if (child != null && child.getJSValue() != null) {
+                    child.getJSValue().unprotect();
+                }
+            }
+            children.clear();
+        }
+    }
+
     public void appendChild(HMBase child) {
         if (child == null) {
             return;
