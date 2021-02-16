@@ -5,6 +5,12 @@
 - 处理NotifyCenter遍历过程中删除的case；
 - 修复Image组件在没有设置宽高的情况下设置远程图片无法自撑开的问题；
 - 修复Scroller组件的子控件无法设置百分比和flexGrow等属性的问题；
+- 在DevTools的页面参数中增加Hummer SDK Version的显示；
+- 重构手势事件逻辑，并把单击和长按改成了标准系统事件；
+- 修复List组件加载更多时触发重复调用onCreateViewHolder的问题；
+- 修复removeChild控件做内存自动回收时，没有回收控件的子控件的内存的问题；
+- 调整List初始化方式，适应多次设置List样式的问题；
+- 支持 Hummer.loadScript 和 Hummer.loadScriptWithUrl；
 
 ### 0.3.16
 - glide 版本升级到 4.9.0
