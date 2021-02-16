@@ -138,6 +138,12 @@ const Hummer = {
     render: (view) => {
         invoke("Hummer", 0, "render", view.objID);
     },
+    loadScript: (script) => {
+        return invoke("Hummer", 0, "loadScript", script);
+    },
+    loadScriptWithUrl: (url, callback) => {
+        invoke("Hummer", 0, "loadScriptWithUrl", url, callback);
+    },
     notifyCenter: NotifyCenter,
 }
 

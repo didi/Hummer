@@ -6,17 +6,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.os.Looper;
 import android.support.v4.view.AccessibilityDelegateCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Button;
 
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsMethod;
@@ -30,22 +25,12 @@ import com.didi.hummer.render.component.anim.BasicAnimation;
 import com.didi.hummer.render.component.anim.HummerAnimationUtils;
 import com.didi.hummer.render.component.anim.Transition;
 import com.didi.hummer.render.event.EventManager;
-import com.didi.hummer.render.event.base.Event;
-import com.didi.hummer.render.event.base.TraceEvent;
-import com.didi.hummer.render.event.guesture.LongPressEvent;
-import com.didi.hummer.render.event.guesture.PanEvent;
-import com.didi.hummer.render.event.guesture.PinchEvent;
-import com.didi.hummer.render.event.guesture.SwipeEvent;
-import com.didi.hummer.render.event.guesture.TapEvent;
-import com.didi.hummer.render.event.guesture.TouchEvent;
-import com.didi.hummer.render.event.guesture.common.GestureUtils;
 import com.didi.hummer.render.style.HummerLayoutExtendUtils;
 import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.YogaAttrUtils;
 import com.didi.hummer.sdk.R;
-import com.didi.hummer.tools.EventTracer;
 import com.facebook.yoga.YogaNode;
 import com.facebook.yoga.YogaPositionType;
 
@@ -67,9 +52,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     private Map<String, BasicAnimation> animMap = new HashMap<>();
     protected BackgroundHelper backgroundHelper;
     protected EventManager mEventManager;
-    private GestureDetector mGestureDetector;
-    private ScaleGestureDetector mScaleGestureDetector;
-    private MotionEvent mLatestMotionEvent;
+    protected HMGestureEventDetector hmGestureEventDetector;
     protected JSValue mJSValue;
     private InlineBox inlineBox;
     private PositionChangedListener positionChangedListener;
@@ -133,12 +116,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     public void onCreate() {
         mEventManager = new EventManager();
         mEventManager.onCreate();
-
-        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
-            initViewGestureEvent();
-        } else {
-            getView().post(this::initViewGestureEvent);
-        }
+        hmGestureEventDetector = new HMGestureEventDetector(this);
     }
 
     @Override
@@ -185,6 +163,10 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
 
     public AnimViewWrapper getAnimViewWrapper() {
         return animViewWrapper;
+    }
+
+    public EventManager getEventManager() {
+        return mEventManager;
     }
 
     @JsProperty("style")
@@ -312,25 +294,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     @JsMethod("addEventListener")
     public void addEventListener(String eventName, JSCallback callback) {
         mEventManager.addEventListener(eventName, callback);
-
-        // Button控件单独设置单击和长按事件，为了使按钮按压状态不失效
-        if (mTargetView instanceof Button) {
-            getView().setOnClickListener((v) -> {
-                // 埋点
-                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TAP, this);
-                EventTracer.traceEvent(context.getNamespace(), params);
-
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_TAP)) {
-                    TapEvent event = new TapEvent();
-                    event.setType(Event.HM_EVENT_TYPE_TAP);
-                    event.setPosition(GestureUtils.findPositionInMotionEvent(getContext(), null));
-                    event.setTimestamp(System.currentTimeMillis());
-                    event.setState(GestureUtils.findStateInMotionEvent(null));
-                    event.setTarget(mJSValue);
-                    mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_TAP, event);
-                }
-            });
-        }
+        hmGestureEventDetector.initClickListener(eventName);
     }
 
     @JsMethod("removeEventListener")
@@ -340,205 +304,6 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         } else {
             mEventManager.removeEventListener(eventName, callback);
         }
-    }
-
-    private void initViewGestureEvent() {
-        if (mTargetView instanceof Button) {
-            return;
-        }
-        mGestureDetector = new GestureDetector(context, new GestureDetector.OnGestureListener() {
-            private float startY;
-            private float startX;
-
-            @Override
-            public boolean onDown(MotionEvent e) {
-                // 埋点
-                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_PAN, HMBase.this);
-                EventTracer.traceEvent(context.getNamespace(), params);
-
-                startX = e.getRawX();
-                startY = e.getRawY();
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_PAN)) {
-                    PanEvent event = new PanEvent();
-                    event.setType(Event.HM_EVENT_TYPE_PAN);
-                    event.setTimestamp(System.currentTimeMillis());
-                    event.setState(Event.HM_GESTURE_STATE_BEGAN);
-                    mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_PAN, event);
-                }
-                return true;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent e) {
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                // 埋点
-                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TAP, HMBase.this);
-                EventTracer.traceEvent(context.getNamespace(), params);
-
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_TAP)) {
-                    TapEvent event = new TapEvent();
-                    event.setType(Event.HM_EVENT_TYPE_TAP);
-                    event.setPosition(GestureUtils.findPositionInMotionEvent(getContext(), e));
-                    event.setTimestamp(System.currentTimeMillis());
-                    event.setState(GestureUtils.findStateInMotionEvent(e));
-                    event.setTarget(mJSValue);
-                    mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_TAP, event);
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_PAN)) {
-                    if (e2.getAction() == MotionEvent.ACTION_MOVE) {
-                        PanEvent event = new PanEvent();
-                        //获取移动后的坐标
-                        int moveX = (int) e2.getRawX();
-                        int moveY = (int) e2.getRawY();
-
-                        event.setType(Event.HM_EVENT_TYPE_PAN);
-                        event.setTimestamp(System.currentTimeMillis());
-                        event.setTranslation(GestureUtils.findTranslationInMotionEvent(context, moveX - startX, moveY - startY));
-                        event.setState(Event.HM_GESTURE_STATE_CHANGED);
-                        mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_PAN, event);
-                        startX = moveX;
-                        startY = moveY;
-                    }
-                }
-                return true;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-                // 埋点
-                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_LONG_PRESS, HMBase.this);
-                EventTracer.traceEvent(context.getNamespace(), params);
-
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_LONG_PRESS)) {
-                    LongPressEvent event = new LongPressEvent();
-                    event.setType(Event.HM_EVENT_TYPE_LONG_PRESS);
-                    event.setPosition(GestureUtils.findPositionInMotionEvent(getContext(), e));
-                    event.setTimestamp(System.currentTimeMillis());
-                    event.setState(GestureUtils.findStateInMotionEvent(e));
-                    event.setTarget(mJSValue);
-                    mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_LONG_PRESS, event);
-                }
-            }
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_SWIPE)) {
-                    SwipeEvent event = new SwipeEvent();
-                    event.setType(Event.HM_EVENT_TYPE_SWIPE);
-                    event.setTimestamp(System.currentTimeMillis());
-
-                    float minMove = 120;        //最小滑动距离
-                    float minVelocity = 0;      //最小滑动速度
-                    float beginX = e1.getX();
-                    float endX = e2.getX();
-                    float beginY = e1.getY();
-                    float endY = e2.getY();
-
-                    if (beginX - endX > minMove && Math.abs(velocityX) > minVelocity) {   //左滑
-                        event.setDirection(SwipeEvent.DIRECTION_LEFT);
-                    } else if (endX - beginX > minMove && Math.abs(velocityX) > minVelocity) {   //右滑
-                        event.setDirection(SwipeEvent.DIRECTION_RIGHT);
-                    } else if (beginY - endY > minMove && Math.abs(velocityY) > minVelocity) {   //上滑
-                        event.setDirection(SwipeEvent.DIRECTION_UP);
-                    } else if (endY - beginY > minMove && Math.abs(velocityY) > minVelocity) {   //下滑
-                        event.setDirection(SwipeEvent.DIRECTION_DOWN);
-                    }
-
-                    event.setState(Event.HM_GESTURE_STATE_CHANGED);
-
-                    if (e1.getAction() == MotionEvent.ACTION_DOWN) {
-                        event.setState(Event.HM_GESTURE_STATE_BEGAN);
-                    }
-
-                    if (e2.getAction() == MotionEvent.ACTION_MOVE) {
-                        event.setState(Event.HM_GESTURE_STATE_CHANGED);
-                    } else if (e2.getAction() == MotionEvent.ACTION_UP) {
-                        event.setState(Event.HM_GESTURE_STATE_ENDED);
-                    } else if (e2.getAction() == MotionEvent.ACTION_CANCEL) {
-                        event.setState(Event.HM_GESTURE_STATE_CANCELLED);
-                    }
-                    mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_SWIPE, event);
-                }
-                return false;
-            }
-        });
-
-        mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_PINCH)) {
-                    // 控制缩放的最大值
-                    final float scale = Math.max(0.1f, Math.min(detector.getScaleFactor(), 5.0f));
-                    PinchEvent event = new PinchEvent();
-                    event.setType(Event.HM_EVENT_TYPE_PINCH);
-                    event.setScale(scale);
-                    event.setTimestamp(System.currentTimeMillis());
-                    event.setState(GestureUtils.findStateInMotionEvent(mLatestMotionEvent));
-                    mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_PINCH, event);
-                }
-                return true;
-            }
-        });
-
-        mTargetView.setOnTouchListener((v, event) -> {
-            if (mEventManager != null && mEventManager.hasBasicTouchEvent()) {
-                mLatestMotionEvent = event;
-                mScaleGestureDetector.onTouchEvent(event);
-                mGestureDetector.onTouchEvent(event);
-
-                // 处理touch事件
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_TOUCH)) {
-                    TouchEvent touchEvent = new TouchEvent();
-                    touchEvent.setType(Event.HM_EVENT_TYPE_TOUCH);
-                    touchEvent.setPosition(GestureUtils.findPositionInMotionEvent(getContext(), event));
-                    touchEvent.setTimestamp(System.currentTimeMillis());
-
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN: {
-                            touchEvent.setState(Event.HM_GESTURE_STATE_BEGAN);
-                            break;
-                        }
-                        case MotionEvent.ACTION_MOVE: {
-                            touchEvent.setState(Event.HM_GESTURE_STATE_CHANGED);
-                            break;
-                        }
-                        case MotionEvent.ACTION_UP: {
-                            touchEvent.setState(Event.HM_GESTURE_STATE_ENDED);
-                            break;
-                        }
-                        case MotionEvent.ACTION_CANCEL: {
-                            touchEvent.setState(Event.HM_GESTURE_STATE_CANCELLED);
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                    mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_TOUCH, touchEvent);
-                }
-
-                // pan的end事件，只能放在这里触发
-                if (mEventManager.contains(Event.HM_EVENT_TYPE_PAN) &&
-                        (event.getAction() == MotionEvent.ACTION_UP
-                                || event.getAction() == MotionEvent.ACTION_CANCEL)) {
-                    PanEvent e = new PanEvent();
-                    e.setType(Event.HM_EVENT_TYPE_PAN);
-                    e.setTimestamp(System.currentTimeMillis());
-                    e.setState(Event.HM_GESTURE_STATE_ENDED);
-                    mEventManager.dispatchEvent(Event.HM_EVENT_TYPE_PAN, e);
-                }
-
-                return true;
-            }
-            return false;
-        });
     }
 
     @JsMethod("addAnimation")

@@ -6,7 +6,7 @@ ext {
     VERSION_MIN_SDK = 18
 
     VERSION_CODE = 1
-    VERSION_NAME = '1.0'
+    VERSION_NAME = project.VERSION
 
     MAX_JVM_SIZE = '4g'
     COMPILE_THREAD_NUM = 8

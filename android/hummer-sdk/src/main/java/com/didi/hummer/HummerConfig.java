@@ -8,6 +8,8 @@ import com.didi.hummer.adapter.location.ILocationAdapter;
 import com.didi.hummer.adapter.location.impl.DefaultLocationAdapter;
 import com.didi.hummer.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
+import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
+import com.didi.hummer.adapter.scriptloader.impl.DefaultScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
 import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
 import com.didi.hummer.adapter.websocket.IWebSocketAdapter;
@@ -61,6 +63,10 @@ public class HummerConfig {
      * 导航适配器
      */
     private INavigatorAdapter navAdapter;
+    /**
+     * 脚本加载适配器
+     */
+    private IScriptLoaderAdapter scriptLoaderAdapter;
 
     private HummerConfig(Builder builder) {
         this.namespace = builder.namespace;
@@ -73,6 +79,7 @@ public class HummerConfig {
         this.storageAdapter = builder.storageAdapter;
         this.locationAdapter = builder.locationAdapter;
         this.navAdapter = builder.navAdapter;
+        this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
     }
 
     public String getNamespace() {
@@ -142,6 +149,13 @@ public class HummerConfig {
         return navAdapter;
     }
 
+    public IScriptLoaderAdapter getScriptLoaderAdapter() {
+        if (scriptLoaderAdapter == null) {
+            scriptLoaderAdapter = new DefaultScriptLoaderAdapter();
+        }
+        return scriptLoaderAdapter;
+    }
+
     public static class Builder {
         private String namespace = HummerSDK.NAMESPACE_DEFAULT;
         private JSLogger.Logger jsLogger;
@@ -153,6 +167,7 @@ public class HummerConfig {
         private IStorageAdapter storageAdapter;
         private ILocationAdapter locationAdapter;
         private INavigatorAdapter navAdapter;
+        private IScriptLoaderAdapter scriptLoaderAdapter;
 
         public Builder setNamespace(String namespace) {
             this.namespace = namespace;
@@ -201,6 +216,11 @@ public class HummerConfig {
 
         public Builder setNavigatorAdapter(INavigatorAdapter adapter) {
             navAdapter = adapter;
+            return this;
+        }
+
+        public Builder setScriptLoaderAdapter(IScriptLoaderAdapter adapter) {
+            scriptLoaderAdapter = adapter;
             return this;
         }
 
