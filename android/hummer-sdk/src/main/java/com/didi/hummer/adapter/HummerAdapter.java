@@ -5,6 +5,7 @@ import com.didi.hummer.adapter.http.IHttpAdapter;
 import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer.adapter.location.ILocationAdapter;
 import com.didi.hummer.adapter.navigator.INavigatorAdapter;
+import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
 import com.didi.hummer.adapter.websocket.IWebSocketAdapter;
 
@@ -61,5 +62,13 @@ public class HummerAdapter {
 
     public static INavigatorAdapter getNavigatorAdapter(String namespace) {
         return HummerSDK.getHummerConfig(namespace).getNavAdapter();
+    }
+
+    public static IScriptLoaderAdapter getScriptLoaderAdapter() {
+        return getScriptLoaderAdapter(null);
+    }
+
+    public static IScriptLoaderAdapter getScriptLoaderAdapter(String namespace) {
+        return HummerSDK.getHummerConfig(namespace).getScriptLoaderAdapter();
     }
 }
