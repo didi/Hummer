@@ -187,8 +187,7 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
     }
 
     @Override
-    public void setStyle(Map style) {
-        super.setStyle(style);
+    public void onStyleUpdated(Map<String, Object> style) {
         initPageStyle();
     }
 

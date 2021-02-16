@@ -60,12 +60,17 @@ public class List extends HMBase<SmartRefreshLayout> {
     private int topSpacing;
     private int bottomSpacing;
 
+    private boolean needUpdateMode = true;
+    private boolean needUpdateLineSpacing = true;
+    private boolean needUpdateEdgeSpacing = true;
+
     private SmartRefreshLayout refreshLayout;
     private HummerHeader hummerHeader;
     private HummerFooter hummerFooter;
     private RecyclerView recyclerView;
     private HMListAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.ItemDecoration itemDecoration;
 
     private ObjectPool instanceManager;
 
@@ -146,14 +151,6 @@ public class List extends HMBase<SmartRefreshLayout> {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (adapter != null) {
-            adapter.destroy();
-        }
-    }
-
-    @Override
     protected SmartRefreshLayout createViewInstance(Context context) {
         // 这里不用代码new一个RecyclerView，而是通过xml，是为了解决设置scrollerbar显示无效的问题
         recyclerView = (RecyclerView) LayoutInflater.from(context).inflate(R.layout.recycler_view, null, false);
@@ -229,6 +226,7 @@ public class List extends HMBase<SmartRefreshLayout> {
         super.onCreate();
         recyclerView.addOnScrollListener(mOnScrollListener);
         adapter = new HMListAdapter(getContext(), instanceManager);
+        recyclerView.setAdapter(adapter);
 
         YogaNode recyclerViewNode = YogaNodeUtil.createYogaNode();
         recyclerViewNode.setData(recyclerView);
@@ -237,30 +235,34 @@ public class List extends HMBase<SmartRefreshLayout> {
         getYogaNode().addChildAt(recyclerViewNode, 0);
     }
 
-    private void bindRecyclerViewIfNeed() {
-        if (layoutManager != null) {
-            return;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (adapter != null) {
+            adapter.destroy();
         }
-
-        initRecyclerLayoutManager();
-
-        // List组件四周边缘的间距
-        if (leftSpacing > 0 || rightSpacing > 0 || topSpacing > 0 || bottomSpacing > 0) {
-            recyclerView.setPadding(leftSpacing, topSpacing, rightSpacing, bottomSpacing);
-            recyclerView.setClipToPadding(false);
-        }
-
-        // 滚动条显示或隐藏
-        if (direction == DIRECTION_VERTICAL) {
-            recyclerView.setVerticalScrollBarEnabled(showScrollBar);
-        } else if (direction == DIRECTION_HORIZONTAL) {
-            recyclerView.setHorizontalScrollBarEnabled(showScrollBar);
-        }
-
-        recyclerView.setAdapter(adapter);
     }
 
-    private void initRecyclerLayoutManager() {
+    @Override
+    protected void onStyleUpdated(Map<String, Object> newStyle) {
+        if (needUpdateMode) {
+            initLayoutManager();
+        }
+
+        if (needUpdateLineSpacing) {
+            initLineSpacing();
+        }
+
+        if (needUpdateEdgeSpacing) {
+            initEdgeSpacing();
+        }
+
+        needUpdateMode = false;
+        needUpdateLineSpacing = false;
+        needUpdateEdgeSpacing = false;
+    }
+
+    private void initLayoutManager() {
         switch (mode) {
             case MODE_LIST:
             default:
@@ -269,18 +271,12 @@ public class List extends HMBase<SmartRefreshLayout> {
                 } else {
                     layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 }
-                if (lineSpacing > 0) {
-                    recyclerView.addItemDecoration(new LinearSpacingItemDecoration(lineSpacing, false));
-                }
                 break;
             case MODE_GRID:
                 if (direction == DIRECTION_HORIZONTAL) {
                     layoutManager = new GridLayoutManager(getContext(), column, GridLayoutManager.HORIZONTAL, false);
                 } else {
                     layoutManager = new GridLayoutManager(getContext(), column, GridLayoutManager.VERTICAL, false);
-                }
-                if (lineSpacing > 0 || itemSpacing > 0) {
-                    recyclerView.addItemDecoration(new GridSpacingItemDecoration(column, lineSpacing, itemSpacing, false));
                 }
                 break;
             case MODE_WATERFALL:
@@ -289,89 +285,161 @@ public class List extends HMBase<SmartRefreshLayout> {
                 } else {
                     layoutManager = new StaggeredGridLayoutManager(column, StaggeredGridLayoutManager.VERTICAL);
                 }
-                if (lineSpacing > 0 || itemSpacing > 0) {
-                    recyclerView.addItemDecoration(new StaggeredGridSpacingItemDecoration(column, lineSpacing, itemSpacing, false));
-                }
                 break;
         }
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    @Override
-    public void setStyle(Map style) {
-        super.setStyle(style);
-        bindRecyclerViewIfNeed();
+    private void initLineSpacing() {
+        RecyclerView.ItemDecoration oldItemDecoration = itemDecoration;
+
+        switch (mode) {
+            case MODE_LIST:
+            default:
+                if (lineSpacing > 0) {
+                    itemDecoration = new LinearSpacingItemDecoration(lineSpacing, false);
+                }
+                break;
+            case MODE_GRID:
+                if (lineSpacing > 0 || itemSpacing > 0) {
+                    itemDecoration = new GridSpacingItemDecoration(column, lineSpacing, itemSpacing, false);
+                }
+                break;
+            case MODE_WATERFALL:
+                if (lineSpacing > 0 || itemSpacing > 0) {
+                    itemDecoration = new StaggeredGridSpacingItemDecoration(column, lineSpacing, itemSpacing, false);
+                }
+                break;
+        }
+
+        // 更新ItemDecoration
+        if (itemDecoration != null) {
+            if (oldItemDecoration != null) {
+                recyclerView.removeItemDecoration(oldItemDecoration);
+            }
+            recyclerView.addItemDecoration(itemDecoration);
+        }
+    }
+
+    private void initEdgeSpacing() {
+        // List组件四周边缘的间距
+        if (leftSpacing > 0 || rightSpacing > 0 || topSpacing > 0 || bottomSpacing > 0) {
+            recyclerView.setPadding(leftSpacing, topSpacing, rightSpacing, bottomSpacing);
+            recyclerView.setClipToPadding(false);
+        }
     }
 
     @JsAttribute("mode")
     public void setMode(String strMode) {
+        int curMode;
         switch (strMode) {
             case "list":
             default:
-                mode = MODE_LIST;
+                curMode = MODE_LIST;
                 break;
             case "grid":
-                mode = MODE_GRID;
+                curMode = MODE_GRID;
                 break;
             case "waterfall":
-                mode = MODE_WATERFALL;
-                // 瀑布流模式下的默认值为8
+                curMode = MODE_WATERFALL;
+                break;
+        }
+
+        if (mode != curMode) {
+            mode = curMode;
+            needUpdateMode = true;
+
+            // 瀑布流模式下的默认值为8
+            if (curMode == MODE_WATERFALL) {
                 if (lineSpacing <= 0) {
                     lineSpacing = DPUtil.dp2px(getContext(), 8);
                 }
                 if (itemSpacing <= 0) {
                     itemSpacing = DPUtil.dp2px(getContext(), 8);
                 }
-                break;
+                needUpdateLineSpacing = true;
+            }
         }
     }
 
     @JsAttribute("scrollDirection")
     public void setScrollDirection(String strDirection) {
+        int curDirection;
         switch (strDirection) {
             case "vertical":
             default:
-                direction = DIRECTION_VERTICAL;
+                curDirection = DIRECTION_VERTICAL;
                 break;
             case "horizontal":
-                direction = DIRECTION_HORIZONTAL;
+                curDirection = DIRECTION_HORIZONTAL;
                 break;
+        }
+
+        if (direction != curDirection) {
+            direction = curDirection;
+            needUpdateMode = true;
         }
     }
 
     @JsAttribute("column")
     public void setColumn(int column) {
-        this.column = column;
+        if (this.column != column) {
+            this.column = column;
+            if (mode == MODE_GRID || mode == MODE_WATERFALL) {
+                needUpdateMode = true;
+                needUpdateLineSpacing = true;
+            }
+        }
     }
 
     @JsAttribute("lineSpacing")
     public void setLineSpacing(int spacing) {
-        this.lineSpacing = spacing;
+        if (this.lineSpacing != spacing) {
+            this.lineSpacing = spacing;
+            needUpdateLineSpacing = true;
+        }
     }
 
     @JsAttribute("itemSpacing")
     public void setItemSpacing(int spacing) {
-        this.itemSpacing = spacing;
+        if (this.itemSpacing != spacing) {
+            this.itemSpacing = spacing;
+            if (mode == MODE_GRID || mode == MODE_WATERFALL) {
+                needUpdateLineSpacing = true;
+            }
+        }
     }
 
     @JsAttribute("leftSpacing")
     public void setLeftSpacing(int spacing) {
-        this.leftSpacing = spacing;
+        if (this.leftSpacing != spacing) {
+            this.leftSpacing = spacing;
+            needUpdateEdgeSpacing = true;
+        }
     }
 
     @JsAttribute("rightSpacing")
     public void setRightSpacing(int spacing) {
-        this.rightSpacing = spacing;
+        if (this.rightSpacing != spacing) {
+            this.rightSpacing = spacing;
+            needUpdateEdgeSpacing = true;
+        }
     }
 
     @JsAttribute("topSpacing")
     public void setTopSpacing(int spacing) {
-        this.topSpacing = spacing;
+        if (this.topSpacing != spacing) {
+            this.topSpacing = spacing;
+            needUpdateEdgeSpacing = true;
+        }
     }
 
     @JsAttribute("bottomSpacing")
     public void setBottomSpacing(int spacing) {
-        this.bottomSpacing = spacing;
+        if (this.bottomSpacing != spacing) {
+            this.bottomSpacing = spacing;
+            needUpdateEdgeSpacing = true;
+        }
     }
 
     @JsProperty("refreshView")
