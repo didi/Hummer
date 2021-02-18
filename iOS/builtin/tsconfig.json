@@ -10,7 +10,7 @@
     "noUncheckedIndexedAccess": true,
 
     "target": "ESNext",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "types": [],
     "isolatedModules": true,
     "esModuleInterop": true,

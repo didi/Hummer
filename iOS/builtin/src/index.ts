@@ -216,31 +216,32 @@ globalThis.hummerLoadClass = (loaderModel?: Record<string, LoaderClassModel | un
         globalThis.Hummer.notifyCenter = new globalThis.NotifyCenter();
     }
 
-    globalThis.setInterval = (handler: (...args: unknown[]) => void, timeout?: number) => {
-        const timer = new globalThis.Timer();
+    globalThis.setInterval = (handler, timeout) => {
+        const timer = new globalThis.Timer
         globalThis.hummerValueStorageAdd(timer);
         timer.setInterval(handler, timeout);
 
-        return timer;
+        return timer
     }
 
-    globalThis.clearInterval = (timer: Timer) => {
-        timer.clearInterval();
+    globalThis.clearInterval = timer => {
+        (timer as unknown as Timer).clearInterval();
         globalThis.hummerValueStorageDelete(timer);
     }
 
-    globalThis.setTimeout = (handler: (...args: unknown[]) => void, timeout?: number) => {
+    globalThis.setTimeout = (handler, timeout) => {
         const timer = new globalThis.Timer();
         globalThis.hummerValueStorageAdd(timer);
         timer.setTimeout(() => {
             globalThis.hummerValueStorageDelete(timer);
-            handler();
+            // eslint-disable-next-line @typescript-eslint/ban-types
+            (handler as Function)();
         }, timeout);
 
         return timer;
     }
 
-    globalThis.clearTimeout = (timer: Timer) => {
+    globalThis.clearTimeout = timer => {
         if (!timer) {
             return;
         }

@@ -8,6 +8,3 @@ declare interface Timer {
     setTimeout(handler: Function, timeout?: number);
     clearTimeout();
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const console: any
