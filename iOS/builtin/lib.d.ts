@@ -1,10 +1,8 @@
 declare class View { viewID?: string }
 
 declare interface Timer {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    setInterval(handler: Function, timeout?: number);
+    setInterval(handler: () => void, timeout?: number);
     clearInterval();
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    setTimeout(handler: Function, timeout?: number);
+    setTimeout(handler: () => void, timeout?: number);
     clearTimeout();
 }

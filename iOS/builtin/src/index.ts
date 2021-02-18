@@ -234,8 +234,7 @@ globalThis.hummerLoadClass = (loaderModel?: Record<string, LoaderClassModel | un
         globalThis.hummerValueStorageAdd(timer);
         timer.setTimeout(() => {
             globalThis.hummerValueStorageDelete(timer);
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            (handler as Function)();
+            (handler as () => void)();
         }, timeout);
 
         return timer;
