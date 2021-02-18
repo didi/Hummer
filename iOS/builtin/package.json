@@ -2,6 +2,7 @@
   "name": "@hummer/builtin",
   "version": "1.0.0",
   "description": "Hummer 内建代码",
+  "private": true,
   "main": "dist/index.js",
   "repository": {
     "type": "git",

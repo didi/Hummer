@@ -48,21 +48,20 @@ function isString(value: unknown) {
     return typeof value === 'string' && value.length > 0;
 }
 
-globalThis.exportedClassNameCache = Symbol();
+const exportedClassNameCache = Symbol();
 
 class HummerBase extends Object {
     readonly _private: unknown
 
-    constructor(...args: [unknown]) {
+    constructor(...args: unknown[]) {
         super();
         let className = this.constructor.name;
-        if (isString(this.constructor[globalThis.exportedClassNameCache]) && globalThis.exporedComponentMap?.get(this.constructor[globalThis.exportedClassNameCache])) {
+        if (isString(this.constructor[exportedClassNameCache]) && globalThis.exporedComponentMap?.get(this.constructor[exportedClassNameCache])) {
             // 直接使用缓存类名
-            className = this.constructor[globalThis.exportedClassNameCache];
-            // eslint-disable-next-line no-prototype-builtins
-            if (Object.getPrototypeOf(this.constructor.prototype).constructor[globalThis.exportedClassNameCache] && this.constructor.hasOwnProperty(globalThis.exportedClassNameCache)) {
+            className = this.constructor[exportedClassNameCache];
+            if (Object.getPrototypeOf(this.constructor.prototype).constructor[exportedClassNameCache] && Object.prototype.hasOwnProperty.call(this, exportedClassNameCache)) {
                 // 原型链上已经缓存并且自身也重复缓存则删除自身缓存
-                delete this.constructor[globalThis.exportedClassNameCache];
+                delete this.constructor[exportedClassNameCache];
             }
         } else if (!globalThis.exporedComponentMap?.get(className)) {
             // 不是导出组件
@@ -81,7 +80,7 @@ class HummerBase extends Object {
                 return;
             }
             // 缓存
-            this.constructor[globalThis.exportedClassNameCache] = className;
+            this.constructor[exportedClassNameCache] = className;
         }
         // 构造 _private
         this._private = globalThis.hummerCreate(className, this, ...args);
@@ -89,12 +88,14 @@ class HummerBase extends Object {
         this.initialize(...args);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    initialize(...args: [unknown]) { args }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    initialize(..._args: unknown[]) {
+        // 等待继承
+    }
 }
 
 globalThis.hummerCreateFunction = (object: unknown) => {
-    const functionValue = (...args: [unknown]) => {
+    const functionValue = (...args: unknown[]) => {
         return globalThis.hummerCallFunction(object, ...args);
     }
     // 给原生 convertValueRefToFunction 方法使用
@@ -111,8 +112,7 @@ globalThis.hummerCreateObject = (privatePointer: unknown, jsClassName: string) =
     return newObject;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-globalThis.hummerLoadClass = (loaderModel?: Object) => {
+globalThis.hummerLoadClass = (loaderModel?: Record<string, LoaderClassModel | undefined>) => {
     if (!loaderModel) {
         // 提示错误信息
         console.error('hummerLoaderClass 空调用');
@@ -124,11 +124,10 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
         interface StackModel {
             jsClassName: string,
             value: LoaderClassModel,
-            // jsClass: new (...args: [unknown]) => unknown
         }
         let stackArray: Array<StackModel> | undefined;
 
-        let value: LoaderClassModel | undefined = loaderModel[jsClassName];
+        let value = loaderModel[jsClassName];
         if (!isString(jsClassName) || globalThis.exporedComponentMap?.get(jsClassName) || !value) {
             return;
         }
@@ -136,8 +135,7 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
             if (!value) {
                 return;
             }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            let jsClass: new (...args: [unknown]) => any = HummerBase;
+            let jsClass = HummerBase;
             if (value.superClassName && isString(value.superClassName) && loaderModel[value.superClassName]) {
                 // 有父类
                 if (!globalThis.exporedComponentMap?.get(value.superClassName)) {
@@ -168,11 +166,11 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
                 const inlineJSClassName = jsClassName;
                 const prototypeOrClsss = value.isClass ? jsClass : jsClass?.prototype;
                 if (value.isMethod) {
-                    prototypeOrClsss[value.nameString] = function (...args: [unknown]) {
+                    prototypeOrClsss[value.nameString] = function (...args: unknown[]) {
                         if (value.isClass) {
                             return globalThis.hummerCall(inlineJSClassName, value.nameString, ...args);
                         } else {
-                            return globalThis.hummerCall(this._private, inlineJSClassName, value.nameString, ...args);
+                            return globalThis.hummerCall((this as HummerBase)._private, inlineJSClassName, value.nameString, ...args);
                         }
                     }
                 } else {
@@ -215,11 +213,11 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
     });
 
     if (globalThis.Hummer && !globalThis.Hummer.notifyCenter) {
-        globalThis.Hummer.notifyCenter = new NotifyCenter();
+        globalThis.Hummer.notifyCenter = new globalThis.NotifyCenter();
     }
 
     globalThis.setInterval = (handler: (...args: unknown[]) => void, timeout?: number) => {
-        const timer = new Timer();
+        const timer = new globalThis.Timer();
         globalThis.hummerValueStorageAdd(timer);
         timer.setInterval(handler, timeout);
 
@@ -232,7 +230,7 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
     }
 
     globalThis.setTimeout = (handler: (...args: unknown[]) => void, timeout?: number) => {
-        const timer = new Timer();
+        const timer = new globalThis.Timer();
         globalThis.hummerValueStorageAdd(timer);
         timer.setTimeout(() => {
             globalThis.hummerValueStorageDelete(timer);
@@ -250,7 +248,7 @@ globalThis.hummerLoadClass = (loaderModel?: Object) => {
     }
 }
 
-
+// 未来需要被废弃
 globalThis.Memory = new class Memory {
     typedKey(key: string) {
         if (!key) {
@@ -266,30 +264,30 @@ globalThis.Memory = new class Memory {
 
         if (value instanceof View) {
             const vid = value.viewID
-            MemoryProxy.set(key, vid)
-            MemoryProxy.set(tk, 'view')
+            globalThis.MemoryProxy.set(key, vid)
+            globalThis.MemoryProxy.set(tk, 'view')
             return
         }
         if (value instanceof Function) {
-            MemoryProxy.set(key, value)
-            MemoryProxy.set(tk, 'function')
+            globalThis.MemoryProxy.set(key, value)
+            globalThis.MemoryProxy.set(tk, 'function')
             return
         }
         if ((value instanceof Array) || (value instanceof Object)) {
             const str = JSON.stringify(value)
-            MemoryProxy.set(key, str)
-            MemoryProxy.set(tk, 'object')
+            globalThis.MemoryProxy.set(key, str)
+            globalThis.MemoryProxy.set(tk, 'object')
             return
         }
-        MemoryProxy.set(key, value)
+        globalThis.MemoryProxy.set(key, value)
     }
     get(key: string) {
         if (!key) {
             return
         }
-        const value = MemoryProxy.get(key)
+        const value = globalThis.MemoryProxy.get(key)
         const tk = this.typedKey(key)
-        const typeValue = MemoryProxy.get(tk)
+        const typeValue = globalThis.MemoryProxy.get(tk)
         if (typeValue && typeValue === 'object') {
             const obj = JSON.parse(value)
             return obj
@@ -301,11 +299,11 @@ globalThis.Memory = new class Memory {
             return
         }
         const tk = this.typedKey(key)
-        MemoryProxy.remove(key)
-        MemoryProxy.remove(tk)
+        globalThis.MemoryProxy.remove(key)
+        globalThis.MemoryProxy.remove(tk)
     }
     exist(key: unknown) {
-        return MemoryProxy.exist(key)
+        return globalThis.MemoryProxy.exist(key)
     }
 };
 
