@@ -2,16 +2,19 @@
   "compilerOptions": {
     "strict": true,
     "noImplicitAny": false,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "types": [],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "types": [
+      "jest"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "declaration": true,
