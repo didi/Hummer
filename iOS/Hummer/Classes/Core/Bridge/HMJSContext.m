@@ -99,7 +99,7 @@ NS_ASSUME_NONNULL_END
             // TODO(唐佳诚): 补上 namespace 功能
         }];
     };
-    [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"http://localhost:8080/builtin.js"]];
+    [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/builtin.js"]];
 
     NSMutableDictionary *classes = [NSMutableDictionary new];
     // 可以使用模型替代字典，转 JSON，做缓存
@@ -120,7 +120,6 @@ NS_ASSUME_NONNULL_END
             }];
         }];
         NSDictionary *class = @{
-                @"className": obj.jsClass,
                 @"methodPropertyList": methodPropertyArray,
                 @"superClassName": obj.superClassReference.jsClass ?: @""
         };
@@ -128,7 +127,7 @@ NS_ASSUME_NONNULL_END
     }];
     NSData *data = [NSJSONSerialization dataWithJSONObject:classes options:0 error:nil];
     NSString *classesStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [self.context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"http://localhost:8080/hummer.js"]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
 
     return self;
 }
