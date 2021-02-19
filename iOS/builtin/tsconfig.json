@@ -21,7 +21,6 @@
     "skipLibCheck": true
   },
   "include": [
-    "./src/**/*.ts",
-    "./lib.d.ts"
+    "./src/**/*.ts"
   ]
 }
