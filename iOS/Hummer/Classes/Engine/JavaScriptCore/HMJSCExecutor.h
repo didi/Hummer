@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) HMExceptionHandler exceptionHandler;
 
+@property (nonatomic, copy, nullable) void (^consoleHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
+
 @end
 
 NS_ASSUME_NONNULL_END

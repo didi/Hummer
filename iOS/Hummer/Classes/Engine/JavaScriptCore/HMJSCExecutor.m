@@ -36,6 +36,8 @@ static JSValueRef _Nullable hummerGetProperty(JSContextRef ctx, JSObjectRef func
 
 static JSValueRef _Nullable hummerSetProperty(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception);
 
+static JSValueRef _Nullable nativeLoggingHook(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception);
+
 static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 @interface HMJSCExecutor ()
@@ -95,6 +97,23 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 @end
 
 NS_ASSUME_NONNULL_END
+
+JSValueRef _Nullable nativeLoggingHook(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception) {
+    HMAssertMainQueue();
+    if (argumentCount != 2) {
+        return NULL;
+    }
+    HMJSCExecutor *executor = (HMJSCExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:JSContextGetGlobalContext(ctx)]];
+    NSString *logString = [executor convertValueRefToString:arguments[0] isForce:NO];
+    HMLogLevel logLevel = [executor convertValueRefToNumber:arguments[1] isForce:NO].unsignedIntegerValue;
+    // 日志中间件
+    [HMLogger printJSLog:logString level:logLevel];
+    if (executor.consoleHandler) {
+        executor.consoleHandler(logString, logLevel);
+    }
+    
+    return NULL;
+}
 
 JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception) {
     HMAssertMainQueue();
@@ -313,15 +332,19 @@ void hummerFinalize(JSObjectRef object) {
     JSStringRef hummerGetPropertyString = JSStringCreateWithUTF8CString("hummerGetProperty");
     JSStringRef hummerSetPropertyString = JSStringCreateWithUTF8CString("hummerSetProperty");
     JSStringRef hummerCallFunctionString = JSStringCreateWithUTF8CString("hummerCallFunction");
+    JSStringRef nativeLoggingHookStringRef = JSStringCreateWithUTF8CString("nativeLoggingHook");
     JSObjectRef globalThis = JSContextGetGlobalObject(_contextRef);
 
     // 匿名函数
+    JSObjectRef nativeLoggingHookFunction = JSObjectMakeFunctionWithCallback(_contextRef, NULL, &nativeLoggingHook);
     JSObjectRef inlineHummerCallFunction = JSObjectMakeFunctionWithCallback(_contextRef, NULL, &hummerCall);
     JSObjectRef hummerCreateFunction = JSObjectMakeFunctionWithCallback(_contextRef, NULL, &hummerCreate);
     JSObjectRef hummerGetPropertyFunction = JSObjectMakeFunctionWithCallback(_contextRef, NULL, &hummerGetProperty);
     JSObjectRef hummerSetPropertyFunction = JSObjectMakeFunctionWithCallback(_contextRef, NULL, &hummerSetProperty);
     JSObjectRef hummerCallFunctionFunction = JSObjectMakeFunctionWithCallback(_contextRef, NULL, &hummerCallFunction);
     JSValueRef exception = NULL;
+    JSObjectSetProperty(_contextRef, globalThis, nativeLoggingHookStringRef, nativeLoggingHookFunction, kJSPropertyAttributeReadOnly | kJSPropertyAttributeDontDelete, &exception);
+    [self popExceptionWithErrorObject:&exception];
     JSObjectSetProperty(_contextRef, globalThis, hummerCallString, inlineHummerCallFunction, kJSPropertyAttributeReadOnly | kJSPropertyAttributeDontDelete, &exception);
     // 初始化过程 exceptionHandler 一定不存在，因此可以会打到日志里
     [self popExceptionWithErrorObject:&exception];
@@ -333,6 +356,7 @@ void hummerFinalize(JSObjectRef object) {
     [self popExceptionWithErrorObject:&exception];
     JSObjectSetProperty(_contextRef, globalThis, hummerCallFunctionString, hummerCallFunctionFunction, kJSPropertyAttributeReadOnly | kJSPropertyAttributeDontDelete, &exception);
     [self popExceptionWithErrorObject:&exception];
+    JSStringRelease(nativeLoggingHookStringRef);
     JSStringRelease(hummerCallString);
     JSStringRelease(hummerCreateString);
     JSStringRelease(hummerGetPropertyString);

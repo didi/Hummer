@@ -6,16 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSInteger, HMLogLevel) {
-    HMLogLevelDebug,
-    HMLogLevelInfo,
-    HMLogLevelWarning,
-    HMLogLevelError,
-    HMLogLevelTrace,
-};
 
 @protocol HMLoggerProtocol <NSObject>
 @optional

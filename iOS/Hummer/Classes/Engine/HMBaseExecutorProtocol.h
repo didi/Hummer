@@ -28,6 +28,14 @@ typedef void (^HMExceptionHandler)(HMExceptionModel *exceptionModel);
  */
 typedef id _Nullable (^HMFunctionType)(NSArray *_Nullable value);
 
+typedef NS_ENUM(NSUInteger, HMLogLevel) {
+  HMLogLevelTrace = 0,
+  HMLogLevelInfo,
+  HMLogLevelWarning,
+  HMLogLevelError,
+  HMLogLevelFatal
+};
+
 // 兼容以前代码
 typedef HMFunctionType HMFuncCallback;
 
@@ -40,6 +48,8 @@ typedef HMFunctionType HMFuncCallback;
 @property (nonatomic, readonly, strong) HMBaseValue *globalObject;
 
 @property (nonatomic, copy, nullable) void (^exceptionHandler)(HMExceptionModel *exception);
+
+@property (nonatomic, copy, nullable) void (^consoleHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
 
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)script withSourceURL:(nullable NSURL *)sourceURL;
 

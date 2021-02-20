@@ -20,7 +20,7 @@ void _HMLogInternal(HMLogLevel level,
         case HMLogLevelWarning: levelString = @"[WARNING]"; break;
         case HMLogLevelInfo: levelString = @"[INFO]"; break;
         case HMLogLevelTrace: levelString = @"[TRACE]"; break;
-        default: levelString = @"[DEBUG]"; break;
+        default: levelString = @"[FATAL]"; break;
     }
     
     va_list args;
@@ -57,7 +57,6 @@ void _HMLogInternal(HMLogLevel level,
     }
     
     if (!isIntercept) {
-        if (logLevel == HMLogLevelDebug)    { HMLogDebug(@"%@", log); }
         if (logLevel == HMLogLevelInfo)     { HMLogInfo(@"%@", log); }
         if (logLevel == HMLogLevelWarning)  { HMLogWarning(@"%@", log); }
         if (logLevel == HMLogLevelError)    { HMLogError(@"%@", log); }

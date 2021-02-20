@@ -18,8 +18,7 @@ do { \
 _HMLogInternal(level, @(__func__), @(__FILE__), __LINE__, (fmt), ## __VA_ARGS__); \
 } while(0)
 
-
-#define HMLogDebug(format, ...)         _HMLog(HMLogLevelDebug, format, ##__VA_ARGS__)
+#define HMLogDebug(format, ...)         _HMLog(HMLogLevelTrace, format, ##__VA_ARGS__)
 #define HMLogWarning(format, ...)       _HMLog(HMLogLevelWarning, format ,##__VA_ARGS__)
 #define HMLogError(format, ...)         _HMLog(HMLogLevelError, format, ##__VA_ARGS__)
 #define HMLogInfo(format, ...)          _HMLog(HMLogLevelInfo, format, ##__VA_ARGS__)
@@ -27,6 +26,6 @@ _HMLogInternal(level, @(__func__), @(__FILE__), __LINE__, (fmt), ## __VA_ARGS__)
 
 @interface HMLogger : NSObject
 
-+ (void)printJSLog:(NSString * _Nullable)log level:(HMLogLevel)logLevel;
++ (void)printJSLog:(nullable NSString *)log level:(HMLogLevel)logLevel;
 
 @end
