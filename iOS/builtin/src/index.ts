@@ -10,6 +10,299 @@ declare interface Timer {
 }
 
 /*
+enum LOG_LEVELS {
+    trace = 0,
+    info = 1,
+    warn = 2,
+    error = 3,
+}
+
+function consoleAssertPolyfill(expression: unknown, label: string) {
+    if (!expression) {
+        globalThis.nativeLoggingHook('Assertion failed: ' + label, LOG_LEVELS.error);
+    }
+}
+
+function isUndefined(arg: unknown): arg is undefined {
+    return arg === void 0;
+}
+
+function isString(arg: unknown): arg is string {
+    return typeof arg === 'string';
+}
+function isNumber(arg: unknown): arg is number {
+    return typeof arg === 'number';
+}
+
+function isBoolean(arg: unknown): arg is boolean {
+    return typeof arg === 'boolean';
+}
+function isNull(arg: unknown): arg is null {
+    return arg === null;
+}
+function isObject(arg: unknown): arg is Record<string, unknown> {
+    return typeof arg === 'object' && arg !== null;
+}
+function objectToString(o: unknown) {
+    return Object.prototype.toString.call(o);
+}
+
+function isRegExp(re: unknown): re is RegExp {
+    return isObject(re) && objectToString(re) === '[object RegExp]';
+}
+
+function isError(e: unknown) {
+    return (
+        isObject(e) &&
+        (objectToString(e) === '[object Error]' || e instanceof Error)
+    );
+}
+
+function formatPrimitive(ctx, value) {
+    if (isUndefined(value)) return ctx.stylize('undefined', 'undefined');
+    if (isString(value)) {
+        const simple =
+            "'" +
+            JSON.stringify(value)
+                .replace(/^"|"$/g, '')
+                .replace(/'/g, "\\'")
+                .replace(/\\"/g, '"') +
+            "'";
+        return ctx.stylize(simple, 'string');
+    }
+    if (isNumber(value)) return ctx.stylize('' + value, 'number');
+    if (isBoolean(value)) return ctx.stylize('' + value, 'boolean');
+    // For some reason typeof null is "object", so special case here.
+    if (isNull(value)) return ctx.stylize('null', 'null');
+}
+
+function arrayToHash(array: string[]) {
+    const hash = {};
+
+    array.forEach(function (val) {
+        hash[val] = true;
+    });
+
+    return hash;
+}
+
+function isArray(ar: unknown): ar is unknown[] {
+    return Array.isArray(ar);
+}
+
+function isDate(d: unknown): d is Date {
+    return isObject(d) && objectToString(d) === '[object Date]';
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+function isFunction(arg: unknown): arg is Function {
+    return typeof arg === 'function';
+}
+
+function formatError(value: unknown) {
+    return '[' + Error.prototype.toString.call(value) + ']';
+}
+
+interface Context {seen: unknown[], formatValueCalls: number, stylize: (str: unknown, _styleType: string) => unknown}
+
+function formatArray(ctx: Context, value:Record<string, unknown>, recurseTimes:number, visibleKeys, keys) {
+    var output = [];
+    for (var i = 0, l = value.length; i < l; ++i) {
+      if (hasOwnProperty(value, String(i))) {
+        output.push(
+          formatProperty(
+            ctx,
+            value,
+            recurseTimes,
+            visibleKeys,
+            String(i),
+            true,
+          ),
+        );
+      } else {
+        output.push('');
+      }
+    }
+    keys.forEach(function(key) {
+      if (!key.match(/^\d+$/)) {
+        output.push(
+          formatProperty(ctx, value, recurseTimes, visibleKeys, key, true),
+        );
+      }
+    });
+    return output;
+  }
+
+function formatValue(ctx: Context, value: Record<string, unknown>, recurseTimes: number) {
+    ctx.formatValueCalls++;
+    if (ctx.formatValueCalls > 200) {
+        return `[TOO BIG formatValueCalls ${ctx.formatValueCalls
+            } exceeded limit of 200]`;
+    }
+
+    // Primitive types cannot have properties
+    const primitive = formatPrimitive(ctx, value);
+    if (primitive) {
+        return primitive;
+    }
+
+    // Look up the keys of the object.
+    const keys = Object.keys(value);
+    const visibleKeys = arrayToHash(keys);
+
+    // IE doesn't make error fields non-enumerable
+    // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+    if (
+        isError(value) &&
+        (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)
+    ) {
+        return formatError(value);
+    }
+
+    // Some type of object without properties can be shortcutted.
+    if (keys.length === 0) {
+        if (isFunction(value)) {
+            const name = value.name ? ': ' + value.name : '';
+            return ctx.stylize('[Function' + name + ']', 'special');
+        }
+        if (isRegExp(value)) {
+            return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+        }
+        if (isDate(value)) {
+            return ctx.stylize(Date.prototype.toString.call(value), 'date');
+        }
+        if (isError(value)) {
+            return formatError(value);
+        }
+    }
+
+    let base = '',
+        array = false,
+        braces = ['{', '}'];
+
+    // Make Array say that they are Array
+    if (isArray(value)) {
+        array = true;
+        braces = ['[', ']'];
+    }
+
+    // Make functions say that they are functions
+    if (isFunction(value)) {
+        const n = value.name ? ': ' + value.name : '';
+        base = ' [Function' + n + ']';
+    }
+
+    // Make RegExps say that they are RegExps
+    if (isRegExp(value)) {
+        base = ' ' + RegExp.prototype.toString.call(value);
+    }
+
+    // Make dates with properties first say the date
+    if (isDate(value)) {
+        base = ' ' + Date.prototype.toUTCString.call(value);
+    }
+
+    // Make error with message first say the error
+    if (isError(value)) {
+        base = ' ' + formatError(value);
+    }
+
+    if (keys.length === 0 && (!array || value.length == 0)) {
+        return braces[0] + base + braces[1];
+    }
+
+    if (recurseTimes < 0) {
+        if (isRegExp(value)) {
+            return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+        } else {
+            return ctx.stylize('[Object]', 'special');
+        }
+    }
+
+    ctx.seen.push(value);
+
+    let output: unknown;
+    if (array) {
+        output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+    } else {
+        output = keys.map(function (key) {
+            return formatProperty(
+                ctx,
+                value,
+                recurseTimes,
+                visibleKeys,
+                key,
+                array,
+            );
+        });
+    }
+
+    ctx.seen.pop();
+
+    return reduceToSingleString(output, base, braces);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function stylizeNoColor(str: unknown, _styleType: string) {
+    return str;
+}
+
+function inspect(obj: unknown, opts: { depth: number }) {
+    const ctx = {
+        seen: [],
+        formatValueCalls: 0,
+        stylize: stylizeNoColor,
+    };
+    return formatValue(ctx, obj, opts.depth);
+}
+
+function getNativeLogFunction(level) {
+    return function (...args: unknown[]) {
+        let str;
+        if (arguments.length === 1 && typeof args[0] === 'string') {
+            str = args[0];
+        } else {
+            str = Array.prototype.map
+                .call(args, function (arg) {
+                    return inspect(arg, { depth: 10 });
+                })
+                .join(', ');
+        }
+
+        // TRICKY
+        // If more than one argument is provided, the code above collapses them all
+        // into a single formatted string. This transform wraps string arguments in
+        // single quotes (e.g. "foo" -> "'foo'") which then breaks the "Warning:"
+        // check below. So it's important that we look at the first argument, rather
+        // than the formatted argument string.
+        const firstArg = arguments[0];
+
+        let logLevel = level;
+        if (
+            typeof firstArg === 'string' &&
+            firstArg.slice(0, 9) === 'Warning: ' &&
+            logLevel >= LOG_LEVELS.error
+        ) {
+            // React warnings use console.error so that a stack trace is shown,
+            // but we don't (currently) want these to show a redbox
+            // (Note: Logic duplicated in ExceptionsManager.js.)
+            logLevel = LOG_LEVELS.warn;
+        }
+        if (global.__inspectorLog) {
+            global.__inspectorLog(
+                INSPECTOR_LEVELS[logLevel],
+                str,
+                [].slice.call(arguments),
+                INSPECTOR_FRAMES_TO_SKIP,
+            );
+        }
+        if (groupStack.length) {
+            str = groupFormat('', str);
+        }
+        global.nativeLoggingHook(str, logLevel);
+    };
+}
+
 if (globalThis.nativeLoggingHook) {
     const originalConsole = globalThis.console;
     if (originalConsole) {
