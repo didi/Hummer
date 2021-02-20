@@ -1,12 +1,12 @@
-const exportedClassNameCache = Symbol();
+const exportedClassNameCache = Symbol()
 
 export default class HummerBase extends Object {
     readonly _private: unknown
 
     constructor(...args: unknown[]) {
-        super();
+        super()
         // 只有非导出组件才需要考虑缓存问题
-        let className = this.constructor.name;
+        let className = this.constructor.name
         if (!globalThis[this.constructor.name]) {
             className = this.constructor[exportedClassNameCache]
             // 1. 已缓存
@@ -21,41 +21,41 @@ export default class HummerBase extends Object {
             if (typeof className === 'string' && !globalThis[className]) {
                 console.error(`${className} 已缓存未注入`)
 
-                return;
+                return
             }
 
             if (typeof className !== 'string') {
-                let prototype = Object.getPrototypeOf(this);
+                let prototype = Object.getPrototypeOf(this)
                 // new HummerBase() 情况需要排除，不能进入循环
                 if (prototype !== HummerBase.prototype) {
                     // 结束条件 1 找到导出组件
                     // 结束条件 2 prototype === HummerBase.prototype
                     do {
-                        className = prototype.constructor.name;
-                        prototype = Object.getPrototypeOf(prototype);
+                        className = prototype.constructor.name
+                        prototype = Object.getPrototypeOf(prototype)
                     } while (!globalThis[className] && prototype !== HummerBase.prototype)
                 }
                 // 缓存
                 if (typeof className === 'string' && globalThis[className]) {
-                    this.constructor[exportedClassNameCache] = className;
+                    this.constructor[exportedClassNameCache] = className
                 } else {
                     // 兜底错误
                     console.error('兜底异常，大概率为 new HummerBase() 或者 class TestA extends HummerBase {}')
 
-                    return;
+                    return
                 }
             }
         }
 
-        this._private = globalThis.hummerCreate(className, this, ...args);
+        this._private = globalThis.hummerCreate(className, this, ...args)
         if (!this._private) {
             console.error('兜底异常，大概率为 globalThis.X = class X extends View {} 全局声明业务类的情况')
 
-            return;
+            return
         }
 
         // 兼容代码
-        this.initialize(...args);
+        this.initialize(...args)
     }
 
     initialize(..._args: unknown[]): void {
