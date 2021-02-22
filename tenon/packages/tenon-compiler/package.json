@@ -19,7 +19,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@hummer/tenon-utils": "^1.0.0",
+    "@hummer/tenon-utils": "file:../tenon-utils",
     "@vue/compiler-core": "^3.0.1"
   }
 }

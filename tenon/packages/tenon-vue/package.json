@@ -18,11 +18,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@hummer/tenon-utils": "^1.0.0",
+    "@hummer/tenon-utils": "file:../tenon-utils",
     "@vue/reactivity": "^3.0.1",
     "@vue/runtime-core": "^3.0.1"
-  },
-  "devDependencies": {
-    "@hummer/hummer-front": "^1.0.0"
   }
 }
