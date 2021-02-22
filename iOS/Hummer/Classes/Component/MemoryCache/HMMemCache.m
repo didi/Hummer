@@ -15,7 +15,7 @@
 
 #pragma mark Export
 
-HM_EXPORT_CLASS(MemoryProxy, HMMemCache)
+HM_EXPORT_CLASS(Memory, HMMemCache)
 HM_EXPORT_CLASS_METHOD(set, __setKey:value:)
 HM_EXPORT_CLASS_METHOD(get, __getValueForKey:)
 HM_EXPORT_CLASS_METHOD(remove, __removeForKey:)
