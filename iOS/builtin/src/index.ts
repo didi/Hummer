@@ -10,7 +10,7 @@ declare interface Timer {
     clearTimeout(): void
 }
 
-if (globalThis.nativeLoggingHook) {
+if (globalThis.nativeLoggingHook && !globalThis.console['_isPolyfilled']) {
     const originalConsole = globalThis.console
     if (originalConsole) {
         const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'console')
