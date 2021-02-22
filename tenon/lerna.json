@@ -1,4 +1,5 @@
 {
+  "tagVersionPrefix": "tenon_",
   "packages": [
     "packages/*"
   ],
