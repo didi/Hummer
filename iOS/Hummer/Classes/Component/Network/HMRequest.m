@@ -83,15 +83,7 @@ HM_EXPORT_METHOD(send, send:)
               withData:(NSData *)data
              withError:(NSError *)error
               callback:(HMFuncCallback)callback {
-    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        /**
-         * 可能存在主线程回调之后，context已经被销毁。此时不应该在执行回调
-         */
-        if(weakSelf.hmContext == nil){
-            
-            return;
-        }
         HMResponse *response = [[HMResponse alloc] init];
         response.error = error; response.status = resp.statusCode;
         response.header = [resp allHeaderFields];
@@ -170,7 +162,6 @@ HM_EXPORT_METHOD(send, send:)
 #pragma mark - Export Method
 
 - (void)send:(HMFuncCallback)callback {
-    __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:[self urlRequest]
                                                                      completionHandler:^(NSData * _Nullable data,
                                                                                          NSURLResponse * _Nullable response,
@@ -179,10 +170,10 @@ HM_EXPORT_METHOD(send, send:)
             error = HMError(-100, @"not http response");
             data = nil; response = nil;
         }
-        [weakSelf handleResponse:(NSHTTPURLResponse *)response
+        [self handleResponse:(NSHTTPURLResponse *)response
                         withData:data
                        withError:error
-                        callback:[callback copy]];
+                        callback:callback];
     }];
     [dataTask resume];
 }
