@@ -138,11 +138,15 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
         _envParams = NSMutableDictionary.dictionary;
         [_envParams addEntriesFromDictionary:[self getEnvironmentInfo]];
     }
-    HMJSContext *context = [self.contextGraph objectForKey:HMCurrentExecutor];
-    NSMutableDictionary<NSString *, NSObject *> *tempEnvironmentDictionary = _envParams.mutableCopy;
-    tempEnvironmentDictionary[@"namespace"] = context.nameSpace;
+    if (HMCurrentExecutor) {
+        HMJSContext *context = [self currentContext:HMCurrentExecutor];
+        NSMutableDictionary<NSString *, NSObject *> *tempEnvironmentDictionary = _envParams.mutableCopy;
+        tempEnvironmentDictionary[@"namespace"] = context.nameSpace;
+        
+        return tempEnvironmentDictionary.copy;
+    }
 
-    return tempEnvironmentDictionary;
+    return _envParams;
 }
 
 - (NSDictionary *)getEnvironmentInfo {
