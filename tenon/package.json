@@ -3,7 +3,6 @@
   "private": true,
   "devDependencies": {
     "@hummer/hummer-front": "^1.0.0",
-    "@hummer/tenon-vue": "file:packages/tenon-vue",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-json": "^4.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
@@ -45,6 +44,7 @@
     "@hummer/tenon": "file:packages/tenon",
     "@hummer/tenon-compiler": "file:packages/tenon-compiler",
     "@hummer/tenon-store": "file:packages/tenon-store",
-    "@hummer/tenon-utils": "file:packages/tenon-utils"
+    "@hummer/tenon-utils": "file:packages/tenon-utils",
+    "@hummer/tenon-vue": "file:packages/tenon-vue"
   }
 }
