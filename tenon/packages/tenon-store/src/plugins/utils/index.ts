@@ -1,4 +1,6 @@
 import {OperationType, Operation, Operations} from './types'
+export const NAMESPACE = Hummer.env.namespace || '';
+const randomChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 /**
  * 对象的Diff操作
  * @param left Origin Object
@@ -59,4 +61,23 @@ function isEqual(left:object, right:object):boolean{
 // Common Clone Object
 export function cloneObject(source: object):object{
   return Object.assign({}, source)
+}
+
+export function getUUID(){
+  const id = randomString(8, randomChars); 
+  return id
+}
+
+export function getNotifyEventKey(){
+  return `${NAMESPACE}_UPDATE_STORE`
+}
+
+export function getMemoryKey(){
+  return `${NAMESPACE}_STORE_MEMORY`
+}
+
+function randomString(length = 8, chars: string) {
+  var result = '';
+  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+  return result;
 }
