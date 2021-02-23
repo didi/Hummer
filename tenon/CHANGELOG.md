@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/didi/Hummer/compare/tenon_1.1.0...tenon_1.2.0) (2021-02-23)
+
+
+### Bug Fixes
+
+* **iOS:** console polyfill not work ([00ddbe8](https://github.com/didi/Hummer/commit/00ddbe816d9adb8f3a376eb272060c07330eb553))
+
+
+### Features
+
+* Tenon Store 增加业务线隔离的逻辑 ([#84](https://github.com/didi/Hummer/issues/84)) ([536ecbe](https://github.com/didi/Hummer/commit/536ecbe2968b24caba07c5217a754444bc8dd49f))
+* **iOS:** Add namespace to Hummer.env ([7b64ba5](https://github.com/didi/Hummer/commit/7b64ba549147217425eef7431de01d73e97aa542))
+
+
+
+
+
 # 1.1.0 (2021-02-23)
 
 
