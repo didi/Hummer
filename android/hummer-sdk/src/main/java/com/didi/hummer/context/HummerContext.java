@@ -58,6 +58,7 @@ public class HummerContext extends ContextWrapper {
     private static final String ENV_KEY_AVAILABLE_WIDTH = "availableWidth";
     private static final String ENV_KEY_AVAILABLE_HEIGHT = "availableHeight";
     private static final String ENV_KEY_SCALE = "scale";
+    private static final String ENV_KEY_NAMESPACE = "namespace";
 
     /**
      * 命名空间（用于隔离不同业务线）
@@ -463,6 +464,10 @@ public class HummerContext extends ContextWrapper {
         envs.put(ENV_KEY_AVAILABLE_WIDTH, availableWidth);
         envs.put(ENV_KEY_AVAILABLE_HEIGHT, availableHeight);
         envs.put(ENV_KEY_SCALE, ScreenUtils.getScreenDensity(this));
+
+        if (!TextUtils.isEmpty(namespace) && !namespace.equals(HummerSDK.NAMESPACE_DEFAULT)) {
+            envs.put(ENV_KEY_NAMESPACE, namespace);
+        }
 
         initEnv(envs);
     }
