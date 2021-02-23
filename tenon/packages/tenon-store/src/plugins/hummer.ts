@@ -1,12 +1,8 @@
-declare const Hummer:any;
-declare const Memory:any;
-export const MemoryStoreKey = 'STORE_MEMORY';
-export const NotifyEvent = 'UPDATE_STORE';
-const randomChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const id = randomString(8, randomChars);
-import {diff, cloneObject} from './utils/index'
+import {diff, cloneObject, getUUID, getNotifyEventKey, getMemoryKey} from './utils/index'
 import {Operation, OperationType} from './utils/types'
-
+const id = getUUID();
+const MemoryStoreKey = getMemoryKey();
+const NotifyEvent = getNotifyEventKey();
 let cacheData:Record<string, any> = {}; 
 /**
  * 多页面同步数据
@@ -37,6 +33,9 @@ export function createHummerPlugin ({
       Memory.set(MemoryStoreKey, JSON.stringify(state));
       // TODO 限流操作
       let ops = diff(cacheData, state);
+      if(!ops || ops.length === 0){
+        return
+      }
       notifyCenter.triggerEvent(NotifyEvent, {
         eventId: id,
         operations: JSON.stringify(ops)
@@ -55,11 +54,6 @@ function initState(store:any){
   }
 }
 
-function randomString(length = 8, chars: string) {
-  var result = '';
-  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-  return result;
-}
 
 function setObjectValue(ob:any, keys:Array<string>, value: any){
   let temp = ob;
