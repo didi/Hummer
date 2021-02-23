@@ -17,6 +17,9 @@ public class DefaultScriptLoaderAdapter implements IScriptLoaderAdapter {
     @Override
     public void loadScriptWithUrl(String url, ScriptLoadCallback callback) {
         if (TextUtils.isEmpty(url)) {
+            if (callback != null) {
+                callback.onScriptLoad(null);
+            }
             return;
         }
 
@@ -30,6 +33,10 @@ public class DefaultScriptLoaderAdapter implements IScriptLoaderAdapter {
                     }
                 }
             });
+        } else {
+            if (callback != null) {
+                callback.onScriptLoad(null);
+            }
         }
     }
 }
