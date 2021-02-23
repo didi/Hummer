@@ -393,7 +393,7 @@ export function consoleAssertPolyfill(expression: unknown, label: string): void 
 export function getNativeLogFunction(level: LogLevel): (...args: unknown[]) => void {
     return (...args: unknown[]) => {
         let str: string | undefined
-        if (arguments.length === 1 && typeof args[0] === 'string') {
+        if (args.length === 1 && typeof args[0] === 'string') {
             str = args[0]
         } else {
             str = Array.prototype.map
