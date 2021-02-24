@@ -134,6 +134,9 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
     private void initScrollView() {
         layout = new HummerLayout(getContext());
+        layout.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            adjustWidthAndHeight();
+        });
         scrollView.addView(layout);
 
         YogaNode scrollViewNode = YogaNodeUtil.createYogaNode();
@@ -246,8 +249,6 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         }
 
         layout.addView(finalChild);
-
-        adjustWidthAndHeight();
     }
 
     @JsMethod("removeChild")
@@ -269,8 +270,6 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         }
 
         layout.removeView(child);
-
-        adjustWidthAndHeight();
     }
 
     @JsMethod("removeAll")
@@ -291,8 +290,6 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         children.clear();
 
         layout.removeAllViews();
-
-        adjustWidthAndHeight();
     }
 
     @JsMethod("insertBefore")
@@ -320,8 +317,6 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
         // 默认处理
         layout.insertBefore(finalChild, finalExisting);
-
-        adjustWidthAndHeight();
     }
 
     @JsMethod("replaceChild")
@@ -353,8 +348,6 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
         // 默认处理
         layout.replaceView(finalChild, finalOld);
-
-        adjustWidthAndHeight();
     }
 
     @Deprecated
