@@ -49,7 +49,10 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
 
     @Override
     protected HScrollView createViewInstance(Context context) {
-        return (HScrollView) LayoutInflater.from(context).inflate(R.layout.horizontal_scroll_view, null, false);
+        HScrollView scrollView = (HScrollView) LayoutInflater.from(context).inflate(R.layout.horizontal_scroll_view, null, false);
+        scrollView.setClipChildren(false);
+        scrollView.setFillViewport(true);
+        return scrollView;
     }
 
     @Override
@@ -67,6 +70,9 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
     private void initScrollView() {
         layout = new HummerLayout(getContext());
         layout.getYogaNode().setFlexDirection(YogaFlexDirection.ROW);
+        layout.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            adjustWidthAndHeight();
+        });
         getView().addView(layout);
 
         getYogaNode().setOverflow(YogaOverflow.SCROLL);
@@ -175,8 +181,6 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         }
 
         layout.addView(finalChild);
-
-        adjustWidthAndHeight();
     }
 
     @JsMethod("removeChild")
@@ -198,8 +202,6 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         }
 
         layout.removeView(child);
-
-        adjustWidthAndHeight();
     }
 
     @JsMethod("removeAll")
@@ -220,8 +222,6 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         children.clear();
 
         layout.removeAllViews();
-
-        adjustWidthAndHeight();
     }
 
     @JsMethod("insertBefore")
@@ -249,8 +249,6 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
 
         // 默认处理
         layout.insertBefore(finalChild, finalExisting);
-
-        adjustWidthAndHeight();
     }
 
     @JsMethod("replaceChild")
@@ -282,8 +280,6 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
 
         // 默认处理
         layout.replaceView(finalChild, finalOld);
-
-        adjustWidthAndHeight();
     }
 
     @Deprecated
