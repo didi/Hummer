@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/didi/Hummer/compare/tenon_1.2.0...tenon_1.2.1) (2021-02-25)
+
+
+### Bug Fixes
+
+* 修复颜色色值 #eee 不生效的情况 ([#88](https://github.com/didi/Hummer/issues/88)) ([c08849a](https://github.com/didi/Hummer/commit/c08849adb56fa29e639fd46c3909d25bc4c5af86))
+* **iOS:** Change arguments to args ([8399889](https://github.com/didi/Hummer/commit/83998897f56d86f0eb56554a21145df91f6a319b))
+* **iOS:** Request GC ([9dfb53a](https://github.com/didi/Hummer/commit/9dfb53a239c1cebb454574adbdf2632f852b09bc))
+
+
+
+
+
 # [1.2.0](https://github.com/didi/Hummer/compare/tenon_1.1.0...tenon_1.2.0) (2021-02-23)
 
 
