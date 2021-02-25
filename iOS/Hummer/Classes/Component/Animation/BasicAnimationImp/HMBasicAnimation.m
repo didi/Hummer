@@ -62,8 +62,11 @@ static UIViewAnimationOptions UIViewAnimationOptionsFromHMAnimationType(HMAnimat
 @interface HMBasicAnimationProperty()
 
 @property (nonatomic, copy) NSString *origKey;
+@property (nonatomic, strong) id origValue;
+
 @property (nonatomic, copy) NSString *viewPropertyKey;
 @property (nonatomic, strong) id value;
+
 @end
 
 @implementation HMBasicAnimationProperty
@@ -171,141 +174,35 @@ static UIViewAnimationOptions UIViewAnimationOptionsFromHMAnimationType(HMAnimat
 @end
 
 @interface HMBasicAnimation()
-@property (nonatomic, copy, getter=getStartBlock, setter=setStartBlock:) HMFuncCallback startBlock;
-@property (nonatomic, copy, getter=getStopBlock, setter=setStopBlock:) HMFuncCallback stopBlock;
-@property (nonatomic, copy, getter=getTimingFunctionName, setter=setTimingFunctionName:) NSString *timingFunctionName;
+
 @end
 
 @implementation HMBasicAnimation
 
-HM_EXPORT_CLASS(BasicAnimation, HMBasicAnimation)
-HM_EXPORT_PROPERTY(value, animValue, setAnimValue:)
-
-HM_EXPORT_PROPERTY(duration, __duration, __setDuration:)
-HM_EXPORT_PROPERTY(repeatCount, __repeatCount, __setRepeatCount:)
-HM_EXPORT_PROPERTY(delay, __delay, __setDelay:)
-HM_EXPORT_PROPERTY(timingFunction, __getTimingFunction, __setTimingFunction:)
-HM_EXPORT_METHOD(on, on:callback:)
-
-@synthesize animationType;
-@synthesize springDamping;
-@synthesize repeatCount;
-@synthesize initialVelocity;
-@synthesize duration;
-@synthesize delay;
-
-- (instancetype)initWithHMValues:(NSArray *)values {
-    self = [self init];
-    if (self) {
-        NSString *value = values.count > 0 ? [values[0] toString] : @"";
-        NSString *animationKeyPath = value;
-        NSAssert(animationKeyPath != nil, @"HMBasicAnimation init must set keypath!!!");
-        if (animationKeyPath) {
-            self.animationKeyPath = animationKeyPath;
-        }
-    }
-    return self;
-}
-
-
-#pragma mark <js export>
-
-- (HMBaseValue *)animValue {
-    return nil;
-}
-
-- (void)setAnimValue:(HMBaseValue *)value {
-    id animationValue = [HMAnimationConverter convertAnimationValue:value.hm_toObjCObject
-                                                            keyPath:self.animationKeyPath];
-    
-    self.property = [[HMBasicAnimationProperty alloc] initWithKey:self.animationKeyPath propertyValue:animationValue];
-}
-
-- (HMBaseValue *)__duration {
-    return [HMBaseValue valueWithDouble:self.duration inContext:self.hmContext];
-}
-
-- (void)__setDuration:(HMBaseValue *)value {
-    self.duration = [value.toNumber doubleValue];
-}
-
-- (HMBaseValue *)__repeatCount {
-    return [HMBaseValue valueWithInt32:self.repeatCount inContext:self.hmContext];
-}
-
-- (void)__setRepeatCount:(HMBaseValue *)value {
-    float repeatCount = [value.toNumber floatValue];
-    if (repeatCount < 0) {
-        repeatCount = MAXFLOAT;
-    }
-    [self setRepeatCount:repeatCount];
-}
-
-- (HMBaseValue *)__delay {
-    return [HMBaseValue valueWithDouble:self.delay inContext:self.hmContext];
-}
-
-- (void)__setDelay:(HMBaseValue *)value{
-    
-    self.delay = [value.toNumber floatValue];
-}
-
-
-- (HMBaseValue *)__getTimingFunction {
-    return [self getTimingFunctionName].hmValue;
-}
-
-- (void)__setTimingFunction:(HMBaseValue *)value {
-    if ([value isString]) {
-        [self setTimingFunctionName:value.toString];
-    }
-}
-
-- (void)on:(HMBaseValue *)value callback:(HMFuncCallback)callback{
-    if ([value isString]) {
-        NSString *event = value.toString;
-        if ([event isEqualToString:kHMAnimationEventStart]) {
-            self.startBlock = callback;
-        } else if ([event isEqualToString:kHMAnimationEventEnd]) {
-            self.stopBlock = callback;
-        }
-    }
-}
 
 
 #pragma mark <HMViewAnimation>
+
+- (void)setAnimationView:(UIView *)view forKey:(NSString *)animationKey {
+    self.animatedView = view;
+    self.animationKey = animationKey;
+}
+
+- (BOOL)canStartAnimation {
+    return !self.animatedView.hm_renderObject.isDirty;
+}
+
 - (void)startAnimation {
     
     [self.property mergeTransform:self.animatedView.layer.transform];
     [self.property calculateBoundsIfNeedWithAnimatedView:self.animatedView];
     void (^animations)(void) = ^(void) {
-        
+        [UIView setAnimationRepeatCount:self.repeatCount];
         [self.animatedView setValue:self.property.value forKey:self.property.viewPropertyKey];
         [self.property updateYogaLayoutIfNeedWithAniamtedView:self.animatedView];
     };
-    
-    void (^completion)(BOOL) = ^(BOOL finished) {
-
-        if (self.stopBlock) {
-            NSMutableArray *args = NSMutableArray.new;
-            if (self.hmValue) {
-                [args addObject:self.hmValue];
-                [args addObject:[HMBaseValue valueWithBool:finished inContext:self.hmValue.context]];
-            } else {
-                HMLogDebug(@"class [%@] JSValue is nil", [self class]);
-            }
-            self.stopBlock(args.copy);
-        }
-    };
-    
     if (self.startBlock) {
-        NSMutableArray *args = NSMutableArray.new;
-        if (self.hmValue) {
-            [args addObject:self.hmValue];
-        } else {
-            HMLogDebug(@"class [%@] JSValue is nil", [self class]);
-        }
-        self.startBlock(args);
+        self.startBlock();
     }
     
     if (self.animationType == HMAnimationTypeSpring) {
@@ -315,7 +212,7 @@ HM_EXPORT_METHOD(on, on:callback:)
               initialSpringVelocity:self.initialVelocity
                             options:UIViewAnimationOptionBeginFromCurrentState
                          animations:animations
-                         completion:completion];
+                         completion:self.endBlock];
     } else {
         UIViewAnimationOptions options =
         UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionsFromHMAnimationType(self.animationType);
@@ -324,18 +221,27 @@ HM_EXPORT_METHOD(on, on:callback:)
                               delay:self.delay
                             options:options
                          animations:animations
-                         completion:completion];
+                         completion:self.endBlock];
     }
 }
 
-- (void)stopAnimation:(BOOL)withoutFinishing {
+- (void)stopAnimation {
     
-    [self.animatedView.layer removeAllAnimations];
+    [self.animatedView.layer removeAnimationForKey:self.animationKey];
 }
 
-- (BOOL)canStartAnimation {
-    return !self.animatedView.hm_renderObject.isDirty;
-}
+
+@synthesize animationType;
+@synthesize springDamping;
+@synthesize repeatCount;
+@synthesize initialVelocity;
+@synthesize duration;
+@synthesize delay;
+@synthesize animatedView;
+@synthesize endBlock;
+@synthesize startBlock;
+@synthesize animationKeyPath;
+@synthesize animationKey;
 
 @end
 
