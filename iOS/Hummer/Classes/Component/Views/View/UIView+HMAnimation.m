@@ -25,14 +25,14 @@ HM_EXPORT_METHOD(removeAnimationForKey, hm_removeAnimationForKey:)
 HM_EXPORT_METHOD(removeAllAnimation, hm_removeAllAnimation)
 
 - (void)hm_addAnimation:(HMBaseValue *)animation forKey:(HMBaseValue *)keyPath {
-    id anim = animation.hm_toObjCObject;
+    NSObject *anim = animation.hm_toObjCObject;
     NSString *key = keyPath.toString;
     if (!anim) {
         return;
     }
-    if ([anim isKindOfClass:HMBasicAnimationWapper.class]) {
+    if ([anim  conformsToProtocol:@protocol(HMAnimator)]) {
+        
         [HMAnimationManager addAnimation:anim forView:self key:key];
-
     }else{
         // 临时补丁，关键帧动画需要每次重置到最初的位置
         HMRenderObject *shadowView = self.hm_renderObject;

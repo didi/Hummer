@@ -10,6 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ *      HMAnimationManager
+ *      /         |        \
+ *     /          |         \
+ *  HMAnimator  HMAnimator  ...
+ *  
+ */
+
+
 @interface HMAnimationManager : NSObject
 
 + (void)addAnimation:(id<HMAnimator>)animation forView:(UIView *)view key:(nullable NSString *)animationKey;

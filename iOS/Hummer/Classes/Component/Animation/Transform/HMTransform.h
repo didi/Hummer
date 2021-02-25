@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/* 保存最新的 view transform 状态，在执行动画之后，把状态同步给 view ，保持事件事件响应*/
+
 @interface HMTransform : NSObject<NSCopying>
 
 /* position */
