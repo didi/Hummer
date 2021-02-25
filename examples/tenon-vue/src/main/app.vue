@@ -13,6 +13,7 @@
     font-size: 24;
     width: 100%;
     text-align: center;
+    color: #0f0;
   }
   .list-container{
     margin-top: .2rem;

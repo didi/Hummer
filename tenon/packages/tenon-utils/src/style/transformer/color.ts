@@ -23,5 +23,15 @@ function isRgba(color:string){
   return rgbaReg.test(color)
 }
 function transformColorStyle(value: string):string{
-  return getColor(value)
+  // 处理 #eee 这种场景
+  if(/^#/.test(value) && value.length === 4){
+    return normalizeColor(value)
+  }else {
+    return getColor(value)
+  }
+}
+function normalizeColor(value: string){
+  return value.replace(/(\w)/ig, function(match){
+    return `${match}${match}`
+  })
 }
