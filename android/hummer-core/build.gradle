@@ -18,7 +18,7 @@ android {
     defaultConfig {
 
         ndk {
-            abiFilters 'armeabi-v7a','x86'//,'arm64-v8a'//,'x86_64'
+            abiFilters 'armeabi-v7a','x86','arm64-v8a'//,'x86_64'
         }
 
         // 使打包后的aar带有该混淆规则的文件
