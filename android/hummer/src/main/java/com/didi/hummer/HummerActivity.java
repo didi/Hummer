@@ -111,7 +111,13 @@ public class HummerActivity extends AppCompatActivity {
      * 获取通过Intent传递过来的PageInfo（子类可以重写，用自己的方式获取PageInfo）
      */
     protected NavPage getPageInfo() {
-        return (NavPage) getIntent().getSerializableExtra(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL);
+        NavPage page = null;
+        try {
+            page = (NavPage) getIntent().getSerializableExtra(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return page;
     }
 
     /**
