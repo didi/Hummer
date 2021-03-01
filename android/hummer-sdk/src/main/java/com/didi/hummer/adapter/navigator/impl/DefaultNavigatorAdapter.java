@@ -181,16 +181,20 @@ public class DefaultNavigatorAdapter implements INavigatorAdapter {
 
     protected Map<String, Object> transIntentData(Intent intent) {
         Map<String, Object> data = null;
-        if (intent != null && intent.getExtras() != null) {
-            Bundle bundle = intent.getExtras();
-            data = new HashMap<>();
-            Set<String> keys = bundle.keySet();
-            for (String key : keys) {
-                Object value = bundle.get(key);
-                if (value != null) {
-                    data.put(key, value);
+        try {
+            if (intent != null && intent.getExtras() != null) {
+                Bundle bundle = intent.getExtras();
+                data = new HashMap<>();
+                Set<String> keys = bundle.keySet();
+                for (String key : keys) {
+                    Object value = bundle.get(key);
+                    if (value != null) {
+                        data.put(key, value);
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return data;
     }

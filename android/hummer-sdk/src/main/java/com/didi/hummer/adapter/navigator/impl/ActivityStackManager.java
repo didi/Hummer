@@ -183,7 +183,11 @@ public class ActivityStackManager implements Application.ActivityLifecycleCallba
         }
         String pageId = null;
         if (activity.getIntent() != null) {
-            pageId = activity.getIntent().getStringExtra(DefaultNavigatorAdapter.EXTRA_PAGE_ID);
+            try {
+                pageId = activity.getIntent().getStringExtra(DefaultNavigatorAdapter.EXTRA_PAGE_ID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (pageId == null) {
             pageId = activity.toString();

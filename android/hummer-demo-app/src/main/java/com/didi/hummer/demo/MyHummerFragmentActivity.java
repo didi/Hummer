@@ -21,7 +21,12 @@ public class MyHummerFragmentActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_fragment);
 
-        NavPage page = (NavPage) getIntent().getSerializableExtra(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL);
+        NavPage page = null;
+        try {
+            page = (NavPage) getIntent().getSerializableExtra(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         loadFragment(MyHummerFragment.newInstance(page), R.id.fragment_container, "fragment_hummer");
     }
 

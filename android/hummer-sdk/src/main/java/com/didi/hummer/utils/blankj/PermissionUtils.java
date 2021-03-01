@@ -380,7 +380,12 @@ public final class PermissionUtils {
         public void onCreated(final UtilsTransActivity activity, @Nullable Bundle savedInstanceState) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                     | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
-            int type = activity.getIntent().getIntExtra(TYPE, -1);
+            int type = -1;
+            try {
+                type = activity.getIntent().getIntExtra(TYPE, -1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if (type == TYPE_RUNTIME) {
                 if (sInstance == null) {
                     Log.e("PermissionUtils", "request permissions failed");
