@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HMViewAnimation.h"
+#import "HMCAAnimation.h"
 #import "HMAnimator.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,22 +20,15 @@ NS_ASSUME_NONNULL_BEGIN
  *
  */
 
-@interface HMCABasicAnimationInfo : NSObject
+@interface HMCABasicAnimationInfo : NSObject<HMCAAnimationInfo>
 
-@property (nonatomic, weak) UIView *animatedView;
-@property (nonatomic, strong) NSString *propertyName;
 @property (nonatomic, strong) id fromValue;
 @property (nonatomic, strong) id toValue;
-@property (nonatomic, assign) double duration;
-@property (nonatomic, assign) double delay;
-@property (nonatomic, strong) CAMediaTimingFunction *timingFunction;
-@property (nonatomic, assign) CGPoint originAnchorPoint;
 
 @end
 
-@interface HMCABasicAnimation : NSObject<HMViewAnimation,HMAnimator>
+@interface HMCABasicAnimation : HMCAAnimation<HMAnimator>
 
-@property (nonatomic, strong)id property;
 
 @end
 

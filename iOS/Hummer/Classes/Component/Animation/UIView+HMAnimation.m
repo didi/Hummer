@@ -16,7 +16,6 @@
 #import "UIView+HMRenderObject.h"
 #import "HMRenderObject.h"
 #import "UIView+HMDom.h"
-#import "HMBasicAnimationWapper.h"
 
 @implementation UIView (HMAnimation)
 

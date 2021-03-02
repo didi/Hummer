@@ -41,7 +41,7 @@
         basicAnimation.duration = [[[HMTransitionAnimationConverter transformBasicAnimationMap] allValues] containsObject:keyPath] ? self.needAnimations[@"transform"].doubleValue : self.needAnimations[keyPath].doubleValue;
         basicAnimation.delay = self.delay.doubleValue;
         basicAnimation.repeatCount = 1;
-        basicAnimation.animationType = self.animationType;        
+//        basicAnimation.easing = self.animationType;
         [HMAnimationManager addAnimation:basicAnimation forView:self.animatedView key:nil];
     }];
 }

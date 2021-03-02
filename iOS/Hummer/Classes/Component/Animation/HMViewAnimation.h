@@ -31,7 +31,7 @@ typedef void(^HMViewAnimationFinishBlock)(BOOL);
 @property (nonatomic, assign) CGFloat springDamping;
 @property (nonatomic, assign) CGFloat initialVelocity;
 @property (nonatomic, assign) float repeatCount;
-@property (nonatomic, assign) HMAnimationType animationType;
+@property (nonatomic, copy) NSString *easing;
 
 // 动画属性：position，backgroundColor
 @property (nonatomic, copy)NSString *animationKeyPath;

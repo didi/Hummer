@@ -9,7 +9,13 @@
 #import "UIView+HMAnimation.h"
 #import "UIView+HMRenderObject.h"
 #import "UIView+HMDom.h"
-
+#import "HMAnimationConverter.h"
+#import "HMExportManager.h"
+#import <Hummer/HMBaseValue.h>
+#import "NSObject+Hummer.h"
+#import <Hummer/HMUtility.h>
+#import <Hummer/HMAnimationManager.h>
+#import <Hummer/HMCAAnimation+Internal.h>
 
 @implementation HMCABasicAnimationInfo
 
@@ -21,52 +27,52 @@
     info.animatedView = self.animatedView;
     info.fromValue = self.fromValue;
     info.toValue = self.toValue;
-    info.duration = self.duration;
-    info.delay = self.delay;
     info.timingFunction = self.timingFunction;
     return info;
 }
+
+@synthesize animatedView;
+
+@synthesize originAnchorPoint;
+
+@synthesize propertyName;
+
+@synthesize timingFunction;
 
 @end
 
 @interface HMCABasicAnimation()<CAAnimationDelegate>
 
-@property (nonatomic, strong)NSMutableArray<HMCABasicAnimationInfo *> *infos;
-@property (nonatomic, strong)NSMutableArray<CAAnimation *> *animations;
-
-@property (nonatomic, assign)BOOL isFinish;
 @end
 
 @implementation HMCABasicAnimation
 
+HM_EXPORT_CLASS(BasicAnimation, HMCABasicAnimation)
+HM_EXPORT_PROPERTY(value, animValue, setAnimValue:)
+
+HM_EXPORT_PROPERTY(duration, __duration, __setDuration:)
+HM_EXPORT_PROPERTY(repeatCount, __repeatCount, __setRepeatCount:)
+HM_EXPORT_PROPERTY(delay, __delay, __setDelay:)
+HM_EXPORT_PROPERTY(easing, __getTimingFunction, __setTimingFunction:)
+HM_EXPORT_METHOD(on, on:callback:)
+
 #pragma mark <HMAnimator>
-
-- (void)setAnimationView:(UIView *)view forKey:(NSString *)animationKey {
-    self.animatedView = view;
-    self.animationKey = animationKey ? animationKey : self.animationKeyPath;
-}
-
-- (BOOL)canStartAnimation {
-    
-    return !self.animatedView.hm_renderObject.isDirty;
-}
 
 - (void)startAnimation {
     
     HMTransform *oldTransform = self.animatedView.hm_transform;
     //目前 前端没有直接对 transform 进行赋值的接口，因此不能直接覆盖 oldTransform。需要进行合并。
-    HMTransform *newTransform = [[HMTransform alloc] initWithKey:self.animationKeyPath propertyValue:self.property];
-    newTransform = [oldTransform mergeTransform:newTransform withKey:self.animationKeyPath];
-
+    HMTransform *newTransform = [[HMTransform alloc] initWithKey:self.keyPath propertyValue:self.property];
+    newTransform = [oldTransform mergeTransform:newTransform withKey:self.keyPath];
+    
     self.infos = [NSMutableArray new];
     self.animations = [NSMutableArray new];
     HMCABasicAnimationInfo *info = [HMCABasicAnimationInfo new];
     info.animatedView = self.animatedView;
-    info.duration = self.duration;
-    info.delay = self.delay;
-
+    info.timingFunction = [HMAnimationConverter convertMediaTimingFunction:self.easing];
+    
     if ([self isTransformAnimation]) {
-
+        
         if (oldTransform.translateX != newTransform.translateX) {
             HMCABasicAnimationInfo *newInfo = [info copy];
             newInfo.propertyName = @"transform.translation.x";
@@ -106,7 +112,7 @@
             [self.infos addObject:newInfo];
         }
         if (oldTransform.rotationY != newTransform.rotationY) {
-                        
+            
             HMCABasicAnimationInfo *newInfo = [info copy];
             newInfo.propertyName = @"transform.rotation.y";
             newInfo.fromValue = @(oldTransform.rotationY);
@@ -123,28 +129,28 @@
         }
         self.animatedView.hm_transform = newTransform;
     }else{
-        if ([self.animationKeyPath isEqualToString:@"backgroundColor"]) {
+        if ([self.keyPath isEqualToString:@"backgroundColor"]) {
             HMCABasicAnimationInfo *newInfo = [info copy];
             newInfo.propertyName = @"backgroundColor";
             newInfo.fromValue = (__bridge id _Nonnull)((self.animatedView.backgroundColor.CGColor));
             newInfo.toValue = self.property;
             [self.infos addObject:newInfo];
-        } else if ([self.animationKeyPath isEqualToString:@"opacity"]) {
+        } else if ([self.keyPath isEqualToString:@"opacity"]) {
             HMCABasicAnimationInfo *newInfo = [info copy];
             newInfo.propertyName = @"opacity";
             newInfo.fromValue = @(self.animatedView.alpha);
             newInfo.toValue = self.property;
             [self.infos addObject:newInfo];
-        } else if ([self.animationKeyPath isEqualToString:@"width"] || [self.animationKeyPath isEqualToString:@"height"]) {
-           
+        } else if ([self.keyPath isEqualToString:@"width"] || [self.keyPath isEqualToString:@"height"]) {
+            
             __weak typeof(self) __weakSelf = self;
             [self.animatedView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
                 __strong typeof(__weakSelf) __strongSelf = __weakSelf;
                 NSNumber *numVal = __strongSelf.property;
-                if ([__strongSelf.animationKeyPath isEqualToString:@"width"])  layout.width = HMPointValueMake(numVal.floatValue);
-                if ([__strongSelf.animationKeyPath isEqualToString:@"height"])  layout.height = HMPointValueMake(numVal.floatValue);
+                if ([__strongSelf.keyPath isEqualToString:@"width"])  layout.width = HMPointValueMake(numVal.floatValue);
+                if ([__strongSelf.keyPath isEqualToString:@"height"])  layout.height = HMPointValueMake(numVal.floatValue);
             }];
-            UIView *root = hm_yoga_get_root_view(animatedView);
+            UIView *root = hm_yoga_get_root_view(self.animatedView);
             NSHashTable<id<HMLayoutStyleProtocol>> *affectedShadowViews = NSHashTable.weakObjectsHashTable;
             
             [root hm_applyLayoutPreservingOrigin:NO affectedShadowViews:affectedShadowViews];
@@ -159,7 +165,7 @@
                 newInfo1.toValue = [NSValue valueWithCGRect:affectedView.bounds];
                 newInfo1.animatedView = affectedView;
                 [self.infos addObject:newInfo1];
-
+                
                 HMCABasicAnimationInfo *newInfo2 = [info copy];
                 newInfo2.propertyName = @"position";
                 newInfo2.animatedView = affectedView;
@@ -169,17 +175,11 @@
                 
                 [affectedView hm_layoutBackgroundColorImageBorderShadowCornerRadius];
             }
-        }    
+        }
     }
     
     for (HMCABasicAnimationInfo *info in self.infos) {
         [self _createCAAnimation:info];
-    }
-}
-
-- (void)stopAnimation {
-    for (HMCABasicAnimationInfo *info in self.infos) {
-        [info.animatedView.layer removeAnimationForKey:[self uniqueAnimationKeyWithInfo:info]];
     }
 }
 
@@ -188,87 +188,82 @@
     CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:info.propertyName];
     animation.fromValue = info.fromValue;
     animation.toValue = info.toValue;
-    animation.duration = info.duration;
-    animation.beginTime = CACurrentMediaTime() + info.delay;
+    animation.duration = self.duration == 0 ? 0.0001 : self.duration;
+    animation.beginTime = CACurrentMediaTime() + self.delay;
     animation.timingFunction = info.timingFunction;
-    animation.repeatCount = self.repeatCount;
+    animation.repeatCount = self.repeatCount < 0 ? MAXFLOAT : self.repeatCount;
     animation.removedOnCompletion = NO;
     animation.fillMode = kCAFillModeForwards;
     animation.delegate = self;
     [info.animatedView.layer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
 }
 
-#pragma mark <CAAnimationDelegate>
-- (void)animationDidStart:(CAAnimation *)anim {
 
-    [self.animations addObject:anim];
-    if (self.animations.count == self.infos.count) {
-        //同步transform。bounds 不需要
-        if ([self isTransformAnimation]) {
 
-            CATransform3D trans = CATransform3DMakeScale(self.animatedView.hm_transform.scaleX, self.animatedView.hm_transform.scaleY, 1);
-            trans = CATransform3DTranslate(trans, self.animatedView.hm_transform.translateX, self.animatedView.hm_transform.translateY, 0);
-            trans = CATransform3DRotate(trans, self.animatedView.hm_transform.rotationX, 1, 0, 0);
-            trans = CATransform3DRotate(trans, self.animatedView.hm_transform.rotationY, 0, 1, 0);
-            trans = CATransform3DRotate(trans, self.animatedView.hm_transform.rotationZ, 0, 0, 1);
-            self.animatedView.layer.transform = trans;
+#pragma mark <JSExport>
+- (HMBaseValue *)animValue {
+    return nil;
+}
 
-        } else if ([self.animationKeyPath isEqualToString:@"backgroundColor"]) {
-            self.animatedView.layer.backgroundColor = (__bridge CGColorRef _Nullable)(self.property);
-        } else if ([self.animationKeyPath isEqualToString:@"opacity"]) {
-            self.animatedView.alpha = [self.property floatValue];
-        }
-        if (self.startBlock) {
-            self.startBlock();
-        }
+- (void)setAnimValue:(HMBaseValue *)value {
+    id animationValue = [HMAnimationConverter convertAnimationValue:value.hm_toObjCObject
+                                                            keyPath:self.keyPath];
+    self.property = animationValue;
+    
+}
+
+- (HMBaseValue *)__duration {
+    return [HMBaseValue valueWithDouble:self.duration inContext:self.hmContext];
+}
+
+- (void)__setDuration:(HMBaseValue *)value {
+    self.duration = [value.toNumber doubleValue];
+}
+
+- (HMBaseValue *)__repeatCount {
+    return [HMBaseValue valueWithInt32:self.repeatCount inContext:self.hmContext];
+}
+
+/**
+ * 小于0，相当于 infinate
+ * 0，执行1次。
+ * 大于等于 1 的数字，代表动画执行的次数。
+ */
+- (void)__setRepeatCount:(HMBaseValue *)value {
+    float repeatCount = [value.toNumber floatValue];
+    self.repeatCount = repeatCount;
+}
+
+- (HMBaseValue *)__delay {
+    return [HMBaseValue valueWithDouble:self.delay inContext:self.hmContext];
+}
+
+- (void)__setDelay:(HMBaseValue *)value{
+    
+    self.delay = [value.toNumber floatValue];
+}
+
+
+- (HMBaseValue *)__getTimingFunction {
+    return [HMBaseValue valueWithObject:self.easing inContext:self.hmContext];
+}
+
+- (void)__setTimingFunction:(HMBaseValue *)value {
+    if ([value isString]) {
+        self.easing = value.toString;
     }
 }
 
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    
-    self.isFinish = self.isFinish | flag;
-    [self.animations removeObject:anim];
-    if (self.animations.count <= 0) {
-        if (self.endBlock) {
-            self.endBlock(self.isFinish);
+- (void)on:(HMBaseValue *)value callback:(HMFuncCallback)callback{
+    if ([value isString]) {
+        NSString *event = value.toString;
+        if ([event isEqualToString:@"start"]) {
+            self.startBlock = callback;
+        } else if ([event isEqualToString:@"end"]) {
+            self.stopBlock = callback;
         }
     }
 }
-
-#pragma mark <private>
-
-- (BOOL)isTransformAnimation {
-    return [self.animationKeyPath hasPrefix:@"position"] || [self.animationKeyPath hasPrefix:@"scale"] || [self.animationKeyPath hasPrefix:@"rotation"];
-}
-
-- (NSString *)uniqueAnimationKeyWithInfo:(HMCABasicAnimationInfo *)info{
-    
-    NSString *key = [NSString stringWithFormat:@"%@%@",self.animationKey, info.propertyName];
-    return key;
-}
-
-
-@synthesize animatedView;
-
-@synthesize animationType;
-
-@synthesize delay;
-
-@synthesize duration;
-
-@synthesize endBlock;
-
-@synthesize initialVelocity;
-
-@synthesize repeatCount;
-
-@synthesize springDamping;
-
-@synthesize startBlock;
-
-@synthesize animationKeyPath;
-
-@synthesize animationKey;
 
 @end
 

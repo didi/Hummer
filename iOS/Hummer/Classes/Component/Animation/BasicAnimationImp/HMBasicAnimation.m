@@ -175,6 +175,7 @@ static UIViewAnimationOptions UIViewAnimationOptionsFromHMAnimationType(HMAnimat
 
 @interface HMBasicAnimation()
 
+@property (nonatomic, assign) HMAnimationType animationType;
 @end
 
 @implementation HMBasicAnimation
@@ -231,7 +232,6 @@ static UIViewAnimationOptions UIViewAnimationOptionsFromHMAnimationType(HMAnimat
 }
 
 
-@synthesize animationType;
 @synthesize springDamping;
 @synthesize repeatCount;
 @synthesize initialVelocity;
@@ -242,6 +242,7 @@ static UIViewAnimationOptions UIViewAnimationOptionsFromHMAnimationType(HMAnimat
 @synthesize startBlock;
 @synthesize animationKeyPath;
 @synthesize animationKey;
+@synthesize easing;
 
 @end
 

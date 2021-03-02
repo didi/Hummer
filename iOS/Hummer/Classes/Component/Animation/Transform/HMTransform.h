@@ -29,6 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithKey:(NSString *)key propertyValue:(id)value;
 
+// keyframe
+- (instancetype)initWithKey:(NSString *)key propertyValues:(NSArray *)values;
+
 // 同属性覆盖。
 - (HMTransform *)mergeTransform:(HMTransform *)transform withKey:(NSString *)key;
 @end

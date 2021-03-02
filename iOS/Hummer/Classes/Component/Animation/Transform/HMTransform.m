@@ -49,6 +49,7 @@
  * rotationZ   旋转动画（z轴）
  */
 - (instancetype)initWithKey:(NSString *)key propertyValue:(id)value{
+    if (value == nil) {return nil;}
     self = [self init];
     if ([key isEqualToString:@"position"]) {
         CGPoint point = [((NSValue *)value) CGPointValue];
@@ -72,6 +73,11 @@
        
         [self setValue:value forKey:key];
     }
+    return self;
+}
+
+- (instancetype)initWithKey:(NSString *)key propertyValues:(NSArray *)values {
+    self = [self initWithKey:key propertyValue:values.lastObject];
     return self;
 }
 
