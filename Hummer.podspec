@@ -51,7 +51,11 @@ Hummer is a dynamic solution for client.
   # s.dependency 'AFNetworking', '~> 2.3'
 
   s.pod_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES'
+    'DEFINES_MODULE' => 'YES',
+    'WARNING_CFLAGS' => [
+      '-Werror=undeclared-selector',
+      '-Werror=incomplete-implementation'
+    ]
   }
   s.libraries = 'c++'
 end
