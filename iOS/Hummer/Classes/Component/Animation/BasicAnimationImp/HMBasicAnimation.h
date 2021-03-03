@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HMViewAnimation.h"
+#import "HMAnimator.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HMBasicAnimationProperty : NSObject
@@ -15,10 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface HMBasicAnimation : NSObject<HMViewAnimation>
+@interface HMBasicAnimation : NSObject<HMViewAnimation,HMAnimator>
 
-@property (nonatomic, strong)UIView *animatedView;
-@property (nonatomic, copy)NSString *animationKeyPath;
 @property (nonatomic, strong)HMBasicAnimationProperty *property;
 
 @end

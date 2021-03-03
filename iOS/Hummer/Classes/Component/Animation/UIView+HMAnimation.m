@@ -24,15 +24,14 @@ HM_EXPORT_METHOD(removeAnimationForKey, hm_removeAnimationForKey:)
 HM_EXPORT_METHOD(removeAllAnimation, hm_removeAllAnimation)
 
 - (void)hm_addAnimation:(HMBaseValue *)animation forKey:(HMBaseValue *)keyPath {
-    id anim = animation.hm_toObjCObject;
+    NSObject *anim = animation.hm_toObjCObject;
     NSString *key = keyPath.toString;
     if (!anim) {
         return;
     }
-    if ([anim isKindOfClass:HMBasicAnimation.class]) {
-        ((HMBasicAnimation *)anim).animatedView = self;
-        [HMAnimationManager addAnimation:anim];
+    if ([anim  conformsToProtocol:@protocol(HMAnimator)]) {
         
+        [HMAnimationManager addAnimation:anim forView:self key:key];
     }else{
         // 临时补丁，关键帧动画需要每次重置到最初的位置
         HMRenderObject *shadowView = self.hm_renderObject;
@@ -61,6 +60,7 @@ HM_EXPORT_METHOD(removeAllAnimation, hm_removeAllAnimation)
 
 - (void)hm_removeAnimationForKey:(HMBaseValue *)keyPath {
     NSString *key = keyPath.toString;
+    [HMAnimationManager removeAnimationForKey:key];
     if (key) {
         [self.layer removeAnimationForKey:key];
     }
@@ -72,17 +72,34 @@ HM_EXPORT_METHOD(removeAllAnimation, hm_removeAllAnimation)
 }
 
 
-- (void)setAnimatorMap:(NSMutableDictionary *)animatorMap{
-    objc_setAssociatedObject(self, @selector(animatorMap), animatorMap, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
+#pragma mark <property>
 
-- (NSMutableDictionary *)animatorMap{
+- (void)setHm_transform:(HMTransform *)hm_transform {
+    objc_setAssociatedObject(self, @selector(hm_transform), hm_transform, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (HMTransform *)hm_transform {
     
     if (!objc_getAssociatedObject(self, _cmd)) {
-        
-        self.animatorMap = [NSMutableDictionary new];
+        self.hm_transform = [HMTransform new];
     }
     return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setHm_animationPropertyBounds:(CGRect)hm_animationPropertyBounds {
+    objc_setAssociatedObject(self, @selector(hm_animationPropertyBounds), [NSValue valueWithCGRect:hm_animationPropertyBounds], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+
+- (CGRect)hm_animationPropertyBounds {
+    return [objc_getAssociatedObject(self, _cmd) CGRectValue];
+}
+
+- (void)setHm_animationPropertyCenter:(CGPoint)hm_animationPropertyCenter {
+    objc_setAssociatedObject(self, @selector(hm_animationPropertyCenter), [NSValue valueWithCGPoint:hm_animationPropertyCenter], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGPoint)hm_animationPropertyCenter {
+    return [objc_getAssociatedObject(self, _cmd) CGPointValue];
 }
 
 @end

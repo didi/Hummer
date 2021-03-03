@@ -22,7 +22,7 @@
 
 @implementation HMKeyframeAnimation
 
-HM_EXPORT_CLASS(KeyframeAnimation, HMKeyframeAnimation)
+//HM_EXPORT_CLASS(KeyframeAnimation, HMKeyframeAnimation)
 HM_EXPORT_PROPERTY(keyframes, keyframes, setKeyframes:)
 
 - (instancetype)initWithHMValues:(NSArray *)values {

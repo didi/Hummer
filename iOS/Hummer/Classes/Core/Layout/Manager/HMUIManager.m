@@ -20,6 +20,7 @@
 #import "HMTextRenderObject.h"
 #import "UIView+HMDom.h"
 #import "HMYogaUtility.h"
+#import "UIView+HMAnimation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -201,6 +202,8 @@ NS_ASSUME_NONNULL_END
 #pragma mark <layout observer>
 
 - (void)notifyWillPerformLayoutForView:(UIView *)view {
+    view.hm_animationPropertyBounds = view.bounds;
+    view.hm_animationPropertyCenter = view.center;
     [view hm_willPerformLayout];
 }
 
