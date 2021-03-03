@@ -28,8 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)popToRootPage:(BOOL)animated;
 
-+ (void)popBackWithCount:(nullable HMBaseValue *)count pageInfo:(nullable HMBaseValue *)pageInfo;
-
 @end
 
 NS_ASSUME_NONNULL_END
