@@ -34,6 +34,10 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 
 @property (nonatomic, copy, nullable) NSMutableDictionary<NSString *, NSObject *> *envParams;
 
+// 根据 namespace 获取不同的 envParams;
+@property (nonatomic, strong, nullable) NSMutableDictionary<NSString *, NSMutableDictionary *> *envParamsMap;
+
+
 + (nullable HMBaseValue *)env;
 
 + (void)setEnv:(nullable HMBaseValue *)value;
@@ -119,6 +123,7 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
     _contextGraph = [[NSMapTable alloc] initWithKeyOptions:weakOption
                                               valueOptions:weakOption
                                                   capacity:0];
+    _envParamsMap = [NSMutableDictionary new];
 
     return self;
 }
@@ -129,10 +134,15 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
     dispatch_once(&onceToken, ^{
         _sharedInstance = [[self alloc] init];
     });
-
     return _sharedInstance;
 }
 
+/**
+ * envParams 为 namespace 独立。
+ * 如果 当前不存在 namespace 则默认为全局容器。
+ * phase1：hummerCall(JS调用)会区分 namespace，返回 _envParams + envParamsMap[namespace]
+ * phase2：native 调用 addGlobalEnviroment 不区分 namespace。
+ */
 - (NSMutableDictionary<NSString *, NSObject*> *)envParams {
     if (!_envParams) {
         _envParams = NSMutableDictionary.dictionary;
@@ -140,12 +150,20 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
     }
     if (HMCurrentExecutor) {
         HMJSContext *context = [self currentContext:HMCurrentExecutor];
-        NSMutableDictionary<NSString *, NSObject *> *tempEnvironmentDictionary = _envParams.mutableCopy;
-        tempEnvironmentDictionary[@"namespace"] = context.nameSpace;
-        
-        return tempEnvironmentDictionary.copy;
+        NSString *nameSpace = context.nameSpace;
+        if (nameSpace) {
+            // _envParams + envParamsMap[namespace]
+            NSMutableDictionary *params = [self.envParamsMap objectForKey:nameSpace];
+            NSDictionary *globalEnv = _envParams.copy;
+            params = params ? params : [NSMutableDictionary new];
+            [params addEntriesFromDictionary:globalEnv];
+            params[@"namespace"] = nameSpace;
+            [self.envParamsMap setObject:params forKey:nameSpace];
+            return params;
+        }
+        //不存在 namespace 则默认 到全局容器
+        return _envParams;
     }
-
     return _envParams;
 }
 
