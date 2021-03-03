@@ -6,6 +6,7 @@
 //
 
 #import "HMCAAnimation.h"
+#import "HMBaseExecutorProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
