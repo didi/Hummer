@@ -3,8 +3,5 @@ export function isNotEmptyString(value: unknown): value is string {
 }
 
 export function isOfType<T>(varToBeChecked: unknown, propertyToCheckFor: keyof T): varToBeChecked is T {
-    if (!varToBeChecked) {
-        return false
-    }
-    return (varToBeChecked as T)[propertyToCheckFor] !== undefined
+    return (varToBeChecked as (T | undefined | null))?.[propertyToCheckFor] !== undefined
 }
