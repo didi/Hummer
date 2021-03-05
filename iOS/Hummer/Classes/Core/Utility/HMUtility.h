@@ -98,4 +98,39 @@ HMResourceModel *hm_resolveResource(NSString *path);
 
 NSString *hm_availableFontName(NSString *names);
 
+typedef NS_OPTIONS(int, HMBlockFlags) {
+    HMBlockFlagsHasCopyDisposeHelpers = (1 << 25),
+    HMBlockFlagsHasSignature = (1 << 30)
+};
+
+/**
+ * 大量做空指针判断
+ */
+typedef struct _HMBlockLayout {
+    __unused Class isa;
+    HMBlockFlags flags; // 引用计数等
+    __unused int reserved;
+    
+    void (__unused *_Nullable invoke)(struct _HMBlockLayout *_Nullable block, ...);
+    
+    struct {
+        unsigned long int reserved;
+        unsigned long int size;
+        
+        // requires HMBlockFlagsHasCopyDisposeHelpers
+        void (*_Nullable copy)(void *dst, const void *src);
+        
+        void (*_Nullable dispose)(const void *);
+        
+        // requires HMBlockFlagsHasSignature
+        const char *_Nullable signature;
+        const char *_Nullable layout;
+    } *_Nullable descriptor;
+    // imported variables
+} HMBlockLayout;
+
+typedef HMBlockLayout *HMBlockRef;
+
+NSMethodSignature *_Nullable HMExtractMethodSignatureFromBlock(id _Nullable block);
+
 NS_ASSUME_NONNULL_END

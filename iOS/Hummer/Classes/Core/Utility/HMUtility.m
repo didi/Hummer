@@ -528,3 +528,34 @@ NSString *hm_availableFontName(NSString *names) {
     }];
     return name;
 }
+
+NSMethodSignature *HMExtractMethodSignatureFromBlock(id block) {
+    // 强依赖 struct Block_Layout 内存布局，如果发生了改变，可能导致 crash
+    if (![block isKindOfClass:NSClassFromString(@"NSBlock")]) {
+        return nil;
+    }
+    HMBlockRef blockRef = (__bridge void *) block;
+    if (!(blockRef->flags & HMBlockFlagsHasSignature)) {
+        HMLogError(@"Block 没有方法签名");
+
+        return nil;
+    }
+    if (!blockRef->descriptor) {
+        HMLogError(@"blockRef->descriptor 空指针");
+
+        return nil;
+    }
+    void *desc = blockRef->descriptor;
+    desc += 2 * sizeof(unsigned long int);
+    if (blockRef->flags & HMBlockFlagsHasCopyDisposeHelpers) {
+        desc += 2 * sizeof(void *);
+    }
+    const char *signature = (*(const char **) desc);
+    if (!signature) {
+        HMLogError(@"signature == NULL");
+
+        return nil;
+    }
+
+    return [NSMethodSignature signatureWithObjCTypes:signature];
+}
