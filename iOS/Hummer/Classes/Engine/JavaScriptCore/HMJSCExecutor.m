@@ -307,17 +307,26 @@ JSValueRef hummerSetProperty(JSContextRef ctx, JSObjectRef function, JSObjectRef
 }
 
 void hummerFinalize(JSObjectRef object) {
-    HMAssertMainQueue();
+    
     void *opaquePointer = JSObjectGetPrivate(object);
-    assert(opaquePointer != NULL);
-    if (opaquePointer) {
-        // 不透明指针可能为原生对象，也可能为闭包
-        // 清空 hm_value
-        [((__bridge id) opaquePointer) setHmValue:nil];
-        HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
-        CFRelease(opaquePointer);
-    } else {
-        HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
+    void(^finalizeTask)(void) = ^(void){
+        assert(opaquePointer != NULL);
+        if (opaquePointer) {
+            // 不透明指针可能为原生对象，也可能为闭包
+            // 清空 hm_value
+            [((__bridge id) opaquePointer) setHmValue:nil];
+            HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
+            CFRelease(opaquePointer);
+        } else {
+            HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
+        }
+    };
+    
+    if (NSThread.isMainThread) {
+        finalizeTask();
+    }else{
+        HMLogError(@"This function must be called on the main queue");
+        dispatch_async(dispatch_get_main_queue(), finalizeTask);
     }
 }
 
