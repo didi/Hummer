@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 布尔类型不是数字
 @property (nonatomic, assign, readonly) BOOL isNumber;
 
+@property (nonatomic, assign, readonly) BOOL isDate DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，永远返回 NO");
+
 /// new String() 是对象不是标量
 @property (nonatomic, assign, readonly) BOOL isString;
 
@@ -97,6 +99,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSNumber *)toNumber;
 
 - (nullable NSString *)toString;
+
+- (nullable NSDate *)toDate;
 
 /**
  * 包括 Proxy 代理的 Array

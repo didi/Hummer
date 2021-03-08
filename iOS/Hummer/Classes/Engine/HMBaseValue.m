@@ -45,6 +45,14 @@ NS_ASSUME_NONNULL_END
     return [self.context valueIsObject:self];
 }
 
+- (BOOL)isDate {
+    return NO;
+}
+
+- (NSDate *)toDate {
+    return nil;
+}
+
 - (BOOL)isArray {
     return [self.context valueIsArray:self];
 }
