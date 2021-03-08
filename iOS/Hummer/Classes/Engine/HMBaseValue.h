@@ -100,7 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)toString;
 
-- (nullable NSDate *)toDate;
+- (nullable NSDate *)toDate DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，永远返回 nil");
 
 /**
  * 包括 Proxy 代理的 Array
