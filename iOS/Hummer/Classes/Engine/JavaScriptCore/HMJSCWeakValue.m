@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_END
 - (void)dealloc {
     // JSManagedValue dealloc 可能触发堆 GC
     __block JSManagedValue *managedValue = _managedValue;
+    _managedValue = nil;
     HMSafeMainThread(^{
         // 防止编译器优化
         managedValue = nil;
