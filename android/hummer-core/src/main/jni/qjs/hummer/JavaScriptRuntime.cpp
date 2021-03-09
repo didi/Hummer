@@ -24,12 +24,12 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_destroyJSContextNative(JNIEnv *env, jclass clazz, jlong js_context) {
     auto context = QJS_CONTEXT(js_context);
+    QJS_CONTEXT_REMOVE(js_context);
     if (context != nullptr) {
         JSRuntime *rt = JS_GetRuntime(context);
         JS_FreeContext(context);
         JS_RunGC(rt);
     }
-    QJS_CONTEXT_REMOVE(js_context);
 }
 
 extern "C"

@@ -30,14 +30,6 @@ public class JSCCallback implements JSCallback {
     }
 
     @Override
-    protected void finalize() {
-        // 如果Callback没有手动调用release释放js对象，那么在java对象被gc时，会再做一次release
-        if (isValid()) {
-            release();
-        }
-    }
-
-    @Override
     public long getIdentify() {
         return value;
     }

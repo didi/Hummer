@@ -121,13 +121,35 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
 
     @Override
     public void onDestroy() {
-        if (mEventManager != null) {
-            mEventManager.onDestroy();
-        }
-
         if (animMap != null) {
             animMap.clear();
             animMap = null;
+        }
+        if (mEventManager != null) {
+            /**
+             * 当JSCallback正在被调用的生命周期中，触发了控件回收时，也会到这里onDestroy中，这时JSCallback不能被释放，会有野指针问题，
+             * 所以用post到下一个消息事件中处理，这样就可以走完当前JSCallback了。
+             *
+             * 示例代码：
+             * let callback = () => {
+             *     console.log("222");
+             * }
+             * let layout = new View();
+             * let view = new View();
+             * view.style = {
+             *     width: 100,
+             *     height: 100,
+             *     backgroundColor: '#FF000022',
+             * }
+             * view.addEventListener('tap', () => {
+             *     layout.removeAll();  // 这一步会释放view，连带会释放EventListener
+             *     console.log('111');
+             *
+             *     callback(); // !!这一步会挂，因为当前EventListener已经被回收了
+             * });
+             * layout.appendChild(view);
+             */
+            getView().post(() -> mEventManager.onDestroy());
         }
     }
 
