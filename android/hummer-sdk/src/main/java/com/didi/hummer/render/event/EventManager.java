@@ -21,13 +21,11 @@ public class EventManager implements ILifeCycle, IEventListener {
         if (mEventListeners != null) {
             for (List<JSCallback> callbackList : mEventListeners.values()) {
                 if (callbackList != null) {
-                    // 当JSCallback正在被调用的生命周期中，触发了控件回收时，也会到这里onDestroy中，这时不该被释放，会有野指针问题，
-                    // 所以在onDestroy暂时不做callback.release()了，统一在系统GC时自动触发JSCallback的release
-//                    for (JSCallback callback : callbackList) {
-//                        if (callback != null) {
-//                            callback.release();
-//                        }
-//                    }
+                    for (JSCallback callback : callbackList) {
+                        if (callback != null) {
+                            callback.release();
+                        }
+                    }
                     callbackList.clear();
                 }
             }
