@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/didi/Hummer/compare/tenon_1.2.1...tenon_1.2.2) (2021-03-11)
+
+
+### Bug Fixes
+
+* Transform ownership to variable that is captured by block ([6c37492](https://github.com/didi/Hummer/commit/6c37492cccb0093e850e655730d823ee9f75f563))
+* 修复 tenon 事件绑定中触发 iOS断言问题 ([fec34f4](https://github.com/didi/Hummer/commit/fec34f400acb2557ef5703fe136fa2bbb36f951d))
+* **Android:** 修复loadScriptWithUrl的回调异常问题 ([fd9cc91](https://github.com/didi/Hummer/commit/fd9cc91d2405bc5dac1f7afee92f4ef8ba6b1657))
+* **Android:** 修复Scroller组件子容器的子容器改变内容时，高度无法撑开的问题 ([ba7a96a](https://github.com/didi/Hummer/commit/ba7a96a6fab2bce080bfa0b7d1792e12297660b5))
+* **iOS:** -Werror=incomplete-implementation ([42205d7](https://github.com/didi/Hummer/commit/42205d7ca43bb2fa846a60e690ef0dd196078d46))
+
+
+### Features
+
+* **Android:** android release version: 0.3.18 ([d137b65](https://github.com/didi/Hummer/commit/d137b6521e00368e89a5588c16602a701337d022))
+* **Android:** android release version: 0.3.18 ([9366517](https://github.com/didi/Hummer/commit/93665175d23c48778a93ee1676443a4a728c1a9e))
+* **Android:** android test version: 0.3.17.3 ([3f06076](https://github.com/didi/Hummer/commit/3f06076954a2211d98ff7e3471c4460e00b81fe7))
+* **Android:** Hummer.env 中增加 namespace 字段 ([b7af77f](https://github.com/didi/Hummer/commit/b7af77f8bdd18ad92e0d6dd7637499c06dc19cf2))
+* **Android:** 修改动画组件的repeatCount属性定义，和iOS对齐；新增repeatMode属性 ([3def796](https://github.com/didi/Hummer/commit/3def796b0dc2c87fab8daec7d2c2104412f25b1f))
+* **Android:** 增加arm64库的支持 ([9abb78e](https://github.com/didi/Hummer/commit/9abb78e699e02f39d06d05deb1575cee9c849f6e))
+* **iOS:** Add empty isDate and toDate ([7f0ead4](https://github.com/didi/Hummer/commit/7f0ead4f859cba5cd6bfdce96fb5f6b3d1a4879a))
+* **iOS:** Add WARNING_CFLAGS ([f8b12de](https://github.com/didi/Hummer/commit/f8b12de55faaa51a49668ae60d897716516ce32d))
+* **iOS:** Use NSInvocation instead of block directly ([fd88934](https://github.com/didi/Hummer/commit/fd889343fb0815319b83e864a934cf46935e8167))
+
+
+
+
+
 ## [1.2.1](https://github.com/didi/Hummer/compare/tenon_1.2.0...tenon_1.2.1) (2021-02-25)
 
 
