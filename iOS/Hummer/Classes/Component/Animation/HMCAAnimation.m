@@ -38,7 +38,7 @@
 
 - (void)setAnimationView:(nonnull UIView *)view forKey:(nullable NSString *)animationKey {
     self.animatedView = view;
-    self.animationKey = animationKey;
+    self.animationKey = animationKey ? animationKey : self.keyPath;
 }
 
 - (void)startAnimation {
@@ -67,8 +67,8 @@
                 HMLogDebug(@"class [%@] JSValue is nil", [self class]);
             }
             if (self.stopBlock) {self.stopBlock(args);}
-            [HMAnimationManager notifyFinishAnimation:self forKey:self.animationKey];
         }
+        [HMAnimationManager removeAnimationForView:self.animatedView key:self.animationKey];
     }
 }
 - (void)animationDidStart:(CAAnimation *)anim {
@@ -106,7 +106,7 @@
 #pragma mark <private>
 
 - (BOOL)isTransformAnimation {
-    return [self.keyPath hasPrefix:@"position"] || [self.keyPath hasPrefix:@"scale"] || [self.keyPath hasPrefix:@"rotation"] || [self.keyPath hasPrefix:@"skew"];
+    return [self.keyPath hasPrefix:@"position"] || [self.keyPath hasPrefix:@"scale"] || [self.keyPath hasPrefix:@"rotation"];
 }
 
 - (NSString *)uniqueAnimationKeyWithInfo:(id<HMCAAnimationInfo>)info{

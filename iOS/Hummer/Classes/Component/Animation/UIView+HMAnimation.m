@@ -60,7 +60,7 @@ HM_EXPORT_METHOD(removeAllAnimation, hm_removeAllAnimation)
 
 - (void)hm_removeAnimationForKey:(HMBaseValue *)keyPath {
     NSString *key = keyPath.toString;
-    [HMAnimationManager removeAnimationForKey:key];
+    [HMAnimationManager removeAnimationForView:self key:key];
     if (key) {
         [self.layer removeAnimationForKey:key];
     }
@@ -102,4 +102,14 @@ HM_EXPORT_METHOD(removeAllAnimation, hm_removeAllAnimation)
     return [objc_getAssociatedObject(self, _cmd) CGPointValue];
 }
 
+- (void)setHm_animationMap:(NSMutableDictionary *)hm_animationMap {
+    objc_setAssociatedObject(self, @selector(hm_animationMap), hm_animationMap, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableDictionary *)hm_animationMap {
+    if (!objc_getAssociatedObject(self, _cmd)) {
+        self.hm_animationMap = [NSMutableDictionary new];
+    }
+    return objc_getAssociatedObject(self, _cmd);
+}
 @end
