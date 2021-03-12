@@ -106,7 +106,7 @@
 #pragma mark <private>
 
 - (BOOL)isTransformAnimation {
-    return [self.keyPath hasPrefix:@"position"] || [self.keyPath hasPrefix:@"scale"] || [self.keyPath hasPrefix:@"rotation"];
+    return [self.keyPath hasPrefix:@"position"] || [self.keyPath hasPrefix:@"scale"] || [self.keyPath hasPrefix:@"rotation"] || [self.keyPath hasPrefix:@"skew"];
 }
 
 - (NSString *)uniqueAnimationKeyWithInfo:(id<HMCAAnimationInfo>)info{

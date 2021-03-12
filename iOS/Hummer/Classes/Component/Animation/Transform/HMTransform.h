@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) float scaleX;
 @property (nonatomic, assign, readonly) float scaleY;
 
+/* skew */
+@property (nonatomic, assign, readonly) CATransform3D skew;
 
 - (instancetype)initWithKey:(NSString *)key propertyValue:(id)value;
 
