@@ -22,7 +22,7 @@
       <text class="demo-item-title">Input设定focused</text>
       <view class="demo-box">
         <input class="input" :focused="focused"/>
-        <button @tap="handleFocus">Toggle Focus</button>
+        <text class="btn" @tap="toggleFocus">Toggle Focus</text>
       </view>
     </view>
     <view class="demo-item">
@@ -76,7 +76,7 @@ export default {
     }
   },
   methods: {
-    handleFocus(){
+    toggleFocus(){
       this.focused = !this.focused
     },
     handleChangeType(){
@@ -120,7 +120,15 @@ export default {
    cursor-color: #eedeee;
    placeholder-font-size: .24rem;
   }
-
+.btn {
+  flex: 1;
+  margin: 0 0.2rem;
+  height: 0.8rem;
+  text-align: center;
+  color: white;
+  background: #fa9153;
+  border-radius: 10px;
+}
   .demo-box{
     margin-top: .2rem;
   }

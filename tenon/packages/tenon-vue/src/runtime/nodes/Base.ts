@@ -55,7 +55,6 @@ export class Base {
     let CSSOM : any,
         elementStyle = {}
     if(!(CSSOM = (<any>__GLOBAL__).CSSOM)) return
-    let startTime = (new Date()).getTime();
     const className = this.getAttribute('class') || ''
     const scopedRuleSet = CSSOM.hasOwnProperty(this._scopedId) ? CSSOM[this._scopedId].classMap : new Map()
     const classList = className.split(/\s/)
@@ -73,8 +72,6 @@ export class Base {
     if(Object.keys(elementStyle).length > 0){
       this.setStyle(elementStyle)
     }
-    let endTime = (new Date()).getTime();
-    console.log(`Update Style Time: ${endTime - startTime}ms`)
   }
 
   // Mounted 生命周期
@@ -95,8 +92,6 @@ export class Base {
   protected onDestoryed(){}
 
   _appendChild(child: Base) {
-    let startTime = (new Date()).getTime();
-
     child.unlinkSiblings();
     child.parent = this;
     this.children.add(child);
@@ -114,8 +109,6 @@ export class Base {
       this.element.appendChild(child.element)
     }
     child._onMounted()
-    let endTime = (new Date()).getTime();
-    console.log(`Append Child Time:${endTime - startTime}ms`)
   }
 
   private unlinkSiblings() {
@@ -140,7 +133,6 @@ export class Base {
   }
 
   _removeChild(child: Base) {
-    let startTime = (new Date()).getTime();
     child._onDestoryed();
     child.unlinkSiblings();
     child.parent = undefined;
@@ -149,12 +141,9 @@ export class Base {
     if(this.element && child.element){
       this.element.removeChild(child.element)
     }
-    let endTime = (new Date()).getTime();
-    console.log(`Remove Child Time:${endTime - startTime}ms`)
   }
 
   _insertBefore(child: Base, anchor: Base) {
-    let startTime = (new Date()).getTime();
     child.unlinkSiblings();
     child.parent = this;
     if (anchor.prevSibling) {
@@ -173,8 +162,6 @@ export class Base {
       this.element.insertBefore(child.element, anchor.element)
       child._onMounted();
     }
-    let endTime = (new Date()).getTime();
-    console.log(`InsertBefore Child Time:${endTime - startTime}ms`)
   }
 
   setElementText(text: string) {

@@ -55,8 +55,6 @@ export const createRootContainer = (options: PageOptions):Page => {
 }
 
 export function render(App:any){
-  let startTime = (new Date()).getTime();
-
   let {pageConfig} = App;
   let app = createApp(App);
   install(app);
@@ -72,7 +70,4 @@ export function render(App:any){
   let instance = app.mount(container);
   initPageLifeCycle(container, instance, App)
   container.render();
-
-  let endTime = (new Date()).getTime();
-  console.log(`Render Time:${endTime - startTime}ms`)
 }
