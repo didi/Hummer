@@ -22,6 +22,9 @@
 @property (nonatomic, assign, readwrite) float scaleX;
 @property (nonatomic, assign, readwrite) float scaleY;
 
+/* skew */
+@property (nonatomic, assign, readwrite) CATransform3D skew;
+
 @end
 
 @implementation HMTransform
@@ -36,6 +39,8 @@
         
         _scaleX = 1.0;
         _scaleY = 1.0;
+            
+        _skew = CATransform3DIdentity;
     }
     return self;
 }
@@ -47,6 +52,7 @@
  * rotationX   旋转动画（x轴）
  * rotationY   旋转动画（y轴）
  * rotationZ   旋转动画（z轴）
+ * skew 倾斜动画（x轴和y轴同时）
  */
 - (instancetype)initWithKey:(NSString *)key propertyValue:(id)value{
     if (value == nil) {return nil;}
@@ -70,8 +76,9 @@
         self.scaleX = x;
         self.scaleY = y;
     } else if([key hasPrefix:@"rotation"]){
-       
         [self setValue:value forKey:key];
+    } else if ([key isEqualToString:@"skew"]) {
+        self.skew = [((NSValue *)value) CATransform3DValue];
     }
     return self;
 }
@@ -99,6 +106,8 @@
         newTransform.scaleY = transform.scaleY;
     }else if ([key hasPrefix:@"rotation"]){
         [newTransform setValue:[transform valueForKey:key] forKey:key];
+    }else if ([key isEqualToString:@"skew"]){
+        newTransform.skew = transform.skew;
     }
     return newTransform;
 }
@@ -113,6 +122,7 @@
     transform.rotationZ = self.rotationZ;
     transform.rotationY = self.rotationY;
     transform.rotationX = self.rotationX;
+    transform.skew = self.skew;
     return transform;
 }
 @end

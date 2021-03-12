@@ -127,6 +127,13 @@ HM_EXPORT_METHOD(on, on:callback:)
             newInfo.toValue = @(newTransform.rotationX);
             [self.infos addObject:newInfo];
         }
+        if (!CATransform3DEqualToTransform(oldTransform.skew, newTransform.skew)) {
+            HMCABasicAnimationInfo *newInfo = [info copy];
+            newInfo.propertyName = @"transform";
+            newInfo.fromValue = [NSValue valueWithCATransform3D:oldTransform.skew];
+            newInfo.toValue = [NSValue valueWithCATransform3D:newTransform.skew];
+            [self.infos addObject:newInfo];
+        }
         self.animatedView.hm_transform = newTransform;
     }else{
         if ([self.keyPath isEqualToString:@"backgroundColor"]) {
