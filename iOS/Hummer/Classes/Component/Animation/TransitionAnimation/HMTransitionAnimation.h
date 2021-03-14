@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSNumber *delay;
 
 /// 动画过度类型
-@property (nonatomic, assign) HMAnimationType animationType;
+@property (nonatomic, copy) NSString *animationType;
 
 /// 动画作用的view
 @property (nonatomic, weak) UIView *animatedView;
