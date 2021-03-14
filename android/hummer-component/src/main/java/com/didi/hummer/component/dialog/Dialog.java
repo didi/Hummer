@@ -116,7 +116,7 @@ public class Dialog {
 
         // 去除默认默认背景
         if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(null);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
     }
 
