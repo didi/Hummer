@@ -12,6 +12,7 @@
 #import "UIView+HMRenderObject.h"
 #import "UIView+HMDom.h"
 #import "HMBaseExecutorProtocol.h"
+#import "HMConverter.h"
 
 static NSInteger kHMDialogPopoverViewTag = 517212;
 
@@ -227,6 +228,7 @@ HM_EXPORT_METHOD(alert, __alertWithMessage:btnText:callback:)
 HM_EXPORT_METHOD(confirm, __confirmWithTitle:message:okBtnText:cancelBtnText:okCallback:cancelCallback:)
 HM_EXPORT_METHOD(custom, __customWithView:)
 HM_EXPORT_METHOD(dismiss, __dismiss)
+HM_EXPORT_METHOD(loading, __loading:)
 
 HM_EXPORT_PROPERTY(cancelable, __isCancelabled, __setCancelabled:)
 
@@ -273,6 +275,40 @@ static HMDialogPopoverView *_popover;
 //   }
 //}
 
+- (void)__loading:(HMBaseValue *)jsContent {
+    NSString *content = jsContent.toString;
+    if (!content) {
+        return;
+    }
+    UIViewController *presenting = [HMDialog fix_getCurrentViewController];
+    [self _dismissPopoverAt:presenting];
+    _popover = [[HMDialogPopoverView alloc] init];
+    _popover.shouldDismissPopover = self.isCancelabled;
+    
+    int labLeftIndentation = 5;
+    UIView *contentView = [UIView new];
+    contentView.layer.cornerRadius = 2;
+    contentView.layer.masksToBounds = YES;
+    contentView.backgroundColor = [HMConverter HMStringToColor:@"#25262D"];
+    UIActivityIndicatorView *loadingView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 45, 40)];
+    loadingView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+    [loadingView startAnimating];
+    UILabel *titleLab = [UILabel new];
+    titleLab.text = content;
+    titleLab.textColor = [HMConverter HMStringToColor:@"#CCCCCC"];
+    titleLab.font = [UIFont systemFontOfSize:14];
+    titleLab.lineBreakMode = NSLineBreakByTruncatingTail;
+    [titleLab sizeToFit];
+    
+    [contentView addSubview:loadingView];
+    [contentView addSubview:titleLab];
+    CGFloat maxWidth = CGRectGetWidth(titleLab.frame)+CGRectGetWidth(loadingView.frame)-labLeftIndentation + 16;//16右边距
+    maxWidth = maxWidth > 240 ? 240 : maxWidth;
+    contentView.frame = CGRectMake(0, 0, maxWidth, 40);
+    titleLab.frame = CGRectMake(CGRectGetMaxX(loadingView.frame)-labLeftIndentation, 0, maxWidth - CGRectGetWidth(loadingView.frame)-16+labLeftIndentation, 40);
+    [_popover addContentView:contentView presentingViewController:presenting];
+}
+
 - (void)__customWithView:(HMBaseValue *)jsView
 {
     UIView *view = jsView.hm_toObjCObject;
@@ -280,17 +316,7 @@ static HMDialogPopoverView *_popover;
         return;
     }
     UIViewController *presenting = [HMDialog fix_getCurrentViewController];
-    if (!presenting) {
-        return;
-    }
-    if (_popover) {
-        [self dismiss];
-    }
-    UIView *poped = [presenting.view.window viewWithTag:kHMDialogPopoverViewTag];
-    if (poped && [poped isKindOfClass:HMDialogPopoverView.class]) {
-        _popover = poped;
-        [self dismiss];
-    }
+    [self _dismissPopoverAt:presenting];
     _popover = [[HMDialogPopoverView alloc] init];
     _popover.shouldDismissPopover = self.isCancelabled;
     [_popover addJSContentView:view presentingViewController:presenting];
@@ -302,17 +328,7 @@ static HMDialogPopoverView *_popover;
         return;
     }
     UIViewController *presenting = [HMDialog fix_getCurrentViewController];
-    if (!presenting) {
-        return;
-    }
-    if (_popover) {
-        [self dismiss];
-    }
-    UIView *poped = [presenting.view.window viewWithTag:kHMDialogPopoverViewTag];
-    if (poped && [poped isKindOfClass:HMDialogPopoverView.class]) {
-        _popover = poped;
-        [self dismiss];
-    }
+    [self _dismissPopoverAt:presenting];
     _popover = [[HMDialogPopoverView alloc] init];
     _popover.shouldDismissPopover = self.isCancelabled;
     [_popover addContentView:view presentingViewController:presenting];
@@ -430,6 +446,28 @@ static HMDialogPopoverView *_popover;
     }];
 }
 
+#pragma mark - private
+
+- (void)_dismissPopover {
+    [self _dismissPopoverAt:nil];
+}
+
+- (void)_dismissPopoverAt:(nullable UIViewController *)presenting {
+    if (presenting) {
+        presenting = [HMDialog fix_getCurrentViewController];
+    }
+    if (!presenting) {
+        return;
+    }
+    if (_popover) {
+        [self dismiss];
+    }
+    UIView *poped = [presenting.view.window viewWithTag:kHMDialogPopoverViewTag];
+    if (poped && [poped isKindOfClass:HMDialogPopoverView.class]) {
+        _popover = poped;
+        [self dismiss];
+    }
+}
 #pragma mark - helper
 
 /**
