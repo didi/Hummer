@@ -14,6 +14,7 @@
 #import "HMResponse.h"
 #import "HMBaseExecutorProtocol.h"
 #import <Hummer/HMBaseValue.h>
+#import <Hummer/HMURLUtility.h>
 
 @interface HMRequest()
 
@@ -102,16 +103,34 @@ HM_EXPORT_METHOD(send, send:)
     NSURL *url = [self requestURL];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.timeoutInterval = self.timeout;
+    __block NSString *contentType = nil;
     [self.header enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key,
                                                      id  _Nonnull obj,
                                                      BOOL * _Nonnull stop) {
+        if ([key isKindOfClass:NSString.class]) {
+            if ([((NSString *)key) isEqualToString:@"Content-Type"]) {
+                if ([obj isKindOfClass:NSString.class]) {
+                    contentType = (NSString *)obj;
+                }
+            }
+        }
         [request addValue:[NSString stringWithFormat:@"%@", obj] forHTTPHeaderField:key];
     }];
     if ([[self.method uppercaseString] isEqualToString:@"POST"]) {
-        request.HTTPMethod = @"POST";
+
         if (self.param && self.param.count > 0) {
-            NSData *data = [NSJSONSerialization dataWithJSONObject:self.param options:0 error:nil];
-            request.HTTPBody = data;
+            // TODO: 其他 Content-Type 序列化兼容
+            request.HTTPMethod = @"POST";
+            if (contentType && [contentType isEqualToString:@"application/x-www-form-urlencoded"]) {
+                
+                NSString *query = HMQueryStringFromParameters(self.param);
+                if (query) {
+                    [request setHTTPBody:[query dataUsingEncoding:NSUTF8StringEncoding]];
+                }
+            }else{
+                NSData *data = [NSJSONSerialization dataWithJSONObject:self.param options:0 error:nil];
+                request.HTTPBody = data;
+            }
         }
     }
     return request;
