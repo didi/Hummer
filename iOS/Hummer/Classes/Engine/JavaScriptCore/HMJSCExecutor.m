@@ -275,13 +275,15 @@ JSValueRef _Nullable hummerCallFunction(JSContextRef ctx, JSObjectRef function, 
     HMFunctionType closure = (__bridge HMFunctionType) JSObjectGetPrivate(objectRef);
     // TODO(ChasonTang): 探测执行，特殊处理第一个参数为 NSArray 的情况（兼容，可能需要开启开关）
     NSMethodSignature *methodSignature = HMExtractMethodSignatureFromBlock(closure);
-    if (!methodSignature || methodSignature.numberOfArguments != 2) {
+    if (!methodSignature || methodSignature.numberOfArguments == 0 || methodSignature.numberOfArguments > 2) {
         return NULL;
     }
     NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
     invocation.target = closure;
     NSArray<HMBaseValue *> *argumentArray = mutableArgumentArray.copy;
-    [invocation hm_setArgument:argumentArray atIndex:1 encodingType:HMEncodingGetType([methodSignature getArgumentTypeAtIndex:1])];
+    if (methodSignature.numberOfArguments == 2) {
+        [invocation hm_setArgument:argumentArray atIndex:1 encodingType:HMEncodingGetType([methodSignature getArgumentTypeAtIndex:1])];
+    }
     [invocation invoke];
     id returnObject = [invocation hm_getReturnValueObject];
     HMCurrentExecutor = nil;
