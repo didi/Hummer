@@ -1,8 +1,6 @@
 import { consoleAssertPolyfill, getNativeLogFunction, LogLevel } from "./console"
 import injectClassModel, { ClassModel } from "./injectClassModel"
 
-declare class View { viewID?: string }
-
 declare interface Timer {
     setInterval(handler: () => void, timeout?: number): void
     clearInterval(): void

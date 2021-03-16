@@ -307,26 +307,17 @@ JSValueRef hummerSetProperty(JSContextRef ctx, JSObjectRef function, JSObjectRef
 }
 
 void hummerFinalize(JSObjectRef object) {
-    
+    HMAssertMainQueue();
     void *opaquePointer = JSObjectGetPrivate(object);
-    void(^finalizeTask)(void) = ^(void){
-        assert(opaquePointer != NULL);
-        if (opaquePointer) {
-            // 不透明指针可能为原生对象，也可能为闭包
-            // 清空 hm_value
-            [((__bridge id) opaquePointer) setHmValue:nil];
-            HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
-            CFRelease(opaquePointer);
-        } else {
-            HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
-        }
-    };
-    
-    if (NSThread.isMainThread) {
-        finalizeTask();
-    }else{
-        HMLogError(@"This function must be called on the main queue");
-        dispatch_async(dispatch_get_main_queue(), finalizeTask);
+    assert(opaquePointer != NULL);
+    if (opaquePointer) {
+        // 不透明指针可能为原生对象，也可能为闭包
+        // 清空 hm_value
+        [((__bridge id) opaquePointer) setHmValue:nil];
+        HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) opaquePointer) class]);
+        CFRelease(opaquePointer);
+    } else {
+        HMLogError(HUMMER_OPAQUE_POINTER_IS_NULL);
     }
 }
 
@@ -1468,20 +1459,32 @@ void hummerFinalize(JSObjectRef object) {
 
 - (nullable JSValueRef)callWithFunctionObject:(nullable JSObjectRef)functionObjectRef thisObject:(nullable JSObjectRef)thisObjectRef argumentArray:(nullable NSArray *)argumentArray {
     JSValueRef exception = NULL;
-    // 转参数
-    __block JSValueRef *valueRefArray = NULL;
-    __block size_t count = 0;
-    [argumentArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        JSValueRef inlineValueRef = [self convertObjectToValueRef:obj];
-        // 增长或者创建
-        count += 1;
-        // TODO(ChasonTang): 处理 realloc 错误
-        valueRefArray = realloc(valueRefArray, count * sizeof(JSValueRef));
-        valueRefArray[count - 1] = inlineValueRef;
-    }];
-    JSValueRef returnValueRef = JSObjectCallAsFunction(self.contextRef, functionObjectRef, thisObjectRef, count, valueRefArray, &exception);
-    // free 空指针安全
-    free(valueRefArray);
+    JSValueRef returnValueRef = NULL;
+    if (argumentArray.count <= 8) {
+        // stack
+        JSValueRef valueRefArray[argumentArray.count];
+        for (NSUInteger i = 0; i < argumentArray.count; ++i) {
+            valueRefArray[i] = [self convertObjectToValueRef:argumentArray[i]];
+        }
+        returnValueRef = JSObjectCallAsFunction(self.contextRef, functionObjectRef, thisObjectRef, argumentArray.count, valueRefArray, &exception);
+    } else {
+        // heap
+        NSUInteger count = argumentArray.count;
+        JSValueRef *valueRefArray = malloc(count * sizeof(JSValueRef));
+        if (valueRefArray == NULL) {
+            count = 0;
+            if (errno) {
+                errno = 0;
+            }
+        }
+        if (count > 0) {
+            [argumentArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                valueRefArray[idx] = [self convertObjectToValueRef:obj];
+            }];
+        }
+        returnValueRef = JSObjectCallAsFunction(self.contextRef, functionObjectRef, thisObjectRef, count, valueRefArray, &exception);
+        free(valueRefArray);
+    }
     // 业务代码需要抛出异常
     [self popExceptionWithErrorObject:&exception];
 
