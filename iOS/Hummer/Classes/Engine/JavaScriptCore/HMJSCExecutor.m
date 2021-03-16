@@ -1470,13 +1470,19 @@ void hummerFinalize(JSObjectRef object) {
     } else {
         // heap
         NSUInteger count = argumentArray.count;
-        JSValueRef *valueRefArray = malloc(count * sizeof(JSValueRef));
-        if (valueRefArray == NULL) {
-            count = 0;
-            if (errno) {
-                errno = 0;
+        JSValueRef *valueRefArray = NULL;
+        if (count) {
+            // malloc(0) return NULL or unique pointer that will be passed to free() safely
+            valueRefArray = malloc(count * sizeof(JSValueRef));
+            if (valueRefArray == NULL) {
+                count = 0;
+                HMAssert(NO, @"malloc() error");
+                if (errno) {
+                    errno = 0;
+                }
             }
         }
+        
         if (count > 0) {
             [argumentArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 valueRefArray[idx] = [self convertObjectToValueRef:obj];
