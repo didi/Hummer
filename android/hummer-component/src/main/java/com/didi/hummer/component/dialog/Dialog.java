@@ -109,15 +109,10 @@ public class Dialog {
         TextView tVMsg = view.findViewById(R.id.tv_msg);
         tVMsg.setText(msg);
 
-        dialog = new AlertDialog.Builder(context)
+        dialog = new AlertDialog.Builder(context, R.style.CustomDialog)
                 .setCancelable(cancelable)
                 .setView(view)
                 .show();
-
-        // 去除默认默认背景
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
     }
 
     @JsMethod("custom")
@@ -135,23 +130,12 @@ public class Dialog {
         customContainer.addView(baseView.getView());
 
         if (dialog == null) {
-            dialog = new AlertDialog.Builder(context)
+            dialog = new AlertDialog.Builder(context, R.style.CustomDialog)
                     .setCancelable(cancelable)
                     .setView(customContainer)
                     .show();
         } else {
             dialog.show();
-        }
-
-        if (dialog.getWindow() != null) {
-            // 去除默认背景
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-            // 设置Dialog原始布局宽度全屏，内容默认是居中显示
-            WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setAttributes(lp);
         }
     }
 
