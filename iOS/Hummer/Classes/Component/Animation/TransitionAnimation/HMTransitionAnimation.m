@@ -32,7 +32,7 @@
 {
     NSDictionary <NSString *, NSObject *> *convertAnimations = [HMTransitionAnimationConverter convertStyleToAnimations:animations];
     [convertAnimations enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull keyPath, NSObject * _Nonnull value, BOOL * _Nonnull stop) {
-        // 将解析出的动画属性及属性值 全部转换成HMBasicAnimation对象，动画实现交由HMBasicAnimation实现
+        // 将解析出的动画属性及属性值 全部转换成HMCABasicAnimation对象，动画实现交由HMCABasicAnimation实现
         HMCABasicAnimation *basicAnimation = [[HMCABasicAnimation alloc] init];
         basicAnimation.keyPath = keyPath;
         
