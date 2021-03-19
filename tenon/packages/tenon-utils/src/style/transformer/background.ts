@@ -4,7 +4,6 @@ import {hexify} from './unit'
 /**
  * 转换Background Image
  * @param style 待转换的Style值
- * @param view 组件
  */
 
 const isUrl = /url\((?:"|')/
@@ -14,7 +13,7 @@ const isLinearGradient =  /linear\-gradient/
 const imageUrlReg = /url\((?:"|')?([\w\W]+)(?:"|')\)/
 const imageBase64Reg = /url\(([\w\W]+)\)/
 const linearReg = /linear\-gradient\(([\w\W]+)\)/
-export function transformBackground(style:Record<string, string>, view:any){
+export function transformBackground(style:Record<string, string>){
   let tempStyle:Record<string, string> = {
     ...style
   }

@@ -1,9 +1,8 @@
 /**
  * 转换Flex Attribute
  * @param style 待转换的Style值
- * @param view 组件
  */
-export function transformFlex(style:Record<string, string>, view:any){
+export function transformFlex(style:Record<string, string>){
   let tempStyle:Record<string, string> = {
     ...style
   }

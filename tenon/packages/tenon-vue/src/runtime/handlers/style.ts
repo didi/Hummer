@@ -1,5 +1,5 @@
 import { Base } from '../nodes/Base'
-import {parseStringStyle} from '@hummer/tenon-utils'
+import {parseStringStyle, styleTransformer} from '@hummer/tenon-utils'
 export function patchStyle( 
   el: Base,
   key: string,
@@ -10,5 +10,7 @@ export function patchStyle(
   if(typeof nextValue === 'string'){
     style = parseStringStyle(nextValue)
   }
+  // 样式转换为 Hummer 特有样式
+  style = styleTransformer.transformStyle(style);
   el.setStyle(style)
 }

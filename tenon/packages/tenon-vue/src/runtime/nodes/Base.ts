@@ -1,4 +1,4 @@
-import {styleTransformer} from '@hummer/tenon-utils'
+import {styleDynamicTransformer} from '@hummer/tenon-utils'
 import {setCacheNode,handleFixedNodeByStyle,removeChildWithFixed} from '../helper/fixed-helper'
 import {handleAnimation, Animation} from '../helper/animation-helper'
 let __view_id = 0;
@@ -175,7 +175,7 @@ export class Base {
    * @param flag 是否来自 style 属性
    */
   setStyle(style: any, flag: boolean = false) {
-    let tempStyle = styleTransformer.transformStyle(style, this)
+    let tempStyle = this.hackForStyle(style, this)
     flag && (this._baseStyle = tempStyle);
     let newStyle = {
       ...this._defaultStyle,
@@ -186,6 +186,9 @@ export class Base {
     this.element.style = this._style = newStyle;
   }
 
+  protected hackForStyle(style: any, base:Base){
+    return styleDynamicTransformer.transformStyle(style, base)
+  }
   /**
    * 设定属性
    * @param key 属性名

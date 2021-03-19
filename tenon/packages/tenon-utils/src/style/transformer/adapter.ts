@@ -10,11 +10,16 @@ const borderRadius = "border-radius,border-top-left-radius,border-top-right-radi
 const isBorderRadius = makeMap(borderRadius)
 
 
-export function transformAdapter(style:Record<string, string>, view:any){
+export function transformAdapter(style:Record<string, string>){
   let tempStyle:Record<string, string> = {}
-  tempStyle = hackForBorderRadius(view, style);
   tempStyle = hackForDefaultFlex(tempStyle);
   tempStyle = hackForWhiteSpace(tempStyle);
+  return tempStyle
+}
+
+export function dynamicTransformAdapter(style:Record<string, string>, view:any){
+  let tempStyle:Record<string, string> = {}
+  tempStyle = hackForBorderRadius(view, style);
   return tempStyle
 }
 
@@ -27,6 +32,7 @@ function hackForWhiteSpace(style:Record<string, string>){
 }
 
 // HACK: 针对IOS中Image标签，需要添加Overflow实现圆角效果
+// TODO 样式静态编译时，无法增加动态运行时处理
 function hackForBorderRadius(view:any, style:Record<string, string>){
   if(view && view.__NAME === NODE_IMAGE && hasSpecialAttr(style, isBorderRadius)){
     style['overflow'] = 'hidden';
