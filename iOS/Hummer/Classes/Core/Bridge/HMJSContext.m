@@ -79,6 +79,7 @@ NS_ASSUME_NONNULL_END
 //    _context = [[HMHermesExecutor alloc] init];
     _context = [[HMJSCExecutor alloc] init];
     [[HMJSGlobal globalObject] weakReference:self];
+    __weak typeof(self) weakSelf = self;
     _context.exceptionHandler = ^(HMExceptionModel *exception) {
         NSArray<id<HMReporterProtocol>> *interceptors = [HMInterceptor interceptor:HMInterceptorTypeReporter];
         if (interceptors.count <= 0) {
@@ -95,8 +96,13 @@ NS_ASSUME_NONNULL_END
         [interceptors enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if ([obj respondsToSelector:@selector(handleJSException:)]) {
                 [obj handleJSException:exceptionInfo];
+                
+                return;
             }
-            // TODO(唐佳诚): 补上 namespace 功能
+            typeof(weakSelf) strongSelf = weakSelf;
+            if ([obj respondsToSelector:@selector(handleJSException:context:)]) {
+                [obj handleJSException:exceptionInfo context:strongSelf];
+            }
         }];
     };
     [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/builtin.js"]];
