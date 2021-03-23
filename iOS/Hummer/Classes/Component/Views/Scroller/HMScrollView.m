@@ -17,6 +17,14 @@
 #import "UIView+HMRenderObject.h"
 #import "HMRefreshBaseView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+@interface HMScrollContentView : UIView
+
+@end
+
+NS_ASSUME_NONNULL_END
+
 @interface HMScrollView ()<UIScrollViewDelegate>
 @property(nonatomic,copy) HMFuncCallback onScrollToTopLisener;
 @property(nonatomic,copy) HMFuncCallback onScrollToBottomLisener;
@@ -24,19 +32,55 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@property (nonatomic, nullable, strong) HMScrollContentView *contentView;
+
 @property (nonatomic, assign) BOOL showScrollBar;
 
 @property (nonatomic, assign) BOOL hummerBounces;
 
-- (CGSize)getNewContentSize;
-
 - (CGPoint)calculateOffsetForContentSize:(CGSize)newContentSize;
+
+- (void)updateIfNeeded;
 
 NS_ASSUME_NONNULL_END
 
 @end
 
 @implementation HMScrollView
+
+#pragma mark - 视图层级管理
+
+- (void)addSubview:(UIView *)view {
+    if (view.isHmLayoutEnabled) {
+        [self.contentView addSubview:view];
+    } else {
+        [super addSubview:view];
+    }
+}
+
+- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index {
+    if (view.isHmLayoutEnabled) {
+        [self.contentView insertSubview:view atIndex:index];
+    } else {
+        [super insertSubview:view atIndex:index];
+    }
+}
+
+- (void)insertSubview:(UIView *)view aboveSubview:(UIView *)siblingSubview {
+    if (view.isHmLayoutEnabled) {
+        [self.contentView insertSubview:view aboveSubview:siblingSubview];
+    } else {
+        [super insertSubview:view aboveSubview:siblingSubview];
+    }
+}
+
+- (void)insertSubview:(UIView *)view belowSubview:(UIView *)siblingSubview {
+    if (view.isHmLayoutEnabled) {
+        [self.contentView insertSubview:view belowSubview:siblingSubview];
+    } else {
+        [super insertSubview:view belowSubview:siblingSubview];
+    }
+}
 
 HM_EXPORT_CLASS(HMScrollView, HMScrollView)
 
@@ -78,6 +122,9 @@ HM_EXPORT_PROPERTY(bounces, hummerBounces, setHummerBounces:)
         } else {
             // Fallback on earlier versions
         }
+        _contentView = [[HMScrollContentView alloc] initWithFrame:CGRectZero];
+        [self addSubview:_contentView];
+        _contentView.isHmLayoutEnabled = YES;
         self.delegate = self;
         self.bounces = YES;
         self.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
@@ -311,48 +358,6 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     }
 }
 
-#pragma mark <private>
-
-- (CGSize)getNewContentSize {
-    CGSize newContentSize = CGSizeZero;
-    if (self.scrollDirection == HMScrollDirectionHorizontal) {
-        YOGA_TYPE_WRAPPER(YGValue) minWidth = self.hm_renderObject.minWidth;
-        YOGA_TYPE_WRAPPER(YGValue) width = self.hm_renderObject.width;
-        YOGA_TYPE_WRAPPER(YGValue) maxWidth = self.hm_renderObject.maxWidth;
-        
-        [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.minWidth = YOGA_TYPE_WRAPPER(YGValueUndefined);
-            layout.width = YOGA_TYPE_WRAPPER(YGValueAuto);
-            layout.maxWidth = YOGA_TYPE_WRAPPER(YGValueUndefined);
-        }];
-        newContentSize = [self hm_sizeThatFits:CGSizeMake(CGFLOAT_MAX, self.bounds.size.height)];
-        newContentSize.height = MAX(self.bounds.size.height, newContentSize.height);
-        [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.minWidth = minWidth;
-            layout.width = width;
-            layout.maxWidth = maxWidth;
-        }];
-    } else {
-        YOGA_TYPE_WRAPPER(YGValue) minHeight = self.hm_renderObject.minHeight;
-        YOGA_TYPE_WRAPPER(YGValue) height = self.hm_renderObject.height;
-        YOGA_TYPE_WRAPPER(YGValue) maxHeight = self.hm_renderObject.maxHeight;
-        
-        [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.minHeight = YOGA_TYPE_WRAPPER(YGValueUndefined);
-            layout.height = YOGA_TYPE_WRAPPER(YGValueAuto);
-            layout.maxHeight = YOGA_TYPE_WRAPPER(YGValueUndefined);
-        }];
-        newContentSize = [self hm_sizeThatFits:CGSizeMake(self.bounds.size.width, CGFLOAT_MAX)];
-        newContentSize.width = MAX(self.bounds.size.width, newContentSize.width);
-        [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.minHeight = minHeight;
-            layout.height = height;
-            layout.maxHeight = maxHeight;
-        }];
-    }
-    return newContentSize;
-}
-
 - (CGPoint)calculateOffsetForContentSize:(CGSize)newContentSize {
     CGPoint oldOffset = self.contentOffset;
     CGPoint newOffset = oldOffset;
@@ -398,6 +403,51 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
 
 #pragma mark <override>
 
+- (void)updateIfNeeded {
+    CGSize contentSize = self.contentView.bounds.size;
+    if (!CGSizeEqualToSize(self.contentSize, contentSize)) {
+      // When contentSize is set manually, ScrollView internals will reset
+      // contentOffset to  {0, 0}. Since we potentially set contentSize whenever
+      // anything in the ScrollView updates, we workaround this issue by manually
+      // adjusting contentOffset whenever this happens
+      CGPoint newOffset = [self calculateOffsetForContentSize:contentSize];
+      self.contentSize = contentSize;
+      self.contentOffset = newOffset;
+    }
+}
+
+- (void)setFrame:(CGRect)frame {
+    // 由 hummerSetFrame -> self.bounds = bounds; 触发
+    // Preserving and revalidating `contentOffset`.
+    CGPoint originalOffset = self.contentOffset;
+    
+    [super setFrame:frame];
+    
+    UIEdgeInsets contentInset = self.contentInset;
+    CGSize contentSize = self.contentSize;
+    
+    // If contentSize has not been measured yet we can't check bounds.
+    if (CGSizeEqualToSize(contentSize, CGSizeZero)) {
+        self.contentOffset = originalOffset;
+    } else {
+        if (@available(iOS 11.0, *)) {
+            if (!UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, self.adjustedContentInset)) {
+                contentInset = self.adjustedContentInset;
+            }
+        }
+        CGSize boundsSize = self.bounds.size;
+        CGFloat xMaxOffset = contentSize.width - boundsSize.width + contentInset.right;
+        CGFloat yMaxOffset = contentSize.height - boundsSize.height + contentInset.bottom;
+        // Make sure offset doesn't exceed bounds. This can happen on screen rotation.
+        if ((originalOffset.x >= -contentInset.left) && (originalOffset.x <= xMaxOffset) &&
+            (originalOffset.y >= -contentInset.top) && (originalOffset.y <= yMaxOffset)) {
+            return;
+        }
+        self.contentOffset = CGPointMake(MAX(-contentInset.left, MIN(xMaxOffset, originalOffset.x)), MAX(-contentInset.top, MIN(yMaxOffset, originalOffset.y)));
+    }
+}
+
+/*
 - (void)hummerSetFrame:(CGRect)frame {
     CGRect currentFrame = CGRectMake(self.center.x - self.bounds.size.width / 2, self.center.y - self.bounds.size.height / 2, self.bounds.size.width, self.bounds.size.height);
     if (!CGRectEqualToRect(frame, currentFrame)) {
@@ -410,17 +460,9 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
         bounds.origin = oldBoundsOrigin;
         self.bounds = bounds;
     }
-    CGSize newContentSize = [self getNewContentSize];
-    if (!CGSizeEqualToSize(newContentSize, self.contentSize)) {
-        // When contentSize is set manually, ScrollView internals will reset
-        // contentOffset to  {0, 0}. Since we potentially set contentSize whenever
-        // anything in the ScrollView updates, we workaround this issue by manually
-        // adjusting contentOffset whenever this happens
-        CGPoint newOffset = [self calculateOffsetForContentSize:newContentSize];
-        self.contentSize = newContentSize;
-        self.contentOffset = newOffset;
-    }
+    self.contentOffset = [self calculateOffsetForContentSize:self.contentSize];
 }
+ */
 
 @end
 
@@ -452,6 +494,9 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
     if (self = [super initWithHMValues:values]) {
         self.scrollDirection = HMScrollDirectionVertical;
         self.alwaysBounceVertical = YES;
+        [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
+            layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionColumn);
+        }];
     }
     return self;
 }
@@ -573,6 +618,9 @@ HM_EXPORT_CLASS(HorizontalScroller, HMHorizontalScrollView)
         [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
             layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionRow);
         }];
+        [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
+            layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionRow);
+        }];
     }
     return self;
 }
@@ -583,6 +631,23 @@ HM_EXPORT_CLASS(HorizontalScroller, HMHorizontalScrollView)
 
 - (void)setHummerBounces:(BOOL)hummerBounces {
     self.alwaysBounceHorizontal = hummerBounces;
+}
+
+@end
+
+@implementation HMScrollContentView
+
+- (void)hummerSetFrame:(CGRect)frame {
+    [super hummerSetFrame:frame];
+    HMScrollView *scrollView = (HMScrollView *) self.superview;
+
+    if (!scrollView) {
+      return;
+    }
+
+    NSAssert([scrollView isKindOfClass:HMScrollView.class], @"Unexpected view hierarchy of HMScrollView component.");
+
+    [scrollView updateIfNeeded];
 }
 
 @end
