@@ -25,9 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param animations style中解析到的动画属性及值
 + (NSDictionary <NSString *, NSObject *> *)convertStyleToAnimations:(NSDictionary <NSString *, NSObject *> *)animations;
 
-/// 动画过度类型解析
-/// @param animationCurve style中获取的动画类型
-+ (HMAnimationType)convertAnimationCurve:(NSString *)animationCurve;
 @end
 
 NS_ASSUME_NONNULL_END

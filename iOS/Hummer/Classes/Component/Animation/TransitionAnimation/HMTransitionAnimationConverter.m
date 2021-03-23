@@ -246,21 +246,4 @@
     return convertAnimations.copy;
 }
 
-+ (HMAnimationType)convertAnimationCurve:(NSString *)animationCurve {
-    if (!animationCurve || animationCurve.length == 0) {
-        return HMAnimationTypeLinear;
-    }
-    HMAnimationType curve = HMAnimationTypeLinear;
-    if ([animationCurve isEqualToString:@"linear"]) {
-        curve = HMAnimationTypeLinear;
-    } else if ([animationCurve isEqualToString:@"ease-in"]) {
-        curve = HMAnimationTypeEaseIn;
-    } else if ([animationCurve isEqualToString:@"ease-out"]) {
-        curve = HMAnimationTypeEaseOut;
-    } else if ([animationCurve isEqualToString:@"ease-in-out"]) {
-        curve = HMAnimationTypeEaseInEaseOut;
-    }
-    return curve;
-}
-
 @end

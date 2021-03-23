@@ -11,8 +11,8 @@
 #import "HMConverter.h"
 #import "UIView+HMDom.h"
 #import "HMAnimationManager.h"
-#import "HMBasicAnimation.h"
 #import "HMAnimationConverter.h"
+#import "HMCABasicAnimation.h"
 
 @implementation HMTransitionAnimation
 
@@ -20,7 +20,7 @@
 {
     if (self = [super init]) {
         _delay = (NSNumber *)transitions[@"transitionDelay"]?:@0;
-        _animationType = [HMTransitionAnimationConverter convertAnimationCurve:(NSString *)transitions[@"transitionTimingFunction"]];
+        _animationType = (NSString *)transitions[@"transitionTimingFunction"];
         _needAnimations = [HMTransitionAnimationConverter convertProperties:(NSString *)transitions[@"transitionProperty"] durations:(NSString *)transitions[@"transitionDuration"]];
         _animatedView = view;
     }
@@ -32,17 +32,21 @@
 {
     NSDictionary <NSString *, NSObject *> *convertAnimations = [HMTransitionAnimationConverter convertStyleToAnimations:animations];
     [convertAnimations enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull keyPath, NSObject * _Nonnull value, BOOL * _Nonnull stop) {
-        // 将解析出的动画属性及属性值 全部转换成HMBasicAnimation对象，动画实现交由HMBasicAnimation实现
-        HMBasicAnimation *basicAnimation = [[HMBasicAnimation alloc] init];
-        basicAnimation.animationKeyPath = keyPath;
+        // 将解析出的动画属性及属性值 全部转换成HMCABasicAnimation对象，动画实现交由HMCABasicAnimation实现
+        HMCABasicAnimation *basicAnimation = [[HMCABasicAnimation alloc] init];
+        basicAnimation.keyPath = keyPath;
+        
         id animationValue = [HMAnimationConverter convertAnimationValue:value
                                                                 keyPath:keyPath];
-        basicAnimation.property = [[HMBasicAnimationProperty alloc] initWithKey:keyPath propertyValue:animationValue];
+        basicAnimation.property = animationValue;
+        
         basicAnimation.duration = [[[HMTransitionAnimationConverter transformBasicAnimationMap] allValues] containsObject:keyPath] ? self.needAnimations[@"transform"].doubleValue : self.needAnimations[keyPath].doubleValue;
         basicAnimation.delay = self.delay.doubleValue;
         basicAnimation.repeatCount = 1;
-//        basicAnimation.easing = self.animationType;
-        [HMAnimationManager addAnimation:basicAnimation forView:self.animatedView key:nil];
+        basicAnimation.easing = self.animationType;
+        basicAnimation.animatedView = self.animatedView;
+        basicAnimation.animationKey = [keyPath stringByAppendingString:@"-transition"];
+        [HMAnimationManager addAnimation:basicAnimation forView:self.animatedView key:keyPath];
     }];
 }
 
