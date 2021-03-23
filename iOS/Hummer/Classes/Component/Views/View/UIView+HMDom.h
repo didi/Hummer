@@ -134,28 +134,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)hummerSetFrame:(CGRect)frame;
 
-
-/*   Layout Pass   */
-
-/**
- * @brief 当 js 设置 style 之后调用
- */
-- (void)hm_didSetProps:(NSDictionary<NSString *, NSObject *> *)changedProps NS_REQUIRES_SUPER;
-
-/**
- * view 布局函数。
- * 布局周期函数内不要做复杂行为，否则会 block 到主线程。
- */
-
-/**
- * @brief yoga 计算布局结束，应用布局之前
- */
-- (void)hm_willPerformLayout NS_REQUIRES_SUPER;
-
-/**
- * @brief 设置 frame 之后。
- */
-- (void)hm_didPerformLayout NS_REQUIRES_SUPER;
-
 NS_ASSUME_NONNULL_END
+
 @end

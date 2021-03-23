@@ -6,12 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HMViewLayoutPass.h"
+
 typedef NS_ENUM(NSUInteger, HMScrollDirection) {
     HMScrollDirectionVertical,
     HMScrollDirectionHorizontal
 };
-@interface HMScrollView : UIScrollView<HMViewLayoutPass>
+
+@interface HMScrollView : UIScrollView
 
 @property (nonatomic,assign) HMScrollDirection scrollDirection;
 @end
