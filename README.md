@@ -10,7 +10,7 @@
     <img alt="license" src="https://img.shields.io/badge/license-Apache%202-green" />
 </a>
 <a href="https://github.com/didi/Hummer/pulls">
-    <img alt="license" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
+    <img alt="PRs" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
 </a>
 </div>
 
@@ -76,7 +76,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 
 ## 友情链接
 1. [DoKit](https://github.com/didi/DoraemonKit) DoraemonKit /'dɔ:ra:'emɔn/，简称DoKit，中文名 哆啦A梦，意味着能够像哆啦A梦一样提供给他的主人各种各样的工具。Just Do Kit
-2. 我们部门的技术公众号【普惠出行产品技术公众号】，欢迎关注。**公众号介绍：这里是滴滴出行旗下普惠产品技术团队对外分享的窗口，普惠出行支撑滴滴代驾、货运等业务，建设了Hummer、NodeX、Dokit、卡梅隆等开源项目，始终秉承聚心成事、聚气育人的原则。欢迎各位技术同仁一起交流，共同成长。**  
+2. 我们团队的技术公众号【滴滴OrangeLab】，欢迎关注，我们会在这里持续输出团队内部比较有深度的技术沉淀和经验分享，欢迎一起交流。
 <div style="height: 200px">
- <img src="https://pt-starimg.didistatic.com/static/starimg/img/8Nk6ceaAkD1607601919167.jpg" height = "200" alt="普惠技术公众号" />
+ <img src="https://pt-starimg.didistatic.com/static/starimg/img/cPlaMme4g81616682162304.jpg" height = "200" alt="滴滴OrangeLab" />
 </div>
