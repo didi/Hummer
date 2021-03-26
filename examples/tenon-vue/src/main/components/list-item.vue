@@ -47,6 +47,8 @@ export default {
     align-items: center;
     background-color: #ffffff;
     height: 1rem;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
   }
   .item-title{
     flex: 1;
