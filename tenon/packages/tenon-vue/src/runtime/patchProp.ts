@@ -24,9 +24,6 @@ export function patchProp(
       break;
     default:
       if(isOn(key)){
-        // console.log(nextValue)
-        // console.log(typeof nextValue)
-        // console.log(`view_id = ${el.__view_id} key= ${key} nextValue = ${nextValue}`)
         patchEvents(el, key, prevValue, nextValue, parentComponent)
       }else{
         patchAttrs(el, key, prevValue, nextValue)

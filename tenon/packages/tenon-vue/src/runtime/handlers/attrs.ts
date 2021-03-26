@@ -7,5 +7,4 @@ export  function patchAttrs(
   nextValue: any){
   
   el.setAttribute(key, nextValue);
-  // console.log('patch-attr:', key, prevValue, nextValue)
 }

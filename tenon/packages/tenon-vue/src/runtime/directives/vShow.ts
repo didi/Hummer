@@ -24,7 +24,6 @@ export const vShow: ObjectDirective<VShowElement> = {
     }
   },
   updated(el, { value, oldValue }, { transition }) {
-    console.log('Vshow Value Change', value, oldValue)
     if (!value === !oldValue) return
     if (transition) {
       if (value) {

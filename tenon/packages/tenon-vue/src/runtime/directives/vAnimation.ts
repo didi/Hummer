@@ -6,13 +6,11 @@ interface Element extends Base {
 
 export const vAnimation: ObjectDirective<Element> = {
   mounted(el, { value }) {
-    console.log('Animation Mounted')
     value && el.handleAnimation(value)
   },
   updated(el, { value, oldValue }) {
     // FIXME: Animation对象更新时,不会触发updated事件
     if(!value || value === oldValue){
-      console.log('value equal')
       return
     }else{
       el.handleAnimation(value)

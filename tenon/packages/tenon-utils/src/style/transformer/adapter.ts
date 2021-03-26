@@ -11,7 +11,9 @@ const isBorderRadius = makeMap(borderRadius)
 
 
 export function transformAdapter(style:Record<string, string>){
-  let tempStyle:Record<string, string> = {}
+  let tempStyle:Record<string, string> = {
+    ...style
+  }
   tempStyle = hackForDefaultFlex(tempStyle);
   tempStyle = hackForWhiteSpace(tempStyle);
   return tempStyle
