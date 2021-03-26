@@ -1375,7 +1375,7 @@ void hummerFinalize(JSObjectRef object) {
     id <HMBaseExecutorProtocol> value = nil;
     BOOL isNoExecutor = YES;
     while ((value = enumerator.nextObject)) {
-        if ([value isKindOfClass:HMJSCExecutor.class] && value != self) {
+        if ([value isKindOfClass:HMJSCExecutor.class]) {
             isNoExecutor = NO;
             break;
         }
@@ -1478,7 +1478,7 @@ void hummerFinalize(JSObjectRef object) {
             valueRefArray = malloc(count * sizeof(JSValueRef));
             if (valueRefArray == NULL) {
                 count = 0;
-                HMAssert(NO, @"malloc() error");
+                HMAssert(NO, @"malloc() ENOMEM");
                 if (errno) {
                     errno = 0;
                 }
