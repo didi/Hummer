@@ -18,7 +18,10 @@
 
 @end
 
-@implementation HMAttributesBuilder
+@implementation HMAttributesBuilder{
+    NSNumber *_maxCapHeight;
+    bool hasCustomFont;
+}
 
 - (instancetype)init {
     return [self initWithFont:[UIFont systemFontOfSize:16] textDecoration:nil letterSpacing:nil paragraphStyle:nil];
@@ -47,6 +50,7 @@
     [self clear];
     
     // map
+    __block CGFloat maxCapH = self.font.capHeight;
     NSMutableArray *itemArray = [NSMutableArray arrayWithCapacity:data.count];
     [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         HMAttributesItem *item = nil;
@@ -57,12 +61,16 @@
         } else {
             //
         }
+        // 是否有 item 使用自定义大小字体。
+        hasCustomFont = item.isCustomizedFont || hasCustomFont;
+        UIFont *font = [item copiedFont:self.font];
+        maxCapH = MAX(maxCapH, font.capHeight);
         if (item) {
             [itemArray addObject:item];
         }
     }];
     self.items = [itemArray copy];
-    
+    _maxCapHeight = @(maxCapH);
     // parse
     NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
     [self.items enumerateObjectsUsingBlock:^(HMAttributesItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -74,17 +82,32 @@
     self.result = [result copy];
     return self.result;
 }
-
+// 如果没有 item 使用自定义字体。则直接覆盖。否则需要选出最大的字体。
 - (void)updateFont:(UIFont *)font {
     _font = font;
-    
-    [self performUpdationWithHandler:^(NSMutableAttributedString *result, HMAttributesItem *item, NSRange range, BOOL *hasChanged) {
+    __weak typeof(self) wSelf = self;
+    CGFloat maxCapH = font.capHeight;
+    _maxCapHeight = hasCustomFont ? @(MAX(maxCapH, _maxCapHeight.floatValue)) : @(maxCapH);
+    [self performUpdationWithHandler:^(NSMutableAttributedString *result, HMAttributesItem *item, NSRange range, BOOL *hasChanged) {\
+        if (!wSelf) return;
+        __strong typeof(wSelf) sself = wSelf;
         if (item.isCustomizedFont) {
             UIFont *copied = [item copiedFont:font];
             if (copied) {
                 [result addAttribute:NSFontAttributeName value:copied range:range];
                 *hasChanged = YES;
             }
+        }
+        if (item.image && item.cachedImage && item.imageAlign == HMAttributesImageAlignBaselineCenter) {
+            NSRangePointer ptr = nil;
+            NSDictionary *attributesDic = [result attributesAtIndex:0 effectiveRange:ptr];
+            UIImage *image = item.cachedImage;
+            NSTextAttachment *imageAttachment = [NSTextAttachment new];
+            imageAttachment.image = image;
+            imageAttachment.bounds = CGRectMake(0, (sself->_maxCapHeight.floatValue - image.size.height)/2, image.size.width, image.size.height);
+            NSAttributedString *imageString = [NSAttributedString attributedStringWithAttachment:imageAttachment];
+            NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithAttributedString:imageString];
+            [string addAttributes:attributesDic range:*ptr];
         }
     }];
 }
@@ -224,6 +247,9 @@
     NSMutableAttributedString *string = nil;
     if (image) {
         NSTextAttachment *imageAttachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
+        if (item.imageAlign == HMAttributesImageAlignBaselineCenter) {
+            imageAttachment.bounds = CGRectMake(0, (_maxCapHeight.floatValue - image.size.height)/2, image.size.width, image.size.height);
+        }
         imageAttachment.image = image;
         NSAttributedString *imageString = [NSAttributedString attributedStringWithAttachment:imageAttachment];
         string = [[NSMutableAttributedString alloc] initWithAttributedString:imageString];
@@ -272,11 +298,16 @@
         CGFloat imageHeight = item.imageHeight > 0 ? item.imageHeight : image.size.height;
         img = [self fragmentImage:image width:imageWidth height:imageHeight];
     }
-
     NSTextAttachment *imageAttachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
     imageAttachment.image = img;
-    NSAttributedString *imageString = [NSAttributedString attributedStringWithAttachment:imageAttachment];
-    
+    if (item.imageAlign == HMAttributesImageAlignBaselineCenter) {
+        imageAttachment.bounds = CGRectMake(0, (_maxCapHeight.floatValue - img.size.height)/2, img.size.width, img.size.height);
+    }
+    NSAttributedString *_imageString = [NSAttributedString attributedStringWithAttachment:imageAttachment];
+    NSMutableAttributedString *imageString = [[NSMutableAttributedString alloc] initWithAttributedString:_imageString];
+    if (self.paragraphStyle) {
+        [imageString addAttributes:@{NSParagraphStyleAttributeName:self.paragraphStyle} range:NSMakeRange(0, 1)];
+    }
     // replace
     NSRange range = NSMakeRange(position, item.length);
     NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithAttributedString:self.result];
@@ -293,7 +324,7 @@
 }
 
 - (UIImage *)fragmentImage:(UIImage *)image width:(CGFloat)width height:(CGFloat)height {
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(width, height), NO, image.scale);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(width, height), NO, 2);
     [image drawInRect:CGRectMake(0, 0, width, height)];
     UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
