@@ -1,5 +1,9 @@
 # Release Nodes
 
+### 0.3.19
+- 修复Loading对话框和自定义对话框在某些机型上没有去除默认背景的问题；
+- 修复HotLoad时偶现的StackOverflow问题；
+
 ### 0.3.18
 - 去除对 blankj.utilcode 库的依赖，减小包体积，减少sdk接入时的冲突；
 - 重构手势事件逻辑，并把单击和长按改成了标准系统事件；
