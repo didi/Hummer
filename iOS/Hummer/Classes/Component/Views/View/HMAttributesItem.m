@@ -76,7 +76,7 @@
         item.imageHeight = [HMConverter HMStringToFloat:dictionary[@"imageHeight"]];
     }
     if (dictionary[@"imageAlign"]) {
-        //
+        item.imageAlign = [dictionary[@"imageAlign"] isEqualToString:@"center"] ? HMAttributesImageAlignBaselineCenter : HMAttributesImageAlignBaseline;
     }
     item.href = dictionary[@"href"];
     if (dictionary[@"hrefColor"]) {
