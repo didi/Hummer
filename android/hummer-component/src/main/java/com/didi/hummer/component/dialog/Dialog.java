@@ -109,7 +109,7 @@ public class Dialog {
         TextView tVMsg = view.findViewById(R.id.tv_msg);
         tVMsg.setText(msg);
 
-        dialog = new AlertDialog.Builder(context, R.style.CustomDialog)
+        dialog = new AlertDialog.Builder(context, R.style.TransparentDialog)
                 .setCancelable(cancelable)
                 .setView(view)
                 .show();
@@ -130,7 +130,7 @@ public class Dialog {
         customContainer.addView(baseView.getView());
 
         if (dialog == null) {
-            dialog = new AlertDialog.Builder(context, R.style.CustomDialog)
+            dialog = new AlertDialog.Builder(context, R.style.TransparentDialog)
                     .setCancelable(cancelable)
                     .setView(customContainer)
                     .show();
