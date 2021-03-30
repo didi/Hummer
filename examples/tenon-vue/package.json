@@ -8,8 +8,10 @@
     "debug": "npm run dev & hummer debug"
   },
   "dependencies": {
+    "@hummer/tenon-store": "^1.2.2",
     "@hummer/tenon-vue": "^1.0.0",
     "@hummer/vue-plugin-list": "^0.2.0",
+    "@hummer/vue-plugin-popup": "^0.2.0",
     "@hummer/vue-plugin-viewpager": "^0.2.0"
   },
   "devDependencies": {}
