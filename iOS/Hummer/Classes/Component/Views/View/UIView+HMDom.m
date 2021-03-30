@@ -1428,4 +1428,19 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     self.bounds = bounds;
 }
 
+
+#pragma mark <LayoutPass>
+
+- (void)hm_willPerformLayout {
+    // The default implementation does nothing.
+}
+
+- (void)hm_didPerformLayout {
+//    [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+}
+
+- (void)hm_didSetProps:(NSDictionary<NSString *, NSObject *> *)changedProps {
+//    [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+}
+
 @end

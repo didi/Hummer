@@ -132,6 +132,7 @@ NS_ASSUME_NONNULL_END
         HMLayoutMetrics layoutMetrics = shadowView.layoutMetrics;
         UIView *inlineView = shadowView.view;
         hm_safe_main_thread(^{
+            [self notifyWillPerformLayoutForView:inlineView];
             CGRect frame = layoutMetrics.frame;
             // 兼容以前的双属性控制视图显示
             if (!HMUseDoubleAttributeControlHidden) {
@@ -153,6 +154,7 @@ NS_ASSUME_NONNULL_END
                 }
             }
             [inlineView hummerSetFrame:frame];
+            [self notifyDidPerformLayoutForView:inlineView];
         });
     }
 }
@@ -197,4 +199,15 @@ NS_ASSUME_NONNULL_END
     }];
 }
 
+#pragma mark <layout observer>
+
+- (void)notifyWillPerformLayoutForView:(UIView *)view {
+    view.hm_animationPropertyBounds = view.bounds;
+    view.hm_animationPropertyCenter = view.center;
+    [view hm_willPerformLayout];
+}
+
+- (void)notifyDidPerformLayoutForView:(UIView *)view{
+    [view hm_didPerformLayout];
+}
 @end
