@@ -66,12 +66,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Applies computed layout metrics to the view.
  */
-- (void)layoutWithMetrics:(HMLayoutMetrics)layoutMetrics layoutContext:(HMLayoutContext)layoutContext;
+- (BOOL)layoutWithMetrics:(HMLayoutMetrics)layoutMetrics layoutContext:(HMLayoutContext)layoutContext;
 
 /**
  * Calculates (if needed) and applies layout to subviews.
  */
-- (void)layoutSubviewsWithContext:(HMLayoutContext)layoutContext;
+- (nullable NSArray <HMRenderObject *>*)layoutSubviewsWithContext:(HMLayoutContext)layoutContext;
 
 /**
  * Measures shadow view without side-effects.
