@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F4F5"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/layout_above"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#22FF0000"
+        android:gravity="center"
+        android:text="原生上半部分"
+        android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#220000FF"
+        android:gravity="center"
+        android:text="原生下半部分"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <com.didi.hummer.render.style.HummerLayout
+        android:id="@+id/layout_hummer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_bottom"
+        app:layout_constraintTop_toBottomOf="@+id/layout_above" />
+
+</android.support.constraint.ConstraintLayout>
