@@ -27,6 +27,9 @@
         <activity
             android:name=".MyHummerFragmentActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".PartialHummerActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
