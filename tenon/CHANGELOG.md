@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.4) (2021-04-08)
+
+
+### Bug Fixes
+
+* **Android:** 修复intent数据获取时可能引起的崩溃问题 ([d64a8d0](https://github.com/didi/Hummer/commit/d64a8d00345b8cca24dc1d346a464a0f03e85f80))
+* **Android:** 修复JSCallback延迟销毁引起的野指针问题 ([1824b8d](https://github.com/didi/Hummer/commit/1824b8d9eee068453d2a7ba605209438c4b013af))
+* **Android:** 修复Loading对话框没有去除默认背景的问题 ([9671e04](https://github.com/didi/Hummer/commit/9671e04cb3ecd28c40a41a7bd65c2652032f04d9))
+* **iOS:** Add malloc(0) safe path ([be134aa](https://github.com/didi/Hummer/commit/be134aab939eda193196e5cf3f9dbec409adbdea))
+* **iOS:** block can use void argument ([08dc9da](https://github.com/didi/Hummer/commit/08dc9daf8dcc4fe2d3ecb6b91fbf1241f8a5d407))
+* **iOS:** exceptionHandler add namespace ([#108](https://github.com/didi/Hummer/issues/108)) ([f27d1ef](https://github.com/didi/Hummer/commit/f27d1ef1be3ecf595e00dbea74821d3464bdb1af))
+* **iOS:** Remove unused View declare ([597a9c8](https://github.com/didi/Hummer/commit/597a9c8c4c7aa46f3e6782cd2361239faef5098c))
+* **iOS:** Use contentView instead of LayoutObserver ([#106](https://github.com/didi/Hummer/issues/106)) ([931164f](https://github.com/didi/Hummer/commit/931164fc7308b2eee625594928aad66de7a5bc9b))
+* **iOS:** weak value does not need compare self ([df21749](https://github.com/didi/Hummer/commit/df217491120d0499bdaa497c49650c7da5af1fc0))
+
+
+### Features
+
+* **Android:** android test version: 0.3.18.1 ([c225bd9](https://github.com/didi/Hummer/commit/c225bd948bd43b97fbf290a93c4cd39255ae46ba))
+* **Android:** android test version: 0.3.18.2 ([40679a1](https://github.com/didi/Hummer/commit/40679a14557a2fd09e71d2904bab1d16008812d4))
+
+
+### Reverts
+
+* Revert "fix(iOS): Use contentView instead of LayoutObserver" (#114) ([2c0f5f7](https://github.com/didi/Hummer/commit/2c0f5f7a19d776885b42af88abb6f6b10ac62c29)), closes [#114](https://github.com/didi/Hummer/issues/114) [#106](https://github.com/didi/Hummer/issues/106)
+
+
+
+
+
 ## [1.2.3](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.3) (2021-03-30)
 
 
