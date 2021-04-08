@@ -68,7 +68,7 @@
 </style>
 
 <script>
-import {mapState, mapMutation, mapActions} from '@hummer/tenon-store';
+import {mapState, mapActions} from '@hummer/tenon-store';
 
 export default {
   data() {

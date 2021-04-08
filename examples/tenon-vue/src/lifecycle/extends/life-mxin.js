@@ -5,5 +5,10 @@ export default {
   },
   onLoad(){
     console.log('Extends LifeCycle onLoad')
+  },
+  onBack(){
+    // On Back LifeCycle
+    console.log('Extends onBack LifeCycle')
+    // return true
   }
 }

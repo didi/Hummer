@@ -42,5 +42,10 @@ export default {
     // onHide 生命周期
     console.log("Base Lifecycle On Hide!");
   },
+  onBack(){
+    // onBack 生命周期
+    console.log("on Back 生命周期")
+    return true
+  }
 };
 </script>
