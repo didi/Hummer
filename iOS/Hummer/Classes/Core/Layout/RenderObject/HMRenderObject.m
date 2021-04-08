@@ -174,20 +174,25 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
     [self layoutSubviewsWithContext:layoutContext];
 }
 
-- (void)layoutWithMetrics:(HMLayoutMetrics)layoutMetrics layoutContext:(HMLayoutContext)layoutContext {
+- (BOOL)layoutWithMetrics:(HMLayoutMetrics)layoutMetrics layoutContext:(HMLayoutContext)layoutContext {
     if (!HMLayoutMetricsEqualToLayoutMetrics(self.layoutMetrics, layoutMetrics)) {
         self.layoutMetrics = layoutMetrics;
         [layoutContext.affectedShadowViews addObject:self];
+        return YES;
     }
+    return NO;
 }
+// 返回当前节点下，是否存在子节点需要更新布局。
+// 在某些场景下(scroll)，虽然当前容器的布局可能未发生改变，但需要更新内部布局(contentSize)
 
-- (void)layoutSubviewsWithContext:(HMLayoutContext)layoutContext {
+- (nullable NSArray <HMRenderObject *> *)layoutSubviewsWithContext:(HMLayoutContext)layoutContext {
     HMLayoutMetrics layoutMetrics = self.layoutMetrics;
 
     // YGZeroOutLayoutRecursivly 递归设置 { 0, 0 } 后，如果是 absolute 元素，按照原来的 YogaKit 逻辑还是可能继续显示的
     if (!HMUseDoubleAttributeControlHidden && layoutMetrics.displayType == HMDisplayTypeNone) {
-        return;
+        return nil;
     }
+    NSMutableArray *affectedObjects = [NSMutableArray new];
     for (HMRenderObject *childShadowView in self.subviews) {
         YOGA_TYPE_WRAPPER(YGNodeRef) childYogaNode = childShadowView.yogaNode;
 
@@ -206,12 +211,17 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
 
         layoutContext.absolutePosition.x += childLayoutMetrics.frame.origin.x;
         layoutContext.absolutePosition.y += childLayoutMetrics.frame.origin.y;
-        
-        [childShadowView layoutWithMetrics:childLayoutMetrics layoutContext:layoutContext];
+        if ([childShadowView layoutWithMetrics:childLayoutMetrics layoutContext:layoutContext]) {
+            [affectedObjects addObject:childShadowView];
+        }
 
         // Recursive call.
-        [childShadowView layoutSubviewsWithContext:layoutContext];
+        NSArray *childAffectedObjects = [childShadowView layoutSubviewsWithContext:layoutContext];
+        if (childAffectedObjects.count > 0) {
+            [affectedObjects addObjectsFromArray:childAffectedObjects];
+        }
     }
+    return affectedObjects;
 }
 
 - (void)markDirty {

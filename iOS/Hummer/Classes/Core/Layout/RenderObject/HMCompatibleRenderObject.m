@@ -67,4 +67,12 @@ YOGA_TYPE_WRAPPER(YGSize) HMCompatibleMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) node,
     YOGA_TYPE_WRAPPER(YGNodeMarkDirty)(node);
 }
 
+- (nullable NSArray <HMRenderObject *>*)layoutSubviewsWithContext:(HMLayoutContext)layoutContext {
+
+    NSArray *affectedObjects = [super layoutSubviewsWithContext:layoutContext];
+    if ([self.view isKindOfClass:HMScrollView.class] && affectedObjects.count>0) {
+        [layoutContext.affectedShadowViews addObject:self];
+    }
+    return affectedObjects;
+}
 @end

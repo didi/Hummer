@@ -15,5 +15,6 @@ typedef NS_ENUM(NSUInteger, HMScrollDirection) {
 @interface HMScrollView : UIScrollView
 
 @property (nonatomic,assign) HMScrollDirection scrollDirection;
+
 @end
 
