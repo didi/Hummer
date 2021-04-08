@@ -6,6 +6,7 @@
   "homepage": "",
   "license": "ISC",
   "main": "dist/tenon-store.cjs.js",
+  "module": "dist/tenon-store.es.js",
   "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
   "files": [
