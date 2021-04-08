@@ -1,0 +1,42 @@
+diff --git a/node_modules/@vue/runtime-core/dist/runtime-core.cjs.prod.js b/node_modules/@vue/runtime-core/dist/runtime-core.cjs.prod.js
+index 5b6f123..de218a6 100644
+--- a/node_modules/@vue/runtime-core/dist/runtime-core.cjs.prod.js
++++ b/node_modules/@vue/runtime-core/dist/runtime-core.cjs.prod.js
+@@ -3147,17 +3147,6 @@ function baseCreateRenderer(options, createHydrationFns) {
+         }
+         else {
+             el = vnode.el = hostCreateElement(vnode.type, isSVG, props && props.is, props);
+-            // mount children first, since some props may rely on child content
+-            // being already rendered, e.g. `<select value>`
+-            if (shapeFlag & 8 /* TEXT_CHILDREN */) {
+-                hostSetElementText(el, vnode.children);
+-            }
+-            else if (shapeFlag & 16 /* ARRAY_CHILDREN */) {
+-                mountChildren(vnode.children, el, null, parentComponent, parentSuspense, isSVG && type !== 'foreignObject', slotScopeIds, optimized || !!vnode.dynamicChildren);
+-            }
+-            if (dirs) {
+-                invokeDirectiveHook(vnode, null, parentComponent, 'created');
+-            }
+             // props
+             if (props) {
+                 for (const key in props) {
+@@ -3171,6 +3160,19 @@ function baseCreateRenderer(options, createHydrationFns) {
+             }
+             // scopeId
+             setScopeId(el, vnode, vnode.scopeId, slotScopeIds, parentComponent);
++            
++            // mount children first, since some props may rely on child content
++            // being already rendered, e.g. `<select value>`
++            if (shapeFlag & 8 /* TEXT_CHILDREN */) {
++                hostSetElementText(el, vnode.children);
++            }
++            else if (shapeFlag & 16 /* ARRAY_CHILDREN */) {
++                mountChildren(vnode.children, el, null, parentComponent, parentSuspense, isSVG && type !== 'foreignObject', slotScopeIds, optimized || !!vnode.dynamicChildren);
++            }
++            if (dirs) {
++                invokeDirectiveHook(vnode, null, parentComponent, 'created');
++            }
++
+         }
+         if (dirs) {
+             invokeDirectiveHook(vnode, null, parentComponent, 'beforeMount');
