@@ -35,12 +35,16 @@ export default packageConfigs
 
 
 function createConfig(format, output, plugins = []) {
+  let external = []
   const entryFile =  `src/index.ts` 
   output.sourcemap = true
   output.externalLiveBindings = false
   output.name = `index.${format}`
   if(/global/.test(format)){
     output.name = 'tenon'
+  }
+  if(process.env.TARGET === 'tenon-store'){
+    external = ['@hummer/tenon-vue']
   }
   const tsPlugin = ts({
     check: true,
@@ -71,10 +75,9 @@ function createConfig(format, output, plugins = []) {
         require('rollup-plugin-node-globals')()
       ]
     : []
-
   return {
     input: resolve(entryFile),
-    external: ['@hummer/hummer-front'],
+    external: ['@hummer/hummer-front', ...external],
     plugins: [
       json({
         namedExports: false
