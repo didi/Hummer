@@ -18,7 +18,7 @@ public class DefaultScriptLoaderAdapter implements IScriptLoaderAdapter {
     public void loadScriptWithUrl(String url, ScriptLoadCallback callback) {
         if (TextUtils.isEmpty(url)) {
             if (callback != null) {
-                callback.onScriptLoad(null);
+                callback.onScriptLoad(null, 0, "url is empty");
             }
             return;
         }
@@ -26,16 +26,16 @@ public class DefaultScriptLoaderAdapter implements IScriptLoaderAdapter {
         if (url.toLowerCase().startsWith("http://") || url.startsWith("https://")) {
             NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
                 if (callback != null) {
-                    if (response == null || response.error.code != 0) {
-                        callback.onScriptLoad(null);
+                    if (response.error.code != 0) {
+                        callback.onScriptLoad(null, response.status, response.message);
                     } else {
-                        callback.onScriptLoad(response.data);
+                        callback.onScriptLoad(response.data, response.status, response.message);
                     }
                 }
             });
         } else {
             if (callback != null) {
-                callback.onScriptLoad(null);
+                callback.onScriptLoad(null, 0, "url is invalid");
             }
         }
     }

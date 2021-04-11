@@ -21,6 +21,8 @@ public class HttpResponse<T> implements Serializable {
 
     public int status;
 
+    public String message;
+
     public Map<String, String> header;
 
     public T data;

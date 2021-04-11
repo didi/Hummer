@@ -7,5 +7,5 @@ package com.didi.hummer.adapter.scriptloader;
  */
 public interface ScriptLoadCallback {
 
-    void onScriptLoad(String script);
+    void onScriptLoad(String script, int errCode, String errMsg);
 }
