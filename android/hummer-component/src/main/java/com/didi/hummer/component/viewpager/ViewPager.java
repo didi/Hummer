@@ -122,7 +122,12 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
                 }
                 processMotionEventConflict(ev);
                 ev.offsetLocation(-edgeSpacing, 0);
-                return getViewPager().dispatchTouchEvent(ev);
+                try {
+                    return getViewPager().dispatchTouchEvent(ev);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return true;
+                }
             }
 
             /**
