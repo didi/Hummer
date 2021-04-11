@@ -11,15 +11,17 @@ import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 
 /**
+ * Hummer单页面示例
+ *
  * Created by XiaoFeng on 2020-01-02.
  */
-public class MyHummerFragmentActivity extends FragmentActivity {
+public class HummerPageFragmentActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_fragment);
+        setContentView(R.layout.activity_page_fragment);
 
         NavPage page = null;
         try {
@@ -27,7 +29,7 @@ public class MyHummerFragmentActivity extends FragmentActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        loadFragment(MyHummerFragment.newInstance(page), R.id.fragment_container, "fragment_hummer");
+        loadFragment(HummerPageFragment.newInstance(page), R.id.fragment_container, "fragment_hummer");
     }
 
     private void loadFragment(Fragment fragment, int fragmentContainerId, String tag) {

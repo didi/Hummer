@@ -22,13 +22,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MyHummerActivity"
+            android:name=".HummerPageActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".MyHummerFragmentActivity"
+            android:name=".HummerPageFragmentActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".PartialHummerActivity"
+            android:name=".HummerEmbeddedActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
