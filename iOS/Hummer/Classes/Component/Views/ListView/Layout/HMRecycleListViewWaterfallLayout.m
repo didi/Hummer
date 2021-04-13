@@ -216,7 +216,7 @@
 }
 
 - (NSNumber *)shortestColumnHeight {
-    return [self.columnHeights valueForKeyPath:@"@min.floatValue"];
+    return [self.columnHeights valueForKeyPath:@"@min.self"];
 }
 
 - (NSUInteger)shortestColumnIndex {
@@ -225,7 +225,7 @@
 }
 
 - (NSNumber *)largestColumnHeight {
-    return [self.columnHeights valueForKeyPath:@"@max.floatValue"];
+    return [self.columnHeights valueForKeyPath:@"@max.self"];
 }
 
 - (CGFloat)columnWidth {
