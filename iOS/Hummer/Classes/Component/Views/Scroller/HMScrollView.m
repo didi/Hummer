@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL hummerBounces;
 
+- (void)commonInit;
+
 - (CGSize)getNewContentSize;
 
 - (CGPoint)calculateOffsetForContentSize:(CGSize)newContentSize;
@@ -51,16 +53,7 @@ HM_EXPORT_PROPERTY(showScrollBar, showScrollBar, setShowScrollBar:)
     self.showsHorizontalScrollIndicator = showScrollBar;
 }
 
-HM_EXPORT_PROPERTY(bounces, hummerBounces, setHummerBounces:)
-
-- (BOOL)hummerBounces {
-    return self.alwaysBounceVertical || self.alwaysBounceHorizontal;
-}
-
-- (void)setHummerBounces:(BOOL)hummerBounces {
-    self.alwaysBounceHorizontal = hummerBounces;
-    self.alwaysBounceVertical = hummerBounces;
-}
+HM_EXPORT_PROPERTY(bounces, bounces, setBounces:)
 
 #pragma mark - Init
 
@@ -69,19 +62,32 @@ HM_EXPORT_PROPERTY(bounces, hummerBounces, setHummerBounces:)
     [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if ([super initWithFrame:frame]) {
-        self.showsVerticalScrollIndicator = NO;
-        self.showsHorizontalScrollIndicator = NO;
-        if (@available(iOS 11.0, *)) {
-            self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-        } else {
-            // Fallback on earlier versions
-        }
-        self.delegate = self;
-        self.bounces = YES;
-        self.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+- (void)commonInit {
+    self.showsVerticalScrollIndicator = NO;
+    self.showsHorizontalScrollIndicator = NO;
+    if (@available(iOS 11.0, *)) {
+        self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
     }
+    self.delegate = self;
+    self.bounces = YES;
+    self.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    [self commonInit];
+    
     return self;
 }
 
@@ -451,7 +457,6 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
 - (instancetype)initWithHMValues:(NSArray *)values {
     if (self = [super initWithHMValues:values]) {
         self.scrollDirection = HMScrollDirectionVertical;
-        self.alwaysBounceVertical = YES;
     }
     return self;
 }
@@ -549,14 +554,6 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
     [self.loadView setLoadHeight:ceil(size.height)];
 }
 
-- (BOOL)hummerBounces {
-    return self.alwaysBounceVertical;
-}
-
-- (void)setHummerBounces:(BOOL)hummerBounces {
-    self.alwaysBounceVertical = hummerBounces;
-}
-
 @end
 
 @interface HMHorizontalScrollView : HMScrollView
@@ -569,20 +566,11 @@ HM_EXPORT_CLASS(HorizontalScroller, HMHorizontalScrollView)
 - (instancetype)initWithHMValues:(NSArray *)values {
     if (self = [super initWithHMValues:values]) {
         self.scrollDirection = HMScrollDirectionHorizontal;
-        self.alwaysBounceHorizontal = YES;
         [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
             layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionRow);
         }];
     }
     return self;
-}
-
-- (BOOL)hummerBounces {
-    return self.alwaysBounceHorizontal;
-}
-
-- (void)setHummerBounces:(BOOL)hummerBounces {
-    self.alwaysBounceHorizontal = hummerBounces;
 }
 
 @end

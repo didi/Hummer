@@ -136,23 +136,7 @@ HM_EXPORT_PROPERTY(showScrollBar, showScrollBar, setShowScrollBar:)
     self.showsHorizontalScrollIndicator = showScrollBar;
 }
 
-HM_EXPORT_PROPERTY(bounces, hummerBounces, setHummerBounces:)
-
-- (BOOL)hummerBounces {
-    if (self.direction == UICollectionViewScrollDirectionVertical) {
-        return self.alwaysBounceVertical;
-    } else {
-        return self.alwaysBounceHorizontal;
-    }
-}
-
-- (void)setHummerBounces:(BOOL)hummerBounces {
-    if (self.direction == UICollectionViewScrollDirectionVertical) {
-        self.alwaysBounceVertical = hummerBounces;
-    } else {
-        self.alwaysBounceHorizontal = hummerBounces;
-    }
-}
+HM_EXPORT_PROPERTY(bounces, bounces, setBounces:)
 
 // 列表
 HM_EXPORT_CLASS(List, HMRecycleListView)
@@ -223,9 +207,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     
     self.showsHorizontalScrollIndicator = NO;
     self.showsVerticalScrollIndicator = NO;
-    
-    self.alwaysBounceVertical = YES;
-    
+        
     self.reuseIdentifiers = [[NSMutableSet alloc] init];
     [self.reuseIdentifiers addObject:HMRecycleListViewListCellDefaultIdentifier];
     [self registerClass:[_InnerCollectionViewCell class]
@@ -418,15 +400,6 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
 }
 
 - (void)setDirection:(UICollectionViewScrollDirection)direction {
-    if (direction != _direction) {
-        if (direction == UICollectionViewScrollDirectionVertical) {
-            self.alwaysBounceVertical = YES;
-            self.alwaysBounceHorizontal = NO;
-        } else {
-            self.alwaysBounceVertical = NO;
-            self.alwaysBounceHorizontal = YES;
-        }
-    }
     _direction = direction;
     
     [self updateDirection];
