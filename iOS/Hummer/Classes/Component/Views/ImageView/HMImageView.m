@@ -85,6 +85,10 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
     return self;
 }
 
++ (Class)layerClass {
+    return HMImageViewLayer.class;
+}
+
 #pragma mark - Export Property
 
 - (NSString *)src {
