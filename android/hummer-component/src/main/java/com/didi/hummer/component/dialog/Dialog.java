@@ -137,6 +137,14 @@ public class Dialog {
         } else {
             dialog.show();
         }
+
+        if (dialog.getWindow() != null) {
+            // 设置Dialog原始布局宽度全屏，内容默认是居中显示
+            WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(lp);
+        }
     }
 
     @JsMethod("dismiss")
