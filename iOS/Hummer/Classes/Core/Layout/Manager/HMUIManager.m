@@ -132,6 +132,8 @@ NS_ASSUME_NONNULL_END
         HMLayoutMetrics layoutMetrics = shadowView.layoutMetrics;
         UIView *inlineView = shadowView.view;
         hm_safe_main_thread(^{
+            inlineView.hm_animationPropertyBounds = inlineView.bounds;
+            inlineView.hm_animationPropertyCenter = inlineView.center;
             CGRect frame = layoutMetrics.frame;
             // 兼容以前的双属性控制视图显示
             if (!HMUseDoubleAttributeControlHidden) {
