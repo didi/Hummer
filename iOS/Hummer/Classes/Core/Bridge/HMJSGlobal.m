@@ -17,6 +17,8 @@
 #import "HMBaseValue.h"
 #import "HMBaseWeakValueProtocol.h"
 #import "UIView+HMDom.h"
+#import "HMJavaScriptLoader.h"
+#import "HMJSGlobal+Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -77,6 +79,71 @@ HM_EXPORT_CLASS_PROPERTY(pageInfo, pageInfo, setPageInfo:)
 HM_EXPORT_CLASS_METHOD(render, render:)
 
 HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
+
+HM_EXPORT_CLASS_METHOD(evaluateScript, evaluateScript:)
+
+HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:callback:)
+
++ (HMBaseValue *)evaluateScript:(HMBaseValue *)script {
+    NSString *jsString = [script toString];
+    HMExceptionModel *_exception = [self _evaluateString:jsString fileName:@""];
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    if (_exception) {
+        NSDictionary *err = @{@"code":@(-1),
+                               @"message":@"javascript evalute exception"};
+        return [HMBaseValue valueWithObject:err inContext:context.context];
+    }
+    return [HMBaseValue valueWithObject:[NSNull null] inContext:context.context];
+}
+
++ (void)evaluateScriptWithUrl:(HMBaseValue *)urlString callback:(HMFunctionType)callback {
+    
+    NSString *_urlString = [urlString toString];
+    NSURL *url = [NSURL URLWithString:_urlString];
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    
+    void(^checkException)(NSString *) = ^(NSString *jsString){
+        HMExceptionModel *_exception = [self _evaluateString:jsString fileName:_urlString inContext:context];
+        if (_exception) {
+            NSDictionary *err = @{@"code":@(-1),
+                                   @"message":@"javascript evalute exception"};
+            callback(@[err]);
+        }else{
+            callback(@[[NSNull null]]);
+        }
+    };
+    
+    // TODO：拦截器
+    if ([HMInterceptor hasInterceptor:HMInterceptorTypeJSLoad]) {
+        [HMInterceptor enumerateInterceptor:HMInterceptorTypeJSLoad
+                                  withBlock:^(id<HMJSLoadInterceptor> interceptor,
+                                              NSUInteger idx,
+                                              BOOL * _Nonnull stop) {
+            [interceptor handleUrlString:_urlString completion:^(NSString * _Nonnull jsString) {
+                if (jsString) {
+                    *stop = YES;
+                    checkException(jsString);
+                    return;
+                }
+            }];
+        }];
+    }
+    
+    [HMJavaScriptLoader loadBundleWithURL:url onProgress:nil onComplete:^(NSError *error, HMDataSource *source) {
+        if (error) {
+            NSDictionary *err = @{@"code":@(error.code),
+                                  @"message":error.userInfo[NSLocalizedDescriptionKey] ? error.userInfo[NSLocalizedDescriptionKey] : @"http error"};
+            callback(@[err]);
+            return;
+        }
+        NSString *script = nil;
+        if(!error) script = [[NSString alloc] initWithData:source.data encoding:NSUTF8StringEncoding];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            checkException(script);
+            return;
+        });
+    }];
+}
 
 + (HMNotifyCenter *)notifyCenter {
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
@@ -233,6 +300,7 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
     UIView *view = (UIView *) viewObject;
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:page.context];
     context.componentView = page;
+    [context.rootView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [context.rootView addSubview:view];
     context.rootView.isHmLayoutEnabled = YES;
     [context.rootView hm_markDirty];
