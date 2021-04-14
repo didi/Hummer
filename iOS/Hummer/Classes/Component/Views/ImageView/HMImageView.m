@@ -21,6 +21,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface HMImageViewLayer : CALayer
+
+@end
+
+
 @interface HMImageView ()
 
 @property (nonatomic, copy, nullable) NSString *imageSrc;
@@ -38,6 +43,23 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+@implementation HMImageViewLayer
+
+- (void)removeAllAnimations {
+    BOOL isAnimating = NO;
+    HMImageView *imageView = nil;
+    if ([self.delegate isKindOfClass:HMImageView.class]) {
+        imageView = (HMImageView *) self.delegate;
+        isAnimating = imageView.isAnimating;
+    }
+    [super removeAllAnimations];
+    if (isAnimating) {
+        [imageView startAnimating];
+    }
+}
+
+@end
 
 @implementation HMImageView
 
@@ -118,6 +140,8 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
                 }
             }else{
                 strongSelf.image = img;
+                // 停止动画
+                strongSelf.animationImages = nil;
             }
             [strongSelf hm_markDirty];
         }];
