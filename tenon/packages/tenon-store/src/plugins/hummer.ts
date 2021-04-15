@@ -1,4 +1,4 @@
-import {diff, cloneObject, getUUID, getNotifyEventKey, getMemoryKey,stringify, parseJson} from './utils/index'
+import {diff, cloneObject, getUUID, getNotifyEventKey, getMemoryKey,stringify, parseJson, getMemoryByKey, setMemoryByKey} from './utils/index'
 import {Operation, OperationType} from './utils/types'
 const id = getUUID();
 const MemoryStoreKey = getMemoryKey();
@@ -30,7 +30,7 @@ export function createHummerPlugin ({
 
     // 只监测Mutation的提交变化，不支持监听ResetStore
     store.subscribe((mutation:any, state:any) => {
-      Memory.set(MemoryStoreKey, stringify(state));
+      setMemoryByKey(MemoryStoreKey, stringify(state));
       // TODO 限流操作
       let ops = diff(cacheData, state);
       if(!ops || ops.length === 0){
@@ -46,9 +46,9 @@ export function createHummerPlugin ({
 }
 
 function initState(store:any){
-  let newData = Memory.get(MemoryStoreKey);
+  let newData = getMemoryByKey(MemoryStoreKey);
   if(newData){
-    newData = typeof newData === 'string'? parseJson(newData): newData;
+    newData = parseJson(newData);
     cacheData = cloneObject(newData);
     store.replaceState(newData);
   }

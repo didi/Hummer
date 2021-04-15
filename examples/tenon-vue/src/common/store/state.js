@@ -1,4 +1,5 @@
 export default {
   count: 0,
-  name: undefined
+  name: undefined,
+  nullName: null
 }
