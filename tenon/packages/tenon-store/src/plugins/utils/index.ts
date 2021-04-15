@@ -108,3 +108,13 @@ export function parseJson(json: string){
   })
   return obj
 }
+
+export function setMemoryByKey(key:string, content: string){
+  // 由于 Android getMemory时，会自动反序列化字符串。存储的时候增加前缀，设为非标准 Json String。
+  Memory.set(key, 'Memory_'+content);
+}
+
+export function getMemoryByKey(key:string){
+  let data = Memory.get(key);
+  return data && data.slice(7);
+}

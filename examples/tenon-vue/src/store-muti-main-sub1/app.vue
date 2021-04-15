@@ -18,6 +18,7 @@
         </view>
         <view class="item-container">
           <text>{{storeKeys}}</text>
+           <text>{{storeData}}</text>
         </view>
       </view>
     </view>
@@ -106,6 +107,9 @@ export default {
     ...mapState(["count"]),
     storeKeys(){
       return Object.keys(this.$store.state).join(';')
+    },
+    storeData(){
+      return JSON.stringify(this.$store.state)
     }
   },
   mounted(){
