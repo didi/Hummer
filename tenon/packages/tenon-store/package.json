@@ -1,6 +1,6 @@
 {
   "name": "@hummer/tenon-store",
-  "version": "1.2.5",
+  "version": "1.2.6-alpha.0",
   "description": "Tenon Store",
   "author": "duanlikang",
   "homepage": "",
@@ -21,7 +21,5 @@
   },
   "peerDependencies": {
     "@hummer/tenon-vue": "^1.0.0"
-  },
-  "devDependencies": {
   }
 }
