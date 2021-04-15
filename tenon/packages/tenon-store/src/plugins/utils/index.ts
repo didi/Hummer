@@ -1,5 +1,6 @@
 import {OperationType, Operation, Operations} from './types'
 export const NAMESPACE = Hummer.env.namespace || '';
+
 const randomChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 /**
  * 对象的Diff操作
@@ -80,4 +81,30 @@ function randomString(length = 8, chars: string) {
   var result = '';
   for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
   return result;
+}
+
+export const Undefined = Symbol('undefined')
+export const StaicUndefined = 'undefined' // 转换的时候，暂时直接使用 undefined 字符串
+export function stringify(obj: Object){
+  return JSON.stringify(obj, (key:string, value:any) => {
+    if(value === undefined){
+      return StaicUndefined
+    }
+    return value
+  })
+}
+
+export function parseJson(json: string){
+  let obj = JSON.parse(json, (key:string, value:any) => {
+    if(value === StaicUndefined){
+      return Undefined
+    }
+    return value
+  })
+  Object.keys(obj).forEach((key) => {
+    if(obj[key] === Undefined){
+      obj[key] = undefined
+    } 
+  })
+  return obj
 }

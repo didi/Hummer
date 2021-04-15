@@ -23,6 +23,5 @@
     "@hummer/tenon-vue": "^1.0.0"
   },
   "devDependencies": {
-    "@hummer/tenon-vue": "file:../tenon-vue"
   }
 }
