@@ -9,7 +9,7 @@
           <text class="item-title-text">v-rtl 布局</text>
         </view>
         <view class="item-container">
-          <view class="box-container">
+          <view class="box-container" v-rtl>
             <view class="box">
               <text>Box 1</text>
             </view>
