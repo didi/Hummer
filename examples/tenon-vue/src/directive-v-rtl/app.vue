@@ -9,7 +9,7 @@
           <text class="item-title-text">v-rtl 布局</text>
         </view>
         <view class="item-container">
-          <view class="box-container" v-rtl>
+          <view class="box-container">
             <view class="box">
               <text>Box 1</text>
             </view>
@@ -26,7 +26,7 @@
         <view class="item-container">
           <view class="box-container">
             <view class="box">
-              <text v-rtl="text">Box 1</text>
+              <text v-rtl="'text'">Box 1</text>
             </view>
           </view>
         </view>
@@ -132,7 +132,6 @@
 export default {
   data() {
     return {
-     
     };
   },
   methods: {
