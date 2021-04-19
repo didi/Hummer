@@ -34,6 +34,8 @@ dependencies {
     // Yoga
     api 'com.facebook.yoga.android:yoga-layout:1.16.0'
     implementation 'com.facebook.soloader:soloader:0.9.0'
+    // Yoga中用到了com.facebook.proguard.annotations.DoNotStrip类，如YogaAlign
+    implementation 'com.facebook.yoga:proguard-annotations:1.14.1'
 
     // relinker
     implementation 'com.getkeepsafe.relinker:relinker:1.4.1'
