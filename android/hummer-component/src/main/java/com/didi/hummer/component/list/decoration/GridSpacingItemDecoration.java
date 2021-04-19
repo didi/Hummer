@@ -4,6 +4,8 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.didi.hummer.component.list.ListUtil;
+
 /**
  * Grid模式的行间隔和列间隔设置
  *
@@ -32,19 +34,37 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         int position = parent.getChildAdapterPosition(view); // item position
         int column = position % spanCount; // item column
 
-        if (includeEdge) {
-            outRect.left = itemSpacing - column * itemSpacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-            outRect.right = (column + 1) * itemSpacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+        if (ListUtil.isVertical(parent.getLayoutManager())) {
+            if (includeEdge) {
+                outRect.left = itemSpacing - column * itemSpacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * itemSpacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
 
-            if (position < spanCount) { // top edge
-                outRect.top = lineSpacing;
+                if (position < spanCount) { // top edge
+                    outRect.top = lineSpacing;
+                }
+                outRect.bottom = lineSpacing; // item bottom
+            } else {
+                outRect.left = column * itemSpacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = itemSpacing - (column + 1) * itemSpacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = lineSpacing; // item top
+                }
             }
-            outRect.bottom = lineSpacing; // item bottom
         } else {
-            outRect.left = column * itemSpacing / spanCount; // column * ((1f / spanCount) * spacing)
-            outRect.right = itemSpacing - (column + 1) * itemSpacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-            if (position >= spanCount) {
-                outRect.top = lineSpacing; // item top
+            if (includeEdge) {
+                outRect.top = itemSpacing - column * itemSpacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.bottom = (column + 1) * itemSpacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.left = lineSpacing;
+                }
+                outRect.right = lineSpacing; // item bottom
+            } else {
+                outRect.top = column * itemSpacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.bottom = itemSpacing - (column + 1) * itemSpacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.left = lineSpacing; // item top
+                }
             }
         }
     }
