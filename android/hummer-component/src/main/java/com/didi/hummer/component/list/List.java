@@ -34,6 +34,8 @@ import com.didi.hummer.render.utility.YogaNodeUtil;
 import com.facebook.yoga.YogaNode;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -265,27 +267,67 @@ public class List extends HMBase<SmartRefreshLayout> {
     private void initLayoutManager() {
         switch (mode) {
             case MODE_LIST:
-            default:
-                if (direction == DIRECTION_HORIZONTAL) {
-                    layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                } else {
-                    layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                }
+            default: {
+                int orientation = direction == DIRECTION_HORIZONTAL ? LinearLayoutManager.HORIZONTAL : LinearLayoutManager.VERTICAL;
+                layoutManager = new LinearLayoutManager(getContext(), orientation, false);
                 break;
-            case MODE_GRID:
-                if (direction == DIRECTION_HORIZONTAL) {
-                    layoutManager = new GridLayoutManager(getContext(), column, GridLayoutManager.HORIZONTAL, false);
-                } else {
-                    layoutManager = new GridLayoutManager(getContext(), column, GridLayoutManager.VERTICAL, false);
-                }
+            }
+            case MODE_GRID: {
+                int orientation = direction == DIRECTION_HORIZONTAL ? GridLayoutManager.HORIZONTAL : GridLayoutManager.VERTICAL;
+                layoutManager = new GridLayoutManager(getContext(), column, orientation, false);
                 break;
-            case MODE_WATERFALL:
-                if (direction == DIRECTION_HORIZONTAL) {
-                    layoutManager = new StaggeredGridLayoutManager(column, StaggeredGridLayoutManager.HORIZONTAL);
-                } else {
-                    layoutManager = new StaggeredGridLayoutManager(column, StaggeredGridLayoutManager.VERTICAL);
-                }
+            }
+            case MODE_WATERFALL: {
+                int orientation = direction == DIRECTION_HORIZONTAL ? StaggeredGridLayoutManager.HORIZONTAL : StaggeredGridLayoutManager.VERTICAL;
+                layoutManager = new StaggeredGridLayoutManager(column, orientation) {
+                    /**
+                     * 这里重写StaggeredGridLayoutManager，是为了修复滑动过程中自动触发动画后，item间距错乱的问题。
+                     * 参考：https://blog.kyleduo.com/2017/07/27/recyclerview-wrong-decoration-inset/
+                     */
+                    private Method markItemDecorInsetsDirty = null;
+                    private boolean reflectError = false;
+
+                    @Override
+                    public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+                        if (markItemDecorInsetsDirty == null && !reflectError) {
+                            try {
+                                markItemDecorInsetsDirty = RecyclerView.class.getDeclaredMethod("markItemDecorInsetsDirty");
+                                markItemDecorInsetsDirty.setAccessible(true);
+                            } catch (NoSuchMethodException e) {
+                                e.printStackTrace();
+                                reflectError = true;
+                            }
+                        }
+                        if (markItemDecorInsetsDirty != null && state.willRunSimpleAnimations()) {
+                            // noinspection TryWithIdenticalCatches
+                            try {
+                                markItemDecorInsetsDirty.invoke(recyclerView);
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        super.onLayoutChildren(recycler, state);
+                    }
+
+                    @Override
+                    public void requestSimpleAnimationsInNextLayout() {
+                        super.requestSimpleAnimationsInNextLayout();
+                        if (markItemDecorInsetsDirty != null) {
+                            // noinspection TryWithIdenticalCatches
+                            try {
+                                markItemDecorInsetsDirty.invoke(recyclerView);
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                };
                 break;
+            }
         }
         recyclerView.setLayoutManager(layoutManager);
     }
