@@ -54,6 +54,10 @@ public class CyclePagerAdapter extends ReusePagerAdapter<CyclePagerAdapter.ViewH
         mIsCanLoop = loop;
     }
 
+    public boolean isCanLoop() {
+        return mIsCanLoop;
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         mOnItemClickListener = listener;
     }
