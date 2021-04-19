@@ -2,9 +2,7 @@ package com.didi.hummer.component.list;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -132,19 +130,9 @@ public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder
 
     private void setLayoutParams(View view) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof StaggeredGridLayoutManager) {
-            view.setLayoutParams(new StaggeredGridLayoutManager.LayoutParams(
-                    StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
-                    StaggeredGridLayoutManager.LayoutParams.WRAP_CONTENT));
-        } else if (layoutManager instanceof GridLayoutManager) {
-            view.setLayoutParams(new GridLayoutManager.LayoutParams(
-                    GridLayoutManager.LayoutParams.MATCH_PARENT,
-                    GridLayoutManager.LayoutParams.WRAP_CONTENT));
-        } else {
-            view.setLayoutParams(new RecyclerView.LayoutParams(
-                    RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT));
-        }
+        view.setLayoutParams(ListUtil.isVertical(layoutManager) ?
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) :
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
