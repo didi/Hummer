@@ -179,7 +179,7 @@ public class DevToolsEntrance extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mHummerContext != null) {
-            HummerException.removeJSContextExceptionCallback(mHummerContext.getJsContext());
+            HummerException.removeJSContextExceptionCallback(mHummerContext.getJsContext(), mExceptionCallback);
         }
     }
 
