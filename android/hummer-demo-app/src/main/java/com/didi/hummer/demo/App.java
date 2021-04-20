@@ -31,6 +31,8 @@ public class App extends Application {
 
 //        DoraemonKit.install(this, null, "cfe007137560fd511dfbcbbb3c9889c8");
 
+//        Hummer.initHermesDebugger(new DefaultHermesDebugger());
+
         // Hummer SDK
         HummerConfig config = new HummerConfig.Builder()
                 .setJSLogger((level, msg) -> Log.d("HummerJS", msg))

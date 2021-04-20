@@ -14,7 +14,7 @@ import com.didi.hummer.render.style.HummerLayout;
  *
  * Created by XiaoFeng on 2020-01-02.
  */
-public class HummerEmbeddedActivity extends AppCompatActivity {
+public class HummerEmbeddedPageActivity extends AppCompatActivity {
 
     private HummerRender hmRender1;
     private HummerRender hmRender2;
@@ -22,7 +22,7 @@ public class HummerEmbeddedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hummer_embedded);
+        setContentView(R.layout.activity_hummer_embedded_page);
 
         renderLayout1();
         renderLayout2();

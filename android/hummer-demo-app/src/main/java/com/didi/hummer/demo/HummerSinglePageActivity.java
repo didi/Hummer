@@ -1,12 +1,10 @@
 package com.didi.hummer.demo;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.didi.hummer.HummerFragment;
+import com.didi.hummer.HummerActivity;
 import com.didi.hummer.adapter.navigator.NavPage;
-import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
@@ -22,16 +20,15 @@ import java.util.Map;
 /**
  * Hummer单页面示例
  *
- * Created by XiaoFeng on 2020/9/21.
+ * Created by XiaoFeng on 2020-01-02.
  */
-public class HummerPageFragment extends HummerFragment {
+public class HummerSinglePageActivity extends HummerActivity {
 
-    public static HummerFragment newInstance(@NonNull NavPage page) {
-        HummerPageFragment fragment = new HummerPageFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL, page);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    protected NavPage getPageInfo() {
+        return super.getPageInfo();
+//        return new NavPage("HelloWorld6.js");
+//        return new NavPage("/sdcard/test/HelloWorld6.js");
     }
 
 //    @Override
@@ -92,10 +89,10 @@ public class HummerPageFragment extends HummerFragment {
         });
 
         // NotifyCenter全局通知消息
-//        NotifyCenter.addEventListener("testEvent", new NotifyCallback(mHMContext.getJsContext()) {
+//        NotifyCenter.addEventListener("testEvent", new NotifyCallback(this) {
 //            @Override
 //            public void onNotify(Object event) {
-//                Log.v("zdf", "onNotify, obj = " + obj);
+//                Log.v("zdf", "onNotify, event = " + event);
 //            }
 //        });
 //
