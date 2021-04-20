@@ -20,12 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Hummer单页面示例
+ *
  * Created by XiaoFeng on 2020/9/21.
  */
-public class MyHummerFragment extends HummerFragment {
+public class HummerSinglePageFragment extends HummerFragment {
 
     public static HummerFragment newInstance(@NonNull NavPage page) {
-        MyHummerFragment fragment = new MyHummerFragment();
+        HummerSinglePageFragment fragment = new HummerSinglePageFragment();
         Bundle args = new Bundle();
         args.putSerializable(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL, page);
         fragment.setArguments(args);

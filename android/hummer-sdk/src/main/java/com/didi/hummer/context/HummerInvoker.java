@@ -33,15 +33,46 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                 mHummerContext.render(v);
                 break;
             case "loadScript":
+                /**
+                 * 返回值说明：
+                 * - JS加载过程中无异常，则返回null/undefined；
+                 * - JS加载过程中存在异常，则返回不同类型错误码：
+                 *   1. JS执行异常：-1～-100，如：{errCode: -1, errMsg: "JavaScript evaluate exception"}；
+                 */
                 jsRet = mHummerContext.evaluateJavaScript(String.valueOf(params[0]));
+                if (jsRet instanceof JSValue && ((JSValue)jsRet).stringValue() == null) {
+                    jsRet = new HummerError(-1, "JavaScript evaluate exception");
+                } else {
+                    jsRet = null;
+                }
                 break;
             case "loadScriptWithUrl":
+                /**
+                 * 返回值说明：
+                 * - JS加载过程中无异常，则返回null/undefined；
+                 * - JS加载过程中存在异常，则返回不同类型错误码：
+                 *   1. 网络错误：>0，如：{errCode: 404, errMsg: "[http error]"}；
+                 *   2. JS执行异常：-1～-100，如：{errCode: -1, errMsg: "JavaScript evaluate exception"}；
+                 *   3. JS文件读取错误：>-100，如：{errCode: -101, errMsg: "JavaScript file read error"}；
+                 */
                 String url = String.valueOf(params[0]);
                 JSCallback callback = params.length > 1 ? (JSCallback) params[1] : null;
-                HummerAdapter.getScriptLoaderAdapter(mHummerContext.getNamespace()).loadScriptWithUrl(url, script -> {
-                    Object ret = mHummerContext.evaluateJavaScript(script);
-                    if (callback != null) {
-                        callback.call(ret);
+                HummerAdapter.getScriptLoaderAdapter(mHummerContext.getNamespace()).loadScriptWithUrl(url, (script, errCode, errMsg) -> {
+                    if (script == null) {
+                        Object ret = new HummerError(errCode, errMsg);
+                        if (callback != null) {
+                            callback.call(ret);
+                        }
+                    } else {
+                        Object ret = mHummerContext.evaluateJavaScript(script);
+                        if (ret instanceof JSValue && ((JSValue) ret).stringValue() == null) {
+                            ret = new HummerError(-1, "JavaScript evaluate exception");
+                        } else {
+                            ret = null;
+                        }
+                        if (callback != null) {
+                            callback.call(ret);
+                        }
                     }
                 });
                 break;

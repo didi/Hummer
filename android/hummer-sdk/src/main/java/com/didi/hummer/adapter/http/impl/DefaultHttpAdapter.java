@@ -376,6 +376,8 @@ public class DefaultHttpAdapter implements IHttpAdapter {
             }
         }
         resp.status = response.code();
+        resp.message = response.message();
+
         if (!response.isSuccessful()) {
             resp.error = new HttpResponse.Error(-100, "http response status error!");
             return resp;
@@ -404,6 +406,7 @@ public class DefaultHttpAdapter implements IHttpAdapter {
      */
     private HttpResponse processError(Exception e) {
         HttpResponse resp = new HttpResponse();
+        resp.message = e.toString();
         resp.error = new HttpResponse.Error(-102, e.toString());
         return resp;
     }

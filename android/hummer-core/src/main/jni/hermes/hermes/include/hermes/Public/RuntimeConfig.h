@@ -26,6 +26,12 @@ class raw_ostream;
 namespace hermes {
 namespace vm {
 
+enum CompilationMode {
+  SmartCompilation,
+  ForceEagerCompilation,
+  ForceLazyCompilation
+};
+
 class PinnedHermesValue;
 #ifdef HERMESVM_SERIALIZE
 class Serializer;
@@ -56,11 +62,17 @@ class Deserializer;
   /* Whether to optimize the code inside eval and Function ctor */             \
   F(constexpr, bool, OptimizedEval, false)                                     \
                                                                                \
-  /* Support for ES6 Proxy. */                                                 \
-  F(constexpr, bool, ES6Proxy, false)                                          \
+  /* Whether to emit async break check instructions in eval code */            \
+  F(constexpr, bool, AsyncBreakCheckInEval, false)                             \
                                                                                \
-  /* Support for ES6 Symbol. */                                                \
-  F(constexpr, bool, ES6Symbol, true)                                          \
+  /* Support for ES6 Promise. */                                               \
+  F(constexpr, bool, ES6Promise, true)                                         \
+                                                                               \
+  /* Support for ES6 Proxy. */                                                 \
+  F(constexpr, bool, ES6Proxy, true)                                           \
+                                                                               \
+  /* Support for ECMA-402 Intl APIs. */                                        \
+  F(constexpr, bool, Intl, true)                                               \
                                                                                \
   /* Enable synth trace. */                                                    \
   F(constexpr, bool, TraceEnabled, false)                                      \
@@ -82,7 +94,7 @@ class Deserializer;
   F(constexpr, bool, EnableSampledStats, false)                                \
                                                                                \
   /* Whether to enable sampling profiler */                                    \
-  F(constexpr, bool, EnableSampleProfiling, false)                             \
+  F(constexpr, bool, EnableSampleProfiling, true)                              \
                                                                                \
   /* Whether to randomize stack placement etc. */                              \
   F(constexpr, bool, RandomizeMemoryLayout, false)                             \
@@ -104,6 +116,15 @@ class Deserializer;
   /* if available. For this to work code must have been compiled at */         \
   /* runtime with CompileFlags::allowFunctionToStringWithRuntimeSource set. */ \
   F(constexpr, bool, AllowFunctionToStringWithRuntimeSource, false)            \
+                                                                               \
+  /* Choose lazy/eager compilation mode. */                                    \
+  F(constexpr,                                                                 \
+    CompilationMode,                                                           \
+    CompilationMode,                                                           \
+    CompilationMode::SmartCompilation)                                         \
+                                                                               \
+  /* Choose whether generators are enabled. */                                 \
+  F(constexpr, bool, EnableGenerator, true)                                    \
                                                                                \
   /* An interface for managing crashes. */                                     \
   F(HERMES_NON_CONSTEXPR,                                                      \

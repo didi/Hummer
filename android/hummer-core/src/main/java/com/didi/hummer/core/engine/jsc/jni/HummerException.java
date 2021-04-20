@@ -82,9 +82,11 @@ public class HummerException {
      */
     private static void dispatchExceptionCallback(long jsContext, Exception e) {
         List<ExceptionCallback> cbList = HummerException.contextCallbacks.get(jsContext);
-        for (ExceptionCallback cb : cbList) {
-            if (cb != null) {
-                cb.onException(e);
+        if (cbList != null) {
+            for (ExceptionCallback cb : cbList) {
+                if (cb != null) {
+                    cb.onException(e);
+                }
             }
         }
     }

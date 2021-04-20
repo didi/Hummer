@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
                 Button b = new Button(MainActivity.this);
                 b.setText(filename);
                 b.setOnClickListener(v -> {
-                    Intent i = new Intent(MainActivity.this, MyHummerActivity.class);
+                    Intent i = new Intent(MainActivity.this, HummerSinglePageActivity.class);
                     i.putExtra(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL, new NavPage(Constant.HOST + filename));
                     startActivity(i);
                 });

@@ -122,7 +122,12 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
                 }
                 processMotionEventConflict(ev);
                 ev.offsetLocation(-edgeSpacing, 0);
-                return getViewPager().dispatchTouchEvent(ev);
+                try {
+                    return getViewPager().dispatchTouchEvent(ev);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return true;
+                }
             }
 
             /**
@@ -192,20 +197,30 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
     }
 
     private void initPageStyle() {
-        getView()
-                .setPageStyle(edgeSpacing > 0 ? PageStyle.MULTI_PAGE : PageStyle.NORMAL)
-                .setPageMargin((int) itemSpacing)
-                .setRevealWidth((int) (edgeSpacing - itemSpacing))
-                .setCanLoop(canLoop)
-                .setAutoPlay(autoPlay && loopInterval > 0)
-                .setInterval(loopInterval)
-                .setRoundCorner(cornerRadius);
-
-        if (!(autoPlay && loopInterval > 0)) {
+        boolean canAutoPlay = autoPlay && loopInterval > 0;
+        if (!canAutoPlay) {
             getView().stopLoop();
         }
 
-        adapter.setCanLoop(canLoop);
+        getView()
+                .setPageStyle(edgeSpacing > 0 ? PageStyle.MULTI_PAGE : PageStyle.NORMAL)
+                .setRevealWidth((int) (edgeSpacing - itemSpacing))
+                .setAutoPlay(canAutoPlay)
+                .setInterval(loopInterval)
+                .setRoundCorner(cornerRadius);
+
+        // getView().setPageMargin内部的mViewPager.setPageMargin多次快速设置时，在AutoPlay模式下，会出现短暂白屏，需要限制调用
+        int pageMargin = (int) itemSpacing;
+        if (pageMargin != getView().getViewPager().getPageMargin()) {
+            getView().setPageMargin(pageMargin);
+        }
+
+        // 是否可以循环也是个重操作，也需要限制调用
+        if (canLoop != adapter.isCanLoop()) {
+            getView().setCanLoop(canLoop);
+            adapter.setCanLoop(canLoop);
+            setData(mData);
+        }
     }
 
     @JsProperty("data")
@@ -213,14 +228,12 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
 
     public void setData(List<Object> data) {
         if (data == null) {
-            if (mData == null) {
-                return;
-            }
             data = new ArrayList<>();
         }
 
+        // 如果是非图片url的数据源，但是又没有设置自定义控件的回调，则直接返回
         if (!data.isEmpty() && !(data.get(0) instanceof String) && mOnItemViewCallback == null) {
-            throw new RuntimeException("please set onItemView callback first");
+            return;
         }
 
         mData = data;

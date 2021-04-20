@@ -18,9 +18,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Hummer单页面示例
+ *
  * Created by XiaoFeng on 2020-01-02.
  */
-public class MyHummerActivity extends HummerActivity {
+public class HummerSinglePageActivity extends HummerActivity {
 
     @Override
     protected NavPage getPageInfo() {
