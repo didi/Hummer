@@ -21,7 +21,7 @@ public class HummerSinglePageFragmentActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_single_page_fragment);
+        setContentView(R.layout.activity_hummer_single_page_fragment);
 
         NavPage page = null;
         try {

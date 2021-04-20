@@ -45,7 +45,7 @@ public class App extends Application {
         Hummer.init(this, config);
 
         HummerConfig config2 = new HummerConfig.Builder()
-                .setNamespace("my_demo")
+                .setNamespace("test_namespace")
                 .setJSLogger((level, msg) -> Log.d("HummerJS_2", msg))
                 .setEventTracer((event, params) -> Log.i("zdf", "[EventTracer_2] event: " + event + ", params: " + params))
                 .setExceptionCallback(e -> {
