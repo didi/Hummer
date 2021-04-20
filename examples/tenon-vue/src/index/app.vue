@@ -1,9 +1,12 @@
 <template>
-  <view style="height:100%;background-color:#ffcccc">
-    <text>Hello Tenon</text>
+  <view>
+    <text class="text" style="border-style: none;">Hello Tenon</text>
   </view>
 </template>
 <style lang="less" scoped>
+.text{
+  border: 5px solid  black;
+}
 </style>
 
 <script>
