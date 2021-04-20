@@ -4,6 +4,7 @@ const { DGHMCircleProgress } = __GLOBAL__
 
 class CircleProgress extends Base {
   constructor() {
+    super()
     this.element = new DGHMCircleProgress()
   }
   _setAttribute(key, value) {
