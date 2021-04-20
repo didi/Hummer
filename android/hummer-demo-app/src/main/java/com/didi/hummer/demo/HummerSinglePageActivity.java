@@ -24,16 +24,9 @@ import java.util.Map;
  */
 public class HummerSinglePageActivity extends HummerActivity {
 
-    @Override
-    protected NavPage getPageInfo() {
-        return super.getPageInfo();
-//        return new NavPage("HelloWorld6.js");
-//        return new NavPage("/sdcard/test/HelloWorld6.js");
-    }
-
 //    @Override
 //    protected String getNamespace() {
-//        return "my_demo";
+//        return "test_namespace";
 //    }
 
     @Override
@@ -58,6 +51,13 @@ public class HummerSinglePageActivity extends HummerActivity {
                 return "result1";
             }
         });
+    }
+
+    @Override
+    protected void renderHummer() {
+        super.renderHummer();
+//        hmRender.renderWithAssets("HelloWorld.js");
+//        hmRender.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/HelloWorld.js");
     }
 
     @Override

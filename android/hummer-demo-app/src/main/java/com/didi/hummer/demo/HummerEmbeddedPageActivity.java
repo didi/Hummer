@@ -45,7 +45,7 @@ public class HummerEmbeddedPageActivity extends AppCompatActivity {
         });
 
         // 渲染Hummer页面
-        hmRender1.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/HelloWorld.js");
+        hmRender1.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/index.js");
     }
 
     private void renderLayout2() {
@@ -65,7 +65,7 @@ public class HummerEmbeddedPageActivity extends AppCompatActivity {
         });
 
         // 渲染Hummer页面
-        hmRender2.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/index.js");
+        hmRender2.renderWithUrl("http://xxx.xxx.xxx.xxx:8001/index.js");
     }
 
     @Override
