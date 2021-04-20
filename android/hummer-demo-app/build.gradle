@@ -81,7 +81,7 @@ dependencies {
 //    debugImplementation project(':v8-debugger')
 //    debugImplementation project(':hermes-debugger')
 //    debugImplementation 'com.didi.hummer:v8-debugger:0.0.1-SNAPSHOT'
-//    debugImplementation 'com.didi.hummer:hermes-debugger:0.0.1-SNAPSHOT'
+//    debugImplementation 'com.didi.hummer:hermes-debugger:0.0.3'
 
     // native crash 堆栈捕获
 //    implementation 'com.iqiyi.xcrash:xcrash-android-lib:2.4.8'
