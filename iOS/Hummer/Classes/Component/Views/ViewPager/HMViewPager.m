@@ -568,6 +568,13 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
             // [jsView.superview hm_markDirty];
             return cell;
         }
+        if (cell.contentViewValue) {
+            id contentViewObject = cell.contentViewValue.toNativeObject;
+            if ([contentViewObject isKindOfClass:UIView.class]) {
+                [((UIView *) contentViewObject) removeFromSuperview];
+            }
+        }
+        cell.contentViewValue = cellJSValue;
         [cell setJSView:jsView];
         [cell.contentView hm_markDirty];
         [cell setNeedsLayout];

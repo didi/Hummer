@@ -34,6 +34,8 @@ typedef NS_ENUM(NSUInteger, HMScrollDirection) {
 
 @interface _InnerCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, nullable, strong) HMBaseValue *contentViewValue;
+
 @end
 
 @implementation _InnerCollectionViewCell
@@ -646,6 +648,13 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
         NSAssert(isValueKindOfView, @"JSValue can't be turned to view");
         
         if (isValueKindOfView) {
+            if (cell.contentViewValue) {
+                id contentViewObject = cell.contentViewValue.toNativeObject;
+                if ([contentViewObject isKindOfClass:UIView.class]) {
+                    [((UIView *) contentViewObject) removeFromSuperview];
+                }
+            }
+            cell.contentViewValue = cellJSValue;
             [cell.contentView addSubview:jsContentView];
         }
     }

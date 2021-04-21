@@ -7,9 +7,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class HMBaseValue;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HMViewPagerCell : UICollectionViewCell
+
+@property (nonatomic, nullable, strong) HMBaseValue *contentViewValue;
 
 - (void)setImageURL:(NSString *)url;
 
