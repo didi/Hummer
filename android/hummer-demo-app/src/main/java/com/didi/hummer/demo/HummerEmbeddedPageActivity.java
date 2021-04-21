@@ -50,8 +50,15 @@ public class HummerEmbeddedPageActivity extends AppCompatActivity {
             }
         });
 
-        // 渲染Hummer页面
+        // 方式一：通过assets文件渲染JS页面
+        // hmRender1.renderWithAssets("HelloWorld.js");
+
+        // 方式二：通过url渲染JS页面
         hmRender1.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/index.js");
+
+        // 方式三：通过JS内容渲染JS页面，需要先通过其实方式获取到JS内容
+        // String jsContent = "xxxx";
+        // hmRender1.render(jsContent);
     }
 
     /**
@@ -74,8 +81,15 @@ public class HummerEmbeddedPageActivity extends AppCompatActivity {
             }
         });
 
-        // 渲染Hummer页面
-        hmRender2.renderWithUrl("http://xxx.xxx.xxx.xxx:8001/index.js");
+        // 方式一：通过assets文件渲染JS页面
+        // hmRender1.renderWithAssets("HelloWorld.js");
+
+        // 方式二：通过url渲染JS页面
+        hmRender1.renderWithUrl("http://xxx.xxx.xxx.xxx:8001/index.js");
+
+        // 方式三：通过JS内容渲染JS页面，需要先通过其实方式获取到JS内容
+        // String jsContent = "yyyy";
+        // hmRender1.render(jsContent);
     }
 
     @Override

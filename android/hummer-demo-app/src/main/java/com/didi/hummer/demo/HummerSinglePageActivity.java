@@ -55,9 +55,18 @@ public class HummerSinglePageActivity extends HummerActivity {
 
     @Override
     protected void renderHummer() {
+        // 方式一：通过Intent传入的url渲染JS页面
         super.renderHummer();
-//        hmRender.renderWithAssets("HelloWorld.js");
-//        hmRender.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/HelloWorld.js");
+
+        // 方式二：通过assets文件渲染JS页面
+        // hmRender.renderWithAssets("HelloWorld.js");
+
+        // 方式三：通过url渲染JS页面
+        // hmRender.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/HelloWorld.js");
+
+        // 方式四：通过JS内容渲染JS页面，需要先通过其实方式获取到JS内容
+        // String jsContent = "xxxx";
+        // hmRender.render(jsContent);
     }
 
     @Override
