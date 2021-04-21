@@ -13,6 +13,7 @@
 #import "HMAttrManager.h"
 #import "HMConverter.h"
 #import "UIImageView+HMImageLoader.h"
+#import <Hummer/UIView+HMDom.h>
 
 @interface HMViewPagerCell ()
 
@@ -41,13 +42,6 @@
     return self;
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    [self.contentView hm_applyLayoutPreservingOrigin:NO affectedShadowViews:nil];
-}
-
 - (void)setImageURL:(NSString *)url
 {
     if (!url || ![url isKindOfClass:NSString.class] || ![url containsString:@"http"]) {
@@ -64,6 +58,7 @@
     }
     self.imageView.hidden = YES;
     [self.contentView addSubview:view];
+    [self.contentView hm_markDirty];
 }
 
 @end

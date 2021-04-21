@@ -550,13 +550,13 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     // update existing view
     if (cellJSValue) {
         self.itemUpdatedCallback(@[@(index), cellJSValue]);
-        [cell setNeedsLayout];
+        
         return cell;
     }
     
     // append new view
-    HMBaseValue *value = self.itemUpdatedCallback(@[@(index)]);
-    UIView *jsView = value.hm_toObjCObject;
+    cellJSValue = self.itemUpdatedCallback(@[@(index)]);
+    UIView *jsView = cellJSValue.hm_toObjCObject;
     if (jsView && [jsView isKindOfClass:UIView.class]) {
         if (jsView.superview) {
             NSLog(@"Bad case occured.");
@@ -576,8 +576,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
         }
         cell.contentViewValue = cellJSValue;
         [cell setJSView:jsView];
-        [cell.contentView hm_markDirty];
-        [cell setNeedsLayout];
+        
         return cell;
     }
     
