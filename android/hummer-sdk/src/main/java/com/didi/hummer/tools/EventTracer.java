@@ -55,7 +55,7 @@ public class EventTracer {
                 trace.onEvent(Event.TYPE, params);
 
                 if (DebugUtil.isDebuggable()) {
-                    HMLog.i("HummerEvent", "event: " + Exception.TYPE + ", params: " + params);
+                    HMLog.i("HummerEvent", "event: " + Event.TYPE + ", params: " + params);
                 }
             }
         });
@@ -75,7 +75,7 @@ public class EventTracer {
                 trace.onEvent(Performance.TYPE, fParams);
 
                 if (DebugUtil.isDebuggable()) {
-                    HMLog.i("HummerEvent", "event: " + Exception.TYPE + ", params: " + fParams);
+                    HMLog.i("HummerEvent", "event: " + Performance.TYPE + ", params: " + fParams);
                 }
             }
         });
