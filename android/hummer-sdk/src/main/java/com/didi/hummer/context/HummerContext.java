@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.core.engine.JSCallback;
@@ -116,6 +117,11 @@ public class HummerContext extends ContextWrapper {
         HummerException.addJSContextExceptionCallback(mJsContext, e -> {
             ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Bundle>>", "", jsSourcePath, -1));
             HummerSDK.getException(namespace).onException(e);
+
+            if (DebugUtil.isDebuggable()) {
+                HMLog.e("HummerException", "Hummer Exception", e);
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
         registerInvoker(new HummerInvoker());

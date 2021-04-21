@@ -9,109 +9,98 @@ import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
-import com.didi.hummer.core.util.HMGsonUtil;
-import com.didi.hummer.lifecycle.ILifeCycle;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * 普通功能组件导出组件
+ *
  * Created by XiaoFeng on 2019-09-12.
  */
 @Component("TestExportModel")
-public class TestExportModel implements ILifeCycle {
+public class TestExportModel {
 
-    public class Model {
-        public int v1;
-        public float v2;
-        public String v3;
-    }
-
-    protected TestExportModel(Context context, JSValue jsValue, Map map, boolean bool, float f, long l, Model model, JSCallback callback) {
+    /**
+     * 构造函数（可选）
+     *
+     * 参数支持基本类型、Map、List、自定义对象、JSCallback 这几种类型。
+     * 其中前两个参数比较特殊，用于接收保留参数：
+     * 第一个参数用于接收 Context 或 HummerContext，其中 Context 是页面上下文，HummerContext 是 Hummer 执行上下文，可以不接收。
+     * 第二个参数用于接收 本对象对应的 JSValue，可以不接收。
+     */
+    public TestExportModel(Context context, JSValue jsValue, int i, long l, float f, boolean b, Map<String, Object> map, List<Object> list, Model model, JSCallback callback) {
         Log.v("zdf", "TestExportModel, context = " + context + ", jsValue = " + jsValue);
-        Log.v("zdf", "TestExportModel, map = " + map + ", bool = " + bool + ", f = " + f + ", l = " + l + ", model = " + HMGsonUtil.toJson(model));
-        callback.call(12.34, true);
+        Log.v("zdf", "TestExportModel, i = " + i + ", l = " + l + ", f = " + f + ", b = " + b + ", map = " + map + ", list = " + list + ", model = " + model);
+        callback.call(11, 22, 12.34, true);
     }
 
-    @Override
-    public void onCreate() {
-
-    }
-
-    @Override
-    public void onDestroy() {
-
-    }
-
-    @JsProperty("style")
-    private HashMap<String, Object> style;
-
-    public void setStyle(HashMap<String, Object> style) {
-        Log.v("zdf", "setStyle, " + style);
-        this.style = style;
-    }
-
-    public HashMap<String, Object> getStyle() {
-        Log.v("zdf", "getStyle, " + style);
-        return style;
-    }
-
-    @JsProperty("map")
-    private HashMap<String, Object> map;
-    public void setMap(HashMap<String, Object> map) {
-        Log.v("zdf", "setMap, " + map);
-        this.map = map;
-    }
-
-    public HashMap<String, Object> getMap() {
-        Log.v("zdf", "getMap, " + map);
-        return map;
-    }
-
-    @JsProperty("text")
-    public String text;
-//    public void setText(String text) {
-//        Log.v("zdf", "setText, " + text);
-//        this.text = text;
-//    }
-
-//    public String getText() {
-//        Log.v("zdf", "getText, " + text);
-//        return "getText: " + text;
-//    }
-
+    // 导出基本类型的属性（可以有get/set方法，也可以没有）
     @JsProperty("floatValue")
     public float floatValue;
-
+    public void setFloatValue(float floatValue) {
+        Log.v("zdf", "setFloatValue, " + floatValue);
+        this.floatValue = floatValue;
+    }
     public float getFloatValue() {
         Log.v("zdf", "getFloatValue, " + floatValue);
         return floatValue;
     }
 
-    @JsProperty("array")
-    private List<String> array;
-    public void setArray(List<String> array) {
-        Log.v("zdf", "setArray, " + array);
-        this.array = array;
+    // 导出Map类型的属性（对应JS侧的Object）
+    @JsProperty("mapValue")
+    private Map<String, Object> mapValue;
+    public void setMapValue(Map<String, Object> value) {
+        Log.v("zdf", "setMapValue, " + value);
+        mapValue = value;
+    }
+    public Map<String, Object> getMapValue() {
+        Log.v("zdf", "getMapValue, " + mapValue);
+        return mapValue;
     }
 
-    public List<String> getArray() {
-        Log.v("zdf", "getArray, " + array);
-        return array;
+    // 导出List类型的属性（对应JS侧的Array）
+    @JsProperty("listValue")
+    private List<Object> listValue;
+    public void setListValue(List<Object> value) {
+        Log.v("zdf", "setListValue, " + value);
+        listValue = value;
+    }
+    public List<Object> getListValue() {
+        Log.v("zdf", "getListValue, " + listValue);
+        return listValue;
     }
 
-    @JsMethod("getElementById")
-    public boolean getSubview(String viewID, int index, Long test, HashMap<String, String> testMap, ArrayList<Object> testList, Model model) {
-        Log.v("zdf", "getSubview, viewID: " + viewID + ", index = " + index + ", test = " + test + ", testMap: " + testMap + ", testList: " + testList + ", model = " + HMGsonUtil.toJson(model));
-        return true;
+    // 导出自定义类的属性（对应JS侧的Object）
+    @JsProperty("modelValue")
+    private Model modelValue;
+    public void setModelValue(Model value) {
+        Log.v("zdf", "setModelValue, " + value);
+        modelValue = value;
+    }
+    public Model getModelValue() {
+        Log.v("zdf", "getModelValue, " + modelValue);
+        return modelValue;
     }
 
-    @JsMethod("testObject")
-    public Object testObject(HummerContext context, Object obj) {
-        Log.v("zdf", "testObject, context = " + context);
-        Log.v("zdf", "testObject, obj = " + obj);
-        return "qqq";
+    // 导出方法（参数支持同构造方法，第一个参数也是保留参数，用于接收 Context 或 HummerContext，可以不接收）
+    @JsMethod("doFunc")
+    public String doFunc(HummerContext context, int i, long l, float f, boolean b, Map<String, Object> map, List<Object> list, Model model, JSCallback callback) {
+        return "[doFunc] i = " + i + ", l = " + l + ", f = " + f + ", b = " + b + ", map = " + map + ", list = " + list + ", model = " + model + ", callback.call = " + callback.call();
+    }
+
+    public static class Model {
+        public int v1;
+        public float v2;
+        public String v3;
+
+        @Override
+        public String toString() {
+            return "Model{" +
+                    "v1=" + v1 +
+                    ", v2=" + v2 +
+                    ", v3='" + v3 + '\'' +
+                    '}';
+        }
     }
 }
