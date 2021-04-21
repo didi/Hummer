@@ -2,14 +2,15 @@ package com.didi.hummer.demo;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.didi.hummer.Hummer;
 import com.didi.hummer.HummerConfig;
-import com.didi.hummer.adapter.navigator.NavCallback;
-import com.didi.hummer.adapter.navigator.NavPage;
+import com.didi.hummer.adapter.http.impl.DefaultHttpAdapter;
+import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
+import com.didi.hummer.adapter.location.impl.DefaultLocationAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
+import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
+import com.didi.hummer.adapter.websocket.impl.DefaultWebSocketAdapter;
 
 /**
  * Created by XiaoFeng on 2019/3/25.
@@ -35,31 +36,30 @@ public class App extends Application {
 
         // Hummer SDK
         HummerConfig config = new HummerConfig.Builder()
-                .setJSLogger((level, msg) -> Log.d("HummerJS", msg))
-                .setEventTracer((event, params) -> Log.i("zdf", "[EventTracer] event: " + event + ", params: " + params))
-                .setExceptionCallback(e -> {
-                    Log.e("zdf", "HummerException", e);
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                })
-                .builder();
-        Hummer.init(this, config);
-
-        HummerConfig config2 = new HummerConfig.Builder()
+                // 自定义namespace（用于业务线隔离，需和Hummer容器中的namespace配合使用）
                 .setNamespace("test_namespace")
-                .setJSLogger((level, msg) -> Log.d("HummerJS_2", msg))
-                .setEventTracer((event, params) -> Log.i("zdf", "[EventTracer_2] event: " + event + ", params: " + params))
-                .setExceptionCallback(e -> {
-                    Log.e("zdf", "HummerException_2", e);
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                })
-                .setNavigatorAdapter(new DefaultNavigatorAdapter() {
-                    @Override
-                    public void openPage(Context context, NavPage page, NavCallback callback) {
-                        Log.v("zdf", "my_demo, openPage");
-                    }
-                })
+                // JS日志回调
+                .setJSLogger((level, msg) -> {})
+                // JS异常回调
+                .setExceptionCallback(e -> {})
+                // SDK内部埋点回调
+                .setEventTracer((event, params) -> {})
+                // 自定义路由（可在这里指定自定义Hummer容器）
+                .setNavigatorAdapter(new DefaultNavigatorAdapter())
+                // 自定义图片库
+                .setImageLoaderAdapter(new DefaultImageLoaderAdapter())
+                // 自定义网络库
+                .setHttpAdapter(new DefaultHttpAdapter())
+                // 自定义长链接
+                .setWebSocketAdapter(new DefaultWebSocketAdapter())
+                // 自定义定位
+                .setLocationAdapter(new DefaultLocationAdapter())
+                // 自定义持久化存储
+                .setStorageAdapter(new DefaultStorageAdapter())
+                // 构造HummerConfig
                 .builder();
-        Hummer.init(this, config2);
+//        Hummer.init(this, config);
+        Hummer.init(this);
     }
 
     @Override

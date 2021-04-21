@@ -3,6 +3,8 @@ package com.didi.hummer.tools;
 import android.util.Log;
 
 import com.didi.hummer.HummerSDK;
+import com.didi.hummer.core.util.DebugUtil;
+import com.didi.hummer.core.util.HMLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +53,10 @@ public class EventTracer {
             Trace trace = HummerSDK.getEventTracer(namespace);
             if (trace != null) {
                 trace.onEvent(Event.TYPE, params);
+
+                if (DebugUtil.isDebuggable()) {
+                    HMLog.i("HummerEvent", "event: " + Exception.TYPE + ", params: " + params);
+                }
             }
         });
     }
@@ -67,6 +73,10 @@ public class EventTracer {
                 fParams.put(Performance.KEY_EVENT_NAME, eventName);
                 fParams.put(Performance.KEY_TIME_COST, System.currentTimeMillis() - startTime);
                 trace.onEvent(Performance.TYPE, fParams);
+
+                if (DebugUtil.isDebuggable()) {
+                    HMLog.i("HummerEvent", "event: " + Exception.TYPE + ", params: " + fParams);
+                }
             }
         });
     }
@@ -79,6 +89,10 @@ public class EventTracer {
                 params.put(Exception.KEY_EVENT_NAME, eventName);
                 params.put(Exception.KEY_EXCEPTION, Log.getStackTraceString(e));
                 trace.onEvent(Exception.TYPE, params);
+
+                if (DebugUtil.isDebuggable()) {
+                    HMLog.i("HummerEvent", "event: " + Exception.TYPE + ", params: " + params);
+                }
             }
         });
     }

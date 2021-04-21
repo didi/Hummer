@@ -16,7 +16,9 @@ import com.didi.hummer.render.style.HummerLayout;
  */
 public class HummerEmbeddedPageActivity extends AppCompatActivity {
 
+    // Hummer渲染器1
     private HummerRender hmRender1;
+    // Hummer渲染器2
     private HummerRender hmRender2;
 
     @Override
@@ -28,8 +30,12 @@ public class HummerEmbeddedPageActivity extends AppCompatActivity {
         renderLayout2();
     }
 
+    /**
+     * 渲染第一个嵌入式Hummer容器
+     */
     private void renderLayout1() {
         HummerLayout layout1 = findViewById(R.id.layout_hummer_1);
+        // 构造函数中的namespace需和HummerConfig中的namespace配合使用，可不传
         hmRender1 = new HummerRender(layout1, "test_namespace");
         // 页面加载回调（可选）
         hmRender1.setRenderCallback(new HummerRender.HummerRenderCallback() {
@@ -48,8 +54,12 @@ public class HummerEmbeddedPageActivity extends AppCompatActivity {
         hmRender1.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/index.js");
     }
 
+    /**
+     * 渲染第二个嵌入式Hummer容器
+     */
     private void renderLayout2() {
         HummerLayout layout2 = findViewById(R.id.layout_hummer_2);
+        // 构造函数中的namespace需和HummerConfig中的namespace配合使用，可不传
         hmRender2 = new HummerRender(layout2, "test_namespace");
         // 页面加载回调（可选）
         hmRender2.setRenderCallback(new HummerRender.HummerRenderCallback() {

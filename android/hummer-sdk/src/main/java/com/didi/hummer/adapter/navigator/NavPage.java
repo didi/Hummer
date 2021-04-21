@@ -44,6 +44,17 @@ public class NavPage implements Serializable {
         this.url = url;
     }
 
+    @Override
+    public String toString() {
+        return "NavPage{" +
+                "id='" + id + '\'' +
+                ", url='" + url + '\'' +
+                ", animated=" + animated +
+                ", closeSelf=" + closeSelf +
+                ", params=" + params +
+                '}';
+    }
+
     /**
      * 是否是JS文件路径
      *
