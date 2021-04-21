@@ -1,18 +1,20 @@
-class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+const data = [
+    'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3207781657,3460758070&fm=27&gp=0.jpg',
+]
 
-        let data = [
-            'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3207781657,3460758070&fm=27&gp=0.jpg',
-            'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2735633715,2749454924&fm=27&gp=0.jpg',
-            'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3464499095,1074840881&fm=27&gp=0.jpg',
-        ]
+const data2 = [
+    'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3207781657,3460758070&fm=27&gp=0.jpg',
+    'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2735633715,2749454924&fm=27&gp=0.jpg',
+    'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3464499095,1074840881&fm=27&gp=0.jpg',
+]
+class RootView extends View {
+    constructor() {
+        super();
 
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
-        };
+            width: '100%',
+            height: '100%',
+        }
 
         let titleView = new Text();
         titleView.text = 'ViewPager';
@@ -24,15 +26,15 @@ class RootView extends View {
 
         let layout = new View();
         layout.style = {
-            width: environment.availableWidth,
+            width: '100%',
             flexGrow: 1,
             justifyContent: 'center',
             alignItems: 'center',
         };
 
-        let pager = new ViewPager("pager");
-        pager.style = {
-            width: environment.availableWidth,
+        this.pager = new ViewPager("pager");
+        this.pager.style = {
+            width: '100%',
             height: 170,
             itemSpacing: 20,
             edgeSpacing: 40,
@@ -41,14 +43,14 @@ class RootView extends View {
             loopInterval: 2000,
             borderRadius:20,
         };
-        pager.onPageChange((current, total) => {
+        this.pager.onPageChange((current, total) => {
             console.log("ViewPager onPageChange, index: " + (current + 1) + "/" + total);
         });
-        pager.onItemClick((position) => {
+        this.pager.onItemClick((position) => {
             console.log("ViewPager onItemClick, position: " + position);
         });
 
-        pager.onItemView((position, view) => {
+        this.pager.onItemView((position, view) => {
             let image = view;
             if (!image) {
                 image = new Image();
@@ -57,15 +59,15 @@ class RootView extends View {
                     borderRadius: 20,
                 }
             }
-            image.src = data[position];
+            image.src = this.data[position];
             return image;
         });
 
-        pager.data = data;
+        this.updateData(data);
 
         pager.setCurrentItem(1);
 
-        layout.appendChild(pager);
+        layout.appendChild(this.pager);
         this.appendChild(titleView);
         this.appendChild(layout);
 
@@ -101,6 +103,11 @@ class RootView extends View {
         tabLayout.appendChild(btn1);
         tabLayout.appendChild(btn2);
         this.appendChild(tabLayout);
+    }
+
+    updateData(data) {
+        this.data = data;
+        this.pager.data = data;
     }
 }
 
