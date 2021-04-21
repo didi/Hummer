@@ -15,8 +15,11 @@ public class DefaultStorageAdapter implements IStorageAdapter {
     private static final String SP_NAME = "HummerStorage";
     private SharedPreferences sp;
 
-    public DefaultStorageAdapter() {
-        sp = HummerSDK.appContext.getSharedPreferences(SP_NAME, 0);
+    private SharedPreferences getSP() {
+        if (sp == null) {
+            sp = HummerSDK.appContext.getSharedPreferences(SP_NAME, 0);
+        }
+        return sp;
     }
 
     @Override
@@ -24,21 +27,21 @@ public class DefaultStorageAdapter implements IStorageAdapter {
         if (!(value instanceof String)) {
             return;
         }
-        sp.edit().putString(key, (String) value).apply();
+        getSP().edit().putString(key, (String) value).apply();
     }
 
     @Override
     public Object get(String key) {
-        return sp.getString(key, "");
+        return getSP().getString(key, "");
     }
 
     @Override
     public void remove(String key) {
-        sp.edit().remove(key).apply();
+        getSP().edit().remove(key).apply();
     }
 
     @Override
     public boolean exist(String key) {
-        return sp.contains(key);
+        return getSP().contains(key);
     }
 }
