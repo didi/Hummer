@@ -36,11 +36,11 @@
       <text class="demo-item-title">瀑布流列表</text>
       <view class="demo-box">
         <ex-list
-          class="list"
+          class="list album-list "
           :data="list"
+          style="mode:waterfall;column:3;"
           @refresh="handleRefresh"
           @loadMore="handleLoadMore"
-          mode="waterfall"
         >
           <template v-slot:refresh>
             <view>
@@ -121,6 +121,14 @@
     height: 1.5rem;
     background-color: #00ffff;
     margin-bottom: 0.2rem;
+  }
+  .album-list {
+    item-spacing: 8;
+    line-spacing: 8;
+    left-spacing: 8;
+    right-spacing: 8;
+    top-spacing: 8;
+    bottom-spacing: 34;
   }
 </style>
 
