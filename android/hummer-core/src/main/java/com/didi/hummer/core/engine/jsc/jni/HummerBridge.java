@@ -1,6 +1,6 @@
 package com.didi.hummer.core.engine.jsc.jni;
 
-import com.didi.hummer.core.debug.HMDebugger;
+import com.didi.hummer.core.debug.InvokerAnalyzerManager;
 import com.didi.hummer.core.debug.InvokeTracker;
 import com.didi.hummer.core.engine.jsc.JSCUtils;
 import com.didi.hummer.core.util.DebugUtil;
@@ -18,13 +18,14 @@ public class HummerBridge {
         this.jsContext = jsContext;
         this.mCallback = callback;
         initHummerBridge(jsContext);
-        HMDebugger.getInstance().init(jsContext);
+        InvokerAnalyzerManager.getInstance().init(jsContext);
+        HMLog.d("HummerNative", "HummerBridge.init");
     }
 
     public void onDestroy() {
         HMLog.d("HummerNative", "HummerBridge.onDestroy");
         releaseHummerBridge(jsContext);
-        HMDebugger.getInstance().release(jsContext);
+        InvokerAnalyzerManager.getInstance().release(jsContext);
         mCallback = null;
     }
 
@@ -44,7 +45,7 @@ public class HummerBridge {
 
         try {
             // <for debug>
-            InvokeTracker tracker = HMDebugger.getInstance().startTrack(jsContext);
+            InvokeTracker tracker = InvokerAnalyzerManager.getInstance().startTrack(jsContext);
 
             // 把long型的JS对象指针参数转换为Object或JSValue对象参数
             parameters = JSCUtils.jsValuesToObjects(jsContext, params);
@@ -61,7 +62,7 @@ public class HummerBridge {
             result = JSCUtils.objectToJsValue(jsContext, ret);
 
             // <for debug>
-            HMDebugger.getInstance().stopTrack(jsContext, tracker);
+            InvokerAnalyzerManager.getInstance().stopTrack(jsContext, tracker);
         } catch (Exception e) {
             ExceptionUtil.addStackTrace(e, new StackTraceElement(String.format("<<Bridge>> (%d) %s", objectID, className), methodName, Arrays.toString(parameters), -1));
             HummerException.nativeException(jsContext, e);

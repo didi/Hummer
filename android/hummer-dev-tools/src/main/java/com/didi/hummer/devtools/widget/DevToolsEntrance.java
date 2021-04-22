@@ -63,8 +63,6 @@ public class DevToolsEntrance extends LinearLayout {
 
         mHummerContext = (HummerContext) context;
         mRootView = mHummerContext.getContainer();
-        mLogManager = new HummerLogManager();
-        mHummerContext.registerInvoker(new HummerInvokerWrapper(mLogManager));
 
         initView(context);
     }
@@ -109,7 +107,7 @@ public class DevToolsEntrance extends LinearLayout {
 
         FloatLayout floatLayout = new FloatLayout(context);
         floatLayout.addView(this, lpEntryLayout);
-        ViewCompat.setElevation(floatLayout, 20);
+        ViewCompat.setElevation(floatLayout, 10000);
         floatLayout.setOnClickListener(v -> {
             if (!mShow) {
                 openDebugView();
@@ -132,6 +130,10 @@ public class DevToolsEntrance extends LinearLayout {
 
     public void setParameterInjector(HummerDevTools.IParameterInjector injector) {
         this.mParameterInjector = injector;
+    }
+
+    public void setLogManager(HummerLogManager manager) {
+        this.mLogManager = manager;
     }
 
     @SuppressLint("SwitchIntDef")
@@ -159,11 +161,8 @@ public class DevToolsEntrance extends LinearLayout {
         }
     }
 
-    private ExceptionCallback mExceptionCallback = new ExceptionCallback() {
-        @Override
-        public void onException(Exception e) {
-            mLogManager.addException(Log.getStackTraceString(e));
-        }
+    private ExceptionCallback mExceptionCallback = e -> {
+        mLogManager.addException(Log.getStackTraceString(e));
     };
 
 
@@ -202,7 +201,7 @@ public class DevToolsEntrance extends LinearLayout {
         view.bindHummerContext(mHummerContext);
         view.bindParameterInjector(mParameterInjector);
         view.bindLog(mLogManager);
-        ViewCompat.setElevation(view, 19);
+        ViewCompat.setElevation(view, 9999);
 
         mConsoleView = new HMBase<ConsoleView>(mHummerContext, null, null) {
             @Override
