@@ -29,6 +29,8 @@
 @property (nonatomic, copy) NSString *formattedText;
 @property (nonatomic, strong) HMAttributesBuilder *builder;
 
+- (void)commonInit;
+
 @end
 
 @implementation HMLabel
@@ -59,15 +61,29 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
     return _paragraphStyle;
 }
 
+- (void)commonInit {
+    self.userInteractionEnabled = YES;
+    self.numberOfLines = 0;
+    // 默认为 [UIFont systemFontSize:17];
+    self.font = [UIFont fontWithDescriptor:self.font.fontDescriptor size:16];
+    // 默认 clearColor
+//    self.backgroundColor = UIColor.clearColor;
+    _fontSize = 16;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
+    [self commonInit];
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
     if (self) {
-        self.userInteractionEnabled = YES;
-        self.numberOfLines = 0;
-//        self.layer.masksToBounds = YES;
-        _fontSize = 16;
-        self.backgroundColor = [UIColor clearColor];
+        [self commonInit];
     }
+    
     return self;
 }
 
@@ -248,17 +264,15 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
 }
 
 - (void)updateFont {
-    UIFontDescriptor *fontDescriptor = [[UIFontDescriptor alloc] init];
+    UIFontDescriptor *fontDescriptor = self.font.fontDescriptor;
     if (_fontWeight) {
         fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | UIFontDescriptorTraitBold];
     }
     if (_fontStyle) {
         fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | _fontStyle];
-        CGAffineTransform matrix = CGAffineTransformMake(1, 0, tanf(5 * (CGFloat)M_PI / 180), 1, 0, 0);
-        fontDescriptor = [fontDescriptor fontDescriptorWithMatrix:matrix];
     }
     if (_fontFamily) {
-        fontDescriptor = [fontDescriptor fontDescriptorByAddingAttributes:@{UIFontDescriptorNameAttribute:_fontFamily}];
+        fontDescriptor = [fontDescriptor fontDescriptorWithFamily:_fontFamily];
     }
     UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:_fontSize];
     self.font = font;
