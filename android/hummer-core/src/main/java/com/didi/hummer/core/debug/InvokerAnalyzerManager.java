@@ -6,23 +6,23 @@ import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMLog;
 
 /**
- * 用于调试的单例工具类，管理各个页面的InvokerAnalyzer
+ * 用于分析Invoke过程数据的单例，管理各个页面的InvokerAnalyzer
  * <p>
  * Created by XiaoFeng on 2020/4/28.
  */
-public class HMDebugger {
+public class InvokerAnalyzerManager {
 
-    private static volatile HMDebugger instance = null;
+    private static volatile InvokerAnalyzerManager instance = null;
 
     private LongSparseArray<InvokerAnalyzer> analyzers = new LongSparseArray<>();
 
-    private HMDebugger() {}
+    private InvokerAnalyzerManager() {}
 
-    public static HMDebugger getInstance() {
+    public static InvokerAnalyzerManager getInstance() {
         if (instance == null) {
-            synchronized (HMDebugger.class) {
+            synchronized (InvokerAnalyzerManager.class) {
                 if (instance == null) {
-                    instance = new HMDebugger();
+                    instance = new InvokerAnalyzerManager();
                 }
             }
         }

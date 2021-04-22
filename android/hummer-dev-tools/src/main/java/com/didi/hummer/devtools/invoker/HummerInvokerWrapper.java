@@ -23,19 +23,19 @@ public class HummerInvokerWrapper extends HummerInvoker {
 
         switch (methodName) {
             case "console.log":
-                logType = LogBean.TYPE_LOG;
+                logType = LogBean.LEVEL_LOG;
                 break;
             case "console.debug":
-                logType = LogBean.TYPE_DEBUG;
+                logType = LogBean.LEVEL_DEBUG;
                 break;
             case "console.info":
-                logType = LogBean.TYPE_INFO;
+                logType = LogBean.LEVEL_INFO;
                 break;
             case "console.warn":
-                logType = LogBean.TYPE_WARN;
+                logType = LogBean.LEVEL_WARN;
                 break;
             case "console.error":
-                logType = LogBean.TYPE_ERROR;
+                logType = LogBean.LEVEL_ERROR;
                 break;
             default:
                 break;

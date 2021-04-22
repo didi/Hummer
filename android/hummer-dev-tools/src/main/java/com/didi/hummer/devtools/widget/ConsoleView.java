@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
@@ -22,7 +21,7 @@ import android.widget.Toast;
 
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
-import com.didi.hummer.core.debug.HMDebugger;
+import com.didi.hummer.core.debug.InvokerAnalyzerManager;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.bean.LogBean;
 import com.didi.hummer.devtools.manager.HummerLogManager;
@@ -31,7 +30,6 @@ import com.didi.hummer.hummerdebug.R;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.utils.ScreenUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +97,6 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
 
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.hummer_debug_container, this);
-        ViewCompat.setElevation(this, 9);
 
         layoutConsole = findViewById(R.id.layout_console);
         btnClearLog = findViewById(R.id.btn_clear_log);
@@ -222,19 +219,19 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     }
 
     private void updateCompTree() {
-        String info = HMDebugger.getInstance().getComponentTreeFormat(hummerContext.getJsContext().getIdentify());
+        String info = InvokerAnalyzerManager.getInstance().getComponentTreeFormat(hummerContext.getJsContext().getIdentify());
         tvInfo.setText(info);
         scrollInfo.post(() -> scrollInfo.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updateCallStack() {
-        String info = HMDebugger.getInstance().getCallStackTreeFormat(hummerContext.getJsContext().getIdentify());
+        String info = InvokerAnalyzerManager.getInstance().getCallStackTreeFormat(hummerContext.getJsContext().getIdentify());
         tvInfo.setText(info);
         scrollInfo.post(() -> scrollInfo.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updatePerformance() {
-        String info = HMDebugger.getInstance().getPerformanceFormat(hummerContext.getJsContext().getIdentify());
+        String info = InvokerAnalyzerManager.getInstance().getPerformanceFormat(hummerContext.getJsContext().getIdentify());
         tvInfo.setText(info);
     }
 
@@ -272,38 +269,16 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
         }
     }
 
-    RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    RecyclerView.Adapter<ConsoleHolder> mAdapter = new RecyclerView.Adapter<ConsoleHolder>() {
         @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            ConsoleHolder holder = new ConsoleHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hummer_debug_console_item, viewGroup, false));
-            return holder;
+        public ConsoleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
+            return new ConsoleHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hummer_debug_console_item, viewGroup, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-            switch (logs.get(i).type) {
-                case LogBean.TYPE_DEBUG:
-                case LogBean.TYPE_INFO:
-                case LogBean.TYPE_LOG:
-                    ((ConsoleHolder) (viewHolder)).tvConsole.setTextColor(Color.BLACK);
-                    break;
-                case LogBean.TYPE_WARN:
-                    ((ConsoleHolder) (viewHolder)).tvConsole.setTextColor(0xFFFD6D40);
-                    break;
-                case LogBean.TYPE_EXCEPTION:
-                case LogBean.TYPE_ERROR:
-                    ((ConsoleHolder) (viewHolder)).tvConsole.setTextColor(Color.RED);
-                    break;
-                default:
-                    ((ConsoleHolder) (viewHolder)).tvConsole.setTextColor(Color.BLACK);
-                    break;
-            }
-
-            LogBean log = logs.get(i);
-            String time = new SimpleDateFormat("HH:mm:ss").format(log.timestamp) + "." + (log.timestamp % 1000);
-            String strLog = String.format("[%s] %s", time, log.msg);
-            ((ConsoleHolder) (viewHolder)).tvConsole.setText(strLog);
+        public void onBindViewHolder(@NonNull ConsoleHolder viewHolder, int position) {
+            viewHolder.updateUI(position);
         }
 
         @Override
@@ -326,6 +301,28 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
                 Toast.makeText(tvConsole.getContext(), "内容已复制", Toast.LENGTH_SHORT).show();
                 return true;
             });
+        }
+
+        public void updateUI(int position) {
+            LogBean bean = logs.get(position);
+            switch (bean.getLevel()) {
+                case LogBean.LEVEL_DEBUG:
+                case LogBean.LEVEL_INFO:
+                case LogBean.LEVEL_LOG:
+                    tvConsole.setTextColor(Color.BLACK);
+                    break;
+                case LogBean.LEVEL_WARN:
+                    tvConsole.setTextColor(0xFFFD6D40);
+                    break;
+                case LogBean.LEVEL_EXCEPTION:
+                case LogBean.LEVEL_ERROR:
+                    tvConsole.setTextColor(Color.RED);
+                    break;
+                default:
+                    tvConsole.setTextColor(Color.BLACK);
+                    break;
+            }
+            tvConsole.setText(bean.getMsg());
         }
     }
 }

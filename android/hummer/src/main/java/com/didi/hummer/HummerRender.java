@@ -14,7 +14,6 @@ import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.devtools.DevToolsConfig;
 import com.didi.hummer.devtools.HummerDevTools;
-import com.didi.hummer.hotload.HotLoader;
 import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.FileUtil;
@@ -36,8 +35,8 @@ public class HummerRender {
 
     private HummerContext hmContext;
     private AtomicBoolean isDestroyed = new AtomicBoolean(false);
-    private HotLoader hotLoader;
     private HummerRenderCallback renderCallback;
+    private HummerDevTools devTools;
 
     public interface HummerRenderCallback {
         void onSucceed(HummerContext hmContext, JSValue jsPage);
@@ -56,7 +55,7 @@ public class HummerRender {
         hmContext = Hummer.createContext(container, namespace);
 
         if (DebugUtil.isDebuggable()) {
-            HummerDevTools.init(hmContext, config != null ? config.getInjector() : null);
+            devTools = new HummerDevTools(hmContext, config);
         }
     }
 
@@ -85,8 +84,8 @@ public class HummerRender {
 
         if (DebugUtil.isDebuggable()) {
             HummerDebugger.release(hmContext);
-            if (hotLoader != null) {
-                hotLoader.destroy();
+            if (devTools != null) {
+                devTools.release();
             }
         }
 
@@ -153,9 +152,8 @@ public class HummerRender {
             HummerDebugger.init(hmContext, url);
 
             // 热更新
-            if (hotLoader == null) {
-                hotLoader = new HotLoader();
-                hotLoader.connect(hmContext, url);
+            if (devTools != null) {
+                devTools.connectWebSocket(url);
             }
         }
     }

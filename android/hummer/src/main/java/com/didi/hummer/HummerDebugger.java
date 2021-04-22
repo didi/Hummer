@@ -48,7 +48,7 @@ public class HummerDebugger {
                 Toast.makeText(context, "页面已刷新", Toast.LENGTH_SHORT).show();
             });
         });
-        ViewCompat.setElevation(floatLayout, 10);
+        ViewCompat.setElevation(floatLayout, 9000);
         View.inflate(context, R.layout.layout_refresh_btn, floatLayout);
 
         HMBase<FloatLayout> base = new HMBase<FloatLayout>(context, null, null) {
