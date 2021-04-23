@@ -300,7 +300,6 @@ HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:callback:)
     UIView *view = (UIView *) viewObject;
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:page.context];
     context.componentView = page;
-    [context.rootView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [context.rootView addSubview:view];
     context.rootView.isHmLayoutEnabled = YES;
     [context.rootView hm_markDirty];
