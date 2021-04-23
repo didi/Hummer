@@ -3,6 +3,15 @@
 ### 0.3.19
 - 修复Loading对话框和自定义对话框在某些机型上没有去除默认背景的问题；
 - 修复HotLoad时偶现的StackOverflow问题；
+- 修复ViewPager在触发touch事件时偶现index out of range问题；
+- 修复ViewPager动态改变canLoop属性时出现crash的问题；
+- 修复退出页面时抛出JS异常时导致原生crash的问题；
+- 修复横向List组件item宽度撑满全屏的问题；
+- 修复List组件在瀑布流模式下滑动过程中自动执行动画后，item间距错乱的问题；
+- 修复默认Storage适配器再初始化配置时的空指针问题；
+- 修复加载本地.9图时无法自动拉伸的问题，改用原生加载方式；
+- 支持命令行窗口直接显示日志，代码热更新支持断开重连；
+- 升级Hermes调试引擎；
 
 ### 0.3.18
 - 去除对 blankj.utilcode 库的依赖，减小包体积，减少sdk接入时的冲突；
