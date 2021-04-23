@@ -32,25 +32,43 @@ typedef NS_ENUM(NSUInteger, HMScrollDirection) {
     HMScrollDirectionHorizontal,
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface _InnerCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, nullable, strong) HMBaseValue *contentViewValue;
 
+- (void)commonInit;
+
 @end
+
+NS_ASSUME_NONNULL_END
 
 @implementation _InnerCollectionViewCell
 
+- (void)commonInit {
+    self.clipsToBounds = YES;
+    self.isHmLayoutEnabled = NO;
+    [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
+        layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionColumn);
+        layout.justifyContent= YOGA_TYPE_WRAPPER(YGJustifyCenter);
+        layout.alignItems = YOGA_TYPE_WRAPPER(YGAlignStretch);
+    }];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
+    [self commonInit];
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
     if (self) {
-        self.clipsToBounds = YES;
-        self.isHmLayoutEnabled = NO;
-        [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionColumn);
-            layout.justifyContent= YOGA_TYPE_WRAPPER(YGJustifyCenter);
-            layout.alignItems = YOGA_TYPE_WRAPPER(YGAlignStretch);
-        }];
+        [self commonInit];
     }
+    
     return self;
 }
 
@@ -120,6 +138,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL showScrollBar;
 
 @property (nonatomic, assign) BOOL hummerBounces;
+
+- (void)commonInit;
 
 NS_ASSUME_NONNULL_END
 
@@ -195,13 +215,8 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     [super layoutSubviews];
     [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
 }
-- (instancetype)initWithFrame:(CGRect)frame {
-    HMRecycleListViewListLayout *layout = [[HMRecycleListViewListLayout alloc] init];
-    self = [super initWithFrame:frame collectionViewLayout:layout];
-    if (!self) {
-        return self;
-    }
-    
+
+- (void)commonInit {
     self.backgroundColor = [UIColor whiteColor];
     
     self.dataSource = self;
@@ -210,16 +225,38 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     self.showsHorizontalScrollIndicator = NO;
     self.showsVerticalScrollIndicator = NO;
         
-    self.reuseIdentifiers = [[NSMutableSet alloc] init];
-    [self.reuseIdentifiers addObject:HMRecycleListViewListCellDefaultIdentifier];
-    [self registerClass:[_InnerCollectionViewCell class]
-forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
+    _reuseIdentifiers = NSMutableSet.set;
+    [_reuseIdentifiers addObject:HMRecycleListViewListCellDefaultIdentifier];
+    [self registerClass:_InnerCollectionViewCell.class forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     if (@available(iOS 11.0, *)) {
         self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     
-    self.column = 2;
-    self.mode = @"list";
+    _column = 2;
+    _mode = @"list";
+    _lastContentOffset = CGPointZero;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout {
+    self = [self initWithFrame:frame];
+    // 应该是没有动画的
+    self.collectionViewLayout = layout;
+    
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame collectionViewLayout:[[HMRecycleListViewListLayout alloc] init]];
+    [self commonInit];
     
     return self;
 }
@@ -533,14 +570,18 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     return CGSizeMake(width, height);
 }
 
+#pragma mark - UIScrollViewDelegate
+
 - (void)scrollViewWillBeginDragging:(__unused UIScrollView *)scrollView {
-    HMScrollEvent *value = [[HMScrollEvent alloc] init];
-    NSDictionary *args = @{kHMScrollState:@(HMScrollEventBegan),
-                           kHMScrollDeltaX:@(0),
-                           kHMScrollDeltaY:@(0),
-                           kHMScrollOffsetX:@(0),
-                           kHMScrollOffsetY:@(0)};
-    [self hm_notifyEvent:HMScrollEventName withValue:value withArgument:args];
+    self.lastContentOffset = scrollView.contentOffset;
+    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        kHMScrollState: @(HMScrollEventBegan),
+        kHMScrollDeltaX: @(0),
+        kHMScrollDeltaY: @(0),
+        // TODO(ChasonTang): 这里的逻辑是错误的，应该是返回当前的 contentOffset
+        kHMScrollOffsetX: @(0),
+        kHMScrollOffsetY: @(0)
+    }];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -548,31 +589,39 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    
-    HMScrollEvent *value = [[HMScrollEvent alloc] init];
-    NSDictionary *args = @{kHMScrollState:@(HMScrollEventScroll),
-                           kHMScrollDeltaX:@(deltaX),
-                           kHMScrollDeltaY:@(deltaY),
-                           kHMScrollOffsetX:@(contentOffset.x),
-                           kHMScrollOffsetY:@(contentOffset.y)};
-    [self hm_notifyEvent:HMScrollEventName withValue:value withArgument:args];
+    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        kHMScrollState: @(HMScrollEventScroll),
+        kHMScrollDeltaX: @(deltaX),
+        kHMScrollDeltaY: @(deltaY),
+        kHMScrollOffsetX: @(contentOffset.x),
+        kHMScrollOffsetY: @(contentOffset.y)
+    }];
 }
 
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView
-                     withVelocity:(__unused CGPoint)velocity
-              targetContentOffset:(inout __unused CGPoint *)targetContentOffset {
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     CGPoint contentOffset = scrollView.contentOffset;
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    
-    HMScrollEvent *value = [[HMScrollEvent alloc] init];
-    NSDictionary *args = @{kHMScrollState:@(HMScrollEventEndedDragging),
-                           kHMScrollDeltaX:@(deltaX),
-                           kHMScrollDeltaY:@(deltaY),
-                           kHMScrollOffsetX:@(contentOffset.x),
-                           kHMScrollOffsetY:@(contentOffset.y)};
-    [self hm_notifyEvent:HMScrollEventName withValue:value withArgument:args];
+    if (!decelerate) {
+        // 结束
+        [self hm_notifyWithEventName:HMScrollEventName argument:@{
+            kHMScrollState: @(HMScrollEventEndedDecelerating),
+            kHMScrollDeltaX: @(deltaX),
+            kHMScrollDeltaY: @(deltaY),
+            kHMScrollOffsetX: @(contentOffset.x),
+            kHMScrollOffsetY: @(contentOffset.y)
+        }];
+    } else {
+        // 手指抬起继续滚动
+        [self hm_notifyWithEventName:HMScrollEventName argument:@{
+            kHMScrollState: @(HMScrollEventEndedDragging),
+            kHMScrollDeltaX: @(deltaX),
+            kHMScrollDeltaY: @(deltaY),
+            kHMScrollOffsetX: @(contentOffset.x),
+            kHMScrollOffsetY: @(contentOffset.y)
+        }];
+    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -580,14 +629,13 @@ forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    
-    HMScrollEvent *value = [[HMScrollEvent alloc] init];
-    NSDictionary *args = @{kHMScrollState:@(HMScrollEventEndedDecelerating),
-                           kHMScrollDeltaX:@(deltaX),
-                           kHMScrollDeltaY:@(deltaY),
-                           kHMScrollOffsetX:@(contentOffset.x),
-                           kHMScrollOffsetY:@(contentOffset.y)};
-    [self hm_notifyEvent:HMScrollEventName withValue:value withArgument:args];
+    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        kHMScrollState: @(HMScrollEventEndedDecelerating),
+        kHMScrollDeltaX: @(deltaX),
+        kHMScrollDeltaY: @(deltaY),
+        kHMScrollOffsetX: @(contentOffset.x),
+        kHMScrollOffsetY: @(contentOffset.y)
+    }];
 }
 
 #pragma mark - UICollectionViewDataSource

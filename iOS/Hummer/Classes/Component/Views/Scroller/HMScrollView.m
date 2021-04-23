@@ -63,6 +63,7 @@ HM_EXPORT_PROPERTY(bounces, bounces, setBounces:)
 }
 
 - (void)commonInit {
+    _lastContentOffset = CGPointZero;
     self.showsVerticalScrollIndicator = NO;
     self.showsHorizontalScrollIndicator = NO;
     if (@available(iOS 11.0, *)) {
@@ -213,16 +214,20 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
 
 #pragma mark - UIScrollViewDelegate
 
+// 分两种情况
+// beginDragging -> didScroll -> willEndDragging(决定减速停到哪个位置) -> didEndDragging(参数为 0 表示立刻停止)
+// beginDragging -> didScroll -> willEndDragging -> didEndDragging(参数 为 1 表示手指离开屏幕后继续滚动，但是发生减速) -> beginDecelerating -> didScroll -> didEndDecelerating
+
 - (void)scrollViewWillBeginDragging:(__unused UIScrollView *)scrollView {
-    HMExecOnMainQueue(^{
-        HMScrollEvent *scrollEvent = [[HMScrollEvent alloc] init];
-        NSDictionary *args = @{kHMScrollState:@(HMScrollEventBegan),
-                               kHMScrollDeltaX:@(0),
-                               kHMScrollDeltaY:@(0),
-                               kHMScrollOffsetX:@(0),
-                               kHMScrollOffsetY:@(0)};
-        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
-    });
+    self.lastContentOffset = scrollView.contentOffset;
+    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        kHMScrollState: @(HMScrollEventBegan),
+        kHMScrollDeltaX: @(0),
+        kHMScrollDeltaY: @(0),
+        // TODO(ChasonTang): 这里的逻辑是错误的，应该是返回当前的 contentOffset
+        kHMScrollOffsetX: @(0),
+        kHMScrollOffsetY: @(0)
+    }];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -230,16 +235,13 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    HMExecOnMainQueue(^{
-        HMScrollEvent *scrollEvent = [[HMScrollEvent alloc] init];
-
-        NSDictionary *args = @{kHMScrollState:@(HMScrollEventScroll),
-                               kHMScrollDeltaX:@(deltaX),
-                               kHMScrollDeltaY:@(deltaY),
-                               kHMScrollOffsetX:@(contentOffset.x),
-                               kHMScrollOffsetY:@(contentOffset.y)};
-        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
-    });
+    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        kHMScrollState: @(HMScrollEventScroll),
+        kHMScrollDeltaX: @(deltaX),
+        kHMScrollDeltaY: @(deltaY),
+        kHMScrollOffsetX: @(contentOffset.x),
+        kHMScrollOffsetY: @(contentOffset.y)
+    }];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
@@ -247,18 +249,25 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    HMExecOnMainQueue(^{
-        HMScrollEvent *scrollEvent = [[HMScrollEvent alloc] init];
-        NSDictionary *args = @{kHMScrollState:@(HMScrollEventEndedDragging),
-                               kHMScrollDeltaX:@(deltaX),
-                               kHMScrollDeltaY:@(deltaY),
-                               kHMScrollOffsetX:@(contentOffset.x),
-                               kHMScrollOffsetY:@(contentOffset.y)};
-        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
-        [self checkIFTopOrBottom];
-    });
     if (!decelerate) {
+        // 结束
+        [self hm_notifyWithEventName:HMScrollEventName argument:@{
+            kHMScrollState: @(HMScrollEventEndedDecelerating),
+            kHMScrollDeltaX: @(deltaX),
+            kHMScrollDeltaY: @(deltaY),
+            kHMScrollOffsetX: @(contentOffset.x),
+            kHMScrollOffsetY: @(contentOffset.y)
+        }];
         [self checkIFTopOrBottom];
+    } else {
+        // 手指抬起继续滚动
+        [self hm_notifyWithEventName:HMScrollEventName argument:@{
+            kHMScrollState: @(HMScrollEventEndedDragging),
+            kHMScrollDeltaX: @(deltaX),
+            kHMScrollDeltaY: @(deltaY),
+            kHMScrollOffsetX: @(contentOffset.x),
+            kHMScrollOffsetY: @(contentOffset.y)
+        }];
     }
 }
 
@@ -267,16 +276,14 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    HMExecOnMainQueue(^{
-        HMScrollEvent *scrollEvent = [[HMScrollEvent alloc] init];
-        NSDictionary *args = @{kHMScrollState:@(HMScrollEventEndedDecelerating),
-                               kHMScrollDeltaX:@(deltaX),
-                               kHMScrollDeltaY:@(deltaY),
-                               kHMScrollOffsetX:@(contentOffset.x),
-                               kHMScrollOffsetY:@(contentOffset.y)};
-        [self hm_notifyEvent:HMScrollEventName withValue:scrollEvent withArgument:args];
-        [self checkIFTopOrBottom];
-    });
+    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        kHMScrollState: @(HMScrollEventEndedDecelerating),
+        kHMScrollDeltaX: @(deltaX),
+        kHMScrollDeltaY: @(deltaY),
+        kHMScrollOffsetX: @(contentOffset.x),
+        kHMScrollOffsetY: @(contentOffset.y)
+    }];
+    [self checkIFTopOrBottom];
 }
 
 - (void)checkIFTopOrBottom {
