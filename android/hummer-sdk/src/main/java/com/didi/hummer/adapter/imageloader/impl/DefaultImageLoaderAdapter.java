@@ -58,10 +58,9 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
 
     @Override
     public void setImage(int resId, ImageView view) {
-        try {
-            Glide.with(view.getContext()).load(resId).into(view);
-        } catch (Exception e) {
-            e.printStackTrace();
+        // 使用Glide加载resId图片时，.9图自动拉伸功能会失效，所以这里直接用原生加载方式
+        if (view != null) {
+            view.setImageResource(resId);
         }
     }
 
@@ -110,22 +109,10 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
 
     @Override
     public void loadDrawable(int resId, DrawableCallback callback) {
-        try {
-            Glide.with(HummerSDK.appContext).load(resId).into(new CustomTarget<Drawable>() {
-                @Override
-                public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                }
-
-                @Override
-                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                    if (callback != null) {
-                        callback.onDrawableLoaded(resource);
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+        // 使用Glide加载resId图片时，.9图自动拉伸功能会失效，所以这里直接用原生加载方式
+        Drawable drawable = HummerSDK.appContext.getResources().getDrawable(resId);
+        if (callback != null) {
+            callback.onDrawableLoaded(drawable);
         }
     }
 

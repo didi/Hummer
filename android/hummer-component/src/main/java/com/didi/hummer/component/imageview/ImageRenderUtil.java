@@ -98,7 +98,7 @@ public class ImageRenderUtil {
             if (isGif) {
                 renderResourceGif(context, imageView, imageSrc, repeatCount);
             } else {
-                renderResourceImage(imageView, imageSrc);
+                renderResourceImage(context, imageView, imageSrc);
             }
         }
     }
@@ -149,9 +149,9 @@ public class ImageRenderUtil {
         } catch (Exception e) {}
     }
 
-    private static void renderResourceImage(ImageView imageView, String imageSrc) {
+    private static void renderResourceImage(HummerContext context, ImageView imageView, String imageSrc) {
         int imageId = YogaResUtils.getResourceId(imageSrc, "drawable", null);
-        imageView.setImageResource(imageId);
+        getImageLoader(context).setImage(imageId, imageView);
     }
 
     private static void renderRemoteGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount) {
