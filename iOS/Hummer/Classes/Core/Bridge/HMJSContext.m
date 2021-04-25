@@ -22,6 +22,31 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, HMCLILogLevel) {
+    HMCLILogLevelLog = 0,
+    HMCLILogLevelDebug,
+    HMCLILogLevelInfo,
+    HMCLILogLevelWarn,
+    HMCLILogLevelError
+};
+
+static inline HMCLILogLevel convertNativeLogLevel(HMLogLevel logLevel) {
+    // T I W E F
+    switch (logLevel) {
+        case HMLogLevelTrace:
+            return HMCLILogLevelDebug;
+        case HMLogLevelInfo:
+            return HMCLILogLevelLog;
+        case HMLogLevelWarning:
+            return HMCLILogLevelWarn;
+        case HMLogLevelError:
+            return HMCLILogLevelError;
+            
+        default:
+            // 正常不会传递
+            return HMCLILogLevelError;
+    }
+}
 
 @interface UIView (HMJSContext)
 
@@ -29,9 +54,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface HMJSContext ()
+#if defined(DEBUG)
+API_AVAILABLE(ios(13.0))
+#endif
+@interface HMJSContext () // <NSURLSessionWebSocketDelegate>
 
 @property (nonatomic, weak, nullable) UIView *rootView;
+
+#if defined(DEBUG)
+@property (nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
+
+- (void)handleWebSocket;
+
+#endif
 
 @end
 
@@ -56,6 +91,8 @@ NS_ASSUME_NONNULL_END
         [((UIView *) componentViewObject) removeFromSuperview];
     }
     HMLogDebug(@"HMJSContext 销毁");
+    self.context.consoleHandler = nil;
+    [self.webSocketTask cancel];
 }
 
 + (instancetype)contextInRootView:(UIView *)rootView {
@@ -133,17 +170,71 @@ NS_ASSUME_NONNULL_END
     }];
     NSData *data = [NSJSONSerialization dataWithJSONObject:classes options:0 error:nil];
     NSString *classesStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [self.context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
+    [_context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
 
     return self;
 }
 
+#if defined(DEBUG)
+- (void)handleWebSocket {
+    if (@available(iOS 13, *)) {
+        if (self.webSocketTask.state == NSURLSessionTaskStateCanceling || self.webSocketTask.state == NSURLSessionTaskStateCompleted) {
+            self.context.consoleHandler = nil;
+            self.webSocketTask = nil;
+        }
+    }
+}
+#endif
+
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
+    // context 和 WebSocket 对应
     BOOL needEnableDebugger = NO;
     if (!self.url && fileName.length > 0) {
         needEnableDebugger = YES;
         self.url = [NSURL URLWithString:fileName];
     }
+    
+#if defined(DEBUG)
+    if (@available(iOS 13, *)) {
+        if (!self.webSocketTask && fileName.length > 0) {
+            NSURLComponents *urlComponents = [NSURLComponents componentsWithString:fileName];
+            if ([urlComponents.scheme isEqualToString:@"http"]) {
+                urlComponents.scheme = @"ws";
+                urlComponents.user = nil;
+                urlComponents.password = nil;
+                urlComponents.path = nil;
+                urlComponents.query = nil;
+                urlComponents.fragment = nil;
+                if (urlComponents.URL) {
+                    self.webSocketTask = [NSURLSession.sharedSession webSocketTaskWithURL:urlComponents.URL];
+                    // 启动
+                    [self.webSocketTask resume];
+                    __weak typeof(self) weakSelf = self;
+                    self.context.consoleHandler = ^(NSString * _Nullable logString, HMLogLevel logLevel) {
+                        typeof(weakSelf) strongSelf = weakSelf;
+                        // 避免 "(null)" 情况
+                        NSURLSessionWebSocketMessage *webSocketMessage = [[NSURLSessionWebSocketMessage alloc] initWithString:[NSString stringWithFormat:@"{type:\"log\",data:{level:%lu,message:\"%@\"}}", convertNativeLogLevel(logLevel), logString.length > 0 ? logString : @""]];
+                        // 忽略错误
+                        [strongSelf.webSocketTask sendMessage:webSocketMessage completionHandler:^(NSError * _Nullable error) {
+                            typeof(weakSelf) strongSelf = weakSelf;
+                            if (error) {
+                                [strongSelf handleWebSocket];
+                            }
+                        }];
+                    };
+                    // 判断是否连通
+                    [self.webSocketTask sendPingWithPongReceiveHandler:^(NSError * _Nullable error) {
+                        typeof(weakSelf) strongSelf = weakSelf;
+                        if (error) {
+                            [strongSelf handleWebSocket];
+                        }
+                    }];
+                }
+            }
+        }
+    }
+#endif
+
     NSURL *url = nil;
     if (fileName.length > 0) {
         url = [NSURL URLWithString:fileName];
