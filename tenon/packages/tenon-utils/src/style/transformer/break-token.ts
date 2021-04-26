@@ -5,7 +5,7 @@
 import { makeMapByArr } from "../../utils"
 import {extend} from '../../index'
 
-const commonAttrs = ["margin", "padding", "border-width", "border-style", "border-color"]
+const commonAttrs = ["margin", "padding"]
 const borderAttrs = ["border-radius"]
 const attrs = commonAttrs.concat(borderAttrs)
 // const directions = ["left", "right", "top", "bottom"]

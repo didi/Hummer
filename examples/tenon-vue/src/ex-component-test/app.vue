@@ -1,21 +1,15 @@
 <template>
   <view class="page">
     <view class="demo-header">
-      <text class="demo-title">Popup Component</text>
+      <text class="demo-title">Custom Native Component</text>
     </view>
     <view class="demo-container">
       <view class="demo-item">
         <view class="item-title">
-          <text class="item-title-text">Popup</text>
+          <text class="item-title-text">webview</text>
         </view>
         <view class="item-container">
-          <ex-popup :show="showPopup">
-            <view>
-              <text>
-                我是一个标准的Popup
-              </text>
-            </view>
-          </ex-popup>
+         <ex-webview @webview-ready="webviewReady"></ex-webview>
         </view>
       </view>
     </view>
@@ -84,6 +78,11 @@ export default {
   },
   created(){
     // this.showPopup2 = false
+  },
+  methods: {
+    webviewReady(){
+
+    }
   }
 };
 </script>
