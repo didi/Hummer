@@ -34,6 +34,9 @@ public class JSCContext extends JSCValue implements JSContext {
         if (TextUtils.isEmpty(script)) {
             return null;
         }
+        if (scriptId == null) {
+            scriptId = "";
+        }
         long jsValue = JavaScriptRuntime.evaluateJavaScript(context, script, scriptId);
         return JSCUtils.jsValueToObject(context, jsValue);
     }
