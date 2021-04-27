@@ -898,7 +898,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
                 int leftIndex = property.indexOf("(");
                 int rightIndex = property.indexOf(")");
 
-                String animType = property.substring(0, leftIndex);
+                String animType = property.substring(0, leftIndex).trim();
                 Object params = HummerStyleUtils.transformValue(property.substring(leftIndex + 1, rightIndex));
                 propertyValuesHolderList.addAll(HummerAnimationUtils.parser(animType, params));
             }
