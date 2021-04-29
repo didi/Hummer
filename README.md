@@ -33,8 +33,10 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 ## 开始使用
 - 官方文档请访问 [Hummer 官网](https://hummer.didi.cn/)，点击[【快速开始】](https://hummer.didi.cn/doc#/zh-CN/)按钮。
 - 想创建一个全新的 Hummer 跨端应用，请参考 [创建一个全新应用](https://hummer.didi.cn/doc#/zh-CN/new_project_doc)。
-- 想在现有客户端项目中集成 Hummer 跨端框架，请参考 [Android 端接入文档](https://hummer.didi.cn/doc#/zh-CN/android_doc) 或 [iOS 端接入文档](https://hummer.didi.cn/doc#/zh-CN/ios_doc)。
-- Hummer CLI 脚手架使用，请参考 [CLI 使用教程](https://hummer.didi.cn/doc#/zh-CN/cli_doc)。
+- 想在现有客户端项目中集成 Hummer 跨端框架，请参考 [Android 端接入文档](https://hummer.didi.cn/doc#/zh-CN/android_doc) 和 [iOS 端接入文档](https://hummer.didi.cn/doc#/zh-CN/ios_doc)。
+- 想了解更多客户端集成 Hummer 时的高阶用法，请参考 [Android 进阶](https://hummer.didi.cn/doc#/zh-CN/android_doc_advanced) 和 [iOS 进阶](https://hummer.didi.cn/doc#/zh-CN/ios_doc_advanced)。
+- 想了解更多 Hummer CLI 脚手架的使用说明，请参考 [CLI 使用教程](https://hummer.didi.cn/doc#/zh-CN/cli_doc)。
+- 想了解更多 Hummer 相关的基准测试报告，请参考 [Hummer Standard Benchmarks](https://github.com/OrangeLab/hummer-standard-benchmarks)。
 
 
 ## 简单演示
