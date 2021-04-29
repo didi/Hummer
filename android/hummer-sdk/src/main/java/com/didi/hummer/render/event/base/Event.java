@@ -1,7 +1,5 @@
 package com.didi.hummer.render.event.base;
 
-import com.didi.hummer.core.engine.JSValue;
-
 import java.io.Serializable;
 
 public abstract class Event implements Serializable {
@@ -20,20 +18,14 @@ public abstract class Event implements Serializable {
     public static final int HM_GESTURE_STATE_CANCELLED = 4;
 
     private String type;
-//    private JSValue target;
-    private Object state;
+    private int state;
     private long timestamp;
 
     public void setType(String type) {
         this.type = type;
     }
 
-    public void setTarget(JSValue target) {
-        // TODO: 无法通过普通对象序列化传递JSValue到JS侧，待处理
-//        this.target = target;
-    }
-
-    public void setState(Object state) {
+    public void setState(int state) {
         this.state = state;
     }
 
