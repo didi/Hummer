@@ -83,7 +83,6 @@ public class Switch extends HMBase<android.widget.Switch> implements CompoundBut
         switchEvent.setType(SwitchEvent.HM_EVENT_TYPE_SWITCH);
         switchEvent.setTimestamp(System.currentTimeMillis());
         switchEvent.setState(isChecked);
-        switchEvent.setTarget(mJSValue);
         mEventManager.dispatchEvent(SwitchEvent.HM_EVENT_TYPE_SWITCH, switchEvent);
     }
 

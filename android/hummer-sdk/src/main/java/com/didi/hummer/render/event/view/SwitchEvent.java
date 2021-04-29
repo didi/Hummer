@@ -7,6 +7,6 @@ public class SwitchEvent extends Event {
     public static final String HM_EVENT_TYPE_SWITCH = "switch";
 
     public void setState(boolean checked) {
-        super.setState(checked);
+        super.setState(checked ? 1 : 0);
     }
 }
