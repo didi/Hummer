@@ -53,8 +53,12 @@ function createInvoker(
 }
 
 export function addEventListener(el:Base, event: string, handler: EventListener){
+  // click事件转换成原生的tap事件
+  event = event === 'click' ? 'tap' : event
   el.addEventListener(event, handler)
 }
 export function removeEventListener(el:Base, event: string, handler: EventListener){
+  // click事件转换成原生的tap事件
+  event = event === 'click' ? 'tap' : event
   el.removeEventListener(event, handler)
 }
