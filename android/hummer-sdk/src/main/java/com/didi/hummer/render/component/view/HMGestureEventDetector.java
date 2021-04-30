@@ -117,8 +117,6 @@ class HMGestureEventDetector {
                 Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TOUCH, view, viewId);
                 EventTracer.traceEvent(hummerContext.getNamespace(), params);
 
-                latestMotionEvent = event;
-
                 TouchEvent touchEvent = null;
                 if (eventManager.contains(Event.HM_EVENT_TYPE_TOUCH)) {
                     touchEvent = makeTouchEvent(v.getContext(), event);
@@ -131,6 +129,7 @@ class HMGestureEventDetector {
 
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        latestMotionEvent = MotionEvent.obtain(event);
                         if (panEvent != null) {
                             downX = event.getRawX();
                             downY = event.getRawY();
@@ -148,6 +147,7 @@ class HMGestureEventDetector {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                     default:
+                        latestMotionEvent = MotionEvent.obtain(event);
                         break;
                 }
 
