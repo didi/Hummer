@@ -12,13 +12,22 @@
     <view class="demo-item">
       <text class="demo-item-title">Button With Disabled</text>
       <view class="demo-box">
-        <button class="btn" :disabled="true" :disabled-style="disabledStyle"  @tap="handleClickBtn('Button With Disabled')">Button</button>
+        <button class="btn" disabled :disabled-style="disabledStyle"  @tap="handleClickBtn('Button With Disabled')">Button</button>
       </view>
     </view>
-     <view class="demo-item">
+    <view class="demo-item">
       <text class="demo-item-title">Button With PressedStyle</text>
       <view class="demo-box">
-        <button class="btn" :pressed-style="pressedStyle"  @tap="handleClickBtn('Button With PressedStyle')">Button</button>
+        <button class="btn" :pressedStyle="pressedStyle"  @click="handleClickBtn('Button With PressedStyle')">Button</button>
+      </view>
+    </view>
+    <view class="demo-item">
+      <text class="demo-item-title">Button With slot</text>
+      <view class="demo-box">
+        <c-button class="btn"></c-button>
+      </view>
+      <view class="demo-box">
+        <c-button class="btn">slot button text</c-button>
       </view>
     </view>
   </view>
@@ -43,7 +52,12 @@
 </style>
 
 <script>
+
+import cButton from './button-slot'
 export default {
+  components: {
+    cButton
+  },
   data(){
     return {
       pressedStyle:{

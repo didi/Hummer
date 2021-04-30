@@ -8,6 +8,8 @@ export default {
   onBack(){
     // On Back LifeCycle
     console.log('Base Lifecycle Mixin On Back!')
-    return true
+    console.log("this.disabledBack", this.disabledBack)
+    return this.disabledBack
+    // return true
   }
 }

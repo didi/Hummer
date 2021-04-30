@@ -3,6 +3,10 @@
     <view class="demo-header">
       <text class="demo-title">生命周期</text>
     </view>
+    <view class="demo-header">
+      <text class="demo-title">当前是否禁用返回: {{disabledBack}}</text>
+      <button @click="changedisabledBack">切换是否可以返回</button>
+    </view>
   </view>
 </template>
 <style lang="less" scoped>
@@ -32,7 +36,9 @@ export default {
   mixins: [LifeMixin],
   extends: LifeExtend1,
   data() {
-    return {};
+    return {
+      disabledBack: true
+    };
   },
   onShow() {
     // onShow 生命周期
@@ -45,7 +51,12 @@ export default {
   onBack(){
     // onBack 生命周期
     console.log("on Back 生命周期")
-    return true
+    return this.disabledBack
+  },
+  methods: {
+    changedisabledBack() {
+      this.disabledBack = !this.disabledBack
+    }
   }
 };
 </script>
