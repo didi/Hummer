@@ -35,15 +35,19 @@ public class GestureUtils {
 
     public static Map<String, Float> findPositionInMotionEvent(Context context, MotionEvent e) {
         Map<String, Float> ret = new HashMap<>();
-        ret.put("x", 0f);
-        ret.put("y", 0f);
 
         if (e == null) {
+            ret.put("x", 0f);
+            ret.put("y", 0f);
+            ret.put("rawX", 0f);
+            ret.put("rawY", 0f);
             return ret;
         }
 
         ret.put("x", DPUtil.px2dpF(context, e.getX()));
         ret.put("y", DPUtil.px2dpF(context, e.getY()));
+        ret.put("rawX", DPUtil.px2dpF(context, e.getRawX()));
+        ret.put("rawY", DPUtil.px2dpF(context, e.getRawY()));
 
         return ret;
     }
