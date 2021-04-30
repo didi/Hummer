@@ -200,7 +200,7 @@ export class Base {
     const camelizeKey = camelize(key)
     switch(camelizeKey){
       case 'disabled':
-        this.disabled = value
+        this.disabled = value !== false
         break;
       case 'class': 
         this.updateStyle()

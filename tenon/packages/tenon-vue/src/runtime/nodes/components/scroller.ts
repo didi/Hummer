@@ -13,7 +13,7 @@ export class Scroller extends Base{
   _setAttribute(key:string, value: any){
     switch(key){
       case 'disabled':
-        this.disabled = value
+        this.disabled = value !== false
         break;
       case 'scrollDirection':
         if(value === 'horizontal' &&  this.element instanceof ScrollerComponent){

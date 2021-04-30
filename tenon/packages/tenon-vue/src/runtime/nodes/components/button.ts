@@ -54,7 +54,7 @@ export class Button extends Base{
   _setAttribute(key:string, value: any){
     switch(key){
       case 'disabled':
-        this.disabled = value
+        this.disabled = value !== false
         break;
       case 'disabledStyle':
         this.disabledStyle = value
