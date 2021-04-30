@@ -15,7 +15,7 @@ export class Scroller extends Base{
       case 'disabled':
         this.disabled = value
         break;
-      case 'scroll-direction':
+      case 'scrollDirection':
         if(value === 'horizontal' &&  this.element instanceof ScrollerComponent){
           // 属性切换时，滚动插件需要重新生命；同时元素渲染从children一次向上，这个时候element children已经赋值
           let scroller = new HorizontalScroller() as any

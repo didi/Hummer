@@ -1,5 +1,6 @@
 const listDelimiterRE = /;(?![^(]*\))/g
 const propertyDelimiterRE = /:(.+)/
+const camelizeRE = /-(\w)/g
 export type NormalizedStyle = Record<string, string | number>
 
 export function parseStringStyle(cssText: string): NormalizedStyle {
@@ -11,4 +12,8 @@ export function parseStringStyle(cssText: string): NormalizedStyle {
     }
   })
   return ret
+}
+
+export function camelize (str: string)  {
+    return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))
 }

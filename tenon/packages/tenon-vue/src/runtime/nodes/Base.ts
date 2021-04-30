@@ -1,4 +1,4 @@
-import {styleDynamicTransformer} from '@hummer/tenon-utils'
+import {styleDynamicTransformer, camelize} from '@hummer/tenon-utils'
 import {setCacheNode,handleFixedNodeByStyle,removeChildWithFixed} from '../helper/fixed-helper'
 import {handleAnimation, Animation} from '../helper/animation-helper'
 let __view_id = 0;
@@ -197,8 +197,8 @@ export class Base {
   setAttribute(key:string, value: any){
     key.search(/^data-/) === 0 && key.split('data-')[1] && (this.dataset[key.split('data-')[1]] = value);
     this.props.set(key, value)
-
-    switch(key){
+    const camelizeKey = camelize(key)
+    switch(camelizeKey){
       case 'disabled':
         this.disabled = value
         break;
@@ -208,7 +208,7 @@ export class Base {
       default:
         // FIX: 修复Viewpager组件Data属性赋值问题
         // this.element[key] = value
-        this._setAttribute(key, value)
+        this._setAttribute(camelizeKey, value)
         break;
     }
   }
