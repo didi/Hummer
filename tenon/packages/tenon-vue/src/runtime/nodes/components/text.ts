@@ -7,6 +7,13 @@ export class Text extends Base{
   constructor(){
     super()
     this.element = new TextComponent()
+    // FIXME: 原生实现appendChild和insertBefore后删除
+    if(!this.element.appendChild) {
+      this.element.appendChild = this._setNodeText.bind(this)
+    }
+    if(!this.element.insertBefore) {
+      this.element.insertBefore = this._setNodeText.bind(this)
+    }
   }
 
   // FIXME: 去除 Hack SetElementText方法，直接操作属性即可
@@ -26,6 +33,16 @@ export class Text extends Base{
 
   set richText(value: Array<String>){
     this.element.richText = value
+  }
+
+  // FIXME: 原生实现appendChild和insertBefore后删除
+  _setNodeText (text: string | any) {
+    if(typeof text !== 'string') {
+      if(!text._text) return
+      this.text = text._text
+    } else {
+      this.text = text
+    }
   }
 
   _setAttribute(key:string, value: any){

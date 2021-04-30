@@ -8,6 +8,13 @@ export class Button extends Base{
   constructor(){
     super()
     this.element = new ButtonComponent()
+    // FIXME: 原生实现appendChild和insertBefore后删除
+    if(!this.element.appendChild) {
+      this.element.appendChild = this._setNodeText.bind(this)
+    }
+    if(!this.element.insertBefore) {
+      this.element.insertBefore = this._setNodeText.bind(this)
+    }
   }
   setElementText(text: string){
     this.text = text
@@ -28,6 +35,16 @@ export class Button extends Base{
 
   set disabledStyle(style: Record<string, string>){
     this.element.disabled = styleTransformer.transformStyle(style, this) || {}
+  }
+
+  // FIXME: 原生实现appendChild和insertBefore后删除
+  _setNodeText (text: string | any) {
+    if(typeof text !== 'string') {
+      if(!text._text) return
+      this.text = text._text
+    } else {
+      this.text = text
+    }
   }
 
 
