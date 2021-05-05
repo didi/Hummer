@@ -20,6 +20,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.didi.hummer.HummerSDK;
+import com.didi.hummer.render.utility.RTLUtil;
+
 import java.util.Arrays;
 
 /**
@@ -181,6 +184,9 @@ public class BackgroundDrawable extends Drawable {
                     topLeftPercent > 0 || topRightPercent > 0 || bottomRightPercent > 0 || bottomLeftPercent > 0;
         }
 
+        /**
+         * 根据百分比计算边框圆角
+         */
         public void fillWithPercent(Rect bounds) {
             if (bounds == null || bounds.isEmpty()) {
                 return;
@@ -217,6 +223,30 @@ public class BackgroundDrawable extends Drawable {
                     bottomLeftY = bounds.height() * bottomLeftPercent / 100;
                 }
             }
+        }
+
+        /**
+         * 把边框圆角转换为RTL
+         */
+        public void toRTL() {
+            float t = topLeftX;
+            topLeftX = topRightX;
+            topRightX = t;
+            t = topLeftY;
+            topLeftY = topRightY;
+            topRightY = t;
+            t = bottomLeftX;
+            bottomLeftX = bottomRightX;
+            bottomRightX = t;
+            t = bottomLeftY;
+            bottomLeftY = bottomRightY;
+            bottomRightY = t;
+            t = topLeftPercent;
+            topLeftPercent = topRightPercent;
+            topRightPercent = t;
+            t = bottomLeftPercent;
+            bottomLeftPercent = bottomRightPercent;
+            bottomRightPercent = t;
         }
     }
 
@@ -328,6 +358,16 @@ public class BackgroundDrawable extends Drawable {
                     return BorderStyle.NONE;
             }
         }
+
+        /**
+         * 把边框圆角转换为RTL
+         */
+        public void toRTL() {
+            RTLUtil.toRTLRect(style);
+            RTLUtil.toRTLRect(width);
+            RTLUtil.toRTLRect(color);
+            radius.toRTL();
+        }
     }
 
     /**
@@ -364,6 +404,11 @@ public class BackgroundDrawable extends Drawable {
         RectF width = border.width;
         BorderRadius radius = border.radius;
         radius.fillWithPercent(getBounds());
+
+        // 转换成RTL布局
+        if (RTLUtil.isRTL(HummerSDK.appContext)) {
+            border.toRTL();
+        }
 
         mOuterBoundsRect.set(getBounds());
 

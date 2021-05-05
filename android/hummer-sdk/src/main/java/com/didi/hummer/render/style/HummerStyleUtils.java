@@ -7,6 +7,7 @@ import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.DPUtil;
+import com.didi.hummer.render.utility.RTLUtil;
 import com.didi.hummer.render.utility.RemUtil;
 import com.didi.hummer.render.utility.YogaAttrUtils;
 import com.facebook.yoga.YogaAlign;
@@ -447,6 +448,19 @@ public class HummerStyleUtils {
      * @param value
      */
     static void applyYogaStyle(YogaNode node, String key, Object value) {
+        // 转换成RTL布局
+        if (RTLUtil.isRTL(HummerSDK.appContext)) {
+            if (key.equals(Yoga.LEFT)) {
+                key = Yoga.RIGHT;
+            } else if (key.equals(Yoga.POSITION_LEFT)) {
+                key = Yoga.POSITION_RIGHT;
+            } else if (key.equals(Yoga.RIGHT)) {
+                key = Yoga.LEFT;
+            } else if (key.equals(Yoga.POSITION_RIGHT)) {
+                key = Yoga.POSITION_LEFT;
+            }
+        }
+
         switch (key) {
             case Yoga.JUSTIFY_CONTENT:
                 node.setJustifyContent(YogaJustify.valueOf(toYogaEnumString(value)));
