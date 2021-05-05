@@ -1,8 +1,10 @@
 package com.didi.hummer.render.style;
 
+import android.content.Context;
 import android.graphics.Color;
 
 import com.didi.hummer.HummerSDK;
+import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.render.component.view.HMBase;
@@ -333,6 +335,8 @@ public class HummerStyleUtils {
                 if (Hummer.TRANSFORM.equals(key) || (isTransitionStyle(key) && (view.supportTransitionStyle("all") || view.supportTransitionStyle(key)))) {
                     view.handleTransitionStyle(key, value);
                 } else if (isYogaStyle(key)) {
+                    // 可能需要转换成RTL样式
+                    key = toRTLStyleIfNeed(view.getContext(), key);
                     // 处理Yoga支持样式
                     applyYogaStyle(view.getYogaNode(), key, value); // 耗时1ms
                 } else {
@@ -442,25 +446,42 @@ public class HummerStyleUtils {
     }
 
     /**
+     * 转换成RTL样式
+     *
+     * @param key
+     */
+    static String toRTLStyleIfNeed(Context context, String key) {
+        boolean supportRTL = context instanceof HummerContext && HummerSDK.isSupportRTL(((HummerContext) context).getNamespace());
+        boolean needRTL = supportRTL && RTLUtil.isRTL(context);
+        if (needRTL) {
+            if (key.equals(Yoga.LEFT)) {
+                key = Yoga.RIGHT;
+            } else if (key.equals(Yoga.RIGHT)) {
+                key = Yoga.LEFT;
+            } else if (key.equals(Yoga.POSITION_LEFT)) {
+                key = Yoga.POSITION_RIGHT;
+            } else if (key.equals(Yoga.POSITION_RIGHT)) {
+                key = Yoga.POSITION_LEFT;
+            } else if (key.equals(Yoga.MARGIN_LEFT)) {
+                key = Yoga.MARGIN_RIGHT;
+            } else if (key.equals(Yoga.MARGIN_RIGHT)) {
+                key = Yoga.MARGIN_LEFT;
+            } else if (key.equals(Yoga.PADDING_LEFT)) {
+                key = Yoga.PADDING_RIGHT;
+            } else if (key.equals(Yoga.PADDING_RIGHT)) {
+                key = Yoga.PADDING_LEFT;
+            }
+        }
+        return key;
+    }
+
+    /**
      * 设置Yoga自带的flexbox属性
      *
      * @param key
      * @param value
      */
     static void applyYogaStyle(YogaNode node, String key, Object value) {
-        // 转换成RTL布局
-        if (RTLUtil.isRTL(HummerSDK.appContext)) {
-            if (key.equals(Yoga.LEFT)) {
-                key = Yoga.RIGHT;
-            } else if (key.equals(Yoga.POSITION_LEFT)) {
-                key = Yoga.POSITION_RIGHT;
-            } else if (key.equals(Yoga.RIGHT)) {
-                key = Yoga.LEFT;
-            } else if (key.equals(Yoga.POSITION_RIGHT)) {
-                key = Yoga.POSITION_LEFT;
-            }
-        }
-
         switch (key) {
             case Yoga.JUSTIFY_CONTENT:
                 node.setJustifyContent(YogaJustify.valueOf(toYogaEnumString(value)));

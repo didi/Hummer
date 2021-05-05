@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.render.utility.RTLUtil;
 import com.didi.hummer.render.utility.YogaDrawableUtil;
 
 /**
@@ -25,7 +27,9 @@ public class BackgroundHelper {
 
     private BackgroundDrawable getBgDrawable() {
         if (backgroundDrawable == null) {
-            backgroundDrawable = new BackgroundDrawable();
+            boolean supportRTL = context instanceof HummerContext && HummerSDK.isSupportRTL(((HummerContext) context).getNamespace());
+            boolean needRTL = supportRTL && RTLUtil.isRTL(context);
+            backgroundDrawable = new BackgroundDrawable(needRTL);
             if (view != null) {
                 view.setBackground(backgroundDrawable);
             }
