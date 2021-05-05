@@ -40,6 +40,10 @@ public class HummerConfig {
      */
     private ExceptionCallback exceptionCallback;
     /**
+     * 是否支持RTL布局（默认不支持）
+     */
+    private boolean isSupportRTL;
+    /**
      * 网络请求适配器
      */
     private IHttpAdapter httpAdapter;
@@ -73,6 +77,7 @@ public class HummerConfig {
         this.jsLogger = builder.jsLogger;
         this.eventTracer = builder.eventTracer;
         this.exceptionCallback = builder.exceptionCallback;
+        this.isSupportRTL = builder.isSupportRTL;
         this.httpAdapter = builder.httpAdapter;
         this.webSocketAdapter = builder.webSocketAdapter;
         this.imageLoaderAdapter = builder.imageLoaderAdapter;
@@ -105,6 +110,10 @@ public class HummerConfig {
             exceptionCallback = e -> {};
         }
         return exceptionCallback;
+    }
+
+    public boolean isSupportRTL() {
+        return isSupportRTL;
     }
 
     public IHttpAdapter getHttpAdapter() {
@@ -161,6 +170,7 @@ public class HummerConfig {
         private JSLogger.Logger jsLogger;
         private EventTracer.Trace eventTracer;
         private ExceptionCallback exceptionCallback;
+        private boolean isSupportRTL;
         private IHttpAdapter httpAdapter;
         private IWebSocketAdapter webSocketAdapter;
         private IImageLoaderAdapter imageLoaderAdapter;
@@ -186,6 +196,11 @@ public class HummerConfig {
 
         public Builder setExceptionCallback(ExceptionCallback callback) {
             exceptionCallback = callback;
+            return this;
+        }
+
+        public Builder setSupportRTL(boolean supportRTL) {
+            isSupportRTL = supportRTL;
             return this;
         }
 

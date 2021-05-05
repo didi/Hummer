@@ -20,7 +20,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.didi.hummer.HummerSDK;
 import com.didi.hummer.render.utility.RTLUtil;
 
 import java.util.Arrays;
@@ -31,6 +30,11 @@ import java.util.Arrays;
  * Created by XiaoFeng on 2020-01-14.
  */
 public class BackgroundDrawable extends Drawable {
+
+    /**
+     * 是否需要转换为RTL布局
+     */
+    private boolean needRTL = false;
 
     /**
      * 背景图片Drawable
@@ -387,6 +391,13 @@ public class BackgroundDrawable extends Drawable {
         }
     }
 
+    public BackgroundDrawable() {
+    }
+
+    public BackgroundDrawable(boolean needRTL) {
+        this.needRTL = needRTL;
+    }
+
     @Override
     public void draw(@NonNull Canvas canvas) {
         if (!border.hasBorder()) {
@@ -405,8 +416,7 @@ public class BackgroundDrawable extends Drawable {
         BorderRadius radius = border.radius;
         radius.fillWithPercent(getBounds());
 
-        // 转换成RTL布局
-        if (RTLUtil.isRTL(HummerSDK.appContext)) {
+        if (needRTL) {
             border.toRTL();
         }
 

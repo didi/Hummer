@@ -208,4 +208,8 @@ public class HummerSDK {
     public static ExceptionCallback getException(String namespace) {
         return getHummerConfig(namespace).getExceptionCallback();
     }
+
+    public static boolean isSupportRTL(String namespace) {
+        return getHummerConfig(namespace).isSupportRTL();
+    }
 }
