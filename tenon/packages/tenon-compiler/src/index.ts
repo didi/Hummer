@@ -17,6 +17,7 @@ import {transformModel} from './transforms/vModel'
 import {transformAnimation} from './transforms/vAnimation'
 import {transformComment} from './transforms/transformComment'
 import {transformElement} from './transforms/transformElement'
+import {transformProps} from './transforms/transformProps'
 export const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
   show: transformShow,
   model: transformModel,
@@ -27,7 +28,8 @@ export const NodeTransforms: (NodeTransform | any)[] = [
   transformComment,
   transformStyle,
   transformClass,
-  transformElement
+  transformElement,
+  transformProps
 ]
 export function compile(template:string, options:CompilerOptions):CodegenResult{
   return baseCompile(

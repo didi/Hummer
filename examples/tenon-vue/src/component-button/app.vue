@@ -18,7 +18,7 @@
      <view class="demo-item">
       <text class="demo-item-title">Button With PressedStyle</text>
       <view class="demo-box">
-        <button class="btn" :pressed-style="pressedStyle"  @tap="handleClickBtn('Button With PressedStyle')">Button</button>
+        <button class="btn" :pressed-style="pressedStyle"  @click="handleClickBtn('Button With PressedStyle')">Button</button>
       </view>
     </view>
   </view>
