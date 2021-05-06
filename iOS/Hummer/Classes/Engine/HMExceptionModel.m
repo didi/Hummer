@@ -19,6 +19,18 @@ NS_ASSUME_NONNULL_END
 
 @implementation HMExceptionModel
 
+- (instancetype)initWithParams:(NSDictionary *)params {
+    self = [super init];
+    if (self) {
+        self.column = params[@"column"];
+        self.line = params[@"line"];
+        self.message = params[@"message"];
+        self.name = params[@"name"];
+        self.stack = params[@"stack"];
+    }
+    return self;
+}
+
 + (BOOL)supportsSecureCoding {
     return YES;
 }

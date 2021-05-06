@@ -19,6 +19,7 @@
 #import "UIView+HMDom.h"
 #import "HMJavaScriptLoader.h"
 #import "HMJSGlobal+Private.h"
+#import "HMExceptionModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -83,6 +84,18 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
 HM_EXPORT_CLASS_METHOD(evaluateScript, evaluateScript:)
 
 HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:callback:)
+
+HM_EXPORT_CLASS_METHOD(postException, postException:)
+
+
++ (void)postException:(HMBaseValue *)exception{
+    
+    NSDictionary *exceptionDic = exception.toDictionary;
+    if (exceptionDic && HMCurrentExecutor.exceptionHandler) {
+        HMExceptionModel *model = [[HMExceptionModel alloc] initWithParams:exceptionDic];
+        HMCurrentExecutor.exceptionHandler(model);
+    }
+}
 
 + (HMBaseValue *)evaluateScript:(HMBaseValue *)script {
     NSString *jsString = [script toString];

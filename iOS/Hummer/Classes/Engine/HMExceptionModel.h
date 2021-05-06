@@ -31,4 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface HMExceptionModel ()
+
+- (instancetype)initWithParams:(NSDictionary *)params;
+@end
+
 NS_ASSUME_NONNULL_END
