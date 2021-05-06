@@ -144,6 +144,10 @@ const Hummer = {
     loadScriptWithUrl: (url, callback) => {
         invoke("Hummer", 0, "loadScriptWithUrl", url, callback);
     },
+    postException: (err) => {
+        err = transSingleArg(err);
+        invoke("Hummer", 0, "postException", err);
+    },
     notifyCenter: NotifyCenter,
 }
 
