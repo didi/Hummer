@@ -3,10 +3,15 @@ package com.didi.hummer.context;
 import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.engine.jsc.jni.HummerException;
+import com.didi.hummer.core.exception.JSException;
+import com.didi.hummer.core.util.HMJsonUtil;
 import com.didi.hummer.render.component.view.BaseInvoker;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.RemUtil;
 import com.didi.hummer.tools.JSLogger;
+
+import java.util.Map;
 
 public class HummerInvoker extends BaseInvoker<HMBase> {
 
@@ -75,6 +80,11 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                         }
                     }
                 });
+                break;
+            case "postException":
+                Map<String, Object> errMap = HMJsonUtil.toMap(String.valueOf(params[0]));
+                String strErr = errMap.get("message") + "\n" + errMap.get("stack");
+                HummerException.nativeException(mHummerContext.mJsContext, new JSException(strErr));
                 break;
             case "console.log":
                 JSLogger.log(mHummerContext.getNamespace(), String.valueOf(params[0]));
