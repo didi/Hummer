@@ -28,15 +28,7 @@ export  class Input extends Base{
     return this.element.focused || false
   }
   set focused(value:Boolean){
-    let flag = value
-    if(typeof value === 'string'){
-      if(value === 'true'){
-        flag = true
-      }else if(value === 'false'){
-        flag = false
-      }
-    }
-    this.element.focused = flag
+    this.element.focused = value !== false
   }
 
   // 占位提示文本

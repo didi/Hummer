@@ -13,7 +13,7 @@ export class Switch extends Base{
     return this.element.checked
   }
   set value(value: Boolean){
-    this.element.checked = value
+    this.element.checked = value !== false
   }
 
   set onColor(value: string){
