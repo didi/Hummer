@@ -3,6 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.6) (2021-05-07)
+
+
+### Bug Fixes
+
+* 修复 Tenon 动态 hack 无法生效的问题 ([29b6fd3](https://github.com/didi/Hummer/commit/29b6fd3a0f2d08e6ca5388e29f1429eb45e9e829))
+* **Android:** 修复evaluateJavaScript中scriptId传null时出现空指针异常 ([749e68a](https://github.com/didi/Hummer/commit/749e68aa85930776ac86f87a7a9cc919a35fc66b))
+* **Android:** 修复intent数据获取时可能引起的崩溃问题 ([d64a8d0](https://github.com/didi/Hummer/commit/d64a8d00345b8cca24dc1d346a464a0f03e85f80))
+* **Android:** 修复JSCallback延迟销毁引起的野指针问题 ([1824b8d](https://github.com/didi/Hummer/commit/1824b8d9eee068453d2a7ba605209438c4b013af))
+* **Android:** 修复Loading对话框没有去除默认背景的问题 ([9671e04](https://github.com/didi/Hummer/commit/9671e04cb3ecd28c40a41a7bd65c2652032f04d9))
+* **Android:** 修复transform样式解析空格问题 ([ece7a7c](https://github.com/didi/Hummer/commit/ece7a7c30ddd2615a6ce27ee581b9262b0eabea2))
+* **Android:** 修复对话框在部分App环境下显示默认黑色背景的问题 ([c14750d](https://github.com/didi/Hummer/commit/c14750dc96305d3a342c44ead08abb766b7bf064))
+* **Android:** 修复对话框在部分App环境下显示默认黑色背景的问题 ([a2d64fa](https://github.com/didi/Hummer/commit/a2d64fa6fa7629bafc68a0558da604586cb0f956))
+* **compiler:** 支持click自动转换tap事件 ([#152](https://github.com/didi/Hummer/issues/152)) ([19524cc](https://github.com/didi/Hummer/commit/19524ccf730b257f2e69425e990df86b3396cd56))
+* **iOS:** Add malloc(0) safe path ([be134aa](https://github.com/didi/Hummer/commit/be134aab939eda193196e5cf3f9dbec409adbdea))
+* **iOS:** Animation error ([99279e1](https://github.com/didi/Hummer/commit/99279e1e6fd054841029a394b34d3df50e2ca0b1))
+* **iOS:** block can use void argument ([08dc9da](https://github.com/didi/Hummer/commit/08dc9daf8dcc4fe2d3ecb6b91fbf1241f8a5d407))
+* **iOS:** Scroller/List scroll event error ([23457e3](https://github.com/didi/Hummer/commit/23457e3bb09e2fe911b35806df67cef79fbe99ef))
+* 修复List组件在瀑布流模式下滑动过程中自动执行动画后，item间距错乱的问题 ([0d2c860](https://github.com/didi/Hummer/commit/0d2c8603ef1e2500695879c1f91a3a94cfdcb4f3))
+* 修复List组件横向布局时的一些bug ([e267238](https://github.com/didi/Hummer/commit/e2672388727e4a1ac651d3c303d1e084177cf54c))
+* 修复ViewPager动态改变canLoop属性时出现crash的问题 ([5786173](https://github.com/didi/Hummer/commit/5786173bb116f09a9f3eae1648abb601e4763f42))
+* 修复加载本地.9图时无法自动拉伸的问题，改用原生加载方式 ([33e2a18](https://github.com/didi/Hummer/commit/33e2a188da1e49fb7a03a31600eb8789e3f4dc19))
+* **iOS:** bounces only change native bounces ([63f5dcf](https://github.com/didi/Hummer/commit/63f5dcf875f214c66e8ec8c43c4c840ff36dbf2a))
+* **iOS:** exceptionHandler add namespace ([#108](https://github.com/didi/Hummer/issues/108)) ([f27d1ef](https://github.com/didi/Hummer/commit/f27d1ef1be3ecf595e00dbea74821d3464bdb1af))
+* **iOS:** italic render error ([7a454b5](https://github.com/didi/Hummer/commit/7a454b53267962d50a4088123059194ae99989bd))
+* update EventTracer ([b0ef6c3](https://github.com/didi/Hummer/commit/b0ef6c35f6ba1e3800c5081410f9236e56177d94))
+* 修复退出页面时抛出JS异常时导致原生crash的问题 ([36e5960](https://github.com/didi/Hummer/commit/36e5960e00775ed1b16fb4db90133aeb6c6f73f3))
+* 修复默认Storage适配器再初始化配置时的空指针问题 ([0024b22](https://github.com/didi/Hummer/commit/0024b22b8483bd49727c68f9ee1db26e14202a7f))
+* 移除com.facebook.yoga:proguard-annotations依赖 ([ff45423](https://github.com/didi/Hummer/commit/ff45423917f2c2225ec890cf41f8fe809d7a76f9))
+* **Android:** 修复HotLoad时偶现的StackOverflow问题 ([08aa473](https://github.com/didi/Hummer/commit/08aa4730b9a3a31201fa3212e6ba6fae5386e73c))
+* **Android:** 修复ViewPager在触发touch事件时偶现index out of range问题 ([2268512](https://github.com/didi/Hummer/commit/226851289861152b33f71bf6abe2088a3012f5db))
+* **Android:** 修复对话框内容是absolute样式的情况下显示异常的问题 ([2e16ce5](https://github.com/didi/Hummer/commit/2e16ce5006523eca720030538ec0c73a2edc779f))
+* **Android:** 修复对话框在部分App环境下显示默认黑色背景的问题 ([7275c0c](https://github.com/didi/Hummer/commit/7275c0cae69dfeaede57d936ffb99644a8a850a8))
+* **iOS:** Add layerClass ([f11fdad](https://github.com/didi/Hummer/commit/f11fdad7cde26bef4b336bf03384847dec9fbed0))
+* **iOS:** List/ViewPager memory error ([9108b6c](https://github.com/didi/Hummer/commit/9108b6cb1ec44161a0438937c5ffe30200b96d58))
+* **iOS:** NSArray NSNumber min max NSNotFound error ([570fb6f](https://github.com/didi/Hummer/commit/570fb6f66be7947f91ab76b299feaf55f2c71eb9))
+* **iOS:** Remove unused View declare ([597a9c8](https://github.com/didi/Hummer/commit/597a9c8c4c7aa46f3e6782cd2361239faef5098c))
+* **iOS:** UICollectionView nest twice and then GIF stop animation ([6b74a5e](https://github.com/didi/Hummer/commit/6b74a5e860795d3f138e8ed67493d0d918cbf012))
+* **iOS:** Use contentView instead of LayoutObserver ([#106](https://github.com/didi/Hummer/issues/106)) ([931164f](https://github.com/didi/Hummer/commit/931164fc7308b2eee625594928aad66de7a5bc9b))
+* **iOS:** weak value does not need compare self ([df21749](https://github.com/didi/Hummer/commit/df217491120d0499bdaa497c49650c7da5af1fc0))
+
+
+### Features
+
+* add iOS postException ([e53af00](https://github.com/didi/Hummer/commit/e53af00f2708b5d7d49069ec5ede972d0a689a72))
+* **Android:** android release version: 0.3.19 ([6945a06](https://github.com/didi/Hummer/commit/6945a068c5b0bc8c37390b7b11be386717f4edba))
+* **Android:** android test version: 0.3.18.1 ([c225bd9](https://github.com/didi/Hummer/commit/c225bd948bd43b97fbf290a93c4cd39255ae46ba))
+* **Android:** android test version: 0.3.18.2 ([40679a1](https://github.com/didi/Hummer/commit/40679a14557a2fd09e71d2904bab1d16008812d4))
+* **Android:** android test version: 0.3.18.3 ([13cd946](https://github.com/didi/Hummer/commit/13cd946f4facc02e45b76d64ee96c5007b2fd355))
+* **Android:** android test version: 0.3.18.4 ([b63c702](https://github.com/didi/Hummer/commit/b63c702d0925b91b716c2fd32aa65ffdd4856ec2))
+* **Android:** android test version: 0.3.18.5 ([6014575](https://github.com/didi/Hummer/commit/601457529df7a21257227a3a6de6e0503044e90c))
+* **Android:** android test version: 0.3.18.7 ([a0f7e8e](https://github.com/didi/Hummer/commit/a0f7e8e8a3666a9963a1958817e575c6cee1abdb))
+* **Android:** Hummer.loadScript 和 Hummer.loadScriptWithUrl 返回值重新定义 ([565d9ac](https://github.com/didi/Hummer/commit/565d9ac477c4d912654d8aa48fafb4c303bffafa))
+* **Android:** 使用MavenCentral中发布的hermes-debugger新版本 ([9910eec](https://github.com/didi/Hummer/commit/9910eecd1a4528d567bb74b2105b3e4cf33288ad))
+* **Android:** 新增局部视图使用Hummer渲染的示例 ([fb6b2ef](https://github.com/didi/Hummer/commit/fb6b2ef5ccf87ed7e9be0fc810607b1670e6b007))
+* **iOS:** Send console to CLI by WebSocket ([#143](https://github.com/didi/Hummer/issues/143)) ([06fae60](https://github.com/didi/Hummer/commit/06fae607c45a4e2a9cec3e6165662f02c1441565))
+* Use hm_markDirty instead of setNeedsLayout ([a11daa4](https://github.com/didi/Hummer/commit/a11daa4f510be92e56005c6b6c9cf7ab491c5b41))
+* 支持命令行窗口直接显示日志；修改代码自动热更新支持断开重连 ([a7a7d4b](https://github.com/didi/Hummer/commit/a7a7d4b51047ad09cd5351aee2f7d22b416efc68))
+* **Android:** 整理示例页面 ([c514ba4](https://github.com/didi/Hummer/commit/c514ba491355d6d88ecb5dcce1bbbac9f002856f))
+
+
+### Reverts
+
+* Revert "fix(iOS): Use contentView instead of LayoutObserver" (#114) ([2c0f5f7](https://github.com/didi/Hummer/commit/2c0f5f7a19d776885b42af88abb6f6b10ac62c29)), closes [#114](https://github.com/didi/Hummer/issues/114) [#106](https://github.com/didi/Hummer/issues/106)
+
+
+
+
+
 ## [1.2.4](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.4) (2021-04-08)
 
 
