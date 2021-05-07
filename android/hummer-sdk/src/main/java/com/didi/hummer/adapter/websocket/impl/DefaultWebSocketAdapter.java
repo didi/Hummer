@@ -1,5 +1,10 @@
 package com.didi.hummer.adapter.websocket.impl;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.NonNull;
+
 import com.didi.hummer.adapter.websocket.IWebSocketAdapter;
 import com.didi.hummer.adapter.websocket.OnWebSocketEventListener;
 import com.didi.hummer.adapter.websocket.WebSocketCloseCodes;
@@ -17,12 +22,31 @@ import okhttp3.WebSocketListener;
  */
 public class DefaultWebSocketAdapter implements IWebSocketAdapter {
 
+    private static final int MSG_MESSAGE = 1;
+
     private String url;
     private OkHttpClient client;
     private WebSocket ws;
+    private Handler handler;
+    private OnWebSocketEventListener eventListener;
 
     public DefaultWebSocketAdapter() {
         client = new OkHttpClient();
+        handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case MSG_MESSAGE:
+                        if (eventListener != null) {
+                            eventListener.onMessage(String.valueOf(msg.obj));
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
     }
 
     @Override
@@ -38,6 +62,7 @@ public class DefaultWebSocketAdapter implements IWebSocketAdapter {
         }
 
         this.url = url;
+        this.eventListener = listener;
 
         Request request = new Request.Builder()
                 .url(url)
@@ -57,9 +82,11 @@ public class DefaultWebSocketAdapter implements IWebSocketAdapter {
             public void onClosed(WebSocket webSocket, int code, String reason) {
                 reset();
 
-                if (listener != null) {
-                    listener.onClose(code, reason);
-                }
+                handler.post(() -> {
+                    if (listener != null) {
+                        listener.onClose(code, reason);
+                    }
+                });
             }
 
             @Override
@@ -67,20 +94,22 @@ public class DefaultWebSocketAdapter implements IWebSocketAdapter {
                 t.printStackTrace();
                 reset();
 
-                if (listener != null) {
-                    if (t instanceof EOFException) {
-                        listener.onClose(WebSocketCloseCodes.CLOSE_NORMAL.getCode(), WebSocketCloseCodes.CLOSE_NORMAL.name());
-                    } else {
-                        listener.onError(t.getMessage());
+                handler.post(() -> {
+                    if (listener != null) {
+                        if (t instanceof EOFException) {
+                            listener.onClose(WebSocketCloseCodes.CLOSE_NORMAL.getCode(), WebSocketCloseCodes.CLOSE_NORMAL.name());
+                        } else {
+                            listener.onError(t.getMessage());
+                        }
                     }
-                }
+                });
             }
 
             @Override
             public void onMessage(WebSocket webSocket, String text) {
-                if (listener != null) {
-                    listener.onMessage(text);
-                }
+                // 用Message的形式发送是为了可以在发送之前移除阻塞的消息，防止消息堆积阻塞
+                handler.removeMessages(MSG_MESSAGE);
+                handler.sendMessage(Message.obtain(handler, MSG_MESSAGE, text));
             }
         });
     }
