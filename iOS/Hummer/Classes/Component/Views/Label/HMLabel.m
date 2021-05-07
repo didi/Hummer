@@ -264,15 +264,14 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
 }
 
 - (void)updateFont {
-    UIFontDescriptor *fontDescriptor = self.font.fontDescriptor;
+    UIFontDescriptor *fontDescriptor = _fontFamily ? [UIFontDescriptor fontDescriptorWithName:_fontFamily size:_fontSize] : self.font.fontDescriptor;
     if (_fontWeight) {
-        fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | UIFontDescriptorTraitBold];
+        UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | UIFontDescriptorTraitBold];
+        fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;
     }
     if (_fontStyle) {
-        fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | _fontStyle];
-    }
-    if (_fontFamily) {
-        fontDescriptor = [fontDescriptor fontDescriptorWithFamily:_fontFamily];
+        UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | _fontStyle];
+        fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;
     }
     UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:_fontSize];
     self.font = font;
