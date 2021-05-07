@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.6) (2021-05-07)
+
+
+### Bug Fixes
+
+* 修复 Tenon 动态 hack 无法生效的问题 ([29b6fd3](https://github.com/didi/Hummer/commit/29b6fd3a0f2d08e6ca5388e29f1429eb45e9e829))
+
+
+
+
+
 ## [1.2.4](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.4) (2021-04-08)
 
 **Note:** Version bump only for package @hummer/tenon-utils
