@@ -10,6 +10,7 @@
   "dependencies": {
     "@hummer/tenon-store": "^1.2.6-alpha.0",
     "@hummer/tenon-vue": "^1.0.0",
+    "@hummer/vue-plugin-error-handler": "^0.3.1",
     "@hummer/vue-plugin-list": "^0.2.0",
     "@hummer/vue-plugin-popup": "^0.2.0",
     "@hummer/vue-plugin-viewpager": "^0.2.0"

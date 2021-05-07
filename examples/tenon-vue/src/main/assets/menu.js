@@ -66,6 +66,20 @@ export const Animation = {
   },]
 }
 
+export const Plugin = {
+  title: '插件篇',
+  items: [{
+    url: './plugin-error.js',
+    name: '错误捕获'
+  },{
+    url: './store-demo.js',
+    name: '页面状态管理'
+  },{
+    url: './store-muti-main.js',
+    name: '多页面级状态管理'
+  }]
+}
+
 export const Other = {
   title: '其它',
   items: [{
@@ -73,4 +87,6 @@ export const Other = {
     name: 'Lifecycle'
   }]
 }
-export const Menu =  [GrammarMenu, ComponentMenu, HighComponent, Animation, Other]
+
+
+export const Menu =  [GrammarMenu, ComponentMenu, HighComponent, Animation, Plugin, Other]
