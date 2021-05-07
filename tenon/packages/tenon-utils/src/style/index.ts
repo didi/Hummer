@@ -4,11 +4,13 @@ import {transformUnit} from './transformer/unit'
 import {transformBreakToken} from './transformer/break-token'
 import {transformBorder} from './transformer/border'
 import {transformShadow} from './transformer/shadow'
-import {transformAdapter, dynamicTransformAdapter} from './transformer/adapter'
+import {transformAdapter} from './transformer/adapter'
 import {transformBackground} from './transformer/background'
 import {transformFlex} from './transformer/flex'
 import {transformTransform} from './transformer/transform'
 import {transformTransition} from './transformer/transition'
+
+import {dynamicTransformAdapter} from './dynamic-transformer/adapter'
 
 class StyleTransformer{
 

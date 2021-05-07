@@ -1,47 +1,53 @@
 <template>
-  <view>
-    <view>
-      <text class="demo-title">Component Image!</text>
+  <view class="page">
+    <view class="demo-header">
+      <text class="demo-title">Component Image</text>
     </view>
-    <view class="demo-item">
-      <text class="demo-item-title">普通图片</text>
-      <view class="demo-box">
-        <image class="image-item" :src="imageSrc"></image>
+    <view class="demo-container">
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">普通图片</text>
+        </view>
+        <view class="item-container">
+          <view class="box-container">
+            <view class="image-item border-item"></view>
+            <image class="image-item" :src="imageSrc"></image>
+          </view>
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Gif图片</text>
-      <view class="demo-box">
-        <image class="image-item" :src="gifSrc"></image>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">普通图片带圆角</text>
+        </view>
+        <view class="item-container">
+          <view class="box-container">
+            <image class="image-item border-item" :src="imageSrc"></image>
+          </view>
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Gif图片 和 RepeatCount 2</text>
-      <view class="demo-box">
-        <image class="image-item" :src="gifSrc" :gifRepeatCount="gifRepeatCount"></image>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Gif图片 & RepeatCount 2</text>
+        </view>
+        <view class="item-container">
+          <view class="box-container">
+            <image class="image-item" :src="gifSrc" :gifRepeatCount="gifRepeatCount"></image>
+          </view>
+        </view>
+      </view>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Gif图片 & RepeatCount 2</text>
+        </view>
+        <view class="item-container">
+          <view class="box-container">
+            <image class="image-item" :src="gifSrc" :gifRepeatCount="gifRepeatCount"></image>
+          </view>
+        </view>
       </view>
     </view>
   </view>
 </template>
-<style lang="less" scoped>
-  .demo-title{
-    font-size: .36rem;
-    width: 100%;
-    text-align: center;
-  }
-  .demo-item-image{
-    font-size: .24rem;
-    width: 100%;
-  }
-  .demo-box{
-    margin-top: .2rem;
-  }
-  .image-item{
-    width: 2rem;
-    height: 2rem;
-  }
-</style>
-
 <script>
 export default {
   data(){
@@ -53,3 +59,51 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.page {
+  background-color: #eeeeee;
+  margin-bottom: 0.5rem;
+}
+.demo-header {
+  padding: 0.2rem 0;
+  background-color: #fa9153;
+}
+.demo-title {
+  font-size: 0.36rem;
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+.demo-container {
+  margin-top: 0.2rem;
+}
+.demo-item {
+  background-color: #ffffff;
+  width: 100%;
+  margin-bottom: 0.2rem;
+  padding: 0.2rem 0;
+}
+.box-container{
+  display: flex;
+  justify-content: center;
+}
+.item-title {
+  text-align: center;
+}
+.item-title-text {
+  text-align: center;
+  font-size: 0.28rem;
+}
+.item-container {
+  margin-top: 0.2rem;
+}
+.image-item{
+  width: 2rem;
+  height: 2rem;
+  background-color: red;
+}
+.border-item{
+  border-radius: 50%;
+  // overflow: hidden;
+}
+</style>

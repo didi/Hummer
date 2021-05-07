@@ -45,7 +45,7 @@ export default {
   onBack(){
     // onBack 生命周期
     console.log("on Back 生命周期")
-    return true
+    // return true
   }
 };
 </script>
