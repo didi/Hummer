@@ -111,6 +111,17 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [ ] React Router 生态接入
 - Tenon 组件库建设（[mand-mobile](https://github.com/didi/mand-mobile)）
   - [ ] 一期完成基本组件
+- Hummer 基础组件建设
+    - [ ] 单选框（Radio）
+    - [ ] 复选框（Checkbox）
+    - [ ] 普通进度条（Progress）
+    - [ ] 滑动进度条（Slider）
+    - [ ] 日期/时间选择器（DatePicker）
+    - [ ] 图片选择器（ImagePicker）
+    - [ ] 图片预览（ImageViewer）
+    - [ ] 拍照/录像（Camera）
+    - [ ] 电话（Phone）
+    - [ ] 画布（Canvas）
 
 #### 性能优化
 - 动态执行 JS
@@ -137,8 +148,9 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 </div>
 
 ## 友情链接
-1. [DoKit](https://github.com/didi/DoraemonKit) DoraemonKit /'dɔ:ra:'emɔn/，简称 DoKit，中文名 哆啦A梦，意味着能够像哆啦A梦一样提供给他的主人各种各样的工具。Just Do Kit
-2. [OrangeLab](https://github.com/OrangeLab) 我们团队的官方 GitHub 组织，我们团队所有对外开源的其他项目都可以在这里找到。
+- [DoKit](https://github.com/didi/DoraemonKit) DoraemonKit /'dɔ:ra:'emɔn/，简称 DoKit，中文名 哆啦A梦，意味着能够像哆啦A梦一样提供给他的主人各种各样的工具。Just Do Kit
+- [Mand Mobile](https://github.com/didi/mand-mobile) 一款优秀的面向金融场景的移动端 UI 组件库。
+- [OrangeLab](https://github.com/OrangeLab) 我们团队的官方 GitHub 组织，我们团队所有对外开源的其他项目都可以在这里找到。
 <div style="height: 200px">
  <img alt="OrangeLab" src="https://pt-starimg.didistatic.com/static/starimg/img/D0o2VUdbBk1619669626314.png" height = "200" />
 </div>
