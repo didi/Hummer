@@ -120,11 +120,11 @@ public class WebSocketManager {
         }
 
         Uri uri = Uri.parse(url);
-        String authority = uri.getAuthority();
-        if (TextUtils.isEmpty(authority)) {
-            return null;
-        }
 
-        return "ws://" + authority;
+        // 如果是CML的链接，需要特殊处理一下端口号，因为CML的CLI会占用原始端口（如：http://x.x.x.x:8000/tenon/index.js）
+        if (uri.getPath().startsWith("/tenon")) {
+            return "ws://" + uri.getHost() + ":39340";
+        }
+        return "ws://" + uri.getAuthority();
     }
 }
