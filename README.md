@@ -1,3 +1,4 @@
+
 <div align="left">
  <a href="http://hummer.didi.cn">
     <img alt="Hummer" src="https://pt-starimg.didistatic.com/static/starimg/img/qJSiUPdQIn1605061199481.png" width="384" />
@@ -38,7 +39,6 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 - 想了解更多 Hummer CLI 脚手架的使用说明，请参考 [CLI 使用教程](https://hummer.didi.cn/doc#/zh-CN/cli_doc)。
 - 想了解更多 Hummer 相关的基准测试报告，请参考 [Hummer Standard Benchmarks](https://github.com/OrangeLab/hummer-standard-benchmarks)。
 
-
 ## 简单演示
 简单感受一下分别使用 Hummer API 和 Tenon 开发的 HelloWorld 页面对应的代码，以及分别在 Android 和 iOS 设备上运行的最终效果。
 
@@ -49,6 +49,7 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 | Android | iOS |
 | ---- | ---- |
 | ![HummerCode](https://pt-starimg.didistatic.com/static/starimg/img/dfed6eHxTQ1607423220944.png) | ![TenonCode](https://pt-starimg.didistatic.com/static/starimg/img/mGMzF3X8F31607423224147.png) |
+
 ## 关联仓库
 | 仓库      |  说明   |
 | :-------- | :------ |
@@ -56,7 +57,6 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 | [Hummer CLI Template](https://github.com/OrangeLab/hummer-cli-template)   | Hummer CLI 的模板仓库  |
 | [Tenon Loader](https://github.com/OrangeLab/tenon-loader)   | Tenon Vue Loader  |
 | [Tenon Plugins ](https://github.com/OrangeLab/tenon-plugins)   | Tenon 的插件库  |
-
 
 ## 协议
 <img alt="Apache-2.0 license" src="https://www.apache.org/img/ASF20thAnniversary.jpg" width="128">
@@ -67,6 +67,61 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 - **负责人** [小枫](https://github.com/bbssyyuui)
 - **内部核心成员** [小枫](https://github.com/bbssyyuui), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
 - **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin)
+
+## 近期规划
+
+### 里程碑
+- 5月底
+    - VSCode 调试插件发布
+    - Tenon Router 发布
+    - 两端一致性达到 90%
+- 6月底
+    - 视图调试发布
+    - Tenon for React 初版发布
+    - 两端一致性达到 98%
+- 7月底
+    - VSCode 插件完整版发布
+    - 增强版 DevTools 发布
+    - 公共包抽离能力发布
+
+### TODO
+#### 研发体验
+- 两端一致性
+    - [ ] 设计和编写测试用例
+    - [ ] 搜集和梳理两端不一致问题
+    - [ ] 逐一解决两端不一致问题
+    - [ ] iOS 端完成部分组件自渲染
+- DevTools
+    - [ ] iOS 对齐 Android 端【开发工具】按钮功能，可以显示日志、异常堆栈和页面基本信息
+    - [ ] iOS 对齐 Android 端【刷新】按钮功能
+    - [ ] iOS 对齐 Android 端热重载功能
+    - [ ] CLI 支持命令行日志输出
+    - [ ] 增强版 DevTools 支持（类似RN）
+- VSCode 插件
+    - [ ] VSCode 调试插件开发完成
+    - [ ] 支持代码提示和代码自动补全
+- 视图调试
+    - [ ] Dev 页面展示视图树和节点样式
+    - [ ] 原生侧高亮选中的UI控件（画框）
+
+#### 生态建设
+- Tenon for React
+  - [ ] 基础框架完成
+  - [ ] Redux 生态接入
+  - [ ] React Router 生态接入
+- Tenon 组件库建设（[mand-mobile](https://github.com/didi/mand-mobile)）
+  - [ ] 一期完成基本组件
+
+#### 性能优化
+- 动态执行 JS
+    - [ ] 公共包抽离
+    - [ ] 页面懒加载（Tenon Router）
+- 多线程支持
+
+#### 其他
+- N-API 专项（抽象JS引擎）
+    - [ ] 适配 QuickJS
+    - [ ] 适配 Hermes
 
 ## QQ 交流群
 欢迎加入我们的 QQ 交流群【Hummer&Tenon交流群】(851327307)，有任何 Hummer 使用上的问题和建议，都可以在群里直接反馈，我们会第一时间跟进。
