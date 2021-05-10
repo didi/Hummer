@@ -135,6 +135,8 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 适配 QuickJS
     - [ ] 适配 Hermes
 
+*（~ 欢迎大家领取任务，给我们提交 PR ~）*
+
 ## QQ 交流群
 欢迎加入我们的 QQ 交流群【Hummer&Tenon交流群】(851327307)，有任何 Hummer 使用上的问题和建议，都可以在群里直接反馈，我们会第一时间跟进。
 <div style="height: 200px">    
