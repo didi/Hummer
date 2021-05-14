@@ -282,6 +282,7 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
         if (state == 0) {
             return;
         }
+        CGPoint windowLocation = [obj locationInView:nil];
         CGPoint location = [obj locationInView:obj.view];
         [self hm_notifyWithEventName:HMTouchEventName argument:@{
                 @"type": HMTouchEventName,
@@ -289,7 +290,9 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
                 @"timestamp": @(([[[NSDate alloc] init] timeIntervalSince1970] - NSProcessInfo.processInfo.systemUptime + obj.timestamp) * 1000),
                 @"position": @{
                         @"x": @(location.x),
-                        @"y": @(location.y)
+                        @"y": @(location.y),
+                        @"rawX": @(windowLocation.x),
+                        @"rawY": @(windowLocation.y)
                 }
         }];
     }];
