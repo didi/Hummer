@@ -1,5 +1,12 @@
 # Release Nodes
 
+### 0.3.20
+- 修复evaluateJavaScript中scriptId传null时出现空指针异常；
+- 修复WebSocket组件子线程访问JS的问题；
+- 触摸事件支持返回屏幕相对坐标；
+- 支持RTL布局；
+- 在调式模式下，对CML链接的WS端口号做特殊处理；
+
 ### 0.3.19
 - 修复Loading对话框和自定义对话框在某些机型上没有去除默认背景的问题；
 - 修复HotLoad时偶现的StackOverflow问题；
