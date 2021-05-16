@@ -49,7 +49,7 @@
     }
     
     if (dictionary[@"lineSpacingMulti"]) {
-        item.paragraphStyle = [NSMutableParagraphStyle defaultParagraphStyle];
+        item.paragraphStyle = NSParagraphStyle.defaultParagraphStyle.mutableCopy;
         item.paragraphStyle.lineSpacing = [HMConverter HMStringToFloat:dictionary[@"lineSpacingMulti"]];
     }
     
