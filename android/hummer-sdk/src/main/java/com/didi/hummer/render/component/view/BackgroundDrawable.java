@@ -785,7 +785,7 @@ public class BackgroundDrawable extends Drawable {
             return;
         }
         Canvas shadowCanvas = new Canvas(shadowBitmap);
-        shadowCanvas.translate(offset, offset);
+        shadowCanvas.translate(-shadow.dx + offset, -shadow.dy + offset);
 
         // 生成阴影图片
         mShadowPaint.setColor(Color.WHITE);
@@ -804,7 +804,7 @@ public class BackgroundDrawable extends Drawable {
         }
 
         // 画阴影图片
-        canvas.drawBitmap(shadowBitmap, -offset, -offset, null);
+        canvas.drawBitmap(shadowBitmap, shadow.dx - offset, shadow.dy - offset, null);
 
         // 释放阴影图片
         if (!shadowBitmap.isRecycled()) {
