@@ -94,7 +94,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 - DevTools
     - [ ] iOS 对齐 Android 端【开发工具】按钮功能，可以显示日志、异常堆栈和页面基本信息
     - [ ] iOS 对齐 Android 端【刷新】按钮功能
-    - [ ] iOS 对齐 Android 端热重载功能
+    - [x] iOS 对齐 Android 端热重载功能
     - [ ] CLI 支持命令行日志输出
     - [ ] 增强版 DevTools 支持（类似RN）
 - VSCode 插件
