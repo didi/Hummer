@@ -16,26 +16,11 @@
 @implementation UIView (HMImageLoader)
 
 - (id <HMImageLoaderOperation>)hm_webImageOperation {
-    WeakPointerWrapper *weakPointerWrapper = objc_getAssociatedObject(self, _cmd);
-
-    if (!weakPointerWrapper.value) {
-        objc_setAssociatedObject(self, _cmd, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-
-    return weakPointerWrapper.value;
+    return objc_getAssociatedObject(self, _cmd);
 }
 
 - (void)setHm_webImageOperation:(id <HMImageLoaderOperation>)hmWebImageOperation {
-    if (!hmWebImageOperation) {
-        objc_setAssociatedObject(self, @selector(hm_webImageOperation), nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    } else {
-        WeakPointerWrapper<id <HMImageLoaderOperation>> *weakPointerWrapper = objc_getAssociatedObject(self, @selector(hm_webImageOperation));
-        if (!weakPointerWrapper) {
-            weakPointerWrapper = [[WeakPointerWrapper alloc] init];
-            objc_setAssociatedObject(self, @selector(hm_webImageOperation), weakPointerWrapper, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        }
-        weakPointerWrapper.value = hmWebImageOperation;
-    }
+    objc_setAssociatedObject(self, @selector(hm_webImageOperation), hmWebImageOperation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 - (void)hm_internalSetImageWithURL:(id<HMURLConvertible>)source
                   inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource
@@ -47,6 +32,7 @@
         HMJSContext *hummerJSContext = [HMJSGlobal.globalObject currentContext:self.hmValue.context];
         bundle = hummerJSContext.url;
     }
+    [[self hm_webImageOperation] cancel];
     self.hm_webImageOperation = [[HMImageManager sharedManager] load:source inJSBundleSource:bundle context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
         if (completionBlock) {
             completionBlock(image,error,cacheType);

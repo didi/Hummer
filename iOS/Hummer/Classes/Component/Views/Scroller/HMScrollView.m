@@ -513,7 +513,7 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
     
     // 3. 将通过 JS 创建的 view 贴在 refreshView 上
     [self.refreshView.contentView addSubview:subView];
-    
+    self.refreshView.contentViewValue = value;
     // 4. 根据 JS 创建的 View 的大小更新 refreshView 的大小
     CGSize size = [subView hm_sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
     [subView hm_applyLayoutPreservingOrigin:NO affectedShadowViews:nil];
@@ -553,7 +553,7 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
     
     // 3. 将通过 JS 创建的 view 贴在 refreshView 上
     [self.loadView.contentView addSubview:subView];
-    
+    self.loadView.contentViewValue = value;
     // 4. 根据 JS 创建的 View 的大小更新 refreshView 的大小
     CGSize size = [subView hm_sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
     [subView hm_applyLayoutPreservingOrigin:NO affectedShadowViews:nil];

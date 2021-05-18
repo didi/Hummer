@@ -11,4 +11,7 @@
 /// NSOperation conform to `HMWebImageOperation`.
 @implementation NSOperation (HMImageLoaderOperation)
 
+- (BOOL)isCancel {
+    return self.isCancelled;
+}
 @end

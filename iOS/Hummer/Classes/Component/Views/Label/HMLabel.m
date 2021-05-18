@@ -264,7 +264,7 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
 }
 
 - (void)updateFont {
-    UIFontDescriptor *fontDescriptor = _fontFamily ? [UIFontDescriptor fontDescriptorWithName:_fontFamily size:_fontSize] : self.font.fontDescriptor;
+    UIFontDescriptor *fontDescriptor = _fontFamily ? [UIFontDescriptor fontDescriptorWithName:_fontFamily size:_fontSize] : [UIFont systemFontOfSize:_fontSize].fontDescriptor;
     if (_fontWeight) {
         UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | UIFontDescriptorTraitBold];
         fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;

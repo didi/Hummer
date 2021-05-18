@@ -69,6 +69,7 @@
         completionBlock(image,nil,HMImageCacheTypeMemory);
         return nil;
     }
+    __block  id<HMImageLoaderOperation> operation = nil;
     HMImageLoaderCompletionBlock loaderCompletedBloack = ^(id _Nullable data, BOOL needCache, NSError * _Nullable error) {
         if (error) {
             hm_safe_main_thread(^{
@@ -88,6 +89,9 @@
                     [wSelf.decodedImageCache addImageToCache:image url:cacheUrlString context:context];
                 }
                 hm_safe_main_thread(^{
+                    if ([operation isCancel]) {
+                        return;
+                    }
                     completionBlock(image,error,0);
                 });
             };
@@ -97,12 +101,15 @@
             });
         }else{
             hm_safe_main_thread(^{
+                if ([operation isCancel]) {
+                    return;
+                }
                 completionBlock(((UIImage *)data),nil,0);
             });
         }
     };
     //2 start load（download or local asset）
-    id<HMImageLoaderOperation> operation = [loader load:source inJSBundleSource:bundleSource context:context completion:loaderCompletedBloack];
+    operation = [loader load:source inJSBundleSource:bundleSource context:context completion:loaderCompletedBloack];
     return operation;
 }
 

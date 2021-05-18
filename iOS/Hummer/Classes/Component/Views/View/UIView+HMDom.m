@@ -36,7 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const BASE64HEADERPREFIX = @"data:";
 @interface UIView ()
-@property (nonatomic, weak, nullable) id<HMImageLoaderOperation> hm_webImageOperation;
 
 @property (nonatomic, nullable, strong) HMBaseValue *hmAccessible;
 

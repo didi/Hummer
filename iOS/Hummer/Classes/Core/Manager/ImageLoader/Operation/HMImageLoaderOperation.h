@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HMImageLoaderOperation <NSObject>
 
 - (void)cancel;
+- (BOOL)isCancel;
 @end
 
 /// NSOperation conform to `HMWebImageOperation`.

@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class HMBaseValue;
 typedef NS_ENUM(NSUInteger, HMRefreshType) {
     HMRefreshTypeNormal = 0,  // 正常状态
     HMRefreshTypeWillRefresh, // 将要刷新
@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HMRefreshBaseView : UIView
 
 @property (nonatomic, strong , readonly) UIView * contentView;
+@property (nonatomic, nullable, strong) HMBaseValue *contentViewValue;
 
 @property (nonatomic, assign ) UIEdgeInsets insets;
 

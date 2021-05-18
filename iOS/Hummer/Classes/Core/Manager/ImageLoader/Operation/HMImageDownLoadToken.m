@@ -25,4 +25,8 @@
         self.token = nil;
     }
 }
+- (BOOL)isCancel {
+    return _isCancel;
+}
+
 @end
