@@ -61,7 +61,7 @@ YOGA_TYPE_WRAPPER(YGSize) HMCompatibleMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) node,
         if (((UIImageView *) view).image) {
             CGSize imageSize = ((UIImageView *) view).image.size;
             
-            if ((widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeUndefined) && heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeUndefined)) || (widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeUndefined) && heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeAtMost) && height >= imageSize.height) || (widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeAtMost) && heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeAtMost) && width >= imageSize.width && height >= imageSize.height)) {
+            if ((widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeUndefined) && heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeUndefined)) || (widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeUndefined) && heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeAtMost) && height >= imageSize.height) || (heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeUndefined) && widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeAtMost) && width >= imageSize.width) || (widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeAtMost) && heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeAtMost) && width >= imageSize.width && height >= imageSize.height)) {
                 // 1. 无约束
                 // 2. 一边无约束，一边 atMost，并且图片更小
                 // 3. 两边 atMost，并且图片更小
