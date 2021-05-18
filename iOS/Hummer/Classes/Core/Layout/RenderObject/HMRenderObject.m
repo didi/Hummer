@@ -262,7 +262,7 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
         }
         YOGA_TYPE_WRAPPER(YGPositionType) position = YOGA_TYPE_WRAPPER(YGNodeStyleGetPositionType(clonedYogaNode));
         if (position == YOGA_TYPE_WRAPPER(YGPositionTypeAbsolute)) {
-            YGNodeStyleSetPositionType(clonedYogaNode, YOGA_TYPE_WRAPPER(YGPositionTypeRelative));
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetPositionType)(clonedYogaNode, YOGA_TYPE_WRAPPER(YGPositionTypeRelative));
         }
         // 不需要设置 bottom left right top，因为虽然相对布局会计算这些属性，但是由于当前只计算大小，所以不修改也没关系
     }
