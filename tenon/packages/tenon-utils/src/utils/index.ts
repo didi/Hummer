@@ -40,4 +40,14 @@ export function makeMapByArr(list:any, expectedLowerCase:Boolean =false){
   return expectedLowerCase ? (val:any) => !!map[val.toLowerCase()] : (val:any) => !!map[val]
 }
 
+const camelizeRE = /-(\w)/g
+/**
+ * 将字符串转换成驼峰命名方式
+ * @param str 待判断的字符串 test-data
+ * @returns 返回转换后的字符串 testData
+ */
+export function camelize(str:string){
+  return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))
+}
+
 export * from './api'
