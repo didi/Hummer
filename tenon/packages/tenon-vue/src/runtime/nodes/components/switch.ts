@@ -37,13 +37,13 @@ export class Switch extends Base{
       case 'value':
         this.value = value
         break;
-      case 'open-color':
+      case 'openColor':
         this.onColor = value
         break;
-      case 'close-color':
+      case 'closeColor':
         this.offColor = value
         break;
-      case 'thumb-color':
+      case 'thumbColor':
         this.thumbColor = value
         break;
       default:

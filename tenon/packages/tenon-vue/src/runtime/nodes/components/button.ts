@@ -39,10 +39,10 @@ export class Button extends Base{
       case 'disabled':
         this.disabled = value
         break;
-      case 'disabled-style':
+      case 'disabledStyle':
         this.disabledStyle = value
         break;
-      case 'pressed-style':
+      case 'pressedStyle':
         this.pressedStyle = value
         break;
       default:

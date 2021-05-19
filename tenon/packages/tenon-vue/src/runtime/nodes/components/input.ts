@@ -71,10 +71,10 @@ export  class Input extends Base{
       case 'type':
         this.type = value
         break;
-      case 'max-length':
+      case 'maxLength':
         this.maxLength = value
         break;
-      case 'return-key-type':
+      case 'returnKeyType':
         this.returnKeyType = value
         break;
       default:

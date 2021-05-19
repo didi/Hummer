@@ -30,7 +30,7 @@ export class Text extends Base{
 
   _setAttribute(key:string, value: any){
     switch(key){
-      case 'rich-text':
+      case 'richText':
         this.richText = value
         break;
       default:
