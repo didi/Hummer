@@ -200,7 +200,7 @@ export class Base {
 
     switch(key){
       case 'disabled':
-        this.disabled = value
+        this.disabled = value !== false
         break;
       case 'class': 
         this.updateStyle()

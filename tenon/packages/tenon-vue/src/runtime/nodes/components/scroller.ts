@@ -12,9 +12,6 @@ export class Scroller extends Base{
   }
   _setAttribute(key:string, value: any){
     switch(key){
-      case 'disabled':
-        this.disabled = value
-        break;
       case 'scroll-direction':
         if(value === 'horizontal' &&  this.element instanceof ScrollerComponent){
           // 属性切换时，Scroller组件需要重新声明，同时进行 Children的重新赋值
