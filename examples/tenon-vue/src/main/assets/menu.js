@@ -80,6 +80,16 @@ export const Plugin = {
   }]
 }
 
+export const Style = {
+  title: '样式篇',
+  items: [{
+    url: './style-basic.js',
+    name: '基础样式'
+  },{
+    url: './style-layout.js',
+    name: '布局样式'
+  }]
+}
 export const Other = {
   title: '其它',
   items: [{
@@ -89,4 +99,4 @@ export const Other = {
 }
 
 
-export const Menu =  [GrammarMenu, ComponentMenu, HighComponent, Animation, Plugin, Other]
+export const Menu =  [GrammarMenu, ComponentMenu, HighComponent, Style, Animation, Plugin, Other]
