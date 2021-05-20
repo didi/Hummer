@@ -1,51 +1,48 @@
 <template>
-  <view>
-    <view>
-      <text class="demo-title">Component Switch!</text>
+  <view class="page">
+    <view class="demo-header">
+      <text class="demo-title">Component Switch</text>
     </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Switch</text>
-      <view class="demo-box">
-        <switch v-model="checked" @switch="handleSwitch" open-color="#00ff00"  close-color="#ff0000" thumb-color="#00ffff">
-          HandleSwitch
-        </switch>
-        <button class="btn" @tap="handleToggle">Toggle Checked</button>
+    <view class="demo-container">
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Switch</text>
+        </view>
+        <view class="item-container">
+          <switch
+            v-model="checked"
+            style="width: 1rem;"
+            @switch="handleSwitch"
+            openColor="#00ff00"
+            closeColor="#ff0000"
+            thumbColor="#00ffff"
+          ></switch>
+        </view>
+        <view class="operator-container">
+          <button class="btn" @tap="handleToggle">Toggle Checked</button>
+        </view>
       </view>
     </view>
   </view>
 </template>
 <style lang="less" scoped>
-  .demo-title{
-    font-size: .36rem;
-    width: 100%;
-    text-align: center;
-  }
-  .demo-item-image{
-    font-size: .24rem;
-    width: 100%;
-  }
-  .demo-box{
-    margin-top: .2rem;
-  }
-  .btn{
-    background-color: yellow;
-  }
+@import "../common/assets/css/common.less";
 </style>
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-      checked: false
-    }
+      checked: false,
+    };
   },
-  methods:{
-    handleSwitch(checked){
-      Toast.show(JSON.stringify(checked))
+  methods: {
+    handleSwitch(checked) {
+      Toast.show(checked);
     },
-    handleToggle(){
-      this.checked = !this.checked
-    }
-  }
-}
+    handleToggle() {
+      this.checked = !this.checked;
+    },
+  },
+};
 </script>
