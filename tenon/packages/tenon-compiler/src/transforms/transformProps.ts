@@ -11,7 +11,7 @@ export const transformProps:NodeTransform = (node:any) => {
           if(p.type === NodeTypes.ATTRIBUTE) {
             p.name = camelize(p.name)
           }
-          if(p.type === NodeTypes.DIRECTIVE && p.name === 'bind') {
+          if(p.type === NodeTypes.DIRECTIVE && p.name === 'bind' && p.arg && p.arg.isStatic) {
               p.arg.content = camelize(p.arg.content)
           }
         }
