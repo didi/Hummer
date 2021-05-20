@@ -91,8 +91,10 @@ NS_ASSUME_NONNULL_END
         [((UIView *) componentViewObject) removeFromSuperview];
     }
     HMLogDebug(@"HMJSContext 销毁");
+#if defined(DEBUG)
     self.context.consoleHandler = nil;
     [self.webSocketTask cancel];
+#endif
 }
 
 + (instancetype)contextInRootView:(UIView *)rootView {
