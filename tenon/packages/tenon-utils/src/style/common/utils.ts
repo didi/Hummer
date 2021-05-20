@@ -8,6 +8,14 @@ export enum Keyword {
   AUTO = "auto"
 }
 
+export enum BorderStyle {
+  NONE = 'none',
+  SOLID = 'solid',
+  DASHED = 'dashed',
+  DOTTED = 'dotted'
+}
+
+
 /**
  * 判断是否是 Number 类型
  * @param num<number> 待判断的 Number 类型 
@@ -33,7 +41,19 @@ export function isWidth(width: Width):Boolean{
  * @returns Boolean 是否是 Length 类型
  */
 export function isLength(length: any):Boolean{
-  let lengthReg = /[\d\.]+(%|rem|hm|cpx)?$/
-  return length && length.test(lengthReg)
+  let lengthReg = /[\d\.]+(%|rem|hm|cpx|px|vw|vh)?$/
+  return lengthReg.test(length)
 }
 
+
+
+/**
+ * 判断是否是 BorderStyle 类型
+ * @param value 
+ * @returns 
+ */
+ export function isBorderStyle(value: string):Boolean{
+  return [BorderStyle.NONE,BorderStyle.DASHED,BorderStyle.DOTTED, BorderStyle.SOLID].findIndex((borderStyle:BorderStyle) => {
+    return value === borderStyle
+  }) !== -1
+}
