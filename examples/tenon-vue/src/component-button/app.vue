@@ -1,63 +1,70 @@
 <template>
-  <view>
-    <view>
-      <text class="demo-title">Component Button!</text>
+  <view class="page">
+    <view class="demo-header">
+      <text class="demo-title">Component Button</text>
     </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Button</text>
-      <view class="demo-box">
-        <button class="btn" @tap="handleClickBtn('Button')">Button</button>
+    <view class="demo-container">
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Button</text>
+        </view>
+        <view class="item-container">
+          <button class="btn" @tap="handleClickBtn('Button')">Button</button>
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Button With Disabled</text>
-      <view class="demo-box">
-        <button class="btn" disabled :disabled-style="disabledStyle"  @tap="handleClickBtn('Button With Disabled')">Button</button>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Button With Disabled</text>
+        </view>
+        <view class="item-container">
+          <button
+            class="btn"
+            disabled
+            :disabled-style="disabledStyle"
+            @tap="handleClickBtn('Button With Disabled')"
+          >
+            Button
+          </button>
+        </view>
       </view>
-    </view>
-     <view class="demo-item">
-      <text class="demo-item-title">Button With PressedStyle</text>
-      <view class="demo-box">
-        <button class="btn" :pressedStyle="pressedStyle"  @click="handleClickBtn('Button With PressedStyle')">Button</button>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Button With PressedStyle</text>
+        </view>
+        <view class="item-container">
+          <button
+            class="btn"
+            :pressedStyle="pressedStyle"
+            @click="handleClickBtn('Button With PressedStyle')"
+          >
+            Button
+          </button>
+        </view>
       </view>
     </view>
   </view>
 </template>
 <style lang="less" scoped>
-  .demo-title{
-    font-size: .36rem;
-    width: 100%;
-    text-align: center;
-  }
-  .demo-item-image{
-    font-size: .24rem;
-    width: 100%;
-  }
-  .demo-box{
-    margin-top: .2rem;
-  }
-  .btn{
-    background-color: blanchedalmond;
-    border-radius: .2rem;
-  }
+@import "../common/assets/css/common.less";
 </style>
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-      pressedStyle:{
-        'background-color': 'black'
+      pressedStyle: {
+        "background-color": "black",
       },
       disabledStyle: {
-        'background-color': 'yellow'
-      }
-    }
+        "background-color": "#eeeeee",
+        color: "#333333",
+      },
+    };
   },
   methods: {
-    handleClickBtn(msg){
+    handleClickBtn(msg) {
       Toast.show(msg);
-    }
-  }
-}
+    },
+  },
+};
 </script>
