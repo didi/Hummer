@@ -320,7 +320,9 @@ CGPoint intersectionPoint(CGPoint firstLineBegin,
             CGFloat value = ((NSNumber *) number).floatValue;
             
             return HMPercentValueMake(value);
-        } else {
+        } else if([((NSString *) number) isEqualToString:@"auto"]) {
+            return HMAutoValueMake();
+        }else{
             return HMPointValueMake(HMPointWithString((NSString *) number));
         }
     } else {

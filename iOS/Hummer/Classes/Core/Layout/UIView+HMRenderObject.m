@@ -42,6 +42,10 @@ YOGA_TYPE_WRAPPER(YGValue) HMPointValueMake(CGFloat value) {
 YOGA_TYPE_WRAPPER(YGValue) HMPercentValueMake(CGFloat value) {
     return (YOGA_TYPE_WRAPPER(YGValue)) {.value = value, .unit = YOGA_TYPE_WRAPPER(YGUnitPercent)};
 }
+YOGA_TYPE_WRAPPER(YGValue) HMAutoValueMake() {
+    return (YOGA_TYPE_WRAPPER(YGValue)) {.value = 0, .unit = YOGA_TYPE_WRAPPER(YGUnitAuto)};
+}
+
 
 @implementation UIView (HMShadowView)
 
