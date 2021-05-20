@@ -14,6 +14,16 @@
           </view>
         </view>
       </view>
+       <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">位移</text>
+        </view>
+        <view class="item-container">
+          <view class="box-container">
+            <view class="box" v-animation="translateStep"></view>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -42,6 +52,31 @@ export default {
             ...baseAnimation,
             styles: {
               opacity: 1,
+              position: {
+                x: "200hm",
+                y: 0,
+              },
+            },
+          },
+        ],
+      },
+      translateStep: {
+        steps: [
+          {
+            ...baseAnimation,
+            styles: {
+              // opacity: 0,
+              position: {
+                x: "100hm",
+                y: 0,
+              },
+            },
+          },
+          {
+            ...baseAnimation,
+            styles: {
+              // opacity: 1,
+              // position 基于初始位置
               position: {
                 x: "200hm",
                 y: 0,
@@ -94,9 +129,6 @@ export default {
   height: 1rem;
   margin: 0.1rem;
   background-color: #fa9153;
-}
-.box-opacity-hide {
-  opacity: 0;
 }
 .box-flex-row {
   display: flex;

@@ -37,6 +37,20 @@
           </button>
         </view>
       </view>
+       <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">width: auto</text>
+        </view>
+        <view class="item-container flex-container">
+          <view class="box-item width-auto">
+            <text>width: auto</text>
+          </view>
+           <view class="box-item">
+            <text>width: auto</text>
+          </view>
+          <view class="box-item"></view>
+        </view>
+      </view>
     </view>
 
   </view>
@@ -59,6 +73,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.width-auto{
+  width: auto;
 }
 </style>
 
