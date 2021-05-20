@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.7](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.7) (2021-05-20)
+
+
+### Bug Fixes
+
+* **runtime:** 修复native组件布尔类型的属性传递问题 ([#155](https://github.com/didi/Hummer/issues/155)) ([ce1511e](https://github.com/didi/Hummer/commit/ce1511ec964260b763210ec1fb74f0db541f0467))
+* **tenon:** 同时支持驼峰和横杠相连的属性传递 ([395c984](https://github.com/didi/Hummer/commit/395c984379cddd4b87134cf503f4e5c3ec02ab62))
+
+
+
+
+
 ## [1.2.6](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.6) (2021-05-07)
 
 **Note:** Version bump only for package @hummer/tenon-vue
