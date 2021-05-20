@@ -1,67 +1,99 @@
 <template>
-  <view>
-    <view>
-      <text class="demo-title">Component Textarea!</text>
+  <view class="page">
+    <view class="demo-header">
+      <text class="demo-title">Component Textarea</text>
     </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Textarea</text>
-      <view class="demo-box">
-        <textarea class="textarea"></textarea>
+    <view class="demo-container">
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Textarea</text>
+        </view>
+        <view class="item-container">
+          <textarea class="textarea" />
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Textarea 含有placeholder</text>
-      <view class="demo-box">
-         <textarea 
-          class="textarea input-place" 
-          placeholder="我是PlaceHolder" 
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Textarea(rows)</text>
+        </view>
+        <view class="item-container">
+          <textarea class="textarea" :rows="2" placeholder="我是PlaceHolder" />
+        </view>
+      </view>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Textarea(placeholder)</text>
+        </view>
+        <view class="item-container">
+          <textarea
+            class="textarea textarea-place"
+            placeholder="我是PlaceHolder"
           />
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Textarea设定focused</text>
-      <view class="demo-box">
-        <textarea class="textarea" :focused="focused"/>
-        <button @tap="handleFocus">Toggle Focus</button>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Textarea(focused)</text>
+        </view>
+        <view class="item-container">
+          <textarea class="textarea" :focused="focused" />
+        </view>
+        <view class="operation-container">
+          <button class="btn" @tap="toggleFocus">Change textarea Focus</button>
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Textarea设定max</text>
-      <view class="demo-box">
-        <textarea class="textarea" :max-length="maxLength"/>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Textarea(MaxLength)</text>
+        </view>
+        <view class="item-container">
+          <textarea class="textarea" :maxLength="maxLength" />
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Textarea设定type</text>
-      <view class="demo-box">
-        <text>当前Type:{{type}}</text>
-        <textarea class="textarea" :type="type"/>
-        <button @tap="handleChangeType">Change Textarea Type</button>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Textarea(type)</text>
+          <text class="item-title-text">type: {{ type }}</text>
+        </view>
+        <view class="item-container">
+          <textarea class="textarea" :type="type" />
+        </view>
+        <view class="operation-container">
+          <button class="btn" @tap="handleChangeType">
+            Change textarea Type
+          </button>
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Textarea设定ReturnKeyType</text>
-      <view class="demo-box">
-        <text>当前Return Key:{{returnKeyType}}</text>
-        <textarea class="textarea" :return-key-type="returnKeyType"/>
-        <button @tap="handleChangeKeyType">Change ReturnKey Type</button>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Textarea(returnKeyType)</text>
+          <text class="item-title-text"
+            >returnKeyType: {{ returnKeyType }}</text
+          >
+        </view>
+        <view class="item-container">
+          <textarea class="textarea" :returnKeyType="returnKeyType" />
+        </view>
+        <view class="operation-container">
+          <button class="btn" @tap="handleChangeKeyType">
+            Change ReturnKey Type
+          </button>
+        </view>
       </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Textarea设定Rows</text>
-      <view class="demo-box">
-        <textarea class="textarea" rows="2"/>
-      </view>
-    </view>
-    <view class="demo-item">
-      <text class="demo-item-title">Textarea事件测试</text>
-      <view class="demo-box">
-        <textarea class="textarea" 
-          @input="handleInput" 
-          @change="handleChange"
-          @focus="handleFocus"
-          @blur="handleBlur"
-          @confirm="handleConfirm"/>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">Textarea事件</text>
+        </view>
+        <view class="item-container">
+          <textarea
+            class="textarea"
+            @textarea="handletextarea"
+            @change="handleChange"
+            @focus="handleFocus"
+            @blur="handleBlur"
+            @confirm="handleConfirm"
+          />
+        </view>
       </view>
     </view>
   </view>
@@ -70,63 +102,69 @@
 
 <script>
 let i = 0;
-let types = ['default','number','tel','email','password']
-let returnTypes = ['done' ,'go' ,'next','search' ,'send']
+let types = ["default", "number", "tel", "email", "password"];
+let returnTypes = ["done", "go", "next", "search", "send"];
 export default {
-  data(){
+  data() {
     return {
       focused: false,
       maxLength: 10,
-      type: 'default',
-      returnKeyType: 'done'
-    }
+      type: "email",
+      returnKeyType: "done",
+    };
   },
   methods: {
-    handleFocus(){
-      this.focused = !this.focused
+    toggleFocus() {
+      this.focused = !this.focused;
     },
-    handleChangeType(){
-      this.type = types[i++%5]
+    handleChangeType() {
+      this.type = types[i++ % 5];
     },
-    handleChangeKeyType(){
-      this.returnKeyType = returnTypes[i++%5]
+    handleChangeKeyType() {
+      this.returnKeyType = returnTypes[i++ % 5];
     },
-    handleInput({value, state}){
-      console.log('Input Event:', value)
+    handletextarea({ value, text, state }) {
+      console.log("textarea Event:", value, text, state);
     },
-    handleChange(value){
-      console.log('Change Event:', value)
+    handleChange(value) {
+      console.log("Change Event:", value);
     },
-    handleFocus(value){
-      console.log('Focus Event:', value)
+    handleFocus() {
+      console.log("Focus Event:");
     },
-     handleBlur(value){
-      console.log('Blur Event:', value)
+    handleBlur(value) {
+      console.log("Blur Event:");
     },
-     handleConfirm(value){
-      console.log('Confirm Event:', value)
-    }
-  }
-}
+    handleConfirm(value) {
+      console.log("Confirm Event:", value);
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
-  .demo-title{
-    font-size: .36rem;
-    width: 100%;
-    text-align: center;
-  }
-  .textarea{
-    width: 100%;
-    background-color: aquamarine;
-  }
-  .input-place{
-   placeholder-color: blue;
-   cursor-color: #eedeee;
-   placeholder-font-size: .24rem;
-  }
+@import "../common/assets/css/common.less";
 
-  .demo-box{
-    margin-top: .2rem;
-  }
+.textarea {
+  width: 100%;
+  background-color: #eeffee;
+  height: 1rem;
+}
+.textarea-place {
+  placeholder-color: blue;
+  cursor-color: #eedeee;
+  placeholder-font-size: 0.24rem;
+}
+.btn {
+  flex: 1;
+  margin: 0 0.2rem;
+  height: 0.8rem;
+  text-align: center;
+  color: white;
+  background: #fa9153;
+  border-radius: 10px;
+}
+.demo-box {
+  margin-top: 0.2rem;
+}
 </style>
