@@ -100,6 +100,8 @@ export default {
   justify-content: center;
 }
 .border-item {
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
 }
 </style>
