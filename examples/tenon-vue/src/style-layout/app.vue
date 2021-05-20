@@ -52,7 +52,6 @@
         </view>
       </view>
     </view>
-
   </view>
 </template>
 <style lang="less" scoped>

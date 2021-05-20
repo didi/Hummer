@@ -10,7 +10,6 @@
         </view>
         <view class="item-container">
           <view class="box-container">
-            <view class="image-item border-item"></view>
             <image class="image-item" :src="imageSrc"></image>
           </view>
         </view>
@@ -27,12 +26,30 @@
       </view>
       <view class="demo-item">
         <view class="item-title">
-          <text class="item-title-text">Gif图片 & RepeatCount 2</text>
+          <text class="item-title-text">普通图片（resize）</text>
         </view>
         <view class="item-container">
           <view class="box-container">
-            <image class="image-item" :src="gifSrc" :gifRepeatCount="gifRepeatCount"></image>
+            <image
+              class="image-item"
+              :resize="resizeStyle"
+              :src="imageSrc"
+            ></image>
           </view>
+        </view>
+        <view class="operation-container">
+          <button class="btn" @tap="updateResizeStyle('stretch')">
+            stretch
+          </button>
+          <button class="btn" @tap="updateResizeStyle('origin')">
+            origin
+          </button>
+          <button class="btn" @tap="updateResizeStyle('contain')">
+           contain
+          </button>
+          <button class="btn" @tap="updateResizeStyle('cover')">
+            cover
+          </button>
         </view>
       </view>
       <view class="demo-item">
@@ -41,7 +58,11 @@
         </view>
         <view class="item-container">
           <view class="box-container">
-            <image class="image-item" :src="gifSrc" :gifRepeatCount="gifRepeatCount"></image>
+            <image
+              class="image-item"
+              :src="gifSrc"
+              :gifRepeatCount="gifRepeatCount"
+            ></image>
           </view>
         </view>
       </view>
@@ -50,60 +71,35 @@
 </template>
 <script>
 export default {
-  data(){
+  data() {
     return {
-      imageSrc: 'https://dpubstatic.udache.com/static/dpubimg/RJ4ZZ_M5ie/WechatIMG24764.jpeg',
-      gifSrc: 'https://pt-starimg.didistatic.com/static/starimg/img/NOrrIvZGhO1605683055216.gif',
-      gifRepeatCount: 2
-    }
-  }
-}
+      imageSrc:
+        "https://dpubstatic.udache.com/static/dpubimg/RJ4ZZ_M5ie/WechatIMG24764.jpeg",
+      gifSrc:
+        "https://pt-starimg.didistatic.com/static/starimg/img/NOrrIvZGhO1605683055216.gif",
+      gifRepeatCount: 2,
+      resizeStyle: "stretch",
+    };
+  },
+  methods: {
+    updateResizeStyle(style) {
+      this.resizeStyle = style;
+    },
+  },
+};
 </script>
 <style lang="less" scoped>
-.page {
-  background-color: #eeeeee;
-  margin-bottom: 0.5rem;
-}
-.demo-header {
-  padding: 0.2rem 0;
-  background-color: #fa9153;
-}
-.demo-title {
-  font-size: 0.36rem;
-  width: 100%;
-  text-align: center;
-  color: white;
-}
-.demo-container {
-  margin-top: 0.2rem;
-}
-.demo-item {
-  background-color: #ffffff;
-  width: 100%;
-  margin-bottom: 0.2rem;
-  padding: 0.2rem 0;
-}
-.box-container{
-  display: flex;
-  justify-content: center;
-}
-.item-title {
-  text-align: center;
-}
-.item-title-text {
-  text-align: center;
-  font-size: 0.28rem;
-}
-.item-container {
-  margin-top: 0.2rem;
-}
-.image-item{
+@import "../common/assets/css/common.less";
+.image-item {
   width: 2rem;
   height: 2rem;
   background-color: red;
 }
-.border-item{
+.box-container {
+  display: flex;
+  justify-content: center;
+}
+.border-item {
   border-radius: 50%;
-  // overflow: hidden;
 }
 </style>
