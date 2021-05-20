@@ -4,7 +4,8 @@ import {NODE_IMAGE} from '@hummer/tenon-utils'
 
 enum ImageAttr{
   Src = 'src',
-  GifCount = 'gifRepeatCount'
+  GifCount = 'gifRepeatCount',
+  Resize = 'resize'
 }
 const gifReg = /\.gif$/
 export class Image extends Base{
@@ -14,7 +15,7 @@ export class Image extends Base{
     super()
     this.element = new ImageComponent()
     // Image标签默认是按照Image组件的宽高缩放图片
-    this._defaultStyle = {
+    this.element.style = {
       resize: 'stretch'
     }
   }
@@ -36,6 +37,11 @@ export class Image extends Base{
       case ImageAttr.GifCount:
         this.element.gifRepeatCount = Number(value)
         this.src = this._src
+        break;
+      case ImageAttr.Resize:
+        this.style = {
+          resize: value
+        }
         break;
       default:
         break;
