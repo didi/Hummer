@@ -24,6 +24,8 @@ typedef NS_ENUM(NSUInteger, HMSizeThatFitsMode) {
 
 FOUNDATION_EXTERN YOGA_TYPE_WRAPPER(YGValue) HMPointValueMake(CGFloat value);
 FOUNDATION_EXTERN YOGA_TYPE_WRAPPER(YGValue) HMPercentValueMake(CGFloat value);
+FOUNDATION_EXTERN YOGA_TYPE_WRAPPER(YGValue) HMAutoValueMake(void);
+
 
 FOUNDATION_EXTERN HMLayoutEngine hm_get_layout_engine(void);
 
