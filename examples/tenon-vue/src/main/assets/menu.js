@@ -49,6 +49,12 @@ export const HighComponent = {
   },{
     url: './ex-component-viewpager.js',
     name: 'Component Viewpager'
+  },{
+    url: './ex-component-popup.js',
+    name: 'Component Popup'
+  },{
+    url: './ex-component-test.js',
+    name: 'Component Test'
   }]
 }
 

@@ -9,84 +9,38 @@
           <text class="item-title-text">Popup</text>
         </view>
         <view class="item-container">
-          <ex-popup :show="showPopup">
-            <text style="background: red;position:absolute; top:0;">
-              First Popup!
-            </text>
-          </ex-popup>
-          <ex-popup :show="showPopup2">
-            <text style="background: red;position:absolute; bottom:0;">
-              Second Popup!
-            </text>
-          </ex-popup>
+        </view>
+        <view class="operation-container">
+          <button class="btn" @tap="openDialog">打开弹窗</button>
         </view>
       </view>
     </view>
+    <dialog :show="showPopup" @close="closeDialog"></dialog>
   </view>
 </template>
 <style lang="less" scoped>
-.page {
-  background-color: #eeeeee;
-  margin-bottom: 0.5rem;
-}
-.demo-header {
-  padding: 0.2rem 0;
-  background-color: #fa9153;
-}
-.demo-title {
-  font-size: 0.36rem;
-  width: 100%;
-  text-align: center;
-  color: white;
-}
-.demo-container {
-  margin-top: 0.2rem;
-}
-.demo-item {
-  background-color: #ffffff;
-  width: 100%;
-  margin-bottom: 0.2rem;
-  padding: 0.2rem 0;
-}
-.item-title {
-  text-align: center;
-}
-.item-title-text {
-  text-align: center;
-  font-size: 0.28rem;
-}
-.item-container {
-  margin-top: 0.2rem;
-  width: 100%;
-  height: .5rem;
-}
-.box {
-  width: 1rem;
-  height: 1rem;
-  margin: 0.1rem;
-  background-color: #fa9153;
-  opacity: 1;
-}
-.box-opacity-hide{
-  opacity: 0;
-}
-.box-flex-row {
-  display: flex;
-  flex-direction: row;
-}
+@import "../common/assets/css/common.less";
+
 </style>
 
 <script>
-
+import Dialog from './components/dialog'
 export default {
+  components: {
+    Dialog
+  },
   data() {
     return {
-      showPopup: true,
-      showPopup2: true
+      showPopup: false
     }
   },
-  created(){
-    // this.showPopup2 = false
+  methods: {
+    openDialog(){
+      this.showPopup = true
+    },
+    closeDialog(){
+      this.showPopup = false
+    }
   }
 };
 </script>

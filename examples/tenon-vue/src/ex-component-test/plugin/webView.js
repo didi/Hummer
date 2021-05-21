@@ -1,25 +1,20 @@
 import { Base } from '@hummer/tenon-vue'
 
-const { View } = __GLOBAL__
+const { View, Text } = __GLOBAL__
 
 class WebView extends Base {
   constructor() {
     super();
     let element = new View();
+    let text = new Text();
     this.element = element;
-
-    // this.element.setWebviewReady((height) => {
-    //   // 容器返回的高度
-    //   // Ps. 注意单位转换
-    //   this.element.style = {
-    //     height: height
-    //   }
-    // })
+    this.text = text;
+    this.element.appendChild(text);
   }
   _setAttribute(key, value) {
     switch (key) {
       case 'content':
-        this.element.content = value
+        this.text.text = value
         break;
       default:
         this.element.style = {
