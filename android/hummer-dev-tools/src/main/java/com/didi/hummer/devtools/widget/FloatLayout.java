@@ -3,6 +3,7 @@ package com.didi.hummer.devtools.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
@@ -21,8 +22,8 @@ public class FloatLayout extends FrameLayout {
     private int maxHeight;
     private int viewWidth;
     private int viewHeight;
-    private float downx;
-    private float downy;
+    private float lastX;
+    private float lastY;
     private long touchDownTimestamp;
 
     public FloatLayout(Context context) {
@@ -49,19 +50,27 @@ public class FloatLayout extends FrameLayout {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 clearAnimation();
-                downx = event.getX();
-                downy = event.getY();
+                lastX = event.getRawX();
+                lastY = event.getRawY();
                 viewWidth = getWidth();
                 viewHeight = getHeight();
+                if (getParent() != null && getParent() instanceof View) {
+                    maxWidth = ((View) getParent()).getWidth();
+                    maxHeight = ((View) getParent()).getHeight();
+                }
                 touchDownTimestamp = System.currentTimeMillis();
                 break;
             case MotionEvent.ACTION_MOVE:
-                float moveX = event.getRawX() - downx;
-                float moveY = event.getRawY() - downy - statusBarHeight;
-                moveX = moveX < 0 ? 0 : (moveX + viewWidth > maxWidth) ? (maxWidth - viewWidth) : moveX;
-                moveY = moveY < 0 ? 0 : (moveY + viewHeight) > maxHeight ? (maxHeight - viewHeight) : moveY;
-                this.setY(moveY);
-                this.setX(moveX);
+                float moveX = event.getRawX() - lastX;
+                float moveY = event.getRawY() - lastY;
+                float viewX = getX() + moveX;
+                float viewY = getY() + moveY;
+                viewX = viewX < 0 ? 0 : (viewX + viewWidth > maxWidth) ? (maxWidth - viewWidth) : viewX;
+                viewY = viewY < 0 ? 0 : (viewY + viewHeight) > maxHeight ? (maxHeight - viewHeight) : viewY;
+                setX(viewX);
+                setY(viewY);
+                lastX = event.getRawX();
+                lastY = event.getRawY();
                 break;
             case MotionEvent.ACTION_UP:
                 float centerX = getX() + viewWidth / 2f;
