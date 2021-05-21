@@ -24,11 +24,13 @@ export class Scroller extends Base{
           this.element = scroller
         }
       break;
+      case 'bounces':
+        this.element.bounces = value !== false
+        break;
+      case 'showScrollBar':
+        this.element.showScrollBar = value !== false
+        break;
       default:
-        // showScrollBar
-        this.element.style = {
-          [key]:value
-        }
         break;
     }
   }
@@ -57,7 +59,6 @@ export class Scroller extends Base{
       }else {
         this.element.appendChild(child.element);
         child._onMounted();
-        child.onMounted();
       }
     }
   }
@@ -87,7 +88,6 @@ export class Scroller extends Base{
       }else {
         this.element.appendChild(child.element);
         child._onMounted();
-        child.onMounted();
       }
     }
   }
