@@ -6222,71 +6222,6 @@ JSValue JS_ThrowOutOfMemory(JSContext *ctx)
     return JS_EXCEPTION;
 }
 
-// 修复 "not a function" 的异常信息不全的问题  by XiaoFeng 20200602
-JSValue Test_ThrowNotFunctionError(JSContext *ctx) {
-
-    typedef struct JSOpCode2 {
-        const char *name;
-        uint8_t size;
-        uint8_t n_pop;
-        uint8_t n_push;
-        uint8_t fmt;
-    } JSOpCode2;
-
-    const JSOpCode2 opcode_info2[OP_COUNT + (OP_TEMP_END - OP_TEMP_START)] = {
-#define FMT(f)
-#define DEF(id, size, n_pop, n_push, f) { #id, size, n_pop, n_push, OP_FMT_ ## f },
-#include "quickjs-opcode.h"
-#undef DEF
-#undef FMT
-    };
-
-#define short_opcode_info2(op)           \
-    opcode_info2[(op) >= OP_TEMP_START ? \
-                (op) + (OP_TEMP_END - OP_TEMP_START) : (op)]
-
-    char atom_buf[ATOM_GET_STR_BUF_SIZE];
-    JSObject *p = JS_VALUE_GET_OBJ(ctx->current_stack_frame->cur_func);
-    JSFunctionBytecode *b = p->u.func.function_bytecode;
-
-    uint8_t *tab = b->byte_code_buf;
-    int len = b->byte_code_len;
-    int op;
-    const JSOpCode2 *oi;
-    JSAtom atom;
-    char funcName1[512] = {0};
-    char funcName2[512] = {0};
-    int pos = 0;
-
-    while (pos < len) {
-        op = tab[pos];
-        oi = &short_opcode_info2(op);
-        if (pos + oi->size > len) {
-            break;
-        }
-        pos++;
-        if (oi->fmt == OP_FMT_atom) {
-            if (strcmp(oi->name, "get_var") == 0) {
-                atom = get_u32(tab + pos);
-                const char* strAtom = JS_AtomGetStr(ctx, atom_buf, sizeof(atom_buf), atom);
-                strcpy(funcName1, strAtom);
-            }
-            if (strcmp(oi->name, "get_field2") == 0) {
-                atom = get_u32(tab + pos);
-                const char* strAtom = JS_AtomGetStr(ctx, atom_buf, sizeof(atom_buf), atom);
-                strcpy(funcName2, strAtom);
-            }
-        }
-        pos += oi->size - 1;
-    }
-
-    if (strlen(funcName1) > 0 && strlen(funcName2) > 0) {
-        strcat(funcName1, ".");
-        strcat(funcName1, funcName2);
-    }
-    return JS_ThrowTypeError(ctx, "'%s' is not a function", funcName1);
-}
-
 static JSValue JS_ThrowStackOverflow(JSContext *ctx)
 {
     return JS_ThrowInternalError(ctx, "stack overflow");
@@ -14969,8 +14904,7 @@ static JSValue JS_CallInternal(JSContext *ctx, JSValueConst func_obj,
                 call_func = ctx->rt->class_array[p->class_id].call;
                 if (!call_func) {
                 not_a_function:
-//                    return JS_ThrowTypeError(ctx, "not a function");
-                    return Test_ThrowNotFunctionError(ctx);
+                    return JS_ThrowTypeError(ctx, "not a function");
                 }
                 return call_func(ctx, func_obj, this_obj, argc,
                                  (JSValueConst *)argv);
@@ -17526,8 +17460,7 @@ static JSValue JS_CallConstructorInternal(JSContext *ctx,
                                              (JSValueConst *)argv);
         default:
         not_a_function:
-//            return JS_ThrowTypeError(ctx, "not a function");
-            return Test_ThrowNotFunctionError(ctx);
+            return JS_ThrowTypeError(ctx, "not a function");
         }
     }
 
@@ -33339,8 +33272,7 @@ static int check_function(JSContext *ctx, JSValueConst obj)
 {
     if (likely(JS_IsFunction(ctx, obj)))
         return 0;
-//    JS_ThrowTypeError(ctx, "not a function");
-    Test_ThrowNotFunctionError(ctx);
+    JS_ThrowTypeError(ctx, "not a function");
     return -1;
 }
 
@@ -42940,8 +42872,7 @@ static JSValue js_proxy_call(JSContext *ctx, JSValueConst func_obj,
         return JS_EXCEPTION;
     if (!s->is_func) {
         JS_FreeValue(ctx, method);
-//        return JS_ThrowTypeError(ctx, "not a function");
-        return Test_ThrowNotFunctionError(ctx);
+        return JS_ThrowTypeError(ctx, "not a function");
     }
     if (JS_IsUndefined(method))
         return JS_Call(ctx, s->target, this_obj, argc, argv);
