@@ -19,7 +19,6 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.devtools.HummerDevTools;
-import com.didi.hummer.devtools.invoker.HummerInvokerWrapper;
 import com.didi.hummer.devtools.manager.HummerLogManager;
 import com.didi.hummer.hummerdebug.R;
 import com.didi.hummer.render.component.view.HMBase;
@@ -34,8 +33,6 @@ import com.facebook.yoga.YogaPositionType;
  * @desc:
  */
 public class DevToolsEntrance extends LinearLayout {
-    private static final int DEFAULT_MARGIN_DP = 100;
-
     private HummerLayout mRootView;
     private boolean mShow;
     private HMBase mConsoleView;
@@ -124,7 +121,7 @@ public class DevToolsEntrance extends LinearLayout {
         };
         base.getYogaNode().setPositionType(YogaPositionType.ABSOLUTE);
         base.getYogaNode().setPosition(YogaEdge.END, 0);
-        base.getYogaNode().setPosition(YogaEdge.BOTTOM, DPUtil.dp2px(context, DEFAULT_MARGIN_DP));
+        base.getYogaNode().setPositionPercent(YogaEdge.BOTTOM, 20);
         mRootView.addView(base);
     }
 

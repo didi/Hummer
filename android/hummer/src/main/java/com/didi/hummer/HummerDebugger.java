@@ -59,7 +59,7 @@ public class HummerDebugger {
         };
         base.getYogaNode().setPositionType(YogaPositionType.ABSOLUTE);
         base.getYogaNode().setPosition(YogaEdge.END, 0);
-        base.getYogaNode().setPositionPercent(YogaEdge.TOP, 50);
+        base.getYogaNode().setPositionPercent(YogaEdge.BOTTOM, 50);
         context.getContainer().addView(base);
     }
 }
