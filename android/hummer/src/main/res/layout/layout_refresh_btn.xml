@@ -7,6 +7,7 @@
     android:layout_margin="12dp"
     android:background="@drawable/btn_refresh_bg"
     android:gravity="center"
+    android:elevation="4dp"
     android:text="刷新"
     android:textColor="@android:color/white"
     android:textSize="12dp" />

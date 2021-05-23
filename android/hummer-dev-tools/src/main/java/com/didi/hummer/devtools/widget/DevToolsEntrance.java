@@ -78,7 +78,13 @@ public class DevToolsEntrance extends LinearLayout {
             return false;
         });
 
+        LinearLayout.LayoutParams lpTvEntry = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams lpTvJsEngine = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lpTvEntry.topMargin = DPUtil.dp2px(context, 12);
+        lpTvEntry.leftMargin = DPUtil.dp2px(context, 12);
+        lpTvEntry.rightMargin = DPUtil.dp2px(context, 12);
+        lpTvJsEngine.topMargin = DPUtil.dp2px(context, 4);
+        lpTvJsEngine.bottomMargin = DPUtil.dp2px(context, 8);
 
         TextView tvEntry = new TextView(context);
         tvEntry.setText("开发\n工具");
@@ -88,7 +94,8 @@ public class DevToolsEntrance extends LinearLayout {
         tvEntry.setHeight(DPUtil.dp2px(context, 40));
         tvEntry.setGravity(Gravity.CENTER);
         tvEntry.setBackgroundResource(R.drawable.btn_dev_tools_entrance_bg);
-        addView(tvEntry, lpTvJsEngine);
+        addView(tvEntry, lpTvEntry);
+        ViewCompat.setElevation(tvEntry, DPUtil.dp2px(context, 4));
 
         TextView tvJsEngine = new TextView(context);
         tvJsEngine.setText(getJsEngineString());
@@ -100,7 +107,6 @@ public class DevToolsEntrance extends LinearLayout {
         addView(tvJsEngine, lpTvJsEngine);
 
         FrameLayout.LayoutParams lpEntryLayout = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lpEntryLayout.setMarginEnd(DPUtil.dp2px(context, 12));
 
         FloatLayout floatLayout = new FloatLayout(context);
         floatLayout.addView(this, lpEntryLayout);
