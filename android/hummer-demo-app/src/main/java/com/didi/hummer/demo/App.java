@@ -42,6 +42,10 @@ public class App extends Application {
                 .setJSLogger((level, msg) -> {})
                 // JS异常回调
                 .setExceptionCallback(e -> {})
+                // RTL支持
+                .setSupportRTL(false)
+                // 字体文件Assets目录
+                .setFontsAssetsPath("fonts")
                 // SDK内部埋点回调
                 .setEventTracer((event, params) -> {})
                 // 自定义路由（可在这里指定自定义Hummer容器）

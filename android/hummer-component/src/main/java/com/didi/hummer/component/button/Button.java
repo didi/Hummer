@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsProperty;
@@ -152,16 +153,15 @@ public class Button extends HMBase<android.widget.Button> {
             return;
         }
 
+        String fontsAssetsPath = HummerSDK.getFontsAssetsPath(((HummerContext) getContext()).getNamespace());
+
         int style = Typeface.NORMAL;
         if (getView().getTypeface() != null) {
             style = getView().getTypeface().getStyle();
         }
 
         for (String font : fontArray) {
-            Typeface typeface = FontManager.getInstance().getTypeface(
-                    font.trim(),
-                    style,
-                    getContext().getAssets());
+            Typeface typeface = FontManager.getInstance().getTypeface(font.trim(), fontsAssetsPath, style, getContext().getAssets());
             if (typeface != null) {
                 getView().setTypeface(typeface);
                 requestLayout();

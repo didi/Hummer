@@ -212,4 +212,8 @@ public class HummerSDK {
     public static boolean isSupportRTL(String namespace) {
         return getHummerConfig(namespace).isSupportRTL();
     }
+
+    public static String getFontsAssetsPath(String namespace) {
+        return getHummerConfig(namespace).getFontsAssetsPath();
+    }
 }
