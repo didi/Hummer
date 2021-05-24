@@ -586,6 +586,11 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         return context;
     }
 
+    /**
+     * 交给子类处理Style，
+     * 如果返回true表示子类已处理了Style，父类不需要再处理了，
+     * 否则表示子类不处理Style，需要父类处理。
+     */
     public boolean setStyle(String key, Object value) {
         return false;
     }
