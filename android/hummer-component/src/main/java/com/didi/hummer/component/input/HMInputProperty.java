@@ -21,7 +21,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.component.text.FontManager;
+import com.didi.hummer.context.HummerContext;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -202,7 +204,7 @@ public class HMInputProperty {
         }
     }
 
-    public void setFontFamily(String fontFamily) {
+    public void setFontFamily(Context context, String fontFamily) {
         if (TextUtils.isEmpty(fontFamily)) {
             return;
         }
@@ -212,16 +214,15 @@ public class HMInputProperty {
             return;
         }
 
+        String fontsAssetsPath = HummerSDK.getFontsAssetsPath(((HummerContext) context).getNamespace());
+
         int style = Typeface.NORMAL;
         if (mView.getTypeface() != null) {
             style = mView.getTypeface().getStyle();
         }
 
         for (String font : fontArray) {
-            Typeface typeface = FontManager.getInstance().getTypeface(
-                    font.trim(),
-                    style,
-                    mView.getContext().getAssets());
+            Typeface typeface = FontManager.getInstance().getTypeface(font.trim(), fontsAssetsPath, style, mView.getContext().getAssets());
             if (typeface != null) {
                 mView.setTypeface(typeface);
                 break;

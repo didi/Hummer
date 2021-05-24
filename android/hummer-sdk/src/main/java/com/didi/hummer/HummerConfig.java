@@ -44,6 +44,10 @@ public class HummerConfig {
      */
     private boolean isSupportRTL;
     /**
+     * 字体文件Assets目录
+     */
+    private String fontsAssetsPath;
+    /**
      * 网络请求适配器
      */
     private IHttpAdapter httpAdapter;
@@ -78,6 +82,7 @@ public class HummerConfig {
         this.eventTracer = builder.eventTracer;
         this.exceptionCallback = builder.exceptionCallback;
         this.isSupportRTL = builder.isSupportRTL;
+        this.fontsAssetsPath = builder.fontsAssetsPath;
         this.httpAdapter = builder.httpAdapter;
         this.webSocketAdapter = builder.webSocketAdapter;
         this.imageLoaderAdapter = builder.imageLoaderAdapter;
@@ -114,6 +119,10 @@ public class HummerConfig {
 
     public boolean isSupportRTL() {
         return isSupportRTL;
+    }
+
+    public String getFontsAssetsPath() {
+        return fontsAssetsPath;
     }
 
     public IHttpAdapter getHttpAdapter() {
@@ -171,6 +180,7 @@ public class HummerConfig {
         private EventTracer.Trace eventTracer;
         private ExceptionCallback exceptionCallback;
         private boolean isSupportRTL;
+        private String fontsAssetsPath;
         private IHttpAdapter httpAdapter;
         private IWebSocketAdapter webSocketAdapter;
         private IImageLoaderAdapter imageLoaderAdapter;
@@ -201,6 +211,11 @@ public class HummerConfig {
 
         public Builder setSupportRTL(boolean supportRTL) {
             isSupportRTL = supportRTL;
+            return this;
+        }
+
+        public Builder setFontsAssetsPath(String fontsAssetsPath) {
+            this.fontsAssetsPath = fontsAssetsPath;
             return this;
         }
 

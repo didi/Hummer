@@ -254,7 +254,7 @@ public class Input extends HMBase<EditText> {
      */
     @JsAttribute("fontFamily")
     public void setFontFamily(String fontFamily) {
-        mProperty.setFontFamily(fontFamily);
+        mProperty.setFontFamily(getContext(), fontFamily);
         requestLayout();
     }
 
