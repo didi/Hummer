@@ -197,6 +197,11 @@ public class Input extends HMBase<EditText> {
         }
         mProperty.setFocused(focused);
     }
+
+    public boolean getFocused() {
+        return getView().isFocused();
+    }
+
     /**
      * 设置键盘可输入字符类型
      *
