@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": false,
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "allowJs": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "types": ["jest", "puppeteer", "node"],
+    "paths": {
+    }
+  },
+  "include": [
+    "./src",
+    "../global.d.ts"
+  ]
+}

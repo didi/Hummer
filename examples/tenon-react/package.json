@@ -1,0 +1,21 @@
+{
+  "name": "tenon-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "hummer build",
+    "dev": "hummer dev",
+    "dev:playground": "hummer dev & node ./script/playground.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^17.0.2",
+    "@hummer/tenon-react": "^0.1.0"
+  },
+  "devDependencies": {
+    "open": "^8.1.0",
+    "serve-handler": "^6.1.3"
+  }
+}
