@@ -1,9 +1,5 @@
 const data = [
     'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3207781657,3460758070&fm=27&gp=0.jpg',
-]
-
-const data2 = [
-    'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3207781657,3460758070&fm=27&gp=0.jpg',
     'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2735633715,2749454924&fm=27&gp=0.jpg',
     'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3464499095,1074840881&fm=27&gp=0.jpg',
 ]
@@ -65,7 +61,7 @@ class RootView extends View {
 
         this.updateData(data);
 
-        pager.setCurrentItem(1);
+        this.pager.setCurrentItem(1);
 
         layout.appendChild(this.pager);
         this.appendChild(titleView);
@@ -87,7 +83,7 @@ class RootView extends View {
         };
         btn1.text = "Tab 1";
         btn1.addEventListener("tap", event => {
-             pager.setCurrentItem(0);
+            this.pager.setCurrentItem(0);
         });
 
         let btn2 = new Button();
@@ -97,7 +93,7 @@ class RootView extends View {
         };
         btn2.text = "Tab 2";
         btn2.addEventListener("tap", event => {
-             pager.setCurrentItem(1);
+            this.pager.setCurrentItem(1);
         });
 
         tabLayout.appendChild(btn1);
