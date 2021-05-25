@@ -91,7 +91,7 @@ export class Base {
 
   protected onDestoryed(){}
 
-  _appendChild(child: Base) {
+  appendChild(child: Base) {
     child.unlinkSiblings();
     child.parent = this;
     this.children.add(child);
@@ -132,7 +132,7 @@ export class Base {
     this.nextSibling = null;
   }
 
-  _removeChild(child: Base) {
+  removeChild(child: Base) {
     child._onDestoryed();
     child.unlinkSiblings();
     child.parent = undefined;
@@ -143,7 +143,7 @@ export class Base {
     }
   }
 
-  _insertBefore(child: Base, anchor: Base) {
+  insertBefore(child: Base, anchor: Base) {
     child.unlinkSiblings();
     child.parent = this;
     if (anchor.prevSibling) {
@@ -205,6 +205,9 @@ export class Base {
       case 'class': 
         this.updateStyle()
         break;
+      case 'style':
+        this.setStyle(value, true)
+        break;
       default:
         // FIX: 修复Viewpager组件Data属性赋值问题
         // this.element[key] = value
@@ -255,5 +258,13 @@ export class Base {
     this.element.getRect((rect: object) => {
       func.call(this, rect)
     })
+  }
+
+  hide(){
+    // TOOD 隐藏当前元素
+  }
+
+  show(){
+    // TODO 展示当前元素
   }
 }

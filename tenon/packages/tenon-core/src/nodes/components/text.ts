@@ -9,8 +9,8 @@ export class Text extends Base{
     this.element = new TextComponent()
   }
 
-  // FIXME: 去除 Hack SetElementText方法，直接操作属性即可
   setElementText(text:string){
+    console.log("SetElementText", text)
     this._text = text
     this.element.text = text
   }

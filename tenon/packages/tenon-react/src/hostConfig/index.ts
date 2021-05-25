@@ -1,220 +1,127 @@
-import {document,Base as Element} from "@hummer/tenon-core"
+import {document, Base as Element} from "@hummer/tenon-core"
+import {diffProperties, processProps, shouldSetTextContent} from './utils'
 
-type HostContext = string;
-type Context = any;
-const randomKey = Math.random()
-  .toString(36)
-  .slice(2);
-const internalInstanceKey = '__reactFiber$' + randomKey;
-const internalPropsKey = '__reactProps$' + randomKey;
+type Container = {}
+type Props = any
 
-function appendChild(parent: Element, child: Element): void {
-  parent._appendChild(child);
-}
+export default {
+  getPublicInstance:<T>(instance: T):T=>{
+    return instance
+  },
 
-function appendChildToContainer(container: any, child: Element): void {
-  // TODO Container 添加子节点
-  container._appendChild(child);
-}
+  getRootHostContext(){
+    return {
 
-function appendInitialChild(parent: Element, child: Element): void {
-  parent._appendChild(child);
-}
-
-function commitMount() {
-
-}
-
-// 提交文本更新
-function commitTextUpdate() {
-
-}
-
-// 更新处理
-function commitUpdate(
-  instance: any,
-  updatePayload: any,
-): void {
-  console.log('Commit Update')
-  Object.keys(updatePayload).forEach(attr => {
-    if (attr === 'children') {
-      instance.text = updatePayload[attr].join('');
     }
-    instance.setAttribute(attr, updatePayload[attr])
+  },
 
-  });
-}
+  getChildHostContext(){
+    return {
 
-function createContainerChildSet() {
-
-}
-
-function createInstance(
-  type: string,
-  props: any,
-  rootContainerInstance: any,
-  hostContext: HostContext,
-  internalInstanceHandle: Object,
-) {
-  const element = document.createElement(type) as any;
-  Object.keys(props).forEach((attr) => {
-    switch (attr) {
-      case 'children':
-        if (type === 'text') {
-          if (typeof props.children === 'string') {
-            element.text = props.children;
-          } else if (typeof props.children === 'object') {
-            element.text = props.children.join('');
-          }
-        }
-        break;
-      case 'style':
-        element.setStyle(props[attr]);
-        break;
-      default:
-        element.setAttribute(attr, props[attr]);
-        break;
     }
-  })
-  element[internalInstanceKey] = internalInstanceHandle;
-  element[internalPropsKey] = props;
-  return element;
-}
+  },
 
-function createTextInstance(
-  text: string,
-  rootContainerInstance: Document,
-  hostContext: HostContext,
-  internalInstanceHandle: Object) {
-  const element = document.createElement('text') as any;
-  element.meta = {
-    skipDom: true
-  }
-  element.text = text;
-  element[internalInstanceKey] = internalInstanceHandle;
-  return element;
-}
-function finalizeContainerChildren() {
+  shouldSetTextContent(type: string, nextProps: any): boolean {
+    // TODO 
+    return shouldSetTextContent(type)
+  },
 
-}
-function finalizeInitialChildren() {
-  return true
-}
-function getPublicInstance(instance: Element): Element {
-  return instance
-}
-function insertBefore(
-  parent: Element,
-  child: Element,
-  beforeChild: Element) {
-  parent._insertBefore(child, beforeChild);
-}
-function prepareForCommit() {
+  prepareForCommit(){
 
-}
+  },
 
-function prepareUpdate(
-  instance: Element,
-  type: string,
-  oldProps: any,
-  newProps: any,
-): any {
-  const updatePayload: {
-    [key: string]: any;
-  } = {};
-  Object.keys(newProps).forEach((key: string) => {
-    const oldPropValue = oldProps[key];
-    const newPropValue = newProps[key];
-    switch (key) {
-      case 'children': {
-        if (oldPropValue !== newPropValue) {
-          updatePayload[key] = newPropValue;
-        }
-        break;
-      }
-      default: {
-        // FIXME: Cancel a event listener
-        if (typeof oldPropValue === 'function' && typeof newPropValue === 'function') {
-          // just skip it if meets function
-        } else if (oldPropValue !== newPropValue) {
-          updatePayload[key] = newPropValue;
-        }
-      }
+  resetAfterCommit: (container: Container) => {
+   
+  },
+
+  createInstance(type: string, newProps: any, container: Container):Element {
+    const element = document.createElement(type) as any;
+    processProps(newProps,type, element);
+    return element;
+  },
+
+  createTextInstance(text: string, container: Container):Element {
+    console.log('createTextInstance:', text)
+    const element = document.createText(text);
+    return element
+  },
+
+  commitTextUpdate(node:Element, oldText:string, newText:string){
+    console.log('CommitTextUpdate:', oldText, newText)
+    if(oldText !== newText){
+      node.setElementText(newText)
     }
-  });
-  if (!Object.keys(updatePayload).length) {
-    return null;
+  },
+
+  prepareUpdate(node:Element, type:string, oldProps:Props, newProps: Props){
+    return diffProperties(
+      node,
+      type,
+      oldProps,
+      newProps
+    ); 
+  },
+
+  commitUpdate(node:Element, updatePayload:any, type:string, oldProps: Props, newProps: Props){
+    // TODO 更新处理
+    console.log('commitUpdate')
+    processProps(updatePayload, type, node)
+  },
+
+  commitMount(node:Element, updatePayload:any, type:string, props: Props){
+    // TODO 更新处理
+  },
+
+
+  appendInitialChild(parent:Element, child: Element){
+    parent.appendChild(child)
+  },
+
+  appendChild(parent:Element, child: Element){
+    parent.appendChild(child)
+  },
+
+  insertBefore(parent:Element, child: Element, anchor: Element){
+    parent.insertBefore(child, anchor)
+  },
+
+  removeChild(parent:Element, child:Element){
+    parent.removeChild(child)
+  },
+
+  finalizeInitialChildren() {
+    return true
+  },
+
+  appendChildToContainer(container:any, child:Element){
+    container.appendChild(child)
+  },
+
+  insertInContainerBefore(container:any, child:Element, anchor: Element){
+    container.insertBefore(child, anchor)
+  },
+
+  removeChildFromContainer(container:any, child:Element){
+    container.removeChild(child)
+  },
+
+  hideInstance(node: Element) {
+    node.hide()
+  },
+
+  hideTextInstance(node: Element){
+    node.setElementText("")
+  },
+
+  unhideInstance(node: Element){
+    // TODO unhide
+  },
+
+  unhideTextInstance(node:Element, text:string){
+    node.setElementText(text)
+  },
+
+  clearContainer(container:any){
+    container = null
   }
-  return updatePayload;
-}
-
-function replaceContainerChildren() {
-
-}
-
-
-function removeChild(parent: Element, child: Element): void {
-  parent._removeChild(child);
-}
-
-function removeChildFromContainer(parent: Element, child: Element): void {
-  parent._removeChild(child);
-}
-
-function resetAfterCommit() {
-
-}
-
-
-function resetTextContent() {
-
-}
-function getRootHostContext(): Context {
-  return {}
-}
-function getChildHostContext(): Context {
-  return {}
-}
-function shouldDeprioritizeSubtree(): boolean {
-  return true
-}
-function shouldSetTextContent(type: string, nextProps: any): boolean {
-  if (['text'].indexOf(type) !== -1) {
-    const { children } = nextProps;
-    return typeof children === 'string' || typeof children === 'number';
-  }
-  return false;
-}
-
-function clearContainer(container: any): void {
-  console.log('Clear Container')
-  container = null
-}
-
-export const HostConfig = {
-  appendChild,
-  appendChildToContainer,
-  appendInitialChild,
-  commitMount,
-  commitTextUpdate,
-  commitUpdate,
-  createContainerChildSet,
-  createInstance,
-  createTextInstance,
-  finalizeContainerChildren,
-  finalizeInitialChildren,
-  getPublicInstance,
-  insertBefore,
-  prepareForCommit,
-  prepareUpdate,
-  replaceContainerChildren,
-  removeChild,
-  removeChildFromContainer,
-  resetAfterCommit,
-  resetTextContent,
-  getRootHostContext,
-  getChildHostContext,
-  shouldDeprioritizeSubtree,
-  shouldSetTextContent,
-  clearContainer
 }

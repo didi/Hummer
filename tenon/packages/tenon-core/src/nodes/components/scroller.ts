@@ -36,7 +36,7 @@ export class Scroller extends Base{
     }
   }
 
-  _appendChild(child: any) {
+  appendChild(child: any) {
     child.unlinkSiblings();
     child.parent = this;
     this.children.add(child);

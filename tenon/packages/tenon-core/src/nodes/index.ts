@@ -1,5 +1,6 @@
 export * from './Base'
 export * from './component'
+export * from './types'
 
 export * from './components/image'
 export * from './components/input'

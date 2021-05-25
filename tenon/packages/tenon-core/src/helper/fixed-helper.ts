@@ -93,7 +93,7 @@ function getParentIds(id:number):Set<number>{
 function deleteNodeByViewId(id: number){
   let node = ViewCache.get(id);
   if(node && node.parent){
-    node.parent._removeChild(node);
+    node.parent.removeChild(node);
   }
   FixedViewCache.delete(id);
 }

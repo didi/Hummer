@@ -1,5 +1,5 @@
 
-import {ELEMNT_TAG_MAP,NODE_SWITCH, NODE_VIEW, NODE_TEXT, NODE_IMAGE, NODE_INPUT, NODE_TEXTAREA, NODE_BUTTON, NODE_SCROLLER, NODE_REFRESH, NODE_LOADMORE} from '@hummer/tenon-utils'
+import {ELEMNT_TAG_MAP,NODE_SWITCH, NODE_VIEW, NODE_TEXT, NODE_IMAGE, NODE_INPUT, NODE_TEXTAREA, NODE_BUTTON, NODE_SCROLLER, NODE_REFRESH, NODE_LOADMORE} from './types'
 import {Page, PageOptions} from './components/page'
 import {View} from './components/view'
 import {Text} from './components/text'
@@ -26,34 +26,34 @@ export class Document{
   createElement(tag:string):(Base | null){
     let component = null
     switch(tag){
-      case ELEMNT_TAG_MAP[NODE_VIEW]:
+      case ELEMNT_TAG_MAP.get(NODE_VIEW):
         component = new View();
         break;
-      case ELEMNT_TAG_MAP[NODE_SCROLLER]:
+      case ELEMNT_TAG_MAP.get(NODE_SCROLLER):
         component = new Scroller();
         break;
-      case ELEMNT_TAG_MAP[NODE_TEXT]:
+      case ELEMNT_TAG_MAP.get(NODE_TEXT):
         component = new Text();
         break;
-      case ELEMNT_TAG_MAP[NODE_IMAGE]:
+      case ELEMNT_TAG_MAP.get(NODE_IMAGE):
         component = new Image();
         break;
-      case ELEMNT_TAG_MAP[NODE_INPUT]:
+      case ELEMNT_TAG_MAP.get(NODE_INPUT):
         component = new Input();
         break;
-      case ELEMNT_TAG_MAP[NODE_TEXTAREA]:
+      case ELEMNT_TAG_MAP.get(NODE_TEXTAREA):
         component = new TextArea()
         break;
-      case ELEMNT_TAG_MAP[NODE_BUTTON]:
+      case ELEMNT_TAG_MAP.get(NODE_BUTTON):
         component = new Button();
         break;
-      case ELEMNT_TAG_MAP[NODE_SWITCH]:
+      case ELEMNT_TAG_MAP.get(NODE_SWITCH):
         component = new Switch();
         break;
-      case ELEMNT_TAG_MAP[NODE_LOADMORE]:
+      case ELEMNT_TAG_MAP.get(NODE_LOADMORE):
         component = new LoadMore();
         break;
-      case ELEMNT_TAG_MAP[NODE_REFRESH]:
+      case ELEMNT_TAG_MAP.get(NODE_REFRESH):
         component = new Refresh();
         break;
       default: 
