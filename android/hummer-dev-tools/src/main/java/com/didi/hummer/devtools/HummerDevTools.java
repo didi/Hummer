@@ -1,15 +1,19 @@
 package com.didi.hummer.devtools;
 
+import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
-import android.widget.Toast;
+import android.view.View;
 
-import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.devtools.invoker.HummerInvokerWrapper;
 import com.didi.hummer.devtools.manager.HummerLogManager;
 import com.didi.hummer.devtools.widget.DevToolsEntrance;
+import com.didi.hummer.devtools.widget.FloatLayout;
 import com.didi.hummer.devtools.ws.WebSocketManager;
-import com.didi.hummer.utils.NetworkUtil;
+import com.didi.hummer.render.component.view.HMBase;
+import com.facebook.yoga.YogaEdge;
+import com.facebook.yoga.YogaPositionType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,8 +32,12 @@ public class HummerDevTools {
         void injectParameter(StringBuilder builder);
     }
 
+    public interface IRefreshCallback {
+        void onRefresh();
+    }
+
     private HummerContext hmContext;
-    private DevToolsEntrance entranceView;
+    private DevToolsEntrance entrance;
     private WebSocketManager wsManager;
     private HummerLogManager logManager;
 
@@ -44,36 +52,68 @@ public class HummerDevTools {
 
     public HummerDevTools(HummerContext context, DevToolsConfig config) {
         hmContext = context;
-        entranceView = new DevToolsEntrance(context);
+        entrance = new DevToolsEntrance(context);
         wsManager = new WebSocketManager();
         logManager = new HummerLogManager(wsManager);
         hmContext.registerInvoker(new HummerInvokerWrapper(logManager));
-        entranceView.setLogManager(logManager);
+        entrance.setLogManager(logManager);
 
         if (config != null && config.getInjector() != null) {
-            entranceView.setParameterInjector(config.getInjector());
+            entrance.setParameterInjector(config.getInjector());
         }
+    }
+
+    public void release() {
+        wsManager.close();
+        entrance.release();
+    }
+
+    /**
+     * 初始化连接
+     */
+    public void initConnection(HummerContext context, String url, IRefreshCallback callback) {
+        connectWebSocket(url, callback);
+        initRefreshView(context, callback);
     }
 
     /**
      * 与CLI建立WebSocket连接，用于热更新和日志输出
      */
-    public void connectWebSocket(String url) {
+    private void connectWebSocket(String url, IRefreshCallback callback) {
         wsManager.connect(url, msg -> {
             msg = getUrlFromWS(msg);
             if (url != null && url.equalsIgnoreCase(msg)) {
                 // 热更新
-                NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
-                    hmContext.onRefresh();
-                    hmContext.evaluateJavaScript(response.data, url);
-                    Toast.makeText(hmContext, "页面已刷新", Toast.LENGTH_SHORT).show();
-                });
+                if (callback != null) {
+                    callback.onRefresh();
+                }
             }
         });
     }
 
-    public void release() {
-        wsManager.close();
+    /**
+     * 初始化刷新按钮
+     */
+    private void initRefreshView(HummerContext context, IRefreshCallback callback) {
+        FloatLayout floatLayout = new FloatLayout(context);
+        floatLayout.setOnClickListener(v -> {
+            if (callback != null) {
+                callback.onRefresh();
+            }
+        });
+        ViewCompat.setElevation(floatLayout, 9000);
+        View.inflate(context, R.layout.layout_refresh_btn, floatLayout);
+
+        HMBase<FloatLayout> base = new HMBase<FloatLayout>(context, null, null) {
+            @Override
+            protected FloatLayout createViewInstance(Context context) {
+                return floatLayout;
+            }
+        };
+        base.getYogaNode().setPositionType(YogaPositionType.ABSOLUTE);
+        base.getYogaNode().setPosition(YogaEdge.END, 0);
+        base.getYogaNode().setPositionPercent(YogaEdge.BOTTOM, 50);
+        context.getContainer().addView(base);
     }
 
     /**
