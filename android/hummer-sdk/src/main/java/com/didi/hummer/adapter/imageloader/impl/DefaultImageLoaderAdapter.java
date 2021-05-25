@@ -1,5 +1,6 @@
 package com.didi.hummer.adapter.imageloader.impl;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
@@ -25,20 +27,30 @@ import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
  */
 public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
 
+    @SuppressLint("CheckResult")
     @Override
     public void setImage(String url, ImageView view) {
         try {
-            Glide.with(view.getContext()).load(url).into(view);
+            RequestOptions requestOptions = new RequestOptions();
+            if (view.getScaleType() == ImageView.ScaleType.CENTER) {
+                requestOptions.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+            }
+            Glide.with(view.getContext()).load(url).apply(requestOptions).into(view);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void setGif(String url, int repeatCount, ImageView view) {
         // 设置为无限循环
         final int fRepeatCount = repeatCount == 0 ? GifDrawable.LOOP_FOREVER : repeatCount;
         try {
+            RequestOptions requestOptions = new RequestOptions();
+            if (view.getScaleType() == ImageView.ScaleType.CENTER) {
+                requestOptions.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+            }
             Glide.with(view.getContext()).asGif().load(url).listener(new RequestListener<GifDrawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
@@ -64,11 +76,16 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
         }
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void setGif(int resId, int repeatCount, ImageView view) {
         // 设置为无限循环
         final int fRepeatCount = repeatCount == 0 ? GifDrawable.LOOP_FOREVER : repeatCount;
         try {
+            RequestOptions requestOptions = new RequestOptions();
+            if (view.getScaleType() == ImageView.ScaleType.CENTER) {
+                requestOptions.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+            }
             Glide.with(view.getContext()).asGif().load(resId).listener(new RequestListener<GifDrawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
