@@ -96,38 +96,26 @@ public class ButtonStyleHelper {
 
     public static StateListDrawable makeButtonBackgroundColorStateList(Map<Integer, Drawable> bgDrawableMap) {
         StateListDrawable stateListDrawable = new StateListDrawable();
-        for (Integer key : bgDrawableMap.keySet()) {
-            switch (key) {
-                case KEY_ON_NORMAL: {
-                    int[] state = new int[]{-android.R.attr.state_pressed, android.R.attr.state_enabled};
-                    Drawable drawable = bgDrawableMap.get(ButtonStyleHelper.KEY_ON_NORMAL);
-                    stateListDrawable.addState(state, drawable);
-                    break;
-                }
-                case KEY_ON_PRESS: {
-                    int[] state = new int[]{android.R.attr.state_pressed};
-                    Drawable drawable = bgDrawableMap.get(ButtonStyleHelper.KEY_ON_PRESS);
-                    stateListDrawable.addState(state, drawable);
-                    break;
-                }
-                case KEY_ON_DISABLE: {
-                    int[] state = new int[]{-android.R.attr.state_enabled};
-                    Drawable drawable = bgDrawableMap.get(ButtonStyleHelper.KEY_ON_DISABLE);
-                    stateListDrawable.addState(state, drawable);
-                    break;
-                }
-                default:
-                    break;
-            }
+        if (bgDrawableMap.containsKey(KEY_ON_DISABLE)) {
+            int[] state = new int[]{-android.R.attr.state_enabled};
+            stateListDrawable.addState(state, bgDrawableMap.get(KEY_ON_DISABLE));
+        }
+        if (bgDrawableMap.containsKey(KEY_ON_PRESS)) {
+            int[] state = new int[]{android.R.attr.state_pressed};
+            stateListDrawable.addState(state, bgDrawableMap.get(KEY_ON_PRESS));
+        }
+        if (bgDrawableMap.containsKey(KEY_ON_NORMAL)) {
+            int[] state = new int[]{};
+            stateListDrawable.addState(state, bgDrawableMap.get(KEY_ON_NORMAL));
         }
         return stateListDrawable;
     }
 
-    public static int pickButtonTextColor(Map<String, Object> style) {
-        int color = Color.BLACK;
+    public static Integer pickButtonTextColor(Map<String, Object> style) {
         if (style == null) {
-            return color;
+            return null;
         }
+        Integer color = null;
         if (style.containsKey(KEY_TEXT_COLOR)) {
             Object object = style.get(KEY_TEXT_COLOR);
             if (object instanceof String) {
@@ -141,23 +129,17 @@ public class ButtonStyleHelper {
         List<int[]> states = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
-        for (Integer key : textColorMap.keySet()) {
-            switch (key) {
-                case KEY_ON_NORMAL:
-                    states.add(new int[]{-android.R.attr.state_pressed, android.R.attr.state_enabled});
-                    colors.add(textColorMap.get(key));
-                    break;
-                case KEY_ON_PRESS:
-                    states.add(new int[]{android.R.attr.state_pressed});
-                    colors.add(textColorMap.get(key));
-                    break;
-                case KEY_ON_DISABLE:
-                    states.add(new int[]{-android.R.attr.state_enabled});
-                    colors.add(textColorMap.get(key));
-                    break;
-                default:
-                    break;
-            }
+        if (textColorMap.containsKey(KEY_ON_DISABLE)) {
+            states.add(new int[]{-android.R.attr.state_enabled});
+            colors.add(textColorMap.get(KEY_ON_DISABLE));
+        }
+        if (textColorMap.containsKey(KEY_ON_PRESS)) {
+            states.add(new int[]{android.R.attr.state_pressed});
+            colors.add(textColorMap.get(KEY_ON_PRESS));
+        }
+        if (textColorMap.containsKey(KEY_ON_NORMAL)) {
+            states.add(new int[]{});
+            colors.add(textColorMap.get(KEY_ON_NORMAL));
         }
 
         if (states.size() <= 0) {

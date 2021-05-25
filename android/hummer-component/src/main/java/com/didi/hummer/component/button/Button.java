@@ -108,7 +108,10 @@ public class Button extends HMBase<android.widget.Button> {
         if (bgDrawable != null) {
             bgDrawableMap.put(ButtonStyleHelper.KEY_ON_PRESS, bgDrawable);
         }
-        textColorMap.put(ButtonStyleHelper.KEY_ON_PRESS, ButtonStyleHelper.pickButtonTextColor(pressed));
+        Integer textColor = ButtonStyleHelper.pickButtonTextColor(pressed);
+        if (textColor != null) {
+            textColorMap.put(ButtonStyleHelper.KEY_ON_PRESS, textColor);
+        }
     }
 
     private void mergeDisabledStyle() {
@@ -117,7 +120,10 @@ public class Button extends HMBase<android.widget.Button> {
         if (bgDrawable != null) {
             bgDrawableMap.put(ButtonStyleHelper.KEY_ON_DISABLE, bgDrawable);
         }
-        textColorMap.put(ButtonStyleHelper.KEY_ON_DISABLE, ButtonStyleHelper.pickButtonTextColor(disabled));
+        Integer textColor = ButtonStyleHelper.pickButtonTextColor(disabled);
+        if (textColor != null) {
+            textColorMap.put(ButtonStyleHelper.KEY_ON_DISABLE, textColor);
+        }
     }
 
     /**
@@ -222,7 +228,7 @@ public class Button extends HMBase<android.widget.Button> {
                 getView().setTextColor(color);
             }
         } else if (textColorMap.containsKey(ButtonStyleHelper.KEY_ON_NORMAL)) {
-            // 如果没有设置press或disable状态，只需要设置简单的normal状态颜色
+            // 如果没有设置press和disable状态，只需要设置简单的normal状态颜色
             Integer color = textColorMap.get(ButtonStyleHelper.KEY_ON_NORMAL);
             if (color != null) {
                 getView().setTextColor(color);
