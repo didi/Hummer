@@ -23,10 +23,10 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
 import com.didi.hummer.core.debug.InvokerAnalyzerManager;
 import com.didi.hummer.devtools.HummerDevTools;
+import com.didi.hummer.devtools.R;
 import com.didi.hummer.devtools.bean.LogBean;
 import com.didi.hummer.devtools.manager.HummerLogManager;
 import com.didi.hummer.devtools.utils.JSONFormat;
-import com.didi.hummer.hummerdebug.R;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.utils.ScreenUtils;
 
@@ -96,7 +96,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.hummer_debug_container, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.layout_console_container, this);
 
         layoutConsole = findViewById(R.id.layout_console);
         btnClearLog = findViewById(R.id.btn_clear_log);
@@ -273,7 +273,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
         @NonNull
         @Override
         public ConsoleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
-            return new ConsoleHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hummer_debug_console_item, viewGroup, false));
+            return new ConsoleHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_console_item, viewGroup, false));
         }
 
         @Override
