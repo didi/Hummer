@@ -39,7 +39,7 @@ HM_EXPORT_ATTRIBUTE(thumbColor, thumbTintColor, HMStringToColor:)
 
 - (void)switchDidChanged {
 
-    NSDictionary *dict = @{kHMSwitchType:@"switch",kHMSwitchState:@(self.isOn)};
+    NSDictionary *dict = @{kHMSwitchType:@"switch",kHMSwitchState:@(self.isOn),@"timestamp":@(floor(NSDate.date.timeIntervalSince1970) * 1000)};
     [self hm_notifyWithEventName:HMSwitchEventName argument:dict];
 }
 

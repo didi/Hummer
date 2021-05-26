@@ -27,7 +27,7 @@ static NSString *const BASE64HEADERPREFIX = @"data:";
 - (nullable id<HMImageLoaderOperation>)load:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource
                                                    context:(nullable HMImageLoaderContext *)context
                                                 completion:(nonnull HMImageLoaderCompletionBlock)completionBlock{
-
+    HMImageLoaderOperation *operation = [HMImageLoaderOperation new];
     NSString *imageUrlString = [source hm_asString];
     if (!imageUrlString) {return nil;}
     NSRange commaRange = [imageUrlString rangeOfString:@","];
@@ -36,7 +36,7 @@ static NSString *const BASE64HEADERPREFIX = @"data:";
     }
     NSData *imageData = [[NSData alloc] initWithBase64EncodedString:imageUrlString options:0];
     completionBlock(imageData,NO,nil);
-    return nil;
+    return operation;
 }
 
 

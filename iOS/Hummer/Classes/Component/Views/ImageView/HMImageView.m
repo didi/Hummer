@@ -69,6 +69,8 @@ HM_EXPORT_PROPERTY(src, src, setSrc:)
 
 HM_EXPORT_PROPERTY(gifSrc, src, setGifSrc:)
 
+HM_EXPORT_METHOD(load, __load:)
+
 HM_EXPORT_PROPERTY(gifRepeatCount, gifRepeatCount, setGifRepeatCount:)
 
 HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
@@ -78,11 +80,36 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
     if (self) {
         self.contentMode = UIViewContentModeCenter;
         self.userInteractionEnabled = YES;
+        self.clipsToBounds = YES;
 //        _internalImageView = [[HMAnimatedImageView alloc] init];
 //        _internalImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 //        [self addSubview:_internalImageView];
     }
     return self;
+}
+
+- (void)__load:(HMBaseValue *)params {
+
+    NSString *srcString = params.toString;
+    NSString *placeholder = nil;
+    NSString *errorSource = nil;
+    HMImageLoaderContext *context = nil;
+    if (!params.isString) {
+     
+        NSDictionary *dic = params.toDictionary;
+        self.gifRepeatCount = dic[@"gifRepeatCount"];
+        srcString = dic[@"src"];
+        placeholder = dic[@"placeholder"];
+        errorSource = dic[@"failedImage"];
+        if (dic[@"gifSrc"]) {
+            context = @{HMImageManagerContextAnimatedImageClass:@"HMAnimatedImage"};
+            srcString = dic[@"gifSrc"];
+        }
+    }
+    if ([srcString hasSuffix:@".gif"]) {
+        context = @{HMImageManagerContextAnimatedImageClass:@"HMAnimatedImage"};
+    }
+    [self realSetSrc:srcString placeholder:placeholder failedImage:errorSource context:context];
 }
 
 + (Class)layerClass {
@@ -99,7 +126,7 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
 - (void)setGifSrc:(HMBaseValue *)src {
     NSString *srcString = src.toString;
     HMImageLoaderContext *context = @{HMImageManagerContextAnimatedImageClass:@"HMAnimatedImage"};
-    [self realSetSrc:srcString context:context];
+    [self realSetSrc:srcString placeholder:nil failedImage:nil context:context];
 }
 
 - (void)setSrc:(HMBaseValue *)src {
@@ -108,16 +135,17 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
         [self setGifSrc:src];
         return;
     }
-    [self realSetSrc:srcString context:nil];
+    [self realSetSrc:srcString placeholder:nil failedImage:nil context:nil];
 }
 
-- (void)realSetSrc:(NSString *)src context:(nullable HMImageLoaderContext *)context {
-    
+- (void)realSetSrc:(NSString *)src placeholder:(NSString *)placeholder failedImage:(NSString *)failedImage context:(nullable HMImageLoaderContext *)context {
+
     self.imageSrc = src;
     if (self.imageSrc) {
         self.image = nil;
         __weak typeof(self) weakSelf = self;
-        [self hm_setImageWithURL:self.imageSrc inJSBundleSource:nil context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+        
+        [self hm_setImageWithURL:self.imageSrc placeholder:placeholder failedImage:failedImage inJSBundleSource:nil processBlock:nil context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
             typeof(weakSelf) strongSelf = weakSelf;
             if (!image) {return;}
             __block UIImage *img = image;

@@ -142,6 +142,7 @@
                                     context:(nullable HMImageLoaderContext *)context
                                  completion:(nonnull HMImageLoaderCompletionBlock)completionBlock{
 
+    HMImageLoaderOperation *operation = [HMImageLoaderOperation new];
     id<HMURLConvertible> realSource = [self fixLoadSource:source withJSBundleSource:bundleSource];
     NSString *sourceString = [realSource hm_asString];
     UIImage *image = nil;
@@ -150,7 +151,7 @@
     HMInternalSourceModel *model = [[HMInternalSourceModel alloc] initWithSource:sourceString];
     if (model.imageNameWithoutExtension == nil){
         completionBlock(nil, NO, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorInvalidURL userInfo:@{NSLocalizedDescriptionKey : @"Invalid URL"}]);
-        return nil;
+        return operation;
     }
     //phase1: bundle+imageName
     if (model.bundle) {
@@ -177,16 +178,16 @@
 
     if (imageData) {
         completionBlock(imageData, YES, nil);
-        return nil;
+        return operation;
     }
     
     if (image) {
         completionBlock(image, NO, nil);
-        return nil;
+        return operation;
     }
     NSError *error = [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorBadImageData userInfo:@{NSLocalizedDescriptionKey : @"can not fetch image data from local asset"}];
     completionBlock(nil, NO, error);
-    return nil;
+    return operation;
 }
 
 - (id<HMURLConvertible>)cacheKeyForSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource {

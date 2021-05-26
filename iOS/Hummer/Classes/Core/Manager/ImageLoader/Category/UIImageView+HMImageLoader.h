@@ -16,6 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
           inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource
                    context:(nullable HMImageLoaderContext *)context
                 completion:(nullable HMImageCompletionBlock)completionBlock;
+
+- (void)hm_setImageWithURL:(id<HMURLConvertible>)source
+               placeholder:(nullable id<HMURLConvertible>)placeholderSource
+               failedImage:(nullable id<HMURLConvertible>)failedImageSource
+          inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource
+              processBlock:(nullable HMImageLoadProcessBlock)process
+                   context:(nullable HMImageLoaderContext *)context
+                completion:(HMImageCompletionBlock)completionBlock;
 @end
 
 NS_ASSUME_NONNULL_END

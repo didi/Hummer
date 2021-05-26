@@ -13,21 +13,31 @@
 - (void)hm_setImageWithURL:(id<HMURLConvertible>)url{
     [self hm_setImageWithURL:url inJSBundleSource:nil context:nil completion:nil];
 }
+- (void)hm_setImageWithURL:(id<HMURLConvertible>)source
+               placeholder:(nullable id<HMURLConvertible>)placeholderSource
+               failedImage:(nullable id<HMURLConvertible>)failedImageSource
+          inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource
+              processBlock:(nullable HMImageLoadProcessBlock)process
+                   context:(nullable HMImageLoaderContext *)context
+                completion:(HMImageCompletionBlock)completionBlock {
+    
+    __weak typeof(self) wSelf = self;
+    [self hm_internalSetImageWithURL:source placeholder:placeholderSource failedImage:failedImageSource inJSBundleSource:bundleSource processBlock:process context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+        if (image) {
+            wSelf.image = image;
+        }
+        if (completionBlock) {
+            completionBlock(image,error,cacheType);
+        }
+    }];
+}
 
 - (void)hm_setImageWithURL:(id<HMURLConvertible>)source
           inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource
                    context:(nullable HMImageLoaderContext *)context
-                completion:(nullable HMImageCompletionBlock)completionBlock{
+                completion:(nullable HMImageCompletionBlock)completionBlock {
     
-    __weak typeof(self) wSelf = self;
-    [self hm_internalSetImageWithURL:source inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
-        if (image) {
-            wSelf.image = image;
-            if (completionBlock) {
-                completionBlock(image,error,cacheType);
-            }
-        }
-    }];
+    [self hm_setImageWithURL:source placeholder:nil failedImage:nil inJSBundleSource:bundleSource processBlock:nil context:context completion:completionBlock];
 }
 
 

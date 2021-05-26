@@ -292,7 +292,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
         return;
     }
     [self invalidateTimer];
-    [self updateData:self.dataList];
+    [self updateData:[self.dataList copy]];
     [self updateView];
     [self setupTimer];
 }

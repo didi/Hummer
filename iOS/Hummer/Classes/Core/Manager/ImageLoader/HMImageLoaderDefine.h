@@ -45,6 +45,7 @@ typedef NS_ENUM(NSInteger, HMImageCacheType) {
     HMImageCacheTypeAll
 };
 
+typedef void(^HMImageLoadProcessBlock)(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType);
 typedef void(^HMImageCompletionBlock)(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType);
 typedef void(^HMImageLoaderCompletionBlock)(id _Nullable data, BOOL needCache, NSError * _Nullable error);
 

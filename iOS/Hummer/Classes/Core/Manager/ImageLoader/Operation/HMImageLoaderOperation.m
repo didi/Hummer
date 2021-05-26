@@ -15,3 +15,24 @@
     return self.isCancelled;
 }
 @end
+
+
+@interface HMImageLoaderOperation()
+@property (nonatomic, assign) BOOL isCancelled;
+@end
+
+@implementation HMImageLoaderOperation
+
+
+- (BOOL)isCancel {
+    return self.isCancelled;
+}
+
+- (void)cancel {
+    self.isCancelled = YES;
+}
+
+
+
+
+@end

@@ -189,6 +189,7 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
 - (void)hm_onEventGesture:(UIGestureRecognizer *)gesture {
     if (!self.hm_eventObj) {
         Class objcClass = [self hm_eventClassWithGesture:gesture];
+        // 时间戳为 0
         self.hm_eventObj = [[objcClass alloc] init];
     }
     [self.hm_eventObj updateEvent:self withContext:gesture];
@@ -198,7 +199,20 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
         
         for (int i = 0; i < callbacks.count; i++) {
             HMBaseValue *listener = callbacks[i];
-            [listener callWithArguments:@[self.hm_eventObj]];
+            if ([self.hm_eventObj isKindOfClass:HMPanEvent.class]) {
+                // pan 事件特殊处理转成字典
+                [listener callWithArguments:@[@{
+                    @"type": @"pan",
+                    @"state": @(gesture.state),
+                    @"timestamp": @(floor(NSDate.date.timeIntervalSince1970) * 1000),
+                    @"translation": @{
+                            @"deltaX": @(((HMPanEvent *) self.hm_eventObj).translation.x),
+                            @"deltaY": @(((HMPanEvent *) self.hm_eventObj).translation.y)
+                    }
+                }]];
+            } else {
+                [listener callWithArguments:@[self.hm_eventObj]];
+            }
         }
     }
 }
