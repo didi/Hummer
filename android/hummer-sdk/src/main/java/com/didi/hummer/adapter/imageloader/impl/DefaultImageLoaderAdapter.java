@@ -27,13 +27,24 @@ import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
  */
 public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
 
-    @SuppressLint("CheckResult")
     @Override
     public void setImage(String url, ImageView view) {
+        setImage(url, null, null, view);
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void setImage(String url, Drawable placeholder, Drawable failedImage, ImageView view) {
         try {
             RequestOptions requestOptions = new RequestOptions();
             if (view.getScaleType() == ImageView.ScaleType.CENTER) {
                 requestOptions.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                if (placeholder != null) {
+                    requestOptions.placeholder(placeholder);
+                }
+                if (failedImage != null) {
+                    requestOptions.error(failedImage);
+                }
             }
             Glide.with(view.getContext()).load(url).apply(requestOptions).into(view);
         } catch (Exception e) {
@@ -41,15 +52,26 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
         }
     }
 
-    @SuppressLint("CheckResult")
     @Override
     public void setGif(String url, int repeatCount, ImageView view) {
+        setGif(url, null, null, repeatCount, view);
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void setGif(String url, Drawable placeholder, Drawable failedImage, int repeatCount, ImageView view) {
         // 设置为无限循环
         final int fRepeatCount = repeatCount == 0 ? GifDrawable.LOOP_FOREVER : repeatCount;
         try {
             RequestOptions requestOptions = new RequestOptions();
             if (view.getScaleType() == ImageView.ScaleType.CENTER) {
                 requestOptions.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                if (placeholder != null) {
+                    requestOptions.placeholder(placeholder);
+                }
+                if (failedImage != null) {
+                    requestOptions.error(failedImage);
+                }
             }
             Glide.with(view.getContext()).asGif().load(url).listener(new RequestListener<GifDrawable>() {
                 @Override
@@ -121,6 +143,9 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
             });
         } catch (Exception e) {
             e.printStackTrace();
+            if (callback != null) {
+                callback.onDrawableLoaded(null);
+            }
         }
     }
 
@@ -151,6 +176,9 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
             });
         } catch (Exception e) {
             e.printStackTrace();
+            if (callback != null) {
+                callback.onSizeReady(0, 0);
+            }
         }
     }
 
@@ -172,6 +200,9 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
             });
         } catch (Exception e) {
             e.printStackTrace();
+            if (callback != null) {
+                callback.onSizeReady(0, 0);
+            }
         }
     }
 }

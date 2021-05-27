@@ -29,6 +29,9 @@ public class YogaDrawableUtil {
 
     public static void loadDrawable(HummerContext context, String imageSrc, DrawableCallback callback) {
         if (TextUtils.isEmpty(imageSrc)) {
+            if (callback != null) {
+                callback.onDrawableLoaded(null);
+            }
             return;
         }
 
@@ -80,17 +83,21 @@ public class YogaDrawableUtil {
         return imageSrc != null && (imageSrc.contains("base64") || imageSrc.contains("BASE64"));
     }
 
+    /**
+     * 适配有些远程图片省略https:的情况
+     */
+    private static String fitRemoteUrl(String url) {
+        if (!TextUtils.isEmpty(url) && url.startsWith("//")) {
+            url = "https:" + url;
+        }
+        return url;
+    }
+
     private static void loadRemoteDrawable(HummerContext context, String imageSrc, DrawableCallback callback) {
         if (TextUtils.isEmpty(imageSrc)) {
             return;
         }
-
-        // 适配有些远程图片省略https:的情况
-        if (imageSrc.startsWith("//")) {
-            imageSrc = "https:" + imageSrc;
-        }
-
-        getImageLoader(context).loadDrawable(imageSrc, callback);
+        getImageLoader(context).loadDrawable(fitRemoteUrl(imageSrc), callback);
     }
 
     private static void loadLocalDrawable(HummerContext context, String imageSrc, DrawableCallback callback) {
