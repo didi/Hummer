@@ -83,7 +83,7 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                 break;
             case "postException":
                 Map<String, Object> errMap = HMJsonUtil.toMap(String.valueOf(params[0]));
-                String strErr = errMap.get("message") + "\n" + errMap.get("stack");
+                String strErr = errMap.get("name") + ": " + errMap.get("message") + "\n" + errMap.get("stack");
                 HummerException.nativeException(mHummerContext.mJsContext, new JSException(strErr));
                 break;
             case "console.log":

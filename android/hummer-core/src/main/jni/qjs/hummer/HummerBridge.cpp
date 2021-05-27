@@ -61,7 +61,7 @@ Java_com_didi_hummer_core_engine_jsc_jni_HummerBridge_initHummerBridge(JNIEnv *e
             "(Ljava/lang/String;JLjava/lang/String;[J)J");
 
     auto funcName = "invoke";
-    auto invokeFunc = JS_NewCFunction(jsContext, invoke, funcName, strlen(funcName));
+    auto invokeFunc = JS_NewCFunction(jsContext, invoke, funcName, 0);
 
     JS_SetPropertyStr(jsContext,
             JS_GetGlobalObject(jsContext),
