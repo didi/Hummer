@@ -2,6 +2,7 @@ package com.didi.hummer.core.engine.jsc.jni;
 
 import com.didi.hummer.core.debug.InvokerAnalyzerManager;
 import com.didi.hummer.core.debug.InvokeTracker;
+import com.didi.hummer.core.engine.jsc.JSCContext;
 import com.didi.hummer.core.engine.jsc.JSCUtils;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.ExceptionUtil;
@@ -64,13 +65,10 @@ public class HummerBridge {
             // <for debug>
             InvokerAnalyzerManager.getInstance().stopTrack(jsContext, tracker);
         } catch (Exception e) {
+            String jsStack = ExceptionUtil.getJSErrorStack(JSCContext.wrapper(jsContext));
+            ExceptionUtil.addStackTrace(e, new StackTraceElement("<<JS_Stack>>", "", "\n" + jsStack, -1));
             ExceptionUtil.addStackTrace(e, new StackTraceElement(String.format("<<Bridge>> (%d) %s", objectID, className), methodName, Arrays.toString(parameters), -1));
             HummerException.nativeException(jsContext, e);
-
-            if (DebugUtil.isDebuggable()) {
-                // 每次Native发生异常后，打印下JS执行方法的堆栈信息
-                JavaScriptRuntime.evaluateJavaScript(jsContext, "console.log('JS stack: \\n' + (new Error()).stack)");
-            }
         }
 
         return result;

@@ -345,6 +345,8 @@ public class HummerStyleUtils {
                 }
             } catch (Exception e) {
                 // 处理异常信息显示不全的问题，补充异常是在哪个key和value下产生
+                String jsStack = ExceptionUtil.getJSErrorStack(view.getJSValue().getJSContext());
+                ExceptionUtil.addStackTrace(e, new StackTraceElement("<<JS_Stack>>", "", "\n" + jsStack, -1));
                 ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Style>>", "", String.format("%s: %s", key, value), -1));
                 HummerException.nativeException(view.getJSValue().getJSContext(), e);
             }
