@@ -354,6 +354,10 @@
             [source addAttribute:NSFontAttributeName value:font range:range];
         }
     }
+    NSDictionary *lettetSpacing = item.letterSpacing ? : self.letterSpacing;
+    if (lettetSpacing) {
+        [source addAttributes:lettetSpacing range:range];
+    }
     if (item.href) {
         [source addAttribute:NSLinkAttributeName value:item.href range:range];
         
