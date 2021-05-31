@@ -21,7 +21,7 @@ public class FontManager {
 
     private static final String[] FILE_EXTENSIONS = {".ttf", ".otf"};
 
-    private static final String FONTS_ASSET_PATH = "fonts";
+    private static final String FONTS_ASSET_PATH = "fonts/";
 
     private static FontManager instance;
 
@@ -72,12 +72,16 @@ public class FontManager {
     }
 
     private static Typeface createTypeface(String fontFamilyName, String fontsAssetsPath, int style, AssetManager assetManager) {
-        if (TextUtils.isEmpty(fontsAssetsPath)) {
+        if (fontsAssetsPath == null) {
+            // 保留默认字体assets路径
             fontsAssetsPath = FONTS_ASSET_PATH;
+        } else if (!TextUtils.isEmpty(fontsAssetsPath)) {
+            // 如果设置了路径，则自动加上"/"，如果是空字符就不加了，空字符代表是在assets根目录下
+            fontsAssetsPath += "/";
         }
         String extension = EXTENSIONS[style];
         for (String fileExtension : FILE_EXTENSIONS) {
-            String fileName = fontsAssetsPath + "/" + fontFamilyName + extension + fileExtension;
+            String fileName = fontsAssetsPath + fontFamilyName + extension + fileExtension;
             try {
                 return Typeface.createFromAsset(assetManager, fileName);
             } catch (Exception e) {
