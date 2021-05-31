@@ -1,6 +1,6 @@
 # Release Nodes
 
-### 0.3.21
+### 0.3.21.1
 - 升级QuickJS至最新版2021-03-27，并且优化JS和Native异常堆栈输出信息；
 - 修复首次进入页面时，轮播组件的回调会回调两次的问题；
 - 修复Scroller直接不支持justifyContent、alignItems、padding等flex属性的问题；
@@ -13,6 +13,7 @@
 - 修复获取Input的focused状态不准的问题；
 - Switch组件的state改成0和1，和iOS对齐；
 - 优化DevTools的显示，修复按钮拖动时位置跳变的问题；
+- 修复Timer的setInterval在一次callback回调中多次调用clearInterval时出现的crash问题；
 
 ### 0.3.20
 - 修复evaluateJavaScript中scriptId传null时出现空指针异常；
