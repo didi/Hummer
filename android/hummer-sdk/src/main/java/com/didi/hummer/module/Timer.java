@@ -27,6 +27,7 @@ public class Timer implements ILifeCycle {
     private JSCallback intervalCallback;
     private JSCallback timeoutCallback;
     private boolean isIntervalRunning;
+    private boolean isIntervalCleared;
     private boolean isTimeoutRunning;
     private AtomicBoolean isDestroyed = new AtomicBoolean(false);
 
@@ -71,8 +72,9 @@ public class Timer implements ILifeCycle {
             if (callback != null) {
                 callback.call();
 
-                if (!isIntervalRunning) {
+                if (isIntervalCleared) {
                     callback.release();
+                    isIntervalCleared = false;
                 }
             }
 
@@ -96,7 +98,7 @@ public class Timer implements ILifeCycle {
                 intervalCallback = null;
             }
         } else {
-            isIntervalRunning = false;
+            isIntervalCleared = true;
         }
 
         jsValue.unprotect();
