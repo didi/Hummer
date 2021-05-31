@@ -32,4 +32,3 @@ async function build(target){
     }
   )
 }
-

@@ -33,6 +33,7 @@ function getElementTagMap(){
   tagMap.set(NODE_BUTTON, 'button')
   tagMap.set(NODE_TEXTAREA, 'textarea')
   tagMap.set(NODE_INPUT, 'input')
+  tagMap.set(NODE_SWITCH, 'switch')
   tagMap.set(NODE_SCROLLER, 'scroller')
   tagMap.set(NODE_REFRESH, 'refresh')
   tagMap.set(NODE_LOADMORE, 'loadmore')

@@ -5,7 +5,7 @@
   "author": "duanlikang",
   "homepage": "",
   "license": "ISC",
-  "main": "dist/tenon-utils.cjs.js",
+  "main": "dist/tenon-utils.es.js",
   "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
   "publishConfig": {
