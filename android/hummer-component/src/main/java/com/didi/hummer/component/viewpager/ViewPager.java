@@ -89,6 +89,12 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
                 .setOnPageChangeListener(new android.support.v4.view.ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                        /**
+                         * Page 滑动距离回调
+                         *
+                         * @param position 当前滑动到的Page位置（滑动到中间位置时会切换position）
+                         * @param positionOffset 当前Page滑动的距离（单位px）
+                         */
                         if (mOnPageScrollListener != null) {
                             // 滑动到中间位置时切换position
                             if (positionOffset >= 0.5) {
@@ -107,6 +113,13 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
 
                     @Override
                     public void onPageScrollStateChanged(int state) {
+                        /**
+                         * Page 滑动状态改变回调
+                         *
+                         * 0-停止滑动时
+                         * 1-手动拖拽时
+                         * 2-手指抬起时、自动滑动开始时
+                         */
                         if (mOnPageScrollStateChangeListener != null) {
                             mOnPageScrollStateChangeListener.call(state);
                         }
