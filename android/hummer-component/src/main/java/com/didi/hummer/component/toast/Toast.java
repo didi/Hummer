@@ -41,7 +41,7 @@ public class Toast {
             return;
         }
         try {
-            Field sField_TN = Toast.class.getDeclaredField("mTN");
+            Field sField_TN = android.widget.Toast.class.getDeclaredField("mTN");
             sField_TN.setAccessible(true);
             Field sField_TN_Handler = sField_TN.getType().getDeclaredField("mHandler");
             sField_TN_Handler.setAccessible(true);
