@@ -728,191 +728,191 @@ YG_VALUE_EDGE_PROPERTY(lowercased_name##Horizontal, capitalized_name##Horizontal
 YG_VALUE_EDGE_PROPERTY(lowercased_name##Vertical, capitalized_name##Vertical, capitalized_name, YOGA_TYPE_WRAPPER(YGEdgeVertical))       \
 YG_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, capitalized_name, YOGA_TYPE_WRAPPER(YGEdgeAll))
 
-- (YGValue)marginLeft {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeLeft);
+- (YOGA_TYPE_WRAPPER(YGValue))marginLeft {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft));
 }
 
-- (void)setMarginLeft:(YGValue)marginLeft {
+- (void)setMarginLeft:(YOGA_TYPE_WRAPPER(YGValue))marginLeft {
     switch (marginLeft.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeLeft);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeLeft, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeLeft, marginLeft.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft), marginLeft.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeLeft, marginLeft.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft), marginLeft.value);
             break;
     }
 }
 
-- (YGValue)marginTop {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeTop);
+- (YOGA_TYPE_WRAPPER(YGValue))marginTop {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop));
 }
 
-- (void)setMarginTop:(YGValue)marginTop {
+- (void)setMarginTop:(YOGA_TYPE_WRAPPER(YGValue))marginTop {
     switch (marginTop.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeTop);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeTop, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeTop, marginTop.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop), marginTop.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeTop, marginTop.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop), marginTop.value);
             break;
     }
 }
 
-- (YGValue)marginRight {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeRight);
+- (YOGA_TYPE_WRAPPER(YGValue))marginRight {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight));
 }
 
-- (void)setMarginRight:(YGValue)marginRight {
+- (void)setMarginRight:(YOGA_TYPE_WRAPPER(YGValue))marginRight {
     switch (marginRight.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeRight);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeRight, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeRight, marginRight.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight), marginRight.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeRight, marginRight.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight), marginRight.value);
             break;
     }
 }
 
-- (YGValue)marginBottom {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeBottom);
+- (YOGA_TYPE_WRAPPER(YGValue))marginBottom {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom));
 }
 
-- (void)setMarginBottom:(YGValue)marginBottom {
+- (void)setMarginBottom:(YOGA_TYPE_WRAPPER(YGValue))marginBottom {
     switch (marginBottom.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeBottom);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeBottom, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeBottom, marginBottom.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom), marginBottom.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeBottom, marginBottom.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom), marginBottom.value);
             break;
     }
 }
 
-- (YGValue)marginStart {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeStart);
+- (YOGA_TYPE_WRAPPER(YGValue))marginStart {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart));
 }
 
-- (void)setMarginStart:(YGValue)marginStart {
+- (void)setMarginStart:(YOGA_TYPE_WRAPPER(YGValue))marginStart {
     switch (marginStart.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeStart);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeStart, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeStart, marginStart.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart), marginStart.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeStart, marginStart.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart), marginStart.value);
             break;
     }
 }
 
-- (YGValue)marginEnd {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeEnd);
+- (YOGA_TYPE_WRAPPER(YGValue))marginEnd {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd));
 }
 
-- (void)setMarginEnd:(YGValue)marginEnd {
+- (void)setMarginEnd:(YOGA_TYPE_WRAPPER(YGValue))marginEnd {
     switch (marginEnd.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeEnd);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeEnd, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeEnd, marginEnd.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd), marginEnd.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeEnd, marginEnd.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd), marginEnd.value);
             break;
     }
 }
 
-- (YGValue)marginHorizontal {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeHorizontal);
+- (YOGA_TYPE_WRAPPER(YGValue))marginHorizontal {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal));
 }
 
-- (void)setMarginHorizontal:(YGValue)marginHorizontal {
+- (void)setMarginHorizontal:(YOGA_TYPE_WRAPPER(YGValue))marginHorizontal {
     switch (marginHorizontal.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeHorizontal);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeHorizontal, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeHorizontal, marginHorizontal.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal), marginHorizontal.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeHorizontal, marginHorizontal.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal), marginHorizontal.value);
             break;
     }
 }
 
-- (YGValue)marginVertical {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeVertical);
+- (YOGA_TYPE_WRAPPER(YGValue))marginVertical {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical));
 }
 
-- (void)setMarginVertical:(YGValue)marginVertical {
+- (void)setMarginVertical:(YOGA_TYPE_WRAPPER(YGValue))marginVertical {
     switch (marginVertical.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeVertical);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeVertical, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeVertical, marginVertical.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical), marginVertical.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeVertical, marginVertical.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical), marginVertical.value);
             break;
     }
 }
 
-- (YGValue)margin {
-    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeAll);
+- (YOGA_TYPE_WRAPPER(YGValue))margin {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll));
 }
 
-- (void)setMargin:(YGValue)margin {
+- (void)setMargin:(YOGA_TYPE_WRAPPER(YGValue))margin {
     switch (margin.unit) {
-        case YGUnitAuto:
-            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeAll);
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll));
             break;
-        case YGUnitUndefined:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeAll, YGUndefined);
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll), YOGA_TYPE_WRAPPER(YGUndefined));
             break;
-        case YGUnitPoint:
-            YGNodeStyleSetMargin(self.yogaNode, YGEdgeAll, margin.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll), margin.value);
             break;
-        case YGUnitPercent:
-            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeAll, margin.value);
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll), margin.value);
             break;
     }
 }
