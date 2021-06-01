@@ -12,6 +12,14 @@
           <view class="demo-box border-box"></view>
         </view>
       </view>
+       <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">View With Border Top</text>
+        </view>
+        <view class="item-container">
+          <view class="demo-box border-top-box"></view>
+        </view>
+      </view>
       <view class="demo-item">
         <view class="item-title">
           <text class="item-title-text">View With Background Image</text>
@@ -34,6 +42,9 @@
 .border-box {
   border-radius: 0.1rem;
   border: 0.2rem solid blue;
+}
+.border-top-box{
+  border-top: 0.2rem solid #444444;
 }
 .background-box {
   background-image: url("https://dpubstatic.udache.com/static/dpubimg/RJ4ZZ_M5ie/WechatIMG24764.jpeg");
