@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsProperty;
@@ -107,7 +108,10 @@ public class Button extends HMBase<android.widget.Button> {
         if (bgDrawable != null) {
             bgDrawableMap.put(ButtonStyleHelper.KEY_ON_PRESS, bgDrawable);
         }
-        textColorMap.put(ButtonStyleHelper.KEY_ON_PRESS, ButtonStyleHelper.pickButtonTextColor(pressed));
+        Integer textColor = ButtonStyleHelper.pickButtonTextColor(pressed);
+        if (textColor != null) {
+            textColorMap.put(ButtonStyleHelper.KEY_ON_PRESS, textColor);
+        }
     }
 
     private void mergeDisabledStyle() {
@@ -116,7 +120,10 @@ public class Button extends HMBase<android.widget.Button> {
         if (bgDrawable != null) {
             bgDrawableMap.put(ButtonStyleHelper.KEY_ON_DISABLE, bgDrawable);
         }
-        textColorMap.put(ButtonStyleHelper.KEY_ON_DISABLE, ButtonStyleHelper.pickButtonTextColor(disabled));
+        Integer textColor = ButtonStyleHelper.pickButtonTextColor(disabled);
+        if (textColor != null) {
+            textColorMap.put(ButtonStyleHelper.KEY_ON_DISABLE, textColor);
+        }
     }
 
     /**
@@ -152,16 +159,15 @@ public class Button extends HMBase<android.widget.Button> {
             return;
         }
 
+        String fontsAssetsPath = HummerSDK.getFontsAssetsPath(((HummerContext) getContext()).getNamespace());
+
         int style = Typeface.NORMAL;
         if (getView().getTypeface() != null) {
             style = getView().getTypeface().getStyle();
         }
 
         for (String font : fontArray) {
-            Typeface typeface = FontManager.getInstance().getTypeface(
-                    font.trim(),
-                    style,
-                    getContext().getAssets());
+            Typeface typeface = FontManager.getInstance().getTypeface(font.trim(), fontsAssetsPath, style, getContext().getAssets());
             if (typeface != null) {
                 getView().setTypeface(typeface);
                 requestLayout();
@@ -222,7 +228,7 @@ public class Button extends HMBase<android.widget.Button> {
                 getView().setTextColor(color);
             }
         } else if (textColorMap.containsKey(ButtonStyleHelper.KEY_ON_NORMAL)) {
-            // 如果没有设置press或disable状态，只需要设置简单的normal状态颜色
+            // 如果没有设置press和disable状态，只需要设置简单的normal状态颜色
             Integer color = textColorMap.get(ButtonStyleHelper.KEY_ON_NORMAL);
             if (color != null) {
                 getView().setTextColor(color);

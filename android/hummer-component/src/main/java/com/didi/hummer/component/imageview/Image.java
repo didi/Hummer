@@ -8,15 +8,28 @@ import android.widget.ImageView;
 import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
+import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerStyleUtils;
 import com.facebook.yoga.YogaUnit;
 
+import java.io.Serializable;
+import java.util.Map;
+
 @Component("Image")
 public class Image extends HMBase<RoundedImageView> {
+
+    private class ImageStyle implements Serializable {
+        public String src;
+        public String placeholder;
+        public String failedImage;
+        public String gifSrc;
+        public int gifRepeatCount;
+    }
 
     public Image(HummerContext context, JSValue jsValue, String viewID) {
         super(context, jsValue, viewID);
@@ -91,36 +104,37 @@ public class Image extends HMBase<RoundedImageView> {
     /**
      * 普通图片
      */
+    @Deprecated
     @JsProperty("src")
     private String src;
 
+    @Deprecated
     public void setSrc(String src) {
         this.src = src;
-        ImageSizeCallback callback = null;
-        if (getYogaNode().getWidth().unit == YogaUnit.AUTO || getYogaNode().getHeight().unit == YogaUnit.AUTO) {
-            callback = this::adjustWidthAndHeight;
-        }
-
-        ImageRenderUtil.renderImage((HummerContext) getContext(), getView(), src, callback);
+        loadImage(src);
     }
 
     /**
      * Gif图片
      */
+    @Deprecated
     @JsProperty("gifSrc")
     private String gifSrc;
 
+    @Deprecated
     public void setGifSrc(String gifSrc) {
         this.gifSrc = gifSrc;
-        ImageRenderUtil.renderGif((HummerContext) getContext(), getView(), gifSrc, gifRepeatCount);
+        loadGif(gifSrc, gifRepeatCount);
     }
 
     /**
      * Gif图片循环次数（默认是0，无限循环）
      */
+    @Deprecated
     @JsProperty("gifRepeatCount")
     private int gifRepeatCount;
 
+    @Deprecated
     public void setGifRepeatCount(int gifRepeatCount) {
         this.gifRepeatCount = gifRepeatCount;
     }
@@ -144,27 +158,61 @@ public class Image extends HMBase<RoundedImageView> {
         }
     }
 
+    @JsMethod("load")
+    public void load(Object src) {
+        if (src instanceof String) {
+            // 普通图片处理
+            loadImage((String) src);
+        } else if (src instanceof Map) {
+            ImageStyle style = HMGsonUtil.fromJson(HMGsonUtil.toJson(src), ImageStyle.class);
+            if (style != null) {
+                if (!TextUtils.isEmpty(style.gifSrc)) {
+                    // gif图片处理
+                    loadGif(style.gifSrc, style.placeholder, style.failedImage, style.gifRepeatCount);
+                } else if (!TextUtils.isEmpty(style.src)) {
+                    // 普通图片处理
+                    loadImage(style.src, style.placeholder, style.failedImage);
+                }
+            }
+        }
+    }
+
+    private void loadImage(String url) {
+        loadImage(url, null, null);
+    }
+
+    private void loadImage(String url, String placeholder, String failedImage) {
+        ImageSizeCallback callback = null;
+        if (getYogaNode().getWidth().unit == YogaUnit.AUTO || getYogaNode().getHeight().unit == YogaUnit.AUTO) {
+            callback = this::adjustWidthAndHeight;
+        }
+        ImageRenderUtil.renderImage((HummerContext) getContext(), getView(), url, placeholder, failedImage, callback);
+    }
+
+    private void loadGif(String url, int repeatCount) {
+        loadGif(url, null, null, repeatCount);
+    }
+
+    private void loadGif(String url, String placeholder, String failedImage, int repeatCount) {
+        ImageSizeCallback callback = null;
+        if (getYogaNode().getWidth().unit == YogaUnit.AUTO || getYogaNode().getHeight().unit == YogaUnit.AUTO) {
+            callback = this::adjustWidthAndHeight;
+        }
+        ImageRenderUtil.renderGif((HummerContext) getContext(), getView(), url, placeholder, failedImage, repeatCount, callback);
+    }
+
     @Override
     public void setBorderWidth(float width) {
-        if (TextUtils.isEmpty(src)) {
-            super.setBorderWidth(width);
-        }
         getView().setBorderWidth(width);
     }
 
     @Override
     public void setBorderColor(int color) {
-        if (TextUtils.isEmpty(src)) {
-            super.setBorderColor(color);
-        }
         getView().setBorderColor(color);
     }
 
     @Override
     public void setBorderStyle(String style) {
-        if (TextUtils.isEmpty(src)) {
-            super.setBorderStyle(style);
-        }
         getView().setBorderStyle(style);
     }
 

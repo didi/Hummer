@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMPanEvent : HMBaseEvent
 
+@property (nonatomic, assign) CGPoint translation;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -2,119 +2,84 @@ package com.didi.hummer.devtools.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.view.View;
 import android.widget.TextView;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.devtools.HummerDevTools;
-import com.didi.hummer.devtools.invoker.HummerInvokerWrapper;
+import com.didi.hummer.devtools.R;
 import com.didi.hummer.devtools.manager.HummerLogManager;
-import com.didi.hummer.hummerdebug.R;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerLayout;
-import com.didi.hummer.render.utility.DPUtil;
 import com.facebook.yoga.YogaEdge;
 import com.facebook.yoga.YogaPositionType;
 
 /**
- * @author: linjizong
- * @date: 2020-04-20
- * @desc:
+ * DevTools按钮入口视图管理类
+ *
+ * Created by XiaoFeng on 2021/5/25.
  */
-public class DevToolsEntrance extends LinearLayout {
-    private static final int DEFAULT_MARGIN_DP = 100;
+public class DevToolsEntrance {
 
-    private HummerLayout mRootView;
-    private boolean mShow;
+    private HummerContext mHummerContext;
+    private JSContext mJsContext;
+    private HummerLayout mContainer;
+    private View mLayoutDevtools;
     private HMBase mConsoleView;
     private HummerLogManager mLogManager;
-    private HummerContext mHummerContext;
     private HummerDevTools.IParameterInjector mParameterInjector;
+    private boolean mIsShown;
 
-    public DevToolsEntrance(Context context) {
-        this(context, null);
-    }
+    private ExceptionCallback mExceptionCallback = e -> {
+        mLogManager.addException(Log.getStackTraceString(e));
+    };
 
-    public DevToolsEntrance(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public DevToolsEntrance(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context);
-    }
-
-    private void init(Context context) {
-        if (!(context instanceof HummerContext) || ((HummerContext) context).getContainer() == null) {
-            return;
-        }
-
-        mHummerContext = (HummerContext) context;
-        mRootView = mHummerContext.getContainer();
+    public DevToolsEntrance(@NonNull HummerContext context) {
+        mHummerContext = context;
+        mJsContext = mHummerContext.getJsContext();
+        mContainer = mHummerContext.getContainer();
+        HummerException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
 
         initView(context);
     }
 
+    public void release() {
+        HummerException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
+    }
+
     private void initView(Context context) {
-        setOrientation(VERTICAL);
-        setGravity(Gravity.CENTER_HORIZONTAL);
-        setFocusableInTouchMode(true);
-        setOnKeyListener((v, keyCode, event) -> {
+        FloatLayout floatLayout = new FloatLayout(context);
+        ViewCompat.setElevation(floatLayout, 10000);
+        floatLayout.setOnClickListener(v -> {
+            if (!mIsShown) {
+                openConsoleView();
+            } else {
+                closeConsoleView();
+            }
+        });
+
+        mLayoutDevtools = View.inflate(context, R.layout.layout_devtools_btn, floatLayout);
+        mLayoutDevtools.setFocusableInTouchMode(true);
+        mLayoutDevtools.setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                if (mShow) {
-                    closeDebugView();
+                if (mIsShown) {
+                    closeConsoleView();
                     return true;
                 }
             }
             return false;
         });
 
-        LinearLayout.LayoutParams lpTvJsEngine = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        TextView tvEntry = new TextView(context);
-        tvEntry.setText("开发\n工具");
-        tvEntry.setTextSize(10);
-        tvEntry.setTextColor(Color.WHITE);
-        tvEntry.setWidth(DPUtil.dp2px(context, 40));
-        tvEntry.setHeight(DPUtil.dp2px(context, 40));
-        tvEntry.setGravity(Gravity.CENTER);
-        tvEntry.setBackgroundResource(R.drawable.btn_dev_tools_entrance_bg);
-        addView(tvEntry, lpTvJsEngine);
-
-        TextView tvJsEngine = new TextView(context);
+        TextView tvJsEngine = mLayoutDevtools.findViewById(R.id.tv_js_engine);
         tvJsEngine.setText(getJsEngineString());
-        tvJsEngine.setTextSize(7);
-        tvJsEngine.setTextColor(Color.WHITE);
-        tvJsEngine.setBackgroundResource(R.drawable.btn_dev_tools_js_engine_bg);
-        tvJsEngine.setPadding(DPUtil.dp2px(context, 3), DPUtil.dp2px(context, 1), DPUtil.dp2px(context, 3), DPUtil.dp2px(context, 1));
-        lpTvJsEngine.topMargin = DPUtil.dp2px(context, 4);
-        addView(tvJsEngine, lpTvJsEngine);
-
-        FrameLayout.LayoutParams lpEntryLayout = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lpEntryLayout.setMarginEnd(DPUtil.dp2px(context, 12));
-
-        FloatLayout floatLayout = new FloatLayout(context);
-        floatLayout.addView(this, lpEntryLayout);
-        ViewCompat.setElevation(floatLayout, 10000);
-        floatLayout.setOnClickListener(v -> {
-            if (!mShow) {
-                openDebugView();
-            } else {
-                closeDebugView();
-            }
-        });
 
         HMBase<FloatLayout> base = new HMBase<FloatLayout>(mHummerContext, null, null) {
             @Override
@@ -124,8 +89,8 @@ public class DevToolsEntrance extends LinearLayout {
         };
         base.getYogaNode().setPositionType(YogaPositionType.ABSOLUTE);
         base.getYogaNode().setPosition(YogaEdge.END, 0);
-        base.getYogaNode().setPosition(YogaEdge.BOTTOM, DPUtil.dp2px(context, DEFAULT_MARGIN_DP));
-        mRootView.addView(base);
+        base.getYogaNode().setPositionPercent(YogaEdge.BOTTOM, 20);
+        mContainer.addView(base);
     }
 
     public void setParameterInjector(HummerDevTools.IParameterInjector injector) {
@@ -161,43 +126,23 @@ public class DevToolsEntrance extends LinearLayout {
         }
     }
 
-    private ExceptionCallback mExceptionCallback = e -> {
-        mLogManager.addException(Log.getStackTraceString(e));
-    };
-
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (mHummerContext != null) {
-            HummerException.addJSContextExceptionCallback(mHummerContext.getJsContext(), mExceptionCallback);
-        }
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (mHummerContext != null) {
-            HummerException.removeJSContextExceptionCallback(mHummerContext.getJsContext(), mExceptionCallback);
-        }
-    }
-
-    public void closeDebugView() {
-        mShow = false;
-        mRootView.removeView(mConsoleView);
-    }
-
-    public void openDebugView() {
-        mShow = true;
+    private void openConsoleView() {
+        mIsShown = true;
         if (mConsoleView == null) {
-            createConsoleView();
+            initConsoleView();
         }
-        mRootView.addView(mConsoleView);
-        requestFocus();
+        mContainer.addView(mConsoleView);
+
+        mLayoutDevtools.requestFocus();
     }
 
-    private void createConsoleView() {
-        ConsoleView view = new ConsoleView(getContext());
+    private void closeConsoleView() {
+        mIsShown = false;
+        mContainer.removeView(mConsoleView);
+    }
+
+    private void initConsoleView() {
+        ConsoleView view = new ConsoleView(mHummerContext);
         view.bindHummerContext(mHummerContext);
         view.bindParameterInjector(mParameterInjector);
         view.bindLog(mLogManager);
@@ -213,5 +158,4 @@ public class DevToolsEntrance extends LinearLayout {
         mConsoleView.getYogaNode().setWidthPercent(100);
         mConsoleView.getYogaNode().setHeightPercent(100);
     }
-
 }

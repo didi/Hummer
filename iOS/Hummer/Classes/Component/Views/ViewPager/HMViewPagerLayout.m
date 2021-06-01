@@ -159,7 +159,7 @@
     
     CGFloat(^calculateTargetOffset)(CGFloat proposedOffset, CGFloat boundedOffset) = ^(CGFloat proposedOffset, CGFloat boundedOffset) {
         CGFloat targetOffset = 0;
-        if (ABS(velocity.x) >= 10) {
+        if (ABS(velocity.x) >= 0.6) {
             CGFloat vector = velocity.x >= 0 ? 1.0 : -1.0;
             targetOffset = round(proposedOffset / self.itemSpacing + 0.35 * vector) * self.itemSpacing;
         } else {

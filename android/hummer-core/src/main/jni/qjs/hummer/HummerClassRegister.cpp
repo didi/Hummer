@@ -72,6 +72,6 @@ void HummerClassRegister::init(JSRuntime *rt, JSContext *ctx) {
         JS_SetConstructor(ctx, ctorClass, proto);
 
         // 这一步是关键
-        MY_JS_SetGlobalVar(ctx, JS_NewAtom(ctx, Recycler::class_name), ctorClass, 0);
+        JS_SetPropertyStr(ctx, JS_GetGlobalObject(ctx), Recycler::class_name, ctorClass);
     }
 }

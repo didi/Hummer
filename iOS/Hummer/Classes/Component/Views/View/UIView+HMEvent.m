@@ -187,20 +187,72 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
 }
 
 - (void)hm_onEventGesture:(UIGestureRecognizer *)gesture {
+    if (gesture.hm_eventName.length == 0) {
+        return;
+    }
+    NSMutableArray<HMBaseValue *> *callbackArray = [self hm_gestureCallbacksForEvent:gesture.hm_eventName];
+    if (callbackArray.count == 0) {
+        return;
+    }
+    NSTimeInterval timestamp = floor(NSDate.date.timeIntervalSince1970) * 1000;
+    CGPoint location = [gesture locationInView:gesture.view];
+    if ([gesture isKindOfClass:UITapGestureRecognizer.class]) {
+        [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [obj callWithArguments:@[@{
+                                         @"type": @"tap",
+                                         @"state": @(UIGestureRecognizerStateEnded),
+                                         @"timestamp": @(timestamp),
+                                         @"position": @{
+                                                 @"x": @(location.x),
+                                                 @"y": @(location.y)
+                                         }
+            }]];
+        }];
+        
+        return;
+    } else if ([gesture isKindOfClass:UILongPressGestureRecognizer.class]) {
+        if (gesture.state != UIGestureRecognizerStateBegan) {
+            // 只有 end 才会回调
+            return;
+        }
+        CGPoint location = [gesture locationInView:gesture.view];
+        [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [obj callWithArguments:@[@{
+                                         @"type": @"longPress",
+                                         @"state": @(UIGestureRecognizerStateBegan),
+                                         @"timestamp": @(timestamp),
+                                         @"position": @{
+                                                 @"x": @(location.x),
+                                                 @"y": @(location.y)
+                                         }
+            }]];
+        }];
+        
+        return;
+    }
     if (!self.hm_eventObj) {
         Class objcClass = [self hm_eventClassWithGesture:gesture];
+        // 时间戳为 0
         self.hm_eventObj = [[objcClass alloc] init];
     }
     [self.hm_eventObj updateEvent:self withContext:gesture];
     
-    if (gesture.hm_eventName) {
-        NSMutableArray<HMBaseValue *> *callbacks = [self hm_gestureCallbacksForEvent:gesture.hm_eventName];
-        
-        for (int i = 0; i < callbacks.count; i++) {
-            HMBaseValue *listener = callbacks[i];
-            [listener callWithArguments:@[self.hm_eventObj]];
+    [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([self.hm_eventObj isKindOfClass:HMPanEvent.class]) {
+            // pan 事件特殊处理转成字典
+            [obj callWithArguments:@[@{
+                                         @"type": @"pan",
+                                         @"state": @(gesture.state),
+                                         @"timestamp": @(timestamp),
+                                         @"translation": @{
+                                                 @"deltaX": @(((HMPanEvent *) self.hm_eventObj).translation.x),
+                                                 @"deltaY": @(((HMPanEvent *) self.hm_eventObj).translation.y)
+                                         }
+            }]];
+        } else {
+            [obj callWithArguments:@[self.hm_eventObj]];
         }
-    }
+    }];
 }
 
 - (NSMutableArray<HMBaseValue *> *)hm_gestureCallbacksForEvent:(NSString *)eventName {

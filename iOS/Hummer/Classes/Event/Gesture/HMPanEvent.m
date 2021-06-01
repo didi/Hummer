@@ -14,7 +14,6 @@
 @interface HMPanEvent()
 
 @property (nonatomic, assign) CGPoint previousLocation;
-@property (nonatomic, assign) CGPoint translation;
 @property (nonatomic, strong) UIPanGestureRecognizer *gesture;
 
 @end

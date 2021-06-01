@@ -53,6 +53,11 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
     private float alphaFactor = ScaleAndAlphaTransformer.DEFAULT_MIN_ALPHA;
     private int cornerRadius;
 
+    /**
+     * 是否正在设置数据，设置数据过程中不需要回调mOnPageChange
+     */
+    private boolean isDataSetting;
+
     public ViewPager(HummerContext context, JSValue jsValue) {
         super(context, jsValue, null);
         HummerStyleUtils.addNonDpStyle(STYLE_LOOP_INTERVAL);
@@ -95,7 +100,7 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
 
                     @Override
                     public void onPageSelected(int position) {
-                        if (mOnPageChangeListener != null) {
+                        if (mOnPageChangeListener != null && !isDataSetting) {
                             mOnPageChangeListener.call(position, mData.size());
                         }
                     }
@@ -219,7 +224,9 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
         if (canLoop != adapter.isCanLoop()) {
             getView().setCanLoop(canLoop);
             adapter.setCanLoop(canLoop);
-            setData(mData);
+            if (!mData.isEmpty()) {
+                setData(mData);
+            }
         }
     }
 
@@ -235,6 +242,8 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
         if (!data.isEmpty() && !(data.get(0) instanceof String) && mOnItemViewCallback == null) {
             return;
         }
+
+        isDataSetting = true;
 
         mData = data;
 
@@ -252,6 +261,9 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
         // 这里重写PagerAdapter，以适用自定义View
         adapter.setData(data);
         getView().getViewPager().setAdapter(adapter);
+
+        isDataSetting = false;
+
         setCurrentItem(0);
     }
 

@@ -52,27 +52,7 @@ public class HummerSDK {
     private static IHermesDebugger hermesDebugger;
 
     public static boolean isSupport(Context context, @JsEngine int engine) {
-        try {
-            switch (engine) {
-                case JsEngine.JSC:
-                    ReLinker.loadLibrary(context.getApplicationContext(), "hummer-jsc");
-                    break;
-                case JsEngine.JSC_WEEX:
-                    ReLinker.loadLibrary(context.getApplicationContext(), "hummer-jsc-weex");
-                    break;
-                case JsEngine.HERMES:
-                    ReLinker.loadLibrary(context.getApplicationContext(), "hummer-hermes");
-                    break;
-                case JsEngine.QUICK_JS:
-                default:
-                    ReLinker.loadLibrary(context.getApplicationContext(), "hummer-qjs");
-                    break;
-            }
-            return true;
-        } catch (Throwable e) {
-            e.printStackTrace();
-            return false;
-        }
+        return loadJSEngine(context, engine);
     }
 
     public static void setJsEngine(@JsEngine int jsEngine) {
@@ -98,7 +78,7 @@ public class HummerSDK {
             ActivityStackManager.getInstance().register((Application) appContext);
 
             loadYogaEngine();
-            loadJSEngine(jsEngine);
+            loadJSEngine(appContext, jsEngine);
 
             HummerException.init();
             isInited = true;
@@ -170,21 +150,27 @@ public class HummerSDK {
         }
     }
 
-    private static void loadJSEngine(@JsEngine int engine) {
-        switch (engine) {
-            case JsEngine.JSC:
-                ReLinker.loadLibrary(appContext, "hummer-jsc");
-                break;
-            case JsEngine.JSC_WEEX:
-                ReLinker.loadLibrary(appContext, "hummer-jsc-weex");
-                break;
-            case JsEngine.HERMES:
-                ReLinker.loadLibrary(appContext, "hummer-hermes");
-                break;
-            case JsEngine.QUICK_JS:
-            default:
-                ReLinker.loadLibrary(appContext, "hummer-qjs");
-                break;
+    private static boolean loadJSEngine(Context context, @JsEngine int engine) {
+        try {
+            switch (engine) {
+                case JsEngine.JSC:
+                    ReLinker.loadLibrary(context, "hummer-jsc");
+                    break;
+                case JsEngine.JSC_WEEX:
+                    ReLinker.loadLibrary(context, "hummer-jsc-weex");
+                    break;
+                case JsEngine.HERMES:
+                    ReLinker.loadLibrary(context, "hummer-hermes");
+                    break;
+                case JsEngine.QUICK_JS:
+                default:
+                    ReLinker.loadLibrary(context, "hummer-qjs");
+                    break;
+            }
+            return true;
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -211,5 +197,9 @@ public class HummerSDK {
 
     public static boolean isSupportRTL(String namespace) {
         return getHummerConfig(namespace).isSupportRTL();
+    }
+
+    public static String getFontsAssetsPath(String namespace) {
+        return getHummerConfig(namespace).getFontsAssetsPath();
     }
 }

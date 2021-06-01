@@ -46,6 +46,8 @@
 @property (nonatomic) NSUInteger targetDragIndex;
 @property (nonatomic) CGPoint targetDragOffset;
 @property (nonatomic) BOOL isDragging;
+@property (nonatomic) BOOL isScrollingWithoutDrag;//非人为拖拽滚动：松手之后，自动滚动到某个index。
+
 @property (nonatomic) BOOL isAdjusting;
 @property (nonatomic, strong) NSTimer *timer;
 
@@ -64,6 +66,7 @@
 @property (nonatomic) CGFloat edgeSpacing; /// item距离容器左右的间距
 @property (nonatomic) CGFloat scaleFactor;
 @property (nonatomic) CGFloat alphaFactor;
+
 
 @end
 
@@ -92,6 +95,11 @@ HM_EXPORT_METHOD(onItemView, setOnItemViewCallback:)
 HM_EXPORT_METHOD(onPageChange, setOnPageChangeCallback:)
 HM_EXPORT_METHOD(onItemClick, setOnItemClickCallback:)
 HM_EXPORT_METHOD(onPageScroll, setOnItemScrollCallback:)
+/**
+ * 0 停止状态
+ * 1 开始手动拖拽
+ * 2 手松开或滚动过程中
+ */
 HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
 
 - (void)dealloc
@@ -292,7 +300,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
         return;
     }
     [self invalidateTimer];
-    [self updateData:self.dataList];
+    [self updateData:[self.dataList copy]];
     [self updateView];
     [self setupTimer];
 }
@@ -346,10 +354,18 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
         return;
     }
     if (self.itemChangedCallback) {
+        NSLog(@"##### hummer Debug itemChangedCallback");
         self.itemChangedCallback(@[@(self.currentIndex % dc), @(dc)]);
     }
 }
-
+// setConentOffset & 松手时自动分页滚动
+- (void)triggerItemScrollStateChangeCallback:(NSNumber *)state
+{
+    if (self.itemScrollStateChangeCallback) {
+        NSLog(@"##### hummer Debug itemChangedCallback %@",state);
+        self.itemScrollStateChangeCallback(@[state]);
+    }
+}
 // MARK: - helper
 
 - (CGFloat)scrollOffset
@@ -365,6 +381,9 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     }
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
     CGPoint contentOffset = [self.layout contentOffsetForIndexPath:indexPath];
+    if (!CGPointEqualToPoint(contentOffset, self.pageView.contentOffset)) {
+        [self triggerItemScrollStateChangeCallback:@2];
+    }
     [self.pageView setContentOffset:contentOffset animated:isAnimated];
 }
 
@@ -433,9 +452,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     
     [self setupStartDragOffset];
     
-    if (self.itemScrollStateChangeCallback) {
-        self.itemScrollStateChangeCallback(@[@(1)]);
-    }
+    [self triggerItemScrollStateChangeCallback:@1];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -458,22 +475,23 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
         progress = 1.0 + (scrollView.contentOffset.x - self.startDragOffset.x) / self.layout.itemSpacing;
         progress = MAX(0.0, MIN(1.0, progress));
     }
+    
+    
     if (self.itemScrollCallback) {
         self.itemScrollCallback(@[@(index % self.dataList.count), @(progress)]);
     }
     NSLog(@"HMMMMM itemScrollCallback %@", @(progress));
+    
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
 //    scrollView.userInteractionEnabled = YES;
 
-    if (self.itemScrollStateChangeCallback) {
-        self.itemScrollStateChangeCallback(@[@(2)]);
-    }
-    if (!decelerate) {
+    if (!decelerate && !self.isScrollingWithoutDrag) {
         [self scrollViewDidEnd:scrollView];
     }
+    self.isScrollingWithoutDrag = NO;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -483,12 +501,23 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-//    scrollView.userInteractionEnabled = YES;
 
-    if (self.itemScrollStateChangeCallback) {
-        self.itemScrollStateChangeCallback(@[@(2)]);
-    }
     [self scrollViewDidEnd:scrollView];
+}
+
+
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    CGPoint _targetContentOffset = *targetContentOffset;
+    //即将停止拖拽，如果停止 targetContentOffset 就是当前位置，则不需要触发滚动
+    if (!CGPointEqualToPoint(self.pageView.contentOffset, _targetContentOffset)) {
+        self.isScrollingWithoutDrag = YES;
+        [self triggerItemScrollStateChangeCallback:@2];
+    }
+
+    *targetContentOffset = scrollView.contentOffset;
+    [self.pageView setContentOffset:_targetContentOffset animated:YES];
 }
 
 - (void)scrollViewDidEnd:(UIScrollView *)scrollView
@@ -496,6 +525,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
 //    scrollView.userInteractionEnabled = YES;
     
     self.isDragging = NO;
+    self.isScrollingWithoutDrag = NO;
     if (self.autoPlay && !self.timer) {
         [self setupTimer];
     }
@@ -504,15 +534,11 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     }
     NSUInteger index = lround(self.scrollOffset) % self.count;
     if (index == self.currentIndex) {
-        if (self.itemScrollStateChangeCallback) {
-            self.itemScrollStateChangeCallback(@[@(0)]);
-        }
+        [self triggerItemScrollStateChangeCallback:@0];
     } else {
         self.currentIndex = index;
         [self triggerItemChangedCallback];
-        if (self.itemScrollStateChangeCallback) {
-            self.itemScrollStateChangeCallback(@[@(0)]);
-        }
+        [self triggerItemScrollStateChangeCallback:@0];
     }
     NSLog(@"HMMMMM end itemChangedCallback");
 }

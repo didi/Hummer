@@ -678,6 +678,7 @@ YG_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge)
 - (void)set##objc_capitalized_name:(YOGA_TYPE_WRAPPER(YGValue))objc_lowercased_name                                 \
 {                                                                                                \
   switch (objc_lowercased_name.unit) {                                                           \
+    case YOGA_TYPE_WRAPPER(YGUnitAuto):                                                                        \
     case YOGA_TYPE_WRAPPER(YGUnitUndefined):                                                                        \
       FINYGNodeStyleSet##c_name(self.yogaNode, edge, objc_lowercased_name.value);                       \
       break;                                                                                     \
@@ -696,6 +697,7 @@ YG_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge)
 - (void)set##objc_capitalized_name:(YGValue)objc_lowercased_name                                 \
 {                                                                                                \
   switch (objc_lowercased_name.unit) {                                                           \
+    case YGUnitAuto:                                                                        \
     case YGUnitUndefined:                                                                        \
       YGNodeStyleSet##c_name(self.yogaNode, edge, objc_lowercased_name.value);                       \
       break;                                                                                     \

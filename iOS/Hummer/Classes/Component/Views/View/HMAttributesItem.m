@@ -103,34 +103,35 @@
 }
 
 - (UIFont *)copiedFont:(UIFont *)font {
+    
+    CGFloat fontSize = _fontSize>0?_fontSize:[font.fontDescriptor.fontAttributes[@"NSFontSizeAttribute"] floatValue];
+
     UIFontDescriptor *fontDescriptor = font.fontDescriptor;
+    UIFontDescriptorSymbolicTraits traits = fontDescriptor.symbolicTraits;
+    if (_fontFamily) {
+        //优先使用自定义字体
+        // 自定义字体可能不支持 加粗等样式，因此使用 fontDescriptor 保持样式。针对 style 设置不支持的样式，在richtext中设置 normal 仍可以生效的问题。
+        fontDescriptor = [UIFontDescriptor fontDescriptorWithName:_fontFamily size:fontSize];
+    }
+
     if (self.fontStyle) {
         // 中文倾斜变换矩阵
-        CGAffineTransform matrix = CGAffineTransformIdentity;
-        UIFontDescriptorSymbolicTraits traits = fontDescriptor.symbolicTraits;
         if (self.fontTraits & UIFontDescriptorTraitItalic) {
             traits |= UIFontDescriptorTraitItalic;
-            matrix = CGAffineTransformMake(1, 0, tanf(5 * (CGFloat)M_PI / 180), 1, 0, 0);
         } else {
             traits &= (~UIFontDescriptorTraitItalic);
-            matrix = CGAffineTransformIdentity;
         }
-        fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:traits];
-        fontDescriptor = [fontDescriptor fontDescriptorWithMatrix:matrix];
+
     }
     if (self.fontWeight) {
-        UIFontDescriptorSymbolicTraits traits = fontDescriptor.symbolicTraits;
         if (self.fontTraits & UIFontDescriptorTraitBold) {
             traits |= UIFontDescriptorTraitBold;
         } else {
             traits &= (~UIFontDescriptorTraitBold);
         }
-        fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:traits];
     }
-    if (self.fontFamily) {
-        fontDescriptor = [fontDescriptor fontDescriptorWithFamily:self.fontFamily];
-    }
-    return [UIFont fontWithDescriptor:fontDescriptor size:self.fontSize];
+    fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:traits];
+    return [UIFont fontWithDescriptor:fontDescriptor size:fontSize];
 }
 
 #undef IsEmptyString

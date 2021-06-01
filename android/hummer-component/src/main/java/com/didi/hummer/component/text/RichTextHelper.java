@@ -12,10 +12,10 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
-import android.text.style.TypefaceSpan;
 import android.text.style.UnderlineSpan;
 import android.widget.TextView;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerStyleUtils;
@@ -180,7 +180,7 @@ public class RichTextHelper {
         }
 
         // 处理其他文字效果
-        processTextStyleSpannableString(spanText, richText, 0, spanText.length());
+        processTextStyleSpannableString(hmBase, spanText, richText, 0, spanText.length());
 
         if (listener != null) {
             listener.onGenerated(spanText);
@@ -221,7 +221,7 @@ public class RichTextHelper {
             }
 
             // 处理其他文字效果
-            processTextStyleSpannableString(spanText, rt, index, index + textLength);
+            processTextStyleSpannableString(hmBase, spanText, rt, index, index + textLength);
 
             index += textLength;
         }
@@ -231,7 +231,7 @@ public class RichTextHelper {
         }
     }
 
-    private static void processTextStyleSpannableString(SpannableString spanText, RichText richText, int start, int end) {
+    private static void processTextStyleSpannableString(HMBase hmBase, SpannableString spanText, RichText richText, int start, int end) {
         if (richText.color != Color.TRANSPARENT) {
             spanText.setSpan(new ForegroundColorSpan(richText.color), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
@@ -239,7 +239,13 @@ public class RichTextHelper {
             spanText.setSpan(new BackgroundColorSpan(richText.backgroundColor), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         if (!TextUtils.isEmpty(richText.fontFamily)) {
-            spanText.setSpan(new TypefaceSpan(richText.fontFamily), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            String fontsAssetsPath = HummerSDK.getFontsAssetsPath(((HummerContext) hmBase.getContext()).getNamespace());
+            int style = Typeface.NORMAL;
+            if (hmBase.getView() instanceof TextView && ((TextView) hmBase.getView()).getTypeface() != null) {
+                style = ((TextView) hmBase.getView()).getTypeface().getStyle();
+            }
+            Typeface typeface = FontManager.getInstance().getTypeface(richText.fontFamily, fontsAssetsPath, style, hmBase.getContext().getAssets());
+            spanText.setSpan(new TypefaceSpanEx(typeface), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         if (richText.fontSize > 0) {
             spanText.setSpan(new AbsoluteSizeSpan(richText.fontSize, false), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);

@@ -85,7 +85,6 @@
                     return;
                 }
                 if (needCache) {
-                    //4 cache fill
                     [wSelf.decodedImageCache addImageToCache:image url:cacheUrlString context:context];
                 }
                 hm_safe_main_thread(^{
@@ -152,6 +151,23 @@
         _decodedImageCache = [[HMImageCache alloc] init];
     }
     return _decodedImageCache;
+}
+
+- (void)registerLoader:(id<HMImageLoader>)loader {
+    
+    [_loaders addObject:loader];
+}
+
+- (void)resignLoader:(id<HMImageLoader>)loader {
+    [_loaders removeObject:loader];
+}
+
+- (void)registerDecoder:(id<HMImageDecoder>)decoder {
+    [_decoders addObject:decoder];
+}
+
+- (void)resignDecoder:(id<HMImageDecoder>)decoder {
+    [_decoders removeObject:decoder];
 }
 
 @end
