@@ -67,7 +67,7 @@ public class HummerAnimationUtils {
             return animRotation(value, from, AXIS_X);
         } else if ("rotateY".equalsIgnoreCase(animType) || "rotationY".equalsIgnoreCase(animType)) {
             return animRotation(value, from, AXIS_Y);
-        } else if ("rotate".equalsIgnoreCase(animType) || "rotation".equalsIgnoreCase(animType) || "rotationZ".equalsIgnoreCase(animType)) {
+        } else if ("rotate".equalsIgnoreCase(animType) || "rotateZ".equalsIgnoreCase(animType) || "rotation".equalsIgnoreCase(animType) || "rotationZ".equalsIgnoreCase(animType)) {
             return animRotation(value, from, AXIS_Z);
         } else if ("backgroundColor".equalsIgnoreCase(animType)) {
             return animBackgroundColor(value, from);
