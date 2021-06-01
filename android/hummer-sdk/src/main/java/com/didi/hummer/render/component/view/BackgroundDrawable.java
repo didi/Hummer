@@ -1105,6 +1105,10 @@ public class BackgroundDrawable extends Drawable {
         invalidateSelf();
     }
 
+    public Border getBorder() {
+        return border;
+    }
+
     public float[] getBorderRadii() {
         return mOuterRadii;
     }

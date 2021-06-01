@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.v4.view.AccessibilityDelegateCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
@@ -31,6 +32,7 @@ import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.YogaAttrUtils;
 import com.didi.hummer.sdk.R;
+import com.facebook.yoga.YogaEdge;
 import com.facebook.yoga.YogaNode;
 import com.facebook.yoga.YogaPositionType;
 
@@ -54,12 +56,20 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     protected EventManager mEventManager;
     protected HMGestureEventDetector hmGestureEventDetector;
     protected JSValue mJSValue;
+    private String boxSizing = BOX_SIZING_NONE;
     private InlineBox inlineBox;
     private PositionChangedListener positionChangedListener;
     private DisplayChangedListener displayChangedListener;
     private HummerLayoutExtendUtils.Position position = HummerLayoutExtendUtils.Position.YOGA;
     private HummerLayoutExtendUtils.Display display = HummerLayoutExtendUtils.Display.YOGA;
     private AnimViewWrapper animViewWrapper;
+
+    // 原生盒
+    private static final String BOX_SIZING_NONE = "none";
+    // 边框盒
+    private static final String BOX_SIZING_BORDER_BOX = "border-box";
+    // 内容盒
+    private static final String BOX_SIZING_CONTENT_BOX = "content-box";
 
     public HMBase(HummerContext context, JSValue jsValue, String viewID) {
         this.context = context;
@@ -435,26 +445,31 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     @JsAttribute("borderWidth")
     public void setBorderWidth(float width) {
         backgroundHelper.setBorderWidth(width);
+        refreshBoxSizing();
     }
 
     @JsAttribute("borderLeftWidth")
     public void setBorderLeftWidth(float width) {
         backgroundHelper.setBorderLeftWidth(width);
+        refreshBoxSizing();
     }
 
     @JsAttribute("borderTopWidth")
     public void setBorderTopWidth(float width) {
         backgroundHelper.setBorderTopWidth(width);
+        refreshBoxSizing();
     }
 
     @JsAttribute("borderRightWidth")
     public void setBorderRightWidth(float width) {
         backgroundHelper.setBorderRightWidth(width);
+        refreshBoxSizing();
     }
 
     @JsAttribute("borderBottomWidth")
     public void setBorderBottomWidth(float width) {
         backgroundHelper.setBorderBottomWidth(width);
+        refreshBoxSizing();
     }
 
     @JsAttribute("borderColor")
@@ -525,6 +540,12 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         } else if (radius instanceof Float) {
             backgroundHelper.setBorderBottomLeftRadius((float) radius);
         }
+    }
+
+    @JsAttribute("boxSizing")
+    public void setBoxSizing(String boxSizing) {
+        this.boxSizing = boxSizing.toLowerCase();
+        refreshBoxSizing();
     }
 
     @JsAttribute("shadow")
@@ -671,6 +692,9 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
             case HummerStyleUtils.Hummer.BORDER_RADIUS_BL:
                 setBorderBottomLeftRadius(value);
                 break;
+            case HummerStyleUtils.Hummer.BOX_SIZING:
+                setBoxSizing(String.valueOf(value));
+                break;
             case HummerStyleUtils.Hummer.SHADOW:
                 setShadow(String.valueOf(value));
                 break;
@@ -701,6 +725,25 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
                 return false;
         }
         return true;
+    }
+
+    /**
+     * 刷新盒模型布局
+     */
+    private void refreshBoxSizing() {
+        if (BOX_SIZING_BORDER_BOX.equals(boxSizing)) {
+            // 边框盒
+            RectF borderWidth = backgroundHelper.getBorder().width;
+            getYogaNode().setBorder(YogaEdge.LEFT, borderWidth.left);
+            getYogaNode().setBorder(YogaEdge.TOP, borderWidth.top);
+            getYogaNode().setBorder(YogaEdge.RIGHT, borderWidth.right);
+            getYogaNode().setBorder(YogaEdge.BOTTOM, borderWidth.bottom);
+        } else {
+            getYogaNode().setBorder(YogaEdge.LEFT, 0);
+            getYogaNode().setBorder(YogaEdge.TOP, 0);
+            getYogaNode().setBorder(YogaEdge.RIGHT, 0);
+            getYogaNode().setBorder(YogaEdge.BOTTOM, 0);
+        }
     }
 
     public final boolean setTransitionStyle(String key, Object value) {
