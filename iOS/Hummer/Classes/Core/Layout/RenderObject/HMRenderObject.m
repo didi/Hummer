@@ -728,7 +728,194 @@ YG_VALUE_EDGE_PROPERTY(lowercased_name##Horizontal, capitalized_name##Horizontal
 YG_VALUE_EDGE_PROPERTY(lowercased_name##Vertical, capitalized_name##Vertical, capitalized_name, YOGA_TYPE_WRAPPER(YGEdgeVertical))       \
 YG_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, capitalized_name, YOGA_TYPE_WRAPPER(YGEdgeAll))
 
-YG_VALUE_EDGES_PROPERTIES(margin, Margin)
+- (YGValue)marginLeft {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeLeft);
+}
+
+- (void)setMarginLeft:(YGValue)marginLeft {
+    switch (marginLeft.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeLeft);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeLeft, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeLeft, marginLeft.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeLeft, marginLeft.value);
+            break;
+    }
+}
+
+- (YGValue)marginTop {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeTop);
+}
+
+- (void)setMarginTop:(YGValue)marginTop {
+    switch (marginTop.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeTop);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeTop, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeTop, marginTop.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeTop, marginTop.value);
+            break;
+    }
+}
+
+- (YGValue)marginRight {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeRight);
+}
+
+- (void)setMarginRight:(YGValue)marginRight {
+    switch (marginRight.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeRight);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeRight, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeRight, marginRight.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeRight, marginRight.value);
+            break;
+    }
+}
+
+- (YGValue)marginBottom {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeBottom);
+}
+
+- (void)setMarginBottom:(YGValue)marginBottom {
+    switch (marginBottom.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeBottom);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeBottom, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeBottom, marginBottom.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeBottom, marginBottom.value);
+            break;
+    }
+}
+
+- (YGValue)marginStart {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeStart);
+}
+
+- (void)setMarginStart:(YGValue)marginStart {
+    switch (marginStart.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeStart);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeStart, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeStart, marginStart.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeStart, marginStart.value);
+            break;
+    }
+}
+
+- (YGValue)marginEnd {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeEnd);
+}
+
+- (void)setMarginEnd:(YGValue)marginEnd {
+    switch (marginEnd.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeEnd);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeEnd, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeEnd, marginEnd.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeEnd, marginEnd.value);
+            break;
+    }
+}
+
+- (YGValue)marginHorizontal {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeHorizontal);
+}
+
+- (void)setMarginHorizontal:(YGValue)marginHorizontal {
+    switch (marginHorizontal.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeHorizontal);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeHorizontal, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeHorizontal, marginHorizontal.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeHorizontal, marginHorizontal.value);
+            break;
+    }
+}
+
+- (YGValue)marginVertical {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeVertical);
+}
+
+- (void)setMarginVertical:(YGValue)marginVertical {
+    switch (marginVertical.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeVertical);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeVertical, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeVertical, marginVertical.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeVertical, marginVertical.value);
+            break;
+    }
+}
+
+- (YGValue)margin {
+    return YGNodeStyleGetMargin(self.yogaNode, YGEdgeAll);
+}
+
+- (void)setMargin:(YGValue)margin {
+    switch (margin.unit) {
+        case YGUnitAuto:
+            YGNodeStyleSetMarginAuto(self.yogaNode, YGEdgeAll);
+            break;
+        case YGUnitUndefined:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeAll, YGUndefined);
+            break;
+        case YGUnitPoint:
+            YGNodeStyleSetMargin(self.yogaNode, YGEdgeAll, margin.value);
+            break;
+        case YGUnitPercent:
+            YGNodeStyleSetMarginPercent(self.yogaNode, YGEdgeAll, margin.value);
+            break;
+    }
+}
 
 YG_VALUE_EDGES_PROPERTIES(padding, Padding)
 
