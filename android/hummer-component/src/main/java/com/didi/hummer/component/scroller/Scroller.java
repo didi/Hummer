@@ -136,6 +136,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
     protected void onStyleUpdated(Map<String, Object> newStyle) {
         // 把最外层的Yoga属性复制一份给最内层的Layout，使JS侧设置的样式生效
         layout.getYogaNode().copyStyle(getYogaNode());
+        adjustWidthAndHeight();
     }
 
     private void initScrollView() {

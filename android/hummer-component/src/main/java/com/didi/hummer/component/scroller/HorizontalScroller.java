@@ -72,6 +72,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         // 把最外层的Yoga属性复制一份给最内层的Layout，使JS侧设置的样式生效
         layout.getYogaNode().copyStyle(getYogaNode());
         layout.getYogaNode().setFlexDirection(YogaFlexDirection.ROW);
+        adjustWidthAndHeight();
     }
 
     private void initScrollView() {
