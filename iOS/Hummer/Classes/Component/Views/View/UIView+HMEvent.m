@@ -211,7 +211,7 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
         
         return;
     } else if ([gesture isKindOfClass:UILongPressGestureRecognizer.class]) {
-        if (gesture.state != UIGestureRecognizerStateEnded) {
+        if (gesture.state != UIGestureRecognizerStateBegan) {
             // 只有 end 才会回调
             return;
         }
@@ -219,7 +219,7 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
         [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj callWithArguments:@[@{
                                          @"type": @"longPress",
-                                         @"state": @(UIGestureRecognizerStateEnded),
+                                         @"state": @(UIGestureRecognizerStateBegan),
                                          @"timestamp": @(timestamp),
                                          @"position": @{
                                                  @"x": @(location.x),
