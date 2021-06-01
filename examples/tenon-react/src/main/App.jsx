@@ -1,42 +1,35 @@
 import React from 'react';
-import Hello from './components/Hello';
-import DynamicHello from './components/DynamicHello';
-import Image from './basic-components/Image';
-import Input from './basic-components/Input';
-import Textarea from './basic-components/Textarea';
+import { menus } from "./assets/menu";
+import ListItem from './components/ListItem'
+
 
 function App() {
-  const message = 'Hello Tenon!'
-  const src = "https://dpubstatic.udache.com/static/dpubimg/RJ4ZZ_M5ie/WechatIMG24764.jpeg"
+  const ListBoxs = menus.map(menu => {
+    let {title, items} = menu
+    let listItems = items.map(item => {
+      return (
+        <ListItem url={item.url} name={item.name}></ListItem>
+      )
+    })
+    return (
+      <view class="list-box">
+        <text class="list-box-title">{ title }</text>
+        <view class="list-box-container">
+          {listItems}
+        </view>
+      </view>
+    )
+  })
+  
   return (
-    <>
-      <view>
-        {/* <DynamicHello></DynamicHello> */}
-        <Hello></Hello>
+    <view class="page">
+      <view class="demo-header">
+        <text class="demo-title">Demo App</text>
       </view>
-      <view>
-        <image  src={src} style="width:2rem;height:2rem;"></image>
+      <view class="list-container">
+        {ListBoxs}
       </view>
-      <view>
-        <input placeholder="Input PlaceHolder"></input>
-      </view>
-      <view>
-        <textarea placeholder="Textarea PlaceHolder"></textarea>
-      </view>
-      <view>
-        <switch></switch>
-      </view>
-      <view>
-        <scroller style={{ height: "100hm", "background-color": "red", display: "flex", flexDirection: "row" }} scrollDirection="horizontal">
-          <text>123  {message}</text>
-          <text>123  {message}</text>
-        </scroller>
-      </view>
-      <view style={{ backgroundColor: '#00ff00' }}>
-        <text>123  {message}</text>
-        <image src={src} style={{ width: "100hm", height: "100hm" }}></image>
-      </view>
-    </>
+    </view>
   );
 }
 
