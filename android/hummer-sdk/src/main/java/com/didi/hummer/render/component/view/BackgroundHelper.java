@@ -155,6 +155,10 @@ public class BackgroundHelper {
         getBgDrawable().setBorderBottomLeftRadiusPercent(radiusPercent);
     }
 
+    BackgroundDrawable.Border getBorder() {
+        return getBgDrawable().getBorder();
+    }
+
     public float[] getBorderRadii() {
         return getBgDrawable().getBorderRadii();
     }

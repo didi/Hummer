@@ -126,6 +126,7 @@ public class HummerStyleUtils {
         public static final String BORDER_RADIUS_TR = "borderTopRightRadius";
         public static final String BORDER_RADIUS_BR = "borderBottomRightRadius";
         public static final String BORDER_RADIUS_BL = "borderBottomLeftRadius";
+        public static final String BOX_SIZING = "boxSizing";
         public static final String SHADOW = "shadow";
         public static final String OPACITY = "opacity";
         public static final String VISIBILITY = "visibility";
