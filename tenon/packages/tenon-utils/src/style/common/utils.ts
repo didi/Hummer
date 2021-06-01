@@ -41,7 +41,7 @@ export function isWidth(width: Width):Boolean{
  * @returns Boolean 是否是 Length 类型
  */
 export function isLength(length: any):Boolean{
-  let lengthReg = /[\d\.]+(%|rem|hm|cpx|px|vw|vh)?$/
+  let lengthReg = /^[\d\.]+(%|rem|hm|cpx|px|vw|vh)?$/
   return lengthReg.test(length)
 }
 
