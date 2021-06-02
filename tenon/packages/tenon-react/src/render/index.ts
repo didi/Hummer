@@ -21,7 +21,6 @@ export function render(rootElement: React.ReactElement | null) {
   // TODO 支持生命周期传递
   let page = document.createPageView({})
   let container = TenonRenderInst.createContainer(page, 0, false, null)
-  console.log('Tenon React Render')
   TenonRenderInst.updateContainer(rootElement, container, null, () => {
     // ignore
     page.render()

@@ -10,7 +10,6 @@ export class Text extends Base{
   }
 
   setElementText(text:string){
-    console.log("SetElementText", text)
     this._text = text
     this.element.text = text
   }
@@ -30,7 +29,7 @@ export class Text extends Base{
 
   _setAttribute(key:string, value: any){
     switch(key){
-      case 'rich-text':
+      case 'richText':
         this.richText = value
         break;
       default:

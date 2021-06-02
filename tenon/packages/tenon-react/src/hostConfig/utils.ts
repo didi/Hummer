@@ -1,6 +1,7 @@
 import {Base as Element, isNotHasChilrenTag, isWithTextTag} from "@hummer/tenon-core"
 
 import {parseStringStyle, styleTransformer} from '@hummer/tenon-utils'
+import { isEventProp, getEventName, getListener } from "src/events";
 
 export function diffProperties(node:Element, type: string, oldProps: any, newProps: any){
   const updatePayload: {
@@ -17,9 +18,8 @@ export function diffProperties(node:Element, type: string, oldProps: any, newPro
         break;
       }
       default: {
-        // FIXME: Cancel a event listener
         if (typeof oldPropValue === 'function' && typeof newPropValue === 'function') {
-          // just skip it if meets function
+          // Skip function if not change
         } else if (oldPropValue !== newPropValue) {
           updatePayload[key] = newPropValue;
         }
@@ -44,6 +44,10 @@ export function processProps(props:any, type:string, node:Element){
     if(key === 'children'){
       return
     }
+    // TODO 支持动态 Remove Listener
+    if(typeof props[key] === 'function' && isEventProp(key)){
+      handleEvent(key, props[key], node)
+    }
     switch(key){
       case 'style':
         handleStyle(props.style, node)
@@ -66,4 +70,11 @@ function handleStyle(styleValue:any, node:Element){
   // 样式转换为 Hummer 特有样式
   style = styleTransformer.transformStyle(style, node);
   node.setStyle(style, true)
+}
+
+function handleEvent(propName: string, value: Function, node:Element){
+  let eventName = getEventName(propName)
+  let listener = getListener(value)
+  console.log('Add Event Listener', propName)
+  node.addEventListener(eventName, listener)
 }

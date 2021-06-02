@@ -1,0 +1,14 @@
+.cube-wrapper{
+  width: 100%;
+  display: flex;
+  margin-top: 10;
+  padding: 10 0;
+  background-color: #dcf5f1;
+}
+.cube-text{
+  width: 34;
+  height: 34;
+  margin: 0 12;
+  background-color: #132266;
+  text-align:center;
+}

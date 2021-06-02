@@ -19,7 +19,7 @@ export class RootViewComponent extends ViewComponent{
   public _onDestroy: Function
   public _onBack: Function
   private _element: ScrollViewComponent|null = null
-  private _canScroll: Boolean = false // 修改 canScroll 默认行为为不能滚动
+  private _canScroll: Boolean = true
   constructor(options:PageOptions = {}){
     super();
     let {onLoad, onShow, onHide, onUnload, onBack, canScroll = true, pageStyle = {}} = options
