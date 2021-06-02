@@ -137,6 +137,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         // 把最外层的Yoga属性复制一份给最内层的Layout，使JS侧设置的样式生效
         layout.getYogaNode().copyStyle(getYogaNode());
         adjustWidthAndHeight();
+        adjustMinMaxWidthAndHeight();
     }
 
     private void initScrollView() {
@@ -234,6 +235,13 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         } else {
             layout.getYogaNode().setHeightPercent(100);
         }
+    }
+
+    private void adjustMinMaxWidthAndHeight() {
+        layout.getYogaNode().setMinWidth(Float.NaN);
+        layout.getYogaNode().setMaxWidth(Float.NaN);
+        layout.getYogaNode().setMinHeight(Float.NaN);
+        layout.getYogaNode().setMaxHeight(Float.NaN);
     }
 
     @JsMethod("appendChild")
