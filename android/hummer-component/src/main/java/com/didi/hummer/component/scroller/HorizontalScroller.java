@@ -73,6 +73,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         layout.getYogaNode().copyStyle(getYogaNode());
         layout.getYogaNode().setFlexDirection(YogaFlexDirection.ROW);
         adjustWidthAndHeight();
+        adjustMinMaxWidthAndHeight();
     }
 
     private void initScrollView() {
@@ -167,6 +168,13 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         } else {
             layout.getYogaNode().setHeightPercent(100);
         }
+    }
+
+    private void adjustMinMaxWidthAndHeight() {
+        layout.getYogaNode().setMinWidth(Float.NaN);
+        layout.getYogaNode().setMaxWidth(Float.NaN);
+        layout.getYogaNode().setMinHeight(Float.NaN);
+        layout.getYogaNode().setMaxHeight(Float.NaN);
     }
 
     @JsMethod("appendChild")
