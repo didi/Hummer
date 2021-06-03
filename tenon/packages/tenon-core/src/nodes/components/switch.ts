@@ -55,12 +55,11 @@ export class Switch extends Base{
     if(event === 'switch'){
       let invoker = (e:any) => {
         let {state} = e
-        let value = state === 1?true:false
+        let value = (state === 1 || state === true)?true:false //  Android state true/false; iOS state 1/0；
         func.call(this, value)
       }
       this.element.addEventListener(event, invoker)
     }
-    
   }
   removeEventListener(event: string, func?:Function){
     this.element.removeEventListener(event, func)

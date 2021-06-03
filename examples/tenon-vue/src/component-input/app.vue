@@ -14,7 +14,7 @@
       </view>
       <view class="demo-item">
         <view class="item-title">
-          <text class="item-title-text">Input 含有placeholder</text>
+          <text class="item-title-text">Input(placeholder)</text>
         </view>
         <view class="item-container">
           <input class="input input-place" placeholder="我是PlaceHolder" />

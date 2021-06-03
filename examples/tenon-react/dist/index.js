@@ -3509,6 +3509,7 @@ var NODE_BUTTON$1 = Symbol('NODE_BUTTON');
 var NODE_TEXTAREA$1 = Symbol('NODE_TEXTAREA');
 var NODE_INPUT$1 = Symbol('NODE_INPUT');
 var NODE_SWITCH$1 = Symbol('NODE_SWITCH');
+var NODE_SCROLLER$1 = Symbol('NODE_SCROLLER');
 var NODE_COMMENT$1 = Symbol('NODE_COMMENT');
 var NODE_ANCHOR$1 = Symbol('NODE_ANCHOR');
 var NODE_REFRESH$1 = Symbol('NODE_REFRESH');
@@ -4108,9 +4109,7 @@ var Base = /*#__PURE__*/function () {
     }
   }, {
     key: "setElementText",
-    value: function setElementText(text) {
-      console.warn('非text元素不支持');
-    }
+    value: function setElementText(text) {}
   }, {
     key: "setStyle",
     value: function setStyle(style) {
@@ -4173,14 +4172,7 @@ var Base = /*#__PURE__*/function () {
   }, {
     key: "addEventListener",
     value: function addEventListener(event, func) {
-      var _this = this;
-
-      this.element.addEventListener(event, function (e) {
-        e.target = {
-          dataset: _this.dataset
-        };
-        func.call(_this, e);
-      });
+      this.element.addEventListener(event, func);
     }
   }, {
     key: "removeEventListener",
@@ -4190,10 +4182,10 @@ var Base = /*#__PURE__*/function () {
   }, {
     key: "getRect",
     value: function getRect(func) {
-      var _this2 = this;
+      var _this = this;
 
       this.element.getRect(function (rect) {
-        func.call(_this2, rect);
+        func.call(_this, rect);
       });
     }
   }, {
@@ -4298,18 +4290,18 @@ var Image = /*#__PURE__*/function (_Base) {
   var _super = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Image);
 
   function Image() {
-    var _this3;
+    var _this2;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Image);
 
-    _this3 = _super.call(this);
-    _this3.__NAME = NODE_IMAGE$1;
-    _this3._src = '';
-    _this3.element = new __GLOBAL__.Image();
-    _this3.element.style = {
+    _this2 = _super.call(this);
+    _this2.__NAME = NODE_IMAGE$1;
+    _this2._src = '';
+    _this2.element = new __GLOBAL__.Image();
+    _this2.element.style = {
       resize: 'stretch'
     };
-    return _this3;
+    return _this2;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(Image, [{
@@ -4354,20 +4346,20 @@ var Input = /*#__PURE__*/function (_Base2) {
   var _super2 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Input);
 
   function Input() {
-    var _this4;
+    var _this3;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Input);
 
-    _this4 = _super2.call(this);
-    _this4.__NAME = NODE_INPUT$1;
-    _this4._input = null;
-    _this4._change = null;
-    _this4._focus = null;
-    _this4._blur = null;
-    _this4._confirm = null;
-    _this4._hasInput = false;
-    _this4.element = new __GLOBAL__.Input();
-    return _this4;
+    _this3 = _super2.call(this);
+    _this3.__NAME = NODE_INPUT$1;
+    _this3._input = null;
+    _this3._change = null;
+    _this3._focus = null;
+    _this3._blur = null;
+    _this3._confirm = null;
+    _this3._hasInput = false;
+    _this3.element = new __GLOBAL__.Input();
+    return _this3;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(Input, [{
@@ -4445,11 +4437,11 @@ var Input = /*#__PURE__*/function (_Base2) {
           this.type = value;
           break;
 
-        case 'max-length':
+        case 'maxLength':
           this.maxLength = value;
           break;
 
-        case 'return-key-type':
+        case 'returnKeyType':
           this.returnKeyType = value;
           break;
       }
@@ -4457,10 +4449,10 @@ var Input = /*#__PURE__*/function (_Base2) {
   }, {
     key: "addEventListener",
     value: function addEventListener(event, func) {
-      var _this5 = this;
+      var _this4 = this;
 
       var handler = function handler(text) {
-        func.call(_this5, text);
+        func.call(_this4, text);
       };
 
       switch (event) {
@@ -4516,7 +4508,7 @@ var Input = /*#__PURE__*/function (_Base2) {
   }, {
     key: "initListener",
     value: function initListener() {
-      var _this6 = this;
+      var _this5 = this;
 
       if (this._hasInput) {
         return;
@@ -4528,23 +4520,23 @@ var Input = /*#__PURE__*/function (_Base2) {
 
         switch (state) {
           case 1:
-            _this6._focus && _this6._focus(text);
+            _this5._focus && _this5._focus(text);
             break;
 
           case 2:
-            _this6._change && _this6._change(text);
+            _this5._change && _this5._change(text);
             break;
 
           case 3:
-            _this6._blur && _this6._blur(text);
+            _this5._blur && _this5._blur(text);
             break;
 
           case 4:
-            _this6._confirm && _this6._confirm(text);
+            _this5._confirm && _this5._confirm(text);
             break;
         }
 
-        _this6._input && _this6._input({
+        _this5._input && _this5._input({
           value: text,
           text: text,
           state
@@ -4563,15 +4555,15 @@ var Text = /*#__PURE__*/function (_Base3) {
   var _super3 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Text);
 
   function Text() {
-    var _this7;
+    var _this6;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Text);
 
-    _this7 = _super3.call(this);
-    _this7.__NAME = NODE_TEXT$1;
-    _this7._text = '';
-    _this7.element = new __GLOBAL__.Text();
-    return _this7;
+    _this6 = _super3.call(this);
+    _this6.__NAME = NODE_TEXT$1;
+    _this6._text = '';
+    _this6.element = new __GLOBAL__.Text();
+    return _this6;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(Text, [{
@@ -4614,21 +4606,21 @@ var View = /*#__PURE__*/function (_Base4) {
   var _super4 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(View);
 
   function View() {
-    var _this8;
+    var _this7;
 
     var isView = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, View);
 
-    _this8 = _super4.call(this);
-    _this8.__NAME = NODE_VIEW$1;
+    _this7 = _super4.call(this);
+    _this7.__NAME = NODE_VIEW$1;
 
     if (!isView) {
-      return (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1__.default)(_this8);
+      return (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1__.default)(_this7);
     }
 
-    _this8.element = new __GLOBAL__.View();
-    return _this8;
+    _this7.element = new __GLOBAL__.View();
+    return _this7;
   }
 
   return View;
@@ -4640,20 +4632,20 @@ var TextArea = /*#__PURE__*/function (_Base5) {
   var _super5 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(TextArea);
 
   function TextArea() {
-    var _this9;
+    var _this8;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, TextArea);
 
-    _this9 = _super5.call(this);
-    _this9.__NAME = NODE_TEXTAREA$1;
-    _this9._input = null;
-    _this9._change = null;
-    _this9._focus = null;
-    _this9._blur = null;
-    _this9._confirm = null;
-    _this9._hasInput = false;
-    _this9.element = new __GLOBAL__.TextArea();
-    return _this9;
+    _this8 = _super5.call(this);
+    _this8.__NAME = NODE_TEXTAREA$1;
+    _this8._input = null;
+    _this8._change = null;
+    _this8._focus = null;
+    _this8._blur = null;
+    _this8._confirm = null;
+    _this8._hasInput = false;
+    _this8.element = new __GLOBAL__.TextArea();
+    return _this8;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(TextArea, [{
@@ -4754,10 +4746,10 @@ var TextArea = /*#__PURE__*/function (_Base5) {
   }, {
     key: "addEventListener",
     value: function addEventListener(event, func) {
-      var _this10 = this;
+      var _this9 = this;
 
       var handler = function handler(text) {
-        func.call(_this10, text);
+        func.call(_this9, text);
       };
 
       switch (event) {
@@ -4813,7 +4805,7 @@ var TextArea = /*#__PURE__*/function (_Base5) {
   }, {
     key: "initListener",
     value: function initListener() {
-      var _this11 = this;
+      var _this10 = this;
 
       if (this._hasInput) {
         return;
@@ -4825,23 +4817,23 @@ var TextArea = /*#__PURE__*/function (_Base5) {
 
         switch (state) {
           case 1:
-            _this11._focus && _this11._focus(text);
+            _this10._focus && _this10._focus(text);
             break;
 
           case 2:
-            _this11._change && _this11._change(text);
+            _this10._change && _this10._change(text);
             break;
 
           case 3:
-            _this11._blur && _this11._blur(text);
+            _this10._blur && _this10._blur(text);
             break;
 
           case 4:
-            _this11._confirm && _this11._confirm(text);
+            _this10._confirm && _this10._confirm(text);
             break;
         }
 
-        _this11._input && _this11._input({
+        _this10._input && _this10._input({
           value: text,
           state
         });
@@ -4861,15 +4853,15 @@ var RootViewComponent = /*#__PURE__*/function (_GLOBAL__$View) {
   var _super6 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(RootViewComponent);
 
   function RootViewComponent() {
-    var _this12;
+    var _this11;
 
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, RootViewComponent);
 
-    _this12 = _super6.call(this);
-    _this12._element = null;
-    _this12._canScroll = true;
+    _this11 = _super6.call(this);
+    _this11._element = null;
+    _this11._canScroll = true;
     var onLoad = options.onLoad,
         onShow = options.onShow,
         onHide = options.onHide,
@@ -4879,28 +4871,28 @@ var RootViewComponent = /*#__PURE__*/function (_GLOBAL__$View) {
         canScroll = _options$canScroll === void 0 ? true : _options$canScroll,
         _options$pageStyle = options.pageStyle,
         pageStyle = _options$pageStyle === void 0 ? {} : _options$pageStyle;
-    _this12._onCreate = onLoad || noFunc;
-    _this12._onAppear = onShow || noFunc;
-    _this12._onDisappear = onHide || noFunc;
-    _this12._onDestroy = onUnload || noFunc;
-    _this12._onBack = onBack || noFunc;
-    _this12._canScroll = canScroll;
-    _this12.style = Object.assign(Object.assign({}, pageStyle), {
+    _this11._onCreate = onLoad || noFunc;
+    _this11._onAppear = onShow || noFunc;
+    _this11._onDisappear = onHide || noFunc;
+    _this11._onDestroy = onUnload || noFunc;
+    _this11._onBack = onBack || noFunc;
+    _this11._canScroll = canScroll;
+    _this11.style = Object.assign(Object.assign({}, pageStyle), {
       width: '100%',
       height: '100%'
     });
 
-    if (_this12._canScroll) {
-      _this12._element = new __GLOBAL__.Scroller();
-      _this12._element.style = {
+    if (_this11._canScroll) {
+      _this11._element = new __GLOBAL__.Scroller();
+      _this11._element.style = {
         width: "100%",
         height: "100%"
       };
 
-      _this12.appendChild(_this12._element);
+      _this11.appendChild(_this11._element);
     }
 
-    return _this12;
+    return _this11;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(RootViewComponent, [{
@@ -4946,14 +4938,14 @@ var Page = /*#__PURE__*/function (_Base6) {
   var _super7 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Page);
 
   function Page(options) {
-    var _this13;
+    var _this12;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Page);
 
-    _this13 = _super7.call(this);
-    _this13._rootView = new RootViewComponent(options);
-    _this13.element = _this13._rootView.element;
-    return _this13;
+    _this12 = _super7.call(this);
+    _this12._rootView = new RootViewComponent(options);
+    _this12.element = _this12._rootView.element;
+    return _this12;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(Page, [{
@@ -4997,15 +4989,15 @@ var Button = /*#__PURE__*/function (_Base7) {
   var _super8 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Button);
 
   function Button() {
-    var _this14;
+    var _this13;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Button);
 
-    _this14 = _super8.call(this);
-    _this14.__NAME = NODE_BUTTON$1;
-    _this14._text = '';
-    _this14.element = new __GLOBAL__.Button();
-    return _this14;
+    _this13 = _super8.call(this);
+    _this13.__NAME = NODE_BUTTON$1;
+    _this13._text = '';
+    _this13.element = new __GLOBAL__.Button();
+    return _this13;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(Button, [{
@@ -5040,11 +5032,11 @@ var Button = /*#__PURE__*/function (_Base7) {
           this.disabled = value;
           break;
 
-        case 'disabled-style':
+        case 'disabledStyle':
           this.disabledStyle = value;
           break;
 
-        case 'pressed-style':
+        case 'pressedStyle':
           this.pressedStyle = value;
           break;
       }
@@ -5060,14 +5052,14 @@ var Switch = /*#__PURE__*/function (_Base8) {
   var _super9 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Switch);
 
   function Switch() {
-    var _this15;
+    var _this14;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Switch);
 
-    _this15 = _super9.call(this);
-    _this15.__NAME = NODE_SWITCH$1;
-    _this15.element = new __GLOBAL__.Switch();
-    return _this15;
+    _this14 = _super9.call(this);
+    _this14.__NAME = NODE_SWITCH$1;
+    _this14.element = new __GLOBAL__.Switch();
+    return _this14;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(Switch, [{
@@ -5123,13 +5115,13 @@ var Switch = /*#__PURE__*/function (_Base8) {
   }, {
     key: "addEventListener",
     value: function addEventListener(event, func) {
-      var _this16 = this;
+      var _this15 = this;
 
       if (event === 'switch') {
         var invoker = function invoker(e) {
           var state = e.state;
-          var value = state === 1 ? true : false;
-          func.call(_this16, value);
+          var value = state === 1 || state === true ? true : false;
+          func.call(_this15, value);
         };
 
         this.element.addEventListener(event, invoker);
@@ -5208,19 +5200,19 @@ var Comment = /*#__PURE__*/function (_Base9) {
   var _super10 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Comment);
 
   function Comment(comment) {
-    var _this17;
+    var _this16;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Comment);
 
-    _this17 = _super10.call(this);
-    _this17.__NAME = NODE_COMMENT$1;
-    _this17._comment = '';
-    _this17.element = new __GLOBAL__.View();
-    _this17.element.style = {
+    _this16 = _super10.call(this);
+    _this16.__NAME = NODE_COMMENT$1;
+    _this16._comment = '';
+    _this16.element = new __GLOBAL__.View();
+    _this16.element.style = {
       display: 'none'
     };
-    _this17._comment = comment;
-    return _this17;
+    _this16._comment = comment;
+    return _this16;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(Comment, [{
@@ -5239,24 +5231,20 @@ var Scroller = /*#__PURE__*/function (_Base10) {
   var _super11 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Scroller);
 
   function Scroller() {
-    var _this18;
+    var _this17;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Scroller);
 
-    _this18 = _super11.call(this);
-    _this18.__NAME = NODE_VIEW$1;
-    _this18.element = new __GLOBAL__.Scroller();
-    return _this18;
+    _this17 = _super11.call(this);
+    _this17.__NAME = NODE_SCROLLER$1;
+    _this17.element = new __GLOBAL__.Scroller();
+    return _this17;
   }
 
   (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__.default)(Scroller, [{
     key: "_setAttribute",
     value: function _setAttribute(key, value) {
       switch (key) {
-        case 'disabled':
-          this.disabled = value;
-          break;
-
         case 'scrollDirection':
           if (value === 'horizontal' && this.element instanceof __GLOBAL__.Scroller) {
             var scroller = new __GLOBAL__.HorizontalScroller();
@@ -5282,10 +5270,12 @@ var Scroller = /*#__PURE__*/function (_Base10) {
 
           break;
 
-        default:
-          this.element.style = {
-            [key]: value
-          };
+        case 'bounces':
+          this.element.bounces = value !== false;
+          break;
+
+        case 'showScrollBar':
+          this.element.showScrollBar = value !== false;
           break;
       }
     }
@@ -5390,44 +5380,44 @@ var Scroller = /*#__PURE__*/function (_Base10) {
   }, {
     key: "addEventListener",
     value: function addEventListener(event, func) {
-      var _this19 = this;
+      var _this18 = this;
 
       switch (event) {
         case "scroll":
           this.element.addEventListener('scroll', function (e) {
-            func.call(_this19, e);
+            func.call(_this18, e);
           });
           break;
 
         case "scrolltotop":
           this.element.setOnScrollToTopListener(function () {
-            func.call(_this19);
+            func.call(_this18);
           });
           break;
 
         case "scrolltobottom":
           this.element.setOnScrollToBottomListener(function () {
-            func.call(_this19);
+            func.call(_this18);
           });
           break;
 
         case 'refresh':
           this.element.onRefresh = function (state) {
-            func.call(_this19, state, _this19);
+            func.call(_this18, state, _this18);
           };
 
           break;
 
         case 'loadmore':
           this.element.onLoadMore = function (state) {
-            func.call(_this19, state, _this19);
+            func.call(_this18, state, _this18);
           };
 
           break;
 
         default:
           this.element.addEventListener(event, function (e) {
-            func.call(_this19, e);
+            func.call(_this18, e);
           });
           break;
       }
@@ -5443,17 +5433,17 @@ var Anchor = /*#__PURE__*/function (_Base11) {
   var _super12 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Anchor);
 
   function Anchor() {
-    var _this20;
+    var _this19;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Anchor);
 
-    _this20 = _super12.call(this);
-    _this20.__NAME = NODE_ANCHOR$1;
-    _this20.element = new __GLOBAL__.View();
-    _this20.element.style = {
+    _this19 = _super12.call(this);
+    _this19.__NAME = NODE_ANCHOR$1;
+    _this19.element = new __GLOBAL__.View();
+    _this19.element.style = {
       display: "none"
     };
-    return _this20;
+    return _this19;
   }
 
   return Anchor;
@@ -5465,13 +5455,13 @@ var Refresh = /*#__PURE__*/function (_View) {
   var _super13 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(Refresh);
 
   function Refresh() {
-    var _this21;
+    var _this20;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, Refresh);
 
-    _this21 = _super13.apply(this, arguments);
-    _this21.__NAME = NODE_REFRESH$1;
-    return _this21;
+    _this20 = _super13.apply(this, arguments);
+    _this20.__NAME = NODE_REFRESH$1;
+    return _this20;
   }
 
   return Refresh;
@@ -5483,13 +5473,13 @@ var LoadMore = /*#__PURE__*/function (_View2) {
   var _super14 = (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__.default)(LoadMore);
 
   function LoadMore() {
-    var _this22;
+    var _this21;
 
     (0,_Users_didi_Documents_GitHub_hummer_cli_packages_plugin_build_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__.default)(this, LoadMore);
 
-    _this22 = _super14.apply(this, arguments);
-    _this22.__NAME = NODE_LOADMORE$1;
-    return _this22;
+    _this21 = _super14.apply(this, arguments);
+    _this21.__NAME = NODE_LOADMORE$1;
+    return _this21;
   }
 
   return LoadMore;
@@ -5631,36 +5621,46 @@ function getEventName(name) {
   return name.slice(2).toLowerCase();
 }
 
+var CHILDREN = 'children';
+var CLASS_NAME = 'className';
+
 function diffProperties(node, type, oldProps, newProps) {
   var updatePayload = {};
-  Object.keys(newProps).forEach(function (key) {
-    var oldPropValue = oldProps[key];
-    var newPropValue = newProps[key];
+  var lastProps = oldProps;
+  var nextProps = newProps;
+  var propKey;
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    switch (key) {
-      case 'children':
-        {
-          if (oldPropValue !== newPropValue) {
-            updatePayload[key] = newPropValue;
-          }
-
-          break;
-        }
-
-      default:
-        {
-          if (typeof oldPropValue === 'function' && typeof newPropValue === 'function') ;else if (oldPropValue !== newPropValue) {
-            updatePayload[key] = newPropValue;
-          }
-        }
+  for (propKey in lastProps) {
+    if (typeof lastProps[propKey] === 'function' && typeof nextProps[propKey] === 'function') {
+      nextProps[propKey].invoker = lastProps[propKey];
     }
-  });
 
-  if (!Object.keys(updatePayload).length) {
-    return null;
+    if (hasOwnProperty.call(nextProps, propKey) || !hasOwnProperty.call(lastProps, propKey) || lastProps[propKey] == null) {
+      continue;
+    }
+
+    updatePayload[propKey] = propKey === CLASS_NAME ? '' : null;
   }
 
-  return updatePayload;
+  for (propKey in nextProps) {
+    var nextProp = nextProps[propKey];
+    var lastProp = lastProps != null ? lastProps[propKey] : undefined;
+
+    if (!hasOwnProperty.call(nextProps, propKey) || nextProp === lastProp || nextProp == null && lastProp == null) {
+      continue;
+    }
+
+    if (propKey === CHILDREN) {
+      if (lastProp !== nextProp) {
+        updatePayload[propKey] = nextProp;
+      }
+    } else {
+      updatePayload[propKey] = nextProp;
+    }
+  }
+
+  return Object.keys(updatePayload).length > 0 ? updatePayload : null;
 }
 
 function processProps(props, type, node) {
@@ -5711,7 +5711,13 @@ function handleStyle(styleValue, node) {
 function handleEvent(propName, value, node) {
   var eventName = getEventName(propName);
   var listener = getListener(value);
-  console.log('Add Event Listener', propName);
+  var oldListener = listener.invoker;
+  listener.invoker = null;
+
+  if (oldListener) {
+    node.removeEventListener(eventName, oldListener);
+  }
+
   node.addEventListener(eventName, listener);
 }
 
@@ -5743,14 +5749,11 @@ var HostConfig = {
   },
 
   createTextInstance(text, container) {
-    console.log('createTextInstance:', text);
     var element = tenonCore.document.createText(text);
     return element;
   },
 
   commitTextUpdate(node, oldText, newText) {
-    console.log('CommitTextUpdate:', oldText, newText);
-
     if (oldText !== newText) {
       node.setElementText(newText);
     }
@@ -5761,7 +5764,6 @@ var HostConfig = {
   },
 
   commitUpdate(node, updatePayload, type, oldProps, newProps) {
-    console.log('commitUpdate');
     processProps(updatePayload, type, node);
   },
 

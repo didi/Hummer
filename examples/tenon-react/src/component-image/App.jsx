@@ -5,49 +5,6 @@ const imageSrc = "https://dpubstatic.udache.com/static/dpubimg/RJ4ZZ_M5ie/Wechat
 const gifSrc = "https://pt-starimg.didistatic.com/static/starimg/img/NOrrIvZGhO1605683055216.gif"
 const gifRepeatCount = 2
 
-// class ResizeItemComponent extends React.Component{
-//   constructor(props){
-//     super(props)
-//     this.state = {
-//       resizeStyle: 'stretch'
-//     }
-//   }
-
-//   setResizeStyle(style){
-//     this.setState({
-//       resizeStyle: style
-//     })
-//   }
-//   render(){
-//     const {resizeStyle} = this.state
-
-//     return (
-//       <DemoItem title="普通图片（resize）"
-//       operator={
-//         <>
-//           <button class="btn" onTap={() => this.setResizeStyle("stretch")}>
-//             stretch
-//           </button>
-//           <button class="btn" onTap={() => this.setResizeStyle("origin")}>
-//             origin
-//           </button>
-//           <button class="btn" onTap={() => this.setResizeStyle("contain")}>
-//             contain
-//           </button>
-//           <button class="btn" onTap={() => this.setResizeStyle("cover")}>
-//             cover
-//           </button>
-//         </>
-//       }>
-//       <image
-//         class="image-item"
-//         resize={resizeStyle}
-//         src={imageSrc}
-//       ></image>
-//     </DemoItem>
-//     )
-//   }
-// }
 function ResizeItem(){
   const [resizeStyle, setResizeStyle] = useState("stretch")
   return (

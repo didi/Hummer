@@ -78,7 +78,7 @@
             </scroller>
           </view>
           <view class="item-scroller-container">
-            <text class="align-center-text">bounces</text>
+            <text class="align-center-text">showScrollBar</text>
             <scroller
               class="scroller vertical-scroller"
               :showScrollBar="true"
