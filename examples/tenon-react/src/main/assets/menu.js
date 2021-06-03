@@ -1,14 +1,8 @@
 export const GrammarMenu = {
   title: '语法篇',
   items: [{
-    url: './grammar-style.js',
-    name: 'Grammar Style'
-  },{
-    url: './directive-v-show.js',
-    name: 'Directive v-show'
-  },{
-    url: './directive-v-if.js',
-    name: 'Directive v-if'
+    url: './grammar.js',
+    name: 'Common Grammar'
   },{
     url: './hook-test.js',
     name: 'Use Hook'
@@ -108,4 +102,5 @@ export const Other = {
 }
 
 
-export const menus =  [GrammarMenu, ComponentMenu, HighComponent, Style, Animation, Plugin, Other]
+// export const menus =  [GrammarMenu, ComponentMenu, HighComponent, Style, Animation, Plugin, Other]
+export const menus =  [GrammarMenu, ComponentMenu]
