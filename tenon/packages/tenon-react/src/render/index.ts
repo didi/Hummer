@@ -17,9 +17,9 @@ const TenonRenderInst = ReactReconciler({
 } as any);
 
 
-export function render(rootElement: React.ReactElement | null) {
+export function render(rootElement: React.ReactElement | null, options:any) {
   // TODO 支持生命周期传递
-  let page = document.createPageView({})
+  let page = document.createPageView(options)
   let container = TenonRenderInst.createContainer(page, 0, false, null)
   TenonRenderInst.updateContainer(rootElement, container, null, () => {
     // ignore

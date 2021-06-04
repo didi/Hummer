@@ -98,9 +98,12 @@ export const Other = {
   items: [{
     url: './lifecycle.js',
     name: 'Lifecycle'
+  },{
+    url: './page-config.js',
+    name: 'PageConfig'
   }]
 }
 
 
 // export const menus =  [GrammarMenu, ComponentMenu, HighComponent, Style, Animation, Plugin, Other]
-export const menus =  [GrammarMenu, ComponentMenu]
+export const menus =  [GrammarMenu, ComponentMenu, Other]
