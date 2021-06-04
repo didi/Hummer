@@ -34,7 +34,8 @@ Tenon Render 时，支持修改页面的默认配置。
 具体效果可以参照：[Git Example](https://github.com/didi/Hummer/tree/master/examples/tenon-react/src/page-config)
 
 ## 生命周期
-
+### 组件生命周期
+组件生命周期同 React 标准生命周期，可以参考 [React 文档](https://reactjs.org/docs/state-and-lifecycle.html)。
 ### 页面生命周期
 页面的生命周期与 Native 相关，可以通过调用 API 自行注册对应的 Listener，监听生命周期的变化。
 
