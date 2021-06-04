@@ -11,6 +11,7 @@ const packagesDir = path.resolve(__dirname, 'packages')
 const packageDir = path.resolve(packagesDir, process.env.TARGET)
 const name = path.basename(packageDir)
 const resolve = p => path.resolve(packageDir, p)
+const isProduction = process.env.NODE_ENV === 'production'
 
 const outputConfig = {
   es: {
@@ -75,6 +76,10 @@ function createConfig(format, output, plugins = []) {
         require('rollup-plugin-node-globals')()
       ]
     : []
+  const stripPlugins = isProduction ? [strip({
+    include: ['**/*.ts'],
+    functions: ['console.*'],
+  })]:[]
   return {
     input: resolve(entryFile),
     external: ['@hummer/hummer-front', ...external],
@@ -86,10 +91,7 @@ function createConfig(format, output, plugins = []) {
       tsPlugin,
       createReplacePlugin(),
       ...plugins,
-      strip({
-        include: ['**/*.ts'],
-        functions: ['console.*'],
-      }),
+      ...stripPlugins,
       externalGlobals({
         '@hummer/hummer-front': '__GLOBAL__'
       }),
@@ -111,7 +113,7 @@ function createReplacePlugin(){
   const replacements = {
     __GLOBAL__: '__GLOBAL__',
     __DEV__: false,
-    'process.env.NODE_ENV': JSON.stringify('production')
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
   }
   Object.keys(replacements).forEach(key => {
     if(key in process.env){

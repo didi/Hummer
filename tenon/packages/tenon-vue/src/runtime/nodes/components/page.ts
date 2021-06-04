@@ -42,8 +42,7 @@ export class RootViewComponent extends ViewComponent{
       this.appendChild(this._element)
     }
   }
-
-  get element():(ViewComponent | ScrollViewComponent){
+  get element():ScrollViewComponent | ViewComponent{
     return this._canScroll && this._element ? this._element : this
   }
   onCreate(){

@@ -1,10 +1,10 @@
 import {Scroller as ScrollerComponent, HorizontalScroller} from '@hummer/hummer-front'
 import {Base} from '../Base'
-import {NODE_VIEW, NODE_REFRESH, NODE_LOADMORE} from '@hummer/tenon-utils'
+import {NODE_SCROLLER, NODE_REFRESH, NODE_LOADMORE} from '@hummer/tenon-utils'
 
 // 增加事件
 export class Scroller extends Base{
-  __NAME = NODE_VIEW
+  __NAME = NODE_SCROLLER
 
   constructor(){
     super();

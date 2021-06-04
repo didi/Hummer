@@ -138,7 +138,7 @@
   transform:translate(1rem, 0);
 }
 .animation-rotate{
-  transform:rotate(180);
+  transform:rotate(45);
 }
 .animation-background{
   background-color: black;

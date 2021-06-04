@@ -1,0 +1,31 @@
+{
+  "name": "@hummer/tenon-react",
+  "version": "0.1.0",
+  "description": "Tenon React 运行时",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/tenon-react.cjs.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@hummer/tenon-core": "file:../tenon-core",
+    "@hummer/tenon-utils": "file:../tenon-utils",
+    "react-reconciler": "^0.26.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.6"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2"
+  }
+}
