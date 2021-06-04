@@ -728,7 +728,194 @@ YG_VALUE_EDGE_PROPERTY(lowercased_name##Horizontal, capitalized_name##Horizontal
 YG_VALUE_EDGE_PROPERTY(lowercased_name##Vertical, capitalized_name##Vertical, capitalized_name, YOGA_TYPE_WRAPPER(YGEdgeVertical))       \
 YG_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, capitalized_name, YOGA_TYPE_WRAPPER(YGEdgeAll))
 
-YG_VALUE_EDGES_PROPERTIES(margin, Margin)
+- (YOGA_TYPE_WRAPPER(YGValue))marginLeft {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft));
+}
+
+- (void)setMarginLeft:(YOGA_TYPE_WRAPPER(YGValue))marginLeft {
+    switch (marginLeft.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft), marginLeft.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeLeft), marginLeft.value);
+            break;
+    }
+}
+
+- (YOGA_TYPE_WRAPPER(YGValue))marginTop {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop));
+}
+
+- (void)setMarginTop:(YOGA_TYPE_WRAPPER(YGValue))marginTop {
+    switch (marginTop.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop), marginTop.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeTop), marginTop.value);
+            break;
+    }
+}
+
+- (YOGA_TYPE_WRAPPER(YGValue))marginRight {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight));
+}
+
+- (void)setMarginRight:(YOGA_TYPE_WRAPPER(YGValue))marginRight {
+    switch (marginRight.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight), marginRight.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeRight), marginRight.value);
+            break;
+    }
+}
+
+- (YOGA_TYPE_WRAPPER(YGValue))marginBottom {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom));
+}
+
+- (void)setMarginBottom:(YOGA_TYPE_WRAPPER(YGValue))marginBottom {
+    switch (marginBottom.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom), marginBottom.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeBottom), marginBottom.value);
+            break;
+    }
+}
+
+- (YOGA_TYPE_WRAPPER(YGValue))marginStart {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart));
+}
+
+- (void)setMarginStart:(YOGA_TYPE_WRAPPER(YGValue))marginStart {
+    switch (marginStart.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart), marginStart.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeStart), marginStart.value);
+            break;
+    }
+}
+
+- (YOGA_TYPE_WRAPPER(YGValue))marginEnd {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd));
+}
+
+- (void)setMarginEnd:(YOGA_TYPE_WRAPPER(YGValue))marginEnd {
+    switch (marginEnd.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd), marginEnd.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeEnd), marginEnd.value);
+            break;
+    }
+}
+
+- (YOGA_TYPE_WRAPPER(YGValue))marginHorizontal {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal));
+}
+
+- (void)setMarginHorizontal:(YOGA_TYPE_WRAPPER(YGValue))marginHorizontal {
+    switch (marginHorizontal.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal), marginHorizontal.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeHorizontal), marginHorizontal.value);
+            break;
+    }
+}
+
+- (YOGA_TYPE_WRAPPER(YGValue))marginVertical {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical));
+}
+
+- (void)setMarginVertical:(YOGA_TYPE_WRAPPER(YGValue))marginVertical {
+    switch (marginVertical.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical), marginVertical.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeVertical), marginVertical.value);
+            break;
+    }
+}
+
+- (YOGA_TYPE_WRAPPER(YGValue))margin {
+    return YOGA_TYPE_WRAPPER(YGNodeStyleGetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll));
+}
+
+- (void)setMargin:(YOGA_TYPE_WRAPPER(YGValue))margin {
+    switch (margin.unit) {
+        case YOGA_TYPE_WRAPPER(YGUnitAuto):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginAuto)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitUndefined):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll), YOGA_TYPE_WRAPPER(YGUndefined));
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPoint):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMargin)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll), margin.value);
+            break;
+        case YOGA_TYPE_WRAPPER(YGUnitPercent):
+            YOGA_TYPE_WRAPPER(YGNodeStyleSetMarginPercent)(self.yogaNode, YOGA_TYPE_WRAPPER(YGEdgeAll), margin.value);
+            break;
+    }
+}
 
 YG_VALUE_EDGES_PROPERTIES(padding, Padding)
 
