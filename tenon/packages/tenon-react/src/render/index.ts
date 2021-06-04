@@ -1,6 +1,8 @@
 import ReactReconciler from 'react-reconciler'
-import HostConfig from '../hostConfig/index'
 import {document} from '@hummer/tenon-core'
+
+import HostConfig from '../hostConfig/index'
+import {GlobalLifeCycles} from '../lifecycle/global-lifecycle'
 
 const TenonRenderInst = ReactReconciler({
   ...HostConfig,
@@ -19,7 +21,10 @@ const TenonRenderInst = ReactReconciler({
 
 export function render(rootElement: React.ReactElement | null, options:any) {
   // TODO 支持生命周期传递
-  let page = document.createPageView(options)
+  let page = document.createPageView({
+    ...options,
+    ...GlobalLifeCycles
+  })
   let container = TenonRenderInst.createContainer(page, 0, false, null)
   TenonRenderInst.updateContainer(rootElement, container, null, () => {
     // ignore
