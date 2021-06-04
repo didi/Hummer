@@ -20,7 +20,6 @@ const TenonRenderInst = ReactReconciler({
 
 
 export function render(rootElement: React.ReactElement | null, options:any) {
-  // TODO 支持生命周期传递
   let page = document.createPageView({
     ...options,
     ...GlobalLifeCycles
