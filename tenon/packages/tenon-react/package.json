@@ -4,7 +4,7 @@
   "description": "Tenon React 运行时",
   "homepage": "",
   "license": "ISC",
-  "main": "dist/tenon-react.cjs.js",
+  "main": "dist/tenon-react.es.js",
   "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
   "files": [
