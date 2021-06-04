@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react": "^17.0.2"
+    "react": "^17.0.2",
+    "@hummer/tenon-react": "^0.1.0"
   },
   "devDependencies": {
     "eslint-plugin-react-hooks": "^4.2.0",
