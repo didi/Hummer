@@ -3,10 +3,11 @@
   "packages": [
     "packages/*"
   ],
-  "version": "1.2.9",
+  "version": "independent",
   "npmClient": "npm",
   "command": {
     "publish": {
+      "message": "chore(release): tenon publish",
       "allowBranch": [
         "master",
         "release"
