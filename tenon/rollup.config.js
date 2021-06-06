@@ -46,6 +46,9 @@ function createConfig(format, output, plugins = []) {
   }
   if(process.env.TARGET === 'tenon-store'){
     external = ['@hummer/tenon-vue']
+  }else if(process.env.TARGET === 'tenon-react'){
+    // 防止tenon-react npm link 后 ，react 打包进项目中，导致工程项目由于 link 双份失效的问题
+    external = ['react']
   }
   const tsPlugin = ts({
     check: true,
