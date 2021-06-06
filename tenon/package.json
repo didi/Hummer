@@ -35,7 +35,6 @@
     "dev": "NODE_ENV=development node ./scripts/dev",
     "build": "NODE_ENV=production node ./scripts/build",
     "test": "node scripts/build.js && jest --runInBand",
-    "publish-dnpm": "node ./scripts/publish.js",
     "pub": "npm run build && npm run clean:lock && npx lerna publish --conventional-commits  && git push --tags",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
     "clean:lock": "rm -rf ./package-lock.json && rm -rf ./packages/**/package-lock.json"
