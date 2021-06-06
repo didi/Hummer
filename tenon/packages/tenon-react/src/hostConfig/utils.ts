@@ -51,8 +51,9 @@ export function diffProperties(node:Element, type: string, oldProps: any, newPro
 
 export function processProps(props:any, type:string, node:Element){
   if(isWithTextTag(type)){
-    if(typeof props.children === 'string'){
-      node.setElementText(props.children)
+    if(typeof props.children === 'string' || typeof props.children === 'number'){
+      // Fix: 修复<text>0</text> 不能显示的问题
+      node.setElementText("" + props.children)
     }else if(typeof props.children === 'object'){
       node.setElementText(props.children.join(''))
     }
