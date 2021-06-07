@@ -9,7 +9,7 @@
           <text class="item-title-text">Textarea</text>
         </view>
         <view class="item-container">
-          <textarea class="textarea" />
+          <textarea class="textarea" v-model="value"/>
         </view>
       </view>
       <view class="demo-item">
@@ -111,6 +111,7 @@ export default {
       maxLength: 10,
       type: "email",
       returnKeyType: "done",
+      value: 'Init Value'
     };
   },
   methods: {

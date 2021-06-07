@@ -9,7 +9,7 @@
           <text class="item-title-text">Input</text>
         </view>
         <view class="item-container">
-          <input class="input" />
+          <input class="input" v-model="value"/>
         </view>
       </view>
       <view class="demo-item">
@@ -98,6 +98,7 @@ export default {
       maxLength: 10,
       type: "email",
       returnKeyType: "done",
+      value: 'Init Value'
     };
   },
   methods: {

@@ -160,7 +160,7 @@ export class TextArea extends Base{
         default:
           break; 
       }
-      this._input && this._input({value: text, state})
+      this._input && this._input({value: text, text: text, state})
     })
     this._hasInput = true
   }
