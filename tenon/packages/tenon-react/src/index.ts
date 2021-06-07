@@ -1,5 +1,11 @@
-export {render} from './render'
+import {render} from './render'
+import {register as registerComponent} from '@hummer/tenon-core'
 
-export * from './hook'
 export * from '@hummer/tenon-core'
+export * from './render'
+export * from './hook'
 
+export default {
+  render,
+  register: registerComponent
+}
