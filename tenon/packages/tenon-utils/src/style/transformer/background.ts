@@ -66,9 +66,9 @@ function splitBackground(value:string):any {
   if (isUrl.test(value)) {
     const urlMatch = /url\(.+\)/
     const match = urlMatch.exec(value)
-    let backgorundImage = match && match[0]
-    if (backgorundImage) {
-      newBackgroundMap['background-image'] = transformBackgroundImage(backgorundImage)
+    let backgroundImage = match && match[0]
+    if (backgroundImage) {
+      newBackgroundMap['background-image'] = transformBackgroundImage(backgroundImage)
     }
   }
 
