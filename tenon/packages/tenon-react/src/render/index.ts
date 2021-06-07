@@ -1,5 +1,5 @@
 import ReactReconciler from 'react-reconciler'
-import {document} from '@hummer/tenon-core'
+import {document, PageOptions} from '@hummer/tenon-core'
 
 import HostConfig from '../hostConfig/index'
 import {GlobalLifeCycles} from '../lifecycle/global-lifecycle'
@@ -19,7 +19,7 @@ const TenonRenderInst = ReactReconciler({
 } as any);
 
 
-export function render(rootElement: React.ReactElement | null, options:any) {
+export function render(rootElement: React.ReactElement | null, options:PageOptions) {
   let page = document.createPageView({
     ...options,
     ...GlobalLifeCycles

@@ -14,6 +14,7 @@
     "@types/react": "^17.0.6",
     "@types/react-reconciler": "^0.26.1",
     "@typescript-eslint/parser": "^3.2.0",
+    "cross-env": "^7.0.3",
     "execa": "^4.0.3",
     "jest": "^26.0.1",
     "lerna": "^4.0.0",
@@ -32,8 +33,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "prewatch": "npm run bootstrap",
-    "dev": "NODE_ENV=development node ./scripts/dev",
-    "build": "NODE_ENV=production node ./scripts/build",
+    "dev": "cross-env NODE_ENV=development node ./scripts/dev",
+    "build": "cross-env NODE_ENV=production node ./scripts/build",
     "test": "node scripts/build.js && jest --runInBand",
     "pub": "npm run build && npm run clean:lock && npx lerna publish --conventional-commits  && git push --tags",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
