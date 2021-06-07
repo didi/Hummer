@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.12](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.2.11...@hummer/tenon-vue@1.2.12) (2021-06-07)
+
+
+### Bug Fixes
+
+* 修复 textarea v-model bug ([7bc0acf](https://github.com/didi/Hummer/commit/7bc0acf4ec4c7547c2b6923e1dc220c6176d458e))
+
+
+
+
+
 ## [1.2.7](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.7) (2021-05-20)
 
 

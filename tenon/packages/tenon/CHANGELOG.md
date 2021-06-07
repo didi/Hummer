@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.12](https://github.com/didi/Hummer/compare/@hummer/tenon@1.2.11...@hummer/tenon@1.2.12) (2021-06-07)
+
+**Note:** Version bump only for package @hummer/tenon
+
+
+
+
+
 ## [1.2.7](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.7) (2021-05-20)
 
 **Note:** Version bump only for package @hummer/tenon

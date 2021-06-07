@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.1.4...@hummer/tenon-react@0.2.0) (2021-06-07)
+
+
+### Features
+
+* Tenon React support default import ([ec1f2eb](https://github.com/didi/Hummer/commit/ec1f2eb421fd4b15420e3d07eb82e74fed30fe7b))
+
+
+
+
+
 ## [0.1.4](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.1.3...@hummer/tenon-react@0.1.4) (2021-06-06)
 
 
