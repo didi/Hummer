@@ -13,7 +13,7 @@ import {transformTransform} from '../src/style/transformer/transform'
 
 describe('base', () => {
   test('style', () => {
-    let result = styleTransformer.transformStyle({
+    const result = styleTransformer.transformStyle({
       "width": "10px",
       "margin": "20px",
       "margin-left": "10px",
@@ -36,7 +36,7 @@ describe('base', () => {
   })
 
   test('style middleware attrname', () => {
-    let result = transformAttr({
+    const result = transformAttr({
       "margin-left": "10px"
     })
     expect(result).toEqual({
@@ -46,7 +46,7 @@ describe('base', () => {
 
   test('style middleware unit', () => {
     // vm，依赖环境，在浏览器中测试
-    let result = transformUnit({
+    const result = transformUnit({
       "width": "10px"
     })
     expect(result).toEqual({
@@ -55,7 +55,7 @@ describe('base', () => {
   })
 
   test('style middleware color', () => {
-    let result = transformColor({
+    const result = transformColor({
       "color": "white"
     })
     expect(result).toEqual({
@@ -64,7 +64,7 @@ describe('base', () => {
   })
 
   test('style middleware break token', () => {
-    let result = transformBreakToken({
+    const result = transformBreakToken({
       "margin": "10px 20px"
     })
     expect(result).toEqual({
@@ -95,7 +95,7 @@ describe('base', () => {
   })
 
   test('style middleware transform border', () => {
-    let result = transformBorder({
+    const result = transformBorder({
       "border-left": "1px solid #eeeeee"
     })
     expect(result).toEqual({
@@ -106,7 +106,7 @@ describe('base', () => {
   })
 
   test('style middleware transform shadow', () => {
-    let result = transformShadow({
+    const result = transformShadow({
       "box-shadow": "5px 5px 10px 10px #000000"
     })
     expect(result).toEqual({
@@ -115,7 +115,7 @@ describe('base', () => {
   })
 
   test('style middleware transform transition', () => {
-    let result = transformTransition({
+    const result = transformTransition({
       "transition": "margin-right 4s, color 1s"
     })
     expect(result).toEqual({
@@ -127,7 +127,7 @@ describe('base', () => {
   })
 
   test('style middleware transform transform', () => {
-    let result = transformTransform({
+    const result = transformTransform({
       "transform": "translate(10rem,10rem) scale(0.5)"
     })
     expect(result).toEqual({

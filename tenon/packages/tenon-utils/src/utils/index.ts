@@ -5,8 +5,8 @@
  */
 export function traverseArr(arr:Array<any>, callback:Function){
   for(let i = 0;i< arr.length;i++){
-    let item = arr[i]
-    let result = callback(item, i)
+    const item = arr[i]
+    const result = callback(item, i)
     if(!result){
       break;
     }
@@ -18,7 +18,7 @@ export function traverseArr(arr:Array<any>, callback:Function){
  * @param str 待判断的字符串 a,b
  * @param expectedLowerCase 是否要转换为小写
  */
-export function makeMap(str:string, expectedLowerCase:Boolean =false){
+export function makeMap(str:string, expectedLowerCase =false){
   const map = Object.create(null)
   const list:Array<string> = str.split(',')
   for(let i = 0; i< list.length; i++){
@@ -32,7 +32,7 @@ export function makeMap(str:string, expectedLowerCase:Boolean =false){
  * @param str 待判断的数组 [a,b]
  * @param expectedLowerCase 是否要转换为小写
  */
-export function makeMapByArr(list:any, expectedLowerCase:Boolean =false){
+export function makeMapByArr(list:any, expectedLowerCase =false){
   const map = Object.create(null)
   for(let i = 0; i< list.length; i++){
     map[list[i]] = true

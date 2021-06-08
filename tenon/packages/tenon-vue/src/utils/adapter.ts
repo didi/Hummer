@@ -9,9 +9,9 @@ export function adapterApi(){
  * 适配Time Interval
  */
 function adapterTimeInterval(){
-  let _interval = __GLOBAL__.setInterval
+  const _interval = __GLOBAL__.setInterval
   __GLOBAL__.setInterval = function(...args:any){
-    let intervalHandler = _interval(args)
+    const intervalHandler = _interval(args)
     return intervalHandler
   }
 }

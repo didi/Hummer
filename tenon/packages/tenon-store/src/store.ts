@@ -5,14 +5,14 @@ import { forEachValue, isObject, isPromise, assert, partial } from './util'
 
 interface StoreOptions{
   plugins?: Array<any>,
-  strict?: Boolean
+  strict?: boolean
 }
 export function createStore (options:StoreOptions) {
   return new Store(options)
 }
 
 export class Store {
-  private _committing:Boolean
+  private _committing:boolean
   private _actions:any
   private _actionSubscribers:Array<any>
   private _mutations:any
@@ -21,7 +21,7 @@ export class Store {
   public _modulesNamespaceMap:any
   private _subscribers:any
   public _makeLocalGettersCache:any
-  public strict: Boolean
+  public strict: boolean
   private _state: any
   public getters: any
   constructor (options:StoreOptions = {}) {

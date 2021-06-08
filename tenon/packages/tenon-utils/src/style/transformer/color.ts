@@ -8,7 +8,7 @@ const rgbaReg = /rgba?/
 export function transformColor(style:Record<string, string>):Record<string, string>{
   Object.keys(style).forEach(key => {
     if(isColorAttr(key)){
-      let value = style[key]
+      const value = style[key]
       if(isRgba(value)){
         style[key] = hexify(value)
       }else {

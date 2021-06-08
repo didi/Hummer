@@ -18,9 +18,9 @@ export const deleteCacheNode = (node:Base) => {
   ViewCache.delete(node.__view_id);
 }
 
-export const handleFixedNodeByStyle = (node:Base, newStyle:Record<string, string>):Boolean =>{
-  let oldPosition = node.style.position;
-  let newPosition = newStyle.position;
+export const handleFixedNodeByStyle = (node:Base, newStyle:Record<string, string>):boolean =>{
+  const oldPosition = node.style.position;
+  const newPosition = newStyle.position;
   if(newPosition === 'fixed'){
     registerFixedNode(node)
     return true
@@ -33,7 +33,7 @@ export const handleFixedNodeByStyle = (node:Base, newStyle:Record<string, string
 }
 
 export const registerFixedNode = (node:Base) => {
-  let fixedNode = {
+  const fixedNode = {
     id: node.__view_id,
     parents: node.parent? getParentIds(node.__view_id): null 
   }
@@ -41,20 +41,20 @@ export const registerFixedNode = (node:Base) => {
 }
 
 export const unRegisterFixedNode = (node:Base) => {
-  let {__view_id:id} = node
+  const {__view_id:id} = node
   FixedViewCache.delete(id)
 }
 
 export const updateFixedNodeParents = () => {
   FixedViewCache.forEach((fixedNode: FixedNode) => {
-    let {id} = fixedNode
+    const {id} = fixedNode
     if(fixedNode.parents === null){
       fixedNode.parents = getParentIds(id)
     }
   })
 }
 export const removeChildWithFixed = (node:Base) => {
-  let {__view_id} = node
+  const {__view_id} = node
   FixedViewCache.forEach((fixedNode: FixedNode) => {
     let {id, parents} = fixedNode
     if(fixedNode.parents === null){
@@ -75,7 +75,7 @@ export const removeChildWithFixed = (node:Base) => {
  * @param node 
  */
 function getParentIds(id:number):Set<number>{
-  let ids = new Set<number>();
+  const ids = new Set<number>();
   let node = ViewCache.get(id);
   while(node){
     if(node.parent){
@@ -91,7 +91,7 @@ function getParentIds(id:number):Set<number>{
  * @param id ViewId
  */
 function deleteNodeByViewId(id: number){
-  let node = ViewCache.get(id);
+  const node = ViewCache.get(id);
   if(node && node.parent){
     node.parent.removeChild(node);
   }

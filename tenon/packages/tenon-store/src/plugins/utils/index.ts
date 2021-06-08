@@ -8,7 +8,7 @@ const randomChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW
  * @param right Target Object
  */
 export function diff(left:Record<string, any>, right:Record<string, any>, parentKey:Array<string> = []):Operations{
-  let ops:Operations = []
+  const ops:Operations = []
   Object.keys(left).forEach(key => {
     if(!right.hasOwnProperty(key)){
       // Delete Attr
@@ -49,7 +49,7 @@ export function createOperation(type:OperationType, key:Array<string>, value?:an
   }
 }
 
-function isObject(x:any):Boolean{
+function isObject(x:any):boolean{
   return Object(x) === x
 }
 
@@ -78,8 +78,8 @@ export function getMemoryKey(){
 }
 
 function randomString(length = 8, chars: string) {
-  var result = '';
-  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+  let result = '';
+  for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
   return result;
 }
 
@@ -95,7 +95,7 @@ export function stringify(obj: Object){
 }
 
 export function parseJson(json: string){
-  let obj = JSON.parse(json, (key:string, value:any) => {
+  const obj = JSON.parse(json, (key:string, value:any) => {
     if(value === StaicUndefined){
       return Undefined
     }
@@ -115,6 +115,6 @@ export function setMemoryByKey(key:string, content: string){
 }
 
 export function getMemoryByKey(key:string){
-  let data = Memory.get(key);
+  const data = Memory.get(key);
   return data && data.slice(7);
 }

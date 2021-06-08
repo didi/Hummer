@@ -9,10 +9,10 @@ export class Switch extends Base{
     this.element = new SwitchComponent()
   }
 
-  get value():(Boolean){
+  get value():(boolean){
     return this.element.checked
   }
-  set value(value: Boolean){
+  set value(value: boolean){
     this.element.checked = value
   }
 
@@ -53,9 +53,9 @@ export class Switch extends Base{
 
   addEventListener(event: string, func:Function){
     if(event === 'switch'){
-      let invoker = (e:any) => {
-        let {state} = e
-        let value = (state === 1 || state === true)?true:false //  Android state true/false; iOS state 1/0；
+      const invoker = (e:any) => {
+        const {state} = e
+        const value = (state === 1 || state === true)?true:false //  Android state true/false; iOS state 1/0；
         func.call(this, value)
       }
       this.element.addEventListener(event, invoker)

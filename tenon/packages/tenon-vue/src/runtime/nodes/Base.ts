@@ -4,7 +4,7 @@ import {handleAnimation, Animation} from '../helper/animation-helper'
 let __view_id = 0;
 export class Base {
   public _scopedId:string|null = null
-  public __NAME: Symbol|null = null;
+  public __NAME: symbol|null = null;
   public element: any = null;
   public dataset:  any = {};
   protected children = new Set<Base>();
@@ -14,7 +14,7 @@ export class Base {
   public prevSibling: Base | null = null;
   public nextSibling: Base | null = null;
   private props =  new Map<any, any>();
-  public  __view_id:number = 0;
+  public  __view_id = 0;
   protected _defaultStyle: Record<string, string>| null = {};
   protected _style: Record<string, string>| null = {};
   private _baseStyle: Record<string, string>| null = {};
@@ -28,7 +28,7 @@ export class Base {
   get disabled(){
     return !this.element.enabled
   }
-  set disabled(disabled:Boolean){
+  set disabled(disabled:boolean){
     this.element.enabled = !disabled 
   }
 
@@ -174,10 +174,10 @@ export class Base {
    * @param style 
    * @param flag 是否来自 style 属性
    */
-  setStyle(style: any, flag: boolean = false) {
-    let tempStyle = this.hackForStyle(style, this)
+  setStyle(style: any, flag = false) {
+    const tempStyle = this.hackForStyle(style, this)
     flag && (this._baseStyle = tempStyle);
-    let newStyle = {
+    const newStyle = {
       ...this._defaultStyle,
       ...tempStyle,
       ...this._baseStyle

@@ -41,8 +41,8 @@ export const transformModel: DirectiveTransform = (dir, node, context) => {
 
   const { tag } = node
   if (tag === 'input' || tag === 'textarea') {
-    let directiveToUse = V_MODEL_TEXT
-    let isInvalidType = false
+    const directiveToUse = V_MODEL_TEXT
+    const isInvalidType = false
     if (tag === 'input') {
       __DEV__ && checkDuplicatedValue()
     }else if (tag === 'textarea') {
@@ -52,7 +52,7 @@ export const transformModel: DirectiveTransform = (dir, node, context) => {
       baseResult.needRuntime = context.helper(directiveToUse)
     }
   }else if(tag === 'switch'){
-    let directiveToUse = V_MODEL_SWITCH
+    const directiveToUse = V_MODEL_SWITCH
     baseResult.needRuntime = context.helper(directiveToUse)
   } else {
     context.onError(

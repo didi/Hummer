@@ -8,7 +8,7 @@ export function transformFlex(style:Record<string, string>){
     ...style
   }
   if(tempStyle['flex']){
-    let value = tempStyle['flex']
+    const value = tempStyle['flex']
     delete tempStyle['flex']
     tempStyle = {
       ...defaultFlexStyle,
@@ -36,7 +36,7 @@ export const defaultFlexStyle = {
  */
 function transformFlexStyle(flexStyleValue: string):Style{
   let tempStyle:Style = {}
-  let values = flexStyleValue.trim().split(/\s+/)
+  const values = flexStyleValue.trim().split(/\s+/)
   switch(values.length){
     case 1:
       tempStyle = handleFlexStyleBy1(values);
@@ -63,8 +63,8 @@ one of the keywords: none, auto, or initial.
  * @returns Style
  */
 function handleFlexStyleBy1(values: Array<string>):Style{
-  let value = values[0];
-  let tempStyle:Style = {};
+  const value = values[0];
+  const tempStyle:Style = {};
   if(isNaN(parseInt(value))){
     tempStyle["flex-basis"] = value
   }else{
@@ -90,8 +90,8 @@ function handleFlexStyleBy1(values: Array<string>):Style{
  * @returns Style
  */
 function handleFlexStyleBy2(values: Array<string>):Style{
-  let tempStyle:Style = {};
-  let [firstValue, secondValue] = values; 
+  const tempStyle:Style = {};
+  const [firstValue, secondValue] = values; 
   if(firstValue){
     tempStyle["flex-grow"] = firstValue;
   }
@@ -115,7 +115,7 @@ function handleFlexStyleBy2(values: Array<string>):Style{
  * @returns Style
  */
 function handleFlexStyleBy3(values: Array<string>):Style{
-  let [firstValue, secondValue, thirdValue] = values; 
+  const [firstValue, secondValue, thirdValue] = values; 
   return {
     "flex-grow": firstValue,
     "flex-shrink": secondValue,

@@ -65,7 +65,7 @@ export interface StepAnimation{
  */
 export function handleKeyframeAnimation(node:any, animation: KeyframeAnimation){
   let {id, onEnd, onStart, keyframes, repeatCount = 1, duration, delay, easing = 'linear'} = animation;
-  let {element} = node
+  const {element} = node
   let styles = keyframes[0].styles
   styles = transformStyle(styles);
   let len = Object.keys(styles).length;
@@ -75,9 +75,9 @@ export function handleKeyframeAnimation(node:any, animation: KeyframeAnimation){
   // 获取需要添加动画的样式
   Object.keys(styles).forEach((key, index) => {
     const ani = new __GLOBAL__.KeyframeAnimation(key);
-    let tempKeyframes: any = []
+    const tempKeyframes: any = []
     keyframes.forEach(keyframe => {
-      let transformedStyles = transformStyle(keyframe.styles)
+      const transformedStyles = transformStyle(keyframe.styles)
       if (transformedStyles[key] !== undefined) {
         tempKeyframes.push({
           percent: keyframe.percent,
@@ -111,7 +111,7 @@ export function handleKeyframeAnimation(node:any, animation: KeyframeAnimation){
  */
 export function handleBasicAnimation(node:any, animation: BasicAnimation){
   let {styles, id, duration, delay, repeatCount, easing, onStart, onEnd} = animation
-  let {element} = node
+  const {element} = node
   styles = transformStyle(styles);
   if(!id){
     id = animationId++;
@@ -147,7 +147,7 @@ export function handleBasicAnimation(node:any, animation: BasicAnimation){
  * @param animation 动画对象
  */
 export function handleStepAnimation(node:any, animation: StepAnimation){
-  let {id, onEnd, onStart, steps} = animation;
+  const {id, onEnd, onStart, steps} = animation;
   let current = Promise.resolve();
   steps && steps.forEach((step,index) => {
     let _onStart:Function
@@ -191,7 +191,7 @@ function transformStyle(styles:any){
   Object.keys(styles).forEach(key => {
     switch(key){
       case AnimationStyle.POSITION:
-        let position = styles[key]
+        const position = styles[key]
         styles[key] = {
           x: transformUnitValue(position.x),
           y: transformUnitValue(position.y)

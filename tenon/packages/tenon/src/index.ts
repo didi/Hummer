@@ -6,7 +6,7 @@ import * as Tenon from '@hummer/tenon-vue'
 function compileToFunction(
   template: string
 ):RenderFunction{
-  let {code} = compile(
+  const {code} = compile(
     template,
     {
       hoistStatic: true

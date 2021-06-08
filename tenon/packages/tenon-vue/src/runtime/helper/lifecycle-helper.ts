@@ -21,8 +21,8 @@ const LIFECYCLE = [LifeCycleEnum.ONLOAD, LifeCycleEnum.ONSHOW, LifeCycleEnum.ONH
  * @param config Options
  */
 export const initPageLifeCycle = (container: any, instance: any, config: any) => {
-  let {mixins: globalMixins} = instance._.appContext
-  let { mixins, extends: extendOptions } = config
+  const {mixins: globalMixins} = instance._.appContext
+  const { mixins, extends: extendOptions } = config
   let lifeCycleMixins: any = {
     onLoad: [],
     onShow: [],
@@ -86,7 +86,7 @@ export const initPageLifeCycle = (container: any, instance: any, config: any) =>
 }
 
 function applyPageMixin(mixins: any): (LifeCycleMixins | null) {
-  let lifeCycleMixins: LifeCycleMixins = {
+  const lifeCycleMixins: LifeCycleMixins = {
     onLoad: [],
     onShow: [],
     onHide: [],
@@ -97,7 +97,7 @@ function applyPageMixin(mixins: any): (LifeCycleMixins | null) {
     return lifeCycleMixins
   }
   mixins.forEach((mixin: any) => {
-    let { onLoad, onShow, onHide, onUnload, onBack } = mixin
+    const { onLoad, onShow, onHide, onUnload, onBack } = mixin
     onLoad && lifeCycleMixins.onLoad.push(onLoad)
     onShow && lifeCycleMixins.onShow.push(onShow)
     onHide && lifeCycleMixins.onHide.push(onHide)

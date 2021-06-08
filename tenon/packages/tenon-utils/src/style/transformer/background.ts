@@ -18,11 +18,11 @@ export function transformBackground(style:Record<string, string>){
     ...style
   }
   if(tempStyle['background-image']){
-    let value = tempStyle['background-image']
+    const value = tempStyle['background-image']
     if(isLinearGradient.test(value.trim())){
       delete tempStyle['background-image']
-      let matches = value.match(linearReg)
-      let linearValue = matches && matches[1] || ''
+      const matches = value.match(linearReg)
+      const linearValue = matches && matches[1] || ''
       tempStyle['background-color'] = 'linear-gradient(' + transformLinear(linearValue) + ')'
     } else{
       tempStyle['background-image'] = transformBackgroundImage(value)
@@ -49,7 +49,7 @@ export function transformBackground(style:Record<string, string>){
  */
 
 function splitBackground(value:string):any {
-  let newBackgroundMap:Record<string, string> = {}
+  const newBackgroundMap:Record<string, string> = {}
   // color
   const colorKeys = Object.keys(COLOR_MAP).join('|')
   const color = '(#\\w{3,8})|(rgba?\\(.+\\))'
@@ -66,7 +66,7 @@ function splitBackground(value:string):any {
   if (isUrl.test(value)) {
     const urlMatch = /url\(.+\)/
     const match = urlMatch.exec(value)
-    let backgroundImage = match && match[0]
+    const backgroundImage = match && match[0]
     if (backgroundImage) {
       newBackgroundMap['background-image'] = transformBackgroundImage(backgroundImage)
     }
@@ -107,23 +107,23 @@ function matchKeyList(list:string[], value:string):string {
 
 // TODO: 处理BackgroundImage渐变的情况
 function transformBackgroundImage(value:string):string{
-  let backgroundImage = value.trim()
+  const backgroundImage = value.trim()
   if(isUrl.test(backgroundImage)){
-    let matches = backgroundImage.match(imageUrlReg)
+    const matches = backgroundImage.match(imageUrlReg)
     return (matches && matches[1]) || ''
   }else if(isImageBase64Reg.test(backgroundImage)){
-    let matches = backgroundImage.match(imageBase64Reg)
+    const matches = backgroundImage.match(imageBase64Reg)
     return (matches && matches[1]) || ''
   }
   return ''
 }
 function transformLinear (value:string){
   let backgroundLinear = value.replace(/\s+/g,'')
-  let isRgba = /rgba?/
-  let rgbaReg = /rgba\(\d+,\d+,\d+,[\d\.]+\)/g
+  const isRgba = /rgba?/
+  const rgbaReg = /rgba\(\d+,\d+,\d+,[\d\.]+\)/g
   if(isRgba.test(backgroundLinear)){
-    let matcheList = backgroundLinear.match(rgbaReg)
-    for(let item in matcheList){
+    const matcheList = backgroundLinear.match(rgbaReg)
+    for(const item in matcheList){
       backgroundLinear = backgroundLinear.replace(matcheList[parseInt(item)],hexify(matcheList[parseInt(item)]))
     }
   }

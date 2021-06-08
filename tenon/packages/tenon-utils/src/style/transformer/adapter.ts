@@ -63,7 +63,7 @@ function transformBorderRadius(style: Record<string, string>){
   if(!style.width){
     return
   }
-  let [, width, unit] = style.width.split(/([\d\.]+)/);
+  const [, width, unit] = style.width.split(/([\d\.]+)/);
   if(unit === '%'){
     return
   }
@@ -78,7 +78,7 @@ function transformBorderRadius(style: Record<string, string>){
  * 计算百分比对应的宽度
  */
 function getBorderRadius(value:string, {width,unit}:any){
-  let [, bPercent, bUnit] = value.split(/([\d\.]+)/);
+  const [, bPercent, bUnit] = value.split(/([\d\.]+)/);
   if(bUnit === '%'){
     return (width * parseFloat(bPercent) / 100).toFixed(2) + unit
   }

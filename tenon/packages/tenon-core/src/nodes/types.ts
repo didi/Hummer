@@ -26,7 +26,7 @@ export const NotHasChildrenTag = [NODE_TEXT, NODE_IMAGE, NODE_BUTTON, NODE_TEXTA
 export const WithTextTag = [NODE_TEXT, NODE_BUTTON]
 
 function getElementTagMap(){
-  let tagMap = new Map();
+  const tagMap = new Map();
   tagMap.set(NODE_VIEW, 'view')
   tagMap.set(NODE_TEXT, 'text')
   tagMap.set(NODE_IMAGE, 'image')

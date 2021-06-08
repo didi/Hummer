@@ -55,19 +55,19 @@ export const createRootContainer = (options: PageOptions):Page => {
 }
 
 export function render(App:any){
-  let {pageConfig} = App;
-  let app = createApp(App);
+  const {pageConfig} = App;
+  const app = createApp(App);
   install(app);
   appContext = app._context;
-  let container = createRootContainer({
+  const container = createRootContainer({
     canScroll: pageConfig && pageConfig.canScroll,
     pageStyle: pageConfig && pageConfig.pageStyle
   });
-  let {plugins} = App;
+  const {plugins} = App;
   plugins && plugins.forEach((plugin:any) => {
     app.use(plugin)
   })
-  let instance = app.mount(container);
+  const instance = app.mount(container);
   initPageLifeCycle(container, instance, App)
   container.render();
 }

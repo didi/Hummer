@@ -37,7 +37,7 @@ export const collectStyle = function(ruleSetMap: RuleSetMap){
     __GLOBAL__.CSSOM = defaultRuleSetGroup
   }
   Object.keys(ruleSetMap).forEach((group:string) => {
-    let ruleSet = ruleSetMap[group]
+    const ruleSet = ruleSetMap[group]
     collectStyleGroup(ruleSet, group)
   })
 }
@@ -52,12 +52,12 @@ const collectStyleGroup = function(ruleSet: RuleSet, group: string){
     __GLOBAL__.CSSOM[group] = defaultRuleSet
   }
   Object.keys(ruleSet).forEach((ruleKey:string) => {
-    let ruleList = ruleSet[ruleKey]
-    let key = RuleKeyMap[ruleKey]
+    const ruleList = ruleSet[ruleKey]
+    const key = RuleKeyMap[ruleKey]
     key && ruleList.forEach((rule:RuleNode) => {
       if(rule){
-        let selectorMap = __GLOBAL__.CSSOM[group][key]
-        let styleList = selectorMap.get(rule.selector) || []
+        const selectorMap = __GLOBAL__.CSSOM[group][key]
+        const styleList = selectorMap.get(rule.selector) || []
         styleList.push(rule)
         __GLOBAL__.CSSOM[group][key].set(rule.selector, styleList)
       }

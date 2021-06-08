@@ -15,9 +15,9 @@ export class Scroller extends Base{
       case 'scrollDirection':
         if(value === 'horizontal' &&  this.element instanceof ScrollerComponent){
           // 属性切换时，Scroller组件需要重新声明，同时进行 Children的重新赋值
-          let scroller = new HorizontalScroller() as any
+          const scroller = new HorizontalScroller() as any
           scroller.style = this._style
-          for(let child of this.children.values()){
+          for(const child of this.children.values()){
             this.element.removeChild(child.element)
             scroller.appendChild(child.element)
           }

@@ -17,10 +17,10 @@ export function register(component:NativeComponent | Array<NativeComponent>){
   }
 }
 function registerComponent(component:NativeComponent){
-  let {name} = component
+  const {name} = component
   components.set(`ex-${name}`, component)
 }
 export function getComponent(tag: string):Base{
-  let component = components.get(tag)
+  const component = components.get(tag)
   return component.factory()
 }

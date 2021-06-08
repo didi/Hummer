@@ -18,7 +18,7 @@ export const lifeCycles = [LifeCycle.ONLOAD, LifeCycle.ONSHOW, LifeCycle.ONHIDE,
  * @param callback<Function>  生命周期监听器
  */
 export function registerLifeCycle(evenName: LifeCycle, listener: Listener){
-  let eventListeners = lifeCycleListener.get(evenName)
+  const eventListeners = lifeCycleListener.get(evenName)
   if(!eventListeners){
     lifeCycleListener.set(evenName, [listener])
   }else{
@@ -44,8 +44,8 @@ export function triggerLifeCycle(evenName: LifeCycle){
  * 触发 onBack 生命周期函数
  * @returns<Boolean> 是否拦截返回，true 拦截，false 不拦截
  */
-function triggerLifeCycleOnBack():Boolean{
-  let listeners = lifeCycleListener.get(LifeCycle.ONBACK)
+function triggerLifeCycleOnBack():boolean{
+  const listeners = lifeCycleListener.get(LifeCycle.ONBACK)
   let flag = false
   if(listeners && listeners.length > 0){
     for(let i = 0;i < listeners.length; i++){
@@ -60,7 +60,7 @@ function triggerLifeCycleOnBack():Boolean{
  * @param evenName<LifeCycle> 生命周期
  */
 function triggerLifeCycleCommon(evenName: LifeCycle){
-  let listeners = lifeCycleListener.get(evenName)
+  const listeners = lifeCycleListener.get(evenName)
   if(listeners && listeners.length > 0){
     listeners.forEach((listener: Listener) => {
       listener()
@@ -74,7 +74,7 @@ function triggerLifeCycleCommon(evenName: LifeCycle){
  * @param eventName<LifeCycle> 生命周期
  * @returns<Boolean> 是否合法
  */
-export function validateLifeCycle(eventName: LifeCycle):Boolean{
+export function validateLifeCycle(eventName: LifeCycle):boolean{
   return lifeCycles.some((item:LifeCycle) => {
     return item === eventName
   })

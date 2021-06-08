@@ -4,7 +4,7 @@ import {NODE_BUTTON, styleTransformer} from '@hummer/tenon-utils'
 
 export class Button extends Base{
   __NAME = NODE_BUTTON
-  private _text: string = ''
+  private _text = ''
   constructor(){
     super()
     this.element = new ButtonComponent()

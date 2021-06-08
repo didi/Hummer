@@ -8,7 +8,7 @@ export const transformElement:NodeTransform = (node:any, context:any) => {
 
       if(isCustomNativeTag(tag)){
         // Handle Slots
-        let {slots} = buildSlots(node, context)
+        const {slots} = buildSlots(node, context)
         props.push({
           type: NodeTypes.DIRECTIVE,
           name: 'bind',

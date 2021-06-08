@@ -42,7 +42,7 @@ const isCpxUnit = /cpx$/
 export function transformUnit(style: Record<string, string>) {
   Object.keys(style).forEach(key => {
     if(isNeedUnitTrasform(key)){
-      let value = transformUnitValue(style[key])
+      const value = transformUnitValue(style[key])
       style[key] = value
     }
   })
@@ -61,7 +61,7 @@ export function transformUnitValue(value:string):string{
 }
 
 export function hexify(color:string){
-  var values = color
+  const values = color
   .replace(/rgba?\(/, '')
   .replace(/\)/, '')
   .replace(/[\s+]/g, '')
@@ -79,12 +79,12 @@ export function hexify(color:string){
 }
 
 function transfromRem(value: string):string{
-  let num = (Number(value.replace(/rem/, '')) * 100) .toFixed(2)
+  const num = (Number(value.replace(/rem/, '')) * 100) .toFixed(2)
   return num + 'hm'
 }
 
 function transfromCpx(value: string):string{
-  let num = value.replace(/cpx/, 'hm')
+  const num = value.replace(/cpx/, 'hm')
   return num
 }
 

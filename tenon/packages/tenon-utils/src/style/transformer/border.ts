@@ -27,8 +27,8 @@ export function transformBorder(style:Record<string, string>):Record<string, str
  * ex.border: none; borderStyle: none;
  */
 function transformBorderStyle(attr:string, borderValue:string){
-  let values = borderValue.trim().split(/\s+/);
-  let tempStyle:Style = {};
+  const values = borderValue.trim().split(/\s+/);
+  const tempStyle:Style = {};
   for(let i=0,len=values.length; i<len; i++){
     if(isBorderStyle(values[i])){
       tempStyle[attr + "-style"] = values[i]

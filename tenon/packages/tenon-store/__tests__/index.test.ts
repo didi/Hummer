@@ -3,26 +3,26 @@ import {diff} from '../src/plugins/utils/index'
 describe('Store Utils Test', () => {
 
   test('Diff Test', () => {
-    let left = {
+    const left = {
       a: 1,
       b: 2,
       c: {
         name: 'c'
       }
     }
-    let right = {
+    const right = {
       a: 2,
       d: "D",
       c: {
         name: 'd'
       }
     }
-    let ops = diff(left, right)
+    const ops = diff(left, right)
     console.log(ops)
   })
 
   test('Diff Array Test', () => {
-    let left = {
+    const left = {
       a: 1,
       b: 2,
       c: {
@@ -34,7 +34,7 @@ describe('Store Utils Test', () => {
         b: 1
       }]
     }
-    let right = {
+    const right = {
       a: 2,
       d: "D",
       c: {
@@ -46,7 +46,7 @@ describe('Store Utils Test', () => {
         b: 2
       }]
     }
-    let ops = diff(left, right)
+    const ops = diff(left, right)
     console.log(ops)
   })
 })

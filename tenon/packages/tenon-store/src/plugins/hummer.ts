@@ -15,7 +15,7 @@ export function createHummerPlugin ({
     // 初始化数据
     initState(store)
     // 注册通知
-    let notifyCenter =  Hummer.notifyCenter
+    const notifyCenter =  Hummer.notifyCenter
     notifyCenter.addEventListener(NotifyEvent, ({eventId, operations}:any) => {
       if(eventId === id){
         return
@@ -32,7 +32,7 @@ export function createHummerPlugin ({
     store.subscribe((mutation:any, state:any) => {
       setMemoryByKey(MemoryStoreKey, stringify(state));
       // TODO 限流操作
-      let ops = diff(cacheData, state);
+      const ops = diff(cacheData, state);
       if(!ops || ops.length === 0){
         return
       }
@@ -57,7 +57,7 @@ function initState(store:any){
 
 function setObjectValue(ob:any, keys:Array<string>, value: any){
   let temp = ob;
-  let lastKey = keys.pop();
+  const lastKey = keys.pop();
   keys.forEach((key,index) => {
     temp = temp[key]
   })
@@ -71,7 +71,7 @@ function resetStore(store: any, operations:Array<Operation>){
 }
 
 function updateStore(store:any, operation:Operation){
-  let {type, key, value} = operation;
+  const {type, key, value} = operation;
 
   store._withCommit(() => {
     switch(type){

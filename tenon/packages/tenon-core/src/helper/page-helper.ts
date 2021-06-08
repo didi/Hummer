@@ -1,5 +1,5 @@
 export type PageConfig = {
-  canScroll: Boolean
+  canScroll: boolean
 }
 
 

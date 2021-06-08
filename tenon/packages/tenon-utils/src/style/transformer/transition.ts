@@ -26,7 +26,7 @@ export function transformTransition(style: Record<string, string>) {
   }
   transitionFullProperty.forEach(property => {
     if(tempStyle[property]) {
-      let value = tempStyle[property]
+      const value = tempStyle[property]
       tempStyle = {
         ...getHummerProp(property, value),
         ...tempStyle
@@ -35,7 +35,7 @@ export function transformTransition(style: Record<string, string>) {
     }
   });
   if (tempStyle['transition']) {
-    let value = tempStyle['transition']
+    const value = tempStyle['transition']
     tempStyle = {
       ...splitToFullProps(value),
       ...tempStyle
@@ -46,18 +46,18 @@ export function transformTransition(style: Record<string, string>) {
 }
 
 function getHummerProp(property: string, value: string) {
-  let obj: Record<string, string> = {}
+  const obj: Record<string, string> = {}
   obj[property] = isTime(value)? value.replace('s', ''): value
   return obj
 }
 
 function splitToFullProps(params: string) {
-  let transitionPropertyArray: Array<string> = []
-  let transitionDurationArray: Array<string> = []
-  let transitionTimingFunctionArray: Array<string> = []
-  let transitionDelayArray: Array<string> = []
+  const transitionPropertyArray: Array<string> = []
+  const transitionDurationArray: Array<string> = []
+  const transitionTimingFunctionArray: Array<string> = []
+  const transitionDelayArray: Array<string> = []
 
-  let transitionArray = params.split(',')
+  const transitionArray = params.split(',')
   transitionArray.forEach(transition => {
     let transitonValues = transition.trim().split(/\s+/g)
     transitonValues = getFullValues(transitonValues)

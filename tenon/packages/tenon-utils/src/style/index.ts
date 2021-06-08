@@ -45,7 +45,7 @@ class StyleTransformer{
   transformStyle(style:Record<string, string> = {}, view?:any):Record<string, string>|null{
     let tempStyle = style
     this.middlewares.forEach(middleware => {
-      let result = middleware(tempStyle, view)
+      const result = middleware(tempStyle, view)
       tempStyle = result? result: tempStyle
     })
     return tempStyle
@@ -75,7 +75,7 @@ class StyleDynamicTransformer{
   transformStyle(style:Record<string, string> = {}, view?:any):Record<string, string>|null{
     let tempStyle = style
     this.middlewares.forEach(middleware => {
-      let result = middleware(tempStyle, view)
+      const result = middleware(tempStyle, view)
       tempStyle = result? result: tempStyle
     })
     return tempStyle

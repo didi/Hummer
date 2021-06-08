@@ -5,7 +5,7 @@ import {NODE_VIEW} from '@hummer/tenon-utils'
 export class View extends Base{
   __NAME = NODE_VIEW
 
-  constructor(isView:boolean = true){
+  constructor(isView = true){
     super();
     if(!isView){
       return

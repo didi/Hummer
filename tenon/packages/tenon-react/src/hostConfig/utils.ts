@@ -10,8 +10,8 @@ export function diffProperties(node:Element, type: string, oldProps: any, newPro
   // TODO 使用 Object 存储 updatePayload，后面可以重构成 ReactDom类似的 Array
 
   const updatePayload: null | any = {};
-  let lastProps:any = oldProps;
-  let nextProps:any = newProps;
+  const lastProps:any = oldProps;
+  const nextProps:any = newProps;
   let propKey: string;
 
   const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -92,10 +92,10 @@ function handleStyle(styleValue:any, node:Element){
 
 // TODO Refactor Event Handler To Solve "Repeatedly add delete listeners".
 function handleEvent(propName: string, value: any, node:Element){
-  let eventName = getEventName(propName)
-  let listener:any = getListener(value)
+  const eventName = getEventName(propName)
+  const listener:any = getListener(value)
   console.log('Add Event Listener', propName)
-  let oldListener = listener.invoker
+  const oldListener = listener.invoker
   listener.invoker = null
 
   if(oldListener){

@@ -45,8 +45,8 @@ export function transformBreakToken(style: Record<string, string>) {
  * Ex. margin: 10 => margin-left: 10;margin-right: 10;margin-top:10;margin-bottom:10;
  * @param Style  
  */
-function breakDirectionAttr({ attr, value }: Style, splitReg: RegExp = /\s/) {
-  let vals = value.split(splitReg).map(item => {
+function breakDirectionAttr({ attr, value }: Style, splitReg = /\s/) {
+  const vals = value.split(splitReg).map(item => {
     return item.trim()
   })
   let top,right,bottom,left
@@ -98,8 +98,8 @@ function breakDirectionAttr({ attr, value }: Style, splitReg: RegExp = /\s/) {
  * @param Style  
  */
 
-function breakBorderRadiusAttr({ attr, value }: Style, splitReg: RegExp = /\s+/) {
-  let vals = value.split(splitReg).map(item => {
+function breakBorderRadiusAttr({ attr, value }: Style, splitReg = /\s+/) {
+  const vals = value.split(splitReg).map(item => {
     return item.trim()
   })
   let topLeft,topRight,bottomLeft,bottomRight

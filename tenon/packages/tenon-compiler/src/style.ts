@@ -38,13 +38,13 @@ const isIDSelectorReg = /^\#/
  * @param selector 
  */
 function handleSelector(ruleSet:RuleSet, selector: string){
-  let selectorList = selector.split(/\s/).filter(item => !!item)
-  let lastSelector = selectorList.pop() as string
+  const selectorList = selector.split(/\s/).filter(item => !!item)
+  const lastSelector = selectorList.pop() as string
   if(isTagSelectorReg.test(lastSelector)){
     return
   }
   if(isClassSelectorReg.test(lastSelector)){
-    let className = lastSelector.slice(1)
+    const className = lastSelector.slice(1)
     ruleSet.classList.push({
       selector: className,
       matchType: MatchType.Class,
@@ -68,14 +68,14 @@ function getCollectPlugin(ruleSet: RuleSet){
         // 不支持媒体查询
         return;
       }
-      let {selector} = node
+      const {selector} = node
       handleSelector(ruleSet, selector)
     })
   })
   return collectRulePlugin
 }
 function generateCode(ruleSet:RuleSet){
-  let styleCode = `
+  const styleCode = `
     var ruleSet = ${JSON.stringify(ruleSet)};
   `
   return `
@@ -88,13 +88,13 @@ function generateCode(ruleSet:RuleSet){
 }
 export const compileStyle = function(source: string, options: CompileStyleOptions = {}){
   console.log('Style:', source)
-  let ruleSet:RuleSet = {
+  const ruleSet:RuleSet = {
     tagList: [],
     classList: [],
     idList: [],
     attrList: []
   }
   postcss([getCollectPlugin(ruleSet)]).process(source, {from: undefined});
-  let code = generateCode(ruleSet)
+  const code = generateCode(ruleSet)
   return code  
 }

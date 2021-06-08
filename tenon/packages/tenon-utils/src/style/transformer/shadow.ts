@@ -44,7 +44,7 @@ function transformValue(value:string){
   const rgbReg = /rgb?/,
   rgbaReg = /rgba?/
   let values = value,
-  shadowItems: Array<string> = new Array()
+  shadowItems: Array<string> = []
   if(rgbReg.test(values)){
     shadowItems = [
       ...values.slice(0,values.indexOf('rgb')).trim().split(/\s/),

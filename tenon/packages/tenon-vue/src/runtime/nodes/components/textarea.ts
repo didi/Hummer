@@ -8,7 +8,7 @@ export class TextArea extends Base{
   private _focus: Function|null = null
   private _blur: Function|null = null
   private _confirm: Function|null = null
-  private _hasInput: Boolean = false
+  private _hasInput = false
   constructor(){
     super()
     this.element = new TextAreaComponent()
@@ -26,7 +26,7 @@ export class TextArea extends Base{
   get focused(){
     return this.element.focused || false
   }
-  set focused(value:Boolean){
+  set focused(value:boolean){
     this.element.focused = value !== false
   }
 
@@ -91,7 +91,7 @@ export class TextArea extends Base{
   }
 
   addEventListener(event: string, func:Function){
-    var handler = (text:string) => {
+    const handler = (text:string) => {
       func.call(this, text)
     }
     switch(event){
@@ -143,7 +143,7 @@ export class TextArea extends Base{
       return;
     }
     this.element.addEventListener('input', (event:any) => {
-      let {state, text} = event
+      const {state, text} = event
       switch(state){
         case 1:
           this._focus && this._focus(text)

@@ -87,7 +87,7 @@ export class Document{
   }
 
   createPageView(options: PageOptions): Page{
-    let pageView = new Page(options)
+    const pageView = new Page(options)
     return pageView
   }
 }

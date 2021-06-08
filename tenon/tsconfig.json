@@ -20,6 +20,7 @@
     "paths": {
     }
   },
+  "exclude": ["node_modules"],
   "include": [
     "packages/global.d.ts",
     "packages/*/src",

@@ -21,7 +21,7 @@ export enum BorderStyle {
  * @param num<number> 待判断的 Number 类型 
  * @returns Boolean 是否是Number 类型
  */
-export function isNumber(num: any):Boolean{
+export function isNumber(num: any):boolean{
   return !isNaN(num)
 }
 
@@ -30,7 +30,7 @@ export function isNumber(num: any):Boolean{
  * @param width<Width> 待判断的 width
  * @returns Boolean 是否是 Width 类型
  */
-export function isWidth(width: Width):Boolean{
+export function isWidth(width: Width):boolean{
   return isLength(width) || width === Keyword.AUTO
 }
 
@@ -40,8 +40,8 @@ export function isWidth(width: Width):Boolean{
  * @param length any
  * @returns Boolean 是否是 Length 类型
  */
-export function isLength(length: any):Boolean{
-  let lengthReg = /^[\d\.]+(%|rem|hm|cpx|px|vw|vh)?$/
+export function isLength(length: any):boolean{
+  const lengthReg = /^[\d\.]+(%|rem|hm|cpx|px|vw|vh)?$/
   return lengthReg.test(length)
 }
 
@@ -52,7 +52,7 @@ export function isLength(length: any):Boolean{
  * @param value 
  * @returns 
  */
- export function isBorderStyle(value: string):Boolean{
+ export function isBorderStyle(value: string):boolean{
   return [BorderStyle.NONE,BorderStyle.DASHED,BorderStyle.DOTTED, BorderStyle.SOLID].findIndex((borderStyle:BorderStyle) => {
     return value === borderStyle
   }) !== -1

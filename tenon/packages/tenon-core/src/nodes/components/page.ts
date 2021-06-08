@@ -8,7 +8,7 @@ export interface PageOptions{
   onHide?: Function,
   onUnload?: Function,
   onBack?: Function,
-  canScroll?: Boolean,  // 是否可滚动
+  canScroll?: boolean,  // 是否可滚动
   pageStyle?: Record<string, string> // 页面样式
 }
 export class RootViewComponent extends ViewComponent{
@@ -18,10 +18,10 @@ export class RootViewComponent extends ViewComponent{
   public _onDestroy: Function
   public _onBack: Function
   private _element: ScrollViewComponent|null = null
-  private _canScroll: Boolean = true
+  private _canScroll = true
   constructor(options:PageOptions = {}){
     super();
-    let {onLoad, onShow, onHide, onUnload, onBack, canScroll = true, pageStyle = {}} = options
+    const {onLoad, onShow, onHide, onUnload, onBack, canScroll = true, pageStyle = {}} = options
     this._onCreate = onLoad || noFunc
     this._onAppear = onShow || noFunc
     this._onDisappear = onHide || noFunc
@@ -68,7 +68,7 @@ export class RootViewComponent extends ViewComponent{
 
   onBack(): boolean{
     // 页面销毁
-    let result = this._onBack()
+    const result = this._onBack()
     return result || false
   }
 }

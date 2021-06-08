@@ -10,7 +10,7 @@ enum ImageAttr{
 const gifReg = /\.gif$/
 export class Image extends Base{
   __NAME = NODE_IMAGE
-  private _src:string = ''
+  private _src = ''
   constructor(){
     super()
     this.element = new ImageComponent()

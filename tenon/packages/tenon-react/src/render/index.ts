@@ -20,11 +20,11 @@ const TenonRenderInst = ReactReconciler({
 
 
 export function render(rootElement: React.ReactElement | null, options:PageOptions) {
-  let page = document.createPageView({
+  const page = document.createPageView({
     ...options,
     ...GlobalLifeCycles
   })
-  let container = TenonRenderInst.createContainer(page, 0, false, null)
+  const container = TenonRenderInst.createContainer(page, 0, false, null)
   TenonRenderInst.updateContainer(rootElement, container, null, () => {
     // ignore
     page.render()

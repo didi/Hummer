@@ -3,7 +3,7 @@ import {Base} from '../Base'
 import {NODE_TEXT} from '@hummer/tenon-utils'
 export class Text extends Base{
   __NAME = NODE_TEXT
-  private _text:string = ''
+  private _text = ''
   constructor(){
     super()
     this.element = new TextComponent()
@@ -24,7 +24,7 @@ export class Text extends Base{
     this.element.text = text
   }
 
-  set richText(value: Array<String>){
+  set richText(value: Array<string>){
     this.element.richText = value
   }
 

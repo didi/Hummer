@@ -24,15 +24,15 @@ export const vModelText: ModelDirective<
     el._assign = getModelAssigner(vnode)
     const castToNumber = !!number
     addEventListener(el, 'input', (e:InputEvent) => {
-      let domValue: string | number = e.text
+      const domValue: string | number = e.text
       if(lazy){
         if(e.state === InputEventState.CONFIRMED || e.state === InputEventState.ENDED){
-          let value = transformValue(trim, castToNumber, domValue)
+          const value = transformValue(trim, castToNumber, domValue)
           el._assign(value)
         }
       }else {
         if(e.state === InputEventState.CHANGED){
-          let value = transformValue(trim, castToNumber,  domValue)
+          const value = transformValue(trim, castToNumber,  domValue)
           el._assign(value)
         }
       }
@@ -67,7 +67,7 @@ export const vModelSwitch: ModelDirective<SwitchElement> = {
     el.value = value == null ? '' : value
     el._assign = getModelAssigner(vnode)
     addEventListener(el, 'switch', (e:SwitchEvent) => {
-      let {state} = e
+      const {state} = e
       if(state === SwitchEventState.CLOSE){
         el._assign(false)
       }else if(state === SwitchEventState.OPEN){
