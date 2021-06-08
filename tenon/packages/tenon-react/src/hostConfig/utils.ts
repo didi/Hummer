@@ -3,13 +3,12 @@ import {Base as Element, isNotHasChilrenTag, isWithTextTag} from "@hummer/tenon-
 import {parseStringStyle, styleTransformer} from '@hummer/tenon-utils'
 import { isEventProp, getEventName, getListener } from "src/events";
 
-const CHILDREN = 'children';
-const CLASS_NAME = 'className';
+const CHILDREN = 'children'
+const STYLE = 'style'
 
 export function diffProperties(node:Element, type: string, oldProps: any, newProps: any){
-  // TODO 使用 Object 存储 updatePayload，后面可以重构成 ReactDom类似的 Array
 
-  const updatePayload: null | any = {};
+  let updatePayload: null | Array<any> = null;
   let lastProps:any = oldProps;
   let nextProps:any = newProps;
   let propKey: string;
@@ -17,10 +16,6 @@ export function diffProperties(node:Element, type: string, oldProps: any, newPro
   const hasOwnProperty = Object.prototype.hasOwnProperty;
   // TODO Add Style Optimize
   for (propKey in lastProps) {
-    if(typeof lastProps[propKey] === 'function' && typeof nextProps[propKey] === 'function'){
-      // 针对 Event 特殊处理，增加 invoker的判断，用于解决事件重复赋值的问题
-      nextProps[propKey].invoker = lastProps[propKey]
-    }
     if (
       hasOwnProperty.call(nextProps, propKey) ||
       !hasOwnProperty.call(lastProps, propKey) ||
@@ -28,35 +23,60 @@ export function diffProperties(node:Element, type: string, oldProps: any, newPro
     ) {
       continue;
     }
-    updatePayload[propKey] = propKey === CLASS_NAME ? '' : null;
+    if(isEventProp(propKey)){
+      if(!updatePayload){
+        updatePayload = []
+      }
+    }else{
+      (updatePayload = updatePayload || []).push(propKey, null)
+    }
   }
 
   for(propKey in nextProps){
-    const nextProp = nextProps[propKey]
+    const nextProp = nextProps[propKey];
     const lastProp = lastProps != null ? lastProps[propKey] : undefined;
-    if(!hasOwnProperty.call(nextProps, propKey) || nextProp === lastProp || (nextProp == null && lastProp == null)){
-      continue
+    if (
+      !nextProps.hasOwnProperty(propKey) ||
+      nextProp === lastProp ||
+      (nextProp == null && lastProp == null)
+    ) {
+      continue;
     }
-    if(propKey === CHILDREN){
-      if (lastProp !== nextProp) {
-        updatePayload[propKey] = nextProp;
+    if(isEventProp(propKey)){
+      if(!updatePayload && lastProp !== nextProp){
+        // Case: Hook Function ReRender
+        updatePayload = []
+      }
+    }else if(propKey === CHILDREN){
+      if (typeof nextProp === 'string' || typeof nextProp === 'number') {
+        (updatePayload = updatePayload || []).push(propKey, '' + nextProp);
+      }else if(isWithTextTag(type)){
+        (updatePayload = updatePayload || []).push(propKey, nextProp)
       }
     }else{
-      updatePayload[propKey] = nextProp;
+      (updatePayload = updatePayload || []).push(propKey, nextProp)
     }
   }
+  return updatePayload;
+}
 
-  return Object.keys(updatePayload).length > 0 ? updatePayload : null;
+export function updateProperties(node: Element, type: string, updatePayload: Array<any>){
+  for(let i =0; i< updatePayload.length; i+=2){
+    const propKey = updatePayload[i];
+    const propValue = updatePayload[i+1];
+    if(propKey === STYLE){
+      handleStyle(propValue, node)
+    }else if(propKey === CHILDREN && isWithTextTag(type)){
+      setTextContent(node, propValue);
+    }else {
+      node.setAttribute(propKey, propValue)
+    }
+  }
 }
 
 export function processProps(props:any, type:string, node:Element){
   if(isWithTextTag(type)){
-    if(typeof props.children === 'string' || typeof props.children === 'number'){
-      // Fix: 修复<text>0</text> 不能显示的问题
-      node.setElementText("" + props.children)
-    }else if(typeof props.children === 'object'){
-      node.setElementText(props.children.join(''))
-    }
+    setTextContent(node, props.children)
   }
   Object.keys(props).forEach((key:string) => {
     if(key === 'children'){
@@ -90,16 +110,18 @@ function handleStyle(styleValue:any, node:Element){
   node.setStyle(style, true)
 }
 
-// TODO Refactor Event Handler To Solve "Repeatedly add delete listeners".
 function handleEvent(propName: string, value: any, node:Element){
   let eventName = getEventName(propName)
   let listener:any = getListener(value)
-  console.log('Add Event Listener', propName)
-  let oldListener = listener.invoker
-  listener.invoker = null
-
-  if(oldListener){
-    node.removeEventListener(eventName,oldListener)
-  }
   node.addEventListener(eventName, listener)
+}
+
+
+function setTextContent(node:Element, children:any){
+  if(typeof children === 'string' || typeof children === 'number'){
+    // Fix: 修复<text>0</text> 不能显示的问题
+    node.setElementText("" + children)
+  }else if(typeof children === 'object'){
+    node.setElementText(children.join(''))
+  }
 }
