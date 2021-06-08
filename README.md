@@ -74,10 +74,12 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 - 5月底
     - VSCode 调试插件发布
     - Tenon Router 发布
+    - Tenon React 一期版本发布
+    - iOS 版 DevTools 发布
     - 两端一致性达到 90%
 - 6月底
-    - 视图调试发布
-    - Tenon for React 初版发布
+    - 视图调试能力发布
+    - Tenon React 二期版本发布
     - 两端一致性达到 98%
 - 7月底
     - VSCode 插件完整版发布
@@ -105,35 +107,48 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 原生侧高亮选中的UI控件（画框）
 
 #### 生态建设
-- Tenon for React
-  - [ ] 基础框架完成
-  - [ ] Redux 生态接入
-  - [ ] React Router 生态接入
+- Tenon React 一期版本
+  - [x] 基础组件对齐
+  - [x] 基本事件模块对齐
+  - [x] 页面生命周期逻辑
+  - [x] 样式 Style 属性对齐
+  - [x] 支持引用外部 CSS 文件
+  - [x] 支持 Hooks
+  - [x] 支持 Ref
+  - [x] 支持页面配置
+- Tenon React 二期版本
+  - [ ] 支持动画
+  - [ ] 事件模块重构
+  - [ ] 样式模块优化
+  - [ ] 支持高阶组件
+  - [ ] 数据管理（Redux 生态接入）
+  - [ ] 路由管理（React Router 生态接入）
 - Tenon 组件库建设（[mand-mobile](https://github.com/didi/mand-mobile)）
   - [ ] 一期完成基本组件
 - Hummer 基础组件建设
-    - [ ] 单选框（Radio）
-    - [ ] 复选框（Checkbox）
-    - [ ] 普通进度条（Progress）
-    - [ ] 滑动进度条（Slider）
-    - [ ] 日期/时间选择器（DatePicker）
-    - [ ] 图片选择器（ImagePicker）
-    - [ ] 图片预览（ImageViewer）
-    - [ ] 拍照/录像（Camera）
-    - [ ] 电话（Phone）
-    - [ ] 画布（Canvas）
+  - [ ] 单选框（Radio）
+  - [ ] 复选框（Checkbox）
+  - [ ] 普通进度条（Progress）
+  - [ ] 滑动进度条（Slider）
+  - [ ] 日期/时间选择器（DatePicker）
+  - [ ] 图片选择器（ImagePicker）
+  - [ ] 图片预览（ImageViewer）
+  - [ ] 页面标签栏（TabLayout）
+  - [ ] 拍照/录像（Camera）
+  - [ ] 电话（Phone）
+  - [ ] 画布（Canvas）
 
 #### 性能优化
 - 动态执行 JS
-    - [x] 原生实现 JS 执行 JS 能力
-    - [ ] 公共包抽离
-    - [ ] 页面懒加载（Tenon Router）
+  - [x] 原生实现 JS 执行 JS 能力
+  - [ ] 公共包抽离
+  - [ ] 页面懒加载（Tenon Router）
 - 多线程支持
 
 #### 其他
 - N-API 专项（抽象JS引擎）
-    - [ ] 适配 QuickJS
-    - [ ] 适配 Hermes
+  - [ ] 适配 QuickJS
+  - [ ] 适配 Hermes
 
 *（~ 欢迎大家领取任务，给我们提交 PR ~）*
 
