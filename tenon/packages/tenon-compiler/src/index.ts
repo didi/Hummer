@@ -24,7 +24,7 @@ export const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
   animation: transformAnimation
 }
 
-export const NodeTransforms: (NodeTransform | any)[] = [
+export const NodeTransforms: (NodeTransform)[] = [
   transformComment,
   transformStyle,
   transformClass,

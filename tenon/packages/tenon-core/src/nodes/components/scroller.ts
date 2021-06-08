@@ -1,14 +1,37 @@
-import {Scroller as ScrollerComponent, HorizontalScroller} from '@hummer/hummer-front'
+import {Scroller as ScrollerComponent, HorizontalScroller, EventType } from '@hummer/hummer-front'
 import {Base} from '../Base'
 import {NODE_SCROLLER, NODE_REFRESH, NODE_LOADMORE} from '@hummer/tenon-utils'
 
+
+export interface ScrollerProps {
+  bounces:boolean
+  showScrollBar:boolean
+  refreshView: any
+  loadMoreView: any
+  setOnScrollToTopListener: (listener: ()=>void)=>void
+  scrollToBottom:()=>void
+  scrollToTop:()=>void
+  scrollTo: (x:number, y:number) => void
+  scrollBy: (x:number, y:number) => void
+  stopLoadMore: (enabled: boolean) => void
+  stopPullRefresh: () => void
+  setOnScrollToBottomListener: (listener: ()=>void)=>void
+  onLoadMore: (state: any)=>void
+  onRefresh: (state: any)=>void
+
+}
+
+
+export type ScrollerEventType = ('scrolltotop' | 'scrolltobottom' | 'loadmore' | 'refresh') & EventType
+
+
 // 增加事件
-export class Scroller extends Base{
+export class Scroller extends Base<ScrollerProps>{
   __NAME = NODE_SCROLLER
 
   constructor(){
     super();
-    this.element = new ScrollerComponent();
+    this.element = new ScrollerComponent() as any;
   }
   _setAttribute(key:string, value: any){
     switch(key){
@@ -28,7 +51,7 @@ export class Scroller extends Base{
         this.element.bounces = value !== false
         break;
       case 'showScrollBar':
-        this.element.showScrollBar = value !== false
+        this.element.bounces = value !== false
         break;
       default:
         break;
@@ -109,7 +132,7 @@ export class Scroller extends Base{
    * @param dy y偏移量
    */
   scrollBy(dx:number, dy:number){
-    this.element.scrolBy(dx, dy)
+    this.element.scrollBy(dx, dy)
   }
 
   /**
@@ -145,7 +168,7 @@ export class Scroller extends Base{
    * @param event 
    * @param func 
    */
-  addEventListener(event: string, func:Function){
+  addEventListener(event: ScrollerEventType, func:Function){
     switch(event){
       case "scroll":
         // event单位 px

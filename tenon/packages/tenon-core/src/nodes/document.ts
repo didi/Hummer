@@ -21,7 +21,7 @@ import {isCustomNativeTag} from '@hummer/tenon-utils'
  * 通用Document对象
  */
 export class Document{
-  constructor(){}
+
 
   createElement(tag:string):(Base | null){
     let component = null

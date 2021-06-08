@@ -47,6 +47,7 @@ const nextSibling = function(node:Base){
   return node.nextSibling
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const querySelector = function(selector:string){
   return null
 }

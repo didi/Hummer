@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ObjectDirective, VNode } from '@vue/runtime-core'
 import {Input as InputElement, TextArea as TextAreaElement, Switch as SwitchElement} from '../nodes'
 import {InputEvent,SwitchEvent, SwitchEventState,InputEventState, addEventListener} from '../../utils/event'

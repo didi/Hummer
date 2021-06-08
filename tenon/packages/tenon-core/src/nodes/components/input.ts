@@ -2,7 +2,14 @@ import {Input as InputComponent} from '@hummer/hummer-front'
 import {Base} from '../Base'
 import {NODE_INPUT} from '@hummer/tenon-utils'
 
-export  class Input extends Base{
+export interface InputProps {
+  text: string | number
+  focused: boolean
+  placeholder: string
+  style: Record<string, any>
+}
+
+export  class Input extends Base<InputProps>{
   __NAME = NODE_INPUT
   private _input: Function|null = null
   private _change: Function|null = null
@@ -12,7 +19,7 @@ export  class Input extends Base{
   private _hasInput = false
   constructor(){
     super()
-    this.element = new InputComponent()
+    this.element = new InputComponent() as any
   }
 
   // 当前元素值

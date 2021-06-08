@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Base } from './nodes'
 import {patchClass} from './handlers/class'
 import {patchStyle} from './handlers/style'

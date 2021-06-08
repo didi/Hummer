@@ -8,7 +8,7 @@ export class Comment extends Base{
   private _comment = ''
   constructor(comment:string){
     super()
-    this.element = new ViewComponent()
+    this.element = new ViewComponent() 
     this.element.style = {
       display: 'none'
     }

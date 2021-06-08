@@ -4,7 +4,7 @@ const components = new Map()
 
 export interface NativeComponent {
   name: string,
-  factory: Function
+  factory: ()=>void
 }
 
 export function register(component:NativeComponent | Array<NativeComponent>){

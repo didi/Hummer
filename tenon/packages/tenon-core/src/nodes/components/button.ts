@@ -2,12 +2,18 @@ import {Button as ButtonComponent} from '@hummer/hummer-front'
 import {Base} from '../Base'
 import {NODE_BUTTON, styleTransformer} from '@hummer/tenon-utils'
 
-export class Button extends Base{
+interface ButtonProps {
+  text:string
+  pressed: Record<string,any>
+  disabled: boolean
+}
+
+export class Button extends Base<ButtonProps>{
   __NAME = NODE_BUTTON
   private _text = ''
   constructor(){
     super()
-    this.element = new ButtonComponent()
+    this.element = new ButtonComponent() as any
   }
   setElementText(text: string){
     this.text = text
@@ -27,7 +33,8 @@ export class Button extends Base{
   }
 
   set disabledStyle(style: Record<string, string>){
-    this.element.disabled = styleTransformer.transformStyle(style, this) || {}
+    // 这里是boolean 但返回的是object ??
+    this.element.disabled = styleTransformer.transformStyle(style, this) || {} as any
   }
 
 

@@ -1,7 +1,14 @@
 import {TextArea as TextAreaComponent} from '@hummer/hummer-front'
 import {Base} from '../Base'
 import {NODE_TEXTAREA} from '@hummer/tenon-utils'
-export class TextArea extends Base{
+
+export interface TextAreaProps {
+  text: string | number
+  focused: boolean
+  placeholder: string
+  style: Record<string, any>
+}
+export class TextArea extends Base<TextAreaProps>{
   __NAME = NODE_TEXTAREA
   private _input: Function|null = null
   private _change: Function|null = null

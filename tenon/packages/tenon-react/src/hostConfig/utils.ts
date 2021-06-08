@@ -99,7 +99,7 @@ function handleEvent(propName: string, value: any, node:Element){
   listener.invoker = null
 
   if(oldListener){
-    node.removeEventListener(eventName,oldListener)
+    node.removeEventListener(eventName as any,oldListener)
   }
-  node.addEventListener(eventName, listener)
+  node.addEventListener(eventName as any, listener)
 }

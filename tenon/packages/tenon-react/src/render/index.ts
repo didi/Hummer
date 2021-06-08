@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import ReactReconciler from 'react-reconciler'
 import {document, PageOptions} from '@hummer/tenon-core'
 

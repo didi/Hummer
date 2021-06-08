@@ -1,3 +1,3 @@
-declare var __GLOBAL__: any
-declare var __DEV__: Boolean
+declare let __GLOBAL__: any
+declare let __DEV__: boolean
 export * from './index'

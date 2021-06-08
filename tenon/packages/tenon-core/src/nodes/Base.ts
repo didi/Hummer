@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {styleDynamicTransformer} from '@hummer/tenon-utils'
 import {setCacheNode,handleFixedNodeByStyle,removeChildWithFixed} from '../helper/fixed-helper'
 import {handleAnimation, Animation} from '../helper/animation-helper'
+import {EventType, View as ViewComponent, EventListener as HummerEventListener} from '@hummer/hummer-front'
 let __view_id = 0;
-export class Base {
+
+export class Base<T = {}> {
   public _scopedId:string|null = null
   public __NAME: symbol|null = null;
-  public element: any = null;
+  public element!: ViewComponent & T;
   public dataset:  any = {};
   protected children = new Set<Base>();
   public parent?: Base = undefined;
@@ -38,6 +41,7 @@ export class Base {
   get className(){
     return this.props.get('class')
   }
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
   set style(value){
     this.setStyle(value, true)
   }
@@ -72,9 +76,10 @@ export class Base {
 
   // Mounted 生命周期
   private _onMounted(){
-    this.onMounted();
+    this.onMounted()
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected onMounted(){
 
   }
@@ -85,6 +90,7 @@ export class Base {
     this.onDestoryed();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected onDestoryed(){}
 
   appendChild(child: Base) {
@@ -160,7 +166,7 @@ export class Base {
     }
   }
 
-  setElementText(text: string) {
+  setElementText(_text: string) {
     // TODO 抛出异常
     console.warn('非text元素不支持')
   }
@@ -217,6 +223,8 @@ export class Base {
    * @param key 
    * @param value 
    */
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected _setAttribute(key:string, value: any){
 
   }
@@ -237,7 +245,7 @@ export class Base {
   handleAnimation(animation: Animation){
     handleAnimation(this, animation)
   }
-  addEventListener(event: string, func:Function){
+  addEventListener(event: EventType, listener: HummerEventListener){
     // this.element.addEventListener(event, (e:any) => {
     //   // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝
     //   e.target = {
@@ -245,14 +253,15 @@ export class Base {
     //   }
     //   func.call(this, e)
     // })
-    this.element.addEventListener(event, func)
+    this.element.addEventListener(event, listener)
   }
-  removeEventListener(event: string, func?:Function){
-    this.element.removeEventListener(event, func)
+  removeEventListener(event: EventType, listener: HummerEventListener){
+    this.element.removeEventListener(event, listener)
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   getRect(func:Function) {
-    this.element.getRect((rect: object) => {
+    this.element.getRect((rect: any) => {
       func.call(this, rect)
     })
   }

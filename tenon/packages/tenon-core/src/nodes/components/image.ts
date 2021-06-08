@@ -8,7 +8,15 @@ enum ImageAttr{
   Resize = 'resize'
 }
 const gifReg = /\.gif$/
-export class Image extends Base{
+
+export interface ImageProps {
+  style: Record<string, any>
+  gifSrc: string
+  src: string
+  gifRepeatCount: number
+}
+
+export class Image extends Base<ImageProps>{
   __NAME = NODE_IMAGE
   private _src = ''
   constructor(){

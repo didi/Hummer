@@ -58,7 +58,7 @@ function initState(store:any){
 function setObjectValue(ob:any, keys:Array<string>, value: any){
   let temp = ob;
   const lastKey = keys.pop();
-  keys.forEach((key,index) => {
+  keys.forEach((key) => {
     temp = temp[key]
   })
   temp && lastKey &&  (temp[lastKey] = value)

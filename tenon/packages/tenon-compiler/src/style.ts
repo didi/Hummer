@@ -1,3 +1,4 @@
+//此处并没有安装postcss 
 import postcss,{Root} from 'postcss'
 
 enum MatchType{
@@ -17,9 +18,11 @@ interface RuleSet{
   attrList: Array<RuleNode>
 }
 
-interface CompileStyleOptions{
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface CompileStyleOptions {
 
 }
+
 const isClassSelectorReg = /^\./
 const isTagSelectorReg = /\[.+\]/
 const isAttrSelectorReg = /\[.+\]/
@@ -62,8 +65,8 @@ function handleSelector(ruleSet:RuleSet, selector: string){
 }
 
 function getCollectPlugin(ruleSet: RuleSet){
-  const collectRulePlugin = postcss.plugin('collect-rule', (options: any) => (root:Root) => {
-    root.each(function collectRule(node){
+  const collectRulePlugin = postcss.plugin('collect-rule', (_options: any) => (root:Root) => {
+    root.each(function collectRule(node: any){
       if(node.type !== "rule"){
         // 不支持媒体查询
         return;
@@ -86,7 +89,7 @@ function generateCode(ruleSet:RuleSet){
     })();
   `
 }
-export const compileStyle = function(source: string, options: CompileStyleOptions = {}){
+export const compileStyle = function(source: string, _options: CompileStyleOptions = {}){
   console.log('Style:', source)
   const ruleSet:RuleSet = {
     tagList: [],

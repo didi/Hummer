@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ObjectDirective } from '@vue/runtime-core'
 import {Base} from '../nodes/Base'
 interface Element extends Base {

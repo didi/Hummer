@@ -1,8 +1,13 @@
-import {Switch as SwitchComponent} from '@hummer/hummer-front'
+import {EventType, Switch as SwitchComponent, EventListener as HummerEventListener} from '@hummer/hummer-front'
 import {Base} from '../Base'
 import {NODE_SWITCH} from '@hummer/tenon-utils'
 
-export class Switch extends Base{
+export interface SwitchProps {
+  checked: boolean;
+  style: Record<string, any>
+}
+
+export class Switch extends Base<SwitchProps>{
   __NAME = NODE_SWITCH
   constructor(){
     super()
@@ -61,8 +66,8 @@ export class Switch extends Base{
       this.element.addEventListener(event, invoker)
     }
   }
-  removeEventListener(event: string, func?:Function){
-    this.element.removeEventListener(event, func)
+  removeEventListener(event: EventType, listener: HummerEventListener){
+    this.element.removeEventListener(event, listener)
   }
 
 }

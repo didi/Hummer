@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {document, Base as Element} from "@hummer/tenon-core"
 import {diffProperties, processProps, shouldSetTextContent} from './utils'
 
