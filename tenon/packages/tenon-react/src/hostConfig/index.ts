@@ -1,5 +1,5 @@
 import {document, Base as Element} from "@hummer/tenon-core"
-import {diffProperties, processProps, shouldSetTextContent} from './utils'
+import {diffProperties, processProps, updateProperties, shouldSetTextContent} from './utils'
 
 type Container = {}
 type Props = any
@@ -36,7 +36,6 @@ export default {
 
   createInstance(type: string, newProps: any, container: Container):Element {
     const element = document.createElement(type) as any;
-    processProps(newProps,type, element);
     return element;
   },
 
@@ -63,9 +62,7 @@ export default {
   },
 
   commitUpdate(node:Element, updatePayload:any, type:string, oldProps: Props, newProps: Props){
-    // TODO 更新处理
-    console.log('commitUpdate')
-    processProps(updatePayload, type, node)
+    updateProperties(node,type, updatePayload)
   },
 
   commitMount(node:Element, updatePayload:any, type:string, props: Props){
@@ -89,8 +86,9 @@ export default {
     parent.removeChild(child)
   },
 
-  finalizeInitialChildren() {
-    return true
+  finalizeInitialChildren(node:Element, type: string, props:Props):Boolean{
+    processProps(props,type, node);
+    return false
   },
 
   appendChildToContainer(container:any, child:Element){
