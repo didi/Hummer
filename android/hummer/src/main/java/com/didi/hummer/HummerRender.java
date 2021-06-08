@@ -82,6 +82,7 @@ public class HummerRender {
 
     public void onDestroy() {
         isDestroyed.set(true);
+        hmContext.onDestroy();
 
         if (DebugUtil.isDebuggable()) {
             HummerDebugger.release(hmContext);
@@ -89,8 +90,6 @@ public class HummerRender {
                 devTools.release();
             }
         }
-
-        hmContext.onDestroy();
     }
 
     public boolean onBack() {
