@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.13](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.2.12...@hummer/tenon-vue@1.2.13) (2021-06-09)
+
+
+### Bug Fixes
+
+* fix tenon vue longPress Event ([a8bd4fa](https://github.com/didi/Hummer/commit/a8bd4fa0910b6f6220217a8b4f3739672950cfd0))
+
+
+
+
+
 ## [1.2.12](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.2.11...@hummer/tenon-vue@1.2.12) (2021-06-07)
 
 

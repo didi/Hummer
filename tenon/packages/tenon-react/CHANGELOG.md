@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.2.0...@hummer/tenon-react@0.2.1) (2021-06-09)
+
+
+### Bug Fixes
+
+* 修复 Tenon react LongPress 无法生效的问题 ([63667d1](https://github.com/didi/Hummer/commit/63667d1e3d8d45ba7a6f5457ad664101e60d86f1))
+
+
+
+
+
 # [0.2.0](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.1.4...@hummer/tenon-react@0.2.0) (2021-06-07)
 
 
