@@ -96,6 +96,14 @@ export const Style = {
     name: '布局样式'
   }]
 }
+export const Event = {
+  title: '事件篇',
+  items: [{
+    url: './event.js',
+    name: '基础事件'
+  }]
+}
+
 export const Other = {
   title: '其它',
   items: [{
@@ -105,4 +113,4 @@ export const Other = {
 }
 
 
-export const Menu =  [GrammarMenu, ComponentMenu, HighComponent, Style, Animation, Plugin, Other]
+export const Menu =  [GrammarMenu, ComponentMenu, HighComponent, Style, Animation,Event, Plugin, Other]
