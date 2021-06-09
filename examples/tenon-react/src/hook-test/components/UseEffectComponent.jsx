@@ -29,7 +29,10 @@ function UseStateComponent(){
   return (
     <view>
       <text>You clicked {count} times</text>
-      <text class="btn" onTap={() => setCount(count + 1)}> count ++ </text>
+      <text class="btn" onTap={() => {
+        console.log('Click Btn:', count)
+        setCount(count + 1)
+      }}> count ++ </text>
       <text class="btn" onTap={() => updateNumber(number + 1)}> number ++ </text>
 
     </view>
