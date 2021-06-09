@@ -17,9 +17,15 @@ export function isEventProp(propName: string){
  * 获取标准的事件名称
  * @param name 
  */
-export function getEventName(name: string){
-  return name.slice(2).toLowerCase()
+export function getEventName(rawName: string){
+  let eventName = rawName.slice(2).toLowerCase()
+  if(eventName === 'longpress'){
+    eventName = "longPress"
+  }
+  return eventName
 }
+
+
 
 
 export * from './listener'
