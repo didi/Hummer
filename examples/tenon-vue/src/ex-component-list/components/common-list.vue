@@ -52,6 +52,8 @@ import {ListMixin} from '../mixins/base'
 export default {
   name: 'common-list',
   mixins: [ListMixin],
-  data(){}
+  data(){
+     return {}
+  }
 }
 </script>

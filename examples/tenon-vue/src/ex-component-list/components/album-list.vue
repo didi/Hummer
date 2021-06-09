@@ -62,6 +62,8 @@ import { ListMixin } from "../mixins/base";
 export default {
   name: "album-list",
   mixins: [ListMixin],
-  data() {},
+  data() {
+     return {}
+  },
 };
 </script>

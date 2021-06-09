@@ -60,7 +60,9 @@ import { ListMixin } from "../mixins/base";
 export default {
   name: "custom-list",
   mixins: [ListMixin],
-  data() {},
+  data() {
+    return {}
+  },
   methods: {
     registerType(position){
       return position % 2
