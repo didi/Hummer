@@ -1,19 +1,20 @@
 <template>
-  <view>
-    <text class="text" style="border-style: none;">Hello Tenon</text>
-  </view>
+  <div class="page">
+    <span class="text">Hello Tenon</span>
+  </div>
 </template>
 <style lang="less" scoped>
+.page{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .text{
-  border: 5px solid  black;
+  font-size: .36rem;
 }
 </style>
-
 <script>
-export default {
-  data(){
-    return {
-    }
-  }
-}
+export default {}
 </script>

@@ -11,15 +11,21 @@
         <view class="item-container">
           <test-component></test-component>
         </view>
+         <view class="item-container">
+          <demo-component></demo-component>
+        </view>
       </view>
     </view>
   </view>
 </template>
 <script>
 import TestComponent from './components/test'
+import DemoComponent from './components/demo-component.vue'
+
 export default {
   components: {
-    TestComponent
+    TestComponent,
+    DemoComponent
   },
   data() {
     return {

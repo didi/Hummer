@@ -1,9 +1,9 @@
 import React from 'react';
 
 function App() {
-  const message = 'Hello Tenon React!'
+  const message = 'Hello Tenon'
   return (
-    <view style="display:flex;justify-content:center;align-items:center;width:100%;height:100%;">
+    <view class="page">
       <text class="message">{message}</text>
     </view>
   );

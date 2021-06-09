@@ -238,14 +238,13 @@ export class Base {
     handleAnimation(this, animation)
   }
   addEventListener(event: string, func:Function){
-    // this.element.addEventListener(event, (e:any) => {
-    //   // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝
-    //   e.target = {
-    //     dataset: this.dataset
-    //   }
-    //   func.call(this, e)
-    // })
-    this.element.addEventListener(event, func)
+    this.element.addEventListener(event, (e:any) => {
+      // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝
+      e.target = {
+        dataset: this.dataset
+      }
+      func.call(this, e)
+    })
   }
   removeEventListener(event: string, func?:Function){
     this.element.removeEventListener(event, func)
