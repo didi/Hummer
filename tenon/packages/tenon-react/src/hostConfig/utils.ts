@@ -5,6 +5,8 @@ import { isEventProp, getEventName, getListener } from "src/events";
 
 const CHILDREN = 'children'
 const STYLE = 'style'
+const CLASSNAME = 'className'
+const CLASS = 'class'
 const randomKey = Math.random()
   .toString(36)
   .slice(2);
@@ -87,14 +89,19 @@ export function processProps(props:any, type:string, node:Element){
     if(key === 'children'){
       return
     }
-    // TODO 支持动态 Remove Listener
     if(typeof props[key] === 'function' && isEventProp(key)){
       handleEvent(key, props[key], node)
+      return
     }
     switch(key){
-      case 'style':
-        handleStyle(props.style, node)
+      case STYLE:
+        handleStyle(props[key], node)
         break;
+      case CLASS:
+      case CLASSNAME:
+        handleClassStyle(props[key], node)
+        break;
+      
       default:
         node.setAttribute(key, props[key])
         break;
@@ -121,6 +128,10 @@ function handleStyle(styleValue:any, node:Element){
   // 
   style = styleTransformer.transformStyle(style, node);
   node.setStyle(style, true)
+}
+
+function handleClassStyle(classValue:any, node:Element){
+  node.setClassStyle(classValue)
 }
 
 function handleEvent(propName: string, value: any, node:Element){
