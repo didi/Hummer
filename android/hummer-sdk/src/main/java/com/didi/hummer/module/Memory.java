@@ -17,10 +17,6 @@ public class Memory {
 
     private static Map<String, Map<String, Object>> memoryStoreMap = new ConcurrentHashMap<>();
 
-    public static Map<String, Object> getAll(HummerContext context) {
-        return memoryStoreMap.get(context.getNamespace());
-    }
-
     @JsMethod("set")
     public static void set(HummerContext context, String key, Object value) {
         set(context.getNamespace(), key, value);
@@ -34,6 +30,11 @@ public class Memory {
     @JsMethod("remove")
     public static void remove(HummerContext context, String key) {
         remove(context.getNamespace(), key);
+    }
+
+    @JsMethod("removeAll")
+    public static void removeAll(HummerContext context) {
+        removeAll(context.getNamespace());
     }
 
     @JsMethod("exist")
@@ -64,6 +65,18 @@ public class Memory {
             return;
         }
         memoryStore.remove(key);
+    }
+
+    public static void removeAll(String namespace) {
+        Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
+        if (memoryStore == null) {
+            return;
+        }
+        memoryStore.clear();
+    }
+
+    public static Map<String, Object> getAll(HummerContext context) {
+        return memoryStoreMap.get(context.getNamespace());
     }
 
     public static boolean exist(String namespace, String key) {
