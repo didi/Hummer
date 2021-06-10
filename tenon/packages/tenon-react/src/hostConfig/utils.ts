@@ -5,7 +5,12 @@ import { isEventProp, getEventName, getListener } from "src/events";
 
 const CHILDREN = 'children'
 const STYLE = 'style'
+const randomKey = Math.random()
+  .toString(36)
+  .slice(2);
+const internalPropsKey = '__reactProps$' + randomKey;
 
+export type Props = any
 export function diffProperties(node:Element, type: string, oldProps: any, newProps: any){
 
   let updatePayload: null | Array<any> = null;
@@ -100,6 +105,14 @@ export function shouldSetTextContent(type:string):boolean{
   return isNotHasChilrenTag(type)
 }
 
+export function getFiberCurrentPropsFromNode(node:Element):Props{
+  return (node as any)[internalPropsKey] || null
+}
+
+export function updateFiberProps(node:Element, props: Props):void{
+  (node as any)[internalPropsKey] = props
+}
+
 function handleStyle(styleValue:any, node:Element){
   let style = styleValue
   if(typeof style === 'string'){
@@ -112,12 +125,12 @@ function handleStyle(styleValue:any, node:Element){
 
 function handleEvent(propName: string, value: any, node:Element){
   let eventName = getEventName(propName)
-  let listener:any = getListener(value)
+  let listener:any = getListener(node, propName, value)
   node.addEventListener(eventName, listener)
 }
 
 
-function setTextContent(node:Element, children:any){
+function setTextContent(node:Element, children:any):void{
   if(typeof children === 'string' || typeof children === 'number'){
     // Fix: 修复<text>0</text> 不能显示的问题
     node.setElementText("" + children)

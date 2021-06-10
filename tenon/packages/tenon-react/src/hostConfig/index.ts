@@ -1,8 +1,7 @@
 import {document, Base as Element} from "@hummer/tenon-core"
-import {diffProperties, processProps, updateProperties, shouldSetTextContent} from './utils'
+import {Props, diffProperties, processProps, updateProperties, shouldSetTextContent, updateFiberProps} from './utils'
 
 type Container = {}
-type Props = any
 
 export default {
   getPublicInstance:<T>(instance: T):T=>{
@@ -36,6 +35,7 @@ export default {
 
   createInstance(type: string, newProps: any, container: Container):Element {
     const element = document.createElement(type) as any;
+    updateFiberProps(element, newProps);
     return element;
   },
 
@@ -62,6 +62,7 @@ export default {
   },
 
   commitUpdate(node:Element, updatePayload:any, type:string, oldProps: Props, newProps: Props){
+    updateFiberProps(node, newProps);
     updateProperties(node,type, updatePayload)
   },
 
@@ -123,3 +124,4 @@ export default {
     container = null
   }
 }
+
