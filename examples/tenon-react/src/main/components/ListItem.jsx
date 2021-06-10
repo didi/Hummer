@@ -14,9 +14,9 @@ function ListItem(props) {
     });
   }
   return (
-    <view class="item" onTap={handleJump}>
-      <text class="item-title">{name}</text>
-      <image class="item-icon" src={iconRight}></image>
+    <view className="item" onTap={handleJump}>
+      <text className="item-title">{name}</text>
+      <image className="item-icon" src={iconRight}></image>
     </view>
   );
 }

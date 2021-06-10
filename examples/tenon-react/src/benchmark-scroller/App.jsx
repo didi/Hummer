@@ -6,12 +6,12 @@ function App() {
 
   const testList = itemArr.map((item, index) => {
     return (
-      <view class="cube-wrapper" key={index}>
-        <text class="cube-text">{ index }</text>
-        <text class="cube-text">{ index }</text>
-        <text class="cube-text">{ index }</text>
-        <text class="cube-text">{ index }</text>
-        <text class="cube-text">{ index }</text>
+      <view className="cube-wrapper" key={index}>
+        <text className="cube-text">{ index }</text>
+        <text className="cube-text">{ index }</text>
+        <text className="cube-text">{ index }</text>
+        <text className="cube-text">{ index }</text>
+        <text className="cube-text">{ index }</text>
       </view>
     )
   })

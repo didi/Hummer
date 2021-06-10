@@ -41,40 +41,40 @@ const hrefRichText = [
 
 function App() {
   return (
-    <view class="page">
-    <view class="demo-header">
-      <text class="demo-title">Component Text</text>
+    <view className="page">
+    <view className="demo-header">
+      <text className="demo-title">Component Text</text>
     </view>
-    <view class="demo-container">
-      <view class="demo-item">
-        <view class="item-title">
-          <text class="item-title-text">普通文本</text>
+    <view className="demo-container">
+      <view className="demo-item">
+        <view className="item-title">
+          <text className="item-title-text">普通文本</text>
         </view>
-        <view class="item-container">
+        <view className="item-container">
           <text>我是普通的文本</text>
         </view>
       </view>
-      <view class="demo-item">
-        <view class="item-title">
-          <text class="item-title-text">富文本(richText)</text>
+      <view className="demo-item">
+        <view className="item-title">
+          <text className="item-title-text">富文本(richText)</text>
         </view>
-        <view class="item-container">
+        <view className="item-container">
           <text richText={baseRichText}></text>
         </view>
       </view>
-      <view class="demo-item">
-        <view class="item-title">
-          <text class="item-title-text">富文本~图片(richText)</text>
+      <view className="demo-item">
+        <view className="item-title">
+          <text className="item-title-text">富文本~图片(richText)</text>
         </view>
-        <view class="item-container">
+        <view className="item-container">
           <text richText={imageRichText}></text>
         </view>
       </view>
-      <view class="demo-item">
-        <view class="item-title">
-          <text class="item-title-text">富文本~超链接(richText)</text>
+      <view className="demo-item">
+        <view className="item-title">
+          <text className="item-title-text">富文本~超链接(richText)</text>
         </view>
-        <view class="item-container">
+        <view className="item-container">
           <text richText={hrefRichText}></text>
         </view>
       </view>

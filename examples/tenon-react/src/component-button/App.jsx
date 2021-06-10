@@ -20,11 +20,11 @@ function App() {
   return (
     <PageItem title="Component Button">
       <DemoItem title="Button">
-        <button class="btn" onTap={() => handleClickBtn("Base Button Clicked!")}>Button</button>
+        <button className="btn" onTap={() => handleClickBtn("Base Button Clicked!")}>Button</button>
       </DemoItem>
       <DemoItem title="Button With Disabled">
         <button
-          class="btn"
+          className="btn"
           disabled
           disabledStyle={disabledStyle}
           onTap={() => handleClickBtn("Button With DiabledStyle Clicked!")}
@@ -32,7 +32,7 @@ function App() {
       </DemoItem>
       <DemoItem title="Button With PressedStyle">
         <button
-          class="btn"
+          className="btn"
           pressedStyle={pressedStyle}
           onTap={() => handleClickBtn("Button With PressedStyle Clicked!")}
         > Button

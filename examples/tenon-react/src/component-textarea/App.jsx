@@ -41,50 +41,50 @@ function App() {
   return (
     <PageItem title="Component Textarea">
       <DemoItem title="Textarea">
-        <textarea class="textarea" />
+        <textarea className="textarea" />
       </DemoItem>
       <DemoItem title="Textarea(rows)">
-        <textarea class="textarea" rows={2}/>
+        <textarea className="textarea" rows={2}/>
       </DemoItem>
       <DemoItem title="Textarea(placeholder)">
-        <textarea class="textarea textarea-place" placeholder="我是PlaceHolder" />
+        <textarea className="textarea textarea-place" placeholder="我是PlaceHolder" />
       </DemoItem>
       <DemoItem title="Textarea(focused)" operator={
         <>
-          <button class="btn" onTap={() => {setFocused(!focused)}}>
+          <button className="btn" onTap={() => {setFocused(!focused)}}>
             Change Textarea Focus
           </button>
         </>
       }>
-        <textarea class="textarea textarea-place" focused={focused} />
+        <textarea className="textarea textarea-place" focused={focused} />
       </DemoItem>
       <DemoItem title="Textarea(MaxLength)">
-        <textarea class="textarea" maxLength={maxLength} />
+        <textarea className="textarea" maxLength={maxLength} />
       </DemoItem>
       <DemoItem customTitle={
         <>
-          <text class="item-title-text">Textarea(type)</text>
-          <text class="item-title-text">type: { type }</text> 
+          <text className="item-title-text">Textarea(type)</text>
+          <text className="item-title-text">type: { type }</text> 
         </>
       } operator = {
-        <button class="btn" onTap={handleChangeType}>Change Textarea Type</button>
+        <button className="btn" onTap={handleChangeType}>Change Textarea Type</button>
       }>
-        <textarea class="textarea" type={type} />
+        <textarea className="textarea" type={type} />
       </DemoItem>
       <DemoItem customTitle={
         <>
-          <text class="item-title-text">Textarea(returnKeyType)</text>
-          <text class="item-title-text">returnKeyType: { returnKeyType }</text> 
+          <text className="item-title-text">Textarea(returnKeyType)</text>
+          <text className="item-title-text">returnKeyType: { returnKeyType }</text> 
         </>
       } operator = {
-        <button class="btn" onTap={handleChangeReturnKeyType}>Change Textarea ReturnKeyType</button>
+        <button className="btn" onTap={handleChangeReturnKeyType}>Change Textarea ReturnKeyType</button>
       }>
-        <textarea class="textarea" type={type} />
+        <textarea className="textarea" type={type} />
       </DemoItem>
 
       <DemoItem title="Textarea事件">
         <textarea
-            class="textarea"
+            className="textarea"
             onTextarea={handleTextarea}
             onChange={handleChange}
             onFocus={handleFocus}

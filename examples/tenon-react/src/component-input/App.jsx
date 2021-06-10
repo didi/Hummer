@@ -41,47 +41,47 @@ function App() {
   return (
     <PageItem title="Component Input">
       <DemoItem title="Input">
-        <input class="input" />
+        <input className="input" />
       </DemoItem>
       <DemoItem title="Input(placeholder)">
-        <input class="input input-place" placeholder="我是PlaceHolder" />
+        <input className="input input-place" placeholder="我是PlaceHolder" />
       </DemoItem>
       <DemoItem title="Input(focused)" operator={
         <>
-          <button class="btn" onTap={() => {setFocused(!focused)}}>
+          <button className="btn" onTap={() => {setFocused(!focused)}}>
             Change Input Focus
           </button>
         </>
       }>
-        <input class="input input-place" focused={focused} />
+        <input className="input input-place" focused={focused} />
       </DemoItem>
       <DemoItem title="Input(MaxLength)">
-        <input class="input" maxLength={maxLength} />
+        <input className="input" maxLength={maxLength} />
       </DemoItem>
       <DemoItem customTitle={
         <>
-          <text class="item-title-text">Input(type)</text>
-          <text class="item-title-text">type: { type }</text> 
+          <text className="item-title-text">Input(type)</text>
+          <text className="item-title-text">type: { type }</text> 
         </>
       } operator = {
-        <button class="btn" onTap={handleChangeType}>Change Input Type</button>
+        <button className="btn" onTap={handleChangeType}>Change Input Type</button>
       }>
-        <input class="input" type={type} />
+        <input className="input" type={type} />
       </DemoItem>
       <DemoItem customTitle={
         <>
-          <text class="item-title-text">Input(returnKeyType)</text>
-          <text class="item-title-text">returnKeyType: { returnKeyType }</text> 
+          <text className="item-title-text">Input(returnKeyType)</text>
+          <text className="item-title-text">returnKeyType: { returnKeyType }</text> 
         </>
       } operator = {
-        <button class="btn" onTap={handleChangeReturnKeyType}>Change Input ReturnKeyType</button>
+        <button className="btn" onTap={handleChangeReturnKeyType}>Change Input ReturnKeyType</button>
       }>
-        <input class="input" type={type} />
+        <input className="input" type={type} />
       </DemoItem>
 
       <DemoItem title="Input事件">
         <input
-            class="input"
+            className="input"
             onInput={handleInput}
             onChange={handleChange}
             onFocus={handleFocus}
