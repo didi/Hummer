@@ -35,26 +35,15 @@ export class Base {
   get style(){
     return this._style || {}
   }
-  get className(){
-    return this.props.get('class')
-  }
+
   set style(value){
     this.setStyle(value, true)
   }
 
-  public setScopeId(id:string){
-    // Scoped Id 只创建一次，避免 Slot 重复赋值，导致 scoped Id 错乱的问题
-    if(!this._scopedId){
-      this._scopedId = id
-      this.updateStyle()
-    }
-  }
-
-  public updateStyle(){
+  public updateStyle(className:string = ''){
     let CSSOM : any,
         elementStyle = {}
     if(!(CSSOM = (<any>__GLOBAL__).CSSOM)) return
-    const className = this.getAttribute('class') || ''
     const classList = className.split(/\s/)
     
     classList.forEach((item: any) => {
@@ -198,20 +187,18 @@ export class Base {
       case 'disabled':
         this.disabled = value
         break;
-      case 'class': 
-        this.updateStyle()
-        break;
       case 'style':
         this.setStyle(value, true)
         break;
       default:
-        // FIX: 修复Viewpager组件Data属性赋值问题
-        // this.element[key] = value
         this._setAttribute(key, value)
         break;
     }
   }
 
+  setClassStyle(value:string){
+    this.updateStyle(value)
+  }
   /**
    * 允许自定义组件覆盖
    * @param key 
