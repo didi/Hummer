@@ -20,7 +20,7 @@
 <br/>
 
 ## 简介
-Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同时支持开发 Android 和 iOS 应用。现已经支持 Vue/TypeScript/JavaScript 三种语法，面向大前端开发人员，总有一款适合你。
+Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同时支持开发 Android 和 iOS 应用。现已经支持 Vue/React/TypeScript/JavaScript 四种语法，面向大前端开发人员，总有一款适合你。
 
 ## 技术优势
 正如 Hummer（蜂鸟）的名字一样，具有小巧轻盈的体态，迅猛强健的翅膀，以及色彩艳丽的外表。
