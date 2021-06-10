@@ -4,18 +4,18 @@ import React from 'react';
 function DemoItem(props){
   let {title, customTitle, children, operator} = props
 
-  let titleUI = customTitle? customTitle : <text class="item-title-text">{title}</text>
+  let titleUI = customTitle? customTitle : <text className="item-title-text">{title}</text>
 
   return (
-    <view class="demo-item">
-      <view class="item-title">
+    <view className="demo-item">
+      <view className="item-title">
        {titleUI}
       </view>
-      <view class="item-container">
+      <view className="item-container">
          {children}
       </view>
       {operator &&
-        <view class="operation-container">
+        <view className="operation-container">
           {operator}
        </view>
       }

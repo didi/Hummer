@@ -12,9 +12,9 @@ function App() {
       )
     })
     return (
-      <view class="list-box" key={menuIndex}>
-        <text class="list-box-title">{ title }</text>
-        <view class="list-box-container">
+      <view className="list-box" key={menuIndex}>
+        <text className="list-box-title">{ title }</text>
+        <view className="list-box-container">
           {listItems}
         </view>
       </view>
@@ -22,11 +22,11 @@ function App() {
   })
   
   return (
-    <view class="page">
-      <view class="demo-header">
-        <text class="demo-title">Demo App</text>
+    <view className="page">
+      <view className="demo-header">
+        <text className="demo-title">Demo App</text>
       </view>
-      <view class="list-container">
+      <view className="list-container">
         {ListBoxs}
       </view>
     </view>

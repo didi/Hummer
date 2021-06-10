@@ -3,8 +3,8 @@ import React from 'react';
 function App() {
   const message = 'Hello Tenon'
   return (
-    <view class="page">
-      <text class="message">{message}</text>
+    <view className="page">
+      <text className="message">{message}</text>
     </view>
   );
 }

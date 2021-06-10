@@ -22,8 +22,8 @@ import React, {useReducer} from 'react'
    return (
      <>
        <text>Count: {state.count}</text>
-       <text class="btn" onTap={() => dispatch({type: 'decrement'})}>-</text>
-       <text class="btn" onTap={() => dispatch({type: 'increment'})}>+</text>
+       <text className="btn" onTap={() => dispatch({type: 'decrement'})}>-</text>
+       <text className="btn" onTap={() => dispatch({type: 'increment'})}>+</text>
      </>
    );
  }

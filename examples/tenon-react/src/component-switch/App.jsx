@@ -14,7 +14,7 @@ function App() {
     <PageItem title="Use Hook">
       <DemoItem title="useState" operator={
         <>
-          <button class="btn" onTap={() => { setChecked(!checked) }}>
+          <button className="btn" onTap={() => { setChecked(!checked) }}>
             Toggle Checked
           </button>
         </>

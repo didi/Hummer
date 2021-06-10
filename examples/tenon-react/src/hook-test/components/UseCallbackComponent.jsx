@@ -21,10 +21,10 @@ function UseCallbackComponent({initialCount}){
   return (
     <view>
       <text>Current Count: {count} </text>
-      <text class="btn" onTap={() => setCount(initialCount)}> Reset </text>
-      <text class="btn" onTap={() => setCount(prevCount => prevCount - 1)}> - </text>
-      <text class="btn" onTap={() => setCount(prevCount => prevCount + 1)}> + </text>
-      <text class="btn" onTap={() => memoizedCallback()}> memoizedCallback </text>
+      <text className="btn" onTap={() => setCount(initialCount)}> Reset </text>
+      <text className="btn" onTap={() => setCount(prevCount => prevCount - 1)}> - </text>
+      <text className="btn" onTap={() => setCount(prevCount => prevCount + 1)}> + </text>
+      <text className="btn" onTap={() => memoizedCallback()}> memoizedCallback </text>
     </view>
   )
 }

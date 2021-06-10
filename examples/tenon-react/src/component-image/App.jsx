@@ -11,22 +11,22 @@ function ResizeItem(){
     <DemoItem title="普通图片（resize）"
       operator={
         <>
-          <button class="btn" onTap={() => setResizeStyle("stretch")}>
+          <button className="btn" onTap={() => setResizeStyle("stretch")}>
             stretch
           </button>
-          <button class="btn" onTap={() => setResizeStyle("origin")}>
+          <button className="btn" onTap={() => setResizeStyle("origin")}>
             origin
           </button>
-          <button class="btn" onTap={() => setResizeStyle("contain")}>
+          <button className="btn" onTap={() => setResizeStyle("contain")}>
             contain
           </button>
-          <button class="btn" onTap={() => setResizeStyle("cover")}>
+          <button className="btn" onTap={() => setResizeStyle("cover")}>
             cover
           </button>
         </>
       }>
       <image
-        class="image-item"
+        className="image-item"
         resize={resizeStyle}
         src={imageSrc}
       ></image>
@@ -36,20 +36,20 @@ function ResizeItem(){
 
 function App() {
   return (
-    <view class="page">
-      <view class="demo-header">
-        <text class="demo-title">Component Image</text>
+    <view className="page">
+      <view className="demo-header">
+        <text className="demo-title">Component Image</text>
       </view>
-      <view class="demo-container">
+      <view className="demo-container">
         <DemoItem title="普通图片">
-          <image class="image-item" src={imageSrc}></image>
+          <image className="image-item" src={imageSrc}></image>
         </DemoItem>
         <DemoItem title="普通图片带圆角">
-          <image class="image-item border-item" src={imageSrc}></image>
+          <image className="image-item border-item" src={imageSrc}></image>
         </DemoItem>
         <DemoItem title="Gif图片 & RepeatCount 2">
           <image
-            class="image-item"
+            className="image-item"
             src={gifSrc}
             gifRepeatCount={gifRepeatCount}
           ></image>

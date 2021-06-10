@@ -38,7 +38,7 @@ function App() {
   const horiItems = verList.map((item, index) => {
     return (
       <view
-        class="scroller-item hori-scroller-item"
+        className="scroller-item hori-scroller-item"
         key={index}
       >
         <text>{item.name}</text>
@@ -48,7 +48,7 @@ function App() {
   const verItems = verList.map((item, index) => {
     return (
       <view
-        class="scroller-item vertical-scroller-item"
+        className="scroller-item vertical-scroller-item"
         v-for="(item, index) in verList"
         key={index}
       >
@@ -59,13 +59,13 @@ function App() {
   return (
     <PageItem title="Use Hook">
       <DemoItem title="横向滚动">
-        <scroller scrollDirection="horizontal" class="scroller hori-scroller">
+        <scroller scrollDirection="horizontal" className="scroller hori-scroller">
           {horiItems}
         </scroller>
       </DemoItem>
       <DemoItem title="普通垂直滚动(带下拉刷新和加载更多)">
         <scroller
-          class="scroller vertical-scroller"
+          className="scroller vertical-scroller"
           onScroll={handleScroll}
           onScrollToTop={handleScrollToTop}
           onScrollToBottom={handleScrollToBottom}
@@ -73,12 +73,12 @@ function App() {
           onLoadMore={handleLoadMore}
         >
           <refresh type="refresh">
-            <view class="refresh-view">
+            <view className="refresh-view">
               <text>I am refresh view!</text>
             </view>
           </refresh>
           <loadmore type="loadmore">
-            <view class="loadmore-view">
+            <view className="loadmore-view">
               <text>I am loadmore view!</text>
             </view>
           </loadmore>
@@ -86,27 +86,27 @@ function App() {
         </scroller>
       </DemoItem>
       <DemoItem title="普通垂直滚动">
-      <view class="item-scroller-container">
-            <text class="align-center-text"> Default </text>
+      <view className="item-scroller-container">
+            <text className="align-center-text"> Default </text>
             <scroller
-              class="scroller vertical-scroller"
+              className="scroller vertical-scroller"
             >
               {verItems}
             </scroller>
           </view>
-          <view class="item-scroller-container">
-            <text class="align-center-text">showScrollBar</text>
+          <view className="item-scroller-container">
+            <text className="align-center-text">showScrollBar</text>
             <scroller
-              class="scroller vertical-scroller"
+              className="scroller vertical-scroller"
               showScrollBar={true}
             >
              {verItems}
             </scroller>
           </view>
-          <view class="item-scroller-container">
-            <text class="align-center-text">bounces</text>
+          <view className="item-scroller-container">
+            <text className="align-center-text">bounces</text>
             <scroller
-              class="scroller vertical-scroller"
+              className="scroller vertical-scroller"
               bounces={false}
             >
              {verItems}

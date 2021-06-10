@@ -4,11 +4,11 @@ import React from 'react';
 function PageItem(props){
   let {title, children} = props
   return (
-    <view class="page">
-      <view class="demo-header">
-        <text class="demo-title">{title}</text>
+    <view className="page">
+      <view className="demo-header">
+        <text className="demo-title">{title}</text>
       </view>
-      <view class="demo-container">
+      <view className="demo-container">
         {children}
       </view>
     </view>
