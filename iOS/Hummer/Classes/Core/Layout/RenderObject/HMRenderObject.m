@@ -271,10 +271,10 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
     
     YOGA_TYPE_WRAPPER(YGNodeInsertChild)(constraintYogaNode, clonedYogaNode, 0);
     
-    YOGA_TYPE_WRAPPER(YGNodeStyleSetMinWidth)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(minimumSize.width));
-    YOGA_TYPE_WRAPPER(YGNodeStyleSetMinHeight)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(minimumSize.height));
-    YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxWidth)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(maximumSize.width));
-    YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxHeight)(constraintYogaNode, HMCoreGraphicsFloatFromYogaFloat(maximumSize.height));
+    YOGA_TYPE_WRAPPER(YGNodeStyleSetMinWidth)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(minimumSize.width));
+    YOGA_TYPE_WRAPPER(YGNodeStyleSetMinHeight)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(minimumSize.height));
+    YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxWidth)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(maximumSize.width));
+    YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxHeight)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(maximumSize.height));
     
     YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(constraintYogaNode, YOGA_TYPE_WRAPPER(YGUndefined), YOGA_TYPE_WRAPPER(YGUndefined), HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
     
