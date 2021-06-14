@@ -1,6 +1,12 @@
 # Release Nodes
 
-### 0.3.21.1
+### 0.3.22
+- 补齐transform对rotateZ的支持；
+- Memory组件支持clearAll接口；
+- 支持边框盒的盒模型；
+- 修复cli日志无法打印生命周期销毁的日志的问题；
+
+### 0.3.21.5
 - 升级QuickJS至最新版2021-03-27，并且优化JS和Native异常堆栈输出信息；
 - 修复首次进入页面时，轮播组件的回调会回调两次的问题；
 - 修复Scroller直接不支持justifyContent、alignItems、padding等flex属性的问题；
