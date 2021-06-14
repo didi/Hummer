@@ -31,6 +31,7 @@ public class Input extends HMBase<EditText> {
     private ColorStateList orgHintColors;
     private float orgTextSize;
     private Typeface orgTypeface;
+    protected int maxLines = 0;
 
     public Input(HummerContext context, JSValue jsValue, String viewID) {
         super(context, jsValue, viewID);
@@ -72,6 +73,28 @@ public class Input extends HMBase<EditText> {
 
         @Override
         public void afterTextChanged(Editable s) {
+            // 超过最大行数
+            int lines = getView().getLineCount();
+            if (maxLines > 0 && lines > maxLines) {
+                String str = s.toString();
+                int cursorStart = getView().getSelectionStart();
+                int cursorEnd = getView().getSelectionEnd();
+                if (cursorStart == cursorEnd && cursorStart < str.length() && cursorStart >= 1) {
+                    str = str.substring(0, cursorStart - 1) + str.substring(cursorStart);
+                } else {
+                    str = str.substring(0, s.length() - 1);
+                }
+
+                // setText会触发afterTextChanged的递归，这里需要先remove再add
+                getView().removeTextChangedListener(this);
+                getView().setText(str);
+                getView().addTextChangedListener(this);
+
+                // setSelection用的索引不能使用str.length()否则会越界
+                getView().setSelection(getView().getText().length());
+                return;
+            }
+
             InputEvent inputEvent = new InputEvent();
             inputEvent.setType(InputEvent.HM_EVENT_TYPE_INPUT);
             inputEvent.setText(s.toString());
