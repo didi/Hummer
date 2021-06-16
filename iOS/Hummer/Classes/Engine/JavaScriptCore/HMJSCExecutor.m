@@ -16,6 +16,7 @@
 #import "HMEncoding.h"
 #import "NSInvocation+Hummer.h"
 #import "HMUtility.h"
+#import "HMInterceptor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -152,6 +153,14 @@ JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObject
     SEL selector = nil;
     NSMethodSignature *methodSignature = nil;
 
+    // jscall回调
+    NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
+    if (interceptors.count > 0) {
+        for (id<HMJSCallerIterceptor> jscaller in interceptors) {
+            [jscaller callWithJSClassName:className functionName:functionName];
+        }
+    }
+
     // 最后一个参数无效
     [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
 
@@ -187,6 +196,14 @@ JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObje
 
         return NULL;
     }
+
+    NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
+    if (interceptors.count > 0) {
+        for (id<HMJSCallerIterceptor> jscaller in interceptors) {
+            [jscaller callWithJSClassName:className functionName:@"constructor"];
+        }
+    }
+    
     // 创建对象
     NSObject *opaquePointer = NULL;
     NSMutableArray<HMBaseValue *> *argumentArray = nil;
@@ -506,6 +523,15 @@ void hummerFinalize(JSObjectRef object) {
     NSMethodSignature *methodSignature = nil;
 
     [self hummerExtractExportWithFunctionPropertyName:propertyName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:isSetter jsClassName:className];
+
+    if (isSetter) {
+        NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
+        if (interceptors.count > 0) {
+            for (id<HMJSCallerIterceptor> jscaller in interceptors) {
+                [jscaller callWithJSClassName:className functionName:[@"set" stringByAppendingString:propertyName.capitalizedString]];
+            }
+        }
+    }
 
     return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
 }
