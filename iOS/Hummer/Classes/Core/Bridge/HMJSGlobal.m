@@ -21,6 +21,11 @@
 #import "HMJSGlobal+Private.h"
 #import "HMExceptionModel.h"
 
+#if DEBUG
+#import "HMDevTools.h"
+#endif
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 static HMJSGlobal *_Nullable _sharedInstance = nil;
@@ -320,6 +325,12 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
         context.renderCompletion();
     }
     [UIView hm_reSortFixedView:context];
+
+
+#if DEBUG
+    // 添加debug按钮
+    [HMDevTools showInContext:context];
+#endif
 }
 
 - (void)setBasicWidth:(HMBaseValue *)basicWidth {

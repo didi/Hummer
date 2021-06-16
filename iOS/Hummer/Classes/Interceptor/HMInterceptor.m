@@ -30,6 +30,7 @@
             @(HMInterceptorTypeImage)         : @protocol(HMImageProtocol),
             @(HMInterceptorTypeEventTrack)    : @protocol(HMEventTrackProtocol),
             @(HMInterceptorTypeJSLoad)        : @protocol(HMJSLoadInterceptor),
+            @(HMInterceptorTypeJSCaller)      : @protocol(HMJSCallerIterceptor),
         };
         self.interceptorMap = [self _initializeInterceptorMapWithType:_protocolMap.allKeys];
     }
