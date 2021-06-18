@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.14](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.2.13...@hummer/tenon-vue@1.2.14) (2021-06-18)
+
+
+### Bug Fixes
+
+* 修复 v-model 重复赋值导致光标后移的问题 ([7187588](https://github.com/didi/Hummer/commit/7187588a749de242a95e624f0d3ae39c7d42e62a))
+
+
+
+
+
 ## [1.2.13](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.2.12...@hummer/tenon-vue@1.2.13) (2021-06-09)
 
 
