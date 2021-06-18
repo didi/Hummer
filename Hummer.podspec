@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   
   s.description      = <<-DESC
-Hummer is a dynamic solution for client.
+Hummer is an dynamic solution for client.
                        DESC
   
   s.homepage         = 'https://github.com/didi/Hummer'
