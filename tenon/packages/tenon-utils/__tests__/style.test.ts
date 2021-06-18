@@ -83,15 +83,6 @@ describe('base', () => {
       "padding-left": "20px"
     })
 
-    expect(transformBreakToken({
-      "border-width": "1px"
-    })).toEqual({
-      "border-width-top": "1px",
-      "border-width-right": "1px",
-      "border-width-bottom": "1px",
-      "border-width-left": "1px"
-    })
-
   })
 
   test('style middleware transform border', () => {
