@@ -147,5 +147,8 @@ function setTextContent(node:Element, children:any):void{
     node.setElementText("" + children)
   }else if(typeof children === 'object'){
     node.setElementText(children.join(''))
+  }else {
+    // Boolean Value => Default Logic
+    node.setElementText("" + children)
   }
 }
