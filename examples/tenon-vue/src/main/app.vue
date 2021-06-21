@@ -53,8 +53,6 @@
 import ListItem from "./components/list-item";
 import { Menu } from "./assets/menu";
 export default {
-  pageStyle: {
-  },
   components: {
     ListItem,
   },
