@@ -80,22 +80,33 @@ HM_EXPORT_METHOD(send, send:)
     return components.URL;
 }
 
+typedef NSMutableDictionary HMPrimitiveResponse;
 - (void)handleResponse:(NSHTTPURLResponse *)resp
               withData:(NSData *)data
              withError:(NSError *)error
               callback:(HMFuncCallback)callback {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        HMResponse *response = [[HMResponse alloc] init];
-        response.error = error; response.status = resp.statusCode;
-        response.header = [resp allHeaderFields];
-        NSString *string = [[NSString alloc] initWithData:data
-                                                 encoding:NSUTF8StringEncoding];
-        response.data = HMJSONDecode(string);
-        
-        if(callback) {
-            callback(@[response]);
-        }
+    
+    NSString *string = [[NSString alloc] initWithData:data
+                                             encoding:NSUTF8StringEncoding];
+    
+    HMPrimitiveResponse *respone = [HMPrimitiveResponse new];
+    [respone setValue:@(resp.statusCode) forKey:@"status"];
+    if (error) {
 
+        NSMutableDictionary *errorDic = [NSMutableDictionary new];
+        [errorDic setObject:@(error.code) forKey:@"code"];
+        if(error.userInfo){
+            [errorDic setValuesForKeysWithDictionary:error.userInfo];
+        }
+        [respone setObject:errorDic forKey:@"error"];
+    }
+    [respone setValue:[resp allHeaderFields] forKey:@"header"];
+    [respone setValue:HMJSONDecode(string) forKey:@"data"];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(callback) {
+            callback(@[respone]);
+        }
     });
 }
 

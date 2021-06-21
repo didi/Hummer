@@ -15,12 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedManager;
 
-- (void)registerLoader:(id<HMImageLoader>)loader;
-- (void)resignLoader:(id<HMImageLoader>)loader;
-
-- (void)registerDecoder:(id<HMImageDecoder>)decoder;
-- (void)resignDecoder:(id<HMImageDecoder>)decoder;
-
 
 - (nullable id<HMImageLoaderOperation>)load:(id<HMURLConvertible>)source
                            inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource

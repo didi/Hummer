@@ -79,6 +79,7 @@
         @"rotateX": @"rotationX",
         @"rotateY": @"rotationY",
         @"rotateZ": @"rotationZ",
+        @"rotate": @"rotationZ",
         @"skew": @"skew",
     };
 }
@@ -90,7 +91,7 @@
     
     transformFuncStr = [transformFuncStr stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^(translate|(scale(X|Y)?)|(rotate((X|Y|Z){1}))|skew)" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^(translate|(scale(X|Y)?)|(rotate(X|Y|Z)?)|skew)" options:NSRegularExpressionCaseInsensitive error:&error];
     if (error) {
         HMLogError(@"HMTransitionAnimationTransfromFunc generate regex error!");
     }

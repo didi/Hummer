@@ -13,6 +13,7 @@
 #import "HMImageCache.h"
 #import "HMGIFImageDecoder.h"
 #import "HMUtility.h"
+#import "HMInterceptorManager.h"
 
 @interface HMImageManager()
 @property (nonatomic, strong, readwrite) NSMutableArray <id<HMImageLoader>> *loaders;
@@ -57,7 +58,7 @@
                                     context:(nullable HMImageLoaderContext *)context
                                  completion:(HMImageCompletionBlock)completionBlock{
     
-    id<HMImageLoader> loader = [self loaderForSource:source inJSBundleSource:bundleSource];
+    id<HMImageLoader> loader = [self loaderForSource:source inJSBundleSource:bundleSource context:context];
     __weak typeof(self) wSelf = self;
     NSString *cacheUrlString = [source hm_asString];
     if ([loader respondsToSelector:@selector(cacheKeyForSource:inJSBundleSource:)]) {
@@ -124,8 +125,13 @@
 }
 
 
-- (id<HMImageLoader>)loaderForSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)jsBundleSource {
+- (id<HMImageLoader>)loaderForSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)jsBundleSource context:(nullable HMImageLoaderContext *)context{
     
+    __block id<HMImageLoader> loader;
+    HMInterceptorScope(context[HMImageManagerContextNamespace], ^{
+        loader = [HMImageLoaderInterceptor interceptorCanLoad:source inJSBundleSource:jsBundleSource];
+    });
+    if (loader) {return loader;}
     for (id<HMImageLoader> loader in self.loaders) {
         
         if ([loader canLoad:source inJSBundleSource:jsBundleSource]) {

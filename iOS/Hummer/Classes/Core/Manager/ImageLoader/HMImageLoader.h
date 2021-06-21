@@ -17,6 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HMImageLoader <NSObject>
 
 - (BOOL)canLoad:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource;
+
+/**
+ * completionBlock: 如果返回的 data 是 Image 类型，则不会调用 decoder。
+ * 如果存在自定义loader，强烈建议直接返回 image。
+ */
 - (nullable id<HMImageLoaderOperation>)load:(id<HMURLConvertible>)source
                            inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource
                                     context:(nullable HMImageLoaderContext *)context                                    
