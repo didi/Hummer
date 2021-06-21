@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.3.0...@hummer/tenon-react@0.3.1) (2021-06-21)
+
+
+### Bug Fixes
+
+* 修复 Tenon React 中 text 组件文本为 Boolean 类型时无法展示的问题 ([774d56c](https://github.com/didi/Hummer/commit/774d56c7af99cac65888e5c3773ebf426bb7e354))
+
+
+
+
+
 # [0.3.0](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.2.1...@hummer/tenon-react@0.3.0) (2021-06-10)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.2.14...@hummer/tenon-vue@1.3.0) (2021-06-21)
+
+
+### Features
+
+* tenon vue add default export ([0242613](https://github.com/didi/Hummer/commit/02426132efd596487386dfa6c064aa4054fca4a1))
+
+
+
+
+
 ## [1.2.14](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.2.13...@hummer/tenon-vue@1.2.14) (2021-06-18)
 
 
