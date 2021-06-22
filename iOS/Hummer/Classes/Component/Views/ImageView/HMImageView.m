@@ -191,7 +191,7 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
             if (completionBlock) {
                 NSURL *url = [NSURL URLWithString:src];
                 NSString* scheme = [url scheme];
-                if ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]) {
+                if (scheme && ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"])) {
                     completionBlock(HMImageLoaderSrcTypeNetworking, YES);
                 } else {
                     completionBlock(HMImageLoaderSrcTypeLocalResource, YES);
