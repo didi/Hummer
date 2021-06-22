@@ -2,7 +2,9 @@ package com.didi.hummer.component.imageview;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
@@ -11,6 +13,7 @@ import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.render.component.view.HMBase;
@@ -55,7 +58,7 @@ public class Image extends HMBase<RoundedImageView> {
 
     /**
      * 如果Image控件本身没有设置大小，这里重新根据图片大小调整Image控件的大小
-     *
+     * <p>
      * 详细逻辑如下：
      * 1. 如果Image控件的宽和搞都没有设置，那么以图片的实际宽高作为Image控件的宽高；
      * 2. 如果Image控件的宽或高有一个设置了，那么按图片宽高比来计算Image控件的另一个未设置的宽过高；
@@ -159,46 +162,50 @@ public class Image extends HMBase<RoundedImageView> {
     }
 
     @JsMethod("load")
-    public void load(Object src) {
+    public void load(Object src, @Nullable JSCallback completeCallback) {
         if (src instanceof String) {
             // 普通图片处理
-            loadImage((String) src);
+            loadImage((String) src, completeCallback);
         } else if (src instanceof Map) {
             ImageStyle style = HMGsonUtil.fromJson(HMGsonUtil.toJson(src), ImageStyle.class);
             if (style != null) {
                 if (!TextUtils.isEmpty(style.gifSrc)) {
                     // gif图片处理
-                    loadGif(style.gifSrc, style.placeholder, style.failedImage, style.gifRepeatCount);
+                    loadGif(style.gifSrc, style.placeholder, style.failedImage, style.gifRepeatCount, completeCallback);
                 } else if (!TextUtils.isEmpty(style.src)) {
                     // 普通图片处理
-                    loadImage(style.src, style.placeholder, style.failedImage);
+                    loadImage(style.src, style.placeholder, style.failedImage, completeCallback);
                 }
             }
         }
     }
 
     private void loadImage(String url) {
-        loadImage(url, null, null);
+        loadImage(url, null, null, null);
     }
 
-    private void loadImage(String url, String placeholder, String failedImage) {
+    private void loadImage(String url, JSCallback completeCallback) {
+        loadImage(url, null, null, completeCallback);
+    }
+
+    private void loadImage(String url, String placeholder, String failedImage, JSCallback completeCallback) {
         ImageSizeCallback callback = null;
         if (getYogaNode().getWidth().unit == YogaUnit.AUTO || getYogaNode().getHeight().unit == YogaUnit.AUTO) {
             callback = this::adjustWidthAndHeight;
         }
-        ImageRenderUtil.renderImage((HummerContext) getContext(), getView(), url, placeholder, failedImage, callback);
+        ImageRenderUtil.renderImage((HummerContext) getContext(), getView(), url, placeholder, failedImage, callback, completeCallback);
     }
 
     private void loadGif(String url, int repeatCount) {
-        loadGif(url, null, null, repeatCount);
+        loadGif(url, null, null, repeatCount, null);
     }
 
-    private void loadGif(String url, String placeholder, String failedImage, int repeatCount) {
+    private void loadGif(String url, String placeholder, String failedImage, int repeatCount, JSCallback completeCallback) {
         ImageSizeCallback callback = null;
         if (getYogaNode().getWidth().unit == YogaUnit.AUTO || getYogaNode().getHeight().unit == YogaUnit.AUTO) {
             callback = this::adjustWidthAndHeight;
         }
-        ImageRenderUtil.renderGif((HummerContext) getContext(), getView(), url, placeholder, failedImage, repeatCount, callback);
+        ImageRenderUtil.renderGif((HummerContext) getContext(), getView(), url, placeholder, failedImage, repeatCount, callback, completeCallback);
     }
 
     @Override
@@ -262,7 +269,7 @@ public class Image extends HMBase<RoundedImageView> {
 
     @Override
     public boolean setStyle(String key, Object value) {
-        switch(key) {
+        switch (key) {
             case HummerStyleUtils.Hummer.RESIZE:
                 setContentMode(String.valueOf(value));
                 break;

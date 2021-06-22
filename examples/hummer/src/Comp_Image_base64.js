@@ -32,7 +32,13 @@ class RootView extends View {
         };
 
         let img1 = new Image();
-        img1.src = imageBase64;
+        img1.load(imageBase64, (srcType, isSuccess) => {
+            if(isSuccess){
+                console.log(`success ${srcType}`)
+            }else{
+                console.log(`fail ${srcType}`)
+            }
+        })
         img1.style = {
             width: 80,
             height: 60,

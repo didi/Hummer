@@ -10,6 +10,7 @@ import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.render.utility.YogaDrawableUtil;
 import com.didi.hummer.render.utility.YogaResUtils;
 import com.didi.hummer.utils.JsSourceUtil;
@@ -18,13 +19,15 @@ import com.didi.hummer.utils.JsSourceUtil;
  * Created by XiaoFeng on 2020/3/20.
  */
 public class ImageRenderUtil {
+    public static final int REMOTE_SRC = 1;
+    public static final int LOCAL_SRC = 2;
 
     public static void renderImage(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage) {
-        renderImage(context, imageView, imageSrc, placeholder, failedImage, false, 0);
+        renderImage(context, imageView, imageSrc, placeholder, failedImage, false, 0, null);
     }
 
-    public static void renderImage(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, ImageSizeCallback callback) {
-        renderImage(context, imageView, imageSrc, placeholder, failedImage, false, 0);
+    public static void renderImage(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, ImageSizeCallback callback, JSCallback completeCallback) {
+        renderImage(context, imageView, imageSrc, placeholder, failedImage, false, 0, completeCallback);
 
         if (callback != null) {
             getImageLoader(context).getImageSize(imageSrc, callback);
@@ -32,18 +35,18 @@ public class ImageRenderUtil {
     }
 
     public static void renderGif(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, int repeatCount) {
-        renderImage(context, imageView, imageSrc, placeholder, failedImage, true, repeatCount);
+        renderImage(context, imageView, imageSrc, placeholder, failedImage, true, repeatCount, null);
     }
 
-    public static void renderGif(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, int repeatCount, ImageSizeCallback callback) {
-        renderImage(context, imageView, imageSrc, placeholder, failedImage, true, repeatCount);
+    public static void renderGif(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, int repeatCount, ImageSizeCallback callback, JSCallback completeCallback) {
+        renderImage(context, imageView, imageSrc, placeholder, failedImage, true, repeatCount, completeCallback);
 
         if (callback != null) {
             getImageLoader(context).getImageSize(imageSrc, callback);
         }
     }
 
-    private static void renderImage(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, boolean isGif, int repeatCount) {
+    private static void renderImage(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, boolean isGif, int repeatCount, JSCallback completeCallback) {
         if (imageView == null || TextUtils.isEmpty(imageSrc)) {
             return;
         }
@@ -51,16 +54,16 @@ public class ImageRenderUtil {
         if (isRemoteImage(imageSrc)) {
             // 远程图片
             if (isGif) {
-                renderRemoteGif(context, imageView, imageSrc, placeholder, failedImage, repeatCount);
+                renderRemoteGif(context, imageView, imageSrc, placeholder, failedImage, repeatCount, completeCallback);
             } else {
-                renderRemoteImage(context, imageView, imageSrc, placeholder, failedImage);
+                renderRemoteImage(context, imageView, imageSrc, placeholder, failedImage, completeCallback);
             }
         } else if (isLocalAbsoluteImage(imageSrc)) {
             // 本地缓存图片（绝对路径）
             if (isGif) {
-                renderLocalGif(context, imageView, imageSrc, repeatCount);
+                renderLocalGif(context, imageView, imageSrc, repeatCount, completeCallback);
             } else {
-                renderLocalImage(context, imageView, imageSrc);
+                renderLocalImage(context, imageView, imageSrc, completeCallback);
             }
         } else if (isLocalRelativeImage(imageSrc)) {
             // 相对路径图片
@@ -69,23 +72,23 @@ public class ImageRenderUtil {
             switch (jsSourceType) {
                 case JsSourceUtil.JS_SOURCE_TYPE_ASSETS:
                     if (isGif) {
-                        renderAssetsGif(context, imageView, imageSrc, repeatCount);
+                        renderAssetsGif(context, imageView, imageSrc, repeatCount, completeCallback);
                     } else {
-                        renderAssetsImage(context, imageView, imageSrc);
+                        renderAssetsImage(context, imageView, imageSrc, completeCallback);
                     }
                     break;
                 case JsSourceUtil.JS_SOURCE_TYPE_FILE:
                     if (isGif) {
-                        renderLocalGif(context, imageView, imageSrc, repeatCount);
+                        renderLocalGif(context, imageView, imageSrc, repeatCount, completeCallback);
                     } else {
-                        renderLocalImage(context, imageView, imageSrc);
+                        renderLocalImage(context, imageView, imageSrc, completeCallback);
                     }
                     break;
                 case JsSourceUtil.JS_SOURCE_TYPE_HTTP:
                     if (isGif) {
-                        renderRemoteGif(context, imageView, imageSrc, placeholder, failedImage, repeatCount);
+                        renderRemoteGif(context, imageView, imageSrc, placeholder, failedImage, repeatCount, completeCallback);
                     } else {
-                        renderRemoteImage(context, imageView, imageSrc, placeholder, failedImage);
+                        renderRemoteImage(context, imageView, imageSrc, placeholder, failedImage, completeCallback);
                     }
                     break;
                 default:
@@ -93,13 +96,13 @@ public class ImageRenderUtil {
             }
         } else if (isBase64Image(imageSrc)) {
             // base64格式的图片
-            renderBase64Image(imageView, imageSrc);
+            renderBase64Image(imageView, imageSrc, completeCallback);
         } else {
             // Native环境下的资源图片（drawable目录下）
             if (isGif) {
-                renderResourceGif(context, imageView, imageSrc, repeatCount);
+                renderResourceGif(context, imageView, imageSrc, repeatCount, completeCallback);
             } else {
-                renderResourceImage(context, imageView, imageSrc);
+                renderResourceImage(context, imageView, imageSrc, completeCallback);
             }
         }
     }
@@ -130,58 +133,61 @@ public class ImageRenderUtil {
         return url;
     }
 
-    private static void renderRemoteImage(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage) {
+    private static void renderRemoteImage(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, JSCallback callback) {
         if (TextUtils.isEmpty(imageSrc)) {
             return;
         }
         YogaDrawableUtil.loadDrawable(context, placeholder, drawable1 -> {
             YogaDrawableUtil.loadDrawable(context, failedImage, drawable2 -> {
-                getImageLoader(context).setImage(fitRemoteUrl(imageSrc), drawable1, drawable2, imageView);
+                getImageLoader(context).setImage(fitRemoteUrl(imageSrc), drawable1, drawable2, imageView, callback, REMOTE_SRC);
             });
         });
     }
 
-    private static void renderLocalImage(HummerContext context, ImageView imageView, String imageSrc) {
-        getImageLoader(context).setImage(imageSrc, imageView);
+    private static void renderLocalImage(HummerContext context, ImageView imageView, String imageSrc, JSCallback completeCallback) {
+        getImageLoader(context).setImage(imageSrc, imageView, completeCallback, LOCAL_SRC);
     }
 
-    private static void renderAssetsImage(HummerContext context, ImageView imageView, String imageSrc) {
+    private static void renderAssetsImage(HummerContext context, ImageView imageView, String imageSrc, JSCallback completeCallback) {
         imageSrc = "file:///android_asset/" + imageSrc;
-        getImageLoader(context).setImage(imageSrc, imageView);
+        getImageLoader(context).setImage(imageSrc, imageView, completeCallback, LOCAL_SRC);
     }
 
-    private static void renderBase64Image(ImageView imageView, String imageSrc) {
+    private static void renderBase64Image(ImageView imageView, String imageSrc, JSCallback completeCallback) {
         try {
             byte[] bitmapArray = Base64.decode(imageSrc.split(",")[1], Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
             imageView.setImageBitmap(bitmap);
-        } catch (Exception e) {}
+            completeCallback.call(LOCAL_SRC, true);
+        } catch (Exception e) {
+            completeCallback.call(LOCAL_SRC, false);
+        }
     }
 
-    private static void renderResourceImage(HummerContext context, ImageView imageView, String imageSrc) {
+    private static void renderResourceImage(HummerContext context, ImageView imageView, String imageSrc, JSCallback completeCallback) {
         int imageId = YogaResUtils.getResourceId(imageSrc, "drawable", null);
-        getImageLoader(context).setImage(imageId, imageView);
+        getImageLoader(context).setImage(imageId, imageView, completeCallback, LOCAL_SRC);
     }
 
-    private static void renderRemoteGif(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, int repeatCount) {
+    private static void renderRemoteGif(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, int repeatCount, JSCallback completeCallback) {
         if (TextUtils.isEmpty(imageSrc)) {
             return;
         }
-        getImageLoader(context).setGif(fitRemoteUrl(imageSrc), repeatCount, imageView);
+        getImageLoader(context).setGif(fitRemoteUrl(imageSrc), repeatCount, imageView, completeCallback, REMOTE_SRC);
     }
 
-    private static void renderLocalGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount) {
-        getImageLoader(context).setGif(imageSrc, repeatCount, imageView);
+    private static void renderLocalGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount, JSCallback completeCallback) {
+        getImageLoader(context).setGif(imageSrc, repeatCount, imageView, completeCallback, LOCAL_SRC);
     }
 
-    private static void renderAssetsGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount) {
+    private static void renderAssetsGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount, JSCallback completeCallback) {
         imageSrc = "file:///android_asset/" + imageSrc;
-        getImageLoader(context).setGif(imageSrc, repeatCount, imageView);
+        getImageLoader(context).setGif(imageSrc, repeatCount, imageView, completeCallback, LOCAL_SRC);
     }
 
-    private static void renderResourceGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount) {
+    private static void renderResourceGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount, JSCallback completeCallback) {
         int imageId = YogaResUtils.getResourceId(imageSrc, "drawable", null);
-        getImageLoader(context).setGif(imageId, repeatCount, imageView);
+        getImageLoader(context).setGif(imageId, repeatCount, imageView, completeCallback, LOCAL_SRC);
     }
 
     private static IImageLoaderAdapter getImageLoader(HummerContext context) {
