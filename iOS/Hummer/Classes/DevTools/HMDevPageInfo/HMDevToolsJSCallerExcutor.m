@@ -7,6 +7,7 @@
 
 #import "HMDevToolsJSCallerExcutor.h"
 #import "HMInterceptor.h"
+#import <Hummer/HMDebug.h>
 
 @interface HMDevToolsJSCallerExcutor ()<HMJSCallerIterceptor>
 
@@ -14,7 +15,7 @@
 
 @implementation HMDevToolsJSCallerExcutor
 
-#if DEBUG
+#ifdef HMDEBUG
 HM_EXPORT_INTERCEPTOR(HMDevToolsJSCallerExcutor)
 #endif
 

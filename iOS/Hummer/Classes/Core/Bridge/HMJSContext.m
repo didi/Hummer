@@ -19,6 +19,7 @@
 #import "HMExceptionModel.h"
 #import "HMBaseValue.h"
 #import "HMJSGlobal.h"
+#import <Hummer/HMDebug.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -54,14 +55,14 @@ static inline HMCLILogLevel convertNativeLogLevel(HMLogLevel logLevel) {
 
 @end
 
-#if defined(DEBUG)
+#ifdef HMDEBUG
 API_AVAILABLE(ios(13.0))
 #endif
 @interface HMJSContext () // <NSURLSessionWebSocketDelegate>
 
 @property (nonatomic, weak, nullable) UIView *rootView;
 
-#if defined(DEBUG)
+#ifdef HMDEBUG
 @property (nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
 
 - (void)handleWebSocket;
@@ -91,8 +92,8 @@ NS_ASSUME_NONNULL_END
         [((UIView *) componentViewObject) removeFromSuperview];
     }
     HMLogDebug(@"HMJSContext 销毁");
-#if defined(DEBUG)
-    self.context.consoleHandler = nil;
+#ifdef HMDEBUG
+    self.context.webSocketHandler = nil;
     [self.webSocketTask cancel];
 #endif
 }
@@ -177,11 +178,11 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
-#if defined(DEBUG)
+#ifdef HMDEBUG
 - (void)handleWebSocket {
     if (@available(iOS 13, *)) {
         if (self.webSocketTask.state == NSURLSessionTaskStateCanceling || self.webSocketTask.state == NSURLSessionTaskStateCompleted) {
-            self.context.consoleHandler = nil;
+            self.context.webSocketHandler = nil;
             self.webSocketTask = nil;
         }
     }
@@ -196,7 +197,7 @@ NS_ASSUME_NONNULL_END
         self.url = [NSURL URLWithString:fileName];
     }
     
-#if defined(DEBUG)
+#ifdef HMDEBUG
     if (@available(iOS 13, *)) {
         if (!self.webSocketTask && fileName.length > 0) {
             NSURLComponents *urlComponents = [NSURLComponents componentsWithString:fileName];
@@ -212,7 +213,7 @@ NS_ASSUME_NONNULL_END
                     // 启动
                     [self.webSocketTask resume];
                     __weak typeof(self) weakSelf = self;
-                    self.context.consoleHandler = ^(NSString * _Nullable logString, HMLogLevel logLevel) {
+                    self.context.webSocketHandler = ^(NSString * _Nullable logString, HMLogLevel logLevel) {
                         typeof(weakSelf) strongSelf = weakSelf;
                         // 避免 "(null)" 情况
                         NSURLSessionWebSocketMessage *webSocketMessage = [[NSURLSessionWebSocketMessage alloc] initWithString:[NSString stringWithFormat:@"{type:\"log\",data:{level:%lu,message:\"%@\"}}", convertNativeLogLevel(logLevel), logString.length > 0 ? logString : @""]];

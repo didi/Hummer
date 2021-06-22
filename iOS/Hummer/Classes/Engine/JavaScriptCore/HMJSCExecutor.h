@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) void (^consoleHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
 
+@property (nonatomic, copy, nullable) void (^webSocketHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -20,8 +20,8 @@
 #import "HMJavaScriptLoader.h"
 #import "HMJSGlobal+Private.h"
 #import "HMExceptionModel.h"
-
-#if DEBUG
+#import <Hummer/HMDebug.h>
+#ifdef HMDEBUG
 #import "HMDevTools.h"
 #endif
 
@@ -327,7 +327,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     [UIView hm_reSortFixedView:context];
 
 
-#if DEBUG
+#ifdef HMDEBUG
     // 添加debug按钮
     [HMDevTools showInContext:context];
 #endif
