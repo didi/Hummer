@@ -31,7 +31,7 @@ import static com.bumptech.glide.load.DataSource.REMOTE;
  */
 public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     // 加载失败
-    private static final int FAIL_SRC = -1;
+    private static final int FAIL_SRC = 0;
     // 远程图片
     private static final int REMOTE_SRC = 1;
     // 本地图片
