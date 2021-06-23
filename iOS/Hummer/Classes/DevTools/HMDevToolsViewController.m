@@ -75,10 +75,7 @@
             return hierarchyVC;
         }],
         [HMDevToolsMenuItem menuItemWithTitle:@"函数树" container:^UIViewController * _Nonnull(HMJSContext * _Nonnull context) {
-            HMDevPageInfoViewController *pageVC = HMDevPageInfoViewController.new;
-            pageVC.context = context;
-            pageVC.textType = HMDevToolsTextTypeCallerTree;
-            return pageVC;
+            return UIViewController.new;
         }],
         [HMDevToolsMenuItem menuItemWithTitle:@"性能" container:^UIViewController * _Nonnull(HMJSContext * _Nonnull context) {
             return UIViewController.new;
