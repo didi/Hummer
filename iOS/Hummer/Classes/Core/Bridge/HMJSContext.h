@@ -12,7 +12,15 @@
 @protocol HMBaseExecutorProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @class HMJSContext;
+
+@interface UIView (HMJSContext)
+
+@property (nonatomic, nullable, strong) HMJSContext *hm_context;
+
+@end
+
 @protocol HMJSContextDelegate <NSObject>
 - (void)context:(HMJSContext *)context didRenderPage:(HMBaseValue *)page;
 
