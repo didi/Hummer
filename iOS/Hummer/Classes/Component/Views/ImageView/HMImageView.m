@@ -189,11 +189,10 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
             [strongSelf hm_markDirty];
             
             if (completionBlock) {
-                NSURL *url = [NSURL URLWithString:src];
-                NSString* scheme = [url scheme];
-                if (scheme && ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"])) {
+                if (cacheType == HMImageCacheTypeNone) {
                     completionBlock(HMImageLoaderSrcTypeNetworking, YES);
-                } else {
+
+                } else if (cacheType == HMImageCacheTypeDisk) {
                     completionBlock(HMImageLoaderSrcTypeLocalResource, YES);
                 }
             }
