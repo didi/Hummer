@@ -113,6 +113,9 @@ JSValueRef _Nullable nativeLoggingHook(JSContextRef ctx, JSObjectRef function, J
     if (executor.consoleHandler) {
         executor.consoleHandler(logString, logLevel);
     }
+    if (executor.webSocketHandler) {
+        executor.webSocketHandler(logString, logLevel);
+    }
     
     return NULL;
 }
