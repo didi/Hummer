@@ -10,13 +10,13 @@ class RootView extends Scroller {
             paddingTop: 10,
         }
 
-        // this.testBackground();
+        this.testBackground();
 
-        // this.testSrc();
+        this.testSrc();
 
-        // this.testSrcResize();
+        this.testSrcResize();
 
-        // this.testGifResize();
+        this.testGifResize();
 
         this.testImageReady();
     }

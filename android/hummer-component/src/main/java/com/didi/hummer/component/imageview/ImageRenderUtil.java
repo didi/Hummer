@@ -19,8 +19,6 @@ import com.didi.hummer.utils.JsSourceUtil;
  * Created by XiaoFeng on 2020/3/20.
  */
 public class ImageRenderUtil {
-    public static final int REMOTE_SRC = 1;
-    public static final int LOCAL_SRC = 2;
 
     public static void renderImage(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage) {
         renderImage(context, imageView, imageSrc, placeholder, failedImage, false, 0, null);
@@ -139,18 +137,18 @@ public class ImageRenderUtil {
         }
         YogaDrawableUtil.loadDrawable(context, placeholder, drawable1 -> {
             YogaDrawableUtil.loadDrawable(context, failedImage, drawable2 -> {
-                getImageLoader(context).setImage(fitRemoteUrl(imageSrc), drawable1, drawable2, imageView, callback, REMOTE_SRC);
+                getImageLoader(context).setImage(fitRemoteUrl(imageSrc), drawable1, drawable2, imageView, callback);
             });
         });
     }
 
     private static void renderLocalImage(HummerContext context, ImageView imageView, String imageSrc, JSCallback completeCallback) {
-        getImageLoader(context).setImage(imageSrc, imageView, completeCallback, LOCAL_SRC);
+        getImageLoader(context).setImage(imageSrc, imageView, completeCallback);
     }
 
     private static void renderAssetsImage(HummerContext context, ImageView imageView, String imageSrc, JSCallback completeCallback) {
         imageSrc = "file:///android_asset/" + imageSrc;
-        getImageLoader(context).setImage(imageSrc, imageView, completeCallback, LOCAL_SRC);
+        getImageLoader(context).setImage(imageSrc, imageView, completeCallback);
     }
 
     private static void renderBase64Image(ImageView imageView, String imageSrc, JSCallback completeCallback) {
@@ -158,36 +156,36 @@ public class ImageRenderUtil {
             byte[] bitmapArray = Base64.decode(imageSrc.split(",")[1], Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
             imageView.setImageBitmap(bitmap);
-            completeCallback.call(LOCAL_SRC, true);
+            completeCallback.call(2, true);
         } catch (Exception e) {
-            completeCallback.call(LOCAL_SRC, false);
+            completeCallback.call(-1, false);
         }
     }
 
     private static void renderResourceImage(HummerContext context, ImageView imageView, String imageSrc, JSCallback completeCallback) {
         int imageId = YogaResUtils.getResourceId(imageSrc, "drawable", null);
-        getImageLoader(context).setImage(imageId, imageView, completeCallback, LOCAL_SRC);
+        getImageLoader(context).setImage(imageId, imageView, completeCallback);
     }
 
     private static void renderRemoteGif(HummerContext context, ImageView imageView, String imageSrc, String placeholder, String failedImage, int repeatCount, JSCallback completeCallback) {
         if (TextUtils.isEmpty(imageSrc)) {
             return;
         }
-        getImageLoader(context).setGif(fitRemoteUrl(imageSrc), repeatCount, imageView, completeCallback, REMOTE_SRC);
+        getImageLoader(context).setGif(fitRemoteUrl(imageSrc), repeatCount, imageView, completeCallback);
     }
 
     private static void renderLocalGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount, JSCallback completeCallback) {
-        getImageLoader(context).setGif(imageSrc, repeatCount, imageView, completeCallback, LOCAL_SRC);
+        getImageLoader(context).setGif(imageSrc, repeatCount, imageView, completeCallback);
     }
 
     private static void renderAssetsGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount, JSCallback completeCallback) {
         imageSrc = "file:///android_asset/" + imageSrc;
-        getImageLoader(context).setGif(imageSrc, repeatCount, imageView, completeCallback, LOCAL_SRC);
+        getImageLoader(context).setGif(imageSrc, repeatCount, imageView, completeCallback);
     }
 
     private static void renderResourceGif(HummerContext context, ImageView imageView, String imageSrc, int repeatCount, JSCallback completeCallback) {
         int imageId = YogaResUtils.getResourceId(imageSrc, "drawable", null);
-        getImageLoader(context).setGif(imageId, repeatCount, imageView, completeCallback, LOCAL_SRC);
+        getImageLoader(context).setGif(imageId, repeatCount, imageView, completeCallback);
     }
 
     private static IImageLoaderAdapter getImageLoader(HummerContext context) {
