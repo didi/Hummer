@@ -49,12 +49,6 @@ static inline HMCLILogLevel convertNativeLogLevel(HMLogLevel logLevel) {
     }
 }
 
-@interface UIView (HMJSContext)
-
-@property (nonatomic, nullable, strong) HMJSContext *hm_context;
-
-@end
-
 #ifdef HMDEBUG
 API_AVAILABLE(ios(13.0))
 #endif
