@@ -47,7 +47,7 @@ static const CGFloat HMDevToolsWindowEntryViewSize = 50.f;
     if (![currentVC.childViewControllers containsObject:self.toolsVC]) {
         [currentVC addChildViewController:self.toolsVC];
         [currentVC.view addSubview:self.toolsVC.view];
-        self.toolsVC.view.frame = currentVC.view.frame;
+        self.toolsVC.view.frame = currentVC.view.bounds;
     }
     if (![currentVC.view.subviews containsObject:self]) {
         CGRect tagetFrame = currentVC.view.frame;
