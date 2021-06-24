@@ -570,6 +570,7 @@ public class List extends HMBase<SmartRefreshLayout> {
     public void stopLoadMore(boolean enable) {
         if (enable) {
             refreshLayout.finishLoadMore();
+            refreshLayout.resetNoMoreData();
         } else {
             refreshLayout.finishLoadMoreWithNoMoreData();
         }
