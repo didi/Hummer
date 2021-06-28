@@ -12,6 +12,8 @@ if (project.COMPILE_JS_ENGINE == 'All') {
     apply from: 'build_quickjs.gradle'
 } else if (project.COMPILE_JS_ENGINE == 'Hermes') {
     apply from: 'build_hermes.gradle'
+} else if (project.COMPILE_JS_ENGINE == 'NAPI') {
+    apply from: 'build_napi.gradle'
 }
 
 android {
@@ -42,6 +44,8 @@ android {
                 path "src/main/jni/qjs/CMakeLists.txt"
             } else if (project.COMPILE_JS_ENGINE == 'Hermes') {
                 path "src/main/jni/hermes/CMakeLists.txt"
+            } else if (project.COMPILE_JS_ENGINE == 'NAPI') {
+                path "src/main/jni/napi/CMakeLists.txt"
             }
         }
     }
