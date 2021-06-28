@@ -76,6 +76,11 @@ public class View extends HummerLayoutExtendView {
         }
 
         hummerNode.insertBefore(child.getNode(), existing.getNode());
+
+        // 以下控件需要限制子元素超出父容器
+        if (child instanceof Image || child instanceof Scroller || child instanceof HorizontalScroller || child instanceof List || child instanceof ViewPager) {
+            getView().setClipChildren(true);
+        }
     }
 
     @Override
@@ -88,6 +93,11 @@ public class View extends HummerLayoutExtendView {
         }
 
         hummerNode.replaceChild(child.getNode(), old.getNode());
+
+        // 以下控件需要限制子元素超出父容器
+        if (child instanceof Image || child instanceof Scroller || child instanceof HorizontalScroller || child instanceof List || child instanceof ViewPager) {
+            getView().setClipChildren(true);
+        }
     }
 
     @Override
