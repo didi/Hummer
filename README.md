@@ -72,19 +72,19 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 
 ### 里程碑
 - 5月底
-    - Tenon Router 发布
     - Tenon React 一期版本发布
-    - iOS 版 DevTools 发布
-    - 两端一致性达到 90%
+    - 两端一致性达到 80%
 - 6月底
+    - iOS 版 DevTools 发布
     - Tenon React 二期版本发布
-    - 两端一致性达到 95%
+    - Tenon Router 发布
 - 7月底
     - VSCode 调试插件发布
     - 视图调试能力发布
     - mand-mobild for Hummer 版组件库一期版本发布
     - 公共包抽离能力发布
     - 公共包抽离能力发布
+    - 两端一致性达到 90%
 - 8月底
     - VSCode 插件完整版发布
     - 增强版 DevTools 发布
