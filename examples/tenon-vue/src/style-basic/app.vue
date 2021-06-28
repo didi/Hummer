@@ -35,8 +35,8 @@
           <button class="btn" @tap="updateBorderStyle('border: dotted red')">
             border: dotted red
           </button>
-          <button class="btn" @tap="updateBorderStyle('border:.1rem dashed red')">
-            border: .1rem dashed red
+          <button class="btn" @tap="updateBorderStyle('border:.1rem dashed rgba(0,0,0)')">
+            border: .1rem dashed rgb(0,0,0)
           </button>
         </view>
       </view>
@@ -62,7 +62,7 @@
   height: 2rem;
   display: flex;
   justify-content: center;
-  border: 0.05rem solid black;
+  border: 0.05rem solid rgba(0,0,0, .2);
 }
 </style>
 
