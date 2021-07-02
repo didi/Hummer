@@ -9,6 +9,9 @@ export const GrammarMenu = {
   },{
     url: './directive-v-if.js',
     name: 'Directive v-if'
+  },{
+    url: './grammar-slot.js',
+    name: 'Grammar slot'
   }]
 }
 
