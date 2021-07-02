@@ -3,6 +3,7 @@ package com.didi.hummer.component.canvas;
 import android.graphics.Path;
 
 import com.didi.hummer.annotation.Component;
+import com.didi.hummer.annotation.JsMethod;
 
 @Component("CanvasPath")
 public class CanvasPath {
@@ -13,15 +14,19 @@ public class CanvasPath {
         return path;
     }
 
+    @JsMethod("moveTo")
     public void moveTo(float x, float y) {
         path.moveTo(x, y);
     }
 
+    @JsMethod("lineTo")
     public void lineTo(float x, float y) {
         path.lineTo(x, y);
     }
 
-
-
+    @JsMethod("close")
+    public void close() {
+        path.close();
+    }
 
 }
