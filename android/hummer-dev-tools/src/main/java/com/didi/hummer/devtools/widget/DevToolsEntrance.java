@@ -13,6 +13,7 @@ import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
+import com.didi.hummer.core.engine.napi.jni.JSException;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
@@ -46,13 +47,22 @@ public class DevToolsEntrance {
         mHummerContext = context;
         mJsContext = mHummerContext.getJsContext();
         mContainer = mHummerContext.getContainer();
-        HummerException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
+
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI) {
+            JSException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        } else {
+            HummerException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        }
 
         initView(context);
     }
 
     public void release() {
-        HummerException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI) {
+            JSException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        } else {
+            HummerException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        }
     }
 
     private void initView(Context context) {

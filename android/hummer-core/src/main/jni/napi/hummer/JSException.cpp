@@ -13,19 +13,27 @@ void reportExceptionIfNeed(NAPIEnv globalEnv) {
     std::string strErr;
 
     NAPIValue error;
-    napi_get_and_clear_last_exception(globalEnv, &error);
+    NAPIStatus status = napi_get_and_clear_last_exception(globalEnv, &error);
+    if (status != NAPIOK) {
+        return;
+    }
+
+    const char *err = nullptr;
     NAPIValue errValue;
-    napi_coerce_to_string(globalEnv, error, &errValue);
-    const char *err = JSUtils::toCString(globalEnv, errValue);
-    LOGE("eval error: %s", err);
+    status = napi_coerce_to_string(globalEnv, error, &errValue);
+    if (status == NAPIOK) {
+        err = JSUtils::toCString(globalEnv, errValue);
+    }
     if (err) {
         strErr.append(err);
     }
 
+    const char *stack = nullptr;
     NAPIValue stackValue;
-    napi_get_named_property(globalEnv, error, "stack", &stackValue);
-    const char *stack = JSUtils::toCString(globalEnv, stackValue);
-    LOGE("eval stack: %s", stack);
+    status = napi_get_named_property(globalEnv, error, "stack", &stackValue);
+    if (status == NAPIOK) {
+        stack = JSUtils::toCString(globalEnv, stackValue);
+    }
     if (stack) {
         strErr.append("\n").append(stack);
     }
@@ -45,11 +53,14 @@ void reportExceptionIfNeed(NAPIEnv globalEnv) {
         env->DeleteLocalRef(javaClass);
         JNI_DetachEnv();
     }
+
+    JSUtils::freeCString(globalEnv, err);
+    JSUtils::freeCString(globalEnv, stack);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_didi_hummer_core_engine_jsc_jni_HummerException_initJSException(JNIEnv *env, jclass clazz, jobject jcallback) {
+Java_com_didi_hummer_core_engine_napi_jni_JSException_init(JNIEnv *env, jclass clazz, jobject jcallback) {
     //生成一个全局引用，回调的时候findclass才不会为null
-//    callback = env->NewGlobalRef(jcallback);
+    callback = env->NewGlobalRef(jcallback);
 }

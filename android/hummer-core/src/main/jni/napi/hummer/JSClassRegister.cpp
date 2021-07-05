@@ -1,15 +1,15 @@
 //
-// Created by XiaoFeng on 2021/6/22.
+// Created by XiaoFeng on 2021/6/29.
 //
 
 #include <HummerJNI.h>
-#include <HummerClassRegister.h>
-#include <HummerRecycler.h>
+#include <JSClassRegister.h>
+#include <JSRecycler.h>
 #include <JSUtils.h>
 
 namespace Recycler {
     typedef struct {
-        long ctxId;
+        int64_t ctxId;
         int64_t objId;
     } Recycler;
 
@@ -21,7 +21,7 @@ namespace Recycler {
             return;
         }
 
-        HummerRecycler::recycle(s->ctxId, s->objId);
+        JSRecycler::recycle(s->ctxId, s->objId);
 
         free(s);
     }
@@ -41,7 +41,9 @@ namespace Recycler {
         }
 
         s->ctxId = JSUtils::toJsContextPtr(env);
-        s->objId = JSUtils::toJsValuePtr(env, argv[0]);
+        double objId;
+        napi_get_value_double(env, argv[0], &objId);
+        s->objId = objId;
 
         NAPIValue result;
         napi_create_external(env, s, class_finalizer, nullptr, &result);
@@ -49,9 +51,12 @@ namespace Recycler {
     }
 }
 
-void HummerClassRegister::init(NAPIEnv env) {
+void JSClassRegister::init(NAPIEnv env) {
     NAPIValue result;
-    NAPIDefineClass(env, Recycler::class_name, NAPI_AUTO_LENGTH, Recycler::class_constructor, nullptr, &result);
+    NAPIStatus status = NAPIDefineClass(env, Recycler::class_name, NAPI_AUTO_LENGTH, Recycler::class_constructor, nullptr, &result);
+    if (status != NAPIOK) {
+        return;
+    }
 
     NAPIValue global = JSUtils::createJsGlobal(env);
     napi_set_named_property(env, global, Recycler::class_name, result);

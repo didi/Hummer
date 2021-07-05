@@ -1,25 +1,19 @@
-package com.didi.hummer.core.engine.jsc;
+package com.didi.hummer.core.engine.napi;
 
 import com.didi.hummer.core.engine.JSCallback;
-import com.didi.hummer.core.engine.base.ICallback;
-import com.didi.hummer.core.engine.jsc.base.CallbackImpl;
+import com.didi.hummer.core.engine.napi.jni.JSEngine;
 
 /**
- * JS回调方法
- *
- * Created by XiaoFeng on 2019-09-25.
+ * Created by XiaoFeng on 2021/6/29.
  */
-public class JSCCallback extends JSCValue implements JSCallback {
+public class NAPICallback extends NAPIValue implements JSCallback {
 
-    private ICallback callback;
-
-    public static JSCCallback wrapper(long context, long value) {
-        return new JSCCallback(context, value);
+    public static NAPICallback wrapper(long context, long value) {
+        return new NAPICallback(context, value);
     }
 
-    private JSCCallback(long context, long value) {
+    private NAPICallback(long context, long value) {
         super(context, value);
-        callback = new CallbackImpl(context, value, -1);
         protect();
     }
 
@@ -39,6 +33,7 @@ public class JSCCallback extends JSCValue implements JSCallback {
         if (!isValid()) {
             return null;
         }
-        return callback.call(params);
+
+        return JSEngine.callFunction(context, -1, value, params);
     }
 }

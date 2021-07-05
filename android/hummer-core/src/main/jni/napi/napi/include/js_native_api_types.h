@@ -1,5 +1,5 @@
-#ifndef js_native_api_types_h
-#define js_native_api_types_h
+#ifndef SRC_JS_NATIVE_API_TYPES_H_
+#define SRC_JS_NATIVE_API_TYPES_H_
 
 #ifdef __cplusplus
 #define EXTERN_C_START                                                                                                 \
@@ -77,16 +77,15 @@ typedef enum
     NAPIDetachableArrayBufferExpected,
     NAPIWouldDeadLock,
     // 自定义添加错误
-    NAPIMemoryError
+    NAPIMemoryError,
+    NAPIHandleScopeEmpty
 } NAPIStatus;
-// 当添加新枚举值的时候，需要同时更新：
-// * 每个 js_native_api_{engine}.c/cc 文件 napi_get_last_error_info 函数的 LAST_STATUS 或者 const int lastStatus
-// * const char *errorMessages[] 也需要更新
 
 typedef NAPIValue (*NAPICallback)(NAPIEnv env, NAPICallbackInfo callbackInfo);
 
 typedef void (*NAPIFinalize)(NAPIEnv env, void *finalizeData, void *finalizeHint);
 
+// 不建议使用
 typedef struct
 {
     const char *utf8name;
@@ -105,4 +104,4 @@ typedef struct
 
 EXTERN_C_END
 
-#endif /* js_native_api_types_h */
+#endif // SRC_JS_NATIVE_API_TYPES_H_

@@ -1,14 +1,14 @@
-package com.didi.hummer.context.jsc;
+package com.didi.hummer.context.napi;
 
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
-import com.didi.hummer.core.engine.jsc.JSCContext;
-import com.didi.hummer.core.engine.jsc.jni.HummerBridge;
-import com.didi.hummer.core.engine.jsc.jni.HummerException;
-import com.didi.hummer.core.engine.jsc.jni.HummerRecycler;
+import com.didi.hummer.core.engine.napi.NAPIContext;
+import com.didi.hummer.core.engine.napi.jni.JSBridge;
+import com.didi.hummer.core.engine.napi.jni.JSException;
+import com.didi.hummer.core.engine.napi.jni.JSRecycler;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.core.util.HMLog;
@@ -17,23 +17,23 @@ import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
 
 
-public class JSCHummerContext extends HummerContext implements HummerBridge.InvokeCallback, HummerRecycler.RecycleCallback {
+public class NAPIHummerContext extends HummerContext implements JSBridge.InvokeCallback, JSRecycler.RecycleCallback {
 
-    private HummerBridge bridge;
-    private HummerRecycler recycler;
+    private JSBridge bridge;
+    private JSRecycler recycler;
 
-    public JSCHummerContext(@NonNull HummerLayout container) {
+    public NAPIHummerContext(@NonNull HummerLayout container) {
         this(container, null);
     }
 
-    public JSCHummerContext(@NonNull HummerLayout container, String namespace) {
+    public NAPIHummerContext(@NonNull HummerLayout container, String namespace) {
         super(container, namespace);
-        mJsContext = JSCContext.create();
-        bridge = new HummerBridge(mJsContext.getIdentify(), this);
-        recycler = new HummerRecycler(mJsContext.getIdentify(), this);
+        mJsContext = NAPIContext.create();
+        bridge = new JSBridge(mJsContext.getIdentify(), this);
+        recycler = new JSRecycler(mJsContext.getIdentify(), this);
 
         // 异常回调注册
-        HummerException.addJSContextExceptionCallback(mJsContext, e -> {
+        JSException.addJSContextExceptionCallback(mJsContext, e -> {
             ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Bundle>>", "", jsSourcePath, -1));
             HummerSDK.getException(namespace).onException(e);
 
@@ -48,7 +48,7 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
 
     @Override
     public void releaseJSContext() {
-        HummerException.removeJSContextExceptionCallback(mJsContext);
+        JSException.removeJSContextExceptionCallback(mJsContext);
         if (bridge != null) {
             bridge.onDestroy();
         }
