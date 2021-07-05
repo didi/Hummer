@@ -1,6 +1,8 @@
 import {styleDynamicTransformer} from '@hummer/tenon-utils'
 import {setCacheNode,handleFixedNodeByStyle,removeChildWithFixed} from '../helper/fixed-helper'
 import {handleAnimation, Animation} from '../helper/animation-helper'
+import {getClassStyle} from '../../utils/style'
+
 let __view_id = 0;
 export class Base {
   public _scopedId:string|null = null
@@ -52,23 +54,8 @@ export class Base {
 
   public updateStyle(){
     if(!this._scopedId) return
-    let CSSOM : any,
-        elementStyle = {}
-    if(!(CSSOM = (<any>__GLOBAL__).CSSOM)) return
-    const className = this.getAttribute('class') || ''
-    const scopedRuleSet = CSSOM.hasOwnProperty(this._scopedId) ? CSSOM[this._scopedId].classMap : new Map()
-    const classList = className.split(/\s/)
-    
-    classList.forEach((item: any) => {
-      if(item){
-        let globalStyleArr = CSSOM['global'].classMap.get(item) || []
-        globalStyleArr = globalStyleArr.map((item : any) => item?.style)
-        let scopeStylesArr = scopedRuleSet.get(item) || []
-        scopeStylesArr = scopeStylesArr.map((item : any) => item?.style)
-        // 将元素总样式、全局变量、scoped变量按照顺序合并
-        elementStyle = Object.assign({}, elementStyle, ...globalStyleArr, ...scopeStylesArr)
-      }
-    })
+    let className = this.getAttribute('class')
+    let elementStyle = getClassStyle(this, className, true, this._scopedId)
     if(Object.keys(elementStyle).length > 0){
       this.setStyle(elementStyle)
     }
