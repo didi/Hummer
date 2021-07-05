@@ -58,14 +58,7 @@ const collectStyleGroup = function(ruleSet: RuleSet, group: string){
     key && ruleList.forEach((rule:RuleNode) => {
       if(rule){
         let selectorMap = __GLOBAL__.CSSOM[group][key]
-        let selectorKey = ""
-        // 版本兼容，兼容老的 Tenon Style Loader: selector a；
-        if(typeof rule.selector === 'object'){
-          // new selector
-          selectorKey = rule.selector?.value
-        }else {
-          selectorKey = rule.selector
-        }
+        let selectorKey = rule.selector
         let styleList = selectorMap.get(selectorKey) || []
         styleList.push(rule)
         __GLOBAL__.CSSOM[group][key].set(selectorKey, styleList)
