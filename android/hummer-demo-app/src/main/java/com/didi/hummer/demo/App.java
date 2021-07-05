@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.didi.hummer.Hummer;
 import com.didi.hummer.HummerConfig;
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.http.impl.DefaultHttpAdapter;
 import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
 import com.didi.hummer.adapter.location.impl.DefaultLocationAdapter;
@@ -33,6 +34,8 @@ public class App extends Application {
 //        DoraemonKit.install(this, null, "cfe007137560fd511dfbcbbb3c9889c8");
 
 //        Hummer.initHermesDebugger(new DefaultHermesDebugger());
+
+        Hummer.setJsEngine(HummerSDK.JsEngine.NAPI);
 
         // Hummer SDK
         HummerConfig config = new HummerConfig.Builder()

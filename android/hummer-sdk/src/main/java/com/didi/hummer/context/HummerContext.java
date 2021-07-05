@@ -5,16 +5,13 @@ import android.content.ContextWrapper;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
-import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.util.DebugUtil;
-import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.module.notifycenter.NotifyCenter;
@@ -112,17 +109,6 @@ public class HummerContext extends ContextWrapper {
     protected void onCreate() {
         HMLog.d("HummerNative", "HummerContext.onCreate");
 
-        // 异常回调注册
-        HummerException.addJSContextExceptionCallback(mJsContext, e -> {
-            ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Bundle>>", "", jsSourcePath, -1));
-            HummerSDK.getException(namespace).onException(e);
-
-            if (DebugUtil.isDebuggable()) {
-                HMLog.e("HummerException", "Hummer Exception", e);
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
         registerInvoker(new HummerInvoker());
         registerInvoker(new NotifyCenterInvoker());
 
@@ -169,7 +155,6 @@ public class HummerContext extends ContextWrapper {
         HMLog.d("HummerNative", "HummerContext.onDestroy");
         destroy();
         NotifyCenter.release(mJsContext);
-        HummerException.removeJSContextExceptionCallback(mJsContext);
         releaseJSContext();
     }
 
