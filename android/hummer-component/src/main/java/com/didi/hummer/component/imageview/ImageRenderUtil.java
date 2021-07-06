@@ -156,9 +156,9 @@ public class ImageRenderUtil {
             byte[] bitmapArray = Base64.decode(imageSrc.split(",")[1], Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
             imageView.setImageBitmap(bitmap);
-            completeCallback.call(LOCAL_SRC, true);
+            completeCallback.call(2, true);
         } catch (Exception e) {
-            completeCallback.call(FAIL_SRC, false);
+            completeCallback.call(0, false);
         }
     }
 

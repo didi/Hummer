@@ -39,7 +39,12 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
 
     @Override
     public void setImage(String url, ImageView view) {
-        setImage(url, null, null, view, null);
+        setImage(url, null, null, view);
+    }
+
+    @Override
+    public void setImage(String url, Drawable placeholder, Drawable failedImage, ImageView view) {
+        setImage(url, placeholder, failedImage, view, null);
     }
 
     @Override
@@ -88,8 +93,18 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     }
 
     @Override
+    public void setGif(String url, int repeatCount, ImageView view) {
+        setGif(url, null, null, repeatCount, view);
+    }
+
+    @Override
     public void setGif(String url, int repeatCount, ImageView view, JSCallback completeCallback) {
         setGif(url, null, null, repeatCount, view, completeCallback);
+    }
+
+    @Override
+    public void setGif(String url, Drawable placeholder, Drawable failedImage, int repeatCount, ImageView view) {
+        setGif(url, placeholder, failedImage, repeatCount, view, null);
     }
 
     @SuppressLint("CheckResult")
@@ -136,6 +151,11 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     }
 
     @Override
+    public void setImage(int resId, ImageView view) {
+        setImage(resId, view, null);
+    }
+
+    @Override
     public void setImage(int resId, ImageView view, JSCallback completeCallback) {
         // 使用Glide加载resId图片时，.9图自动拉伸功能会失效，所以这里直接用原生加载方式
         if (view != null) {
@@ -148,6 +168,11 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
                 completeCallback.call(FAIL_SRC, false);
             }
         }
+    }
+
+    @Override
+    public void setGif(int resId, int repeatCount, ImageView view) {
+        setGif(resId, repeatCount, view, null);
     }
 
     @SuppressLint("CheckResult")
