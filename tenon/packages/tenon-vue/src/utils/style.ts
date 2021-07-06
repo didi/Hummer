@@ -114,10 +114,7 @@ function filterStyle(classList:Array<string> = []){
       case RelationType.Subselector:
         // case1: .a.b
         while(selector){
-          // TODO 优化 ClassList 选择器
-          console.log('Class List', classList,selector.value, classList.indexOf(selector.value))
           if(classList.indexOf(selector.value) < 0){
-            console.log('flag: ', false)
             flag = false
             break;
           }
