@@ -93,6 +93,7 @@ export const getClassStyle = function(instance: Base, className: string = '',sco
       scopeStylesArr = getScopedStyle(MatchType.Class, item, scopedId, filterStyle(classList))
     }
     // 将元素总样式、全局变量、scoped变量按照顺序合并
+    // TODO 增加样式优先级概念，处理 .a.b 和 .b 的优先级
     elementStyle = Object.assign({}, elementStyle, ...globalStyleArr, ...scopeStylesArr)
   })
   return elementStyle
