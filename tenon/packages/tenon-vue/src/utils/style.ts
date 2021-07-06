@@ -32,6 +32,14 @@ export const RuleKeyMap: Record<string, string> = {
   'idList': 'idMap'
 }
 
+export enum RelationType {
+  Subselector, // No combinator(Default) .a | .a.b
+  DescendantSpace, // .a .b
+  Child, // .a > .b
+  DirectAdjacent, // .a + .b
+  IndirectAdjacent, // .a ~ .b
+}
+
 export const collectStyle = function(ruleSetMap: RuleSetMap){
   if(!__GLOBAL__.CSSOM){
     const defaultRuleSetGroup = {
@@ -79,10 +87,10 @@ export const getClassStyle = function(instance: Base, className: string = '',sco
   
   classList.forEach((item: any) => {
     if(!item){return}
-    let globalStyleArr = getGlobalStyle(MatchType.Class, item)
+    let globalStyleArr = getGlobalStyle(MatchType.Class, item, filterStyle(classList))
     let scopeStylesArr:Array<Style> = []
     if(scoped && scopedId){
-      scopeStylesArr = getScopedStyle(MatchType.Class, item, scopedId)
+      scopeStylesArr = getScopedStyle(MatchType.Class, item, scopedId, filterStyle(classList))
     }
     // 将元素总样式、全局变量、scoped变量按照顺序合并
     elementStyle = Object.assign({}, elementStyle, ...globalStyleArr, ...scopeStylesArr)
@@ -90,7 +98,41 @@ export const getClassStyle = function(instance: Base, className: string = '',sco
   return elementStyle
 }
 
-function getGlobalStyle(type: MatchType, key:string):Array<Style>{
+function filterStyle(classList:Array<string> = []){
+  return (rule:any, ) => {
+    if(rule.relation === ''){
+      // 向下兼容
+      return true
+    }
+    let flag = true
+    let selector = rule.n_selector
+    // 不存在组合关系的话，直接返回，从而优化性能
+    if(!selector.next){
+      return true
+    }
+    switch(selector.relation){
+      case RelationType.Subselector:
+        // case1: .a.b
+        while(selector){
+          // TODO 优化 ClassList 选择器
+          console.log('Class List', classList,selector.value, classList.indexOf(selector.value))
+          if(classList.indexOf(selector.value) < 0){
+            console.log('flag: ', false)
+            flag = false
+            break;
+          }
+          selector = selector.next
+        }
+      break;
+      default:
+        break;
+    }
+    return flag
+  }
+
+}
+
+function getGlobalStyle(type: MatchType, key:string, filterFunc?: Function):Array<Style>{
   let styles:Array<Style> = []
   switch(type){
     case MatchType.Class:
@@ -99,12 +141,17 @@ function getGlobalStyle(type: MatchType, key:string):Array<Style>{
     default:
       break;
   }
-  return styles.map((item:any) => {
+  return styles.filter((item:any) => {
+    if(filterFunc){
+      return filterFunc(item)
+    }
+    return item
+  }).map((item:any) => {
     return item?.style
   })
 }
 
-function getScopedStyle(type:MatchType, key:string, scopedId: string):Array<Style>{
+function getScopedStyle(type:MatchType, key:string, scopedId: string, filterFunc?: Function):Array<Style>{
   let styles:Array<Style> = []
   const {CSSOM} = __GLOBAL__
   if(CSSOM[scopedId]){
@@ -116,7 +163,12 @@ function getScopedStyle(type:MatchType, key:string, scopedId: string):Array<Styl
         break;
     }
   }
-  return styles.map((item:any) => {
+  return styles.filter((item:any) => {
+    if(filterFunc){
+      return filterFunc(item)
+    }
+    return item
+  }).map((item:any) => {
     return item?.style
   })
 }
