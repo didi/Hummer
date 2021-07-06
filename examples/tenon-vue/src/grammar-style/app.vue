@@ -120,7 +120,7 @@
         <view class="item-container">
           <view class="box-container">
             <view
-              class="box"
+              class="static-class"
               style="background-color:black;"
             >
               <text>Box</text>
@@ -135,7 +135,7 @@
         <view class="item-container">
           <view class="box-container">
             <view
-              class="box"
+              class="static-class"
               style="background-color:#fa9153"
               :style="isDynamicBlackBox?'background-color:black;':''"
             >
@@ -170,6 +170,15 @@ export default {
 </script>
 <style lang="less" scoped>
 @import url("@common/assets/css/common.less");
+.box {
+  width: 1rem;
+  height: 1rem;
+  margin: 0.1rem;
+  background-color: #fa9153;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .static-class {
   width: 1rem;
   height: 1rem;
