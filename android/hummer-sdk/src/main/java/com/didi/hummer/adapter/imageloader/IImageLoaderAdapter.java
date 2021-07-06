@@ -36,6 +36,16 @@ public interface IImageLoaderAdapter {
      * @param placeholder 占位图
      * @param failedImage 失败图
      * @param view
+     */
+    void setImage(String url, Drawable placeholder, Drawable failedImage, ImageView view);
+
+    /**
+     * 设置普通图片
+     *
+     * @param url 图片路径（包括远程图片路径和本地图片路径）
+     * @param placeholder 占位图
+     * @param failedImage 失败图
+     * @param view
      * @param callback 成功失败回调
      */
     void setImage(String url, Drawable placeholder, Drawable failedImage, ImageView view, JSCallback callback);
@@ -45,10 +55,27 @@ public interface IImageLoaderAdapter {
      *
      * @param resId 本地资源图片id
      * @param view
+     */
+    void setImage(int resId, ImageView view);
+
+    /**
+     * 设置普通图片
+     *
+     * @param resId 本地资源图片id
+     * @param view
      * @param callback 成功失败回调
      */
     void setImage(int resId, ImageView view, JSCallback callback);
-    
+
+    /**
+     * 设置Gif图片
+     *
+     * @param url 图片路径（包括远程图片路径和本地图片路径）
+     * @param repeatCount 循环次数（用于Gif动画）
+     * @param view
+     */
+    void setGif(String url, int repeatCount, ImageView view);
+
     /**
      * 设置Gif图片
      *
@@ -67,9 +94,29 @@ public interface IImageLoaderAdapter {
      * @param failedImage 失败图
      * @param repeatCount 循环次数（用于Gif动画）
      * @param view
+     */
+    void setGif(String url, Drawable placeholder, Drawable failedImage, int repeatCount, ImageView view);
+
+    /**
+     * 设置Gif图片
+     *
+     * @param url 图片路径（包括远程图片路径和本地图片路径）
+     * @param placeholder 占位图
+     * @param failedImage 失败图
+     * @param repeatCount 循环次数（用于Gif动画）
+     * @param view
      * @param callback 成功失败回调
      */
     void setGif(String url, Drawable placeholder, Drawable failedImage, int repeatCount, ImageView view, JSCallback callback);
+
+    /**
+     * 设置Gif图片
+     *
+     * @param resId 本地资源图片id
+     * @param repeatCount 循环次数（用于Gif动画）
+     * @param view
+     */
+    void setGif(int resId, int repeatCount, ImageView view);
 
     /**
      * 设置Gif图片
