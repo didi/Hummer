@@ -6,6 +6,30 @@
     <view class="demo-container">
       <view class="demo-item">
         <view class="item-title">
+          <text class="item-title-text">静态 Class(并列选择器) </text>
+        </view>
+        <view class="item-container">
+          <view class="box-container">
+            <view class="static-class class1">
+              <text>Box</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="demo-item">
+        <view class="item-title">
+          <text class="item-title-text">静态 Class(聚合选择器) </text>
+        </view>
+        <view class="item-container">
+          <view class="box-container">
+            <view class="static-class class1 class2">
+              <text>Box</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="demo-item">
+        <view class="item-title">
           <text class="item-title-text">静态 Class(单一类) </text>
         </view>
         <view class="item-container">
@@ -146,45 +170,6 @@ export default {
 </script>
 <style lang="less" scoped>
 @import url("@common/assets/css/common.less");
-.page {
-  background-color: #eeeeee;
-  margin-bottom: 0.5rem;
-}
-.demo-header {
-  padding: 0.2rem 0;
-  background-color: #fa9153;
-}
-.demo-title {
-  font-size: 0.36rem;
-  width: 100%;
-  text-align: center;
-  color: white;
-}
-.demo-container {
-  margin-top: 0.2rem;
-}
-.demo-item {
-  background-color: #ffffff;
-  width: 100%;
-  margin-bottom: 0.2rem;
-  padding: 0.2rem 0;
-}
-.item-title {
-  text-align: center;
-}
-.item-title-text {
-  text-align: center;
-  font-size: 0.28rem;
-}
-.item-container {
-  margin-top: 0.2rem;
-}
-.box {
-  width: 1rem;
-  height: 1rem;
-  margin: 0.1rem;
-  background-color: #fa9153;
-}
 .static-class {
   width: 1rem;
   height: 1rem;
@@ -211,5 +196,13 @@ export default {
 .box-flex-row {
   display: flex;
   flex-direction: row;
+}
+
+// 并列关系样式
+.class1, .class2{
+  background-color: #fa9153;
+}
+.class1.class2{
+  background-color: #f3ba88;
 }
 </style>
