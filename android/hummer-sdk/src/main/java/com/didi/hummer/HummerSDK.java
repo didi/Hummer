@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.support.annotation.IntDef;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.didi.hummer.adapter.navigator.impl.ActivityStackManager;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
@@ -69,8 +70,6 @@ public class HummerSDK {
 
     public static void init(Context context, HummerConfig config) {
         long startTime = System.currentTimeMillis();
-        addHummerConfig(config);
-
         if (!isInited) {
             appContext = context.getApplicationContext();
             parseAppDebuggable(appContext);
@@ -83,6 +82,7 @@ public class HummerSDK {
             HummerException.init();
             isInited = true;
         }
+        addHummerConfig(config);
 
         Map<String, Object> params = new HashMap<>();
         params.put("isInited", isInited);
@@ -123,6 +123,10 @@ public class HummerSDK {
             HummerConfig c = configs.get(namespace);
             if (c == null || TextUtils.isEmpty(c.getNamespace())) {
                 configs.put(namespace, config);
+            } else {
+                if (DebugUtil.isDebuggable()) {
+                    Toast.makeText(appContext, "There is already a duplicate namespace: " + namespace, Toast.LENGTH_SHORT).show();
+                }
             }
         }
         if (!configs.containsKey(NAMESPACE_DEFAULT)) {
