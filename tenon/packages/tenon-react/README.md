@@ -2,7 +2,26 @@
 
 Tenon React 是 Hummer React 的核心运行时，用于 Tenon React 项目中使用。
 
+## 动画
+Hummer 动画支持两种动画方式，分别为 `Basic Animation``Frame Animation`,为了满足写顺序动画的需求，Tenon 侧增加了 `Step Animation`。
 
+
+#### 动画类型
+现阶段，Style 中仅支持以下几种样式
+| 属性名| 介绍 | 类型 |备注| 示例|
+|:---| :----:| :----: |:----:| :---|
+| position | 位移动画| Object\<PositionObject>| `PositionObject` 可见以下表格 | `position: {x: '100hm', y: 0}`|
+
+
+`Position Object`
+| 属性名| 介绍 | 类型| 备注|
+|:---| :----:| :----:| :---|
+| x | 横向位移| string \| number | 支持 hm、rem单位 |
+| y | 纵向位移| string \| number | 支持 hm、rem单位 |
+
+
+### 协议介绍
+### 如何使用
 
 ## 页面配置
 Tenon Render 时，支持修改页面的默认配置。

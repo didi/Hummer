@@ -106,4 +106,4 @@ export const Other = {
 
 
 // export const menus =  [GrammarMenu, ComponentMenu, HighComponent, Style, Animation, Plugin, Other]
-export const menus =  [GrammarMenu, ComponentMenu,HighComponent, Other]
+export const menus =  [GrammarMenu, ComponentMenu,HighComponent, Animation, Other]
