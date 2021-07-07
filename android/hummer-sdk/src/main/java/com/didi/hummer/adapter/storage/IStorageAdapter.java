@@ -7,6 +7,8 @@ package com.didi.hummer.adapter.storage;
  */
 public interface IStorageAdapter {
 
+    void setNamespace(String namespace);
+
     void set(String key, Object value);
 
     Object get(String key);

@@ -150,6 +150,7 @@ public class HummerConfig {
         if (storageAdapter == null) {
             storageAdapter = new DefaultStorageAdapter();
         }
+        storageAdapter.setNamespace(namespace);
         return storageAdapter;
     }
 
