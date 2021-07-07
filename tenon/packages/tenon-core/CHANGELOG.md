@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/didi/Hummer/compare/@hummer/tenon-core@0.3.0...@hummer/tenon-core@0.3.1) (2021-07-07)
+
+
+### Bug Fixes
+
+* **tenon:** 修复 Tenon React DataSet 缓存失效问题 ([87e378b](https://github.com/didi/Hummer/commit/87e378b6d25bda92b1e01284ac4bf66c3d8fe350))
+
+
+
+
+
 # [0.3.0](https://github.com/didi/Hummer/compare/@hummer/tenon-core@0.2.2...@hummer/tenon-core@0.3.0) (2021-07-06)
 
 
