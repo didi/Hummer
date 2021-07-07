@@ -170,9 +170,7 @@ export class Base {
    * @param value 属性值
    */
   setAttribute(key:string, value: any){
-    key.search(/^data-/) === 0 && key.split('data-')[1] && (this.dataset[key.split('data-')[1]] = value);
-    this.props.set(key, value)
-
+    this.setCacheProp(key, value)
     switch(key){
       case 'disabled':
         this.disabled = value
@@ -184,6 +182,17 @@ export class Base {
         this._setAttribute(key, value)
         break;
     }
+  }
+  // Cache Props To Get
+  private setCacheProp(key:string, value:any){
+    // 如果是 dataattr 格式的属性，缓存到 dataset 中，方便事件可以获取到 dataset （Chameleon事件需求）
+    if(/^data/.test(key)){
+      let dataKey = key.slice(4).toLowerCase()
+      if(dataKey){
+        this.dataset[dataKey] = value
+      }
+    }
+    this.props.set(key, value)
   }
 
   setClassStyle(value:string){
