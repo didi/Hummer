@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.4.0...@hummer/tenon-vue@1.4.1) (2021-07-07)
+
+
+### Bug Fixes
+
+* **tenon:** 修复 Tenon Vue 中 dataset 属性缓存失效问题 ([7350cae](https://github.com/didi/Hummer/commit/7350cae9804c5435eb484f28d87c23765cb71a0a))
+
+
+
+
+
 # [1.4.0](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.3.1...@hummer/tenon-vue@1.4.0) (2021-07-06)
 
 
