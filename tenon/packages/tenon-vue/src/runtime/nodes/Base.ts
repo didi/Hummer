@@ -183,6 +183,7 @@ export class Base {
    */
   setAttribute(key:string, value: any){
     key.search(/^data-/) === 0 && key.split('data-')[1] && (this.dataset[key.split('data-')[1]] = value);
+    
     this.props.set(key, value)
 
     switch(key){
