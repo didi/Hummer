@@ -64,6 +64,9 @@ export const Animation = {
     url: './animation-keyframe.js',
     name: 'Animation Keyframe'
   },{
+    url: './animation-steps.js',
+    name: 'Animation Step'
+  },{
     url: './animation-transition.js',
     name: 'Animation Transition'
   },]
