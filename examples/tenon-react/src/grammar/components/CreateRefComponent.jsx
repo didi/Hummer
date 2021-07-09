@@ -13,7 +13,7 @@ function CreateRefComponent({initialCount}){
   }, [])
   return (
     <view ref={ref}>
-      <text > Ref Get Rect</text>
+      <text> Ref Get Rect</text>
     </view>
   )
 }

@@ -1,3 +1,5 @@
+import {useRef} from 'react'
+
 import {LifeCycle, registerLifeCycle, validateLifeCycle} from '../lifecycle'
 
 export const usePageEvent = function(eventName: LifeCycle, callback: Function){
@@ -7,4 +9,14 @@ export const usePageEvent = function(eventName: LifeCycle, callback: Function){
   }
   // TODO Add Page Context To Cache Data
   registerLifeCycle(eventName, callback)
+}
+
+export function useAnimation(animation:any){
+  let ref = useRef(null)
+  function startAnimation(){
+    if(ref && ref.current){
+      (ref as any).current.setAnimation(animation)
+    }
+  }
+  return [ref, startAnimation]
 }

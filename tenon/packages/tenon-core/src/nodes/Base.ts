@@ -219,10 +219,15 @@ export class Base {
         return this.props.get(key)
     }
   }
-
+  // TODO:保持 Tenon Vue 的兼容，后期切换成同一 Core后，进行变更
   handleAnimation(animation: Animation){
     handleAnimation(this, animation)
   }
+
+  setAnimation(animation: Animation){
+    handleAnimation(this, animation)
+  }
+  
   addEventListener(event: string, func:Function){
     this.element.addEventListener(event, (e:any) => {
       // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝
