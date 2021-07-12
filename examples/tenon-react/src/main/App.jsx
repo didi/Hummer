@@ -24,7 +24,7 @@ function App() {
   return (
     <view className="page">
       <view className="demo-header">
-        <text className="demo-title">Demo App</text>
+        <text className="demo-title demo-title1">Tenon React</text>
       </view>
       <view className="list-container">
         {ListBoxs}

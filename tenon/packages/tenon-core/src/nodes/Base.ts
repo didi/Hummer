@@ -1,6 +1,8 @@
 import {styleDynamicTransformer} from '@hummer/tenon-utils'
 import {setCacheNode,handleFixedNodeByStyle,removeChildWithFixed} from '../helper/fixed-helper'
 import {handleAnimation, Animation} from '../helper/animation-helper'
+import {getClassStyle} from '../utils/style'
+
 let __view_id = 0;
 export class Base {
   public _scopedId:string|null = null
@@ -41,19 +43,7 @@ export class Base {
   }
 
   public updateStyle(className:string = ''){
-    let CSSOM : any,
-        elementStyle = {}
-    if(!(CSSOM = (<any>__GLOBAL__).CSSOM)) return
-    const classList = className.split(/\s/)
-    
-    classList.forEach((item: any) => {
-      if(item){
-        let globalStyleArr = CSSOM['global'].classMap.get(item) || []
-        globalStyleArr = globalStyleArr.map((item : any) => item?.style)
-        // 将元素总样式、全局变量、scoped变量按照顺序合并
-        elementStyle = Object.assign({}, elementStyle, ...globalStyleArr)
-      }
-    })
+    let elementStyle = getClassStyle(this, className, false)
     if(Object.keys(elementStyle).length > 0){
       this.setStyle(elementStyle)
     }
@@ -180,9 +170,7 @@ export class Base {
    * @param value 属性值
    */
   setAttribute(key:string, value: any){
-    key.search(/^data-/) === 0 && key.split('data-')[1] && (this.dataset[key.split('data-')[1]] = value);
-    this.props.set(key, value)
-
+    this.setCacheProp(key, value)
     switch(key){
       case 'disabled':
         this.disabled = value
@@ -194,6 +182,17 @@ export class Base {
         this._setAttribute(key, value)
         break;
     }
+  }
+  // Cache Props To Get
+  private setCacheProp(key:string, value:any){
+    // 如果是 dataattr 格式的属性，缓存到 dataset 中，方便事件可以获取到 dataset （Chameleon事件需求）
+    if(/^data/.test(key)){
+      let dataKey = key.slice(4).toLowerCase()
+      if(dataKey){
+        this.dataset[dataKey] = value
+      }
+    }
+    this.props.set(key, value)
   }
 
   setClassStyle(value:string){
@@ -220,10 +219,15 @@ export class Base {
         return this.props.get(key)
     }
   }
-
+  // TODO:保持 Tenon Vue 的兼容，后期切换成同一 Core后，进行变更
   handleAnimation(animation: Animation){
     handleAnimation(this, animation)
   }
+
+  setAnimation(animation: Animation){
+    handleAnimation(this, animation)
+  }
+  
   addEventListener(event: string, func:Function){
     this.element.addEventListener(event, (e:any) => {
       // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝

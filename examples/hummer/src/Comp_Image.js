@@ -1,4 +1,4 @@
-class RootView extends View {
+class RootView extends Scroller {
     initialize() {
         let environment = Hummer.env;
         this.style = {
@@ -17,108 +17,110 @@ class RootView extends View {
         this.testSrcResize();
 
         this.testGifResize();
+
+        this.testImageReady();
     }
 
     testBackground() {
-            let titleView = new Text();
-            titleView.text = 'Image - 背景';
-            titleView.style = {
-                color: '#333333',
-                fontSize: 16,
-            };
+        let titleView = new Text();
+        titleView.text = 'Image - 背景';
+        titleView.style = {
+            color: '#333333',
+            fontSize: 16,
+        };
 
-            let layout = new View();
-            layout.style = {
-                flexDirection: 'row',
-                padding: 10,
-                borderWidth: 1,
-                borderColor: '#22222222',
-                flexWrap: 'wrap',
-            };
+        let layout = new View();
+        layout.style = {
+            flexDirection: 'row',
+            padding: 10,
+            borderWidth: 1,
+            borderColor: '#22222222',
+            flexWrap: 'wrap',
+        };
 
-            let img1 = new Image();
-            img1.style = {
-                width: 60,
-                height: 60,
-                backgroundColor: '#FF0000',
-            };
+        let img1 = new Image();
+        img1.style = {
+            width: 60,
+            height: 60,
+            backgroundColor: '#FF0000',
+        };
 
-            let img2 = new Image();
-            img2.style = {
-                width: 60,
-                height: 60,
-                backgroundColor: '#FF000044',
-                marginLeft: 10,
-            };
+        let img2 = new Image();
+        img2.style = {
+            width: 60,
+            height: 60,
+            backgroundColor: '#FF000044',
+            marginLeft: 10,
+        };
 
-            let img3 = new Image();
-            img3.style = {
-                width: 60,
-                height: 60,
-                backgroundColor: 'linear-gradient(90deg #FF000060 #00FF0060)',
-                marginLeft: 10,
-            };
+        let img3 = new Image();
+        img3.style = {
+            width: 60,
+            height: 60,
+            backgroundColor: 'linear-gradient(90deg #FF000060 #00FF0060)',
+            marginLeft: 10,
+        };
 
-            let img4 = new Image();
-            img4.style = {
-                width: 80,
-                height: 60,
-                backgroundImage: 'njimage_demo',
-                marginLeft: 10,
-            };
+        let img4 = new Image();
+        img4.style = {
+            width: 80,
+            height: 60,
+            backgroundImage: 'njimage_demo',
+            marginLeft: 10,
+        };
 
-            let img5 = new Image();
-            img5.style = {
-                width: 60,
-                height: 60,
-                backgroundColor: '#FF0000',
-                borderWidth: 2,
-                borderColor: '#000000',
-                borderRadius: 10,
-                marginTop: 10,
-            };
+        let img5 = new Image();
+        img5.style = {
+            width: 60,
+            height: 60,
+            backgroundColor: '#FF0000',
+            borderWidth: 2,
+            borderColor: '#000000',
+            borderRadius: 10,
+            marginTop: 10,
+        };
 
-            let img6 = new Image();
-            img6.style = {
-                width: 60,
-                height: 60,
-                backgroundColor: '#FF0000',
-                borderRadius: 10,
-                marginLeft: 10,
-                marginTop: 10,
-            };
+        let img6 = new Image();
+        img6.style = {
+            width: 60,
+            height: 60,
+            backgroundColor: '#FF0000',
+            borderRadius: 10,
+            marginLeft: 10,
+            marginTop: 10,
+        };
 
-            let img7 = new Image();
-            img7.style = {
-                width: 60,
-                height: 60,
-                backgroundColor: 'linear-gradient(90deg #FF000060 #00FF0060)',
-                borderRadius: 10,
-                marginLeft: 10,
-                marginTop: 10,
-            };
+        let img7 = new Image();
+        img7.style = {
+            width: 60,
+            height: 60,
+            backgroundColor: 'linear-gradient(90deg #FF000060 #00FF0060)',
+            borderRadius: 10,
+            marginLeft: 10,
+            marginTop: 10,
+        };
 
-            let img8 = new Image();
-            img8.style = {
-                width: 80,
-                height: 60,
-                backgroundImage: 'njimage_demo',
-                borderRadius: 10,
-                marginLeft: 10,
-                marginTop: 10,
-            };
+        let img8 = new Image();
+        img8.style = {
+            width: 80,
+            height: 60,
+            backgroundImage: 'njimage_demo',
+            borderRadius: 10,
+            marginLeft: 10,
+            marginTop: 10,
+        };
 
-            layout.appendChild(img1);
-            layout.appendChild(img2);
-            layout.appendChild(img3);
-            layout.appendChild(img4);
-            layout.appendChild(img5);
-            layout.appendChild(img6);
-            layout.appendChild(img7);
-            layout.appendChild(img8);
-            this.appendChild(titleView);
-            this.appendChild(layout);
-        }
+        layout.appendChild(img1);
+        layout.appendChild(img2);
+        layout.appendChild(img3);
+        layout.appendChild(img4);
+        layout.appendChild(img5);
+        layout.appendChild(img6);
+        layout.appendChild(img7);
+        layout.appendChild(img8);
+        this.appendChild(titleView);
+        this.appendChild(layout);
+    }
 
     testSrc() {
         let titleView = new Text();
@@ -498,6 +500,110 @@ class RootView extends View {
         subLayout8.appendChild(img8);
         subLayout8.appendChild(text8);
         layout.appendChild(subLayout8);
+    }
+
+    testImageReady() {
+        let titleView = new Text();
+        titleView.text = 'Image - 成功失败回调';
+        titleView.style = {
+            color: '#333333',
+            fontSize: 16,
+            marginTop: 10
+        };
+
+        let layout = new View();
+        layout.style = {
+            flexDirection: 'row',
+            padding: 10,
+            borderWidth: 1,
+            borderColor: '#22222222',
+            flexWrap: 'wrap',
+        };
+
+        let img1 = new Image();
+        img1.load('http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg', (srcType, isSuccess) => {
+            if(isSuccess){
+                console.log(`xxxx____RemoteLoad Success  srcType = ${srcType}`)
+            }else{
+                console.log(`xxxx____RemoteLoad Fail  srcType = ${srcType}`)
+            }
+        });
+        img1.style = {
+            width: 60,
+            height: 60,
+        };
+
+        let img2 = new Image();
+        img2.load('njimage_demo', (srcType, isSuccess) => {
+            if(isSuccess){
+                console.log(`xxxx____ResIdLoad Success  srcType = ${srcType}`)
+            }else{
+                console.log(`xxxx____ResIdLoad Fail  srcType = ${srcType}`)
+            }
+        });
+        img2.style = {
+            width: 60,
+            height: 60,
+            marginLeft: 10
+        };
+
+        let img3 = new Image();
+        img3.load('//b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg', (srcType, isSuccess) => {
+            if(isSuccess){
+                console.log(`xxxx____RemoteSimpleLoad Success  srcType = ${srcType}`)
+            }else{
+                console.log(`xxxx____RemoteSimpleLoad fail  srcType = ${srcType}`)
+            }
+        })
+        img3.style = {
+            width: 60,
+            height: 60,
+            marginLeft: 10
+        };
+
+        let img4 = new Image();
+        img4.load({
+            src: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg',
+            placeholder: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg',
+            failedImage: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg'
+        }, (srcType, isSuccess) => {
+            if(isSuccess){
+                console.log(`xxxx____ObjectRemoteLoad Success  srcType = ${srcType}`)
+            }else{
+                console.log(`xxxx____ObjectRemoteLoad fail  srcType = ${srcType}`)
+            }
+        })
+        img4.style = {
+            width: 60,
+            height: 60,
+            marginLeft: 10
+        };
+
+        let img5 = new Image()
+        img5.load({
+            src: 'njimage_demo',
+            placeholder: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg',
+            failedImage: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg'
+        }, (srcType, isSuccess) => {
+            if(isSuccess){
+                console.log(`xxxx____ObjectLocalLoad Success  srcType = ${srcType}`)
+            }else{
+                console.log(`xxxx____ObjectLocalLoad fail  srcType = ${srcType}`)
+            }
+        })
+        img5.style = {
+            width: 60,
+            height: 60,
+            marginLeft: 10
+        };
+
+        layout.appendChild(img1)
+        layout.appendChild(img2)
+        layout.appendChild(img3)
+        layout.appendChild(img4)
+        layout.appendChild(img5)
+        this.appendChild(titleView);
+        this.appendChild(layout);
     }
 }
 

@@ -9,7 +9,6 @@
           <button class="btn" @tap="closeDialog">关闭</button>
         </view>
       </view>
-
     </ex-popup>
   </view>
 </template>

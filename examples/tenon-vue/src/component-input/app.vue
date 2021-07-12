@@ -7,6 +7,7 @@
       <view class="demo-item">
         <view class="item-title">
           <text class="item-title-text">Input</text>
+          <text>{{value}}</text>
         </view>
         <view class="item-container">
           <input class="input" v-model="value"/>

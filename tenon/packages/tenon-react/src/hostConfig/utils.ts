@@ -7,6 +7,7 @@ const CHILDREN = 'children'
 const STYLE = 'style'
 const CLASSNAME = 'className'
 const CLASS = 'class'
+const ANIMATION = 'animation'
 const randomKey = Math.random()
   .toString(36)
   .slice(2);
@@ -73,6 +74,8 @@ export function updateProperties(node: Element, type: string, updatePayload: Arr
     const propValue = updatePayload[i+1];
     if(propKey === STYLE){
       handleStyle(propValue, node)
+    }else if(propKey === CLASSNAME || propKey === CLASS){
+      handleClassStyle(propValue, node)
     }else if(propKey === CHILDREN && isWithTextTag(type)){
       setTextContent(node, propValue);
     }else {
@@ -100,8 +103,10 @@ export function processProps(props:any, type:string, node:Element){
       case CLASS:
       case CLASSNAME:
         handleClassStyle(props[key], node)
+        break;  
+      case ANIMATION:
+        handleAnimation(props[key], node)
         break;
-      
       default:
         node.setAttribute(key, props[key])
         break;
@@ -140,6 +145,9 @@ function handleEvent(propName: string, value: any, node:Element){
   node.addEventListener(eventName, listener)
 }
 
+function handleAnimation(animationValue: any, node:Element){
+  node.setAnimation(animationValue)
+}
 
 function setTextContent(node:Element, children:any):void{
   if(typeof children === 'string' || typeof children === 'number'){

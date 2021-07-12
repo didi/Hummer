@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.4.0...@hummer/tenon-vue@1.4.1) (2021-07-07)
+
+
+### Bug Fixes
+
+* **tenon:** 修复 Tenon Vue 中 dataset 属性缓存失效问题 ([7350cae](https://github.com/didi/Hummer/commit/7350cae9804c5435eb484f28d87c23765cb71a0a))
+
+
+
+
+
+# [1.4.0](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.3.1...@hummer/tenon-vue@1.4.0) (2021-07-06)
+
+
+### Features
+
+* **tenon:** refactor tenon vue style module ([46a4222](https://github.com/didi/Hummer/commit/46a42229bcee9b452e1816256d9bedd87afbe890))
+* **tenon:** refactor tenon vue style to result style utils ([99cc3cf](https://github.com/didi/Hummer/commit/99cc3cf7392a8c9f36c24d62452c5e798ac0d4ef))
+* **tenon:** update tenon vue demo ([9c3c62c](https://github.com/didi/Hummer/commit/9c3c62c8c65c7a6c6f59e90d66f5cf0d2a563a66))
+* Tenon Vue Style 兼容新版 Style Loader ([145ff7c](https://github.com/didi/Hummer/commit/145ff7c8f585ca1d685e15eed5990245456f98b4))
+
+
+
+
+
 ## [1.3.1](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.3.0...@hummer/tenon-vue@1.3.1) (2021-06-28)
 
 **Note:** Version bump only for package @hummer/tenon-vue

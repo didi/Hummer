@@ -9,7 +9,7 @@
           <text class="item-title-text">Tap</text>
         </view>
         <view class="item-container">
-          <view class="box static-simple-class" @tap="handleTap">
+          <view class="box static-simple-class" @tap="handleTap" data-href="href content">
             <text>Tap Me</text>
           </view>
         </view>
