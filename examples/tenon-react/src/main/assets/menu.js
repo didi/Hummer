@@ -6,6 +6,9 @@ export const GrammarMenu = {
   },{
     url: './hook-test.js',
     name: 'Use Hook'
+  },{
+    url: './grammar-style.js',
+    name: 'Grammar Of Style'
   }]
 }
 

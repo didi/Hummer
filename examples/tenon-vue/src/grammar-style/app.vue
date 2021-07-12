@@ -94,25 +94,6 @@
           自身不保留状态。 建议给元素绑定默认类，实现效果。
         </text>
       </view>
-
-      <view class="demo-item">
-        <view class="item-title">
-          <text class="item-title-text">动态 Class(单一，数组) </text>
-        </view>
-        <view class="item-container">
-          <view class="box-container">
-            <view
-              :class="['box', isDynamicBlackBox ? 'dynamic-black-class' : '']"
-            >
-              <text>Box</text>
-            </view>
-          </view>
-          <view class="operation-container">
-            <button class="btn" @tap="toggleBoxClass(false)">取消 Class</button>
-            <button class="btn" @tap="toggleBoxClass(true)">设定 Class</button>
-          </view>
-        </view>
-      </view>
       <view class="demo-item">
         <view class="item-title">
           <text class="item-title-text">静态 Style</text>
