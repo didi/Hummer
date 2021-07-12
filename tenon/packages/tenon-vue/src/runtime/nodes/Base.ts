@@ -200,7 +200,7 @@ export class Base {
 
   // Cache Props To Get
   private setCacheProp(key:string, value:any){
-    // 如果是 dataattr 格式的属性，缓存到 dataset 中，方便事件可以获取到 dataset （Chameleon事件需求）
+    // 如果是 datattr 格式的属性，缓存到 dataset 中，方便事件可以获取到 dataset （Chameleon事件需求）
     if(/^data/.test(key)){
       let dataKey = key.slice(4).toLowerCase()
       if(dataKey){

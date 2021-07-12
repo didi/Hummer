@@ -7,33 +7,33 @@ function App() {
   let [startAnimation, setStartAnimation] = useState(false)
   useEffect(() => {
     setTimeout(() => {
-      console.log('Start Animation')
+      Toast.show('开始动画')
       setStartAnimation(true)
     }, 2000)
   }, [])
   return (
     <PageItem title="Transition 动画">
       <DemoItem title="透明度(opacity)">
-        <view className={startAnimation ? 'box animation animation-opacity' : 'box animation'}></view>
+        <view className={startAnimation ? 'animation-opacity' : 'box animation'}></view>
       </DemoItem>
-      {/* <DemoItem title="旋转（Rotate）">
-        <view className="box animation" className={startAnimation ? 'animation-rotate' : ''}></view>
+      <DemoItem title="旋转（Rotate）">
+        <view className={startAnimation ? 'animation-rotate' : 'box animation'}></view>
       </DemoItem>
       <DemoItem title="位移（Position）">
-        <view className="box animation" className={startAnimation ? 'animation-translate' : ''}></view>
+        <view className={startAnimation ? 'animation-translate' : 'box animation'}></view>
       </DemoItem>
       <DemoItem title="放缩（Scale）">
-        <view className="box animation" className={startAnimation ? 'animation-scale' : ''}></view>
+        <view className={startAnimation ? 'animation-scale' : 'box animation'}></view>
       </DemoItem>
       <DemoItem title="背景色（Background）">
-        <view className="box animation" className={startAnimation ? 'animation-background' : ''}></view>
+        <view className={startAnimation ? 'animation-background' : 'box animation'}></view>
       </DemoItem>
       <DemoItem title="宽度（Width）">
-        <view className="box animation" className={startAnimation ? 'animation-width' : ''}></view>
+        <view className={startAnimation ? 'animation-width' : 'box animation'}></view>
       </DemoItem>
       <DemoItem title="高度（Height）">
-        <view className="box animation" className={startAnimation ? 'animation-height' : ''}></view>
-      </DemoItem> */}
+        <view className={startAnimation ? 'animation-height' : 'box animation'}></view>
+      </DemoItem>
     </PageItem>
   );
 }
