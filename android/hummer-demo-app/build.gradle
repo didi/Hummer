@@ -73,15 +73,15 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-//    implementation 'com.didi.hummer:hummer:0.2.9'
+//    implementation 'io.github.didi.hummer:hummer:0.3.22.4'
     implementation project(':hummer')
-//    annotationProcessor 'com.didi.hummer:hummer-compiler:0.2.9'
+//    annotationProcessor 'io.github.didi.hummer:hummer-compiler:0.2.17'
     annotationProcessor project(":hummer-compiler")
 
 //    debugImplementation project(':v8-debugger')
-//    debugImplementation project(':hermes-debugger')
 //    debugImplementation 'com.didi.hummer:v8-debugger:0.0.1-SNAPSHOT'
-//    debugImplementation 'com.didi.hummer:hermes-debugger:0.0.3'
+
+//    debugImplementation project(':hermes-debugger')
 //    debugImplementation 'io.github.didi.hummer:hermes-debugger:0.0.4'
 
     // native crash 堆栈捕获
