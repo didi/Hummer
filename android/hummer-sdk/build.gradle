@@ -26,7 +26,11 @@ dependencies {
     api 'com.android.support:support-annotations:28.0.0'
 
     // Hummer
-    api 'com.didi.hummer:hummer-annotation:0.2.2'
+    if (project.publishArchivesType == '3') {
+        api 'io.github.didi.hummer:hummer-annotation:0.2.3'
+    } else {
+        api 'com.didi.hummer:hummer-annotation:0.2.2'
+    }
     api 'com.didi.hummer:hummer-plugin-interface:0.0.1'
     api project(":hummer-core")
     annotationProcessor project(":hummer-compiler")
