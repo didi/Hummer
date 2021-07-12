@@ -15,5 +15,7 @@ public interface IStorageAdapter {
 
     void remove(String key);
 
+    void removeAll();
+
     boolean exist(String key);
 }

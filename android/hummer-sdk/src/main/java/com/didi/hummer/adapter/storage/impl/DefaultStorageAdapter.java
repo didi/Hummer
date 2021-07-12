@@ -94,6 +94,11 @@ public class DefaultStorageAdapter implements IStorageAdapter {
     }
 
     @Override
+    public void removeAll() {
+        getSP().edit().clear().apply();
+    }
+
+    @Override
     public boolean exist(String key) {
         return getSP().contains(key);
     }
