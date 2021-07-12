@@ -12,7 +12,7 @@ Hummer 动画支持两种动画方式，分别为 `Basic Animation` `KeyFrame An
 
 ### 如何使用
 
-Tenon React 支持两种动画方式，分别是属性传递和Hook的方式
+Tenon React 支持两种动画方式，分别是属性传递和Hook的方式.
 #### Plan1. 属性传递
 Tenon React 中动画通过 animation属性来实现，将动画对象传递给 animation属性即可。
 例如： <view animation={animationObject}></view>
@@ -21,10 +21,12 @@ Tenon React 中动画通过 animation属性来实现，将动画对象传递给 
 > Tips: 该方式，组件创建后会立即执行动画。
 
 #### Plan2. `useAnimation` Hook
-可以异步操作动画执行
+通过`useAnimation`钩子，可以异步操作动画执行.
 
 使用用例如下：
 ```javascript
+import {useAnimation} from '@hummer/tenon-react';
+
 function SyncAnimation(){
   let [animationRef, startAnimation] = useAnimation(animationObject)
   return (
@@ -35,6 +37,7 @@ function SyncAnimation(){
   )
 }
 ```
+`animationRef` 引用需要绑定到需要执行动画的视图上，`startAnimation` 方法控制何时开始执行动画。
 > Tips: `animationObject` 动画对象可参考基础动画、关键帧动画、次序动画的实现。
 
 ## 页面配置
