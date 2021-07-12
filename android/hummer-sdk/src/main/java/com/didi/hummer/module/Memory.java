@@ -1,5 +1,8 @@
 package com.didi.hummer.module;
 
+import android.text.TextUtils;
+
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.context.HummerContext;
@@ -42,7 +45,15 @@ public class Memory {
         return exist(context.getNamespace(), key);
     }
 
+    private static String checkNamespace(String namespace) {
+        if (TextUtils.isEmpty(namespace)) {
+            return HummerSDK.NAMESPACE_DEFAULT;
+        }
+        return namespace;
+    }
+
     public static void set(String namespace, String key, Object value) {
+        namespace = checkNamespace(namespace);
         Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
         if (memoryStore == null) {
             memoryStore = new ConcurrentHashMap<>();
@@ -52,6 +63,7 @@ public class Memory {
     }
 
     public static Object get(String namespace, String key) {
+        namespace = checkNamespace(namespace);
         Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
         if (memoryStore == null) {
             return null;
@@ -60,6 +72,7 @@ public class Memory {
     }
 
     public static void remove(String namespace, String key) {
+        namespace = checkNamespace(namespace);
         Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
         if (memoryStore == null) {
             return;
@@ -68,6 +81,7 @@ public class Memory {
     }
 
     public static void removeAll(String namespace) {
+        namespace = checkNamespace(namespace);
         Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
         if (memoryStore == null) {
             return;
@@ -76,10 +90,12 @@ public class Memory {
     }
 
     public static Map<String, Object> getAll(HummerContext context) {
-        return memoryStoreMap.get(context.getNamespace());
+        String namespace = checkNamespace(context.getNamespace());
+        return memoryStoreMap.get(namespace);
     }
 
     public static boolean exist(String namespace, String key) {
+        namespace = checkNamespace(namespace);
         Map<String, Object> memoryStore = memoryStoreMap.get(namespace);
         if (memoryStore == null) {
             return false;

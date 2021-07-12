@@ -28,6 +28,11 @@ public class Storage {
         remove(context.getNamespace(), key);
     }
 
+    @JsMethod("removeAll")
+    public static void removeAll(HummerContext context) {
+        removeAll(context.getNamespace());
+    }
+
     @JsMethod("exist")
     public static boolean exist(HummerContext context, String key) {
         return exist(context.getNamespace(), key);
@@ -43,6 +48,10 @@ public class Storage {
 
     public static void remove(String namespace, String key) {
         HummerAdapter.getStorageAdapter(namespace).remove(key);
+    }
+
+    public static void removeAll(String namespace) {
+        HummerAdapter.getStorageAdapter(namespace).removeAll();
     }
 
     public static boolean exist(String namespace, String key) {
