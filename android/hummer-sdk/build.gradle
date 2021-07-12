@@ -34,6 +34,7 @@ dependencies {
     // Yoga
     api 'com.facebook.yoga.android:yoga-layout:1.16.0'
     implementation 'com.facebook.soloader:soloader:0.9.0'
+    implementation 'com.facebook.fbjni:fbjni:0.0.2'
 
     // relinker
     implementation 'com.getkeepsafe.relinker:relinker:1.4.1'
