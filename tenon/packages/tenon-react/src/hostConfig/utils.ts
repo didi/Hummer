@@ -74,6 +74,8 @@ export function updateProperties(node: Element, type: string, updatePayload: Arr
     const propValue = updatePayload[i+1];
     if(propKey === STYLE){
       handleStyle(propValue, node)
+    }else if(propKey === CLASSNAME || propKey === CLASS){
+      handleClassStyle(propValue, node)
     }else if(propKey === CHILDREN && isWithTextTag(type)){
       setTextContent(node, propValue);
     }else {
