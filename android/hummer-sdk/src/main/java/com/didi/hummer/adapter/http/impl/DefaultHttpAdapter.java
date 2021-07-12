@@ -381,7 +381,7 @@ public class DefaultHttpAdapter implements IHttpAdapter {
         resp.data = parseResponseBody(response.body(), type);
 
         if (!response.isSuccessful()) {
-            resp.error = new HttpResponse.Error(resp.status, resp.message); // TODO: error需要再对齐一下，包括正常情况下的error
+            resp.error = new HttpResponse.Error(resp.status, resp.message);
             return resp;
         }
 
