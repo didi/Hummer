@@ -13,6 +13,108 @@
 #import "HMJSCExecutor.h"
 #import "NSObject+Hummer.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+static const CLLocationDegrees RANGE_LON_MAX = 137.8347;
+
+static const CLLocationDegrees RANGE_LON_MIN = 72.004;
+
+static const CLLocationDegrees RANGE_LAT_MAX = 55.8271;
+
+static const CLLocationDegrees RANGE_LAT_MIN = 0.8293;
+
+static const CLLocationDegrees jzEE = 0.00669342162296594323;
+
+static const CLLocationDegrees jzA = 6378245.0;
+
+static BOOL isOutOfChina(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+    if (longitude < RANGE_LON_MIN || longitude > RANGE_LON_MAX)
+        return true;
+    if (latitude < RANGE_LAT_MIN || latitude > RANGE_LAT_MAX)
+        return true;
+    
+    return false;
+}
+
+static CLLocationDegrees LAT_OFFSET_0(CLLocationDegrees x, CLLocationDegrees y) {
+    return -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * sqrt(fabs(x));
+}
+
+static CLLocationDegrees LAT_OFFSET_1(CLLocationDegrees x) {
+    return (20.0 * sin(6.0 * x * M_PI) + 20.0 * sin(2.0 * x * M_PI)) * 2.0 / 3.0;
+}
+
+static CLLocationDegrees LAT_OFFSET_2(CLLocationDegrees y) {
+    return (20.0 * sin(y * M_PI) + 40.0 * sin(y / 3.0 * M_PI)) * 2.0 / 3.0;
+}
+
+static CLLocationDegrees LAT_OFFSET_3(CLLocationDegrees y) {
+    return (160.0 * sin(y / 12.0 * M_PI) + 320 * sin(y * M_PI / 30.0)) * 2.0 / 3.0;
+}
+
+static CLLocationDegrees LON_OFFSET_0(CLLocationDegrees x, CLLocationDegrees y) {
+    return 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * sqrt(fabs(x));
+}
+
+static CLLocationDegrees LON_OFFSET_1(CLLocationDegrees x) {
+    return (20.0 * sin(6.0 * x * M_PI) + 20.0 * sin(2.0 * x * M_PI)) * 2.0 / 3.0;
+}
+
+static CLLocationDegrees LON_OFFSET_2(CLLocationDegrees x) {
+    return (20.0 * sin(x * M_PI) + 40.0 * sin(x / 3.0 * M_PI)) * 2.0 / 3.0;
+}
+
+static CLLocationDegrees LON_OFFSET_3(CLLocationDegrees x) {
+    return (150.0 * sin(x / 12.0 * M_PI) + 300.0 * sin(x / 30.0 * M_PI)) * 2.0 / 3.0;
+}
+
+static CLLocationDegrees transformLatLon(CLLocationDegrees x, CLLocationDegrees y) {
+    CLLocationDegrees ret = LAT_OFFSET_0(x, y);
+    ret += LAT_OFFSET_1(x);
+    ret += LAT_OFFSET_2(y);
+    ret += LAT_OFFSET_3(y);
+    
+    return ret;
+}
+
+static CLLocationDegrees transformLonLon(CLLocationDegrees x, CLLocationDegrees y) {
+    CLLocationDegrees ret = LON_OFFSET_0(x, y);
+    ret += LON_OFFSET_1(x);
+    ret += LON_OFFSET_2(x);
+    ret += LON_OFFSET_3(x);
+    
+    return ret;
+}
+
+static CLLocationCoordinate2D convertWGS84ToGCJ02(CLLocationCoordinate2D location) {
+    CLLocationCoordinate2D resPoint;
+    double mgLat;
+    double mgLon;
+    if (isOutOfChina(location.latitude, location.longitude)) {
+        resPoint.latitude = location.latitude;
+        resPoint.longitude = location.longitude;
+        
+        return resPoint;
+    }
+    CLLocationDegrees dLat = transformLatLon(location.longitude - 105.0, location.latitude - 35);
+    CLLocationDegrees dLon = transformLonLon(location.longitude - 105, location.latitude - 35);
+    CLLocationDegrees radLat = location.latitude / 180.0 * M_PI;
+    CLLocationDegrees magic = sin(radLat);
+    magic = 1 - jzEE * magic * magic;
+    CLLocationDegrees sqrtMagic = sqrt(magic);
+    dLat = (dLat * 180.0) / ((jzA * (1 - jzEE)) / (magic * sqrtMagic) * M_PI);
+    dLon = (dLon * 180.0) / (jzA / sqrtMagic * cos(radLat) * M_PI);
+    mgLat = location.latitude + dLat;
+    mgLon = location.longitude + dLon;
+    
+    resPoint.latitude = mgLat;
+    resPoint.longitude = mgLon;
+    
+    return resPoint;
+}
+
+NS_ASSUME_NONNULL_END
+
 typedef NS_ENUM(NSInteger, HMLocationManagerState) {
     HMLocationManagerStateUnknown   = 0,
     HMLocationManagerStateDisabled  = 1001,             //定位不可用
@@ -214,8 +316,9 @@ HM_EXPORT_METHOD(stopLocation, __stopLocation)
     }
     
     NSMutableDictionary *locInfo = [NSMutableDictionary dictionary];
-    locInfo[@"latitude"] = @(location.coordinate.latitude);
-    locInfo[@"longitude"] = @(location.coordinate.longitude);
+    CLLocationCoordinate2D locationCoordinate2D = convertWGS84ToGCJ02(location.coordinate);
+    locInfo[@"latitude"] = @(locationCoordinate2D.latitude);
+    locInfo[@"longitude"] = @(locationCoordinate2D.longitude);
     locInfo[@"altitude"] = @(location.altitude);
     locInfo[@"accuracy"] = @(location.horizontalAccuracy);
     locInfo[@"speed"] = @(location.speed);
