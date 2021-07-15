@@ -150,7 +150,7 @@
     BOOL isGif = context[HMImageManagerContextAnimatedImageClass];
     HMInternalSourceModel *model = [[HMInternalSourceModel alloc] initWithSource:sourceString];
     if (model.imageNameWithoutExtension == nil){
-        completionBlock(nil, NO, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorInvalidURL userInfo:@{NSLocalizedDescriptionKey : @"Invalid URL"}]);
+        completionBlock(nil, NO, HMImageCacheTypeDisk, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorInvalidURL userInfo:@{NSLocalizedDescriptionKey : @"Invalid URL"}]);
         return operation;
     }
     //phase1: bundle+imageName
@@ -177,16 +177,16 @@
     }
 
     if (imageData) {
-        completionBlock(imageData, YES, nil);
+        completionBlock(imageData, YES, HMImageCacheTypeDisk, nil);
         return operation;
     }
     
     if (image) {
-        completionBlock(image, NO, nil);
+        completionBlock(image, NO, HMImageCacheTypeDisk, nil);
         return operation;
     }
     NSError *error = [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorBadImageData userInfo:@{NSLocalizedDescriptionKey : @"can not fetch image data from local asset"}];
-    completionBlock(nil, NO, error);
+    completionBlock(nil, NO, HMImageCacheTypeDisk, error);
     return operation;
 }
 

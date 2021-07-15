@@ -193,7 +193,7 @@ didReceiveResponse:(NSURLResponse *)response
         HMImageDownloaderCompletedBlock completedBlock = [token valueForKey:kCompletedCallbackKey];
         hm_safe_main_thread(^{
             if (completedBlock) {
-                completedBlock(nil, nil, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorCancelled userInfo:@{NSLocalizedDescriptionKey : @"Operation cancelled by user during sending the request"}]);
+                completedBlock(nil, nil, HMImageCacheTypeNone, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorCancelled userInfo:@{NSLocalizedDescriptionKey : @"Operation cancelled by user during sending the request"}]);
             }
         });
     }
@@ -213,7 +213,7 @@ didReceiveResponse:(NSURLResponse *)response
     }
     for (HMImageDownloadCallBackPair *pair in blocks) {
          HMImageDownloaderCompletedBlock callback = pair[kCompletedCallbackKey];
-         callback(imageData, imageData?YES:NO,error);
+         callback(imageData, imageData?YES:NO, HMImageCacheTypeNone, error);
     }
 }
 

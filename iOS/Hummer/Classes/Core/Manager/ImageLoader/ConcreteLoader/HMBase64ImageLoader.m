@@ -35,7 +35,7 @@ static NSString *const BASE64HEADERPREFIX = @"data:";
         imageUrlString = [imageUrlString substringFromIndex:commaRange.location + 1];
     }
     NSData *imageData = [[NSData alloc] initWithBase64EncodedString:imageUrlString options:0];
-    completionBlock(imageData,NO,nil);
+    completionBlock(imageData, NO, HMImageCacheTypeDisk, nil);
     return operation;
 }
 

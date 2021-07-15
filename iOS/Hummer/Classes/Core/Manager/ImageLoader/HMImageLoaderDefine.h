@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, HMImageCacheType) {
 
 typedef void(^HMImageLoadProcessBlock)(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType);
 typedef void(^HMImageCompletionBlock)(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType);
-typedef void(^HMImageLoaderCompletionBlock)(id _Nullable data, BOOL needCache, NSError * _Nullable error);
+typedef void(^HMImageLoaderCompletionBlock)(id _Nullable data, BOOL needCache, HMImageCacheType cacheType, NSError * _Nullable error);
 
 typedef NSString * HMImageLoaderContextOption NS_EXTENSIBLE_STRING_ENUM;
 typedef NSDictionary<HMImageLoaderContextOption, id> HMImageLoaderContext;
