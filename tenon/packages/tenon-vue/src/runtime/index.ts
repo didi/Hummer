@@ -21,7 +21,7 @@ const { render: baseRender, createApp: baseCreateApp } = createRenderer(
 
 export const renderApp = baseRender as RootRenderFunction<Base>
 export let appContext:(AppContext | null) = null;
-
+export let container:(Page | null) = null
 // 供自定义渲染组件渲染 Slot 模块使用，保证 AppContext 和 Global Context 统一
 export const renderCustomSlot = ((vnode: any | null, container: Base) => {
   // 支持纯粹的 Component Options Case
@@ -59,7 +59,7 @@ export function render(App:any){
   let app = createApp(App);
   install(app);
   appContext = app._context;
-  let container = createRootContainer({
+  container = createRootContainer({
     canScroll: pageConfig && pageConfig.canScroll,
     pageStyle: pageConfig && pageConfig.pageStyle
   });
@@ -70,4 +70,12 @@ export function render(App:any){
   let instance = app.mount(container);
   initPageLifeCycle(container, instance, App)
   container.render();
+
+  if(NODE_DEBUG_ENV){
+    injectDevTool(container)
+  }
+}
+
+export function injectDevTool(page:Page){
+  require('@hummer/tenon-dev-tool').run(page)
 }
