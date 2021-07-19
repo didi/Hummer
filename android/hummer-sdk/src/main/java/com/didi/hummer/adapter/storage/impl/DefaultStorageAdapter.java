@@ -97,7 +97,7 @@ public class DefaultStorageAdapter implements IStorageAdapter {
 
     @Override
     public void removeAll() {
-        getSP().edit().clear().apply();
+        getSP().edit().clear().putInt(KEY_VERSION, version).apply();
     }
 
     @Override
