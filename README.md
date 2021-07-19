@@ -121,14 +121,15 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [x] 支持页面配置
   - [x] 一期功能文档编写
 - Tenon React 二期版本
-  - [ ] 支持动画
+  - [x] 支持动画
   - [x] 事件模块重构
-  - [ ] 样式模块优化
+  - [x] 样式模块优化
   - [ ] 支持高阶组件
   - [ ] 数据管理（Redux 生态接入）
   - [ ] 路由管理（React Router 生态接入）
-- Tenon 组件库建设（[mand-mobile](https://github.com/didi/mand-mobile)）
-  - [ ] 一期完成基本组件
+- Tenon 组件库建设一期（[mand-mobile](https://github.com/didi/mand-mobile)）
+  - [x] 基础框架搭建
+  - [ ] 各个组件适配
 - Hummer 基础组件建设
   - [ ] 单选框（Radio）
   - [ ] 复选框（Checkbox）
