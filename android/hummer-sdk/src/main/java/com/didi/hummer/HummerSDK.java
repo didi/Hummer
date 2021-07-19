@@ -69,7 +69,6 @@ public class HummerSDK {
     }
 
     public static void init(Context context, HummerConfig config) {
-        long startTime = System.currentTimeMillis();
         if (!isInited) {
             appContext = context.getApplicationContext();
             parseAppDebuggable(appContext);
@@ -84,9 +83,7 @@ public class HummerSDK {
         }
         addHummerConfig(config);
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("isInited", isInited);
-        EventTracer.tracePerformance(config != null ? config.getNamespace() : null, "HummerSDK.init", params, startTime);
+        EventTracer.traceEvent(config != null ? config.getNamespace() : null, EventTracer.EventName.SDK_INIT);
     }
 
     public static void release() {
