@@ -1,0 +1,123 @@
+import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
+import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.java.source
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+javadoc {
+    description = "生成jar格式的javadoc。"
+    // 只显示 protected 和 public 的类和成员
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.author = true
+    options.version = true
+    options.header = project.name
+    // 静默javadoc检查（比如不支持@date会报错等），jdk 8+
+    options.addStringOption('Xdoclint:none', '-quiet')
+    // 防止本地打开中文乱码
+    options.addStringOption("charset", "UTF-8")
+    // suppress warnings due to cross-module @see and @link references;
+    // note that global 'api' task does display all warnings.
+    logging.captureStandardError LogLevel.INFO
+    // suppress "## warnings" message
+    logging.captureStandardOutput LogLevel.INFO
+    // 编码一定要配置否则直接出错
+    options.encoding = "UTF-8"
+    options.charSet = "UTF-8"
+}
+
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    println "No props file"
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            // The coordinates of the library, being set from variables that
+            // we'll set up in a moment
+            groupId project.GROUP_ID
+            artifactId project.ARTIFACT_ID
+            version project.VERSION
+            from components.java
+
+            artifact sourceJar
+            artifact javadocJar
+
+            // Self-explanatory metadata for the most part
+            pom {
+                name = project.ARTIFACT_ID
+                description = 'Hummer is a high-performance, highly available, lightweight and dynamic cross-platform framework.'
+                // If your project has a dedicated site, use its URL here
+                url = 'https://github.com/didi/Hummer'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'OrangeLab'
+                        name = 'Orange Lab'
+                        email = 'orange-lab@didiglobal.com'
+                    }
+                }
+                // Version control info, if you're using GitHub, follow the format as seen here
+                scm {
+                    connection = 'scm:git:git://github.com/didi/Hummer.git'
+                    developerConnection = 'scm:git:ssh://github.com/didi/Hummer.git'
+                    url = 'https://github.com/didi/Hummer/tree/master'
+                }
+            }
+        }
+    }
+    repositories {
+        // The repository to publish to, Sonatype/MavenCentral
+        maven {
+            // This is an arbitrary name, you may also use "mavencentral" or
+            // any other name that's descriptive for you
+            name = "mavenCentral"
+
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            // You only need this if you want to publish snapshots, otherwise just set the URL
+            // to the release repo directly
+            url = project.VERSION.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            // 用于打印url，方便查看aar是否存在
+            def searchUrl = "https://search.maven.org/artifact/"
+            System.out.println("aar url：" + searchUrl + project.GROUP_ID + "/" + project.ARTIFACT_ID + "/" + project.VERSION + "/aar")
+
+            // The username and password we've fetched earlier
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+signing {
+    sign publishing.publications
+}

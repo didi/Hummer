@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.support.annotation.RequiresPermission;
 
 import com.didi.hummer.core.util.HMLog;
+import com.didi.hummer.utils.LocationTransfer;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,72 +42,6 @@ public final class LocationUtils {
     private LocationUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
-
-
-//    /**
-//     * you have to check for Location Permission before use this method
-//     * add this code <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> to your Manifest file.
-//     * you have also implement LocationListener and passed it to the method.
-//     *
-//     * @param Context
-//     * @param LocationListener
-//     * @return {@code Location}
-//     */
-//
-//    @SuppressLint("MissingPermission")
-//    public static Location getLocation(Context context, LocationListener listener) {
-//        Location location = null;
-//        try {
-//            mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-//            if (!isLocationEnabled()) {
-//                //no Network and GPS providers is enabled
-//                Toast.makeText(context
-//                        , " you have to open GPS or INTERNET"
-//                        , Toast.LENGTH_LONG)
-//                        .show();
-//            } else {
-//                if (isLocationEnabled()) {
-//                    mLocationManager.requestLocationUpdates(
-//                            LocationManager.NETWORK_PROVIDER,
-//                            MIN_TIME_BETWEEN_UPDATES,
-//                            MIN_DISTANCE_CHANGE_FOR_UPDATES,
-//                            listener);
-//
-//                    if (mLocationManager != null) {
-//                        location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//                        if (location != null) {
-//                            mLocationManager.removeUpdates(listener);
-//                            return location;
-//                        }
-//                    }
-//                }
-//                //when GPS is enabled.
-//                if (isGpsEnabled()) {
-//                    if (location == null) {
-//                        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-//                                MIN_TIME_BETWEEN_UPDATES,
-//                                MIN_DISTANCE_CHANGE_FOR_UPDATES,
-//                                listener);
-//
-//                        if (mLocationManager != null) {
-//                            location =
-//                                    mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                            if (location != null) {
-//                                mLocationManager.removeUpdates(listener);
-//                                return location;
-//                            }
-//                        }
-//                    }
-//                }
-//
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return location;
-//    }
-
 
     /**
      * 判断Gps是否可用
@@ -168,10 +103,7 @@ public final class LocationUtils {
 
         String provider = mLocationManager.getBestProvider(getCriteria(), true);
         Location location = mLocationManager.getLastKnownLocation(provider);
-        if (location == null) {
-            location = new Location("unknown");
-        }
-        listener.getLastKnownLocation(location);
+        listener.getLastKnownLocation(LocationTransfer.transform(location));
 
         if (mLocationManager != null) {
             if (myLocationListener == null) {
@@ -347,7 +279,7 @@ public final class LocationUtils {
         @Override
         public void onLocationChanged(Location location) {
             if (mListener != null) {
-                mListener.onLocationChanged(location);
+                mListener.onLocationChanged(LocationTransfer.transform(location));
             }
         }
 

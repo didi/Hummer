@@ -24,7 +24,7 @@ public class TextArea extends Input {
      */
     @JsAttribute("textLineClamp")
     public void setTextLineClamp(int lines) {
-        mProperty.setMaxLines(lines);
+        maxLines = lines;
     }
 
     @Override

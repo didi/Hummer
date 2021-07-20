@@ -111,7 +111,6 @@ public class HummerContext extends ContextWrapper {
 
     protected void onCreate() {
         HMLog.d("HummerNative", "HummerContext.onCreate");
-        long startTime = System.currentTimeMillis();
 
         // 异常回调注册
         HummerException.addJSContextExceptionCallback(mJsContext, e -> {
@@ -140,8 +139,6 @@ public class HummerContext extends ContextWrapper {
         initEnvironmentVariables();
 
         HummerRegister$$hummer_sdk.init(this);
-
-        EventTracer.tracePerformance(namespace, "HummerContext.onCreate", startTime);
     }
 
     public void onStart() {
@@ -170,14 +167,10 @@ public class HummerContext extends ContextWrapper {
 
     public void onDestroy() {
         HMLog.d("HummerNative", "HummerContext.onDestroy");
-        long startTime = System.currentTimeMillis();
-
         destroy();
         NotifyCenter.release(mJsContext);
         HummerException.removeJSContextExceptionCallback(mJsContext);
         releaseJSContext();
-
-        EventTracer.tracePerformance(namespace, "HummerContext.onDestroy", startTime);
     }
 
     public boolean onBack() {

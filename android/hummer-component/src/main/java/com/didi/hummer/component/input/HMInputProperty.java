@@ -9,11 +9,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.inputmethod.EditorInfo;
@@ -35,9 +33,7 @@ public class HMInputProperty {
     private final EditText mView;
     private static final InputFilter[] EMPTY_FILTERS = new InputFilter[0];
     private int defaultInputType;
-
     private boolean isSingleLine;
-    private MaxLinesTextWatcher maxLinesTextWatcher = new MaxLinesTextWatcher();
 
     public HMInputProperty(EditText editText, boolean singleLine) {
         this.isSingleLine = singleLine;
@@ -47,7 +43,6 @@ public class HMInputProperty {
         mView.setTextSize(16);
         if (!isSingleLine) {
             mView.setGravity(Gravity.START);
-            mView.addTextChangedListener(maxLinesTextWatcher);
         }
 
         defaultInputType = editText.getInputType();
@@ -278,11 +273,6 @@ public class HMInputProperty {
         mView.setFilters(newFilters);
     }
 
-    public void setMaxLines(int maxLines) {
-        maxLinesTextWatcher.setMaxLines(maxLines);
-    }
-
-
     public void setReturnKeyType(String type) {
         mView.setImeOptions(getImeOption(type));
 
@@ -316,40 +306,4 @@ public class HMInputProperty {
             FocusUtil.clearFocus(mView);
         }
     }
-
-    private class MaxLinesTextWatcher implements TextWatcher {
-
-        private int maxLines;
-
-        public void setMaxLines(int maxLines) {
-            this.maxLines = maxLines;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            int lines = mView.getLineCount();
-            // 限制最大输入行数
-            if (maxLines > 0 && lines > maxLines) {
-                String str = s.toString();
-                int cursorStart = mView.getSelectionStart();
-                int cursorEnd = mView.getSelectionEnd();
-                if (cursorStart == cursorEnd && cursorStart < str.length() && cursorStart >= 1) {
-                    str = str.substring(0, cursorStart - 1) + str.substring(cursorStart);
-                } else {
-                    str = str.substring(0, s.length() - 1);
-                }
-                // setText会触发afterTextChanged的递归
-                mView.setText(str);
-                // setSelection用的索引不能使用str.length()否则会越界
-                mView.setSelection(mView.getText().length());
-            }
-        }
-    }
-
 }
