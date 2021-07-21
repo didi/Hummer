@@ -270,6 +270,12 @@ class Base {
     recycle() {
         invoke(this.className, this.objID, "recycle");
     }
+
+    dbg_highlight(arg) {
+        let stash = arg;
+        arg = transSingleArg(arg);
+        invoke(this.className, this.objID, "dbg_highlight", arg);
+    }
 }
 
 __GLOBAL__.Hummer = Hummer;

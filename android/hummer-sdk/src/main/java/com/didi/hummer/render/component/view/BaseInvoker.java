@@ -99,6 +99,10 @@ public abstract class BaseInvoker<T> implements Invoker {
                 base.resetStyle();
                 break;
             }
+            case "dbg_highlight": {
+                base.dbg_highlight(params.length > 0 ? params[0] : null);
+                break;
+            }
             case "recycle": {
                 // 已弃用
                 break;
