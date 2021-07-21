@@ -13,6 +13,7 @@
 #import "HMInterceptor.h"
 #import "HMJSObject.h"
 #import "NSObject+Hummer.h"
+#import "HMInterceptorManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,9 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
 @interface Hummer : NSObject
 
-+ (void)startEngine:(void(^ _Nullable)(id<HMConfigBuilder>))builder;
++ (void)startEngine:(void(^ _Nullable)(HMConfigEntry *))builder;
 
 + (void)addGlobalEnvironment:(NSDictionary *)params;
 

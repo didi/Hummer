@@ -20,6 +20,11 @@
 #import "HMJavaScriptLoader.h"
 #import "HMJSGlobal+Private.h"
 #import "HMExceptionModel.h"
+#import <Hummer/HMDebug.h>
+#ifdef HMDEBUG
+#import "HMDevTools.h"
+#endif
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -320,6 +325,12 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
         context.renderCompletion();
     }
     [UIView hm_reSortFixedView:context];
+
+
+#ifdef HMDEBUG
+    // 添加debug按钮
+    [HMDevTools showInContext:context];
+#endif
 }
 
 - (void)setBasicWidth:(HMBaseValue *)basicWidth {

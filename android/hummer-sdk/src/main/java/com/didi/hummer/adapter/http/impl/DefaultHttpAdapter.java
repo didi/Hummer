@@ -25,6 +25,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * 默认网络接口适配器
@@ -377,25 +378,25 @@ public class DefaultHttpAdapter implements IHttpAdapter {
         }
         resp.status = response.code();
         resp.message = response.message();
+        resp.data = parseResponseBody(response.body(), type);
 
         if (!response.isSuccessful()) {
-            resp.error = new HttpResponse.Error(-100, "http response status error!");
+            resp.error = new HttpResponse.Error(resp.status, resp.message);
             return resp;
-        }
-
-        if (response.body() == null) {
-            resp.error = new HttpResponse.Error(-101, "response body is null!");
-            return resp;
-        }
-
-        String respStr = response.body().string();
-        if (HMGsonUtil.isValidJsonString(respStr) && type != null) {
-            resp.data = HMGsonUtil.fromJson(respStr, type);
-        } else {
-            resp.data = respStr;
         }
 
         return resp;
+    }
+
+    private Object parseResponseBody(ResponseBody body, Type type) throws IOException {
+        if (body == null) {
+            return null;
+        }
+        String respStr = body.string();
+        if (HMGsonUtil.isValidJsonString(respStr) && type != null) {
+            return HMGsonUtil.fromJson(respStr, type);
+        }
+        return respStr;
     }
 
     /**

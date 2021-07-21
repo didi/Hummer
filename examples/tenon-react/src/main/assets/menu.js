@@ -6,6 +6,9 @@ export const GrammarMenu = {
   },{
     url: './hook-test.js',
     name: 'Use Hook'
+  },{
+    url: './grammar-style.js',
+    name: 'Grammar Of Style'
   }]
 }
 
@@ -64,6 +67,9 @@ export const Animation = {
     url: './animation-keyframe.js',
     name: 'Animation Keyframe'
   },{
+    url: './animation-steps.js',
+    name: 'Animation Step'
+  },{
     url: './animation-transition.js',
     name: 'Animation Transition'
   },]
@@ -106,4 +112,4 @@ export const Other = {
 
 
 // export const menus =  [GrammarMenu, ComponentMenu, HighComponent, Style, Animation, Plugin, Other]
-export const menus =  [GrammarMenu, ComponentMenu,HighComponent, Other]
+export const menus =  [GrammarMenu, ComponentMenu,HighComponent, Animation, Other]

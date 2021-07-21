@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.13](https://github.com/didi/Hummer/compare/@hummer/tenon-utils@1.2.12...@hummer/tenon-utils@1.2.13) (2021-06-28)
+
+
+### Bug Fixes
+
+* **tenon:** 修复 Tenon Border Color Rgba形式识别失败的问题 ([f0881ad](https://github.com/didi/Hummer/commit/f0881ad73cc5790aed49b645f74baa22c3ea558b))
+
+
+
+
+
+## [1.2.12](https://github.com/didi/Hummer/compare/@hummer/tenon-utils@1.2.11...@hummer/tenon-utils@1.2.12) (2021-06-21)
+
+**Note:** Version bump only for package @hummer/tenon-utils
+
+
+
+
+
 ## [1.2.7](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.7) (2021-05-20)
 
 

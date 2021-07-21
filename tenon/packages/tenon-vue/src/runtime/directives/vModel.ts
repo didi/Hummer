@@ -48,7 +48,10 @@ export const vModelText: ModelDirective<
         return
       }
     }
-    el.value = value == null ? '' : value
+    const newValue = value == null? '' : value
+    if(el.value !== newValue){
+      el.value = newValue
+    }
   }
 }
 function transformValue(trim:boolean, castToNumber: boolean, value:string):(string|number){

@@ -11,7 +11,9 @@
 
 @implementation Hummer
 
-+ (void)startEngine:(void (^)(id<HMConfigBuilder>))builder {
+
+
++ (void)startEngine:(void (^)(HMConfigEntry *))builder {
     [HMInterceptor loadExportInterceptor];
     
     [HMReporter reportPerformanceWithBlock:^(dispatch_block_t  _Nonnull finishBlock) {
@@ -22,8 +24,9 @@
     } forKey:HMExportClasses];
     
     if (builder) {
-        HMConfig *config = [HMConfig sharedInstance];
-        builder(config);
+        HMConfigEntry *entry = [HMConfigEntry new];
+        builder(entry);
+        [[HMInterceptorManager manager] addConfig:entry];
     }
 }
 

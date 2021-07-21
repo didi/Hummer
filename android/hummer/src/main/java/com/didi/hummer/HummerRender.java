@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.core.BuildConfig;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.util.DebugUtil;
@@ -16,6 +17,7 @@ import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.devtools.DevToolsConfig;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.render.style.HummerLayout;
+import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.FileUtil;
 import com.didi.hummer.utils.JsSourceUtil;
@@ -24,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -54,6 +57,7 @@ public class HummerRender {
 
     public HummerRender(@NonNull HummerLayout container, String namespace, DevToolsConfig config) {
         hmContext = Hummer.createContext(container, namespace);
+        EventTracer.traceEvent(namespace, EventTracer.EventName.CONTEXT_CREATE);
 
         if (DebugUtil.isDebuggable()) {
             devTools = new HummerDevTools(hmContext, config);
@@ -83,6 +87,7 @@ public class HummerRender {
     public void onDestroy() {
         isDestroyed.set(true);
         hmContext.onDestroy();
+        EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.CONTEXT_DESTROY);
 
         if (DebugUtil.isDebuggable()) {
             HummerDebugger.release(hmContext);
@@ -105,14 +110,26 @@ public class HummerRender {
             return;
         }
 
+        long startTime = System.currentTimeMillis();
+
+        EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.JS_EVAL_START);
         hmContext.setJsSourcePath(sourcePath);
         hmContext.evaluateJavaScript(js, sourcePath);
+        EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.JS_EVAL_FINISH);
+
+        Map<String, Object> params = new HashMap<>();
+        params.put(EventTracer.PARAM_KEY.SDK_VERSION, BuildConfig.VERSION_NAME);
+        params.put(EventTracer.PARAM_KEY.PAGE_URL, sourcePath);
+        params.put(EventTracer.PARAM_KEY.RENDER_TIME_COST, (System.currentTimeMillis() - startTime));
+        params.put(EventTracer.PARAM_KEY.JS_SIZE, js.length() / 1024);
 
         if (renderCallback != null) {
             if (getHummerContext().getJsPage() != null) {
                 renderCallback.onSucceed(getHummerContext(), getHummerContext().getJsPage());
+                EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.RENDER_SUCCEED, params);
             } else {
                 renderCallback.onFailed(new RuntimeException("Page is empty!"));
+                EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.RENDER_FAILED, params);
             }
         }
     }

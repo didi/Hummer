@@ -12,7 +12,7 @@ function App() {
   let [focused, setFocused] = useState(false)
   let [type, setType] = useState('email')
   let [returnKeyType, setReturnType] = useState('done')
-
+  let [value, setValue] = useState('Init Value')
 
   function handleChangeType() {
     setType(types[i++ % 5]);
@@ -41,7 +41,7 @@ function App() {
   return (
     <PageItem title="Component Input">
       <DemoItem title="Input">
-        <input className="input" />
+        <input className="input" value={value} onChange={(value) => setValue(value)}/>
       </DemoItem>
       <DemoItem title="Input(placeholder)">
         <input className="input input-place" placeholder="我是PlaceHolder" />

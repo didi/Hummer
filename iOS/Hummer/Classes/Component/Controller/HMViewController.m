@@ -133,7 +133,17 @@
 }
 
 #pragma mark - View 生命周期管理
-
+- (BOOL)hm_didClickGoBack {
+    if ([self callJSWithFunc:@"onBack" arguments:@[]]) {return YES;}
+    if ([self respondsToSelector:@selector(hm_triggerNativeGoBack)]) {
+        [self hm_triggerNativeGoBack];
+    }else{
+        if (self.navigationController) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+    return NO;
+}
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self callJSWithFunc:@"onAppear" arguments:@[]];
@@ -184,6 +194,7 @@
         return;
     }
     
+//    NSString *wsURLStr = @"ws://172.23.163.148:9000/";
     NSURL *wsURL = [NSURL URLWithString:wsURLStr];
     if (wsURL) {
         SRWebSocket *webSocket = [[SRWebSocket alloc] initWithURL:wsURL];

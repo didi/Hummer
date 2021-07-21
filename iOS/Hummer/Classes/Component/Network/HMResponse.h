@@ -9,6 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+UIKIT_EXTERN API_DEPRECATED("HMResponse is deprecated. Use NSDictionary or NSMutableDictionary instead", ios(2.0, 9.0)) API_UNAVAILABLE(tvos)
 @interface HMResponse : NSObject
 
 @property (nonatomic, assign) NSInteger status;

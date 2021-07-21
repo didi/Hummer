@@ -85,7 +85,7 @@ function createConfig(format, output, plugins = []) {
   })]:[]
   return {
     input: resolve(entryFile),
-    external: ['@hummer/hummer-front', ...external],
+    external: ['@hummer/hummer-front', 'react',...external],
     plugins: [
       json({
         namedExports: false

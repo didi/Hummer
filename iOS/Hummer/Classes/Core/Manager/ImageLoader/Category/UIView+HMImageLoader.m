@@ -31,10 +31,16 @@
                            context:(nullable HMImageLoaderContext *)context
                         completion:(HMImageCompletionBlock)completionBlock{
    
-    id<HMURLConvertible> bundle = bundleSource;
-    if (!bundle) {
-        HMJSContext *hummerJSContext = [HMJSGlobal.globalObject currentContext:self.hmValue.context];
-        bundle = hummerJSContext.url;
+    HMJSContext *hummerJSContext = [HMJSGlobal.globalObject currentContext:self.hmValue.context];
+    id<HMURLConvertible> bundle = bundleSource ? : hummerJSContext.url;
+    NSString *namespace = hummerJSContext.nameSpace;
+    if (namespace) {
+        if (![context objectForKey:HMImageManagerContextNamespace]) {
+            NSMutableDictionary *_context = context;
+            _context = _context ? [NSMutableDictionary dictionaryWithDictionary:context] : [NSMutableDictionary new];
+            [_context setObject:namespace forKey:HMImageManagerContextNamespace];
+            context = _context.copy;
+        }
     }
     [[self hm_webImageOperation] cancel];
 

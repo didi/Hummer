@@ -49,6 +49,8 @@ typedef HMFunctionType HMFuncCallback;
 
 @property (nonatomic, copy, nullable) void (^exceptionHandler)(HMExceptionModel *exception);
 
+@property (nonatomic, copy, nullable) void (^webSocketHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
+
 @property (nonatomic, copy, nullable) void (^consoleHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
 
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)script withSourceURL:(nullable NSURL *)sourceURL;

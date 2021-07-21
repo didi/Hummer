@@ -106,10 +106,10 @@ static IMP swizzleImp(Class clazz, SEL fromSel, IMP toImp) {
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        touchesBeganOldImpPointer = (void (*)(id, SEL, NSSet<UITouch *> *, UIEvent *)) swizzleImp(UIResponder.class, @selector(touchesBegan:withEvent:), (IMP) touchesBegan);
-        touchesMovedOldImpPointer = (void (*)(id, SEL, NSSet<UITouch *> *, UIEvent *)) swizzleImp(UIResponder.class, @selector(touchesMoved:withEvent:), (IMP) touchesMoved);
-        touchesEndedOldImpPointer = (void (*)(id, SEL, NSSet<UITouch *> *, UIEvent *)) swizzleImp(UIResponder.class, @selector(touchesEnded:withEvent:), (IMP) touchesEnded);
-        touchesCancelledOldImpPointer = (void (*)(id, SEL, NSSet<UITouch *> *, UIEvent *)) swizzleImp(UIResponder.class, @selector(touchesCancelled:withEvent:), (IMP) touchesCancelled);
+        touchesBeganOldImpPointer = (void (*)(id, SEL, NSSet<UITouch *> *, UIEvent *)) swizzleImp(UIView.class, @selector(touchesBegan:withEvent:), (IMP) touchesBegan);
+        touchesMovedOldImpPointer = (void (*)(id, SEL, NSSet<UITouch *> *, UIEvent *)) swizzleImp(UIView.class, @selector(touchesMoved:withEvent:), (IMP) touchesMoved);
+        touchesEndedOldImpPointer = (void (*)(id, SEL, NSSet<UITouch *> *, UIEvent *)) swizzleImp(UIView.class, @selector(touchesEnded:withEvent:), (IMP) touchesEnded);
+        touchesCancelledOldImpPointer = (void (*)(id, SEL, NSSet<UITouch *> *, UIEvent *)) swizzleImp(UIView.class, @selector(touchesCancelled:withEvent:), (IMP) touchesCancelled);
     });
 }
 

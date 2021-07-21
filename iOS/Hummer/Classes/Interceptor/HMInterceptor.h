@@ -14,6 +14,7 @@
 #import "HMRouterProtocol.h"
 #import "HMImageProtocol.h"
 #import "HMJSLoadInterceptor.h"
+#import "HMJSCallerIterceptor.h"
 
 #import "HMEventTrackProtocol.h"
 
@@ -31,7 +32,8 @@ typedef NS_ENUM(NSUInteger, HMInterceptorType) {
     HMInterceptorTypeRouter,
     HMInterceptorTypeImage,
     HMInterceptorTypeEventTrack,
-    HMInterceptorTypeJSLoad
+    HMInterceptorTypeJSLoad,
+    HMInterceptorTypeJSCaller
 };
 
 @interface HMInterceptor : NSObject

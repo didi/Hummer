@@ -3,7 +3,7 @@
 
 ### 添加 Hummer SDK 依赖
 ```java
-implementation 'com.didi.hummer:hummer:0.3.18'
+implementation 'io.github.didi.hummer:hummer:0.3.22.4'
 ```
 
 ### Application 中初始化 Hummer
@@ -51,7 +51,7 @@ android {
 
 ##### 2. 在Module的gradle中添加编译时注解依赖
 ```java
-annotationProcessor 'com.didi.hummer:hummer-compiler:0.2.16'
+annotationProcessor 'io.github.didi.hummer:hummer-compiler:0.2.17'
 ```
 
 ##### 3. 自定义导出类，看下面例子
@@ -174,7 +174,7 @@ if (jsPage != null) {
 ##### 接入步骤：
 1. 添加依赖
 ```
-debugImplementation 'com.didi.hummer:hermes-debugger:0.0.2'
+debugImplementation 'io.github.didi.hummer:hermes-debugger:0.0.4'
 ```
 
 2. 在Application的onCreate中调用

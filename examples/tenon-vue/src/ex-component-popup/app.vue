@@ -11,11 +11,13 @@
         <view class="item-container">
         </view>
         <view class="operation-container">
-          <button class="btn" @tap="openDialog">打开弹窗</button>
+          <button class="btn" @tap="openDialog(1)">打开弹窗1</button>
+          <button class="btn" @tap="openDialog(2)">打开弹窗2</button>
         </view>
       </view>
     </view>
-    <dialog :show="showPopup" @close="closeDialog"></dialog>
+    <dialog :show="showPopup" @close="closeDialog(1)"></dialog>
+    <dialog :show="showPopup2" @close="closeDialog(2)"></dialog>
   </view>
 </template>
 <style lang="less" scoped>
@@ -31,15 +33,24 @@ export default {
   },
   data() {
     return {
-      showPopup: false
+      showPopup: true,
+      showPopup2: false,
     }
   },
   methods: {
-    openDialog(){
-      this.showPopup = true
+    openDialog(type){
+      if(type === 1){
+        this.showPopup = true
+      }else if(type === 2){
+        this.showPopup2 = true
+      }
     },
-    closeDialog(){
-      this.showPopup = false
+    closeDialog(type){
+      if(type === 1){
+        this.showPopup = false
+      }else if(type === 2){
+        this.showPopup2 = false
+      }
     }
   }
 };

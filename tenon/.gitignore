@@ -10,3 +10,4 @@ coverage
 explorations
 packages/*/dist/*
 package-lock.json
+report.*.json
