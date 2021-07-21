@@ -1,5 +1,15 @@
 cmake_minimum_required(VERSION 3.4.1)
 
+if (NAPI_ENGINE STREQUAL QuickJS)
+    set(JS_ENGINE_SO_DIR "napi/libs/qjs")
+    set(JS_ENGINE_SO "libqjs.so")
+    set(JS_NAPI_SO "libnapi_qjs.so")
+elseif (NAPI_ENGINE STREQUAL Hermes)
+    set(JS_ENGINE_SO_DIR "napi/libs/hermes")
+    set(JS_ENGINE_SO "libhermes.so")
+    set(JS_NAPI_SO "libnapi_hermes.so")
+endif()
+
 include_directories(
         hummer
         napi/include)
@@ -11,7 +21,7 @@ aux_source_directory( # Define variable for directory of sources
         )
 
 aux_source_directory( # Define variable for directory of dependency libraries
-        napi/libs
+        ${JS_ENGINE_SO_DIR}
         # Set variable name of dependency libraries directory
         DIR_LIBS
         )
@@ -37,9 +47,9 @@ target_link_libraries( # Specifies the target library.
         # included in the NDK.
         ${log-lib}
 
-        # QuickJS
-        ${CMAKE_CURRENT_SOURCE_DIR}/napi/libs/${ANDROID_ABI}/libquickjs.so
+        # QuickJS/Hermes
+        ${CMAKE_CURRENT_SOURCE_DIR}/${JS_ENGINE_SO_DIR}/${ANDROID_ABI}/${JS_ENGINE_SO}
 
         # N-API
-        ${CMAKE_CURRENT_SOURCE_DIR}/napi/libs/${ANDROID_ABI}/libnapi_qjs.so
+        ${CMAKE_CURRENT_SOURCE_DIR}/${JS_ENGINE_SO_DIR}/${ANDROID_ABI}/${JS_NAPI_SO}
         )

@@ -32,8 +32,8 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
         }
     }
 
-    int64_t objId;
-    napi_get_value_int64(globalEnv, argv[INDEX_OBJECT_ID], &objId);
+    double objId;
+    napi_get_value_double(globalEnv, argv[INDEX_OBJECT_ID], &objId);
     jstring className = JSUtils::toJavaString(globalEnv, argv[INDEX_CLASS_NAME]);
     jstring methodName = JSUtils::toJavaString(globalEnv, argv[INDEX_METHOD_NAME]);
 
@@ -45,7 +45,7 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
 
     jobject ret = env->CallObjectMethod(
             bridge, HUMMER_BRIDGE_INVOKE_ID,
-            className, objId, methodName,
+            className, (int64_t) objId, methodName,
             params);
 
     env->DeleteLocalRef(className);
@@ -73,7 +73,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSBridge_initBridge(JNIEnv *env, jobje
 
     auto funcName = "invoke";
     NAPIValue func;
-    napi_create_function(globalEnv, funcName, NAPI_AUTO_LENGTH, invoke, nullptr, &func);
+    napi_create_function(globalEnv, funcName, invoke, nullptr, &func);
     napi_set_named_property(globalEnv, globalObj, funcName, func);
 }
 

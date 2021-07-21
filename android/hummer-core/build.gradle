@@ -35,22 +35,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    externalNativeBuild {
-        cmake {
-            if (project.COMPILE_JS_ENGINE == 'All') {
-                path "src/main/jni/CMakeLists.txt"
-            } else if (project.COMPILE_JS_ENGINE == 'JSC') {
-                path "src/main/jni/jsc/CMakeLists.txt"
-            } else if (project.COMPILE_JS_ENGINE == 'QuickJS') {
-                path "src/main/jni/qjs/CMakeLists.txt"
-            } else if (project.COMPILE_JS_ENGINE == 'Hermes') {
-                path "src/main/jni/hermes/CMakeLists.txt"
-            } else if (project.COMPILE_JS_ENGINE == 'NAPI') {
-                path "src/main/jni/napi/CMakeLists.txt"
-            }
-        }
-    }
 }
 
 dependencies {

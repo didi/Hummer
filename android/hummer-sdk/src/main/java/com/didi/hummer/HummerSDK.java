@@ -36,8 +36,8 @@ public class HummerSDK {
         int QUICK_JS    = 2;
         int V8          = 3;
         int HERMES      = 4;
-        int NAPI        = 5;
-        int JSC_WEEX    = 11;
+        int NAPI_QJS    = 5;
+        int NAPI_HERMES = 6;
     }
 
     /**
@@ -82,7 +82,7 @@ public class HummerSDK {
             loadYogaEngine();
             loadJSEngine(appContext, jsEngine);
 
-            if (jsEngine == JsEngine.NAPI) {
+            if (jsEngine == JsEngine.NAPI_QJS || jsEngine == JsEngine.NAPI_HERMES) {
                 JSException.init();
                 HummerContextFactory.setHummerContextCreator(NAPIHummerContext::new);
             } else {
@@ -166,13 +166,11 @@ public class HummerSDK {
                 case JsEngine.JSC:
                     ReLinker.loadLibrary(context, "hummer-jsc");
                     break;
-                case JsEngine.JSC_WEEX:
-                    ReLinker.loadLibrary(context, "hummer-jsc-weex");
-                    break;
                 case JsEngine.HERMES:
                     ReLinker.loadLibrary(context, "hummer-hermes");
                     break;
-                case JsEngine.NAPI:
+                case JsEngine.NAPI_QJS:
+                case JsEngine.NAPI_HERMES:
                     ReLinker.loadLibrary(context, "hummer-napi");
                     break;
                 case JsEngine.QUICK_JS:

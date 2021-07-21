@@ -49,7 +49,7 @@ public class HummerContextTest {
     @BeforeClass
     public static void staticInit() {
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        HummerSDK.setJsEngine(HummerSDK.JsEngine.NAPI);
+        HummerSDK.setJsEngine(HummerSDK.JsEngine.NAPI_QJS);
         HummerSDK.init(appContext);
         Looper.prepare();
     }

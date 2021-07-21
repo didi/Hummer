@@ -32,11 +32,11 @@ android {
         }
     }
 
-//    externalNativeBuild {
-//        cmake {
-//            path "src/main/jni/qjs/CMakeLists.txt"
-//        }
-//    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/jni/qjs/CMakeLists.txt"
+        }
+    }
 }
 
 def quickJsVersion() {
