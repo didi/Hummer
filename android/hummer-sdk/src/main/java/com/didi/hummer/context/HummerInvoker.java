@@ -106,7 +106,8 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
      */
     private HummerError makeHummerError(Object ret) {
         HummerError err = null;
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI) {
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             if (ret instanceof JSException) {
                 err = new HummerError(-1, ((JSException) ret).getMessage());
             }

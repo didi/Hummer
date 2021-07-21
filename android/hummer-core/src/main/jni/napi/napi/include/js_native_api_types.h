@@ -85,23 +85,6 @@ typedef NAPIValue (*NAPICallback)(NAPIEnv env, NAPICallbackInfo callbackInfo);
 
 typedef void (*NAPIFinalize)(NAPIEnv env, void *finalizeData, void *finalizeHint);
 
-// 不建议使用
-typedef struct
-{
-    const char *utf8name;
-    NAPIValue name;
-
-    NAPICallback method;
-
-    NAPICallback getter;
-    NAPICallback setter;
-
-    NAPIValue value;
-
-    NAPIPropertyAttributes attributes;
-    void *data;
-} NAPIPropertyDescriptor;
-
 EXTERN_C_END
 
 #endif // SRC_JS_NATIVE_API_TYPES_H_

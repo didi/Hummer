@@ -121,7 +121,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_delProperty(JNIEnv *env, jcla
 
     const char *cKey = env->GetStringUTFChars(key, nullptr);
     NAPIValue jsKey;
-    NAPIStatus status = napi_create_string_utf8(globalEnv, cKey, sizeof(cKey), &jsKey);
+    NAPIStatus status = napi_create_string_utf8(globalEnv, cKey, &jsKey);
     if (status != NAPIOK) {
         env->ReleaseStringUTFChars(key, cKey);
         return false;

@@ -16,10 +16,10 @@ android {
         }
     }
 
-//    externalNativeBuild {
-//        cmake {
-//            path "src/main/jni/jsc/CMakeLists.txt"
-//        }
-//    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/jni/hermes/CMakeLists.txt"
+        }
+    }
 
 }

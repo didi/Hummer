@@ -112,7 +112,8 @@ public class HummerContext extends ContextWrapper {
         registerInvoker(new HummerInvoker());
         registerInvoker(new NotifyCenterInvoker());
 
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES) {
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             // 注入babel
             mJsContext.evaluateJavaScript("var Babel = {}");
             mJsContext.evaluateJavaScript(AssetsUtil.readFile("babel.js"), "babel.js");
@@ -276,7 +277,8 @@ public class HummerContext extends ContextWrapper {
     }
 
     public Object evaluateJavaScript(String script, String scriptId) {
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES) {
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             script = babelTransformCode(script, scriptId);
         }
         return mJsContext.evaluateJavaScript(script, scriptId);

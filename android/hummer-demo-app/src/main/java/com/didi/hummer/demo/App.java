@@ -35,7 +35,7 @@ public class App extends Application {
 
 //        Hummer.initHermesDebugger(new DefaultHermesDebugger());
 
-        Hummer.setJsEngine(HummerSDK.JsEngine.NAPI);
+        Hummer.setJsEngine(HummerSDK.JsEngine.NAPI_HERMES);
 
         // Hummer SDK
         HummerConfig config = new HummerConfig.Builder()

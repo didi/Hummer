@@ -3,6 +3,7 @@ android {
     defaultConfig {
         externalNativeBuild {
             cmake {
+                arguments "-DNAPI_ENGINE=" + project.NAPI_ENGINE
                 arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_shared'
                 cFlags '-std=c99', '-fstrict-aliasing'
                 cppFlags '-std=c++11', '-fstrict-aliasing'
@@ -33,13 +34,17 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['src/main/jni/napi/napi/libs']
+            if (project.NAPI_ENGINE == 'QuickJS') {
+                jniLibs.srcDirs = ['src/main/jni/napi/napi/libs/qjs']
+            } else if (project.NAPI_ENGINE == 'Hermes') {
+                jniLibs.srcDirs = ['src/main/jni/napi/napi/libs/hermes']
+            }
         }
     }
 
-//    externalNativeBuild {
-//        cmake {
-//            path "src/main/jni/napi/CMakeLists.txt"
-//        }
-//    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/jni/napi/CMakeLists.txt"
+        }
+    }
 }

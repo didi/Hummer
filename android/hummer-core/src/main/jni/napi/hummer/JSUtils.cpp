@@ -240,7 +240,7 @@ NAPIValue JSUtils::JavaObjectToJsValue(NAPIEnv globalEnv, jobject value) {
         napi_get_boolean(globalEnv, v, &val);
     } else if (env->IsInstanceOf(value, stringCls)) {
         const char *cString = env->GetStringUTFChars((jstring) value, nullptr);
-        napi_create_string_utf8(globalEnv, cString, NAPI_AUTO_LENGTH, &val);
+        napi_create_string_utf8(globalEnv, cString, &val);
     } else if (env->IsInstanceOf(value, jsCallbackCls)) {
         jlong valuePtr = env->GetLongField(value, js_callback_ptr);
         val = JSUtils::toJsValue(globalEnv, valuePtr);

@@ -48,7 +48,8 @@ public class DevToolsEntrance {
         mJsContext = mHummerContext.getJsContext();
         mContainer = mHummerContext.getContainer();
 
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI) {
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             JSException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
         } else {
             HummerException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
@@ -58,7 +59,8 @@ public class DevToolsEntrance {
     }
 
     public void release() {
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI) {
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             JSException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
         } else {
             HummerException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
@@ -115,13 +117,11 @@ public class DevToolsEntrance {
     public String getJsEngineString() {
         String className = mHummerContext.getClass().getSimpleName();
         switch (className) {
-            case "JSCHummerContext":
+            case "JSCHummerContext": {
                 int engine = HummerSDK.getJsEngine();
                 switch (engine) {
                     case HummerSDK.JsEngine.JSC:
                         return "JSC";
-                    case HummerSDK.JsEngine.JSC_WEEX:
-                        return "JSC_Weex";
                     case HummerSDK.JsEngine.HERMES:
                         return "Hermes";
                     case HummerSDK.JsEngine.QUICK_JS:
@@ -129,6 +129,18 @@ public class DevToolsEntrance {
                     default:
                         return "Unknown";
                 }
+            }
+            case "NAPIHummerContext": {
+                int engine = HummerSDK.getJsEngine();
+                switch (engine) {
+                    case HummerSDK.JsEngine.NAPI_QJS:
+                        return "NAPI - QuickJS";
+                    case HummerSDK.JsEngine.NAPI_HERMES:
+                        return "NAPI - Hermes";
+                    default:
+                        return "Unknown";
+                }
+            }
             case "V8HummerContext":
                 return "V8";
             default:
