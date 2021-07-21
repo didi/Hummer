@@ -20,6 +20,7 @@ import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.debug.Highlight;
 import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.render.component.anim.AnimViewWrapper;
 import com.didi.hummer.render.component.anim.BasicAnimation;
@@ -397,6 +398,24 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         setShadow(null);
         setOpacity(1);
         setVisibility(VISIBILITY_VISIBLE);
+    }
+
+    @JsMethod("dbg_highlight")
+    public void dbg_highlight(Object config) {
+        if (config == null) {
+            Highlight.show(getView());
+            return;
+        }
+        if (config instanceof Boolean) {
+            boolean enable = (boolean) config;
+            if (enable) {
+                Highlight.show(getView());
+            } else {
+                Highlight.clear();
+            }
+        } else if (config instanceof Map) {
+            // do something
+        }
     }
 
     public static final String VISIBILITY_VISIBLE = "visible";

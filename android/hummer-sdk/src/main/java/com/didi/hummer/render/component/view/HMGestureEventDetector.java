@@ -9,6 +9,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.debug.Highlight;
 import com.didi.hummer.render.event.EventManager;
 import com.didi.hummer.render.event.base.Event;
 import com.didi.hummer.render.event.base.TraceEvent;

@@ -255,6 +255,13 @@ let Base = /*#__PURE__*/function () {
       invoke(this.className, this.objID, "recycle");
     }
   }, {
+    key: "dbg_highlight",
+    value: function dbg_highlight(arg) {
+      let stash = arg;
+      arg = transSingleArg(arg);
+      invoke(this.className, this.objID, "dbg_highlight", arg);
+    }
+  }, {
     key: "style",
     set: function (arg) {
       this._style = arg;
