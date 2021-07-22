@@ -30,6 +30,11 @@ public class Text extends HMBase<TextView> {
     private String fontWeight;
     private String fontStyle;
 
+    // x轴定位
+    private int xGravity = 0;
+    // y轴定位
+    private int yGravity = 0;
+
     public Text(HummerContext context, JSValue jsValue, String viewID) {
         super(context, jsValue, viewID);
     }
@@ -71,12 +76,14 @@ public class Text extends HMBase<TextView> {
 
     @JsProperty("text")
     private String text;
+
     public void setText(String text) {
         setRowText(text);
     }
 
     @JsProperty("richText")
     private Object richText;
+
     public void setRichText(Object richText) {
         if (richText instanceof String) {
             return;
@@ -86,6 +93,7 @@ public class Text extends HMBase<TextView> {
 
     @JsProperty("formattedText")
     private String formattedText;
+
     public void setFormattedText(String formattedText) {
         setRowText(fromHtml(formattedText));
     }
@@ -169,14 +177,47 @@ public class Text extends HMBase<TextView> {
         switch (textAlign.toLowerCase()) {
             case "center":
                 getView().setGravity(Gravity.CENTER);
+                xGravity = Gravity.CENTER;
                 break;
             case "left":
             default:
                 getView().setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+                xGravity = Gravity.START | Gravity.CENTER_VERTICAL;
                 break;
             case "right":
                 getView().setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+                xGravity = Gravity.END | Gravity.CENTER_VERTICAL;
                 break;
+        }
+
+        if(yGravity != 0){
+            getView().setGravity(xGravity | yGravity);
+        }
+    }
+
+    @JsAttribute("textVerticalAlign")
+    public void setTextVerticalAlign(String textVerticalAlign) {
+        if (TextUtils.isEmpty(textVerticalAlign)) {
+            return;
+        }
+        switch (textVerticalAlign.toLowerCase()) {
+            case "center":
+                getView().setGravity(Gravity.CENTER_VERTICAL);
+                yGravity = Gravity.CENTER_VERTICAL;
+                break;
+            case "top":
+            default:
+                getView().setGravity(Gravity.TOP);
+                yGravity = Gravity.TOP;
+                break;
+            case "bottom":
+                getView().setGravity(Gravity.BOTTOM);
+                yGravity = Gravity.BOTTOM;
+                break;
+        }
+
+        if(xGravity != 0){
+            getView().setGravity(xGravity | yGravity);
         }
     }
 
@@ -285,6 +326,8 @@ public class Text extends HMBase<TextView> {
             case HummerStyleUtils.Hummer.LINE_SPACING_MULTI:
                 setLineSpacingMulti((float) value);
                 break;
+            case HummerStyleUtils.Hummer.TEXT_VERTICAL_ALIGN:
+                setTextVerticalAlign(String.valueOf(value));
             default:
                 return false;
         }
