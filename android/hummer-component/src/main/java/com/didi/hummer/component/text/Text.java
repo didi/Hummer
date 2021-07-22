@@ -1,5 +1,7 @@
 package com.didi.hummer.component.text;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
@@ -10,7 +12,9 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.annotation.Component;
@@ -96,6 +100,24 @@ public class Text extends HMBase<TextView> {
 
     public void setFormattedText(String formattedText) {
         setRowText(fromHtml(formattedText));
+    }
+
+    @JsProperty("textCopyEnable")
+    private boolean textCopyEnable;
+
+    public void setTextCopyEnable(boolean textCopyEnable) {
+        if (textCopyEnable) {
+            getView().setOnLongClickListener(v -> {
+                ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("copyText", getView().getText());
+                clipboardManager.setPrimaryClip(clipData);
+                Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
+                toast.setText("复制成功");
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                return false;
+            });
+        }
     }
 
     @JsAttribute("color")
@@ -190,7 +212,7 @@ public class Text extends HMBase<TextView> {
                 break;
         }
 
-        if(yGravity != 0){
+        if (yGravity != 0) {
             getView().setGravity(xGravity | yGravity);
         }
     }
@@ -216,7 +238,7 @@ public class Text extends HMBase<TextView> {
                 break;
         }
 
-        if(xGravity != 0){
+        if (xGravity != 0) {
             getView().setGravity(xGravity | yGravity);
         }
     }
