@@ -19,6 +19,9 @@ if (project.COMPILE_JS_ENGINE == 'All') {
 android {
     defaultConfig {
 
+        buildConfigField "long", "VERSION_CODE", "${defaultConfig.versionCode}"
+        buildConfigField "String","VERSION_NAME","\"${defaultConfig.versionName}\""
+
         ndk {
             abiFilters 'armeabi-v7a','x86','arm64-v8a'//,'x86_64'
         }
