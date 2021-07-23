@@ -30,3 +30,4 @@
 -keep class com.didi.hummer.core.exception.JSException {*;}
 -keep class com.didi.hummer.render.component.anim.AnimViewWrapper {*;}
 -keep class com.facebook.yoga.** {*;}
+-keep class com.facebook.jni.** {*;}
