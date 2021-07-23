@@ -113,7 +113,7 @@ public class HummerSDK {
 
     public static void initHermesDebugger(IHermesDebugger debugger) {
         if (hermesDebugger == null) {
-            setJsEngine(HummerSDK.JsEngine.HERMES);
+            setJsEngine(JsEngine.NAPI_HERMES);
             hermesDebugger = debugger;
         }
     }
@@ -171,7 +171,11 @@ public class HummerSDK {
                     break;
                 case JsEngine.NAPI_QJS:
                 case JsEngine.NAPI_HERMES:
-                    ReLinker.loadLibrary(context, "hummer-napi");
+                    if (HummerSDK.getHermesDebugger() != null) {
+                        ReLinker.loadLibrary(context, "hummer-napi-debugger");
+                    } else {
+                        ReLinker.loadLibrary(context, "hummer-napi");
+                    }
                     break;
                 case JsEngine.QUICK_JS:
                 default:
