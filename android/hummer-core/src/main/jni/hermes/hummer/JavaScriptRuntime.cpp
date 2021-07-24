@@ -9,7 +9,6 @@
 #include <hermes.h>
 #include <jsi.h>
 #include <memory>
-#include <DebuggerAPI.h>
 
 using namespace facebook::hermes;
 using namespace facebook::hermes::debugger;
