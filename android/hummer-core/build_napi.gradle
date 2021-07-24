@@ -25,6 +25,7 @@ android {
         debug {
             externalNativeBuild {
                 cmake {
+                    arguments '-DCMAKE_BUILD_TYPE=MinSizeRel'
                     cFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
                     cppFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
                 }
