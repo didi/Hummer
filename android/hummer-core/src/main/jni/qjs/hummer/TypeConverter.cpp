@@ -1,11 +1,11 @@
 #include <jni.h>
-#include "TypeConvertor.h"
-#include "HummerJNI.h"
-#include "QuickJSCache.h"
-#include "JSException.h"
-#include "PromiseProcessor.h"
-#include "../quickjs/quickjs.h"
-#include "../quickjs/cutils.h"
+#include <TypeConvertor.h>
+#include <HummerJNI.h>
+#include <QuickJSCache.h>
+#include <JSException.h>
+#include <PromiseProcessor.h>
+#include <quickjs.h>
+#include <cutils.h>
 
 
 jstring TypeConvertor::JSString2JavaString(JSContext* ctx, JSValue value) {

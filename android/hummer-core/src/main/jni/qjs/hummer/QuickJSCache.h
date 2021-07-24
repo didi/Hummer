@@ -5,7 +5,7 @@
 #ifndef NATIVE_JS_ANDROID_QUICKJSCACHE_H
 #define NATIVE_JS_ANDROID_QUICKJSCACHE_H
 
-#include "../quickjs/quickjs.h"
+#include <quickjs.h>
 #include <map>
 
 #define QJS_CONTEXT_ID(ctx) QuickJSCache::getJSContextId(ctx)

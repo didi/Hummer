@@ -4,8 +4,8 @@ android {
         externalNativeBuild {
             cmake {
                 arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_shared'
-                cFlags '-std=c99', '-fstrict-aliasing', "-DCONFIG_VERSION=\\\"${quickJsVersion()}\\\""
-                cppFlags '-std=c++11', '-fstrict-aliasing', "-DCONFIG_VERSION=\\\"${quickJsVersion()}\\\""
+                cFlags '-std=c99', '-fstrict-aliasing'
+                cppFlags '-std=c++11', '-fstrict-aliasing'
             }
         }
     }
@@ -32,13 +32,15 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jni/qjs/quickjs/libs']
+        }
+    }
+
     externalNativeBuild {
         cmake {
             path "src/main/jni/qjs/CMakeLists.txt"
         }
     }
-}
-
-def quickJsVersion() {
-    return new File(projectDir, "src/main/jni/qjs/quickjs/VERSION").text.trim()
 }
