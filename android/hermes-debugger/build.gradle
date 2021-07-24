@@ -29,13 +29,21 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['../hummer-core/src/main/jni/napi/napi/libs/hermes']
+            if (project.DEBUGGER_JS_ENGINE == 'Hermes') {
+                jniLibs.srcDirs = ['../hummer-core/src/main/jni/hermes/hermes/libs']
+            } else if (project.DEBUGGER_JS_ENGINE == 'NAPI') {
+                jniLibs.srcDirs = ['../hummer-core/src/main/jni/napi/napi/libs/hermes']
+            }
         }
     }
 
     externalNativeBuild {
         cmake {
-            path "src/main/native/CMakeLists.txt"
+            if (project.DEBUGGER_JS_ENGINE == 'Hermes') {
+                path "src/main/native/hermes/CMakeLists.txt"
+            } else if (project.DEBUGGER_JS_ENGINE == 'NAPI') {
+                path "src/main/native/napi/CMakeLists.txt"
+            }
         }
     }
 

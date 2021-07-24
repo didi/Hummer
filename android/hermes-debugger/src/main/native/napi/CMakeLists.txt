@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-set(NAPI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../hummer-core/src/main/jni/napi)
+set(NAPI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../hummer-core/src/main/jni/napi)
 
 include_directories(
         ${NAPI_DIR}/hummer
