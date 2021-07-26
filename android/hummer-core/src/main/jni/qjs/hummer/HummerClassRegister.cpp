@@ -2,10 +2,10 @@
 // Created by XiaoFeng on 2020/6/17.
 //
 
-#include "HummerJNI.h"
-#include "QuickJSCache.h"
-#include "HummerClassRegister.h"
-#include "HummerRecycler.h"
+#include <HummerJNI.h>
+#include <QuickJSCache.h>
+#include <HummerClassRegister.h>
+#include <HummerRecycler.h>
 
 namespace Recycler {
     typedef struct {

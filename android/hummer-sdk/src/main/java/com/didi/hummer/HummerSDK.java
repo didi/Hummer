@@ -8,7 +8,10 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.didi.hummer.adapter.navigator.impl.ActivityStackManager;
+import com.didi.hummer.context.HummerContextFactory;
+import com.didi.hummer.context.napi.NAPIHummerContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
+import com.didi.hummer.core.engine.napi.jni.JSException;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.plugin.interfaze.IHermesDebugger;
@@ -33,7 +36,8 @@ public class HummerSDK {
         int QUICK_JS    = 2;
         int V8          = 3;
         int HERMES      = 4;
-        int JSC_WEEX    = 11;
+        int NAPI_QJS    = 5;
+        int NAPI_HERMES = 6;
     }
 
     /**
@@ -78,7 +82,12 @@ public class HummerSDK {
             loadYogaEngine();
             loadJSEngine(appContext, jsEngine);
 
-            HummerException.init();
+            if (jsEngine == JsEngine.NAPI_QJS || jsEngine == JsEngine.NAPI_HERMES) {
+                JSException.init();
+                HummerContextFactory.setHummerContextCreator(NAPIHummerContext::new);
+            } else {
+                HummerException.init();
+            }
             isInited = true;
         }
         addHummerConfig(config);
@@ -104,7 +113,7 @@ public class HummerSDK {
 
     public static void initHermesDebugger(IHermesDebugger debugger) {
         if (hermesDebugger == null) {
-            setJsEngine(HummerSDK.JsEngine.HERMES);
+            setJsEngine(JsEngine.NAPI_HERMES);
             hermesDebugger = debugger;
         }
     }
@@ -157,11 +166,16 @@ public class HummerSDK {
                 case JsEngine.JSC:
                     ReLinker.loadLibrary(context, "hummer-jsc");
                     break;
-                case JsEngine.JSC_WEEX:
-                    ReLinker.loadLibrary(context, "hummer-jsc-weex");
-                    break;
                 case JsEngine.HERMES:
                     ReLinker.loadLibrary(context, "hummer-hermes");
+                    break;
+                case JsEngine.NAPI_QJS:
+                case JsEngine.NAPI_HERMES:
+                    if (HummerSDK.getHermesDebugger() != null) {
+                        ReLinker.loadLibrary(context, "hummer-napi-debugger");
+                    } else {
+                        ReLinker.loadLibrary(context, "hummer-napi");
+                    }
                     break;
                 case JsEngine.QUICK_JS:
                 default:

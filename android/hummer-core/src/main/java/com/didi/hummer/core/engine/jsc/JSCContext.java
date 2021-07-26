@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.jsc.jni.JavaScriptRuntime;
+import com.didi.hummer.core.engine.jsc.jni.TypeConvertor;
 
 /**
  * JS全局环境
@@ -49,5 +50,10 @@ public class JSCContext extends JSCValue implements JSContext {
     @Override
     public void release() {
         JavaScriptRuntime.destroyJSContext(context);
+    }
+
+    @Override
+    public boolean isValid() {
+        return TypeConvertor.isJSContextValid(context);
     }
 }
