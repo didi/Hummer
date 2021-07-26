@@ -47,6 +47,10 @@ public class Hummer {
         HummerSDK.initHermesDebugger(debugger);
     }
 
+    public static void initHermesDebugger(IHermesDebugger debugger, @HummerSDK.JsEngine int jsEngine) {
+        HummerSDK.initHermesDebugger(debugger, jsEngine);
+    }
+
     public static IHermesDebugger getHermesDebugger() {
         return HummerSDK.getHermesDebugger();
     }
