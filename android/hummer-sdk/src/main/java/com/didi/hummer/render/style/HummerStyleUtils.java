@@ -145,6 +145,7 @@ public class HummerStyleUtils {
         public static final String FONT_WEIGHT = "fontWeight";
         public static final String FONT_STYLE = "fontStyle";
         public static final String TEXT_ALIGN = "textAlign";
+        public static final String TEXT_VERTICAL_ALIGN = "textVerticalAlign";
         public static final String TEXT_DECORATION = "textDecoration";
         public static final String TEXT_OVERFLOW = "textOverflow";
         public static final String TEXT_LINE_CLAMP = "textLineClamp";
