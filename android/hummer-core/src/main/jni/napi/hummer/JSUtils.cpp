@@ -89,6 +89,10 @@ NAPIHandleScope JSUtils::getHandleScope(int64_t envPtr) {
     return nullptr;
 }
 
+void JSUtils::removeHandleScope(int64_t envPtr) {
+    handleScopeMap.erase(envPtr);
+}
+
 NAPIRef JSUtils::toJsValueRef(int64_t valuePtr) {
     if (valuePtr == -1) {
         return nullptr;

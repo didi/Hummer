@@ -41,6 +41,7 @@ public:
 
     static void addHandleScope(int64_t envPtr, NAPIHandleScope scope);
     static NAPIHandleScope getHandleScope(int64_t envPtr);
+    static void removeHandleScope(int64_t envPtr);
 
     static NAPIRef toJsValueRef(int64_t valuePtr);
     static int64_t toJsValuePtr(NAPIRef valueRef);
