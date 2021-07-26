@@ -556,6 +556,9 @@ class RootView extends View {
             textOverflow: 'ellipsis',
         };
 
+        text1.textCopyEnable = true;
+        text2.textCopyEnable = true;
+
         let text3 = new Text();
         text3.text = 'clip 这是一个单行测试文本';
         text3.style = {
