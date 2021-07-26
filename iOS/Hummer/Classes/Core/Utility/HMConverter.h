@@ -112,6 +112,9 @@ NS_ASSUME_NONNULL_END
 
 + (NSTextAlignment)HMStringToTextAlignment:(NSString *)string;
 
+/// HMAttributesTextVerticalAlign
++ (NSInteger)HMStringToTextVerticalAlignment:(NSString *)string;
+
 + (NSDictionary *)HMStringToTextDecoration:(NSString *)string;
 
 + (NSLineBreakMode)HMStringToBreakMode:(NSString *)string;

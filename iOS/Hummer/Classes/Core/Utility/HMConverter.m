@@ -462,6 +462,17 @@ CGPoint intersectionPoint(CGPoint firstLineBegin,
     return alignment;
 }
 
+/// HMAttributesTextVerticalAlign
++ (NSInteger)HMStringToTextVerticalAlignment:(NSString *)string {
+    NSInteger verticalAlignment = 0;
+    if ([string isEqualToString:@"top"]) {
+        verticalAlignment = 1;
+    } else if ([string isEqualToString:@"bottom"]) {
+        verticalAlignment = 2;
+    }
+    return verticalAlignment;
+}
+
 + (NSDictionary *)HMStringToTextDecoration:(NSString *)string {
     if ([string containsString:@"line-through"]) {
         return @{NSStrikethroughStyleAttributeName: @(NSUnderlineStyleSingle)};

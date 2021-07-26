@@ -13,6 +13,7 @@
 #import "UIView+HMDom.h"
 #import "HMAttributesBuilder.h"
 #import "HMUtility.h"
+#import "HMAttributesItem.h"
 
 @interface HMLabel() <HMAttributesBuilderDelegate>
 
@@ -25,6 +26,11 @@
 @property (nonatomic, copy) NSDictionary *letterSpacing;
 @property (nonatomic, assign) CGFloat lineSpacingMulti;
 @property (nonatomic, strong) NSMutableParagraphStyle *paragraphStyle;
+@property (nonatomic, assign) HMAttributesTextVerticalAlign textVerticalAlign;
+
+/// copy text
+@property (nonatomic, assign) BOOL textCopyEnable;
+@property (nonatomic, strong) UILongPressGestureRecognizer *textCopyGesture;
 
 @property (nonatomic, copy) NSString *formattedText;
 @property (nonatomic, strong) HMAttributesBuilder *builder;
@@ -40,6 +46,7 @@ HM_EXPORT_CLASS(Text, HMLabel)
 HM_EXPORT_PROPERTY(text, __text, __setText:)
 HM_EXPORT_PROPERTY(formattedText, __formattedText, __setFormattedText:)
 HM_EXPORT_PROPERTY(richText, __richText, __setRichText:)
+HM_EXPORT_PROPERTY(textCopyEnable, __textCopyEnable, __setTextCopyEnable:)
 
 HM_EXPORT_ATTRIBUTE(color, textColor, HMStringToColor:)
 HM_EXPORT_ATTRIBUTE(textAlign, textAlignment, HMStringToTextAlignment:)
@@ -52,6 +59,8 @@ HM_EXPORT_ATTRIBUTE(textOverflow, lineBreakMode, HMStringToBreakMode:)
 HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
 HM_EXPORT_ATTRIBUTE(letterSpacing, letterSpacing, HMNumberToLetterSpacing:)
 HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
+HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVerticalAlignment:)
+
 
 - (NSMutableParagraphStyle *)paragraphStyle
 {
@@ -174,6 +183,48 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
     [self hm_markDirty];
 }
 
+- (BOOL )__textCopyEnable {
+    return self.textCopyEnable;
+}
+
+- (void)__setTextCopyEnable:(HMBaseValue *)textIsSelectable {
+    NSNumber *num_textCopyEnable = [textIsSelectable toNumber];
+    if (!num_textCopyEnable) {return;}
+    BOOL theTextCopyEnable = [num_textCopyEnable boolValue];
+    
+    self.textCopyEnable = theTextCopyEnable;
+    if (!_textCopyGesture) {
+        _textCopyGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressCopyAction:)];
+    }
+    if (theTextCopyEnable) {
+        if (![self.gestureRecognizers containsObject:_textCopyGesture]) {
+            [self addGestureRecognizer:_textCopyGesture];
+        }
+    } else {
+        [self removeGestureRecognizer:_textCopyGesture];
+    }
+}
+
+- (void)longPressCopyAction:(UILongPressGestureRecognizer *)longPressGes {
+    
+    if (longPressGes.state == UIGestureRecognizerStateBegan) {
+        [self becomeFirstResponder];
+        CGRect rect = self.frame;
+        rect.origin.y += 10;
+        
+        UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(textCopyAction)];
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        [menuController setMenuItems:@[copyItem]];
+        [menuController setTargetRect:rect inView:self.superview];
+        [menuController setMenuVisible:YES animated:YES];
+    }
+}
+
+- (void)textCopyAction {
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = self.text;
+}
+
 #pragma mark - Export Attribute
 
 - (void)setTextDecoration:(NSDictionary *)textDecoration {
@@ -261,6 +312,11 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
 
 - (void)setTextAlign:(NSTextAlignment)textAlign {
     self.textAlignment = textAlign;
+}
+
+- (void)setTextVerticalAlign:(HMAttributesTextVerticalAlign)textVerticalAlign {
+    _textVerticalAlign = textVerticalAlign;
+    [self setNeedsDisplay];
 }
 
 - (void)updateFont {
@@ -366,6 +422,35 @@ HM_EXPORT_ATTRIBUTE(lineSpacingMulti, lineSpacingMulti, HMStringToFloat:)
     superSize.height += epsilon;
     
     return superSize;
+}
+
+- (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines {
+    CGRect textRect = [super textRectForBounds:bounds limitedToNumberOfLines:numberOfLines];
+    switch (self.textVerticalAlign) {
+        case HMAttributesTextVerticalAlignTop:
+            textRect.origin.y = bounds.origin.y;
+            break;
+        case HMAttributesTextVerticalAlignBottom:
+            textRect.origin.y = bounds.origin.y + bounds.size.height - textRect.size.height;
+            break;
+        case HMAttributesTextVerticalAlignCenter:
+        default:
+            textRect.origin.y = bounds.origin.y + (bounds.size.height - textRect.size.height) / 2.0;
+    }
+    return textRect;
+}
+
+- (void)drawTextInRect:(CGRect)requestedRect {
+    CGRect actualRect = [self textRectForBounds:requestedRect limitedToNumberOfLines:self.numberOfLines];
+    [super drawTextInRect:actualRect];
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return self.textCopyEnable;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    return action == @selector(textCopyAction);
 }
 
 @end

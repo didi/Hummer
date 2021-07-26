@@ -17,6 +17,12 @@ typedef NS_ENUM(NSUInteger, HMAttributesImageAlign) {
     HMAttributesImageAlignBaselineBottom,
 };
 
+typedef NS_ENUM(NSUInteger, HMAttributesTextVerticalAlign) {
+    HMAttributesTextVerticalAlignCenter = 0,
+    HMAttributesTextVerticalAlignTop,
+    HMAttributesTextVerticalAlignBottom,
+};
+
 @interface HMAttributesItem : NSObject
 
 @property (nonatomic, copy, nullable) NSString *text;
@@ -36,6 +42,7 @@ typedef NS_ENUM(NSUInteger, HMAttributesImageAlign) {
 @property (nonatomic) HMAttributesImageAlign imageAlign;
 @property (nonatomic, copy, nullable) NSString *href;
 @property (nonatomic, strong, nullable) UIColor *hrefColor;
+@property (nonatomic, assign) HMAttributesTextVerticalAlign textVerticalAlign;
 
 @property (nonatomic) NSUInteger length;
 @property (nonatomic, strong, nullable) UIImage *cachedImage;
