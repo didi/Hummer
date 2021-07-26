@@ -8,7 +8,7 @@
 
 #include <jni.h>
 #include <string>
-#include "../quickjs/quickjs.h"
+#include <quickjs.h>
 
 
 class TypeConvertor {

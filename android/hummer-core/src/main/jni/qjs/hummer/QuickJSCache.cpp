@@ -2,8 +2,8 @@
 // Created by maxiee on 2019-11-20.
 //
 
-#include "QuickJSCache.h"
-#include "HummerJNI.h"
+#include <QuickJSCache.h>
+#include <HummerJNI.h>
 
 std::map<long, JSContext*> QuickJSCache::cachedJSContext;
 

@@ -1,7 +1,7 @@
 #include <map>
-#include "HummerJNI.h"
-#include "QuickJSCache.h"
-#include "HummerRecycler.h"
+#include <HummerJNI.h>
+#include <QuickJSCache.h>
+#include <HummerRecycler.h>
 
 static std::map<long, jobject> HUMMER_RECYCLER_MAP;
 static jmethodID HUMMER_RECYCLER_INVOKE_ID = nullptr;

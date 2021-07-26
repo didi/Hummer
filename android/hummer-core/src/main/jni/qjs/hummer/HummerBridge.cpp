@@ -1,7 +1,7 @@
 #include <map>
-#include "HummerJNI.h"
-#include "TypeConvertor.h"
-#include "QuickJSCache.h"
+#include <HummerJNI.h>
+#include <TypeConvertor.h>
+#include <QuickJSCache.h>
 
 static std::map<long, jobject> HUMMER_BRIDGE_MAP;
 static jmethodID HUMMER_BRIDGE_INVOKE_ID = nullptr;

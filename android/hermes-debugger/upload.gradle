@@ -1,0 +1,7 @@
+if (project.publishArchivesType == '1') {
+    apply from: '../upload_maven.gradle'
+} else if (project.publishArchivesType == '2') {
+    apply from: '../upload_jcenter.gradle'
+} else if (project.publishArchivesType == '3') {
+//    apply from: '../upload_maven_central_aar.gradle'
+}

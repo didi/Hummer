@@ -6,7 +6,7 @@
 #define NATIVE_JS_ANDROID_PROMISEPROCESSOR_H
 
 
-#include "../quickjs/quickjs.h"
+#include <quickjs.h>
 
 // 处理Promise等异步任务的消息队列
 void processJsAsyncTasksLoop(JSContext *context);

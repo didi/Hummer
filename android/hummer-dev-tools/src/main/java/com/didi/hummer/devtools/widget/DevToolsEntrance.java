@@ -13,6 +13,7 @@ import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
+import com.didi.hummer.core.engine.napi.jni.JSException;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
@@ -46,13 +47,24 @@ public class DevToolsEntrance {
         mHummerContext = context;
         mJsContext = mHummerContext.getJsContext();
         mContainer = mHummerContext.getContainer();
-        HummerException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
+
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            JSException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        } else {
+            HummerException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        }
 
         initView(context);
     }
 
     public void release() {
-        HummerException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            JSException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        } else {
+            HummerException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
+        }
     }
 
     private void initView(Context context) {
@@ -105,13 +117,11 @@ public class DevToolsEntrance {
     public String getJsEngineString() {
         String className = mHummerContext.getClass().getSimpleName();
         switch (className) {
-            case "JSCHummerContext":
+            case "JSCHummerContext": {
                 int engine = HummerSDK.getJsEngine();
                 switch (engine) {
                     case HummerSDK.JsEngine.JSC:
                         return "JSC";
-                    case HummerSDK.JsEngine.JSC_WEEX:
-                        return "JSC_Weex";
                     case HummerSDK.JsEngine.HERMES:
                         return "Hermes";
                     case HummerSDK.JsEngine.QUICK_JS:
@@ -119,6 +129,18 @@ public class DevToolsEntrance {
                     default:
                         return "Unknown";
                 }
+            }
+            case "NAPIHummerContext": {
+                int engine = HummerSDK.getJsEngine();
+                switch (engine) {
+                    case HummerSDK.JsEngine.NAPI_QJS:
+                        return "NAPI - QuickJS";
+                    case HummerSDK.JsEngine.NAPI_HERMES:
+                        return "NAPI - Hermes";
+                    default:
+                        return "Unknown";
+                }
+            }
             case "V8HummerContext":
                 return "V8";
             default:

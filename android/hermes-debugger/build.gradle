@@ -1,0 +1,60 @@
+apply plugin: 'com.android.library'
+apply from: '../module.gradle'
+apply from: 'upload.gradle'
+
+android {
+
+    defaultConfig {
+
+        ndk {
+            abiFilters 'armeabi-v7a','x86'//,'arm64-v8a'//,'x86_64'
+        }
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DNAPI_ENGINE=Hermes"
+                arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_shared'
+                cppFlags '-std=c++14'
+                cppFlags '-DHERMES_ENABLE_DEBUGGER=True'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            if (project.DEBUGGER_JS_ENGINE == 'Hermes') {
+                jniLibs.srcDirs = ['../hummer-core/src/main/jni/hermes/hermes/libs']
+            } else if (project.DEBUGGER_JS_ENGINE == 'NAPI') {
+                jniLibs.srcDirs = ['../hummer-core/src/main/jni/napi/napi/libs/hermes']
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            if (project.DEBUGGER_JS_ENGINE == 'Hermes') {
+                path "src/main/native/hermes/CMakeLists.txt"
+            } else if (project.DEBUGGER_JS_ENGINE == 'NAPI') {
+                path "src/main/native/napi/CMakeLists.txt"
+            }
+        }
+    }
+
+    packagingOptions {
+        exclude "**/libc++_shared.so"
+    }
+}
+
+dependencies {
+    implementation 'com.didi.hummer:hummer-plugin-interface:0.0.1'
+//    implementation 'com.didi.hummer:hermes-inspector:0.0.2'
+    implementation 'io.github.didi.hummer:hermes-inspector:0.0.2'
+//    implementation project(":hermes-inspector")
+}
