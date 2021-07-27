@@ -1,6 +1,7 @@
 package com.didi.hummer.render.utility;
 
 import com.facebook.yoga.YogaNode;
+import com.facebook.yoga.YogaNodeFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -23,7 +24,7 @@ public class YogaNodeUtil {
         YogaNode node = null;
         if ((YogaNode.class.getModifiers() & Modifier.ABSTRACT) != 0) {
             // 新版（YogaNode是abstract类）
-            node = YogaNode.create();
+            node = YogaNodeFactory.create();
         } else {
             // 旧版（YogaNode是普通类）
             try {
