@@ -25,5 +25,5 @@ public class JSEngine {
 
     public static native void protect(long jsContext, long jsValue);
 
-    public static native void unProtect(long jsContext, long jsValue);
+    public static native void unprotect(long jsContext, long jsValue);
 }
