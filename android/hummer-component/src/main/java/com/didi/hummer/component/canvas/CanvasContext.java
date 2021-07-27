@@ -3,12 +3,15 @@ package com.didi.hummer.component.canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
+import android.util.Log;
 
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 
 
 public class CanvasContext {
+
+    private static final String TAG = "CanvasDrawHelperView";
 
     private Paint paint = new Paint();
     private TextPaint textPaint = new TextPaint();
@@ -31,8 +34,26 @@ public class CanvasContext {
         paint.setStrokeWidth(w);
     }
 
+    public void lineCap(int cap) {
+        switch (cap) {
+            case 0:
+                paint.setStrokeCap(Paint.Cap.BUTT);
+                break;
+            case 1:
+                paint.setStrokeCap(Paint.Cap.ROUND);
+                break;
+            case 2:
+                paint.setStrokeCap(Paint.Cap.SQUARE);
+                break;
+            default:
+                paint.setStrokeCap(Paint.Cap.BUTT);
+                break;
+        }
+    }
+
 
     public void lineColor(String color) {
+        Log.i(TAG, "lineColor: " + color);
         paint.setColor(Color.parseColor(color));
     }
 
@@ -49,6 +70,7 @@ public class CanvasContext {
                 paint.setStrokeJoin(Paint.Join.BEVEL);
                 break;
             default:
+                paint.setStrokeJoin(Paint.Join.MITER);
                 break;
         }
     }
