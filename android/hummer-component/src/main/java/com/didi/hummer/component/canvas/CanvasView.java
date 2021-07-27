@@ -116,35 +116,28 @@ public class CanvasView extends HMBase<CanvasDrawHelperView> {
 
     @JsMethod("lineWidth")
     public void lineWidth(float w) {
-        getView().getCanvasContext().getPaint().setStrokeWidth(w);
+        getView().lineWidth(w);
     }
 
     @JsMethod("lineColor")
     public void lineColor(String color) {
-        getView().getCanvasContext().lineColor(color);
+        getView().lineColor(color);
     }
 
     @JsMethod("lineJoin")
     public void lineJoin(int join) {
-        switch (join) {
-            case 0:
-                getView().getCanvasContext().getPaint().setStrokeJoin(Paint.Join.MITER);
-                break;
-            case 1:
-                getView().getCanvasContext().getPaint().setStrokeJoin(Paint.Join.ROUND);
-                break;
-            case 2:
-                getView().getCanvasContext().getPaint().setStrokeJoin(Paint.Join.BEVEL);
-                break;
-            default:
-                break;
-        }
+        getView().lineJoin(join);
     }
 
     @JsMethod("fillColor")
     public void fillColor(String color) {
         getView().getCanvasContext().getPaint().setStyle(Paint.Style.FILL);
-        getView().getCanvasContext().getPaint().setColor(Color.parseColor(color));
+        getView().fillColor(color);
+    }
+
+    @JsMethod("lineCap")
+    public void lineCap(int cap) {
+        getView().lineCap(cap);
     }
 
 }

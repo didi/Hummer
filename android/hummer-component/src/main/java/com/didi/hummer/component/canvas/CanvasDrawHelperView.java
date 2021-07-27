@@ -78,19 +78,21 @@ public class CanvasDrawHelperView extends View {
         matrix.postScale(scaleWidth, scaleHeight);
         Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
         actions.add(canvas -> canvas.drawBitmap(newBitmap, x, y, getPaint()));
-        postInvalidate();
+        invalidate();
     }
 
     /**
      * 绘制矩形 实心
      */
     public void fillRect(float x, float y, float width, float height) {
+        Log.i(TAG, "fillRect do");
         getPaint().setStyle(Paint.Style.FILL);
         actions.add(canvas -> {
+            Log.i(TAG, "fillRect Action");
             Rect rect = new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
             canvas.drawRect(rect, getPaint());
         });
-        postInvalidate();
+        invalidate();
     }
 
     /**
@@ -102,7 +104,7 @@ public class CanvasDrawHelperView extends View {
             Rect rect = new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
             canvas.drawRect(rect, getPaint());
         });
-        postInvalidate();
+        invalidate();
     }
 
     /**
@@ -111,7 +113,7 @@ public class CanvasDrawHelperView extends View {
     public void fillCircle(float x, float y, float radius) {
         getPaint().setStyle(Paint.Style.FILL);
         actions.add(canvas -> canvas.drawCircle(x, y, radius, getPaint()));
-        postInvalidate();
+        invalidate();
     }
 
     /**
@@ -120,7 +122,7 @@ public class CanvasDrawHelperView extends View {
     public void strokeCircle(float x, float y, float radius) {
         getPaint().setStyle(Paint.Style.STROKE);
         actions.add(canvas -> canvas.drawCircle(x, y, radius, getPaint()));
-        postInvalidate();
+        invalidate();
     }
 
     public void fontSize(float size) {
@@ -138,7 +140,7 @@ public class CanvasDrawHelperView extends View {
             staticLayout.draw(canvas);
             canvas.restore();
         });
-        postInvalidate();
+        invalidate();
     }
 
     public void arc(float x, float y, float radius, float startAngle, float endAngle, int clockwise) {
@@ -149,18 +151,25 @@ public class CanvasDrawHelperView extends View {
     }
 
     public void drawLine(float startX, float startY, float stopX, float stopY) {
-        actions.add(canvas -> canvas.drawLine(startX, startY, stopX, stopY, getPaint()));
+        Log.i(TAG, "drawLine do");
+        actions.add(canvas -> {
+            Log.i(TAG, "drawLine Action");
+            canvas.drawLine(startX, startY, stopX, stopY, getPaint());
+        });
         invalidate();
     }
 
     public void drawLines(float[] points) {
-        actions.add(canvas -> canvas.drawLines(points, getPaint()));
-        postInvalidate();
+        actions.add(canvas -> {
+            Log.i(TAG, "drawLines Action");
+            canvas.drawLines(points, getPaint());
+        });
+        invalidate();
     }
 
     public void drawPath(CanvasPath path) {
         actions.add(canvas -> canvas.drawPath(path.getPath(), getPaint()));
-        postInvalidate();
+        invalidate();
     }
 
     public void ellipse(float left, float top, float right, float bottom) {
@@ -168,6 +177,43 @@ public class CanvasDrawHelperView extends View {
             RectF rectF = new RectF(left, top, right, bottom);
             canvas.drawOval(rectF, getPaint());
         });
-        postInvalidate();
+        invalidate();
+    }
+
+
+    //==============canvas context==============
+
+
+    public void lineWidth(float w) {
+        actions.add(canvas -> {
+           canvasContext.lineWidth(w);
+        });
+    }
+
+    public void lineCap(int cap) {
+        actions.add(canvas -> {
+            canvasContext.lineCap(cap);
+        });
+    }
+
+
+    public void lineColor(String color) {
+        actions.add(canvas -> {
+            canvasContext.lineColor(color);
+        });
+    }
+
+
+    public void lineJoin(int join) {
+        actions.add(canvas -> {
+            canvasContext.lineJoin(join);
+        });
+    }
+
+
+    public void fillColor(String color) {
+        actions.add(canvas -> {
+            canvasContext.fillColor(color);
+        });
     }
 }
