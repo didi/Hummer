@@ -46,10 +46,9 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_destroyJSContext(JNIEnv *env,
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_evaluateJavaScript(JNIEnv *env, jclass clazz, jlong js_context, jstring script, jstring scriptId) {
+    auto globalEnv = JSUtils::toJsContext(js_context);
     const char *charScript = env->GetStringUTFChars(script, nullptr);
     const char *charScriptId = env->GetStringUTFChars(scriptId, nullptr);
-
-    auto globalEnv = JSUtils::toJsContext(js_context);
 
     NAPIValue result;
     NAPIStatus status = NAPIRunScript(globalEnv, charScript, charScriptId, &result);
@@ -144,6 +143,10 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_callFunction(JNIEnv *env, jcl
     auto paramsCount = static_cast<int>(env->GetArrayLength(params));
     LOGD("JSFunctionCall, paramsCount = %d", paramsCount);
 
+    if (jsFuncObj == nullptr) {
+        return nullptr;
+    }
+
     auto values = new NAPIValue[paramsCount];
     for (int i = 0; i < paramsCount; i++) {
         jobject obj = env->GetObjectArrayElement(params, i);
@@ -200,7 +203,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_protect(JNIEnv *env, jclass c
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_didi_hummer_core_engine_napi_jni_JSEngine_unProtect(JNIEnv *env, jclass clazz, jlong js_context, jlong js_value) {
+Java_com_didi_hummer_core_engine_napi_jni_JSEngine_unprotect(JNIEnv *env, jclass clazz, jlong js_context, jlong js_value) {
     auto globalEnv = JSUtils::toJsContext(js_context);
     if (globalEnv == nullptr) {
         return;

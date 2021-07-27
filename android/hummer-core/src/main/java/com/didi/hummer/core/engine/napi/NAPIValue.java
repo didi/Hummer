@@ -214,7 +214,7 @@ public class NAPIValue implements JSValue {
     public void unprotect() {
         if (!isUnprotected) {
             isUnprotected = true;
-            JSEngine.unProtect(context, value);
+            JSEngine.unprotect(context, value);
         }
     }
 

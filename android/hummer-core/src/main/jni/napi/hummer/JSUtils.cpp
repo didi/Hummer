@@ -245,9 +245,7 @@ NAPIValue JSUtils::JavaObjectToJsValue(NAPIEnv globalEnv, jobject value) {
     } else if (env->IsInstanceOf(value, stringCls)) {
         const char *cString = env->GetStringUTFChars((jstring) value, nullptr);
         napi_create_string_utf8(globalEnv, cString, &val);
-    } else if (env->IsInstanceOf(value, jsCallbackCls)) {
-        jlong valuePtr = env->GetLongField(value, js_callback_ptr);
-        val = JSUtils::toJsValue(globalEnv, valuePtr);
+        env->ReleaseStringUTFChars((jstring) value, cString);
     } else if (env->IsInstanceOf(value, jsValueCls)) {
         jlong valuePtr = env->GetLongField(value, js_value_ptr);
         val = JSUtils::toJsValue(globalEnv, valuePtr);
@@ -255,6 +253,7 @@ NAPIValue JSUtils::JavaObjectToJsValue(NAPIEnv globalEnv, jobject value) {
         jobject jstr = env->CallStaticObjectMethod(jsUtilsCls, toJsonStringMethodID, value);
         const char *cString = env->GetStringUTFChars((jstring) jstr, nullptr);
         NAPIParseUTF8JSONString(globalEnv, cString, &val);
+        env->ReleaseStringUTFChars((jstring) jstr, cString);
     }
 
     JNI_DetachEnv();
