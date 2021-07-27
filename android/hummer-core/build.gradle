@@ -17,6 +17,9 @@ if (project.COMPILE_JS_ENGINE == 'All') {
 }
 
 android {
+
+    ndkVersion "21.4.7075529"
+
     defaultConfig {
 
         buildConfigField "long", "VERSION_CODE", "${defaultConfig.versionCode}"
