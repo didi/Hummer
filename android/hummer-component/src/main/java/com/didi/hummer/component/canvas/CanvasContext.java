@@ -5,80 +5,79 @@ import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.Log;
 
-import com.didi.hummer.annotation.Component;
-import com.didi.hummer.annotation.JsMethod;
-
 
 public class CanvasContext {
 
     private static final String TAG = "CanvasDrawHelperView";
 
-    private Paint paint = new Paint();
+    private Paint linePaint = new Paint();
+    private Paint fillPaint = new Paint();
     private TextPaint textPaint = new TextPaint();
 
     public CanvasContext() {
-        paint.setAntiAlias(true);
+        fillPaint.setAntiAlias(true);
+        linePaint.setAntiAlias(true);
         textPaint.setAntiAlias(true);
     }
 
-    public Paint getPaint() {
-        return paint;
+    public Paint getLinePaint() {
+        return linePaint;
     }
 
     public TextPaint getTextPaint() {
         return textPaint;
     }
 
+    public Paint getFillPaint() {
+        return fillPaint;
+    }
 
     public void lineWidth(float w) {
-        paint.setStrokeWidth(w);
+        linePaint.setStrokeWidth(w);
     }
 
     public void lineCap(int cap) {
         switch (cap) {
             case 0:
-                paint.setStrokeCap(Paint.Cap.BUTT);
+                linePaint.setStrokeCap(Paint.Cap.BUTT);
                 break;
             case 1:
-                paint.setStrokeCap(Paint.Cap.ROUND);
+                linePaint.setStrokeCap(Paint.Cap.ROUND);
                 break;
             case 2:
-                paint.setStrokeCap(Paint.Cap.SQUARE);
+                linePaint.setStrokeCap(Paint.Cap.SQUARE);
                 break;
             default:
-                paint.setStrokeCap(Paint.Cap.BUTT);
+                linePaint.setStrokeCap(Paint.Cap.BUTT);
                 break;
         }
     }
-
-
-    public void lineColor(String color) {
-        Log.i(TAG, "lineColor: " + color);
-        paint.setColor(Color.parseColor(color));
-    }
-
 
     public void lineJoin(int join) {
         switch (join) {
             case 0:
-                paint.setStrokeJoin(Paint.Join.MITER);
+                linePaint.setStrokeJoin(Paint.Join.MITER);
                 break;
             case 1:
-                paint.setStrokeJoin(Paint.Join.ROUND);
+                linePaint.setStrokeJoin(Paint.Join.ROUND);
                 break;
             case 2:
-                paint.setStrokeJoin(Paint.Join.BEVEL);
+                linePaint.setStrokeJoin(Paint.Join.BEVEL);
                 break;
             default:
-                paint.setStrokeJoin(Paint.Join.MITER);
+                linePaint.setStrokeJoin(Paint.Join.MITER);
                 break;
         }
     }
 
+    public void lineColor(String color) {
+        fillPaint.setStyle(Paint.Style.STROKE);
+        linePaint.setColor(Color.parseColor(color));
+    }
 
     public void fillColor(String color) {
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.parseColor(color));
+        fillPaint.setStyle(Paint.Style.FILL);
+        fillPaint.setColor(Color.parseColor(color));
     }
 
 }
