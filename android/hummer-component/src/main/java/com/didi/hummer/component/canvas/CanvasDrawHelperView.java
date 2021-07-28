@@ -3,7 +3,6 @@ package com.didi.hummer.component.canvas;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -15,8 +14,6 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-
-import com.didi.hummer.annotation.JsMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +46,12 @@ public class CanvasDrawHelperView extends View {
         return canvasContext;
     }
 
-    private Paint getPaint() {
-        return canvasContext.getPaint();
+    private Paint getLinePaint() {
+        return canvasContext.getLinePaint();
+    }
+
+    private Paint getFillPaint() {
+        return canvasContext.getFillPaint();
     }
 
     private TextPaint getTextPaint() {
@@ -77,7 +78,7 @@ public class CanvasDrawHelperView extends View {
         float scaleHeight = ((float) dHeight) / height;
         matrix.postScale(scaleWidth, scaleHeight);
         Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-        actions.add(canvas -> canvas.drawBitmap(newBitmap, x, y, getPaint()));
+        actions.add(canvas -> canvas.drawBitmap(newBitmap, x, y, getLinePaint()));
         invalidate();
     }
 
@@ -86,11 +87,11 @@ public class CanvasDrawHelperView extends View {
      */
     public void fillRect(float x, float y, float width, float height) {
         Log.i(TAG, "fillRect do");
-        getPaint().setStyle(Paint.Style.FILL);
+        getLinePaint().setStyle(Paint.Style.FILL);
         actions.add(canvas -> {
             Log.i(TAG, "fillRect Action");
             Rect rect = new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
-            canvas.drawRect(rect, getPaint());
+            canvas.drawRect(rect, getFillPaint());
         });
         invalidate();
     }
@@ -99,10 +100,10 @@ public class CanvasDrawHelperView extends View {
      * 绘制矩形 镂空
      */
     public void strokeRect(float x, float y, float width, float height) {
-        getPaint().setStyle(Paint.Style.STROKE);
+        getLinePaint().setStyle(Paint.Style.STROKE);
         actions.add(canvas -> {
             Rect rect = new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
-            canvas.drawRect(rect, getPaint());
+            canvas.drawRect(rect, getLinePaint());
         });
         invalidate();
     }
@@ -111,8 +112,8 @@ public class CanvasDrawHelperView extends View {
      * 绘制圆形 实心
      */
     public void fillCircle(float x, float y, float radius) {
-        getPaint().setStyle(Paint.Style.FILL);
-        actions.add(canvas -> canvas.drawCircle(x, y, radius, getPaint()));
+        getLinePaint().setStyle(Paint.Style.FILL);
+        actions.add(canvas -> canvas.drawCircle(x, y, radius, getFillPaint()));
         invalidate();
     }
 
@@ -120,8 +121,8 @@ public class CanvasDrawHelperView extends View {
      * 绘制圆形 镂空
      */
     public void strokeCircle(float x, float y, float radius) {
-        getPaint().setStyle(Paint.Style.STROKE);
-        actions.add(canvas -> canvas.drawCircle(x, y, radius, getPaint()));
+        getLinePaint().setStyle(Paint.Style.STROKE);
+        actions.add(canvas -> canvas.drawCircle(x, y, radius, getLinePaint()));
         invalidate();
     }
 
@@ -146,7 +147,7 @@ public class CanvasDrawHelperView extends View {
     public void arc(float x, float y, float radius, float startAngle, float endAngle, int clockwise) {
         actions.add(canvas -> {
             RectF rectF = new RectF(x - radius, y - radius, x + radius, y + radius);
-            canvas.drawArc(rectF, startAngle, endAngle, false, getPaint());
+            canvas.drawArc(rectF, startAngle, endAngle, false, getLinePaint());
         });
     }
 
@@ -154,7 +155,7 @@ public class CanvasDrawHelperView extends View {
         Log.i(TAG, "drawLine do");
         actions.add(canvas -> {
             Log.i(TAG, "drawLine Action");
-            canvas.drawLine(startX, startY, stopX, stopY, getPaint());
+            canvas.drawLine(startX, startY, stopX, stopY, getLinePaint());
         });
         invalidate();
     }
@@ -162,20 +163,20 @@ public class CanvasDrawHelperView extends View {
     public void drawLines(float[] points) {
         actions.add(canvas -> {
             Log.i(TAG, "drawLines Action");
-            canvas.drawLines(points, getPaint());
+            canvas.drawLines(points, getLinePaint());
         });
         invalidate();
     }
 
     public void drawPath(CanvasPath path) {
-        actions.add(canvas -> canvas.drawPath(path.getPath(), getPaint()));
+        actions.add(canvas -> canvas.drawPath(path.getPath(), getLinePaint()));
         invalidate();
     }
 
     public void ellipse(float left, float top, float right, float bottom) {
         actions.add(canvas -> {
             RectF rectF = new RectF(left, top, right, bottom);
-            canvas.drawOval(rectF, getPaint());
+            canvas.drawOval(rectF, getLinePaint());
         });
         invalidate();
     }
@@ -186,7 +187,7 @@ public class CanvasDrawHelperView extends View {
 
     public void lineWidth(float w) {
         actions.add(canvas -> {
-           canvasContext.lineWidth(w);
+            canvasContext.lineWidth(w);
         });
     }
 

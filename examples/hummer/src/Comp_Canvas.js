@@ -18,6 +18,7 @@ class RootView extends View {
         }
         this.drawRect(canvas)
         this.drawLines(width, height, canvas)
+        this.drawText(width, height, canvas)
 
         this.appendChild(canvas);
     }
@@ -45,17 +46,28 @@ class RootView extends View {
             let d4 = data4[i]
 
             if (d2 >= d1) {
-                canvas.lineColor("#FF0000")
+                canvas.fillColor("#FF0000")
                 canvas.fillRect(start_w, d1, width_half * 2, d2 - d1)
+                canvas.lineColor("#FF0000")
                 canvas.drawLine(start_w + width_half, d3, start_w + width_half, d4)
             } else {
-                canvas.lineColor("#00FF00")
+                canvas.fillColor("#00FF00")
                 canvas.fillRect(start_w, d2, width_half * 2, d1 - d2)
+                canvas.lineColor("#00FF00")
                 canvas.drawLine(start_w + width_half, d3, start_w + width_half, d4)
             }
 
             start_w = start_w + width_half * 2 + space
         }
+    }
+
+    deawText(width, height, canvas) {
+        canvas.fillText(10, 100, "600", 40)
+        canvas.fillText(10, 200, "500", 40)
+        canvas.fillText(10, 300, "400", 40)
+        canvas.fillText(10, 400, "300", 40)
+        canvas.fillText(10, 500, "200", 40)
+        canvas.fillText(10, 600, "100", 40)
     }
 
     drawLines(width, height, canvas) {
