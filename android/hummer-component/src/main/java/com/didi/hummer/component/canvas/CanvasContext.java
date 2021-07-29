@@ -80,4 +80,8 @@ public class CanvasContext {
         fillPaint.setColor(Color.parseColor(color));
     }
 
+    public void textColor(String color) {
+        textPaint.setColor(Color.parseColor(color));
+    }
+
 }
