@@ -82,8 +82,10 @@ public class CanvasDrawHelperView extends View {
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
             Matrix matrix = new Matrix();
-            float scaleWidth = ((float) dWidth) / width;
-            float scaleHeight = ((float) dHeight) / height;
+            float w_px = dp2px(dWidth);
+            float h_px = dp2px(dHeight);
+            float scaleWidth = w_px / width;
+            float scaleHeight = h_px / height;
             matrix.postScale(scaleWidth, scaleHeight);
             Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
             float x_px = dp2px(x);
