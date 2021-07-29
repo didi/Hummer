@@ -21,6 +21,7 @@ class RootView extends View {
         this.drawLines(width, height, canvas)
         this.drawText(width, height, canvas)
         this.drawCircle(width, height, canvas)
+        this.drawImage(width, height, canvas)  
 
         this.appendChild(canvas);
     }
@@ -132,7 +133,7 @@ class RootView extends View {
     }
 
     drawImage(width, height, canvas) {
-
+        canvas.drawImage("ic_loading",200,300,30,30)
     }
 
     drawCircle(width, height, canvas) {
