@@ -34,14 +34,26 @@ Hummer is a dynamic solution for client.
 
   s.default_subspec        = "Core"
 
+  s.subspec "Hermes" do |ss|
+    ss.pod_target_xcconfig = {
+      'HEADER_SEARCH_PATHS' => "$(PODS_TARGET_SRCROOT)/iOS/N-API/include $(PODS_TARGET_SRCROOT)/iOS/N-API/third_party/react-native/ReactCommon",
+      'GCC_ENABLE_CPP_EXCEPTIONS' => 'NO',
+      'GCC_ENABLE_CPP_RTTI' => 'NO'
+    }
+    ss.vendored_library = 'iOS/N-API/napi/libhermes.a'
+    ss.library = 'c++'
+    ss.framework = 'CoreFoundation'
+    ss.source_files = 'iOS/Hermes/*.{h,m,mm}'
+    ss.dependency 'SocketRocket', '~> 0.1'
+  end
+
   s.subspec "Core" do |ss|
-    ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,mm,cpp}'
-    ss.exclude_files = 'iOS/Hummer/Classes/Engine/Hermes/*.{h,mm,m}'
+    ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
     ss.frameworks = 'JavaScriptCore'
-
+    ss.dependency 'Hummer/Hermes'
     ss.dependency 'Yoga', '~> 1.14'
     ss.dependency 'SocketRocket', '~> 0.1'
   end
