@@ -66,7 +66,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 ## 团队成员
 - **负责人** [小枫](https://github.com/bbssyyuui)
 - **内部核心成员** [小枫](https://github.com/bbssyyuui), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
-- **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin)
+- **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin)，[jtsky](https://github.com/jtsky)
 
 ## 近期规划
 
