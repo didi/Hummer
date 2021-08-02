@@ -239,6 +239,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     NSDictionary *attributes = [self textAttributes];
     self.attributedText = [[NSMutableAttributedString alloc] initWithString:string
                                                                  attributes:attributes];
+    [self hm_markDirty];
 }
 
 - (void)setLetterSpacing:(NSDictionary *)letterSpacing
@@ -254,6 +255,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     NSDictionary *attributes = [self textAttributes];
     self.attributedText = [[NSMutableAttributedString alloc] initWithString:string
                                                                  attributes:attributes];
+    [self hm_markDirty];
 }
 
 - (void)setLineSpacingMulti:(CGFloat)lineSpacingMulti
@@ -271,6 +273,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     NSDictionary *attributes = [self textAttributes];
     self.attributedText = [[NSMutableAttributedString alloc] initWithString:string
                                                                  attributes:attributes];
+    [self hm_markDirty];
 }
 
 - (void)setFontFamily:(NSString *)fontFamily {
@@ -280,6 +283,8 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     
     if (self.builder) {
         [self.builder updateFont:self.font];
+    } else {
+        [self hm_markDirty];
     }
 }
 
@@ -289,6 +294,8 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     
     if (self.builder) {
         [self.builder updateFont:self.font];
+    } else {
+        [self hm_markDirty];
     }
 }
 
@@ -298,6 +305,8 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     
     if (self.builder) {
         [self.builder updateFont:self.font];
+    } else {
+        [self hm_markDirty];
     }
 }
 
@@ -307,6 +316,8 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     
     if (self.builder) {
         [self.builder updateFont:self.font];
+    } else {
+        [self hm_markDirty];
     }
 }
 
