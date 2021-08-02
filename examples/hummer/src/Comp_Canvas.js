@@ -21,7 +21,7 @@ class RootView extends View {
         this.drawLines(width, height, canvas)
         this.drawText(width, height, canvas)
         this.drawCircle(width, height, canvas)
-        this.drawImage(width, height, canvas)  
+        this.drawImage(width, height, canvas)
 
         this.appendChild(canvas);
     }
@@ -99,14 +99,14 @@ class RootView extends View {
     //     let y = 100;
     //     let space = (width - start_line * 2) / data.length
     //     path.moveTo(x, y)
-    //     console.log("y:"+y);
+    //     console.log("y:" + y);
     //     for (let i = 0; i < data.length; i++) {
     //         x += space
     //         y = data[i]
-    //         console.log("y:"+y);
+    //         console.log("y:" + y);
     //         path.moveTo(x, y)
     //     }
-    //     console.log("path:"+path);
+    //     console.log("path:" + path);
     //     canvas.drawPath(path)
     // }
 
@@ -133,15 +133,22 @@ class RootView extends View {
     }
 
     drawImage(width, height, canvas) {
-        canvas.drawImage("ic_loading",200,300,30,30)
+        //资源图片
+        // let path = "ic_loading"
+        //网络图片
+        let path = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F03%2F20170803110751_8NLev.thumb.700_0.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630219778&t=45bfb77ae5fe1722be22e141075a9af6"
+        //绝对路径
+        // let path = "file://内部存储/bluetooth/test.jepg"
+        canvas.drawImage(path, 180, 330, 50, 50)
+
     }
 
     drawCircle(width, height, canvas) {
         canvas.fillCircle(100, 300, 20)
         canvas.strokeCircle(200, 300, 20)
-        canvas.arc(300,300,20,50,60,1)
-        canvas.strokeEllipse(100,400,300,500)
-        canvas.fillEllipse(100,600,300,700)
+        canvas.arc(300, 300, 20, Math.PI/2, Math.PI, true)
+        canvas.strokeEllipse(100, 400, 300, 500)
+        canvas.fillEllipse(100, 600, 300, 700)
     }
 
 

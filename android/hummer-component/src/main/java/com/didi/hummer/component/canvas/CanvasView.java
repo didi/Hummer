@@ -4,9 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -17,6 +17,7 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.YogaResUtils;
+import com.didi.hummer.utils.JsSourceUtil;
 
 @Component("CanvasView")
 public class CanvasView extends HMBase<CanvasDrawHelperView> {
@@ -47,24 +48,44 @@ public class CanvasView extends HMBase<CanvasDrawHelperView> {
         if (bitmap instanceof Bitmap) {
             getView().drawImage((Bitmap) bitmap, x, y, dWidth, dHeight);
         } else if (bitmap instanceof String) {
-//            String path = JsSourceUtil.getRealResourcePath((String) bitmap, context.getJsSourcePath());
-//            int jsSourceType = JsSourceUtil.getJsSourceType(context.getJsSourcePath());
-//            switch (jsSourceType) {
-//                case JsSourceUtil.JS_SOURCE_TYPE_ASSETS:
-//                    path = "file:///android_asset/" + path;
-//                    break;
-//                case JsSourceUtil.JS_SOURCE_TYPE_FILE:
-//                    break;
-//                case JsSourceUtil.JS_SOURCE_TYPE_HTTP:
-//                    break;
-//                default:
-//                    break;
-//            }
-
-            int imageId = YogaResUtils.getResourceId((String) bitmap, "drawable", null);
-            Bitmap bmp = BitmapFactory.decodeResource(getView().getContext().getResources(),imageId);
-            getView().drawImage(bmp, x, y, dWidth, dHeight);
+            String url = (String) bitmap;
+            if (isRemoteImage(url)) {
+                if (!TextUtils.isEmpty(url) && url.startsWith("//")) {
+                    url = "https:" + url;
+                }
+                loadImageWithGlide(url, x, y, dWidth, dHeight);
+            } else if (isLocalAbsoluteImage((String) bitmap)) {
+                loadImageWithGlide((String) bitmap, x, y, dWidth, dHeight);
+            } else if (isLocalRelativeImage((String) bitmap)) {
+                String imageSrc = (String) bitmap;
+                int jsSourceType = JsSourceUtil.getJsSourceType(context.getJsSourcePath());
+                imageSrc = JsSourceUtil.getRealResourcePath(imageSrc, context.getJsSourcePath());
+                switch (jsSourceType) {
+                    case JsSourceUtil.JS_SOURCE_TYPE_ASSETS:
+                        imageSrc = "file:///android_asset/" + imageSrc;
+                        loadImageWithGlide(imageSrc, x, y, dWidth, dHeight);
+                        break;
+                    case JsSourceUtil.JS_SOURCE_TYPE_FILE:
+                        loadImageWithGlide(imageSrc, x, y, dWidth, dHeight);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                int imageId = YogaResUtils.getResourceId((String) bitmap, "drawable", null);
+                Bitmap bmp = BitmapFactory.decodeResource(getView().getContext().getResources(), imageId);
+                getView().drawImage(bmp, x, y, dWidth, dHeight);
+            }
         }
+    }
+
+    private void loadImageWithGlide(String url, Object x, Object y, Object dWidth, Object dHeight) {
+        Glide.with(getContext()).asBitmap().load(url).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap bmp, @Nullable Transition<? super Bitmap> transition) {
+                getView().drawImage(bmp, x, y, dWidth, dHeight);
+            }
+        });
     }
 
     /**
@@ -127,10 +148,10 @@ public class CanvasView extends HMBase<CanvasDrawHelperView> {
         getView().drawLines(points);
     }
 
-    @JsMethod("drawPath")
-    public void drawPath(Object path) {
-        getView().drawPath((CanvasPath) path);
-    }
+//    @JsMethod("drawPath")
+//    public void drawPath(Object path) {
+//        getView().drawPath((CanvasPath) path);
+//    }
 
     @JsMethod("strokeEllipse")
     public void ellipse(Object left, Object top, Object right, Object bottom) {
@@ -176,4 +197,17 @@ public class CanvasView extends HMBase<CanvasDrawHelperView> {
         getView().lineCap(cap);
     }
 
+    //==========utils===================
+
+    private static boolean isRemoteImage(String imageSrc) {
+        return imageSrc != null && (imageSrc.startsWith("//") || imageSrc.toLowerCase().startsWith("http"));
+    }
+
+    private static boolean isLocalAbsoluteImage(String imageSrc) {
+        return imageSrc != null && imageSrc.startsWith("/");
+    }
+
+    private static boolean isLocalRelativeImage(String imageSrc) {
+        return imageSrc != null && imageSrc.startsWith("./");
+    }
 }
