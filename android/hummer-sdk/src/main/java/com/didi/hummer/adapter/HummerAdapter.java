@@ -3,7 +3,6 @@ package com.didi.hummer.adapter;
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.http.IHttpAdapter;
 import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
-import com.didi.hummer.adapter.location.ILocationAdapter;
 import com.didi.hummer.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
@@ -46,14 +45,6 @@ public class HummerAdapter {
 
     public static IStorageAdapter getStorageAdapter(String namespace) {
         return HummerSDK.getHummerConfig(namespace).getStorageAdapter();
-    }
-
-    public static ILocationAdapter getLocationAdapter() {
-        return getLocationAdapter(null);
-    }
-
-    public static ILocationAdapter getLocationAdapter(String namespace) {
-        return HummerSDK.getHummerConfig(namespace).getLocationAdapter();
     }
 
     public static INavigatorAdapter getNavigatorAdapter() {
