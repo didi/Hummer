@@ -79,6 +79,9 @@ public class CanvasDrawHelperView extends View {
      */
     public void drawImage(Bitmap bitmap, Object x, Object y, Object dWidth, Object dHeight) {
         actions.add(canvas -> {
+            if (bitmap == null) {
+                return;
+            }
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
             Matrix matrix = new Matrix();
@@ -181,16 +184,24 @@ public class CanvasDrawHelperView extends View {
         invalidate();
     }
 
-    public void arc(Object x, Object y, Object radius, Object startAngle, Object endAngle, Object clockwise) {
+    public void arc(Object x, Object y, Object radius, Object startAngle, Object endAngle, Object anticlockwise) {
         actions.add(canvas -> {
             float x_px = dp2px(x);
             float y_px = dp2px(y);
             float radius_px = dp2px(radius);
-            float startAngle_px = dp2px(startAngle);
-            float endAngle_px = dp2px(endAngle);
+            boolean anticlockwiseBool = Boolean.parseBoolean(anticlockwise.toString());
+            float startAngle_px = piToAngle(startAngle);
+            float endAngle_px = piToAngle(endAngle);
+            float sweepAngle = anticlockwiseBool ? (endAngle_px - (startAngle_px + 360)) : (endAngle_px - startAngle_px);
             RectF rectF = new RectF(x_px - radius_px, y_px - radius_px, x_px + radius_px, y_px + radius_px);
-            canvas.drawArc(rectF, startAngle_px, endAngle_px, false, getLinePaint());
+            canvas.drawArc(rectF, startAngle_px, sweepAngle, false, getLinePaint());
         });
+    }
+
+    private float piToAngle(Object pi) {
+        double p = Double.parseDouble(pi.toString());
+        double rate = p / Math.PI;
+        return (float) (rate * 180);
     }
 
     public void drawLine(Object startX, Object startY, Object stopX, Object stopY) {
@@ -255,7 +266,8 @@ public class CanvasDrawHelperView extends View {
 
     public void lineWidth(float w) {
         actions.add(canvas -> {
-            canvasContext.lineWidth(w);
+            float width_px = dp2px(w);
+            canvasContext.lineWidth(width_px);
         });
     }
 
