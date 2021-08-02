@@ -16,6 +16,8 @@ class RootView extends View {
         canvas.lineWidth(2.0)
         canvas.style = {
             marginTop: 10,
+            width: "100%",
+            height: "100%",
         }
         this.drawRect(canvas)
         this.drawLines(width, height, canvas)
