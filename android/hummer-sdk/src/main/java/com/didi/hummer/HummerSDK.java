@@ -112,7 +112,7 @@ public class HummerSDK {
     }
 
     public static void initHermesDebugger(IHermesDebugger debugger) {
-        initHermesDebugger(debugger, JsEngine.HERMES);
+        initHermesDebugger(debugger, JsEngine.NAPI_HERMES);
     }
 
     public static void initHermesDebugger(IHermesDebugger debugger, @JsEngine int jsEngine) {

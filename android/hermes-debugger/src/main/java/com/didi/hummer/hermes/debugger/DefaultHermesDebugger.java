@@ -29,11 +29,11 @@ public class DefaultHermesDebugger implements IHermesDebugger {
 
     @Override
     public void enableDebugging(long runtimeId, String jsSourcePath) {
-        Inspector.enableDebugging(runtimeId, jsSourcePath);
+//        Inspector.enableDebugging(runtimeId, jsSourcePath);
     }
 
     @Override
     public void disableDebugging(long runtimeId) {
-        Inspector.disableDebugging(runtimeId);
+//        Inspector.disableDebugging(runtimeId);
     }
 }

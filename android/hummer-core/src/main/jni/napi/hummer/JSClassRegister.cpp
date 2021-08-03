@@ -15,7 +15,7 @@ namespace Recycler {
 
     const char *class_name = "Recycler";
 
-    void class_finalizer(NAPIEnv env, void *finalizeData, void *finalizeHint) {
+    void class_finalizer(void *finalizeData, void *finalizeHint) {
         auto s = static_cast<Recycler *>(finalizeData);
         if (!s) {
             return;

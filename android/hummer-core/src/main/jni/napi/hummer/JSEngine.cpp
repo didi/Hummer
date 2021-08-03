@@ -15,7 +15,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_createJSContext(JNIEnv *env, 
     JSUtils::init(env);
 
     NAPIEnv globalEnv;
-    NAPICreateEnv(&globalEnv);
+    NAPICreateEnv(&globalEnv, "abc");
 
     NAPIHandleScope handleScope;
     napi_open_handle_scope(globalEnv, &handleScope);

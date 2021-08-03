@@ -87,11 +87,11 @@ NAPI_EXPORT NAPIStatus napi_get_reference_value(NAPIEnv env, NAPIRef ref, NAPIVa
 
 NAPI_EXPORT NAPIStatus napi_open_handle_scope(NAPIEnv env, NAPIHandleScope *result);
 
-NAPI_EXPORT NAPIStatus napi_close_handle_scope(NAPIEnv env, NAPIHandleScope scope);
+NAPI_EXPORT void napi_close_handle_scope(NAPIEnv env, NAPIHandleScope scope);
 
 NAPI_EXPORT NAPIStatus napi_open_escapable_handle_scope(NAPIEnv env, NAPIEscapableHandleScope *result);
 
-NAPI_EXPORT NAPIStatus napi_close_escapable_handle_scope(NAPIEnv env, NAPIEscapableHandleScope scope);
+NAPI_EXPORT void napi_close_escapable_handle_scope(NAPIEnv env, NAPIEscapableHandleScope scope);
 
 NAPI_EXPORT NAPIStatus napi_escape_handle(NAPIEnv env, NAPIEscapableHandleScope scope, NAPIValue escapee, NAPIValue *result);
 
@@ -107,9 +107,10 @@ NAPI_EXPORT NAPIStatus NAPIRunScript(NAPIEnv env, const char *script, const char
 // data 可空
 NAPI_EXPORT NAPIStatus NAPIDefineClass(NAPIEnv env, const char *utf8name, NAPICallback constructor, void *data, NAPIValue *result);
 
-NAPI_EXPORT NAPIStatus NAPICreateEnv(NAPIEnv *env);
+// debuggerTitle 只对 Hermes 引擎生效，应当支持空指针
+NAPI_EXPORT NAPIStatus NAPICreateEnv(NAPIEnv *env, const char *debuggerTitle);
 
-NAPI_EXPORT NAPIStatus NAPIFreeEnv(NAPIEnv env);
+NAPI_EXPORT void NAPIFreeEnv(NAPIEnv env);
 
 NAPI_EXPORT NAPIStatus NAPIGetValueStringUTF8(NAPIEnv env, NAPIValue value, const char **result);
 
