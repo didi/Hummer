@@ -34,6 +34,7 @@
 
 @property (nonatomic, copy) NSString *formattedText;
 @property (nonatomic, strong) HMAttributesBuilder *builder;
+@property (nonatomic, assign) CGFloat multiplier;
 
 - (void)commonInit;
 
@@ -78,6 +79,13 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     // 默认 clearColor
 //    self.backgroundColor = UIColor.clearColor;
     _fontSize = 16;
+    _multiplier = 1.0f;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveNewContentSizeCategory:)
+                                                 name:UIContentSizeCategoryDidChangeNotification
+                                               object:nil];
+    
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -94,6 +102,10 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     }
     
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (NSDictionary *)textAttributes {
@@ -114,6 +126,34 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
         }];
     }
     return [attributes copy];
+}
+
+- (void)didReceiveNewContentSizeCategory:(NSNotification *)notification {
+    NSString *contentSizeCategory = notification.userInfo[UIContentSizeCategoryNewValueKey];
+    static NSDictionary *contentSizeMultipliers = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        contentSizeMultipliers = @{
+            UIContentSizeCategoryExtraSmall : @0.823,
+            UIContentSizeCategorySmall : @0.882,
+            UIContentSizeCategoryMedium : @0.941,
+            UIContentSizeCategoryLarge : @1.0,
+            UIContentSizeCategoryExtraLarge : @1.118,
+            UIContentSizeCategoryExtraExtraLarge : @1.235,
+            UIContentSizeCategoryExtraExtraExtraLarge : @1.353,
+            UIContentSizeCategoryAccessibilityMedium : @1.786,
+            UIContentSizeCategoryAccessibilityLarge : @2.143,
+            UIContentSizeCategoryAccessibilityExtraLarge : @2.643,
+            UIContentSizeCategoryAccessibilityExtraExtraLarge : @3.143,
+            UIContentSizeCategoryAccessibilityExtraExtraExtraLarge : @3.571
+          };
+    });
+    NSNumber *multiplier = contentSizeMultipliers[contentSizeCategory];
+    if (multiplier.doubleValue <= 0.0) {
+        HMLogError(@"Can't determine multiplier for category %@. Using 1.0.", contentSizeCategory);
+        multiplier = @1.0;
+    }
+    self.multiplier = multiplier.doubleValue;
 }
 
 #pragma mark - Export Property
@@ -174,7 +214,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     [self removeBuilder];
 
     // rich text
-    self.builder = [[HMAttributesBuilder alloc] initWithFont:self.font ? : [UIFont systemFontOfSize:self.fontSize]
+    self.builder = [[HMAttributesBuilder alloc] initWithFont:self.font ? : [UIFont systemFontOfSize:self.fontSize * self.multiplier]
                                               textDecoration:self.textDecoration
                                                letterSpacing:self.letterSpacing
                                               paragraphStyle:_paragraphStyle];
@@ -272,6 +312,17 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     self.attributedText = [[NSMutableAttributedString alloc] initWithString:string
                                                                  attributes:attributes];
 }
+    
+- (void)setMultiplier:(CGFloat)multiplier {
+    _multiplier = multiplier;
+    [self updateFont];
+    
+    if (self.builder) {
+        [self.builder updateFont:self.font];
+    } else {
+        [self hm_markDirty];
+    }
+}
 
 - (void)setFontFamily:(NSString *)fontFamily {
     NSString *filteredName = hm_availableFontName(fontFamily);
@@ -320,7 +371,8 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
 }
 
 - (void)updateFont {
-    UIFontDescriptor *fontDescriptor = _fontFamily ? [UIFontDescriptor fontDescriptorWithName:_fontFamily size:_fontSize] : [UIFont systemFontOfSize:_fontSize].fontDescriptor;
+    CGFloat fontSize = _fontSize * _multiplier;
+    UIFontDescriptor *fontDescriptor = _fontFamily ? [UIFontDescriptor fontDescriptorWithName:_fontFamily size:fontSize] : [UIFont systemFontOfSize:fontSize].fontDescriptor;
     if (_fontWeight) {
         UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | UIFontDescriptorTraitBold];
         fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;
@@ -329,7 +381,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
         UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | _fontStyle];
         fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;
     }
-    UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:_fontSize];
+    UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:fontSize];
     self.font = font;
 }
 
