@@ -114,7 +114,7 @@ class RootView extends View {
 
     drawLinesWithNormal(width, height, canvas) {
         let start_line = 15
-        let data = [22, 33, 30, 31, 28, 52, 51, 60, 43, 62, 13, 38, 32, 38, 20, 45, 33, 35, 20];
+        let data = [22, 33, 30, 31, 28, 52, 51, 60, 77, 62, 13, 38, 32, 38, 20, 45, 33, 35, 20];
         let space = (width - start_line * 2) / data.length
         canvas.lineColor("#FF00FF")
         //轴
@@ -136,9 +136,9 @@ class RootView extends View {
 
     drawImage(width, height, canvas) {
         //资源图片
-        // let path = "ic_loading"
+        let path = "ic_loading"
         //网络图片
-        let path = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F03%2F20170803110751_8NLev.thumb.700_0.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630219778&t=45bfb77ae5fe1722be22e141075a9af6"
+        // let path = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F03%2F20170803110751_8NLev.thumb.700_0.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630219778&t=45bfb77ae5fe1722be22e141075a9af6"
         //绝对路径
         // let path = "file://内部存储/bluetooth/test.jepg"
         canvas.drawImage(path, 180, 330, 50, 50)
@@ -148,11 +148,9 @@ class RootView extends View {
     drawCircle(width, height, canvas) {
         canvas.fillCircle(100, 300, 20)
         canvas.strokeCircle(200, 300, 20)
-        canvas.arc(300, 300, 20, Math.PI/2, Math.PI, true)
+        canvas.arc(300, 300, 20, Math.PI/4, Math.PI/5, false)
         canvas.strokeEllipse(100, 400, 300, 500)
         canvas.fillEllipse(100, 600, 300, 700)
     }
-
-
 }
 Hummer.render(new RootView());

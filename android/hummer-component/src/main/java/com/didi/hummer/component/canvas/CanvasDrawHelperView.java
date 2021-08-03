@@ -192,10 +192,31 @@ public class CanvasDrawHelperView extends View {
             boolean anticlockwiseBool = Boolean.parseBoolean(anticlockwise.toString());
             float startAngle_px = piToAngle(startAngle);
             float endAngle_px = piToAngle(endAngle);
-            float sweepAngle = anticlockwiseBool ? (endAngle_px - (startAngle_px + 360)) : (endAngle_px - startAngle_px);
+            float sweepAngle =getSweepAngle(startAngle_px,endAngle_px,anticlockwiseBool);
             RectF rectF = new RectF(x_px - radius_px, y_px - radius_px, x_px + radius_px, y_px + radius_px);
             canvas.drawArc(rectF, startAngle_px, sweepAngle, false, getLinePaint());
         });
+    }
+
+    private float getSweepAngle(float startAngle, float endAngle, boolean anticlockwiseBool) {
+        if (startAngle == endAngle) {
+            return 0F;
+        }
+
+        if (anticlockwiseBool) {
+            if (endAngle > startAngle) {
+                return endAngle - (startAngle + 360);
+            } else {
+                return -Math.abs(startAngle - endAngle);
+            }
+        } else {
+            //顺时针
+            if (endAngle > startAngle) {
+                return endAngle - startAngle;
+            } else {
+                return 360 - Math.abs(endAngle - startAngle);
+            }
+        }
     }
 
     private float piToAngle(Object pi) {
