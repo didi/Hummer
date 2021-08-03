@@ -72,20 +72,20 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
 }
 
 - (void)commonInit {
+    _fontSize = 16;
+    _multiplier = [self applicationContentSize];
+    
     self.userInteractionEnabled = YES;
     self.numberOfLines = 0;
     // 默认为 [UIFont systemFontSize:17];
-    self.font = [UIFont fontWithDescriptor:self.font.fontDescriptor size:16];
+    self.font = [UIFont fontWithDescriptor:self.font.fontDescriptor size:_fontSize * _multiplier];
     // 默认 clearColor
 //    self.backgroundColor = UIColor.clearColor;
-    _fontSize = 16;
-    _multiplier = 1.0f;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveNewContentSizeCategory:)
                                                  name:UIContentSizeCategoryDidChangeNotification
                                                object:nil];
-    
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -130,6 +130,18 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
 
 - (void)didReceiveNewContentSizeCategory:(NSNotification *)notification {
     NSString *contentSizeCategory = notification.userInfo[UIContentSizeCategoryNewValueKey];
+    self.multiplier = [self contentSizeWithCategory:contentSizeCategory];
+}
+
+- (CGFloat)applicationContentSize {
+    if ([NSBundle.mainBundle.bundlePath.pathExtension isEqualToString:@"appex"]) {
+        return 1.0f;
+    }
+    NSString *applicationCategory = UIApplication.sharedApplication.preferredContentSizeCategory;
+    return [self contentSizeWithCategory:applicationCategory];
+}
+ 
+- (CGFloat)contentSizeWithCategory:(NSString *)contentSizeCategory {
     static NSDictionary *contentSizeMultipliers = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -153,7 +165,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
         HMLogError(@"Can't determine multiplier for category %@. Using 1.0.", contentSizeCategory);
         multiplier = @1.0;
     }
-    self.multiplier = multiplier.doubleValue;
+    return multiplier.floatValue;
 }
 
 #pragma mark - Export Property
