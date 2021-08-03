@@ -83,7 +83,7 @@ typedef enum
 
 typedef NAPIValue (*NAPICallback)(NAPIEnv env, NAPICallbackInfo callbackInfo);
 
-typedef void (*NAPIFinalize)(NAPIEnv env, void *finalizeData, void *finalizeHint);
+typedef void (*NAPIFinalize)(void *finalizeData, void *finalizeHint);
 
 EXTERN_C_END
 
