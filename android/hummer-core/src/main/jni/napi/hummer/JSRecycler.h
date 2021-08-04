@@ -5,10 +5,11 @@
 #ifndef ANDROID_JSRECYCLER_H
 #define ANDROID_JSRECYCLER_H
 
+#include <js_native_api.h>
 
 class JSRecycler {
 public:
-    static void recycle(int64_t ctxId, int64_t objId);
+    static void registerClass(NAPIEnv env);
 };
 
 

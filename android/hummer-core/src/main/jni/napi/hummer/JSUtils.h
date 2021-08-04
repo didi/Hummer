@@ -17,21 +17,24 @@ public:
     static jclass booleanCls;
     static jclass stringCls;
     static jclass objectCls;
-    static jclass jsValueCls;
-    static jclass jsCallbackCls;
-    static jclass jsExceptionCls;
-    static jclass jsUtilsCls;
     static jmethodID doubleInitMethodID;
     static jmethodID booleanInitMethodID;
-    static jmethodID jsValueInitMethodID;
-    static jmethodID jsCallbackInitMethodID;
-    static jmethodID jsExceptionInitMethodID;
-    static jmethodID numberValueMethodID;
     static jmethodID doubleValueMethodID;
     static jmethodID booleanValueMethodID;
-    static jmethodID toJsonStringMethodID;
+
+    static jclass jsValueCls;
+    static jclass jsCallbackCls;
+    static jmethodID jsValueInitMethodID;
+    static jmethodID jsCallbackInitMethodID;
     static jfieldID js_value_ptr;
-    static jfieldID js_callback_ptr;
+
+    static jclass jsExceptionCls;
+    static jmethodID jsExceptionInitMethodID;
+
+    static jclass jsEngineCls;
+    static jmethodID toJsonStringMethodID;
+    static jmethodID callJavaCallbackMethodID;
+    static jmethodID callJavaRecyclerMethodID;
 
     static void init(JNIEnv *env);
 
@@ -60,6 +63,8 @@ public:
 
     static jobject JsValueToJavaObject(NAPIEnv env, NAPIValue value);
     static NAPIValue JavaObjectToJsValue(NAPIEnv globalEnv, jobject value);
+
+    static void printDumpReferenceTables(JNIEnv *env);
 
 private:
     static int64_t jsContextId;

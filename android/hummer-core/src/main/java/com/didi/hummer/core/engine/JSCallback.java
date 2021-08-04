@@ -7,7 +7,4 @@ import com.didi.hummer.core.engine.base.ICallback;
  */
 public interface JSCallback extends JSValue, ICallback {
 
-    JSContext getJSContext();
-
-    boolean isValid();
 }

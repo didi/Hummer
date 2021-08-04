@@ -3,6 +3,7 @@ package com.didi.hummer.core.engine.jsc;
 import android.text.TextUtils;
 
 import com.didi.hummer.core.engine.JSContext;
+import com.didi.hummer.core.engine.base.IRecycler;
 import com.didi.hummer.core.engine.jsc.jni.JavaScriptRuntime;
 import com.didi.hummer.core.engine.jsc.jni.TypeConvertor;
 
@@ -40,6 +41,11 @@ public class JSCContext extends JSCValue implements JSContext {
         }
         long jsValue = JavaScriptRuntime.evaluateJavaScript(context, script, scriptId);
         return JSCUtils.jsValueToObject(context, jsValue);
+    }
+
+    @Override
+    public void setRecycler(IRecycler recycler) {
+
     }
 
     @Override

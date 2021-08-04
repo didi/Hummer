@@ -3,6 +3,7 @@ package com.didi.hummer.core.engine.napi;
 import android.text.TextUtils;
 
 import com.didi.hummer.core.engine.JSContext;
+import com.didi.hummer.core.engine.base.IRecycler;
 import com.didi.hummer.core.engine.napi.jni.JSEngine;
 
 /**
@@ -39,12 +40,19 @@ public class NAPIContext extends NAPIValue implements JSContext {
     }
 
     @Override
+    public void setRecycler(IRecycler recycler) {
+        JSEngine.registerJSRecycler(context, recycler);
+    }
+
+    @Override
     public long getIdentify() {
         return context;
     }
 
     @Override
     public void release() {
+        JSEngine.unregisterJSCallback(context);
+        JSEngine.unregisterJSRecycler(context);
         JSEngine.destroyJSContext(context);
     }
 

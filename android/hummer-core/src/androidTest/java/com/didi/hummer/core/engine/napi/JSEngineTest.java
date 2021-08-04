@@ -1,11 +1,11 @@
 package com.didi.hummer.core.engine.napi;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.engine.napi.jni.JSEngine;
 
 import org.junit.After;
@@ -140,7 +140,10 @@ public class JSEngineTest {
      */
     @Test
     public void jsCallNativeGlobalFunction() {
-        // 由于之前 Native 注册方法写在了 HummerContext 层，所以这里暂时无法写单元测试
+        context.set("nativeFunc", (ICallback) params -> params[0]);
+        context.evaluateJavaScript("var ret = nativeFunc(12.34);");
+        double ret = context.getDouble("ret");
+        assertEquals(12.34, ret, 0);
     }
 
     /**
@@ -148,6 +151,13 @@ public class JSEngineTest {
      */
     @Test
     public void jsCallNativeObjectFunction() {
-        // 由于之前 Native 注册方法写在了 HummerContext 层，所以这里暂时无法写单元测试
+        String script = "class Test {};" +
+                "var t = new Test();";
+        context.evaluateJavaScript(script);
+        JSValue t = context.getJSValue("t");
+        t.set("nativeFunc", (ICallback) params -> params[0]);
+        context.evaluateJavaScript("var ret = t.nativeFunc(12.34);");
+        double ret = context.getDouble("ret");
+        assertEquals(12.34, ret, 0);
     }
 }

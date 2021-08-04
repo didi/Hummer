@@ -7,7 +7,33 @@
 #include "HummerJNI.h"
 #include "JSUtils.h"
 #include "JSException.h"
-#include "JSClassRegister.h"
+#include "JSRecycler.h"
+
+static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
+    size_t argc;
+    napi_get_cb_info(globalEnv, info, &argc, nullptr, nullptr, nullptr);
+    NAPIValue argv[argc];
+    int32_t callbackId;
+    napi_get_cb_info(globalEnv, info, &argc, argv, nullptr, (void **)&callbackId);
+
+    JNIEnv* env = JNI_GetEnv();
+    jobjectArray params = nullptr;
+    if (argc > 0) {
+        params = env->NewObjectArray(argc, JSUtils::objectCls, nullptr);
+        for (int i = 0; i < argc; i++) {
+            jobject p = JSUtils::JsValueToJavaObject(globalEnv, argv[i]);
+            env->SetObjectArrayElement(params, i, p);
+        }
+    }
+
+    int64_t ctxPtr = JSUtils::toJsContextPtr(globalEnv);
+    jobject ret = env->CallStaticObjectMethod(JSUtils::jsEngineCls, JSUtils::callJavaCallbackMethodID, ctxPtr, callbackId, params);
+
+    env->DeleteLocalRef(params);
+    JNI_DetachEnv();
+
+    return JSUtils::JavaObjectToJsValue(globalEnv, ret);
+}
 
 extern "C"
 JNIEXPORT jlong JNICALL
@@ -20,8 +46,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_createJSContext(JNIEnv *env, 
     NAPIHandleScope handleScope;
     napi_open_handle_scope(globalEnv, &handleScope);
 
-    // 在创建完JSRuntime后第一时间注册自定义Class，是为了使所有JSRuntime公用一个classId，不被相互覆盖
-    JSClassRegister::init(globalEnv);
+    JSRecycler::registerClass(globalEnv);
 
     int64_t ctxPtr = JSUtils::toJsContextPtr(globalEnv);
     JSUtils::addHandleScope(ctxPtr, handleScope);
@@ -75,7 +100,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_setProperty(JNIEnv *env, jcla
     auto object = JSUtils::toJsValue(globalEnv, js_object);
     // 如果object为空，说明是全局Context下的属性
     if (object == nullptr) {
-        napi_get_global(globalEnv, &object);
+        object = JSUtils::createJsGlobal(globalEnv);
     }
 
     const char *cKey = env->GetStringUTFChars(key, nullptr);
@@ -93,7 +118,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_getProperty(JNIEnv *env, jcla
     auto object = JSUtils::toJsValue(globalEnv, js_object);
     // 如果object为空，说明是全局Context下的属性
     if (object == nullptr) {
-        napi_get_global(globalEnv, &object);
+        object = JSUtils::createJsGlobal(globalEnv);
     }
 
     const char *cKey = env->GetStringUTFChars(key, nullptr);
@@ -116,7 +141,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_delProperty(JNIEnv *env, jcla
     auto object = JSUtils::toJsValue(globalEnv, js_object);
     // 如果object为空，说明是全局Context下的属性
     if (object == nullptr) {
-        napi_get_global(globalEnv, &object);
+        object = JSUtils::createJsGlobal(globalEnv);
     }
 
     const char *cKey = env->GetStringUTFChars(key, nullptr);
@@ -132,6 +157,23 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_delProperty(JNIEnv *env, jcla
 
     env->ReleaseStringUTFChars(key, cKey);
     return ret;
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_didi_hummer_core_engine_napi_jni_JSEngine_registerFunction(JNIEnv *env, jclass clazz, jlong js_context, jlong js_object, jstring func_name, jint func_id) {
+    auto globalEnv = JSUtils::toJsContext(js_context);
+    auto object = JSUtils::toJsValue(globalEnv, js_object);
+    // 如果object为空，说明是全局Context下的属性
+    if (object == nullptr) {
+        object = JSUtils::createJsGlobal(globalEnv);
+    }
+
+    auto funcName = env->GetStringUTFChars(func_name, nullptr);
+    NAPIValue func;
+    napi_create_function(globalEnv, funcName, invoke, (void *) func_id, &func);
+    napi_set_named_property(globalEnv, object, funcName, func);
+    env->ReleaseStringUTFChars(func_name, funcName);
 }
 
 extern "C"
