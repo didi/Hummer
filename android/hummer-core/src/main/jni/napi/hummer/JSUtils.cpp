@@ -10,21 +10,24 @@ jclass JSUtils::doubleCls;
 jclass JSUtils::booleanCls;
 jclass JSUtils::stringCls;
 jclass JSUtils::objectCls;
-jclass JSUtils::jsValueCls;
-jclass JSUtils::jsCallbackCls;
-jclass JSUtils::jsExceptionCls;
-jclass JSUtils::jsUtilsCls;
 jmethodID JSUtils::doubleInitMethodID;
 jmethodID JSUtils::booleanInitMethodID;
-jmethodID JSUtils::jsValueInitMethodID;
-jmethodID JSUtils::jsCallbackInitMethodID;
-jmethodID JSUtils::jsExceptionInitMethodID;
-jmethodID JSUtils::numberValueMethodID;
 jmethodID JSUtils::doubleValueMethodID;
 jmethodID JSUtils::booleanValueMethodID;
-jmethodID JSUtils::toJsonStringMethodID;
+
+jclass JSUtils::jsValueCls;
+jclass JSUtils::jsCallbackCls;
+jmethodID JSUtils::jsValueInitMethodID;
+jmethodID JSUtils::jsCallbackInitMethodID;
 jfieldID JSUtils::js_value_ptr;
-jfieldID JSUtils::js_callback_ptr;
+
+jclass JSUtils::jsExceptionCls;
+jmethodID JSUtils::jsExceptionInitMethodID;
+
+jclass JSUtils::jsEngineCls;
+jmethodID JSUtils::toJsonStringMethodID;
+jmethodID JSUtils::callJavaCallbackMethodID;
+jmethodID JSUtils::callJavaRecyclerMethodID;
 
 int64_t JSUtils::jsContextId = 0;
 std::map<int64_t, NAPIEnv> JSUtils::jsContextIdMap;
@@ -38,19 +41,22 @@ void JSUtils::init(JNIEnv *env) {
     objectCls = (jclass) env->NewGlobalRef((env)->FindClass("java/lang/Object"));
     doubleInitMethodID = env->GetMethodID(doubleCls, "<init>", "(D)V");
     booleanInitMethodID = env->GetMethodID(booleanCls, "<init>", "(Z)V");
+    doubleValueMethodID = env->GetMethodID(numberCls, "doubleValue", "()D");
+    booleanValueMethodID = env->GetMethodID(booleanCls, "booleanValue", "()Z");
+
     jsValueCls = (jclass) env->NewGlobalRef((env)->FindClass("com/didi/hummer/core/engine/napi/NAPIValue"));
     jsCallbackCls = (jclass) env->NewGlobalRef((env)->FindClass("com/didi/hummer/core/engine/napi/NAPICallback"));
     jsValueInitMethodID = env->GetStaticMethodID(jsValueCls, "wrapper","(JJ)Lcom/didi/hummer/core/engine/napi/NAPIValue;");
     jsCallbackInitMethodID = env->GetStaticMethodID(jsCallbackCls, "wrapper","(JJ)Lcom/didi/hummer/core/engine/napi/NAPICallback;");
-    numberValueMethodID = env->GetMethodID(numberCls, "doubleValue", "()D");
-    doubleValueMethodID = env->GetMethodID(doubleCls, "doubleValue", "()D");
-    booleanValueMethodID = env->GetMethodID(booleanCls, "booleanValue", "()Z");
     js_value_ptr = env->GetFieldID(jsValueCls, "value", "J");
-    js_callback_ptr = env->GetFieldID(jsCallbackCls, "value", "J");
+
     jsExceptionCls = (jclass) env->NewGlobalRef((env)->FindClass("com/didi/hummer/core/exception/JSException"));
     jsExceptionInitMethodID = env->GetMethodID(jsExceptionCls, "<init>","(Ljava/lang/String;)V");
-    jsUtilsCls = (jclass) env->NewGlobalRef((env)->FindClass("com/didi/hummer/core/engine/napi/jni/JSUtils"));
-    toJsonStringMethodID = env->GetStaticMethodID(jsUtilsCls, "toJsonString", "(Ljava/lang/Object;)Ljava/lang/String;");
+
+    jsEngineCls = (jclass) env->NewGlobalRef((env)->FindClass("com/didi/hummer/core/engine/napi/jni/JSEngine"));
+    toJsonStringMethodID = env->GetStaticMethodID(jsEngineCls, "toJsonString", "(Ljava/lang/Object;)Ljava/lang/String;");
+    callJavaCallbackMethodID = env->GetStaticMethodID(jsEngineCls, "callJavaCallback", "(JI[Ljava/lang/Object;)Ljava/lang/Object;");
+    callJavaRecyclerMethodID = env->GetStaticMethodID(jsEngineCls, "callJavaRecycler", "(JJ)V");
 }
 
 NAPIEnv JSUtils::toJsContext(int64_t envPtr) {
@@ -237,7 +243,7 @@ NAPIValue JSUtils::JavaObjectToJsValue(NAPIEnv globalEnv, jobject value) {
     if (value == nullptr) {
         val = JSUtils::createJsNull(globalEnv);
     } else if (env->IsInstanceOf(value, numberCls)) {
-        jdouble v = env->CallDoubleMethod(value, numberValueMethodID);
+        jdouble v = env->CallDoubleMethod(value, doubleValueMethodID);
         napi_create_double(globalEnv, v, &val);
     } else if (env->IsInstanceOf(value, booleanCls)) {
         jboolean v = env->CallBooleanMethod(value, booleanValueMethodID);
@@ -250,7 +256,7 @@ NAPIValue JSUtils::JavaObjectToJsValue(NAPIEnv globalEnv, jobject value) {
         jlong valuePtr = env->GetLongField(value, js_value_ptr);
         val = JSUtils::toJsValue(globalEnv, valuePtr);
     } else {
-        jobject jstr = env->CallStaticObjectMethod(jsUtilsCls, toJsonStringMethodID, value);
+        jobject jstr = env->CallStaticObjectMethod(jsEngineCls, toJsonStringMethodID, value);
         const char *cString = env->GetStringUTFChars((jstring) jstr, nullptr);
         NAPIParseUTF8JSONString(globalEnv, cString, &val);
         env->ReleaseStringUTFChars((jstring) jstr, cString);
@@ -258,4 +264,11 @@ NAPIValue JSUtils::JavaObjectToJsValue(NAPIEnv globalEnv, jobject value) {
 
     JNI_DetachEnv();
     return val;
+}
+
+void JSUtils::printDumpReferenceTables(JNIEnv *env) {
+    jclass vm_class = (*env).FindClass("dalvik/system/VMDebug");
+    jmethodID dump_mid = env->GetStaticMethodID(vm_class, "dumpReferenceTables", "()V");
+    env->CallStaticVoidMethod(vm_class, dump_mid);
+    env->DeleteLocalRef(vm_class);
 }

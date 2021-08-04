@@ -323,6 +323,10 @@ public class HummerContext extends ContextWrapper {
         mRegistry.put(invoker.getName(), invoker);
     }
 
+    public Invoker getInvoker(String invokeName) {
+        return mRegistry.get(invokeName);
+    }
+
     /**
      * Native向JS静态类注册回调方法
      *

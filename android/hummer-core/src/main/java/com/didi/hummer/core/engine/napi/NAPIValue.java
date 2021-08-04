@@ -3,6 +3,7 @@ package com.didi.hummer.core.engine.napi;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.engine.napi.jni.JSEngine;
 
 import java.lang.reflect.Type;
@@ -108,7 +109,11 @@ public class NAPIValue implements JSValue {
 
     @Override
     public void set(String key, Object value) {
-        JSEngine.setProperty(this.context, this.value, key, value);
+        if (value instanceof ICallback) {
+            JSEngine.registerJSCallback(this.context, this.value, key, (ICallback) value);
+        } else {
+            JSEngine.setProperty(this.context, this.value, key, value);
+        }
     }
 
     @Override
@@ -226,5 +231,14 @@ public class NAPIValue implements JSValue {
     @Override
     public void release() {
         unprotect();
+    }
+
+    @Override
+    public String toString() {
+        return "NAPIValue{" +
+                "context=" + context +
+                ", value=" + value +
+                ", isUnprotected=" + isUnprotected +
+                '}';
     }
 }
