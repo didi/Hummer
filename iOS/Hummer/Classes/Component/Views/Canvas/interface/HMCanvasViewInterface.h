@@ -41,8 +41,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)drawArcAtPoint:(CGPoint)point radius:(CGFloat)radius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle clockwise:(BOOL)clockwise;
 
-- (void)drawArcFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint radius:(CGFloat)radius clockwise:(BOOL)clockwise;
-
 - (void)drawEllipseAtRect:(CGRect)rect;
 
 - (void)fillEllipseAtRect:(CGRect)rect;

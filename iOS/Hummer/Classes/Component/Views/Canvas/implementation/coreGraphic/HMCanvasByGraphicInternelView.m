@@ -8,16 +8,87 @@
 #import "HMCanvasByGraphicInternelView.h"
 #import "HMCanvasDrawCommand.h"
 
-static const char *serialQueueKey  = "com.hummer.components.canvas.serial";
 
+@interface HMCanvasLayer : CALayer
+
+@property (nonatomic , strong , readonly) NSMutableArray<HMDrawCommand *> *drawCommands;
+
+@end
+
+
+@implementation HMCanvasLayer
+{
+    NSMutableArray<HMDrawCommand *> *_drawCommands;
+}
+
+- (NSMutableArray<HMDrawCommand *> *)drawCommands {
+    if (!_drawCommands) {
+        _drawCommands = [NSMutableArray array];
+    }
+    return _drawCommands;
+}
+
+- (void)drawInContext:(CGContextRef)context {
+    CGContextSaveGState(context);
+    static NSInteger count = 0 ;
+    [self.drawCommands enumerateObjectsUsingBlock:^(HMDrawCommand * _Nonnull drawCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSLog(@" draw %zd 次" , count++);
+        switch (drawCommand.paint.paintType) {
+                case HMDrawPaintTypeStroke:
+                    {
+                        CGContextSetStrokeColorWithColor(context, drawCommand.paint.lineColor.CGColor);
+                        CGContextSetLineCap(context, drawCommand.paint.lineCap);
+                        CGContextSetLineJoin(context, drawCommand.paint.lineJoin);
+                        CGContextSetLineWidth(context, drawCommand.paint.lineWidth);
+                        CGContextAddPath(context, drawCommand.path.CGPath);
+                        CGContextStrokePath(context);
+                        break;
+                    }
+                case HMDrawPaintTypeFill:
+                    {
+                        CGContextSetFillColorWithColor(context, drawCommand.paint.fillColor.CGColor);
+                        CGContextAddPath(context, drawCommand.path.CGPath);
+                        CGContextFillPath(context);
+                        break;
+                    }
+                case HMDrawPaintTypeText:
+                    {
+                        UIGraphicsPushContext(context);
+                        UIFont *font =  [UIFont systemFontOfSize:drawCommand.paint.fontSize];
+                        UIColor *textColor = drawCommand.paint.textColor ?: [UIColor blackColor];
+                        [drawCommand.text drawInRect:drawCommand.rect withAttributes:@{
+                            NSFontAttributeName : font,
+                            NSForegroundColorAttributeName : textColor
+                        }];
+                        UIGraphicsPopContext();
+                        break;
+                    }
+                case HMDrawPaintTypeImage:
+                    {
+                        if (drawCommand.image && !CGRectEqualToRect(drawCommand.rect, CGRectZero)) {
+                            UIGraphicsPushContext(context);
+                            [drawCommand.image drawInRect:drawCommand.rect];
+                            UIGraphicsPopContext();
+                        }
+                        break;
+                    }
+                default:
+                    break;
+            }
+    }];
+    CGContextRestoreGState(context);
+}
+
+@end
 
 @interface HMCanvasByGraphicInternelView ()
 
-@property (nonatomic , strong) NSMutableArray<HMDrawCommand *> *drawCommands;
 @property (nonatomic , assign) BOOL needSetDisplayOnView;
 @property (nonatomic , strong) dispatch_queue_t serial_queue;
-
+@property (nonatomic , strong) NSMutableArray<HMCanvasLayer *> *canvasLayers;
+@property (nonatomic , assign) NSUInteger maxCommandCountPerLayer;
 @end
+
 
 @implementation HMCanvasByGraphicInternelView
 @synthesize lineWidth = _lineWidth, lineColor , fillColor , lineCap , lineJoin , fontSize , textColor;
@@ -25,102 +96,53 @@ static const char *serialQueueKey  = "com.hummer.components.canvas.serial";
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.fillColor = [UIColor whiteColor];
-        self.lineColor = [UIColor blackColor];
-        self.lineWidth = 1;
-        self.lineJoin = kCGLineJoinRound;
-        self.lineCap = kCGLineCapRound;
-        self.fontSize = 10;
-        self.drawCommands = [NSMutableArray array];
         self.backgroundColor = [UIColor whiteColor];
-        self.needSetDisplayOnView = YES;
-        _serial_queue = dispatch_queue_create(serialQueueKey, DISPATCH_QUEUE_SERIAL);
-        dispatch_queue_set_specific(_serial_queue, serialQueueKey, &serialQueueKey, NULL);
+        [self configDefaultPaintStyle];
+        self.maxCommandCountPerLayer = 100;
+        self.canvasLayers = [NSMutableArray array];
     }
     return self;
 }
 
-- (void)asynExcuteDrawBlock:(void(^)(void))drawBlock needsDisplay:(BOOL)needsDisplay {
-    if (drawBlock == nil) {
-        return;
-    }
-    dispatch_async(_serial_queue, ^{
-        drawBlock();
-        if (needsDisplay && self.needSetDisplayOnView) {
-            self.needSetDisplayOnView = NO;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self setNeedsDisplay];
-            });
-        }
-    });
+
+- (void)configDefaultPaintStyle {
+    self.fillColor = [UIColor whiteColor];
+    self.lineColor = [UIColor blackColor];
+    self.lineWidth = 1;
+    self.lineJoin = kCGLineJoinRound;
+    self.lineCap = kCGLineCapRound;
+    self.fontSize = 10;
+    self.textColor = [UIColor blackColor];
 }
 
-- (void)safeSyncExcuteBlockAtSerialQueue:(void(^)(void))block {
-    if (!block) {
-        return;
+- (HMCanvasLayer *)currentCanvasLayer {
+    HMCanvasLayer *layer = self.canvasLayers.lastObject ;
+    if (!layer) {
+        layer = [self generalNewCanvasLayer];
     }
-    if (dispatch_get_specific(serialQueueKey)) {
-        block();
-    }else {
-        dispatch_sync(_serial_queue, block);
-    }
+    return layer;
 }
 
-- (void)drawRect:(CGRect)rect {
 
-   CGContextRef context = UIGraphicsGetCurrentContext();
-
-    [self safeSyncExcuteBlockAtSerialQueue:^{
-
-        [self.drawCommands enumerateObjectsUsingBlock:^(HMDrawCommand * _Nonnull drawCommand, NSUInteger idx, BOOL * _Nonnull stop) {
-            CGContextSaveGState(context);
-                CGContextAddPath(context, drawCommand.path.CGPath);
-                CGContextSetStrokeColorWithColor(context, drawCommand.paint.lineColor.CGColor);
-                CGContextSetLineCap(context, drawCommand.paint.lineCap);
-                CGContextSetLineJoin(context, drawCommand.paint.lineJoin);
-                CGContextSetLineWidth(context, drawCommand.paint.lineWidth);
-                CGContextSetFillColorWithColor(context, drawCommand.paint.fillColor.CGColor);
-                CGContextBeginPath(context);
-                switch (drawCommand.paint.paintType) {
-                    case HMDrawPaintTypeStroke:
-                        CGContextAddPath(context, drawCommand.path.CGPath);
-                        CGContextStrokePath(context);
-                        break;
-                    case HMDrawPaintTypeFill:
-                        CGContextAddPath(context, drawCommand.path.CGPath);
-                        CGContextFillPath(context);
-                        break;
-                    case HMDrawPaintTypeText:
-                        [drawCommand.text drawInRect:drawCommand.rect withAttributes:@{
-                            NSFontAttributeName : [UIFont systemFontOfSize:drawCommand.paint.fontSize] ,
-                            NSForegroundColorAttributeName : drawCommand.paint.textColor ?: [UIColor blackColor]}];
-                        break;
-                    case HMDrawPaintTypeImage:
-                        [drawCommand.image drawInRect:drawCommand.rect];
-                        break;
-                    case HMDrawPaintTypeStrokeArc:
-                        CGContextAddArcToPoint(context, drawCommand.paint.startPoint.x, drawCommand.paint.startPoint.y, drawCommand.paint.endPoint.x, drawCommand.paint.endPoint.y, drawCommand.paint.radius);
-                        CGContextStrokePath(context);
-                        break;
-                    default:
-                        break;
-                }
-            CGContextRestoreGState(context);
-        }];
-        self.needSetDisplayOnView = YES;
-    }];
+- (HMCanvasLayer *)generalNewCanvasLayer {
+    HMCanvasLayer *layer = [HMCanvasLayer layer];
+    layer.frame = self.bounds;
+    [self.layer addSublayer:layer];
+    [self.canvasLayers addObject:layer];
+    return layer;
 }
 
 - (HMDrawCommand *)getCurrentCommand {
-    HMDrawCommand *command = self.drawCommands.lastObject;
-    if (command == nil) {
-        command = [self generalNewCommand];
-    }
-    return command;
+    HMCanvasLayer *canvasLayer = [self currentCanvasLayer];
+    return canvasLayer.drawCommands.lastObject;
 }
 
 
 - (HMDrawCommand *)generalNewCommand {
+    HMCanvasLayer *canvasLayer = [self currentCanvasLayer];
+    if (canvasLayer.drawCommands.count >= self.maxCommandCountPerLayer) {
+        canvasLayer = [self generalNewCanvasLayer];
+    }
     HMDrawCommand *command = [[HMDrawCommand alloc] init];
     command.paint.fillColor =  self.fillColor ;
     command.paint.lineColor = self.lineColor;
@@ -129,130 +151,156 @@ static const char *serialQueueKey  = "com.hummer.components.canvas.serial";
     command.paint.lineCap = self.lineCap;
     command.paint.fontSize = self.fontSize;
     command.paint.textColor = self.textColor;
-    [self.drawCommands addObject:command];
+    [canvasLayer.drawCommands addObject:command];
     return command;
+}
+
+- (BOOL)canReuseCommand:(HMDrawCommand *)drawCommand paintType:(HMDrawPaintType)paintType {
+    if (HMDrawPaintTypeText == paintType ||
+        HMDrawPaintTypeImage == paintType) {
+        return NO; // 文本绘制和图片绘制 不复用command
+    }
+    if (drawCommand.paint.paintType != paintType) {
+        return NO;
+    }
+    BOOL canReuse = YES;
+    switch (paintType) {
+        case HMDrawPaintTypeStroke:
+        {
+            canReuse = canReuse && (drawCommand.paint.lineColor == self.lineColor);
+            canReuse = canReuse && (fabs(drawCommand.paint.lineWidth - self.lineWidth) < 0.0000001) ;
+            canReuse = canReuse && (drawCommand.paint.lineCap == self.lineCap);
+            canReuse = canReuse && (drawCommand.paint.lineJoin == self.lineJoin);
+            break;
+        }
+        case HMDrawPaintTypeFill:
+        {
+            canReuse = canReuse && (drawCommand.paint.fillColor == self.fillColor);
+            break;
+        }
+        default:
+            break;
+    }
+    return canReuse;
 }
 
 
 #pragma mark - interface impl
 
 - (void)moveToPoint:(CGPoint)point {
-    [self asynExcuteDrawBlock:^{
-        [[self getCurrentCommand].path moveToPoint:point];
-    } needsDisplay:NO];
+    [[self getCurrentCommand].path moveToPoint:point];
 }
 
 - (void)addLineTo:(CGPoint)p {
-    [self asynExcuteDrawBlock:^{
-        
-        HMDrawCommand *command = [self getCurrentCommand];
-        if (command.paint.paintType != HMDrawPaintTypeStroke ||
-            command.paint.lineColor != self.lineColor ||
-            command.paint.lineWidth != self.lineWidth) {
-            CGPoint currentPoint = command.path.currentPoint;
-            
-            command = [self generalNewCommand];
-            [command.path moveToPoint:currentPoint];
-            [command.path addLineToPoint:p];
-        }else {
-            [command.path addLineToPoint:p];
-        }
-
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
+        CGPoint currentPoint = command.path.currentPoint;
+        command = [self generalNewCommand];
+        [command.path moveToPoint:currentPoint];
+    }
+    
+    [command.path addLineToPoint:p];
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)drawImage:(UIImage *)image atRect:(CGRect)rect {
-    [self asynExcuteDrawBlock:^{
-        HMDrawCommand *command = [self generalNewCommand];
-        command.paint.paintType = HMDrawPaintTypeImage;
-        command.image = image;
-        command.rect = rect;
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self generalNewCommand];
+    command.paint.paintType = HMDrawPaintTypeImage;
+    command.image = image;
+    command.rect = rect;
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)drawText:(NSString *)text atPoint:(CGPoint)point maxWidth:(CGFloat)maxWidth {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeText;
-            command.text = text;
-            command.rect = CGRectMake(point.x, point.y, maxWidth, CGFLOAT_MAX);
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self generalNewCommand];
+    command.paint.paintType = HMDrawPaintTypeText;
+    command.text = text;
+    command.rect = CGRectMake(point.x, point.y, maxWidth, CGFLOAT_MAX);
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 
 - (void)fillRect:(CGRect)rect {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeFill;
-            command.path = [UIBezierPath bezierPathWithRect:rect];
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeFill]) {
+        command = [self generalNewCommand];
+    }
+    command.paint.paintType = HMDrawPaintTypeFill;
+    [command.path appendPath:[UIBezierPath bezierPathWithRect:rect]];
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)strokeRect:(CGRect)rect {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeStroke;
-            command.path = [UIBezierPath bezierPathWithRect:rect];
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
+        command = [self generalNewCommand];
+    }
+    command.paint.paintType = HMDrawPaintTypeStroke;
+    [command.path appendPath:[UIBezierPath bezierPathWithRect:rect]];
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)strokeCircleAtPoint:(CGPoint)point radius:(CGFloat)radius {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeStroke;
-            command.path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:1];
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
+        command = [self generalNewCommand];
+    }
+    command.paint.paintType = HMDrawPaintTypeStroke;
+    [command.path appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:1]];
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)fillCircleAtPoint:(CGPoint)point radius:(CGFloat)radius {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeFill;
-            command.path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:1];
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeFill]) {
+        command = [self generalNewCommand];
+    }
+    command.paint.paintType = HMDrawPaintTypeFill;
+    [command.path appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:1]];
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)drawArcAtPoint:(CGPoint)point radius:(CGFloat)radius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle clockwise:(BOOL)clockwise {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeStroke;
-            command.path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:startAngle endAngle:endAngle clockwise:clockwise];
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
+        command = [self generalNewCommand];
+    }
+    command.paint.paintType = HMDrawPaintTypeStroke;
+    [command.path appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:startAngle endAngle:endAngle clockwise:clockwise]];
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
-- (void)drawArcFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint radius:(CGFloat)radius clockwise:(BOOL)clockwise {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeStrokeArc;
-            command.paint.startPoint = fromPoint;
-            command.paint.endPoint = toPoint;
-            command.paint.radius = radius;
-    } needsDisplay:YES];
-}
 
 - (void)drawEllipseAtRect:(CGRect)rect {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeStroke;
-            command.path = [UIBezierPath bezierPathWithOvalInRect:rect];
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
+        command = [self generalNewCommand];
+    }
+    command.paint.paintType = HMDrawPaintTypeStroke;
+    [command.path appendPath:[UIBezierPath bezierPathWithOvalInRect:rect]];
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)fillEllipseAtRect:(CGRect)rect {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeFill;
-            command.path = [UIBezierPath bezierPathWithOvalInRect:rect];
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeFill]) {
+        command = [self generalNewCommand];
+    }
+    command.paint.paintType = HMDrawPaintTypeFill;
+    [command.path appendPath:[UIBezierPath bezierPathWithOvalInRect:rect]];
+    [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 
 - (void)drawPath:(UIBezierPath *)path {
-    [self asynExcuteDrawBlock:^{
-            HMDrawCommand *command = [self generalNewCommand];
-            command.paint.paintType = HMDrawPaintTypeStroke;
-            command.path  = path;
-    } needsDisplay:YES];
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
+        command = [self generalNewCommand];
+    }
+    command.paint.paintType = HMDrawPaintTypeStroke;
+    [command.path appendPath:path];
+    [[self currentCanvasLayer] setNeedsDisplay];
+    
 }
 
 @end

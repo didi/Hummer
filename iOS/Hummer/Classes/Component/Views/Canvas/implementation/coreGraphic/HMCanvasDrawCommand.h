@@ -11,8 +11,7 @@ typedef NS_ENUM(NSInteger , HMDrawPaintType ) {
     HMDrawPaintTypeStroke,
     HMDrawPaintTypeFill,
     HMDrawPaintTypeText,
-    HMDrawPaintTypeImage,
-    HMDrawPaintTypeStrokeArc
+    HMDrawPaintTypeImage
 } ;
 
 @interface HMDrawPaint : NSObject

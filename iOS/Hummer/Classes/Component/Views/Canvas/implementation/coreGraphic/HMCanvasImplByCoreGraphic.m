@@ -76,10 +76,6 @@
     [self.canvas drawArcAtPoint:point radius:radius startAngle:startAngle endAngle:endAngle clockwise:clockwise];
 }
 
-- (void)drawArcFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint radius:(CGFloat)radius clockwise:(BOOL)clockwise {
-    [self.canvas drawArcFromPoint:fromPoint toPoint:toPoint radius:radius clockwise:clockwise];
-}
-
 - (void)drawEllipseAtRect:(CGRect)rect {
     [self.canvas drawEllipseAtRect:rect];
 }
