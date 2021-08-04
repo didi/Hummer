@@ -77,6 +77,8 @@ HM_EXPORT_METHOD(strokeRect, strokeRectAtHummerWithX:Y:W:H:)
 HM_EXPORT_METHOD(strokeCircle, strokeCircleAtX:y:radius:)
 HM_EXPORT_METHOD(strokeEllipse, strokeEllipseAtX:y:trailX:trailY:)
 HM_EXPORT_METHOD(arc, arcAtCenterX:centerY:radius:startAngle:endAngle:clockwise:)
+HM_EXPORT_METHOD(lineCap, configStrokeLineCap:)
+HM_EXPORT_METHOD(lineJoin, configStrokeLineJoin:)
 
 
 #pragma mark - fill
@@ -158,6 +160,39 @@ HM_EXPORT_METHOD(drawImage,drawImageWithSrc:atX:y:width:height:)
 
 - (void)configStrokeLineColor:(HMBaseValue *)lineColor {
     [self.internal_canvas_impl setLineColor: [HMConverter HMStringToColor:lineColor.toString]];
+}
+
+- (void)configStrokeLineCap:(HMBaseValue *)lineCap {
+    CGLineCap lineCapValue = kCGLineCapRound;
+    switch (lineCap.toInt32) {
+        case kCGLineCapButt:
+            lineCapValue = kCGLineCapButt;
+            break;
+        case kCGLineCapSquare:
+            lineCapValue = kCGLineCapSquare;
+            break;
+        default:
+            lineCapValue = kCGLineCapRound;
+            break;
+    }
+    [self.internal_canvas_impl setLineCap:lineCapValue];
+}
+
+
+- (void)configStrokeLineJoin:(HMBaseValue *)lineJoin {
+    CGLineJoin lineJoinValue = kCGLineJoinRound;
+    switch (lineJoin.toInt32) {
+        case kCGLineJoinBevel:
+            lineJoinValue = kCGLineJoinBevel;
+            break;
+        case kCGLineJoinMiter:
+            lineJoinValue = kCGLineJoinMiter;
+            break;
+        default:
+            lineJoinValue = kCGLineJoinRound;
+            break;
+    }
+    [self.internal_canvas_impl setLineJoin:lineJoinValue];
 }
 
 - (void)configFillColor:(HMBaseValue *)lineColor {
