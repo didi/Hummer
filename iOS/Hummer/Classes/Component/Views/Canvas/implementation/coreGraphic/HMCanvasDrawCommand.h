@@ -32,11 +32,6 @@ typedef NS_ENUM(NSInteger , HMDrawPaintType ) {
 
 @property (nonatomic , assign) HMDrawPaintType paintType;
 
-@property (nonatomic , assign) CGPoint startPoint ;
-
-@property (nonatomic , assign) CGPoint endPoint ;
-
-@property (nonatomic , assign) CGFloat radius ;
 @end
 
 
