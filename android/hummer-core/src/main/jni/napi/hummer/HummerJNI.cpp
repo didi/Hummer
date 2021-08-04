@@ -2,7 +2,7 @@
 // Created by XiaoFeng on 2021/6/22.
 //
 
-#include <HummerJNI.h>
+#include "HummerJNI.h"
 
 JavaVM *javaVM = NULL;
 

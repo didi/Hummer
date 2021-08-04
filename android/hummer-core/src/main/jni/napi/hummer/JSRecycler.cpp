@@ -3,8 +3,8 @@
 //
 
 #include <map>
-#include <HummerJNI.h>
-#include <JSRecycler.h>
+#include "HummerJNI.h"
+#include "JSRecycler.h"
 
 static std::map<int64_t, jobject> HUMMER_RECYCLER_MAP;
 static jmethodID HUMMER_RECYCLER_INVOKE_ID = nullptr;

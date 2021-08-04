@@ -7,8 +7,8 @@
 
 #include <jni.h>
 #include <quickjs.h>
-#include <HummerJNI.h>
-#include <TypeConvertor.h>
+#include "HummerJNI.h"
+#include "TypeConvertor.h"
 
 extern "C"
 void reportExceptionIfNeed(JSContext *context);

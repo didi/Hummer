@@ -3,11 +3,11 @@
 //
 
 #include <jni.h>
-#include <HummerJNI.h>
-#include <JSUtils.h>
-#include <JSException.h>
-#include <JSClassRegister.h>
 #include <js_native_api.h>
+#include "HummerJNI.h"
+#include "JSUtils.h"
+#include "JSException.h"
+#include "JSClassRegister.h"
 
 extern "C"
 JNIEXPORT jlong JNICALL

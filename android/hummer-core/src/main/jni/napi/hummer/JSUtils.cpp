@@ -2,8 +2,8 @@
 // Created by XiaoFeng on 2021/6/24.
 //
 
-#include <JSUtils.h>
-#include <HummerJNI.h>
+#include "JSUtils.h"
+#include "HummerJNI.h"
 
 jclass JSUtils::numberCls;
 jclass JSUtils::doubleCls;

@@ -2,10 +2,10 @@
 // Created by XiaoFeng on 2021/6/29.
 //
 
-#include <HummerJNI.h>
-#include <JSClassRegister.h>
-#include <JSRecycler.h>
-#include <JSUtils.h>
+#include "HummerJNI.h"
+#include "JSClassRegister.h"
+#include "JSRecycler.h"
+#include "JSUtils.h"
 
 namespace Recycler {
     typedef struct {
