@@ -30,9 +30,7 @@
 
 - (void)drawInContext:(CGContextRef)context {
     CGContextSaveGState(context);
-    static NSInteger count = 0 ;
     [self.drawCommands enumerateObjectsUsingBlock:^(HMDrawCommand * _Nonnull drawCommand, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog(@" draw %zd 次" , count++);
         switch (drawCommand.paint.paintType) {
                 case HMDrawPaintTypeStroke:
                     {
@@ -132,6 +130,15 @@
     return layer;
 }
 
+- (HMDrawCommand *)fetchCommandOfPaintType:(HMDrawPaintType)paintType {
+    HMDrawCommand *command = [self getCurrentCommand];
+    if (![self canReuseCommand:command paintType:paintType]) {
+       command = [self generalNewCommand];
+       command.paint.paintType = paintType;
+    }
+    return command;
+}
+
 - (HMDrawCommand *)getCurrentCommand {
     HMCanvasLayer *canvasLayer = [self currentCanvasLayer];
     return canvasLayer.drawCommands.lastObject;
@@ -221,83 +228,51 @@
 
 
 - (void)fillRect:(CGRect)rect {
-    HMDrawCommand *command = [self getCurrentCommand];
-    if (![self canReuseCommand:command paintType:HMDrawPaintTypeFill]) {
-        command = [self generalNewCommand];
-    }
-    command.paint.paintType = HMDrawPaintTypeFill;
+    HMDrawCommand *command = [self fetchCommandOfPaintType:HMDrawPaintTypeFill];
     [command.path appendPath:[UIBezierPath bezierPathWithRect:rect]];
     [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)strokeRect:(CGRect)rect {
-    HMDrawCommand *command = [self getCurrentCommand];
-    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
-        command = [self generalNewCommand];
-    }
-    command.paint.paintType = HMDrawPaintTypeStroke;
+    HMDrawCommand *command = [self fetchCommandOfPaintType:HMDrawPaintTypeStroke];
     [command.path appendPath:[UIBezierPath bezierPathWithRect:rect]];
     [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)strokeCircleAtPoint:(CGPoint)point radius:(CGFloat)radius {
-    HMDrawCommand *command = [self getCurrentCommand];
-    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
-        command = [self generalNewCommand];
-    }
-    command.paint.paintType = HMDrawPaintTypeStroke;
+    HMDrawCommand *command = [self fetchCommandOfPaintType:HMDrawPaintTypeStroke];
     [command.path appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:1]];
     [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)fillCircleAtPoint:(CGPoint)point radius:(CGFloat)radius {
-    HMDrawCommand *command = [self getCurrentCommand];
-    if (![self canReuseCommand:command paintType:HMDrawPaintTypeFill]) {
-        command = [self generalNewCommand];
-    }
-    command.paint.paintType = HMDrawPaintTypeFill;
+    HMDrawCommand *command = [self fetchCommandOfPaintType:HMDrawPaintTypeFill];
     [command.path appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:1]];
     [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)drawArcAtPoint:(CGPoint)point radius:(CGFloat)radius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle clockwise:(BOOL)clockwise {
-    HMDrawCommand *command = [self getCurrentCommand];
-    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
-        command = [self generalNewCommand];
-    }
-    command.paint.paintType = HMDrawPaintTypeStroke;
+    HMDrawCommand *command = [self fetchCommandOfPaintType:HMDrawPaintTypeStroke];
     [command.path appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:startAngle endAngle:endAngle clockwise:clockwise]];
     [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 
 - (void)drawEllipseAtRect:(CGRect)rect {
-    HMDrawCommand *command = [self getCurrentCommand];
-    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
-        command = [self generalNewCommand];
-    }
-    command.paint.paintType = HMDrawPaintTypeStroke;
+    HMDrawCommand *command = [self fetchCommandOfPaintType:HMDrawPaintTypeStroke];
     [command.path appendPath:[UIBezierPath bezierPathWithOvalInRect:rect]];
     [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 - (void)fillEllipseAtRect:(CGRect)rect {
-    HMDrawCommand *command = [self getCurrentCommand];
-    if (![self canReuseCommand:command paintType:HMDrawPaintTypeFill]) {
-        command = [self generalNewCommand];
-    }
-    command.paint.paintType = HMDrawPaintTypeFill;
+    HMDrawCommand *command = [self fetchCommandOfPaintType:HMDrawPaintTypeFill];
     [command.path appendPath:[UIBezierPath bezierPathWithOvalInRect:rect]];
     [[self currentCanvasLayer] setNeedsDisplay];
 }
 
 
 - (void)drawPath:(UIBezierPath *)path {
-    HMDrawCommand *command = [self getCurrentCommand];
-    if (![self canReuseCommand:command paintType:HMDrawPaintTypeStroke]) {
-        command = [self generalNewCommand];
-    }
-    command.paint.paintType = HMDrawPaintTypeStroke;
+    HMDrawCommand *command = [self fetchCommandOfPaintType:HMDrawPaintTypeStroke];
     [command.path appendPath:path];
     [[self currentCanvasLayer] setNeedsDisplay];
     
