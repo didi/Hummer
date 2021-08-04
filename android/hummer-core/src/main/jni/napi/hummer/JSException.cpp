@@ -3,9 +3,9 @@
 //
 
 #include <jni.h>
-#include <HummerJNI.h>
-#include <JSUtils.h>
-#include <JSException.h>
+#include "HummerJNI.h"
+#include "JSUtils.h"
+#include "JSException.h"
 
 jobject callback;
 

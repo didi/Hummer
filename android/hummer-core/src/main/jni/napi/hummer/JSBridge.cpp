@@ -3,8 +3,8 @@
 //
 
 #include <map>
-#include <HummerJNI.h>
-#include <JSUtils.h>
+#include "HummerJNI.h"
+#include "JSUtils.h"
 
 static std::map<int64_t, jobject> HUMMER_BRIDGE_MAP;
 static jmethodID HUMMER_BRIDGE_INVOKE_ID = nullptr;
