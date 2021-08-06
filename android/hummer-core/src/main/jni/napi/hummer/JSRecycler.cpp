@@ -58,8 +58,8 @@ namespace Recycler {
 
 void JSRecycler::registerClass(NAPIEnv env) {
     NAPIValue result;
-    NAPIStatus status = NAPIDefineClass(env, Recycler::class_name, Recycler::class_constructor, nullptr, &result);
-    if (status != NAPIOK) {
+    auto status = NAPIDefineClass(env, Recycler::class_name, Recycler::class_constructor, nullptr, &result);
+    if (status != NAPIExceptionOK) {
         return;
     }
 

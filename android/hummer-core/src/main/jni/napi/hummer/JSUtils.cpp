@@ -129,8 +129,8 @@ NAPIValue JSUtils::getJsValueFromRef(NAPIEnv env, NAPIRef valueRef) {
     }
 
     NAPIValue value;
-    NAPIStatus status = napi_get_reference_value(env, valueRef, &value);
-    if (status != NAPIOK) {
+    auto status = napi_get_reference_value(env, valueRef, &value);
+    if (status != NAPICommonOK) {
         return nullptr;
     }
     return value;
@@ -142,8 +142,8 @@ NAPIRef JSUtils::createJsValueRef(NAPIEnv env, NAPIValue value) {
     }
 
     NAPIRef valueRef;
-    NAPIStatus status = napi_create_reference(env, value, 0, &valueRef);
-    if (status != NAPIOK) {
+    auto status = napi_create_reference(env, value, 0, &valueRef);
+    if (status != NAPIExceptionOK) {
         return nullptr;
     }
     return valueRef;
@@ -155,8 +155,8 @@ const char *JSUtils::toCString(NAPIEnv env, NAPIValue value) {
     }
 
     const char *cStr;
-    NAPIStatus status = NAPIGetValueStringUTF8(env, value, &cStr);
-    if (status != NAPIOK) {
+    auto status = NAPIGetValueStringUTF8(env, value, &cStr);
+    if (status != NAPIErrorOK) {
         return nullptr;
     }
 
@@ -205,8 +205,8 @@ NAPIValue JSUtils::createJsUndefined(NAPIEnv env) {
 jobject JSUtils::JsValueToJavaObject(NAPIEnv globalEnv, NAPIValue value) {
     JNIEnv* env = JNI_GetEnv();
     NAPIValueType type;
-    NAPIStatus status = napi_typeof(globalEnv, value, &type);
-    if (status != NAPIOK) {
+    auto status = napi_typeof(globalEnv, value, &type);
+    if (status != NAPICommonOK) {
         return nullptr;
     }
     jobject obj;

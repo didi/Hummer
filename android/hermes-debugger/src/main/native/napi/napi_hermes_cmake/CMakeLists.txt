@@ -4,7 +4,8 @@ set(NAPI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../hummer-core/src/main/
 
 include_directories(
         ${NAPI_DIR}/hummer
-        ${NAPI_DIR}/napi/include)
+        ${NAPI_DIR}/napi/include
+        ${NAPI_DIR}/napi/include/napi)
 
 aux_source_directory( # Define variable for directory of sources
         ${NAPI_DIR}/hummer

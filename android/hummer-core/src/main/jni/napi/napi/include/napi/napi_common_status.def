@@ -1,0 +1,2 @@
+NAPI_STATUS(OK)
+NAPI_STATUS(InvalidArg)

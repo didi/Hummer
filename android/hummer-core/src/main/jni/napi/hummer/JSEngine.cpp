@@ -41,7 +41,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_createJSContext(JNIEnv *env, 
     JSUtils::init(env);
 
     NAPIEnv globalEnv;
-    NAPICreateEnv(&globalEnv, "abc");
+    NAPICreateEnv(&globalEnv);
 
     NAPIHandleScope handleScope;
     napi_open_handle_scope(globalEnv, &handleScope);
@@ -76,13 +76,13 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_evaluateJavaScript(JNIEnv *en
     const char *charScriptId = env->GetStringUTFChars(scriptId, nullptr);
 
     NAPIValue result;
-    NAPIStatus status = NAPIRunScript(globalEnv, charScript, charScriptId, &result);
+    auto status = NAPIRunScript(globalEnv, charScript, charScriptId, &result);
     LOGD("eval status: %d", status);
 
     env->ReleaseStringUTFChars(script, charScript);
     env->ReleaseStringUTFChars(script, charScriptId);
 
-    if (status == NAPIPendingException) {
+    if (status == NAPIExceptionPendingException) {
         reportExceptionIfNeed(globalEnv);
         jstring msg = env->NewStringUTF("JavaScript evaluate exception");
         jobject obj = env->NewObject(JSUtils::jsExceptionCls, JSUtils::jsExceptionInitMethodID, msg);
@@ -125,8 +125,8 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_getProperty(JNIEnv *env, jcla
     LOGD("getProperty, key = %s", cKey);
 
     NAPIValue ret;
-    NAPIStatus status = napi_get_named_property(globalEnv, object, cKey, &ret);
-    if (status != NAPIOK) {
+    auto status = napi_get_named_property(globalEnv, object, cKey, &ret);
+    if (status != NAPIExceptionOK) {
         return nullptr;
     }
 
@@ -146,8 +146,8 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_delProperty(JNIEnv *env, jcla
 
     const char *cKey = env->GetStringUTFChars(key, nullptr);
     NAPIValue jsKey;
-    NAPIStatus status = napi_create_string_utf8(globalEnv, cKey, &jsKey);
-    if (status != NAPIOK) {
+    auto status = napi_create_string_utf8(globalEnv, cKey, &jsKey);
+    if (status != NAPIExceptionOK) {
         env->ReleaseStringUTFChars(key, cKey);
         return false;
     }
@@ -201,9 +201,8 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_callFunction(JNIEnv *env, jcl
     }
 
     NAPIValue result;
-    NAPIStatus status = napi_call_function(globalEnv, jsThisObj, jsFuncObj, paramsCount, values, &result);
-
-    if (status == NAPIPendingException) {
+    auto status = napi_call_function(globalEnv, jsThisObj, jsFuncObj, paramsCount, values, &result);
+    if (status == NAPIExceptionPendingException) {
         reportExceptionIfNeed(globalEnv);
         return nullptr;
     }
@@ -227,8 +226,8 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_isJSValueValid(JNIEnv *env, j
     }
     auto value = JSUtils::toJsValue(globalEnv, js_value);
     NAPIValueType type;
-    NAPIStatus status = napi_typeof(globalEnv, value, &type);
-    if (status != NAPIOK) {
+    auto status = napi_typeof(globalEnv, value, &type);
+    if (status != NAPICommonOK) {
         return false;
     }
     return type != NAPIUndefined && type != NAPINull;
