@@ -5,6 +5,9 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+#set(LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/hermes/libs)
+set(LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../napi/napi/libs/hermes)
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -29,7 +32,7 @@ aux_source_directory( # Define variable for directory of dependency libraries
         )
 
 aux_source_directory( # Define variable for directory of dependency libraries
-        hermes/libs
+        ${LIBS_DIR}
         # Set variable name of dependency libraries directory
         DIR_LIBS
         )
@@ -65,6 +68,6 @@ target_link_libraries( # Specifies the target library.
         # included in the NDK.
         ${log-lib}
 
-        # Hermes
-        ${CMAKE_CURRENT_SOURCE_DIR}/hermes/libs/${ANDROID_ABI}/libhermes.so
+        # libhermes.so
+        ${LIBS_DIR}/${ANDROID_ABI}/libhermes.so
         )
