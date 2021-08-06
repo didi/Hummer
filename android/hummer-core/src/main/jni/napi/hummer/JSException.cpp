@@ -13,15 +13,15 @@ void reportExceptionIfNeed(NAPIEnv globalEnv) {
     std::string strErr;
 
     NAPIValue error;
-    NAPIStatus status = napi_get_and_clear_last_exception(globalEnv, &error);
-    if (status != NAPIOK) {
+    auto status1 = napi_get_and_clear_last_exception(globalEnv, &error);
+    if (status1 != NAPIErrorOK) {
         return;
     }
 
     const char *err = nullptr;
     NAPIValue errValue;
-    status = napi_coerce_to_string(globalEnv, error, &errValue);
-    if (status == NAPIOK) {
+    auto status2 = napi_coerce_to_string(globalEnv, error, &errValue);
+    if (status2 == NAPIExceptionOK) {
         err = JSUtils::toCString(globalEnv, errValue);
     }
     if (err) {
@@ -30,8 +30,8 @@ void reportExceptionIfNeed(NAPIEnv globalEnv) {
 
     const char *stack = nullptr;
     NAPIValue stackValue;
-    status = napi_get_named_property(globalEnv, error, "stack", &stackValue);
-    if (status == NAPIOK) {
+    auto status3 = napi_get_named_property(globalEnv, error, "stack", &stackValue);
+    if (status3 == NAPIExceptionOK) {
         stack = JSUtils::toCString(globalEnv, stackValue);
     }
     if (stack) {

@@ -8,7 +8,12 @@ cmake_minimum_required(VERSION 3.4.1)
 # 单独编译hummer-napi的cmakelist，打出libhummer-napi-debugger.so
 ADD_SUBDIRECTORY(napi_hermes_cmake)
 
+set(NAPI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../hummer-core/src/main/jni/napi)
+
 include_directories(
+        ${NAPI_DIR}/hummer
+        ${NAPI_DIR}/napi/include
+        ${NAPI_DIR}/napi/include/napi
         ./
         fbjni
         jsinspector

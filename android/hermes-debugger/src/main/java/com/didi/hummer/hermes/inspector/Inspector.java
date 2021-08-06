@@ -16,11 +16,6 @@ import java.util.List;
 
 @DoNotStrip
 public class Inspector {
-  static {
-    // 这里后续会替换成加载专属debug库
-    System.loadLibrary("hermes");
-    System.loadLibrary("hermes-debugger");
-  }
 
   private final HybridData mHybridData;
 
@@ -42,8 +37,8 @@ public class Inspector {
     }
   }
 
-//  public static native void enableDebugging(long runtimeId, String pageTitle);
-//  public static native void disableDebugging(long runtimeId);
+  public static native void enableDebugging(long ctxPtr, String pageTitle);
+  public static native void disableDebugging(long ctxPtr);
 
   private static native Inspector instance();
 

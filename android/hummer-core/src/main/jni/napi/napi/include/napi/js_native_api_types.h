@@ -54,32 +54,27 @@ typedef enum
 
 typedef enum
 {
-    NAPIOK,
-    NAPIInvalidArg,
-    NAPIObjectExpected,
-    NAPIStringExpected,
-    NAPINameExpected,
-    NAPIFunctionExpected,
-    NAPINumberExpected,
-    NAPIBooleanExpected,
-    NAPIArrayExpected,
-    NAPIGenericFailure,
-    NAPIPendingException,
-    NAPICancelled,
-    NAPIEscapeCalledTwice,
-    NAPIHandleScopeMismatch,
-    NAPICallbackScopeMismatch,
-    NAPIQueueFull,
-    NAPIClosing,
-    NAPIBigIntExpected,
-    NAPIDateExpected,
-    NAPIArrayBufferExpected,
-    NAPIDetachableArrayBufferExpected,
-    NAPIWouldDeadLock,
-    // 自定义添加错误
-    NAPIMemoryError,
-    NAPIHandleScopeEmpty
-} NAPIStatus;
+#define NAPI_STATUS(status) NAPICommon##status,
+#include <napi/napi_common_status.def>
+#undef NAPI_STATUS
+} NAPICommonStatus;
+
+typedef enum
+{
+#define NAPI_STATUS(status) NAPIError##status,
+#include <napi/napi_common_status.def>
+#include <napi/napi_error_status.def>
+#undef NAPI_STATUS
+} NAPIErrorStatus;
+
+typedef enum
+{
+#define NAPI_STATUS(status) NAPIException##status,
+#include <napi/napi_common_status.def>
+#include <napi/napi_error_status.def>
+#include <napi/napi_exception_status.def>
+#undef NAPI_STATUS
+} NAPIExceptionStatus;
 
 typedef NAPIValue (*NAPICallback)(NAPIEnv env, NAPICallbackInfo callbackInfo);
 

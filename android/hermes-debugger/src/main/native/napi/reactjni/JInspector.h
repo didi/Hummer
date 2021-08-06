@@ -21,7 +21,6 @@ namespace react {
 class JPage : public jni::JavaClass<JPage> {
  public:
   static constexpr auto kJavaDescriptor =
-//      "Lcom/facebook/react/bridge/Inspector$Page;";
       "Lcom/didi/hummer/hermes/inspector/Inspector$Page;";
 
   static jni::local_ref<JPage::javaobject>
@@ -31,7 +30,6 @@ class JPage : public jni::JavaClass<JPage> {
 class JRemoteConnection : public jni::JavaClass<JRemoteConnection> {
  public:
   static constexpr auto kJavaDescriptor =
-//      "Lcom/facebook/react/bridge/Inspector$RemoteConnection;";
       "Lcom/didi/hummer/hermes/inspector/Inspector$RemoteConnection;";
 
   void onMessage(const std::string &message) const;
@@ -41,7 +39,6 @@ class JRemoteConnection : public jni::JavaClass<JRemoteConnection> {
 class JLocalConnection : public jni::HybridClass<JLocalConnection> {
  public:
   static constexpr auto kJavaDescriptor =
-//      "Lcom/facebook/react/bridge/Inspector$LocalConnection;";
       "Lcom/didi/hummer/hermes/inspector/Inspector$LocalConnection;";
 
   JLocalConnection(std::unique_ptr<ILocalConnection> connection);
@@ -58,7 +55,6 @@ class JLocalConnection : public jni::HybridClass<JLocalConnection> {
 class JInspector : public jni::HybridClass<JInspector> {
  public:
   static constexpr auto kJavaDescriptor =
-//      "Lcom/facebook/react/bridge/Inspector;";
       "Lcom/didi/hummer/hermes/inspector/Inspector;";
 
   static jni::global_ref<JInspector::javaobject> instance(
