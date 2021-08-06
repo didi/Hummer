@@ -49,3 +49,5 @@ android {
         }
     }
 }
+
+//apply from: '../download_libs.gradle'

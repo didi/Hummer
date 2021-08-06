@@ -12,7 +12,8 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['src/main/jni/hermes/hermes/libs']
+//            jniLibs.srcDirs = ['src/main/jni/hermes/hermes/libs']
+            jniLibs.srcDirs = ['src/main/jni/napi/napi/libs/hermes']
         }
     }
 

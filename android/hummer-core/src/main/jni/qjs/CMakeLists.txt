@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.4.1)
 
+# 源码编译方式
 #file(GLOB_RECURSE sources "*.c" "*.cpp")
-
 #add_library(hummer-qjs SHARED ${sources})
+#target_link_libraries(hummer-qjs ${log-lib})
+
+
+# 动态库编译方式
+#set(LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/quickjs/libs)
+set(LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../napi/napi/libs/qjs)
 
 include_directories(
         hummer
@@ -15,7 +21,7 @@ aux_source_directory( # Define variable for directory of sources
         )
 
 aux_source_directory( # Define variable for directory of dependency libraries
-        quickjs/libs
+        ${LIBS_DIR}
         # Set variable name of dependency libraries directory
         DIR_LIBS
         )
@@ -34,8 +40,6 @@ find_library( # Sets the name of the path variable.
         # you want CMake to locate.
         log)
 
-#target_link_libraries(hummer-qjs ${log-lib})
-
 target_link_libraries( # Specifies the target library.
         hummer-qjs
 
@@ -43,6 +47,6 @@ target_link_libraries( # Specifies the target library.
         # included in the NDK.
         ${log-lib}
 
-        # JavaScriptCore
-        ${CMAKE_CURRENT_SOURCE_DIR}/quickjs/libs/${ANDROID_ABI}/libqjs.so
+        # libqjs.so
+        ${LIBS_DIR}/${ANDROID_ABI}/libqjs.so
         )

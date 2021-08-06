@@ -280,6 +280,9 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_TypeConvertor_JSValueUnProtect(JNIEnv *env, jclass clazz, jlong js_context, jlong js_value) {
     auto jsContext = reinterpret_cast<JSContextRef>(js_context);
+    if (!JSCCache::findJSContextRef(jsContext)) {
+        return;
+    }
     auto jsValue = reinterpret_cast<JSValueRef>(js_value);
     JSValueUnprotect(jsContext, jsValue);
 }

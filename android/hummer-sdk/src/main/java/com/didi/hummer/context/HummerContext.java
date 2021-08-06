@@ -114,10 +114,14 @@ public class HummerContext extends ContextWrapper {
 
         if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES
                 || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            // 仅用于纯Hermes调试版本
+            if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES) {
+                mJsContext.evaluateJavaScript("function Recycler() {}");
+            }
             // 注入babel
             mJsContext.evaluateJavaScript("var Babel = {}");
             mJsContext.evaluateJavaScript(AssetsUtil.readFile("babel.js"), "babel.js");
-            mJsContext.evaluateJavaScript(AssetsUtil.readFile(HUMMER_DEFINITION_ES5_FILE), "HummerDefinition.js");
+            mJsContext.evaluateJavaScript(AssetsUtil.readFile(HUMMER_DEFINITION_ES5_FILE), "HummerDefinition_es5.js");
         } else {
             mJsContext.evaluateJavaScript(AssetsUtil.readFile(HUMMER_DEFINITION_FILE), "HummerDefinition.js");
         }
