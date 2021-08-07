@@ -73,9 +73,11 @@ public class DefaultWebSocketAdapter implements IWebSocketAdapter {
             public void onOpen(WebSocket webSocket, Response response) {
                 ws = webSocket;
 
-                if (listener != null) {
-                    listener.onOpen();
-                }
+                handler.post(() -> {
+                    if (listener != null) {
+                        listener.onOpen();
+                    }
+                });
             }
 
             @Override
