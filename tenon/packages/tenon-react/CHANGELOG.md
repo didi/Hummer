@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.6](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-react@0.3.5...@hummer/tenon-react@0.3.6) (2021-08-09)
+
+
+### Bug Fixes
+
+* **tenon:** 修复 Tenon React Button 组件无内容时显示 undefined 的问题 ([3ece049](https://github.com.cnpmjs.org/didi/Hummer/commit/3ece04901d0616d37268c5edfa9e28bb88b5927e))
+
+
+
+
+
 ## [0.3.5](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.3.4...@hummer/tenon-react@0.3.5) (2021-07-12)
 
 **Note:** Version bump only for package @hummer/tenon-react

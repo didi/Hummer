@@ -1,6 +1,6 @@
 {
   "name": "@hummer/tenon-vue",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Tenon运行时",
   "homepage": "",
   "license": "ISC",
@@ -18,8 +18,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@hummer/tenon-utils": "file:../tenon-utils",
     "@hummer/tenon-dev-tool": "file:../tenon-dev-tool",
+    "@hummer/tenon-utils": "file:../tenon-utils",
     "@vue/reactivity": "^3.0.1",
     "@vue/runtime-core": "^3.0.1"
   }
