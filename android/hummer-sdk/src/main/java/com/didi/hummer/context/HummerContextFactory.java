@@ -1,5 +1,6 @@
 package com.didi.hummer.context;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.didi.hummer.context.jsc.JSCHummerContext;
@@ -12,6 +13,14 @@ public class HummerContextFactory {
 
     public interface IHummerContextCreator {
 
+        /**
+         * 精简版构造函数，只用于JS代码执行，不能用做页面渲染
+         */
+        HummerContext create(@NonNull Context context);
+
+        /**
+         * 正常版构造函数，用于页面渲染
+         */
         HummerContext create(@NonNull HummerLayout container, String namespace);
     }
 
@@ -19,6 +28,17 @@ public class HummerContextFactory {
 
     public static void setHummerContextCreator(IHummerContextCreator creator) {
         contextCreator = creator;
+    }
+
+    public static HummerContext createContext(@NonNull Context context) {
+        try {
+            if (contextCreator != null) {
+                return contextCreator.create(context);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JSCHummerContext(context);
     }
 
     public static HummerContext createContext(@NonNull HummerLayout container) {

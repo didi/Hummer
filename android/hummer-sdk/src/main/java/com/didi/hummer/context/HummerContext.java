@@ -87,6 +87,13 @@ public class HummerContext extends ContextWrapper {
     protected Pattern pattern = Pattern.compile("function *_classCallCheck *\\( *\\w+ *, *\\w+ *\\) *\\{");
     protected Pattern pattern2 = Pattern.compile("\\s");
 
+    /**
+     * 精简版构造函数，只用于JS代码执行，不能用做页面渲染
+     */
+    protected HummerContext(@NonNull Context context) {
+        super(context);
+    }
+
     protected HummerContext(@NonNull HummerLayout container) {
         this(container, null);
     }
