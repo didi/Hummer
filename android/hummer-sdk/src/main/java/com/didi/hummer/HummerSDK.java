@@ -4,10 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.didi.hummer.adapter.navigator.impl.ActivityStackManager;
+import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.context.HummerContextFactory;
 import com.didi.hummer.context.napi.NAPIHummerContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
@@ -16,6 +18,7 @@ import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.plugin.interfaze.IHermesDebugger;
 import com.didi.hummer.plugin.interfaze.IV8Debugger;
+import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
 import com.didi.hummer.utils.blankj.Utils;
@@ -84,7 +87,17 @@ public class HummerSDK {
 
             if (jsEngine == JsEngine.NAPI_QJS || jsEngine == JsEngine.NAPI_HERMES) {
                 JSException.init();
-                HummerContextFactory.setHummerContextCreator(NAPIHummerContext::new);
+                HummerContextFactory.setHummerContextCreator(new HummerContextFactory.IHummerContextCreator() {
+                    @Override
+                    public HummerContext create(@NonNull Context context) {
+                        return new NAPIHummerContext(context);
+                    }
+
+                    @Override
+                    public HummerContext create(@NonNull HummerLayout container, String namespace) {
+                        return new NAPIHummerContext(container, namespace);
+                    }
+                });
             } else {
                 HummerException.init();
             }

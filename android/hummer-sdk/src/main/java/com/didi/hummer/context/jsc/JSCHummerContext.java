@@ -1,5 +1,6 @@
 package com.didi.hummer.context.jsc;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -21,6 +22,19 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
 
     private HummerBridge bridge;
     private HummerRecycler recycler;
+
+    public JSCHummerContext(@NonNull Context context) {
+        super(context);
+        mJsContext = JSCContext.create();
+
+        // 异常回调注册
+        HummerException.addJSContextExceptionCallback(mJsContext, e -> {
+            HummerSDK.getException(namespace).onException(e);
+            if (DebugUtil.isDebuggable()) {
+                HMLog.e("HummerException", "Hummer Exception", e);
+            }
+        });
+    }
 
     public JSCHummerContext(@NonNull HummerLayout container) {
         this(container, null);

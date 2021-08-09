@@ -1,5 +1,6 @@
 package com.didi.hummer.context.napi;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -79,6 +80,17 @@ public class NAPIHummerContext extends HummerContext {
             Toast.makeText(HummerSDK.appContext, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     };
+
+    public NAPIHummerContext(@NonNull Context context) {
+        super(context);
+        mJsContext = NAPIContext.create();
+        JSException.addJSContextExceptionCallback(mJsContext, e -> {
+            HummerSDK.getException(namespace).onException(e);
+            if (DebugUtil.isDebuggable()) {
+                HMLog.e("HummerException", "Hummer Exception", e);
+            }
+        });
+    }
 
     public NAPIHummerContext(@NonNull HummerLayout container) {
         this(container, null);
