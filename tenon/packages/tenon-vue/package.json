@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@hummer/tenon-utils": "file:../tenon-utils",
+    "@hummer/tenon-dev-tool": "file:../tenon-dev-tool",
     "@vue/reactivity": "^3.0.1",
     "@vue/runtime-core": "^3.0.1"
   }

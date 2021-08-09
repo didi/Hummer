@@ -1,0 +1,20 @@
+{
+  "name": "@hummer/tenon-dev-tool",
+  "version": "0.0.1",
+  "description": "Tenon Dev Tool",
+  "author": "duanlikang",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/tenon-dev-tool.cjs.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  }
+}
