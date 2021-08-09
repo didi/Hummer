@@ -5,16 +5,13 @@ import android.content.ContextWrapper;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
-import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.util.DebugUtil;
-import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.module.notifycenter.NotifyCenter;
@@ -111,27 +108,20 @@ public class HummerContext extends ContextWrapper {
 
     protected void onCreate() {
         HMLog.d("HummerNative", "HummerContext.onCreate");
-        long startTime = System.currentTimeMillis();
-
-        // 异常回调注册
-        HummerException.addJSContextExceptionCallback(mJsContext, e -> {
-            ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Bundle>>", "", jsSourcePath, -1));
-            HummerSDK.getException(namespace).onException(e);
-
-            if (DebugUtil.isDebuggable()) {
-                HMLog.e("HummerException", "Hummer Exception", e);
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
         registerInvoker(new HummerInvoker());
         registerInvoker(new NotifyCenterInvoker());
 
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES) {
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            // 仅用于纯Hermes调试版本
+            if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES) {
+                mJsContext.evaluateJavaScript("function Recycler() {}");
+            }
             // 注入babel
             mJsContext.evaluateJavaScript("var Babel = {}");
             mJsContext.evaluateJavaScript(AssetsUtil.readFile("babel.js"), "babel.js");
-            mJsContext.evaluateJavaScript(AssetsUtil.readFile(HUMMER_DEFINITION_ES5_FILE), "HummerDefinition.js");
+            mJsContext.evaluateJavaScript(AssetsUtil.readFile(HUMMER_DEFINITION_ES5_FILE), "HummerDefinition_es5.js");
         } else {
             mJsContext.evaluateJavaScript(AssetsUtil.readFile(HUMMER_DEFINITION_FILE), "HummerDefinition.js");
         }
@@ -140,8 +130,6 @@ public class HummerContext extends ContextWrapper {
         initEnvironmentVariables();
 
         HummerRegister$$hummer_sdk.init(this);
-
-        EventTracer.tracePerformance(namespace, "HummerContext.onCreate", startTime);
     }
 
     public void onStart() {
@@ -170,14 +158,9 @@ public class HummerContext extends ContextWrapper {
 
     public void onDestroy() {
         HMLog.d("HummerNative", "HummerContext.onDestroy");
-        long startTime = System.currentTimeMillis();
-
         destroy();
         NotifyCenter.release(mJsContext);
-        HummerException.removeJSContextExceptionCallback(mJsContext);
         releaseJSContext();
-
-        EventTracer.tracePerformance(namespace, "HummerContext.onDestroy", startTime);
     }
 
     public boolean onBack() {
@@ -298,7 +281,8 @@ public class HummerContext extends ContextWrapper {
     }
 
     public Object evaluateJavaScript(String script, String scriptId) {
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES) {
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             script = babelTransformCode(script, scriptId);
         }
         return mJsContext.evaluateJavaScript(script, scriptId);
@@ -341,6 +325,10 @@ public class HummerContext extends ContextWrapper {
             return;
         }
         mRegistry.put(invoker.getName(), invoker);
+    }
+
+    public Invoker getInvoker(String invokeName) {
+        return mRegistry.get(invokeName);
     }
 
     /**

@@ -66,7 +66,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 ## 团队成员
 - **负责人** [小枫](https://github.com/bbssyyuui)
 - **内部核心成员** [小枫](https://github.com/bbssyyuui), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
-- **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin)
+- **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin)，[jtsky](https://github.com/jtsky)
 
 ## 近期规划
 
@@ -107,7 +107,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] Tenon 支持代码提示和代码自动补全
 - 视图调试
     - [ ] Dev 页面展示视图树和节点样式
-    - [ ] 原生侧高亮选中的UI控件（画框）
+    - [x] 原生侧高亮选中的UI控件（画框）
 
 #### 生态建设
 - Tenon React 一期版本
@@ -121,14 +121,15 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [x] 支持页面配置
   - [x] 一期功能文档编写
 - Tenon React 二期版本
-  - [ ] 支持动画
+  - [x] 支持动画
   - [x] 事件模块重构
-  - [ ] 样式模块优化
+  - [x] 样式模块优化
   - [ ] 支持高阶组件
   - [ ] 数据管理（Redux 生态接入）
   - [ ] 路由管理（React Router 生态接入）
-- Tenon 组件库建设（[mand-mobile](https://github.com/didi/mand-mobile)）
-  - [ ] 一期完成基本组件
+- Tenon 组件库建设一期（[mand-mobile](https://github.com/didi/mand-mobile)）
+  - [x] 基础框架搭建
+  - [ ] 各个组件适配
 - Hummer 基础组件建设
   - [ ] 单选框（Radio）
   - [ ] 复选框（Checkbox）
@@ -140,7 +141,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [ ] 页面标签栏（TabLayout）
   - [ ] 拍照/录像（Camera）
   - [ ] 电话（Phone）
-  - [ ] 画布（Canvas）
+  - [x] 画布（Canvas）
 
 #### 性能优化
 - 动态执行 JS
@@ -151,8 +152,8 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 
 #### 其他
 - N-API 专项（抽象JS引擎）
-  - [ ] 适配 QuickJS
-  - [ ] 适配 Hermes
+  - [x] 适配 QuickJS
+  - [x] 适配 Hermes
 
 *（~ 欢迎大家领取任务，给我们提交 PR ~）*
 

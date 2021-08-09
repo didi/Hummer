@@ -4,11 +4,15 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+//        mavenLocal()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:4.2.2'
+        // JCenter
         classpath 'com.novoda:bintray-release:0.9.2'
+        // MavenCentral
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.4.30"
     }
 }
 
@@ -16,6 +20,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+//        mavenLocal()
         jcenter()
     }
 }

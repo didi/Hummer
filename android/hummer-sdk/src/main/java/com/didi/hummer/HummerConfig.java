@@ -4,8 +4,6 @@ import com.didi.hummer.adapter.http.IHttpAdapter;
 import com.didi.hummer.adapter.http.impl.DefaultHttpAdapter;
 import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
-import com.didi.hummer.adapter.location.ILocationAdapter;
-import com.didi.hummer.adapter.location.impl.DefaultLocationAdapter;
 import com.didi.hummer.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
@@ -64,10 +62,6 @@ public class HummerConfig {
      */
     private IStorageAdapter storageAdapter;
     /**
-     * 定位适配器
-     */
-    private ILocationAdapter locationAdapter;
-    /**
      * 导航适配器
      */
     private INavigatorAdapter navAdapter;
@@ -87,7 +81,6 @@ public class HummerConfig {
         this.webSocketAdapter = builder.webSocketAdapter;
         this.imageLoaderAdapter = builder.imageLoaderAdapter;
         this.storageAdapter = builder.storageAdapter;
-        this.locationAdapter = builder.locationAdapter;
         this.navAdapter = builder.navAdapter;
         this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
     }
@@ -154,13 +147,6 @@ public class HummerConfig {
         return storageAdapter;
     }
 
-    public ILocationAdapter getLocationAdapter() {
-        if (locationAdapter == null) {
-            locationAdapter = new DefaultLocationAdapter();
-        }
-        return locationAdapter;
-    }
-
     public INavigatorAdapter getNavAdapter() {
         if (navAdapter == null) {
             navAdapter = new DefaultNavigatorAdapter();
@@ -186,7 +172,6 @@ public class HummerConfig {
         private IWebSocketAdapter webSocketAdapter;
         private IImageLoaderAdapter imageLoaderAdapter;
         private IStorageAdapter storageAdapter;
-        private ILocationAdapter locationAdapter;
         private INavigatorAdapter navAdapter;
         private IScriptLoaderAdapter scriptLoaderAdapter;
 
@@ -237,11 +222,6 @@ public class HummerConfig {
 
         public Builder setStorageAdapter(IStorageAdapter adapter) {
             storageAdapter = adapter;
-            return this;
-        }
-
-        public Builder setLocationAdapter(ILocationAdapter adapter) {
-            locationAdapter = adapter;
             return this;
         }
 

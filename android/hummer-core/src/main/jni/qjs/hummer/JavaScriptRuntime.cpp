@@ -2,11 +2,11 @@
 // Created by maxiee on 2019-08-05.
 //
 #include <jni.h>
+#include <quickjs.h>
 #include "TypeConvertor.h"
 #include "QuickJSCache.h"
 #include "PromiseProcessor.h"
 #include "HummerJNI.h"
-#include "../quickjs/quickjs.h"
 #include "JSException.h"
 #include "HummerClassRegister.h"
 

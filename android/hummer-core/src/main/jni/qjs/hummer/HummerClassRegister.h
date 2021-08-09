@@ -5,7 +5,7 @@
 #ifndef NATIVE_JS_ANDROID_HUMMERCLASSREGISTER_H
 #define NATIVE_JS_ANDROID_HUMMERCLASSREGISTER_H
 
-#include "../quickjs/quickjs.h"
+#include <quickjs.h>
 
 class HummerClassRegister {
 public:

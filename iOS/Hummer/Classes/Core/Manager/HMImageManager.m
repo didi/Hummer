@@ -71,10 +71,10 @@
         return nil;
     }
     __block  id<HMImageLoaderOperation> operation = nil;
-    HMImageLoaderCompletionBlock loaderCompletedBloack = ^(id _Nullable data, BOOL needCache, NSError * _Nullable error) {
+    HMImageLoaderCompletionBlock loaderCompletedBloack = ^(id _Nullable data, BOOL needCache, HMImageCacheType cacheType, NSError * _Nullable error) {
         if (error) {
             hm_safe_main_thread(^{
-                completionBlock(nil,error,0);
+                completionBlock(nil,error,cacheType);
             });
             return;
         }
@@ -92,7 +92,7 @@
                     if ([operation isCancel]) {
                         return;
                     }
-                    completionBlock(image,error,0);
+                    completionBlock(image,error,cacheType);
                 });
             };
             //3 decode image
@@ -104,7 +104,7 @@
                 if ([operation isCancel]) {
                     return;
                 }
-                completionBlock(((UIImage *)data),nil,0);
+                completionBlock(((UIImage *)data),nil,cacheType);
             });
         }
     };

@@ -182,9 +182,129 @@ class RootView extends View {
             textAlign: 'right'
         };
 
+        let text4 = new Text();
+        text4.text = 'top';
+        text4.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginLeft: 10,
+            color: '#FFFFFF',
+            textVerticalAlign: 'top'
+        };
+
+        let text5 = new Text();
+        text5.text = 'vertical';
+        text5.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginTop: 10,
+            color: '#FFFFFF',
+            textVerticalAlign: 'center'
+        };
+
+        let text6 = new Text();
+        text6.text = 'bottom';
+        text6.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginTop: 10,
+            marginLeft: 10,
+            color: '#FFFFFF',
+            textVerticalAlign: 'bottom'
+        };
+
+        let text7 = new Text();
+        text7.text = 'L&VT';
+        text7.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginTop: 10,
+            marginLeft: 10,
+            color: '#FFFFFF',
+            textAlign: 'left',
+            textVerticalAlign: 'top'
+        };
+
+        let text8 = new Text();
+        text8.text = 'C&VT';
+        text8.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginTop: 10,
+            marginLeft: 10,
+            color: '#FFFFFF',
+            textAlign: 'center',
+            textVerticalAlign: 'top'
+        };
+
+        let text9 = new Text();
+        text9.text = 'R&VT';
+        text9.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginTop: 10,
+            color: '#FFFFFF',
+            textAlign: 'right',
+            textVerticalAlign: 'top',
+        };
+
+        let text10 = new Text();
+        text10.text = 'L&VB';
+        text10.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginTop: 10,
+            marginLeft: 10,
+            color: '#FFFFFF',
+            textAlign: 'left',
+            textVerticalAlign: 'bottom'
+        };
+
+        let text11 = new Text();
+        text11.text = 'C&VB';
+        text11.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginTop: 10,
+            marginLeft: 10,
+            color: '#FFFFFF',
+            textAlign: 'center',
+            textVerticalAlign: 'bottom'
+        };
+
+        let text12 = new Text();
+        text12.text = 'R&VB';
+        text12.style = {
+            width: 70,
+            height: 40,
+            backgroundColor: '#FF0000',
+            marginTop: 10,
+            marginLeft: 10,
+            color: '#FFFFFF',
+            textAlign: 'right',
+            textVerticalAlign: 'bottom'
+        };
+
         layout.appendChild(text1);
         layout.appendChild(text2);
         layout.appendChild(text3);
+        layout.appendChild(text4);
+        layout.appendChild(text5);
+        layout.appendChild(text6);
+        layout.appendChild(text7);
+        layout.appendChild(text8);
+        layout.appendChild(text9);
+        layout.appendChild(text10);
+        layout.appendChild(text11);
+        layout.appendChild(text12);
         this.appendChild(titleView);
         this.appendChild(layout);
     }
@@ -435,6 +555,9 @@ class RootView extends View {
             textLineClamp: 2,
             textOverflow: 'ellipsis',
         };
+
+        text1.textCopyEnable = true;
+        text2.textCopyEnable = true;
 
         let text3 = new Text();
         text3.text = 'clip 这是一个单行测试文本';

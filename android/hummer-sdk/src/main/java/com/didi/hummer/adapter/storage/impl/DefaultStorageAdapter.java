@@ -36,9 +36,11 @@ public class DefaultStorageAdapter implements IStorageAdapter {
      * SP 的默认名字是SP_NAME，如果有自定义namespace，则拼接上namespace
      */
     private String getSpName(String namespace) {
-        String spName = SP_NAME;
+        String spName;
         if (namespace != null && !HummerSDK.NAMESPACE_DEFAULT.equals(namespace)) {
             spName = SP_NAME + "_" + namespace;
+        } else {
+            spName = SP_NAME + "_default";
         }
         return spName;
     }
@@ -95,7 +97,7 @@ public class DefaultStorageAdapter implements IStorageAdapter {
 
     @Override
     public void removeAll() {
-        getSP().edit().clear().apply();
+        getSP().edit().clear().putInt(KEY_VERSION, version).apply();
     }
 
     @Override

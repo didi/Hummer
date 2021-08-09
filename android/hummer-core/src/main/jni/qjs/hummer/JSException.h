@@ -6,7 +6,7 @@
 #define NATIVE_JS_ANDROID_JSEXCEPTION_H
 
 #include <jni.h>
-#include "../quickjs/quickjs.h"
+#include <quickjs.h>
 #include "HummerJNI.h"
 #include "TypeConvertor.h"
 

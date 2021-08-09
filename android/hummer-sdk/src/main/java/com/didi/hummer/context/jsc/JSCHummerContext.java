@@ -1,11 +1,16 @@
 package com.didi.hummer.context.jsc;
 
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.jsc.JSCContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerBridge;
+import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.engine.jsc.jni.HummerRecycler;
+import com.didi.hummer.core.util.DebugUtil;
+import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.render.component.view.Invoker;
@@ -27,11 +32,23 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
         bridge = new HummerBridge(mJsContext.getIdentify(), this);
         recycler = new HummerRecycler(mJsContext.getIdentify(), this);
 
+        // 异常回调注册
+        HummerException.addJSContextExceptionCallback(mJsContext, e -> {
+            ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Bundle>>", "", jsSourcePath, -1));
+            HummerSDK.getException(namespace).onException(e);
+
+            if (DebugUtil.isDebuggable()) {
+                HMLog.e("HummerException", "Hummer Exception", e);
+                Toast.makeText(HummerSDK.appContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         onCreate();
     }
 
     @Override
     public void releaseJSContext() {
+        HummerException.removeJSContextExceptionCallback(mJsContext);
         if (bridge != null) {
             bridge.onDestroy();
         }

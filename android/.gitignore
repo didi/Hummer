@@ -69,10 +69,6 @@ commit.template
 
 # NDK build
 .externalNativeBuild/
+.cxx/
 
 repo/
-
-# Hummer
-hermes-debugger
-hermes-inspector
-v8-debugger

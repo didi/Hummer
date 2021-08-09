@@ -1,5 +1,6 @@
 package com.didi.hummer.context;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
@@ -45,11 +46,7 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                  *   1. JS执行异常：-1～-100，如：{errCode: -1, errMsg: "JavaScript evaluate exception"}；
                  */
                 jsRet = mHummerContext.evaluateJavaScript(String.valueOf(params[0]));
-                if (jsRet instanceof JSValue && ((JSValue)jsRet).stringValue() == null) {
-                    jsRet = new HummerError(-1, "JavaScript evaluate exception");
-                } else {
-                    jsRet = null;
-                }
+                jsRet = makeHummerError(jsRet);
                 break;
             case "loadScriptWithUrl":
                 /**
@@ -70,11 +67,7 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                         }
                     } else {
                         Object ret = mHummerContext.evaluateJavaScript(script);
-                        if (ret instanceof JSValue && ((JSValue) ret).stringValue() == null) {
-                            ret = new HummerError(-1, "JavaScript evaluate exception");
-                        } else {
-                            ret = null;
-                        }
+                        ret = makeHummerError(ret);
                         if (callback != null) {
                             callback.call(ret);
                         }
@@ -106,5 +99,23 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                 break;
         }
         return jsRet;
+    }
+
+    /**
+     * 根据JS代码执行结果来创建对应的HummerError对象，由于napi的JS执行返回结果和其他引擎的返回结果不一样，这里需要做引擎的区分处理
+     */
+    private HummerError makeHummerError(Object ret) {
+        HummerError err = null;
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            if (ret instanceof JSException) {
+                err = new HummerError(-1, ((JSException) ret).getMessage());
+            }
+        } else {
+            if (ret instanceof JSValue && ((JSValue) ret).stringValue() == null) {
+                err = new HummerError(-1, "JavaScript evaluate exception");
+            }
+        }
+        return err;
     }
 }

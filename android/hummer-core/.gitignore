@@ -1,1 +1,3 @@
 /build
+/src/main/jni/jsc/JavaScriptCore/libs
+/src/main/jni/napi/napi

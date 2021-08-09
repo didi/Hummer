@@ -12,14 +12,15 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['src/main/jni/hermes/hermes/libs']
+//            jniLibs.srcDirs = ['src/main/jni/hermes/hermes/libs']
+            jniLibs.srcDirs = ['src/main/jni/napi/napi/libs/hermes']
         }
     }
 
-//    externalNativeBuild {
-//        cmake {
-//            path "src/main/jni/jsc/CMakeLists.txt"
-//        }
-//    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/jni/hermes/CMakeLists.txt"
+        }
+    }
 
 }

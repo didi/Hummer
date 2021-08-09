@@ -1,0 +1,124 @@
+import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
+import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.source
+
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    println "No props file"
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            // The coordinates of the library, being set from variables that
+            // we'll set up in a moment
+            groupId project.GROUP_ID
+            artifactId project.ARTIFACT_ID
+            version project.VERSION
+
+            // Two artifacts, the `aar` and the sources
+            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+            artifact androidSourcesJar
+
+            // Self-explanatory metadata for the most part
+            pom {
+                name = project.ARTIFACT_ID
+                description = 'Hummer is a high-performance, highly available, lightweight and dynamic cross-platform framework.'
+                // If your project has a dedicated site, use its URL here
+                url = 'https://github.com/didi/Hummer'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'OrangeLab'
+                        name = 'Orange Lab'
+                        email = 'orange-lab@didiglobal.com'
+                    }
+                }
+                // Version control info, if you're using GitHub, follow the format as seen here
+                scm {
+                    connection = 'scm:git:git://github.com/didi/Hummer.git'
+                    developerConnection = 'scm:git:ssh://github.com/didi/Hummer.git'
+                    url = 'https://github.com/didi/Hummer/tree/master'
+                }
+                // A slightly hacky fix so that your POM will include any transitive dependencies
+                // that your library builds upon
+                withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+
+                    project.configurations.implementation.allDependencies.each {
+                        if (it instanceof DefaultProjectDependency) {
+                            def node = dependenciesNode.appendNode('dependency')
+                            node.appendNode('groupId', project.GROUP_ID)
+                            node.appendNode('artifactId', it.name)
+                            node.appendNode('version', project.VERSION)
+                        } else if (it instanceof DefaultExternalModuleDependency) {
+                            // 把JCenter上的groupId(com.didi.hummer)替换成MavenCentral上的groupId(io.github.didi.hummer)
+                            def node = dependenciesNode.appendNode('dependency')
+                            def groupId = it.group
+                            if (groupId == "com.didi.hummer") {
+                                groupId = "io.github.didi.hummer"
+                            }
+                            node.appendNode('groupId', groupId)
+                            node.appendNode('artifactId', it.name)
+                            node.appendNode('version', it.version)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        // The repository to publish to, Sonatype/MavenCentral
+        maven {
+            // This is an arbitrary name, you may also use "mavencentral" or
+            // any other name that's descriptive for you
+            name = "mavenCentral"
+
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            // You only need this if you want to publish snapshots, otherwise just set the URL
+            // to the release repo directly
+            url = project.VERSION.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            // 用于打印url，方便查看aar是否存在
+            def searchUrl = "https://search.maven.org/artifact/"
+            System.out.println("aar url：" + searchUrl + project.GROUP_ID + "/" + project.ARTIFACT_ID + "/" + project.VERSION + "/aar")
+
+            // The username and password we've fetched earlier
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+signing {
+    sign publishing.publications
+}

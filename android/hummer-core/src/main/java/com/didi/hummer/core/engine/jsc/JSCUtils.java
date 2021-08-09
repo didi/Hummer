@@ -56,8 +56,6 @@ public class JSCUtils {
             value = TypeConvertor.makeString(jsContext, (String) object);
         } else if (object instanceof JSCValue) {
             value = ((JSCValue) object).value;
-        } else if (object instanceof JSCCallback) {
-            value = ((JSCCallback) object).value;
         } else {
             value = TypeConvertor.makeFromJsonString(jsContext, HMGsonUtil.toJson(object));
         }

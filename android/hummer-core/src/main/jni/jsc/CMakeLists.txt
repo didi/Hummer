@@ -5,6 +5,8 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+set(LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/JavaScriptCore/libs)
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -20,7 +22,7 @@ aux_source_directory( # Define variable for directory of sources
         )
 
 aux_source_directory( # Define variable for directory of dependency libraries
-        JavaScriptCore/libs
+        ${LIBS_DIR}
         # Set variable name of dependency libraries directory
         DIR_LIBS
         )
@@ -56,6 +58,6 @@ target_link_libraries( # Specifies the target library.
         # included in the NDK.
         ${log-lib}
 
-        # JavaScriptCore
-        ${CMAKE_CURRENT_SOURCE_DIR}/JavaScriptCore/libs/${ANDROID_ABI}/libjsc.so
+        # libjsc.so
+        ${LIBS_DIR}/${ANDROID_ABI}/libjsc.so
         )

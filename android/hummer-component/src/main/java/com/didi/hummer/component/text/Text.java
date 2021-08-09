@@ -1,5 +1,7 @@
 package com.didi.hummer.component.text;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
@@ -11,6 +13,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.annotation.Component;
@@ -29,6 +32,11 @@ public class Text extends HMBase<TextView> {
     private Typeface orgTypeface;
     private String fontWeight;
     private String fontStyle;
+
+    // x轴定位
+    private int xGravity = 0;
+    // y轴定位
+    private int yGravity = 0;
 
     public Text(HummerContext context, JSValue jsValue, String viewID) {
         super(context, jsValue, viewID);
@@ -88,6 +96,23 @@ public class Text extends HMBase<TextView> {
     private String formattedText;
     public void setFormattedText(String formattedText) {
         setRowText(fromHtml(formattedText));
+    }
+
+    @JsProperty("textCopyEnable")
+    private boolean textCopyEnable;
+    public void setTextCopyEnable(boolean textCopyEnable) {
+        if (textCopyEnable) {
+            getView().setOnLongClickListener(v -> {
+                ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("copyText", getView().getText());
+                clipboardManager.setPrimaryClip(clipData);
+                Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
+                toast.setText("复制成功");
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                return false;
+            });
+        }
     }
 
     @JsAttribute("color")
@@ -169,14 +194,47 @@ public class Text extends HMBase<TextView> {
         switch (textAlign.toLowerCase()) {
             case "center":
                 getView().setGravity(Gravity.CENTER);
+                xGravity = Gravity.CENTER;
                 break;
             case "left":
             default:
                 getView().setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+                xGravity = Gravity.START | Gravity.CENTER_VERTICAL;
                 break;
             case "right":
                 getView().setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+                xGravity = Gravity.END | Gravity.CENTER_VERTICAL;
                 break;
+        }
+
+        if (yGravity != 0) {
+            getView().setGravity(xGravity | yGravity);
+        }
+    }
+
+    @JsAttribute("textVerticalAlign")
+    public void setTextVerticalAlign(String textVerticalAlign) {
+        if (TextUtils.isEmpty(textVerticalAlign)) {
+            return;
+        }
+        switch (textVerticalAlign.toLowerCase()) {
+            case "center":
+                getView().setGravity(Gravity.CENTER_VERTICAL);
+                yGravity = Gravity.CENTER_VERTICAL;
+                break;
+            case "top":
+            default:
+                getView().setGravity(Gravity.TOP);
+                yGravity = Gravity.TOP;
+                break;
+            case "bottom":
+                getView().setGravity(Gravity.BOTTOM);
+                yGravity = Gravity.BOTTOM;
+                break;
+        }
+
+        if (xGravity != 0) {
+            getView().setGravity(xGravity | yGravity);
         }
     }
 
@@ -285,6 +343,8 @@ public class Text extends HMBase<TextView> {
             case HummerStyleUtils.Hummer.LINE_SPACING_MULTI:
                 setLineSpacingMulti((float) value);
                 break;
+            case HummerStyleUtils.Hummer.TEXT_VERTICAL_ALIGN:
+                setTextVerticalAlign(String.valueOf(value));
             default:
                 return false;
         }

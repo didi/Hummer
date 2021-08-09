@@ -1,2 +1,2 @@
 include ':hummer-demo-app', ':hummer-core', ':hummer-compiler', ':hummer-annotation', ':hummer-sdk', ':hummer-component', ':hummer-plugin-interface', ':hummer', ':hummer-dev-tools'
-//include ':hermes-inspector', ':v8-debugger', ':hermes-debugger'
+include ':hermes-debugger'

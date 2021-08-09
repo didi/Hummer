@@ -69,7 +69,7 @@ HM_EXPORT_PROPERTY(src, src, setSrc:)
 
 HM_EXPORT_PROPERTY(gifSrc, src, setGifSrc:)
 
-HM_EXPORT_METHOD(load, __load:)
+HM_EXPORT_METHOD(load, __load:completion:)
 
 HM_EXPORT_PROPERTY(gifRepeatCount, gifRepeatCount, setGifRepeatCount:)
 
@@ -88,7 +88,7 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
     return self;
 }
 
-- (void)__load:(HMBaseValue *)params {
+- (void)__load:(HMBaseValue *)params completion:(HMFunctionType)callback{
 
     NSString *srcString = params.toString;
     NSString *placeholder = nil;
@@ -109,7 +109,12 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
     if ([srcString hasSuffix:@".gif"]) {
         context = @{HMImageManagerContextAnimatedImageClass:@"HMAnimatedImage"};
     }
-    [self realSetSrc:srcString placeholder:placeholder failedImage:errorSource context:context];
+    
+    [self realSetSrc:srcString placeholder:placeholder failedImage:errorSource context:context completionBlock:^(NSInteger srcType, BOOL isSuccess) {
+        if (callback) {
+            callback(@[@(srcType), @(isSuccess)]);
+        }
+    }];
 }
 
 + (Class)layerClass {
@@ -126,7 +131,7 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
 - (void)setGifSrc:(HMBaseValue *)src {
     NSString *srcString = src.toString;
     HMImageLoaderContext *context = @{HMImageManagerContextAnimatedImageClass:@"HMAnimatedImage"};
-    [self realSetSrc:srcString placeholder:nil failedImage:nil context:context];
+    [self realSetSrc:srcString placeholder:nil failedImage:nil context:context completionBlock:nil];
 }
 
 - (void)setSrc:(HMBaseValue *)src {
@@ -135,11 +140,11 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
         [self setGifSrc:src];
         return;
     }
-    [self realSetSrc:srcString placeholder:nil failedImage:nil context:nil];
+    [self realSetSrc:srcString placeholder:nil failedImage:nil context:nil completionBlock:nil];
 }
 
-- (void)realSetSrc:(NSString *)src placeholder:(NSString *)placeholder failedImage:(NSString *)failedImage context:(nullable HMImageLoaderContext *)context {
-
+- (void)realSetSrc:(NSString *)src placeholder:(NSString *)placeholder failedImage:(NSString *)failedImage context:(nullable HMImageLoaderContext *)context completionBlock:(HMImageLoadCompletionBlock)completionBlock {
+    
     self.imageSrc = src;
     if (self.imageSrc) {
         self.image = nil;
@@ -147,7 +152,12 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
         
         [self hm_setImageWithURL:self.imageSrc placeholder:placeholder failedImage:failedImage inJSBundleSource:nil processBlock:nil context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
             typeof(weakSelf) strongSelf = weakSelf;
-            if (!image) {return;}
+            if (error || !image) {
+                if (completionBlock) {
+                    completionBlock(HMImageLoaderSrcTypeUnknown, NO);
+                }
+                return;
+            }
             __block UIImage *img = image;
             if ([HMInterceptor hasInterceptor:HMInterceptorTypeImage]) {
                 [HMInterceptor enumerateInterceptor:HMInterceptorTypeImage
@@ -177,6 +187,15 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
                 strongSelf.animationImages = nil;
             }
             [strongSelf hm_markDirty];
+            
+            if (completionBlock) {
+                if (cacheType == HMImageCacheTypeNone) {
+                    completionBlock(HMImageLoaderSrcTypeNetworking, YES);
+
+                } else if (cacheType == HMImageCacheTypeDisk) {
+                    completionBlock(HMImageLoaderSrcTypeLocalResource, YES);
+                }
+            }
         }];
     }
 }

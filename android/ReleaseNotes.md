@@ -1,5 +1,17 @@
 # Release Nodes
 
+### 0.3.23
+- 修复TextArea组件在达到最大行数时输入回车，重复触发input事件的问题；
+- 修复quickjs引擎在debug模式下出现stackoverflow的问题；
+- 修复List组件加载更多滑到没有数据之后，无法再重置为可加载更多的状态的问题；
+- 修复View.insertBefore和View.replaceChild处理子元素超出父视图的问题；
+- 修复Request组件返回值两端不一致的问题；
+- Image组件支持图片加载回调；
+- Storage组件支持namespace隔离，并增加removeAll方法；
+- Location组件定位坐标系转换（WGS-84 -> GCJ-02）；
+- 支持MavenCentral发布；
+- 整理核心链路埋点事件；
+
 ### 0.3.22
 - 补齐transform对rotateZ的支持；
 - Memory组件支持clearAll接口；
