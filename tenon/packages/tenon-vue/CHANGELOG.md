@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.4.4...@hummer/tenon-vue@1.5.0) (2021-08-10)
+
+
+### Features
+
+* 修改runtime-devtools引入策略 避免build时仍将devtools代码打包 ([079905e](https://github.com.cnpmjs.org/didi/Hummer/commit/079905ef0e795e9cb55651dc4e30c7a337012dbd))
+
+
+
+
+
 ## [1.4.3](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.4.2...@hummer/tenon-vue@1.4.3) (2021-08-09)
 
 **Note:** Version bump only for package @hummer/tenon-vue
