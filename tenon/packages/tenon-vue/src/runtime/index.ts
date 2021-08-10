@@ -72,10 +72,6 @@ export function render(App:any){
   container.render();
 
   if(NODE_DEBUG_ENV){
-    injectDevTool(container)
+    require('@hummer/tenon-dev-tool').run(container)
   }
-}
-
-export function injectDevTool(page:Page){
-  require('@hummer/tenon-dev-tool').run(page)
 }
