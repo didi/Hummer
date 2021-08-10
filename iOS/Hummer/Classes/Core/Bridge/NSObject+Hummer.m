@@ -19,14 +19,15 @@
 
 - (HMBaseValue *)hmValue {
     id <HMBaseWeakValueProtocol> weakValue = objc_getAssociatedObject(self, _cmd);
-    // 不存在了
-    if (!weakValue.value) {
+    
+    HMBaseValue *value = weakValue.value;
+    if (!value) {
+        // 不存在了
         objc_setAssociatedObject(self, _cmd, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
         return nil;
     }
 
-    return weakValue.value;
+    return value;
 }
 
 - (void)setHmValue:(HMBaseValue *)value {
