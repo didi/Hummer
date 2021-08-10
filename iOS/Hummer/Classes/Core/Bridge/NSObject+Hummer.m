@@ -9,7 +9,7 @@
 
 #import <objc/runtime.h>
 #import "HMBaseValue.h"
-#import "HMBaseWeakValueProtocol.h"
+#import <Hummer/HMBaseWeakValueProtocol.h>
 
 @implementation NSObject (Hummer)
 
@@ -28,6 +28,14 @@
     }
 
     return value;
+}
+
+- (id <HMBaseWeakValueProtocol>)hmWeakValue {
+    return objc_getAssociatedObject(self, @selector(hmValue));
+}
+
+- (void)setHmWeakValue:(id <HMBaseWeakValueProtocol>)hmWeakValue {
+    objc_setAssociatedObject(self, @selector(hmValue), hmWeakValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)setHmValue:(HMBaseValue *)value {
