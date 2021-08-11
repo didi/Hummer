@@ -41,26 +41,6 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
-- (nullable instancetype)initWithValue:(nullable HMBaseValue *)value {
-    HMAssertMainQueue();
-    if (!value || [value isKindOfClass:HMJSStrongValue.class]) {
-        return nil;
-    }
-    HMJSStrongValue *strongValue = (HMJSStrongValue *) value;
-    if (!strongValue.context || ![strongValue.context isKindOfClass:HMJSExecutor.class]) {
-        return nil;
-    }
-    self = [super init];
-    _executor = strongValue.context;
-    if ([_executor popExceptionWithStatus:napi_create_reference(_executor.env, strongValue.valueRef, 0, &self->_reference)]) {
-        NSAssert(NO, CREATE_WEAK_REFERENCE_ERROR);
-        
-        return nil;
-    }
-    
-    return self;
-}
-
 - (NAPIValue)valueRef {
     HMAssertMainQueue();
     NAPIValue resultValue;

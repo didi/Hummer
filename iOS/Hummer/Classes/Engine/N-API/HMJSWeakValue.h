@@ -18,8 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 
-- (nullable instancetype)initWithValue:(nullable HMBaseValue *)value NS_DESIGNATED_INITIALIZER;
-
 - (nullable instancetype)initWithValueRef:(nullable NAPIValue)valueRef executor:(nullable HMJSExecutor*)executor NS_DESIGNATED_INITIALIZER;
 
 @end

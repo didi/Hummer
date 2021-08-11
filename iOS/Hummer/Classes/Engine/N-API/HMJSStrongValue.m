@@ -1,4 +1,4 @@
-#import "HMJSStrongValue.h"
+#import "HMJSStrongValue+Private.h"
 #import <Hummer/HMJSExecutor+Private.h>
 
 NS_ASSUME_NONNULL_BEGIN

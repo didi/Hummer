@@ -4,7 +4,7 @@
 #import <Hummer/HMLogger.h>
 #import <Hummer/NSObject+Hummer.h>
 #import <Hummer/HMExceptionModel.h>
-#import <Hummer/HMJSStrongValue.h>
+#import <Hummer/HMJSStrongValue+Private.h>
 
 static NSString *const HANDLE_SCOPE_ERROR = @"napi_open_handle_scope() error";
 

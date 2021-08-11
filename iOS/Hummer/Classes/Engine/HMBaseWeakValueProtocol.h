@@ -17,8 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, strong, nullable, nonatomic) HMBaseValue *value;
 
-- (nullable instancetype)initWithValue:(nullable HMBaseValue *)value;
-
 @end
 
 NS_ASSUME_NONNULL_END
