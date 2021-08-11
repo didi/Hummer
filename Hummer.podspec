@@ -47,7 +47,7 @@ Hummer is a dynamic solution for client.
 
   s.subspec "Core" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
-    ss.private_header_files = 'iOS/Hummer/Classes/Engine/N-API/HMJSExecutor+Private.h', 'iOS/Hummer/Classes/Engine/N-API/HMJS{Weak,Strong}Value.h'
+    ss.private_header_files = 'iOS/Hummer/Classes/Engine/N-API/HMJSExecutor+Private.h', 'iOS/Hummer/Classes/Engine/N-API/HMJS{Weak,Strong}Value.h', 'iOS/Hummer/Classes/Engine/N-API/HMJSValue.h'
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
