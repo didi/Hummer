@@ -1,10 +1,12 @@
 #import "HMJSExecutor+Private.h"
+#import <Hummer/HMUtility.h>
+#import <Hummer/NSInvocation+Hummer.h>
 #import <Hummer/HMExportClass.h>
 #import <Hummer/HMJSWeakValue.h>
-#import <Hummer/HMLogger.h>
 #import <Hummer/NSObject+Hummer.h>
 #import <Hummer/HMExceptionModel.h>
 #import <Hummer/HMJSStrongValue.h>
+#import <objc/runtime.h>
 
 static NSString *const HANDLE_SCOPE_ERROR = @"napi_open_handle_scope() error";
 
@@ -28,62 +30,29 @@ static NSString *const CREATE_EXTERNAL_ERROR = @"napi_create_external() error";
 
 NS_ASSUME_NONNULL_BEGIN
 
-static void hummerFinalize(void *finalizeData, void *finalizeHint) {
-    HMAssertMainQueue();
-    if (!finalizeData) {
-        assert(false);
+static void hummerFinalize(void *_Nullable finalizeData, void *_Nullable finalizeHint);
 
-        return;
-    }
-    // 不透明指针可能为原生对象，也可能为闭包
-    // 清空 hmWeakValue
-    [((__bridge id) finalizeData) setHmWeakValue:nil];
-    CFRelease(finalizeData);
-}
+static NAPIValue _Nullable hummerCall(NAPIEnv _Nullable env, NAPICallbackInfo _Nullable callbackInfo);
 
-static NAPIValue _Nullable nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
-    HMAssertMainQueue();
-    size_t argc = 2;
-    NAPIValue argv[2];
-    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, argv, nil, nil))
-    if (argc != 2) {
-        assert(false);
+static NAPIValue _Nullable hummerCreate(NAPIEnv _Nullable env, NAPICallbackInfo _Nullable callbackInfo);
 
-        return nil;
-    }
-    const char *utf8String;
-    if (NAPIGetValueStringUTF8(env, argv[0], &utf8String) != NAPIErrorOK) {
-        assert(false);
+static NAPIValue _Nullable hummerCallFunction(NAPIEnv _Nullable env, NAPICallbackInfo _Nullable callbackInfo);
 
-        return nil;
-    }
-    assert(utf8String);
-    // nullable
-    NSString *logString = [NSString stringWithUTF8String:utf8String];
-    CHECK_COMMON(NAPIFreeUTF8String(env, utf8String))
-    double logLevel;
-    if (napi_get_value_double(env, argv[1], &logLevel) != NAPIErrorOK) {
-        assert(false);
+static NAPIValue _Nullable hummerGetProperty(NAPIEnv _Nullable env, NAPICallbackInfo _Nullable callbackInfo);
 
-        return nil;
-    }
-    [HMLogger printJSLog:logString level:logLevel];
-    if ([[HMExecutorMap objectForKey:[NSValue valueWithPointer:env]] isKindOfClass:HMJSExecutor.class]) {
-        HMJSExecutor *executor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
-        if (executor.consoleHandler) {
-            executor.consoleHandler(logString, logLevel);
-        }
-        if (executor.webSocketHandler) {
-            executor.webSocketHandler(logString, logLevel);
-        }
-    }
+static NAPIValue _Nullable hummerSetProperty(NAPIEnv _Nullable env, NAPICallbackInfo _Nullable callbackInfo);
 
-    return nil;
-}
+static NAPIValue _Nullable nativeLoggingHook(NAPIEnv _Nullable env, NAPICallbackInfo _Nullable callbackInfo);
 
 @interface HMJSExecutor ()
 
 @property (nonatomic, assign) NAPIEnv env;
+
+- (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable NAPIValue)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName;
+
+- (nullable NAPIValue)hummerCallNativeWithArgumentCount:(size_t)argumentCount arguments:(NAPIValue *_Nullable)arguments target:(nullable id)target selector:(nullable SEL)selector methodSignature:(nullable NSMethodSignature *)methodSignature;
+
+- (nullable NAPIValue)hummerGetSetPropertyWithArgumentCount:(size_t)argumentCount arguments:(NAPIValue *_Nullable)arguments isSetter:(BOOL)isSetter;
 
 - (BOOL)isArrayWithValueRef:(nullable NAPIValue)valueRef;
 
@@ -129,7 +98,442 @@ static NAPIValue _Nullable nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callb
 
 NS_ASSUME_NONNULL_END
 
+void hummerFinalize(void *finalizeData, void *finalizeHint) {
+    HMAssertMainQueue();
+    if (!finalizeData) {
+        assert(false);
+
+        return;
+    }
+    // 不透明指针可能为原生对象，也可能为闭包
+    // 清空 hmWeakValue
+    [((__bridge id) finalizeData) setHmWeakValue:nil];
+    CFRelease(finalizeData);
+}
+
+NAPIValue hummerCall(NAPIEnv env, NAPICallbackInfo callbackInfo) {
+    HMAssertMainQueue();
+    size_t argc;
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, nil, nil, nil))
+    // 类方法参数必须大于等于三个
+    if (argc < 2) {
+        HMLogError(HUMMER_CALL_PARAMETER_ERROR);
+
+        return nil;
+    }
+    NAPIValue argv[argc];
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, argv, nil, nil))
+    // 判断第一个参数是否为 Object 来确定调用的是类方法还是实例方法
+    NAPIValueType valueType;
+    CHECK_COMMON(napi_typeof(env, argv[0], &valueType))
+    NAPIValue objectRef = nil;
+    if (valueType == NAPIExternal) {
+        objectRef = argv[0];
+    }
+    // 成员方法参数必须大于等于三个
+    if (objectRef && argc < 3) {
+        HMLogError(HUMMER_CALL_PARAMETER_ERROR);
+
+        return nil;
+    }
+    HMJSExecutor *executor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
+    NSString *className = [executor toStringWithValueRef:argv[objectRef ? 1 : 0] isForce:NO];
+    NSString *functionName = [executor toStringWithValueRef:argv[objectRef ? 2 : 1] isForce:NO];
+    // this 指针
+    // 是否为函数类型
+    // NSValue - valueWithPointer: nullable
+    id target = nil;
+    SEL selector = nil;
+    NSMethodSignature *methodSignature = nil;
+
+    // 最后一个参数无效
+    [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
+
+    return [executor hummerCallNativeWithArgumentCount:argc arguments:argv target:target selector:selector methodSignature:methodSignature];
+}
+
+NAPIValue hummerCreate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
+    HMAssertMainQueue();
+    size_t argc;
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, nil, nil, nil))
+    if (argc < 2) {
+        HMLogError(HUMMER_CREATE_ERROR);
+
+        return nil;
+    }
+    NAPIValue argv[argc];
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, argv, nil, nil))
+    HMJSExecutor *executor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
+    NSString *className = [executor toStringWithValueRef:argv[0] isForce:NO];
+    // 隐含 executor 不为空
+    if (className.length == 0) {
+        HMLogError(HUMMER_CREATE_ERROR);
+
+        return nil;
+    }
+
+    HMExportClass *exportClass = HMExportManager.sharedInstance.jsClasses[className];
+    NSString *objcClassName = exportClass.className;
+    if (objcClassName.length == 0) {
+        HMLogError(HUMMER_CREATE_CLASS_NOT_FOUND, className);
+
+        return nil;
+    }
+    Class clazz = NSClassFromString(objcClassName);
+    if (!clazz) {
+        HMLogError(HUMMER_CREATE_CLASS_NOT_FOUND, className);
+
+        return nil;
+    }
+
+    // 创建对象
+    NSObject *opaquePointer = nil;
+    NSMutableArray<HMBaseValue *> *argumentArray = nil;
+    for (int i = 2; i < argc; ++i) {
+        HMBaseValue *value = [[HMJSStrongValue alloc] initWithValueRef:argv[i] executor:executor];
+        if (!argumentArray) {
+            argumentArray = [NSMutableArray arrayWithCapacity:argc - 2];
+        }
+        if (value) {
+            [argumentArray addObject:value];
+        }
+    }
+
+    HMCurrentExecutor = executor;
+    // 支持 HMJSObject，如果不支持则回退 init
+    // 不判断 argumentCount > 2，因为 UIView 必须调用 HMJSObject 初始化方法
+    if ([clazz conformsToProtocol:@protocol(HMJSObject)]) {
+        opaquePointer = (id) [(id) [clazz alloc] initWithHMValues:argumentArray];
+    } else {
+        HMOtherArguments = argumentArray.copy;
+        opaquePointer = [[clazz alloc] init];
+    }
+    HMCurrentExecutor = nil;
+    HMOtherArguments = nil;
+    if (!opaquePointer) {
+        HMLogError(HUMMER_CAN_NOT_CREATE_NATIVE_OBJECT, className);
+
+        return nil;
+    }
+    // 关联 hm_value
+    opaquePointer.hmWeakValue = [[HMJSWeakValue alloc] initWithValueRef:argv[1] executor:executor];
+    // 引用计数 +1
+    HMLogDebug(HUMMER_CREATE_TEMPLATE, className);
+    NAPIValue externalValue;
+    if ([executor popExceptionWithStatus:napi_create_external(env, (__bridge void *) opaquePointer, hummerFinalize, nil, &externalValue)]) {
+        return nil;
+    }
+    CFRetain((__bridge CFTypeRef) opaquePointer);
+
+    return externalValue;
+}
+
+NAPIValue hummerCallFunction(NAPIEnv env, NAPICallbackInfo callbackInfo) {
+    HMAssertMainQueue();
+    size_t argc;
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, nil, nil, nil))
+    if (argc == 0) {
+        HMLogError(HUMMER_CALL_CLOSURE_MUST_HAVE_PARAMETER);
+
+        return nil;
+    }
+    NAPIValue argv[argc];
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, argv, nil, nil))
+    NAPIValueType valueType;
+    CHECK_COMMON(napi_typeof(env, argv[0], &valueType))
+    if (valueType != NAPIExternal) {
+        HMLogError(HUMMER_FIRST_PARAMETER_NOT_NATIVE_CLOSURE);
+
+        return nil;
+    }
+    NAPIValue objectRef = argv[0];
+    void *opaquePointer;
+    if (napi_get_value_external(env, objectRef, &opaquePointer) != NAPIErrorOK) {
+        HMLogError(HUMMER_FIRST_PARAMETER_NOT_NATIVE_CLOSURE);
+
+        return nil;
+    }
+    if (![((__bridge id) opaquePointer) isKindOfClass:NSClassFromString(@"NSBlock")]) {
+        HMLogError(HUMMER_FIRST_PARAMETER_NOT_NATIVE_CLOSURE);
+
+        return nil;
+    }
+    // 转参数
+    HMJSExecutor *executor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
+    NSMutableArray<HMBaseValue *> *mutableArgumentArray = nil;
+    for (int i = 1; i < argc; ++i) {
+        HMBaseValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:argv[i] executor:executor];
+        if (!mutableArgumentArray) {
+            mutableArgumentArray = [NSMutableArray arrayWithCapacity:argc - 1];
+        }
+        if (jsValue) {
+            [mutableArgumentArray addObject:jsValue];
+        }
+    }
+    HMCurrentExecutor = executor;
+    HMFunctionType closure = (__bridge HMFunctionType) opaquePointer;
+    // TODO(ChasonTang): 探测执行，特殊处理第一个参数为 NSArray 的情况（兼容，可能需要开启开关）
+    NSMethodSignature *methodSignature = HMExtractMethodSignatureFromBlock(closure);
+    if (!methodSignature || methodSignature.numberOfArguments == 0 || methodSignature.numberOfArguments > 2) {
+        return nil;
+    }
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+    invocation.target = closure;
+    NSArray<HMBaseValue *> *argumentArray = mutableArgumentArray.copy;
+    if (methodSignature.numberOfArguments == 2) {
+        [invocation hm_setArgument:argumentArray atIndex:1 encodingType:HMEncodingGetType([methodSignature getArgumentTypeAtIndex:1])];
+    }
+    [invocation invoke];
+    id returnObject = [invocation hm_getReturnValueObject];
+    HMCurrentExecutor = nil;
+    if (!returnObject) {
+        return nil;
+    }
+
+    return [executor toValueRefWithObject:returnObject];
+}
+
+NAPIValue hummerGetProperty(NAPIEnv env, NAPICallbackInfo callbackInfo) {
+    HMAssertMainQueue();
+    HMJSExecutor *executor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
+    size_t argc = 3;
+    NAPIValue argv[argc];
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, argv, nil, nil))
+
+    return [executor hummerGetSetPropertyWithArgumentCount:argc arguments:argv isSetter:NO];
+}
+
+NAPIValue hummerSetProperty(NAPIEnv env, NAPICallbackInfo callbackInfo) {
+    HMAssertMainQueue();
+    HMJSExecutor *executor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
+    size_t argc = 4;
+    NAPIValue argv[argc];
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, argv, nil, nil))
+
+    return [executor hummerGetSetPropertyWithArgumentCount:argc arguments:argv isSetter:YES];
+}
+
+NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
+    HMAssertMainQueue();
+    size_t argc = 2;
+    NAPIValue argv[2];
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, argv, nil, nil))
+    if (argc != 2) {
+        assert(false);
+
+        return nil;
+    }
+    const char *utf8String;
+    if (NAPIGetValueStringUTF8(env, argv[0], &utf8String) != NAPIErrorOK) {
+        assert(false);
+
+        return nil;
+    }
+    assert(utf8String);
+    // nullable
+    NSString *logString = [NSString stringWithUTF8String:utf8String];
+    CHECK_COMMON(NAPIFreeUTF8String(env, utf8String))
+    double logLevel;
+    if (napi_get_value_double(env, argv[1], &logLevel) != NAPIErrorOK) {
+        assert(false);
+
+        return nil;
+    }
+    [HMLogger printJSLog:logString level:logLevel];
+    if ([[HMExecutorMap objectForKey:[NSValue valueWithPointer:env]] isKindOfClass:HMJSExecutor.class]) {
+        HMJSExecutor *executor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
+        if (executor.consoleHandler) {
+            executor.consoleHandler(logString, logLevel);
+        }
+        if (executor.webSocketHandler) {
+            executor.webSocketHandler(logString, logLevel);
+        }
+    }
+
+    return nil;
+}
+
 @implementation HMJSExecutor
+
+- (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable NAPIValue)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName {
+    if (!target || !selector || !methodSignature || !functionPropertyName.length || !jsClassName.length) {
+        return;
+    }
+    HMExportClass *exportClass = HMExportManager.sharedInstance.jsClasses[jsClassName];
+    HMExportBaseClass *exportBaseClass = nil;
+    if (!objectRef) {
+        // class
+        if (exportClass.className.length == 0) {
+            HMLogError(HUMMER_CREATE_CLASS_NOT_FOUND, jsClassName);
+
+            return;
+        }
+        (*target) = NSClassFromString(exportClass.className);
+        exportBaseClass = [exportClass methodOrPropertyWithName:functionPropertyName isClass:YES];
+    } else {
+        HMAssertMainQueue();
+        // instance
+        void *opaquePointer;
+        if (napi_get_value_external(self.env, objectRef, &opaquePointer) != NAPIErrorOK) {
+            return;
+        }
+        if (!opaquePointer || ![((__bridge id) opaquePointer) isKindOfClass:NSObject.class]) {
+            return;
+        }
+        NSObject *nativeObject = (__bridge NSObject *) opaquePointer;
+        (*target) = nativeObject;
+        exportBaseClass = [exportClass methodOrPropertyWithName:functionPropertyName isClass:NO];
+    }
+    if ([exportBaseClass isKindOfClass:HMExportMethod.class]) {
+        // 方法
+        HMExportMethod *exportMethod = (HMExportMethod *) exportBaseClass;
+        (*selector) = exportMethod.selector;
+        (*methodSignature) = !objectRef ? [*target methodSignatureForSelector:exportMethod.selector] : [[(*target) class] instanceMethodSignatureForSelector:exportMethod.selector];
+    } else {
+        // 属性
+        // isSetter 只有属性才生效
+        HMExportProperty *exportProperty = (HMExportProperty *) exportBaseClass;
+        (*selector) = isSetter ? exportProperty.propertySetterSelector : exportProperty.propertyGetterSelector;
+        (*methodSignature) = !objectRef ? [*target methodSignatureForSelector:(*selector)] : [[(*target) class] instanceMethodSignatureForSelector:(*selector)];
+    }
+}
+
+- (nullable NAPIValue)hummerCallNativeWithArgumentCount:(size_t)argumentCount arguments:(NAPIValue *_Nullable)arguments target:(nullable id)target selector:(nullable SEL)selector methodSignature:(nullable NSMethodSignature *)methodSignature {
+    if (!target) {
+        HMLogError(HUMMER_CALL_NATIVE_TARGET_ERROR);
+
+        return nil;
+    }
+    if (!selector) {
+        HMLogError(HUMMER_CALL_NATIVE_SELECTOR_ERROR);
+
+        return nil;
+    }
+    if (!methodSignature) {
+        HMLogError(HUMMER_CALL_NATIVE_METHOD_SIGNATURE_ERROR);
+
+        return nil;
+    }
+    BOOL isClass = object_isClass(target);
+    NSMutableArray<HMBaseValue *> *otherArguments = nil;
+    HMCurrentExecutor = self;
+    // 隐含着 numerOfArguments + 0/1 <= argumentCount
+    for (NSUInteger i = methodSignature.numberOfArguments + (isClass ? 0 : 1); i < argumentCount; ++i) {
+        // 多余的转数组
+        HMBaseValue *hummerValue = [[HMJSStrongValue alloc] initWithValueRef:arguments[i] executor:HMCurrentExecutor];
+        if (!otherArguments) {
+            otherArguments = [NSMutableArray arrayWithCapacity:argumentCount - methodSignature.numberOfArguments];
+        }
+        if (hummerValue) {
+            [otherArguments addObject:hummerValue];
+        }
+    }
+    // 存储额外参数
+    HMOtherArguments = otherArguments.copy;
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+    invocation.target = target;
+    invocation.selector = selector;
+    // 后续做循环，都是临时变量，如果不做 retain，会导致野指针
+    [invocation retainArguments];
+
+    // 参数
+    // 本质为 MIN(methodSignature.numberOfArguments, argumentCount - (isClass : 0 : 1))，主要为了防止无符号数字溢出
+    for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + (isClass ? 0 : 1), argumentCount) - (isClass ? 0 : 1); ++i) {
+        const char *objCType = [methodSignature getArgumentTypeAtIndex:i];
+        HMEncodingType type = HMEncodingGetType(objCType);
+        id param = nil;
+        if (type == HMEncodingTypeBlock) {
+            // Block
+            param = [(HMJSExecutor *) HMCurrentExecutor toFunctionWithValueRef:arguments[i + (isClass ? 0 : 1)]];
+        } else if (type == HMEncodingTypeObject) {
+            // HMJSCValue
+            param = [[HMJSStrongValue alloc] initWithValueRef:arguments[i + (isClass ? 0 : 1)] executor:HMCurrentExecutor];
+        } else if (HMEncodingTypeIsCNumber(type)) {
+            // js 只存在 double 和 bool 类型，但原生需要区分具体类型。
+            param = [(HMJSExecutor *) HMCurrentExecutor toNumberWithValueRef:arguments[i + (isClass ? 0 : 1)] isForce:NO];
+        } else {
+            HMLogError(HUMMER_UN_SUPPORT_TYPE_TEMPLATE, objCType);
+        }
+        [invocation hm_setArgument:param atIndex:i encodingType:type];
+    }
+    [invocation invoke];
+    HMOtherArguments = nil;
+
+    // 返回值
+    NAPIValue returnValueRef = nil;
+    const char *objCReturnType = methodSignature.methodReturnType;
+    HMEncodingType returnType = HMEncodingGetType(objCReturnType);
+    if (returnType != HMEncodingTypeVoid && returnType != HMEncodingTypeUnknown) {
+        id returnObject = [invocation hm_getReturnValueObject];
+        if (returnObject) {
+            returnValueRef = [(HMJSExecutor *) HMCurrentExecutor toValueRefWithObject:returnObject];
+        }
+    }
+    HMCurrentExecutor = nil;
+
+    return returnValueRef;
+}
+
+- (nullable NAPIValue)hummerGetSetPropertyWithArgumentCount:(size_t)argumentCount arguments:(NAPIValue *_Nullable)arguments isSetter:(BOOL)isSetter {
+    if (isSetter) {
+        if (argumentCount < 3) {
+            HMLogError(HUMMER_GET_SET_ERROR);
+
+            return nil;
+        }
+    } else {
+        if (argumentCount < 2) {
+            HMLogError(HUMMER_GET_SET_ERROR);
+
+            return nil;
+        }
+    }
+    NAPIValue objectRef = nil;
+    if ([self typeOfWithValueRef:arguments[0]] == NAPIExternal) {
+        objectRef = arguments[0];
+    }
+    if (objectRef) {
+        if (isSetter) {
+            if (argumentCount < 4) {
+                HMLogError(HUMMER_GET_SET_ERROR);
+
+                return nil;
+            }
+        } else {
+            if (argumentCount < 3) {
+                HMLogError(HUMMER_GET_SET_ERROR);
+
+                return nil;
+            }
+        }
+    }
+
+    NSString *className = [self toStringWithValueRef:arguments[objectRef ? 1 : 0] isForce:NO];
+    if (className.length == 0) {
+        return nil;
+    }
+    NSString *propertyName = [self toStringWithValueRef:arguments[objectRef ? 2 : 1] isForce:NO];
+    if (propertyName.length == 0) {
+        return nil;
+    }
+
+    id target = nil;
+    SEL selector = nil;
+    NSMethodSignature *methodSignature = nil;
+
+    [self hummerExtractExportWithFunctionPropertyName:propertyName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:isSetter jsClassName:className];
+
+//    if (isSetter) {
+//        NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
+//        if (interceptors.count > 0) {
+//            for (id<HMJSCallerIterceptor> jscaller in interceptors) {
+//                [jscaller callWithJSClassName:className functionName:[@"set" stringByAppendingString:propertyName.capitalizedString]];
+//            }
+//        }
+//    }
+
+    return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
+}
 
 - (BOOL)isArrayWithValueRef:(nullable NAPIValue)valueRef {
     HMAssertMainQueue();
@@ -542,7 +946,7 @@ NS_ASSUME_NONNULL_END
 
 - (nullable NAPIValue)toValueRefWithDictionary:(nullable NSDictionary<id, id> *)dictionary {
     HMAssertMainQueue();
-    __block NAPIValue objectRef = NULL;
+    __block NAPIValue objectRef = nil;
     // 空字典情况
     if (dictionary && dictionary.count == 0) {
         NAPIEscapableHandleScope escapableHandleScope;
@@ -964,20 +1368,94 @@ NS_ASSUME_NONNULL_END
 - (void)dealloc {
     NAPIEnv env = self.env;
     HMSafeMainThread(^{
-        NAPIFreeEnv(env);
+        CHECK_COMMON(NAPIFreeEnv(env))
+        BOOL isUniqueExecutor = YES;
+        NSValue *key = nil;
+        NSEnumerator<NSValue *> *enumerator = HMExecutorMap.keyEnumerator;
+        while ((key = enumerator.nextObject)) {
+            if (key.pointerValue != env) {
+                isUniqueExecutor = NO;
+                break;
+            }
+        }
+        if (isUniqueExecutor) {
+            HMExecutorMap = nil;
+        }
     });
 }
 
 - (instancetype)init {
+    if (!HMExecutorMap) {
+        HMExecutorMap = NSMapTable.strongToWeakObjectsMapTable;
+    }
+
     HMAssertMainQueue();
     self = [super init];
     if (NAPICreateEnv(&self->_env) != NAPIErrorOK) {
         NSAssert(NO, @"NAPICreateEnv() error");
+        goto executorMapError;
+    }
+    [HMExecutorMap setObject:self forKey:[NSValue valueWithPointer:_env]];
+    // 注入对象
+    NAPIHandleScope handleScope;
+    if (napi_open_handle_scope(_env, &handleScope) != NAPIErrorOK) {
+        NSAssert(NO, HANDLE_SCOPE_ERROR);
+        goto envError;
+    }
+    NAPIValue nativeLoggingHookValue, hummerCallValue, hummerCreateValue, hummerGetValue, hummerSetValue, hummerCallFunctionValue;
+    if ([self popExceptionWithStatus:napi_create_function(_env, nil, nativeLoggingHook, nil, &nativeLoggingHookValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_create_function(_env, nil, hummerCall, nil, &hummerCallValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_create_function(_env, nil, hummerCreate, nil, &hummerCreateValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_create_function(_env, nil, hummerSetProperty, nil, &hummerSetValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_create_function(_env, nil, hummerGetProperty, nil, &hummerGetValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_create_function(_env, nil, hummerCallFunction, nil, &hummerCallFunctionValue)]) {
+        goto handleScopeError;
+    }
 
-        return nil;
+    NAPIValue globalValue;
+    if (napi_get_global(_env, &globalValue) != NAPIErrorOK) {
+        goto handleScopeError;
+    }
+
+    if ([self popExceptionWithStatus:napi_set_named_property(_env, globalValue, "nativeLoggingHook", nativeLoggingHookValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_set_named_property(_env, globalValue, "hummerCall", hummerCallValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_set_named_property(_env, globalValue, "hummerCreate", hummerCreateValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_set_named_property(_env, globalValue, "hummerCallFunction", hummerCallFunctionValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_set_named_property(_env, globalValue, "hummerGetProperty", hummerGetValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_set_named_property(_env, globalValue, "hummerSetProperty", hummerSetValue)]) {
+        goto handleScopeError;
     }
 
     return self;
+
+    handleScopeError:
+    CHECK_COMMON(napi_close_handle_scope(_env, handleScope))
+    envError:
+    CHECK_COMMON(NAPIFreeEnv(_env))
+    executorMapError:
+    HMExecutorMap = nil;
+
+    return nil;
 }
 
 - (BOOL)popExceptionWithStatus:(NAPIExceptionStatus)status {
@@ -1026,35 +1504,25 @@ NS_ASSUME_NONNULL_END
     {
         HMExceptionModel *exceptionModel = [[HMExceptionModel alloc] init];
         double doubleValue;
-        if (napi_get_value_double(self.env, columnValue, &doubleValue) != NAPIErrorOK) {
-            NSAssert(NO, @"napi_get_value_double() error");
-            goto exit;
+        if (napi_get_value_double(self.env, columnValue, &doubleValue) == NAPIErrorOK) {
+            exceptionModel.column = @(doubleValue);
         }
-        exceptionModel.column = @(doubleValue);
-        if (napi_get_value_double(self.env, lineValue, &doubleValue) != NAPIErrorOK) {
-            NSAssert(NO, @"napi_get_value_double() error");
-            goto exit;
+        if (napi_get_value_double(self.env, lineValue, &doubleValue) == NAPIErrorOK) {
+            exceptionModel.line = @(doubleValue);
         }
-        exceptionModel.line = @(doubleValue);
         const char *utf8String;
-        if (NAPIGetValueStringUTF8(self.env, messageValue, &utf8String) != NAPIErrorOK) {
-            NSAssert(NO, @"NAPIGetValueStringUTF8() error");
-            goto exit;
+        if (NAPIGetValueStringUTF8(self.env, messageValue, &utf8String) == NAPIErrorOK) {
+            exceptionModel.message = [NSString stringWithUTF8String:utf8String];
+            CHECK_COMMON(NAPIFreeUTF8String(self.env, utf8String))
         }
-        exceptionModel.message = [NSString stringWithUTF8String:utf8String];
-        CHECK_COMMON(NAPIFreeUTF8String(self.env, utf8String))
-        if (NAPIGetValueStringUTF8(self.env, nameValue, &utf8String) != NAPIErrorOK) {
-            NSAssert(NO, @"NAPIGetValueStringUTF8() error");
-            goto exit;
+        if (NAPIGetValueStringUTF8(self.env, nameValue, &utf8String) == NAPIErrorOK) {
+            exceptionModel.name = [NSString stringWithUTF8String:utf8String];
+            CHECK_COMMON(NAPIFreeUTF8String(self.env, utf8String))
         }
-        exceptionModel.name = [NSString stringWithUTF8String:utf8String];
-        CHECK_COMMON(NAPIFreeUTF8String(self.env, utf8String))
-        if (NAPIGetValueStringUTF8(self.env, stackValue, &utf8String) != NAPIErrorOK) {
-            NSAssert(NO, @"NAPIGetValueStringUTF8() error");
-            goto exit;
+        if (NAPIGetValueStringUTF8(self.env, stackValue, &utf8String) == NAPIErrorOK) {
+            exceptionModel.stack = [NSString stringWithUTF8String:utf8String];
+            CHECK_COMMON(NAPIFreeUTF8String(self.env, utf8String))
         }
-        exceptionModel.stack = [NSString stringWithUTF8String:utf8String];
-        CHECK_COMMON(NAPIFreeUTF8String(self.env, utf8String))
 
         if (self.exceptionHandler) {
             self.exceptionHandler(exceptionModel);
@@ -1104,7 +1572,6 @@ NS_ASSUME_NONNULL_END
     HMJSStrongValue *resultValue = nil;
     NAPIValue result;
     if ([self popExceptionWithStatus:NAPIRunScript(self.env, script.UTF8String, sourceURL.absoluteString.UTF8String, &result)]) {
-        NSAssert(NO, @"NAPIRunScript() error");
         goto exit;
     }
     resultValue = [[HMJSStrongValue alloc] initWithValueRef:result executor:self];
