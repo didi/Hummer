@@ -1,4 +1,4 @@
-#import "HMJSStrongValue+Private.h"
+#import "HMJSStrongValue.h"
 #import <Hummer/HMJSExecutor+Private.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_END
     }
     self = [super initWithExecutor:executor];
     if (self) {
-        if (napi_create_reference(((HMJSExecutor *) executor).env, valueRef, 1, &self->_reference) != NAPIExceptionOK) {
+        if ([((HMJSExecutor *)executor) popExceptionWithStatus:napi_create_reference(((HMJSExecutor *) executor).env, valueRef, 1, &self->_reference)]) {
             NSAssert(NO, @"napi_create_reference() initialRefCount: 1 error");
             NAPIClearLastException(((HMJSExecutor *) executor).env);
             
