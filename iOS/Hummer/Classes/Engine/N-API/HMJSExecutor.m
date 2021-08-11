@@ -107,6 +107,7 @@ void hummerFinalize(void *finalizeData, void *finalizeHint) {
     }
     // 不透明指针可能为原生对象，也可能为闭包
     // 清空 hmWeakValue
+    HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) finalizeData) class]);
     [((__bridge id) finalizeData) setHmWeakValue:nil];
     CFRelease(finalizeData);
 }
