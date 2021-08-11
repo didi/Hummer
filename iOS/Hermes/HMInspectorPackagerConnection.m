@@ -59,7 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-@implementation HMInspectorPackagerConnection;
+@implementation HMInspectorPackagerConnection
+
+- (void)closeQuietly {
+    self.closed = true;
+    [self disposeWebSocket];
+}
 
 - (instancetype)initWithUrl:(NSURL *)url {
     if (!url) {
@@ -72,7 +77,7 @@ NS_ASSUME_NONNULL_END
     self = [super init];
     _jsQueue = jsQueue;
     _url = url.copy;
-    
+
     return self;
 }
 
@@ -95,7 +100,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)closeAllConnections {
-    [self.inspectorConnection enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, HMInspectorLocalConnection * _Nonnull obj, BOOL * _Nonnull stop) {
+    [self.inspectorConnection enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMInspectorLocalConnection *_Nonnull obj, BOOL *_Nonnull stop) {
         [obj disconnect];
     }];
     self.inspectorConnection = nil;
@@ -113,7 +118,7 @@ NS_ASSUME_NONNULL_END
 #ifndef NDEBUG
         NSLog(@"Already connected: %@", pageId);
 #endif
-        
+
         return;
     }
     HMInspectorRemoteConnection *remoteConnection = [[HMInspectorRemoteConnection alloc] initWithPackagerConnection:self pageId:pageId];
@@ -150,7 +155,7 @@ NS_ASSUME_NONNULL_END
 #ifndef NDEBUG
         NSLog(@"Not connected to page: %@ , failed trying to handle event: %@", pageId, wrappedEvent);
 #endif
-        
+
         return;
     }
     [inspectorConnection sendMessage:wrappedEvent];
@@ -162,30 +167,30 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:pages.count];
-    [pages enumerateObjectsUsingBlock:^(HMInspectorPage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [pages enumerateObjectsUsingBlock:^(HMInspectorPage *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
         NSDictionary *jsonPage = @{
-            @"id" : @(obj.id).stringValue,
-            @"title" : obj.title ?: @"",
-            @"app" : NSBundle.mainBundle.bundleIdentifier ?: @"",
-            @"vm" : obj.vm ?: @""
+                @"id": @(obj.id).stringValue,
+                @"title": obj.title ?: @"",
+                @"app": NSBundle.mainBundle.bundleIdentifier ?: @"",
+                @"vm": obj.vm ?: @""
         };
         [array addObject:jsonPage];
     }];
-    
+
     return array;
 }
 
 - (void)sendWrappedEvent:(NSString *)pageId message:(NSString *)message {
     [self sendEvent:@"wrappedEvent" payload:@{
-        @"pageId" : pageId ?: @"",
-        @"wrappedEvent" : message ?: @"",
+            @"pageId": pageId ?: @"",
+            @"wrappedEvent": message ?: @"",
     }];
 }
 
 - (void)sendEvent:(NSString *)name payload:(id)payload {
     [self sendToPackager:@{
-        @"event" : name ?: @"",
-        @"payload" : payload ?: @"",
+            @"event": name ?: @"",
+            @"payload": payload ?: @"",
     }];
 }
 
@@ -206,13 +211,13 @@ NS_ASSUME_NONNULL_END
 #ifndef NDEBUG
         NSLog(@"Unrecognized inspector message, object is of type: %@", [message class]);
 #endif
-        
+
         return;
     }
-    
+
     NSString *messageText = message;
     NSError *error = nil;
-    
+
     id parsedJSON = nil;
     NSData *jsonData = [messageText dataUsingEncoding:NSUTF8StringEncoding];
     if (!jsonData) {
@@ -221,7 +226,7 @@ NS_ASSUME_NONNULL_END
 #ifndef NDEBUG
             NSLog(@"HMJSONParse received the following string, which could "
                   "not be losslessly converted to UTF8 data: '%@'",
-                  messageText);
+                    messageText);
 #endif
         } else {
 #ifndef NDEBUG
@@ -235,15 +240,15 @@ NS_ASSUME_NONNULL_END
     }
     NSJSONReadingOptions options = NSJSONReadingAllowFragments;
     parsedJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:options error:&error];
-    
+
     if (!parsedJSON || error) {
 #ifndef NDEBUG
         NSLog(@"Unrecognized inspector message, string was not valid JSON: %@", messageText);
 #endif
-        
+
         return;
     }
-    
+
     [self handleProxyMessage:parsedJSON];
 }
 
@@ -254,7 +259,7 @@ NS_ASSUME_NONNULL_END
         NSLog(@"Error occurred, shutting down websocket connection: %@ %@", message, cause);
 #endif
     }
-    
+
     [self closeAllConnections];
     [self disposeWebSocket];
 }
@@ -284,10 +289,10 @@ NS_ASSUME_NONNULL_END
 #ifndef NDEBUG
         NSLog(@"Illegal state: Can't connect after having previously been closed.");
 #endif
-        
+
         return;
     }
-    
+
     // The corresponding android code has a lot of custom config options for
     // timeouts, but it appears the iOS RCTSRWebSocket API doesn't have the same
     // implemented options.
@@ -302,17 +307,17 @@ NS_ASSUME_NONNULL_END
 #ifndef NDEBUG
         NSLog(@"Illegal state: Can't reconnect after having previously been closed.");
 #endif
-        
+
         return;
     }
-    
+
     if (self.suppressConnectionErrors) {
 #ifndef NDEBUG
         NSLog(@"Couldn't connect to packager, will silently retry");
 #endif
         self.suppressConnectionErrors = YES;
     }
-    
+
     __weak HMInspectorPackagerConnection *weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, RECONNECT_DELAY_MS * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
         HMInspectorPackagerConnection *strongSelf = weakSelf;
@@ -329,7 +334,7 @@ NS_ASSUME_NONNULL_END
         if (strongSelf && !strongSelf.closed) {
             NSError *error;
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:messageObject
-                                                               options:(NSJSONWritingOptions)NSJSONReadingAllowFragments
+                                                               options:(NSJSONWritingOptions) NSJSONReadingAllowFragments
                                                                  error:&error];
             NSString *messageText = jsonData ? [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding] : nil;
             if (!messageText || error) {
@@ -355,7 +360,7 @@ NS_ASSUME_NONNULL_END
     self = [super init];
     _owningPackagerConnection = owningPackagerConnection;
     _pageId = pageId.copy;
-    
+
     return self;
 }
 
@@ -367,7 +372,7 @@ NS_ASSUME_NONNULL_END
     HMInspectorPackagerConnection *owningPackagerConnectionStrong = self.owningPackagerConnection;
     if (owningPackagerConnectionStrong) {
         [owningPackagerConnectionStrong removeConnectionForPage:self.pageId];
-        [owningPackagerConnectionStrong sendEvent:@"disconnect" payload:@{@"pageId" : self.pageId ?: @""}];
+        [owningPackagerConnectionStrong sendEvent:@"disconnect" payload:@{@"pageId": self.pageId ?: @""}];
     }
 }
 

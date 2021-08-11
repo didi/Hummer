@@ -185,10 +185,9 @@ NS_ASSUME_NONNULL_END
 
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
     // context 和 WebSocket 对应
-    BOOL needEnableDebugger = NO;
     if (!self.url && fileName.length > 0) {
-        needEnableDebugger = YES;
         self.url = [NSURL URLWithString:fileName];
+        [((HMJSExecutor *)self.context) enableDebuggerWithTitle:fileName];
     }
     
 #ifdef HMDEBUG

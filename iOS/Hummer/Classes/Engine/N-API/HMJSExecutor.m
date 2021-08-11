@@ -8,6 +8,13 @@
 #import <Hummer/HMJSStrongValue.h>
 #import <objc/runtime.h>
 
+#if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
+
+#import <Hummer/HMInspectorPackagerConnection.h>
+
+static HMInspectorPackagerConnection *inspectorPackagerConnection = nil;
+#endif
+
 static NSString *const HANDLE_SCOPE_ERROR = @"napi_open_handle_scope() error";
 
 static NSString *const GET_GLOBAL_ERROR = @"napi_get_global() error";
@@ -1381,6 +1388,10 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         }
         if (isUniqueExecutor) {
             HMExecutorMap = nil;
+#if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
+            [inspectorPackagerConnection closeQuietly];
+            inspectorPackagerConnection = nil;
+#endif
         }
     });
 }
@@ -1447,6 +1458,20 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         goto handleScopeError;
     }
 
+#if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
+    if (!inspectorPackagerConnection) {
+        NSString *escapedDeviceName = [[[UIDevice currentDevice] name]
+                stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        NSString *escapedAppName = [[[NSBundle mainBundle] bundleIdentifier]
+                stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        NSURL *inspectorDeviceUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://localhost:8081/inspector/device?name=%@&app=%@",
+                                                                                    escapedDeviceName,
+                                                                                    escapedAppName]];
+        inspectorPackagerConnection = [[HMInspectorPackagerConnection alloc] initWithUrl:inspectorDeviceUrl];
+        [inspectorPackagerConnection connect];
+    }
+#endif
+
     return self;
 
     handleScopeError:
@@ -1457,6 +1482,10 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     HMExecutorMap = nil;
 
     return nil;
+}
+
+- (void)enableDebuggerWithTitle:(nullable NSString *)title {
+    CHECK_COMMON(NAPIEnableDebugger(self.env, title.UTF8String))
 }
 
 - (BOOL)popExceptionWithStatus:(NAPIExceptionStatus)status {

@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)connect;
 
-//- (void)closeQuietly;
+- (void)closeQuietly;
 
 //- (void)sendEventToAllConnections:(NSString *)event;
 

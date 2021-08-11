@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)init NS_DESIGNATED_INITIALIZER;
 
+- (void)enableDebuggerWithTitle:(nullable NSString *)title;
+
 @end
 
 NS_ASSUME_NONNULL_END
