@@ -13,8 +13,9 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
     size_t argc;
     napi_get_cb_info(globalEnv, info, &argc, nullptr, nullptr, nullptr);
     NAPIValue argv[argc];
-    int32_t callbackId;
-    napi_get_cb_info(globalEnv, info, &argc, argv, nullptr, (void **)&callbackId);
+    void *data;
+    napi_get_cb_info(globalEnv, info, &argc, argv, nullptr, &data);
+    int32_t callbackId = (int32_t) (size_t) data;
 
     JNIEnv* env = JNI_GetEnv();
     jobjectArray params = nullptr;
