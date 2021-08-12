@@ -25,6 +25,10 @@ import java.util.Arrays;
 public class NAPIHummerContext extends HummerContext {
 
     private ICallback invoker = params -> {
+        if (params == null || params.length < 3) {
+            return null;
+        }
+
         String className = (String) params[0];
         long objectID = ((Number) params[1]).longValue();
         String methodName = (String) params[2];
