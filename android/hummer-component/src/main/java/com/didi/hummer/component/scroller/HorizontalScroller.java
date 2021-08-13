@@ -187,6 +187,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         child.setPositionChangedListener(this);
         children.add(child);
         HMBase finalChild = child;
+        hummerNode.appendChild(child.getNode());
 
         // 支持 position:fixed 布局样式，添加至窗口视图
         if (child.getPosition() == HummerLayoutExtendUtils.Position.FIXED) {
@@ -208,6 +209,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         child.getJSValue().unprotect();
         child.setPositionChangedListener(null);
         children.remove(child);
+        hummerNode.removeChild(child.getNode());
 
         // fixed 布局操作
         if (fixedNoneBoxMap.containsKey(child)) {
@@ -236,6 +238,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
             hmBase.setPositionChangedListener(null);
         }
         children.clear();
+        hummerNode.removeAll();
 
         layout.removeAllViews();
     }
@@ -251,6 +254,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         children.add(child);
         HMBase finalChild = child;
         HMBase finalExisting = existing;
+        hummerNode.insertBefore(child.getNode(), existing.getNode());
 
         // 支持 position:fixed 布局样式
         if (child.getPosition() == HummerLayoutExtendUtils.Position.FIXED) {
@@ -281,6 +285,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         children.remove(old);
         HMBase finalChild = child;
         HMBase finalOld = old;
+        hummerNode.replaceChild(child.getNode(), old.getNode());
 
         // 支持 position:fixed 布局样式
         if (child.getPosition() == HummerLayoutExtendUtils.Position.FIXED) {

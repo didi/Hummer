@@ -26,7 +26,9 @@ import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
 import com.didi.hummer.devtools.bean.LogBean;
 import com.didi.hummer.devtools.manager.HummerLogManager;
+import com.didi.hummer.devtools.utils.ComponentTreeFormat;
 import com.didi.hummer.devtools.utils.JSONFormat;
+import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.utils.ScreenUtils;
 
@@ -219,8 +221,8 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     }
 
     private void updateCompTree() {
-        String info = InvokerAnalyzerManager.getInstance().getComponentTreeFormat(hummerContext.getJsContext().getIdentify());
-        tvInfo.setText(info);
+        HummerNode node = hummerContext.getJSRootView().getNode();
+        tvInfo.setText(ComponentTreeFormat.format(node));
         scrollInfo.post(() -> scrollInfo.fullScroll(View.FOCUS_DOWN));
     }
 

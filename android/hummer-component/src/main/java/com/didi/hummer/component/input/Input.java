@@ -21,6 +21,7 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.event.view.InputEvent;
+import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
 
 @Component("Input")
@@ -327,6 +328,13 @@ public class Input extends HMBase<EditText> {
     @JsAttribute("returnKeyType")
     public void setReturnKeyType(String type) {
         mProperty.setReturnKeyType(type);
+    }
+
+    @Override
+    public HummerNode getNode() {
+        HummerNode node = super.getNode();
+        node.setDesc(String.valueOf(getView().getText()));
+        return node;
     }
 
     @Override

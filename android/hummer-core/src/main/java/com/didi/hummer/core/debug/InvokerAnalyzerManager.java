@@ -80,22 +80,6 @@ public class InvokerAnalyzerManager {
         }
     }
 
-    public String getComponentTreeFormat(long jsContext) {
-        if (!DebugUtil.isDebuggable()) {
-            return "";
-        }
-
-        try {
-            InvokerAnalyzer analyzer = analyzers.get(jsContext);
-            if (analyzer != null) {
-                return analyzer.getComponentTreeFormat();
-            }
-        } catch (Exception e) {
-            HMLog.e("HummerDebug", "getComponentTreeFormat, e = ", e);
-        }
-        return "";
-    }
-
     public String getCallStackTreeFormat(long jsContext) {
         if (!DebugUtil.isDebuggable()) {
             return "";
