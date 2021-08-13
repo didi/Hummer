@@ -1,9 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -225,29 +226,47 @@ class RootView extends View {
             var anim;
             if (!isKeyFrame) {
                 anim = new BasicAnimation("position");
-                anim.value = { x: 120, y: -70 };
+                anim.value = {
+                    x: 120,
+                    y: -70
+                };
                 anim.easing = "linear";
             } else {
                 anim = new KeyframeAnimation("position");
                 anim.keyframes = [{
                     percent: 0,
-                    value: { x: 0, y: 0 },
+                    value: {
+                        x: 0,
+                        y: 0
+                    },
                     easing: "linear"
                 }, {
                     percent: 0.2,
-                    value: { x: 30, y: 0 },
+                    value: {
+                        x: 30,
+                        y: 0
+                    },
                     easing: "linear"
                 }, {
                     percent: 0.6,
-                    value: { x: 30, y: 60 },
+                    value: {
+                        x: 30,
+                        y: 60
+                    },
                     easing: "linear"
                 }, {
                     percent: 0.8,
-                    value: { x: 100, y: 60 },
+                    value: {
+                        x: 100,
+                        y: 60
+                    },
                     easing: "linear"
                 }, {
                     percent: 1.0,
-                    value: { x: 100, y: 0 },
+                    value: {
+                        x: 100,
+                        y: 0
+                    },
                     easing: "linear"
                 }];
             }
@@ -408,34 +427,53 @@ class RootView extends View {
             anim2.duration = 1;
             animView.addAnimation(anim2, "xx2");
         }
+
         function animSkew() {
             var anim;
 
             if (!isKeyFrame) {
                 anim = new BasicAnimation("skew");
-                anim.value = { x: 45, y: 60 };
+                anim.value = {
+                    x: 45,
+                    y: 60
+                };
                 anim.easing = "linear";
             } else {
                 anim = new KeyframeAnimation("skew");
                 anim.keyframes = [{
                     percent: 0,
-                    value: { x: 0, y: 0 },
+                    value: {
+                        x: 0,
+                        y: 0
+                    },
                     easing: "linear"
                 }, {
                     percent: 0.2,
-                    value: { x: 30, y: 0 },
+                    value: {
+                        x: 30,
+                        y: 0
+                    },
                     easing: "linear"
                 }, {
                     percent: 0.6,
-                    value: { x: 0, y: 30 },
+                    value: {
+                        x: 0,
+                        y: 30
+                    },
                     easing: "linear"
                 }, {
                     percent: 0.8,
-                    value: { x: 30, y: 30 },
+                    value: {
+                        x: 30,
+                        y: 30
+                    },
                     easing: "linear"
                 }, {
                     percent: 1.0,
-                    value: { x: 0, y: 0 },
+                    value: {
+                        x: 0,
+                        y: 0
+                    },
                     easing: "linear"
                 }];
             }
@@ -448,4 +486,3 @@ class RootView extends View {
 }
 
 Hummer.render(new RootView());
-

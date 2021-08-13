@@ -1,10 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -407,7 +407,7 @@ class RootView extends View {
             marginTop: 10,
             color: '#FFFFFF',
             textAlign: 'center',
-            textDecoration : 'underline',
+            textDecoration: 'underline',
         };
 
         let text8 = new Text();
@@ -420,7 +420,7 @@ class RootView extends View {
             marginTop: 10,
             color: '#FFFFFF',
             textAlign: 'center',
-            textDecoration : 'line-through',
+            textDecoration: 'line-through',
         };
 
         let text9 = new Text();
@@ -432,7 +432,7 @@ class RootView extends View {
             marginTop: 10,
             color: '#FFFFFF',
             textAlign: 'center',
-            fontFamily : 'New Times Roma',
+            fontFamily: 'New Times Roma',
         };
 
         let text10 = new Text();
@@ -474,7 +474,7 @@ class RootView extends View {
         layout.style = {
             flexDirection: 'row',
             alignItems: 'center',
-            padding:10,
+            padding: 10,
             borderWidth: 1,
             borderColor: '#22222222',
             flexWrap: 'wrap',

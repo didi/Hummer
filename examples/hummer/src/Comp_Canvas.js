@@ -1,5 +1,6 @@
 class RootView extends View {
-    initialize() {
+    constructor() {
+        super();
 
         let environment = Hummer.env;
         this.style = {
@@ -148,7 +149,7 @@ class RootView extends View {
     drawCircle(width, height, canvas) {
         canvas.fillCircle(100, 300, 20)
         canvas.strokeCircle(200, 300, 20)
-        canvas.arc(300, 300, 20, Math.PI/4, Math.PI/5, false)
+        canvas.arc(300, 300, 20, Math.PI / 4, Math.PI / 5, false)
         canvas.strokeEllipse(100, 400, 300, 500)
         canvas.fillEllipse(100, 600, 300, 700)
     }

@@ -1,13 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
-            paddingLeft: 10,
-            paddingRight: 10,
-            paddingTop: 10,
+            width: '100%',
+            height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
         }
@@ -21,7 +18,7 @@ class RootView extends View {
             marginTop: 50,
         };
         btn1.addEventListener('tap', (event) => {
-//            Navigator.popToPage({id: "222"});
+            // Navigator.popToPage({id: "222"});
             Navigator.popToRootPage();
         });
 
@@ -37,7 +34,10 @@ class RootView extends View {
 
         console.log('Page info: ' + JSON.stringify(Hummer.pageInfo));
 
-        Hummer.pageResult = {key1: 333.3, key2: "444"};
+        Hummer.pageResult = {
+            key1: 333.3,
+            key2: "444"
+        };
     }
 }
 

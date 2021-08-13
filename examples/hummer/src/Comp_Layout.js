@@ -11,12 +11,12 @@ let btnPosition;
 let btnDisplay;
 
 class RootView extends View {
-  initialize() {
-    let environment = Hummer.env;
+  constructor() {
+    super();
+
     this.style = {
-      flexDirection: "column",
-      width: environment.availableWidth,
-      height: environment.availableHeight,
+      width: '100%',
+      height: '100%',
       paddingLeft: 10,
       paddingRight: 10,
       paddingTop: 10
@@ -127,11 +127,11 @@ class RootView extends View {
         if (!oldDisplay || oldDisplay == "flex") {
           newDislpay = "block";
         } else if (oldDisplay == "block") {
-          newDislpay = "inline"; 
+          newDislpay = "inline";
         } else if (oldDisplay == "inline") {
-          newDislpay = "inline-block"; 
+          newDislpay = "inline-block";
         } else if (oldDisplay == "inline-block") {
-          newDislpay = "block"; 
+          newDislpay = "block";
         }
         if (newDislpay) {
           exitView.style = {
@@ -191,7 +191,7 @@ class RootView extends View {
     btnPosition.text = `position：${v.style["position"]}`;
     btnDisplay.text = `display：${v.style["display"]}`;
   }
-  
+
 }
 
 Hummer.render(new RootView());

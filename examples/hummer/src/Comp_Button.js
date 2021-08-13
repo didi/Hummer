@@ -1,10 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -165,8 +165,14 @@ class RootView extends View {
             color: '#FFFFFF',
             textAlign: ''
         };
-        btn1.pressed = { backgroundColor: '#333333', color: '#00FF00' };
-        btn1.disabled = { backgroundColor: '#999999', color: '#666666' };
+        btn1.pressed = {
+            backgroundColor: '#333333',
+            color: '#00FF00'
+        };
+        btn1.disabled = {
+            backgroundColor: '#999999',
+            color: '#666666'
+        };
 
         let btn2 = new Button();
         btn2.text = 'btn2';
@@ -205,8 +211,14 @@ class RootView extends View {
             color: '#FFFFFF',
             borderRadius: 10,
         };
-        btn3.pressed = { backgroundColor: '#33333380', color: '#00FF00' };
-        btn3.disabled = { backgroundColor: '#99999980', color: '#666666' };
+        btn3.pressed = {
+            backgroundColor: '#33333380',
+            color: '#00FF00'
+        };
+        btn3.disabled = {
+            backgroundColor: '#99999980',
+            color: '#666666'
+        };
 
         let btnState = new Button();
         btnState.text = 'disable';
@@ -364,7 +376,7 @@ class RootView extends View {
             backgroundColor: '#FF0000',
             marginTop: 10,
             color: '#FFFFFF',
-//            fontFamily : 'New Times Roma',
+            // fontFamily : 'New Times Roma',
         };
 
         layout.appendChild(btn1);

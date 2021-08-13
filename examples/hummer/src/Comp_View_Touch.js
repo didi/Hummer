@@ -1,10 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -56,7 +56,7 @@ class RootView extends View {
         let pinchListener = (event) => {
             infoText.text = this.formatEvent(event);
         }
-//        view.addEventListener('touch', touchListener);
+        // iew.addEventListener('touch', touchListener);
         view.addEventListener('tap', tapListener);
         view.addEventListener('longPress', longPressListener);
         view.addEventListener('pan', panListener);
@@ -187,7 +187,7 @@ class RootView extends View {
 
     formatEventState(state) {
         let strState = '';
-        switch(state) {
+        switch (state) {
             case 0:
                 strState = 'Normal';
                 break;
@@ -212,7 +212,7 @@ class RootView extends View {
 
     formatDirection(direction) {
         let strDirection = '';
-        switch(direction) {
+        switch (direction) {
             case 1:
                 strDirection = 'Right';
                 break;

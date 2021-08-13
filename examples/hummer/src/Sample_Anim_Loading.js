@@ -1,5 +1,7 @@
 class RootView extends View {
-    initialize() {
+    constructor() {
+        super();
+
         this.style = {
             width: '100%',
             height: '100%',
@@ -13,39 +15,39 @@ class RootView extends View {
     testLoading() {
         let view1 = new View;
         view1.style = {
-          width: 10,
-          height: 10,
-          backgroundColor: '#333333',
-          borderRadius: 5,
-          opacity: 0.5,
+            width: 10,
+            height: 10,
+            backgroundColor: '#333333',
+            borderRadius: 5,
+            opacity: 0.5,
         }
         this.doLoadingAnimation(view1, 0);
 
         let view2 = new View;
         view2.style = {
-          width: 10,
-          height: 10,
-          backgroundColor: '#333333',
-          borderRadius: 5,
-          opacity: 0.5,
+            width: 10,
+            height: 10,
+            backgroundColor: '#333333',
+            borderRadius: 5,
+            opacity: 0.5,
         }
         this.doLoadingAnimation(view2, 300);
 
         let view3 = new View;
         view3.style = {
-          width: 10,
-          height: 10,
-          backgroundColor: '#333333',
-          borderRadius: 5,
-          opacity: 0.5,
+            width: 10,
+            height: 10,
+            backgroundColor: '#333333',
+            borderRadius: 5,
+            opacity: 0.5,
         }
         this.doLoadingAnimation(view3, 600);
 
         let layout = new View;
         layout.style = {
-          flexDirection: 'row',
-          width: 50,
-          justifyContent: 'space-between',
+            flexDirection: 'row',
+            width: 50,
+            justifyContent: 'space-between',
         }
 
         layout.appendChild(view1);
@@ -58,9 +60,9 @@ class RootView extends View {
         setTimeout(() => {
             let anim1 = new KeyframeAnimation("opacity");
             anim1.keyframes = [{
-                  percent: 0,
-                  value: 1,
-                  easing: "ease-in-out"
+                percent: 0,
+                value: 1,
+                easing: "ease-in-out"
             }, {
                 percent: 0.2,
                 value: 0.5,
@@ -75,9 +77,9 @@ class RootView extends View {
 
             let anim2 = new KeyframeAnimation("scale");
             anim2.keyframes = [{
-                  percent: 0,
-                  value: 1.3,
-                  easing: "ease-in-out"
+                percent: 0,
+                value: 1.3,
+                easing: "ease-in-out"
             }, {
                 percent: 0.2,
                 value: 1,

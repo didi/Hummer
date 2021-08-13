@@ -1,13 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
-            paddingLeft: 10,
-            paddingRight: 10,
-            paddingTop: 10,
+            width: '100%',
+            height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
         }
@@ -24,8 +21,8 @@ class RootView extends View {
             let pageInfo = {
                 id: '222',
                 url: './Comp_Navigator_Page2.js',
-//                url: 'http://www.baidu.com',
-//                url: 'native://test',
+                // url: 'http://www.baidu.com',
+                // url: 'native://test',
                 animated: true,
                 params: {
                     aaa: 111,

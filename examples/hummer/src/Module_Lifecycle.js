@@ -1,10 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -12,19 +12,14 @@ class RootView extends View {
             alignItems: 'center',
         }
 
+        this.info = "";
         this.infoView = new Text();
-        this.infoView.style = {
-            width: environment.availableWidth,
-            height: 200,
-            textAlign: 'center',
-        }
-
         this.appendChild(this.infoView);
     }
 
     onCreate() {
         // 页面创建
-        this.info = "onCreate\n";
+        this.info += "onCreate\n";
         this.infoView.text = this.info;
         console.log('-- onCreate');
     }
@@ -38,7 +33,7 @@ class RootView extends View {
 
     onDisappear() {
         // 页面隐藏
-        this.info = "onDisappear\n";
+        this.info += "onDisappear\n";
         this.infoView.text = this.info;
         console.log('-- onDisappear');
     }
