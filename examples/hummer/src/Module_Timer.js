@@ -1,10 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -45,8 +45,8 @@ class RootView extends View {
             if (btn1.text === 'setTimeout') {
                 infoText.text = '';
                 timer1 = setTimeout(() => {
-                     console.log('timer Timeout 2s');
-                     infoText.text += 'timer Timeout 2s';
+                    console.log('timer Timeout 2s');
+                    infoText.text += 'timer Timeout 2s';
                 }, 2000);
             } else {
                 clearTimeout(timer1);
@@ -67,8 +67,8 @@ class RootView extends View {
             if (btn2.text === 'setInterval') {
                 infoText.text = '';
                 timer2 = setInterval(() => {
-                     console.log('timer Interval 1s');
-                     infoText.text += 'timer Interval 1s' + '\n';
+                    console.log('timer Interval 1s');
+                    infoText.text += 'timer Interval 1s' + '\n';
                 }, 1000);
             } else {
                 clearInterval(timer2);

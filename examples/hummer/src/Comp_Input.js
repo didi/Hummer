@@ -1,10 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -454,7 +454,7 @@ class RootView extends View {
             color: '#FFFFFF',
             fontSize: 14,
             placeholderColor: '#999999',
-//            fontFamily : 'New Times Roma',
+            // fontFamily : 'New Times Roma',
         };
 
         layout.appendChild(input1);
@@ -482,7 +482,7 @@ class RootView extends View {
 
     formatEventState(state) {
         let strState = '';
-        switch(state) {
+        switch (state) {
             case 0:
                 strState = 'Normal';
                 break;

@@ -1,6 +1,7 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
             width: '100%',
             height: '100%',

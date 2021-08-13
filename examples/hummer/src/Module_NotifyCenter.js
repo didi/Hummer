@@ -1,10 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -36,8 +36,8 @@ class RootView extends View {
 
         let notifyCenter = Hummer.notifyCenter;
         let callback = (value) => {
-           console.log('receive event: ' + JSON.stringify(value));
-           infoText.text = JSON.stringify(value);
+            console.log('receive event: ' + JSON.stringify(value));
+            infoText.text = JSON.stringify(value);
         }
 
         let btn1 = new Button();

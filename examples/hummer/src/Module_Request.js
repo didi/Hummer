@@ -1,10 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: "100%",
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
@@ -47,9 +47,9 @@ class RootView extends View {
                 console.log('response type is ' + typeof response);
                 console.log('response: ' + JSON.stringify(response));
 
-                let ret = 'method: ' + request.method + '\n'
-                        + 'response type is ' + typeof response + '\n'
-                        + 'response: ' + JSON.stringify(response) + '\n';
+                let ret = 'method: ' + request.method + '\n' +
+                    'response type is ' + typeof response + '\n' +
+                    'response: ' + JSON.stringify(response) + '\n';
 
 
                 infoText.text = ret;
@@ -72,9 +72,9 @@ class RootView extends View {
                 console.log('response type is ' + typeof response);
                 console.log('response: ' + JSON.stringify(response));
 
-                let ret = 'method: ' + request.method + '\n'
-                        + 'response type is ' + typeof response + '\n'
-                        + 'response: ' + JSON.stringify(response) + '\n';
+                let ret = 'method: ' + request.method + '\n' +
+                    'response type is ' + typeof response + '\n' +
+                    'response: ' + JSON.stringify(response) + '\n';
 
                 infoText.text = ret;
             });

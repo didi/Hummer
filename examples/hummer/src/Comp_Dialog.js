@@ -1,9 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
         }
@@ -41,7 +42,7 @@ class RootView extends View {
     showAlertDialog() {
         let dialog = new Dialog();
         dialog.cancelable = false;
-//        dialog.alert("test");
+        // dialog.alert("test");
         dialog.alert("test", "xxx", () => {
             Toast.show('ok click');
         });
@@ -50,7 +51,7 @@ class RootView extends View {
     showConfirmDialog() {
         let dialog = new Dialog();
         dialog.cancelable = false;
-//        dialog.confirm("test");
+        // dialog.confirm("test");
         dialog.confirm("test title", "test msg", "xxx", "yyy",
             () => {
                 Toast.show('ok click');
@@ -62,7 +63,7 @@ class RootView extends View {
     showLoadingDialog() {
         let dialog = new Dialog();
         dialog.loading("加载中...");
-//        dialog.loading("测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字");
+        // dialog.loading("测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字");
     }
 
     showCustomDialog() {
@@ -139,4 +140,3 @@ class RootView extends View {
 }
 
 Hummer.render(new RootView());
-

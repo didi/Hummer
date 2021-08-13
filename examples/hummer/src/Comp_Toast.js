@@ -1,9 +1,10 @@
 class RootView extends View {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            width: environment.availableWidth,
-            height: environment.availableHeight,
+            width: '100%',
+            height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
         }
@@ -11,7 +12,7 @@ class RootView extends View {
         let btn1 = new Button();
         btn1.text = "show Toast"
         btn1.addEventListener('tap', (event) => {
-//            Toast.show("test");
+            // Toast.show("test");
             Toast.show("test", 3000);
         });
 
@@ -56,4 +57,3 @@ class RootView extends View {
 }
 
 Hummer.render(new RootView());
-

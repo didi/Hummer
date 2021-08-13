@@ -1,8 +1,8 @@
 class RootView extends Scroller {
-    initialize() {
-        let environment = Hummer.env;
+    constructor() {
+        super();
+
         this.style = {
-            flexDirection: 'column',
             width: '100%',
             height: '100%',
             paddingLeft: 10,
@@ -31,12 +31,20 @@ class RootView extends Scroller {
 
         let layout = new View();
         layout.style = {
-            flexDirection: 'row',
             padding: 10,
             borderWidth: 1,
             borderColor: '#22222222',
             flexWrap: 'wrap',
         };
+
+        let layout1 = new View();
+        layout1.style = {
+            flexDirection: 'row',
+        }
+        let layout2 = new View();
+        layout2.style = {
+            flexDirection: 'row',
+        }
 
         let img1 = new Image();
         img1.style = {
@@ -110,14 +118,16 @@ class RootView extends Scroller {
             marginTop: 10,
         };
 
-        layout.appendChild(img1);
-        layout.appendChild(img2);
-        layout.appendChild(img3);
-        layout.appendChild(img4);
-        layout.appendChild(img5);
-        layout.appendChild(img6);
-        layout.appendChild(img7);
-        layout.appendChild(img8);
+        layout1.appendChild(img1);
+        layout1.appendChild(img2);
+        layout1.appendChild(img3);
+        layout1.appendChild(img4);
+        layout2.appendChild(img5);
+        layout2.appendChild(img6);
+        layout2.appendChild(img7);
+        layout2.appendChild(img8);
+        layout.appendChild(layout1);
+        layout.appendChild(layout2);
         this.appendChild(titleView);
         this.appendChild(layout);
     }
@@ -133,13 +143,21 @@ class RootView extends Scroller {
 
         let layout = new View();
         layout.style = {
-            flexDirection: 'row',
             alignItems: 'center',
             padding: 10,
             borderWidth: 1,
             borderColor: '#22222222',
             flexWrap: 'wrap',
         };
+
+        let layout1 = new View();
+        layout1.style = {
+            flexDirection: 'row',
+        }
+        let layout2 = new View();
+        layout2.style = {
+            flexDirection: 'row',
+        }
 
         let img1 = new Image();
         img1.src = 'njimage_demo';
@@ -168,7 +186,6 @@ class RootView extends Scroller {
             height: 60,
             backgroundColor: '#FF000022',
             marginLeft: 10,
-            marginRight: 80,
             borderWidth: 2,
             borderColor: '#000000',
             borderRadius: 40,
@@ -209,12 +226,14 @@ class RootView extends Scroller {
             borderRadius: 40,
         };
 
-        layout.appendChild(img1);
-        layout.appendChild(img2);
-        layout.appendChild(img3);
-        layout.appendChild(img4);
-        layout.appendChild(img5);
-        layout.appendChild(img6);
+        layout1.appendChild(img1);
+        layout1.appendChild(img2);
+        layout1.appendChild(img3);
+        layout2.appendChild(img4);
+        layout2.appendChild(img5);
+        layout2.appendChild(img6);
+        layout.appendChild(layout1);
+        layout.appendChild(layout2);
         this.appendChild(titleView);
         this.appendChild(layout);
     }
@@ -522,9 +541,9 @@ class RootView extends Scroller {
 
         let img1 = new Image();
         img1.load('http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg', (srcType, isSuccess) => {
-            if(isSuccess){
+            if (isSuccess) {
                 console.log(`xxxx____RemoteLoad Success  srcType = ${srcType}`)
-            }else{
+            } else {
                 console.log(`xxxx____RemoteLoad Fail  srcType = ${srcType}`)
             }
         });
@@ -535,9 +554,9 @@ class RootView extends Scroller {
 
         let img2 = new Image();
         img2.load('njimage_demo', (srcType, isSuccess) => {
-            if(isSuccess){
+            if (isSuccess) {
                 console.log(`xxxx____ResIdLoad Success  srcType = ${srcType}`)
-            }else{
+            } else {
                 console.log(`xxxx____ResIdLoad Fail  srcType = ${srcType}`)
             }
         });
@@ -549,9 +568,9 @@ class RootView extends Scroller {
 
         let img3 = new Image();
         img3.load('//b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg', (srcType, isSuccess) => {
-            if(isSuccess){
+            if (isSuccess) {
                 console.log(`xxxx____RemoteSimpleLoad Success  srcType = ${srcType}`)
-            }else{
+            } else {
                 console.log(`xxxx____RemoteSimpleLoad fail  srcType = ${srcType}`)
             }
         })
@@ -567,9 +586,9 @@ class RootView extends Scroller {
             placeholder: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg',
             failedImage: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg'
         }, (srcType, isSuccess) => {
-            if(isSuccess){
+            if (isSuccess) {
                 console.log(`xxxx____ObjectRemoteLoad Success  srcType = ${srcType}`)
-            }else{
+            } else {
                 console.log(`xxxx____ObjectRemoteLoad fail  srcType = ${srcType}`)
             }
         })
@@ -585,9 +604,9 @@ class RootView extends Scroller {
             placeholder: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg',
             failedImage: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg'
         }, (srcType, isSuccess) => {
-            if(isSuccess){
+            if (isSuccess) {
                 console.log(`xxxx____ObjectLocalLoad Success  srcType = ${srcType}`)
-            }else{
+            } else {
                 console.log(`xxxx____ObjectLocalLoad fail  srcType = ${srcType}`)
             }
         })
