@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
@@ -194,6 +193,8 @@ public class Image extends HMBase<RoundedImageView> {
             callback = this::adjustWidthAndHeight;
         }
         ImageRenderUtil.renderImage((HummerContext) getContext(), getView(), url, placeholder, failedImage, callback, completeCallback);
+
+        getNode().setDesc(url);
     }
 
     private void loadGif(String url, int repeatCount) {
@@ -206,6 +207,8 @@ public class Image extends HMBase<RoundedImageView> {
             callback = this::adjustWidthAndHeight;
         }
         ImageRenderUtil.renderGif((HummerContext) getContext(), getView(), url, placeholder, failedImage, repeatCount, callback, completeCallback);
+
+        getNode().setDesc(url);
     }
 
     @Override

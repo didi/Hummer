@@ -66,6 +66,8 @@ public class Text extends HMBase<TextView> {
     private void setRowText(CharSequence text) {
         getView().setText(text);
         requestLayout();
+
+        getNode().setDesc(String.valueOf(text));
     }
 
     @SuppressWarnings("deprecation")
@@ -92,6 +94,7 @@ public class Text extends HMBase<TextView> {
         RichTextHelper.generateRichText(this, richText, this::setRowText);
     }
 
+    @Deprecated
     @JsProperty("formattedText")
     private String formattedText;
     public void setFormattedText(String formattedText) {

@@ -23,7 +23,6 @@ import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.render.utility.DPUtil;
-import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.utils.AppUtils;
 import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.BarUtils;
@@ -67,6 +66,7 @@ public class HummerContext extends ContextWrapper {
     protected HummerLayout mContent;
     protected ComponentPool mComponentPool = new ComponentPool();
     protected JSContext mJsContext;
+    protected HMBase mJSRootView;
     protected JSValue mJsPage;
 
     /**
@@ -193,6 +193,7 @@ public class HummerContext extends ContextWrapper {
 
     public void render(HMBase base) {
         if (base != null) {
+            mJSRootView = base;
             mJsPage = base.getJSValue();
             mJsPage.protect();
             create();
@@ -209,6 +210,10 @@ public class HummerContext extends ContextWrapper {
 
     public HummerLayout getContainer() {
         return mContainer;
+    }
+
+    public HMBase getJSRootView() {
+        return mJSRootView;
     }
 
     public JSValue getJsPage() {

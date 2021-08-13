@@ -20,7 +20,6 @@ public class InvokerAnalyzer {
     private final ExecutorService executor;
     private final List<InvokeTracker> treeTrackerList;
     private final List<InvokeTracker> compTrackerList;
-    private final ComponentTreeAnalyzer componentTreeAnalyzer;
     private final CallStackTreeAnalyzer callStackTreeAnalyzer;
     private final PerformanceAnalyzer performanceAnalyzer;
 
@@ -36,7 +35,6 @@ public class InvokerAnalyzer {
         treeTrackerList = new ArrayList<>();
         compTrackerList = new ArrayList<>();
         executor = Executors.newSingleThreadExecutor();
-        componentTreeAnalyzer = new ComponentTreeAnalyzer();
         callStackTreeAnalyzer = new CallStackTreeAnalyzer();
         performanceAnalyzer = new PerformanceAnalyzer();
     }
@@ -96,7 +94,6 @@ public class InvokerAnalyzer {
     private void analyzeTree() {
         executor.submit(() -> {
             try {
-                componentTreeAnalyzer.analyze(treeTrackerList);
                 callStackTreeAnalyzer.analyze(treeTrackerList);
             } catch (Exception e) {
                 HMLog.e("InvokerAnalyzer", "analyzeTree, e = ", e);
@@ -130,13 +127,6 @@ public class InvokerAnalyzer {
             index++;
         }
         return callFrom;
-    }
-
-    /**
-     * 获取视图树的格式化字符串
-     */
-    public String getComponentTreeFormat() {
-        return componentTreeAnalyzer.getComponentTreeFormat();
     }
 
     /**

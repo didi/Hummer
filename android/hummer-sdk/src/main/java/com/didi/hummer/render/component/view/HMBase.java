@@ -169,7 +169,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     }
 
     public String getViewID() {
-        return hummerNode.getNodeId();
+        return hummerNode.getId();
     }
 
     public YogaNode getYogaNode() {
