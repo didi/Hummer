@@ -11,13 +11,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol HMBaseWeakValueProtocol
+@protocol HMBaseWeakValueProtocol <NSObject>
 
 @required
 
 @property (readonly, strong, nullable, nonatomic) HMBaseValue *value;
-
-- (nullable instancetype)initWithValue:(nullable HMBaseValue *)value;
 
 @end
 

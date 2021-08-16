@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMBaseValue : NSObject <HMBaseValueOptionalProtocol>
 
-@property (nonatomic, weak, readonly, nullable) id <HMBaseExecutorProtocol> context;
+@property (nonatomic, weak, readonly) id <HMBaseExecutorProtocol> context;
 
 - (BOOL)hasProperty:(nullable NSString *)propertyString DEPRECATED_MSG_ATTRIBUTE("兼容 JavaScriptCore 需要，废弃接口，存在潜在性能问题");
 
