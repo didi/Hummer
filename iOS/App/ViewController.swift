@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import Hummer
 
-class ViewController: UIViewController {
+class ViewController: HMViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
