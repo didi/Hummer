@@ -52,7 +52,6 @@ Hummer is a dynamic solution for client.
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
     ss.frameworks = 'JavaScriptCore'
-    ss.dependency 'Hummer/Hermes'
     ss.dependency 'Yoga', '~> 1.14'
     ss.dependency 'SocketRocket', '~> 0.1'
   end
