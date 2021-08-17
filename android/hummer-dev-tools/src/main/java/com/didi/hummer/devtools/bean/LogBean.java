@@ -29,14 +29,14 @@ public class LogBean implements Serializable {
     // 序列化时忽略该字段
     private transient long timestamp;
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS");
 
     public LogBean(int level, String msg) {
         this.level = level;
         this.rawMsg = msg;
         this.timestamp = System.currentTimeMillis();
 
-        String time = DATE_FORMAT.format(timestamp) + "." + (timestamp % 1000);
+        String time = DATE_FORMAT.format(timestamp);
         this.msg = String.format("[%s] %s", time, msg);
     }
 

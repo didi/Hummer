@@ -14,6 +14,7 @@ import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.core.util.HMLog;
+import com.didi.hummer.debug.InvokerAnalyzer;
 import com.didi.hummer.module.notifycenter.NotifyCenter;
 import com.didi.hummer.module.notifycenter.NotifyCenterInvoker;
 import com.didi.hummer.pool.ComponentPool;
@@ -70,6 +71,11 @@ public class HummerContext extends ContextWrapper {
     protected JSValue mJsPage;
 
     /**
+     * invoke方法分析工具（用于调试阶段）
+     */
+    protected InvokerAnalyzer invokerAnalyzer;
+
+    /**
      * js文件源路径
      */
     protected String jsSourcePath = "";
@@ -103,10 +109,11 @@ public class HummerContext extends ContextWrapper {
         HMLog.d("HummerNative", "HummerContext.new");
         this.namespace = namespace;
         this.mContainer = container;
-        this.mContent = new HummerLayout(this);
-        this.mContent.getYogaNode().setWidthPercent(100);
-        this.mContent.getYogaNode().setHeightPercent(100);
+        mContent = new HummerLayout(this);
+        mContent.getYogaNode().setWidthPercent(100);
+        mContent.getYogaNode().setHeightPercent(100);
         mContainer.addView(mContent);
+        invokerAnalyzer = InvokerAnalyzer.init();
     }
 
     public String getNamespace() {
@@ -165,6 +172,7 @@ public class HummerContext extends ContextWrapper {
 
     public void onDestroy() {
         HMLog.d("HummerNative", "HummerContext.onDestroy");
+        InvokerAnalyzer.release(invokerAnalyzer);
         destroy();
         NotifyCenter.release(mJsContext);
         releaseJSContext();
@@ -218,6 +226,10 @@ public class HummerContext extends ContextWrapper {
 
     public JSValue getJsPage() {
         return mJsPage;
+    }
+
+    public InvokerAnalyzer getInvokerAnalyzer() {
+        return invokerAnalyzer;
     }
 
     public Context getContext() {

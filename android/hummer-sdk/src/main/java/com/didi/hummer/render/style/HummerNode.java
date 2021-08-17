@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.didi.hummer.core.debug.TreeNode;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.YogaNodeUtil;
