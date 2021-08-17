@@ -329,7 +329,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 
 #ifdef HMDEBUG
     // 添加debug按钮
-    [HMDevTools showInContext:context];
+//    [HMDevTools showInContext:context];
 #endif
 }
 

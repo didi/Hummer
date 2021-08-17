@@ -6,9 +6,7 @@
 //
 
 #import <objc/runtime.h>
-#if __has_include(<Hummer/HMJSExecutor.h>)
 #import <Hummer/HMJSExecutor.h>
-#endif
 #import "HMJSCExecutor.h"
 #import "HMJSContext.h"
 #import "HMExportClass.h"
@@ -110,8 +108,8 @@ NS_ASSUME_NONNULL_END
     NSAssert(dataAsset, @"builtin dataset 无法在 xcassets 中搜索到");
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
     
-    _context = [[HMJSExecutor alloc] init];
-//    _context = [[HMJSCExecutor alloc] init];
+//    _context = [[HMJSExecutor alloc] init];
+    _context = [[HMJSCExecutor alloc] init];
     [[HMJSGlobal globalObject] weakReference:self];
     __weak typeof(self) weakSelf = self;
     _context.exceptionHandler = ^(HMExceptionModel *exception) {
@@ -187,7 +185,9 @@ NS_ASSUME_NONNULL_END
     // context 和 WebSocket 对应
     if (!self.url && fileName.length > 0) {
         self.url = [NSURL URLWithString:fileName];
-        [((HMJSExecutor *)self.context) enableDebuggerWithTitle:fileName];
+        if ([self.context isKindOfClass:HMJSExecutor.class]) {
+            [((HMJSExecutor *)self.context) enableDebuggerWithTitle:fileName];
+        }
     }
     
 #ifdef HMDEBUG

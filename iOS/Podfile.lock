@@ -7,7 +7,7 @@ PODS:
     - Yoga (~> 1.14)
   - Hummer/Hermes (0.2.8):
     - SocketRocket (~> 0.1)
-  - Nimble (9.0.0)
+  - Nimble (9.2.0)
   - Quick (4.0.0)
   - SocketRocket (0.5.1)
   - Yoga (1.14.0)
@@ -30,11 +30,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Hummer: f7c0e06ff2b918748f4f5da00343c7de690879d1
-  Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
+  Nimble: 4f4a345c80b503b3ea13606a4f98405974ee4d0b
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Yoga: cff67a400f6b74dc38eb0bad4f156673d9aa980c
 
-PODFILE CHECKSUM: f12ef13da80e81860e2998b64c238bcc228a8935
+PODFILE CHECKSUM: 3093afc52efbc25703c3a8d4d94604f1e6be4749
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2
