@@ -7,6 +7,8 @@ import com.didi.hummer.render.style.HummerNode;
 import java.util.Iterator;
 
 /**
+ * 视图树字符串格式化帮助类
+ *
  * Created by XiaoFeng on 2021/8/15.
  */
 public class ComponentTreeFormat {
@@ -28,15 +30,19 @@ public class ComponentTreeFormat {
      * 获取组件树字符串
      */
     public static String format(HummerNode node) {
+        if (node == null) {
+            return "";
+        }
+
         return
                 "┌─────────────────────────\n" +
                 "│\t视图树\n" +
                 "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n" +
-                generateNodeTree(node, 0, 0) +
+                generateNodeTreeInfo(node, 0, 0) +
                 "└─────────────────────────\n";
     }
 
-    private static String generateNodeTree(HummerNode node, int level, int lastNodeFlag) {
+    private static String generateNodeTreeInfo(HummerNode node, int level, int lastNodeFlag) {
         if (node == null) {
             return "";
         }
@@ -63,7 +69,7 @@ public class ComponentTreeFormat {
                 if (isLastNode) {
                     lastNodeFlag |= (1 << level);
                 }
-                strLog.append(generateNodeTree(n, newLevel, lastNodeFlag));
+                strLog.append(generateNodeTreeInfo(n, newLevel, lastNodeFlag));
             }
         }
 

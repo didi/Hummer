@@ -1,10 +1,10 @@
-package com.didi.hummer.core.debug;
+package com.didi.hummer.debug;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 /**
- * 一个Invoke方法调用的信息采集
+ * 一次invoke方法调用的信息
  *
  * Created by XiaoFeng on 2020/11/4.
  */
@@ -14,19 +14,17 @@ public class InvokeTracker {
     public long objectID;
     public String methodName;
     public Object[] params;
+    public String desc;
     public long beginTime;
     public long endTime;
+    public long timeCost;
     public long timestamp;
     public String timeFormat;
 
-    public InvokeTracker begin() {
-        beginTime = System.nanoTime();
-        timestamp = System.currentTimeMillis();
-        timeFormat = new SimpleDateFormat("HH:mm:ss.SSS").format(timestamp);
-        return this;
-    }
-
-    public InvokeTracker track(String className, long objectID, String methodName, Object[] params) {
+    public InvokeTracker start(String className, long objectID, String methodName, Object[] params) {
+        this.beginTime = System.nanoTime();
+        this.timestamp = System.currentTimeMillis();
+        this.timeFormat = new SimpleDateFormat("HH:mm:ss.SSS").format(timestamp);
         this.className = className;
         this.objectID = objectID;
         this.methodName = methodName;
@@ -41,12 +39,9 @@ public class InvokeTracker {
         return this;
     }
 
-    public InvokeTracker end() {
+    public InvokeTracker stop() {
         endTime = System.nanoTime();
+        timeCost = endTime - beginTime;
         return this;
-    }
-
-    public long timeCost() {
-        return endTime - beginTime;
     }
 }

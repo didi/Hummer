@@ -21,13 +21,16 @@ import android.widget.Toast;
 
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
-import com.didi.hummer.core.debug.InvokerAnalyzerManager;
+import com.didi.hummer.debug.InvokeTracker;
+import com.didi.hummer.debug.PerformanceTracker;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
 import com.didi.hummer.devtools.bean.LogBean;
 import com.didi.hummer.devtools.manager.HummerLogManager;
+import com.didi.hummer.devtools.utils.CallStackFormat;
 import com.didi.hummer.devtools.utils.ComponentTreeFormat;
 import com.didi.hummer.devtools.utils.JSONFormat;
+import com.didi.hummer.devtools.utils.PerformanceListFormat;
 import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.utils.ScreenUtils;
@@ -221,19 +224,23 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     }
 
     private void updateCompTree() {
-        HummerNode node = hummerContext.getJSRootView().getNode();
+        HummerNode node = hummerContext.getJSRootView() != null ?
+                hummerContext.getJSRootView().getNode() : null;
         tvInfo.setText(ComponentTreeFormat.format(node));
         scrollInfo.post(() -> scrollInfo.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updateCallStack() {
-        String info = InvokerAnalyzerManager.getInstance().getCallStackTreeFormat(hummerContext.getJsContext().getIdentify());
-        tvInfo.setText(info);
+        List<InvokeTracker> trackerList = hummerContext.getInvokerAnalyzer() != null ?
+                hummerContext.getInvokerAnalyzer().getInvokeTrackerList() : null;
+        tvInfo.setText(CallStackFormat.format(trackerList));
         scrollInfo.post(() -> scrollInfo.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updatePerformance() {
-        String info = InvokerAnalyzerManager.getInstance().getPerformanceFormat(hummerContext.getJsContext().getIdentify());
+        List<PerformanceTracker> perfTrackerList = hummerContext.getInvokerAnalyzer() != null ?
+                hummerContext.getInvokerAnalyzer().getPerfTrackerList() : null;
+        String info = PerformanceListFormat.format(perfTrackerList);
         tvInfo.setText(info);
     }
 
