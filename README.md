@@ -71,25 +71,24 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 ## 近期规划
 
 ### 里程碑
-- 5月底
-    - Tenon React 一期版本发布
-    - 两端一致性达到 80%
 - 6月底
     - iOS 版 DevTools 发布
+    - Tenon React 一期版本发布
+- 7月底
+    - VSCode 调试插件预览版完成
+    - N-API 预览版完成
+- 8月底
+    - 视图调试功能发布
+    - VSCode 调试插件正式版发布
+    - N-API 正式发布
+- 9月底
+    - VSCode 插件完整版发布
+    - mand-mobild for Hummer 版组件库一期版本发布
     - Tenon React 二期版本发布
     - Tenon Router 发布
-- 7月底
-    - VSCode 调试插件发布
-    - 视图调试能力发布
-    - mand-mobild for Hummer 版组件库一期版本发布
     - 公共包抽离能力发布
-    - 两端一致性达到 90%
-- 8月底
-    - VSCode 插件完整版发布
-    - 增强版 DevTools 发布
-    - mand-mobild for Hummer 版组件库二期版本发布
 
-### TODO
+### 具体事项
 #### 研发体验
 - 两端一致性
     - [ ] 设计和编写测试用例
@@ -97,20 +96,20 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 逐一解决两端不一致问题
     - [ ] iOS 端完成部分组件自渲染
 - DevTools
-    - [x] iOS 对齐 Android 端【开发工具】按钮功能，可以显示日志、异常堆栈和页面基本信息 @[宏宇](https://github.com/ringlong)
+    - [x] iOS 对齐 Android 端【开发工具】按钮功能，可以显示日志、异常堆栈和页面基本信息 [@宏宇](https://github.com/ringlong)
     - [ ] iOS 对齐 Android 端【刷新】按钮功能
-    - [x] iOS 对齐 Android 端热重载功能 @[ChasonTang](https://github.com/ChasonTang)
-    - [x] CLI 支持命令行日志输出 @[duanlikang](https://github.com/duanlikang)
+    - [x] iOS 对齐 Android 端热重载功能 [@ChasonTang](https://github.com/ChasonTang)
+    - [x] CLI 支持命令行日志输出 [@duanlikang](https://github.com/duanlikang)
     - [ ] 增强版 DevTools 支持（类似RN）
 - VSCode 插件
     - [ ] VSCode 调试插件开发完成
     - [ ] Tenon 支持代码提示和代码自动补全
 - 视图调试
-    - [x] Dev 页面展示视图树和节点样式 @[AdamCaoQAQ](https://github.com/AdamCaoQAQ) @[jayconscious](https://github.com/jayconscious)
-    - [x] 原生侧高亮选中的UI控件（画框）@[小枫](https://github.com/bbssyyuui) @[yFeii](https://github.com/yFeii)
+    - [x] Dev 页面展示视图树和节点样式 [@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@jayconscious](https://github.com/jayconscious)
+    - [x] 原生侧高亮选中的UI控件（画框）[@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
 
 #### 生态建设
-- Tenon React 一期版本 @[duanlikang](https://github.com/duanlikang)
+- Tenon React 一期版本 [@duanlikang](https://github.com/duanlikang)
   - [x] 基础组件对齐
   - [x] 基本事件模块对齐
   - [x] 页面生命周期逻辑
@@ -120,14 +119,14 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [x] 支持 Ref
   - [x] 支持页面配置
   - [x] 一期功能文档编写
-- Tenon React 二期版本 @[duanlikang](https://github.com/duanlikang)
+- Tenon React 二期版本 [@duanlikang](https://github.com/duanlikang)
   - [x] 支持动画
   - [x] 事件模块重构
   - [x] 样式模块优化
   - [ ] 支持高阶组件
   - [ ] 数据管理（Redux 生态接入）
   - [ ] 路由管理（React Router 生态接入）
-- Tenon 组件库（[mand-mobile](https://github.com/didi/mand-mobile)）建设一期 @[duanlikang](https://github.com/duanlikang) @[宏宇](https://github.com/ringlong)
+- Tenon 组件库（[mand-mobile](https://github.com/didi/mand-mobile)）建设一期 [@duanlikang](https://github.com/duanlikang) [@宏宇](https://github.com/ringlong)
   - [x] 基础框架搭建
   - [ ] 各个组件适配
 - Hummer 基础组件建设
@@ -141,22 +140,22 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [ ] 页面标签栏（TabLayout）
   - [ ] 拍照/录像（Camera）
   - [ ] 电话（Phone）
-  - [x] 画布（Canvas）@[litianhao3615](https://github.com/litianhao3615) @[Leo](https://github.com/firelion0725)
+  - [x] 画布（Canvas）[@litianhao3615](https://github.com/litianhao3615) [@Leo](https://github.com/firelion0725)
 
 #### 性能优化
 - 动态执行 JS
-  - [x] 原生实现 JS 执行 JS 能力 @[小枫](https://github.com/bbssyyuui) @[yFeii](https://github.com/yFeii)
+  - [x] 原生实现 JS 执行 JS 能力 [@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
   - [ ] 公共包抽离
   - [ ] 页面懒加载（Tenon Router）
 - 多线程支持
 
 #### 其他
 - N-API 抽象 JS 引擎
-  - [x] 适配 QuickJS @[ChasonTang](https://github.com/ChasonTang)
-  - [x] 适配 Hermes @[ChasonTang](https://github.com/ChasonTang) @[yFeii](https://github.com/yFeii)
-  - [x] 适配 JSC @[ChasonTang](https://github.com/ChasonTang)
-  - [x] 接入 NAPI 至 iOS 端 @[ChasonTang](https://github.com/ChasonTang)
-  - [x] 接入 NAPI 至 Android 端 @[小枫](https://github.com/bbssyyuui)
+  - [x] 适配 QuickJS [@ChasonTang](https://github.com/ChasonTang)
+  - [x] 适配 Hermes [@ChasonTang](https://github.com/ChasonTang) [@yFeii](https://github.com/yFeii)
+  - [x] 适配 JSC [@ChasonTang](https://github.com/ChasonTang)
+  - [x] 接入 NAPI 至 iOS 端 [@ChasonTang](https://github.com/ChasonTang)
+  - [x] 接入 NAPI 至 Android 端 [@小枫](https://github.com/bbssyyuui)
 
 *（~ 欢迎大家领取任务，给我们提交 PR ~）*
 
