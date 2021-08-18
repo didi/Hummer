@@ -78,10 +78,11 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - VSCode 调试插件预览版完成
     - N-API 预览版完成
 - 8月底
-    - 视图调试功能发布
+    - 视图调试一期功能发布
     - VSCode 调试插件正式版发布
     - N-API 正式发布
 - 9月底
+    - 视图调试二期功能发布
     - VSCode 插件完整版发布
     - mand-mobild for Hummer 版组件库一期版本发布
     - Tenon React 二期版本发布
