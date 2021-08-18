@@ -139,6 +139,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (float)HMNumberToFloat:(nullable NSObject *)number;
 
++ (BOOL)HMBoxSizingStringToBoolean:(nullable id)string;
+
 NS_ASSUME_NONNULL_END
 
 + (NSInteger)HMNumberToNSInteger:(NSNumber *)number;

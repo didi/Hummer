@@ -70,6 +70,18 @@ HM_EXPORT_ATTRIBUTE(borderTopStyle, __borderTopStyle, HMStringToBorderStyle:)
 HM_EXPORT_ATTRIBUTE(borderRightStyle, __borderRightStyle, HMStringToBorderStyle:)
 HM_EXPORT_ATTRIBUTE(borderBottomStyle, __borderBottomStyle, HMStringToBorderStyle:)
 
+HM_EXPORT_ATTRIBUTE(boxSizing, HMBorderBoxSizing, HMBoxSizingStringToBoolean:)
+
+- (BOOL)HMBorderBoxSizing {
+    NSNumber *borderBoxSizing = objc_getAssociatedObject(self, _cmd);
+
+    return borderBoxSizing.boolValue;
+}
+
+- (void)setHMBorderBoxSizing:(BOOL)hmBorderBoxSizing {
+    objc_setAssociatedObject(self, @selector(HMBorderBoxSizing), hmBorderBoxSizing ? @YES : nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 //HMBorderPropertyListSetter(Radius)
 - (void)set__borderRadius:(NSArray<NSValue *> *)list {
     if (list.count == 1) {

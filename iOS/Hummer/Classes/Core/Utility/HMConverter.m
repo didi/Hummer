@@ -648,6 +648,21 @@ CGPoint intersectionPoint(CGPoint firstLineBegin,
     }
 }
 
++ (BOOL)HMBoxSizingStringToBoolean:(id)string {
+    if (string && ![string isKindOfClass:NSString.class]) {
+        NSAssert(NO, @"style.boxSizing must be string");
+        
+        return NO;
+    }
+    if ([string isEqualToString:@"border-box"]) {
+        return YES;
+    } else {
+        NSAssert(!string || [string isEqualToString:@"none"], @"style.boxSizing must be none or border-box");
+        
+        return NO;
+    }
+}
+
 + (NSArray<NSNumber *> *)HMStringToBorderStyleList:(NSString *)string {
     NSArray<NSString *> *componentArray = [string componentsSeparatedByString:@" "];
     if (componentArray.count == 0) {

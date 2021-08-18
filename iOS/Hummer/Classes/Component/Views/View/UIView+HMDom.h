@@ -32,6 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable, strong) CAShapeLayer *hm_borderLeftLayer;
 
 /**
+ * @brief 是否为边框盒，默认不是边框盒
+ */
+@property (nonatomic, assign) BOOL HMBorderBoxSizing;
+
+/**
  * @brief 如果是 masksToBounds 优化，则加一个标记位，用于 revert
  */
 @property (nonatomic, assign) BOOL hm_isMasksToBoundsOptimization;

@@ -34,7 +34,7 @@ Hummer is a dynamic solution for client.
 
   s.subspec "Hermes" do |ss|
     ss.pod_target_xcconfig = {
-      'HEADER_SEARCH_PATHS' => "$(PODS_TARGET_SRCROOT)/iOS/N-API/include $(PODS_TARGET_SRCROOT)/iOS/N-API/third_party/react-native/ReactCommon",
+      'HEADER_SEARCH_PATHS' => "$(PODS_TARGET_SRCROOT)/iOS/N-API/third_party/react-native/ReactCommon",
       'GCC_ENABLE_CPP_EXCEPTIONS' => 'NO',
       'GCC_ENABLE_CPP_RTTI' => 'NO'
     }
@@ -45,13 +45,22 @@ Hummer is a dynamic solution for client.
     ss.dependency 'SocketRocket', '~> 0.1'
   end
 
+  s.subspec "JavaScriptCore" do |ss|
+    ss.vendored_library = 'iOS/N-API/napi/libjsc.a'
+    ss.framework = "JavaScriptCore"
+  end
+
   s.subspec "Core" do |ss|
+    ss.dependency 'Hummer/JavaScriptCore'
+    ss.pod_target_xcconfig = {
+      'HEADER_SEARCH_PATHS' => "$(PODS_TARGET_SRCROOT)/iOS/N-API/include"
+    }
     ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
     ss.private_header_files = 'iOS/Hummer/Classes/Engine/N-API/HMJSExecutor+Private.h', 'iOS/Hummer/Classes/Engine/N-API/HMJS{Weak,Strong}Value.h', 'iOS/Hummer/Classes/Engine/N-API/HMJSValue.h'
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
-    ss.frameworks = 'JavaScriptCore'
+    ss.framework = 'JavaScriptCore'
     ss.dependency 'Yoga', '~> 1.14'
     ss.dependency 'SocketRocket', '~> 0.1'
   end
