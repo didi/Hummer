@@ -1087,18 +1087,10 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     
     if (self.HMBorderBoxSizing) {
         if (self.hm_borderModelCollection) {
-            if (self.hm_borderModelCollection.top.isShowBorder) {
-                self.hm_renderObject.borderTopWidth = self.hm_borderModelCollection.top.borderWidth;
-            }
-            if (self.hm_borderModelCollection.bottom.isShowBorder) {
-                self.hm_renderObject.borderBottomWidth = self.hm_borderModelCollection.bottom.borderWidth;
-            }
-            if (self.hm_borderModelCollection.left.isShowBorder) {
-                self.hm_renderObject.borderLeftWidth = self.hm_borderModelCollection.left.borderWidth;
-            }
-            if (self.hm_borderModelCollection.right.isShowBorder) {
-                self.hm_renderObject.borderRightWidth = self.hm_borderModelCollection.right.borderWidth;
-            }
+            self.hm_renderObject.borderTopWidth = self.hm_borderModelCollection.top.isShowBorder ? self.hm_borderModelCollection.top.borderWidth : YGUndefined;
+            self.hm_renderObject.borderBottomWidth = self.hm_borderModelCollection.bottom.isShowBorder ? self.hm_borderModelCollection.bottom.borderWidth : YGUndefined;
+            self.hm_renderObject.borderLeftWidth = self.hm_borderModelCollection.left.isShowBorder ? self.hm_borderModelCollection.left.borderWidth : YGUndefined;
+            self.hm_renderObject.borderRightWidth = self.hm_borderModelCollection.right.isShowBorder ? self.hm_borderModelCollection.right.borderWidth : YGUndefined;
         } else if (self.layer.borderWidth > 0) {
             self.hm_renderObject.borderWidth = self.layer.borderWidth;
         } else {
