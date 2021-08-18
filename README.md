@@ -104,12 +104,17 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 - VSCode 插件
     - [ ] VSCode 调试插件开发完成
     - [ ] Tenon 支持代码提示和代码自动补全
-- 视图调试
-    - [x] Dev 页面展示视图树和节点样式 [@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@jayconscious](https://github.com/jayconscious)
+- 视图调试一期
+    - [x] Dev 页面展示视图树和节点样式（仅支持 Vue 项目）[@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@jayconscious](https://github.com/jayconscious)
     - [x] 原生侧高亮选中的UI控件（画框）[@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
+- 视图调试二期
+    - [ ] 支持 TS 项目
+    - [ ] Dev 首页展示和交互优化
+    - [ ] 支持样式修改
+    - [ ] 支持日志折叠
 
 #### 生态建设
-- Tenon React 一期版本 [@duanlikang](https://github.com/duanlikang)
+- Tenon React 一期 [@duanlikang](https://github.com/duanlikang)
   - [x] 基础组件对齐
   - [x] 基本事件模块对齐
   - [x] 页面生命周期逻辑
@@ -119,7 +124,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [x] 支持 Ref
   - [x] 支持页面配置
   - [x] 一期功能文档编写
-- Tenon React 二期版本 [@duanlikang](https://github.com/duanlikang)
+- Tenon React 二期 [@duanlikang](https://github.com/duanlikang)
   - [x] 支持动画
   - [x] 事件模块重构
   - [x] 样式模块优化
