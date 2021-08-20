@@ -95,7 +95,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 设计和编写测试用例
     - [ ] 搜集和梳理两端不一致问题
     - [ ] 逐一解决两端不一致问题
-    - [ ] iOS 端完成部分组件自渲染
+    - [ ] iOS 端完成部分组件自渲染 [@ChasonTang](https://github.com/ChasonTang)
 - DevTools
     - [x] iOS 对齐 Android 端【开发工具】按钮功能，可以显示日志、异常堆栈和页面基本信息 [@宏宇](https://github.com/ringlong)
     - [ ] iOS 对齐 Android 端【刷新】按钮功能
@@ -138,8 +138,8 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 - Hummer 基础组件建设
   - [ ] 单选框（Radio）
   - [ ] 复选框（Checkbox）
-  - [ ] 普通进度条（Progress）
-  - [ ] 滑动进度条（Slider）
+  - [ ] 普通进度条（Progress）[@jueying-key](https://github.com/jueying-xiangfeng) [@WorriesL](https://github.com/WorriesL)
+  - [ ] 滑动进度条（Slider）[@jueying-key](https://github.com/jueying-xiangfeng) [@WorriesL](https://github.com/WorriesL)
   - [ ] 日期/时间选择器（DatePicker）
   - [ ] 图片选择器（ImagePicker）
   - [ ] 图片预览（ImageViewer）
