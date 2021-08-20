@@ -149,8 +149,17 @@ public class Input extends HMBase<EditText> {
                 || actionId == EditorInfo.IME_ACTION_SEND
                 || actionId == EditorInfo.IME_ACTION_NEXT
                 || actionId == EditorInfo.IME_ACTION_DONE) {
-            handled = true;
-
+            switch (actionId) {
+                case EditorInfo.IME_ACTION_NEXT:
+                    handled = false;
+                    break;
+                case EditorInfo.IME_ACTION_DONE:
+                    setFocused(false);
+                    break;
+                default:
+                    handled = true;
+                    break;
+            }
             InputEvent inputEvent = new InputEvent();
             inputEvent.setType(InputEvent.HM_EVENT_TYPE_INPUT);
             inputEvent.setText(getView().getText().toString());
