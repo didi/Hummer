@@ -28,7 +28,7 @@ Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_destroyJSContextNativ
     if (context != nullptr) {
         JSRuntime *rt = JS_GetRuntime(context);
         JS_FreeContext(context);
-        JS_RunGC(rt);
+        JS_FreeRuntime(rt);
     }
 }
 
