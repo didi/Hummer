@@ -13,10 +13,11 @@ if (project.COMPILE_JS_ENGINE == 'All') {
     // 由于每个字gradle中只会设置一个cmake路径，所以这里需要设置一个总的cmake路径
     android {
         externalNativeBuild {
-        cmake {
-            path "src/main/jni/CMakeLists.txt"
+            cmake {
+                path "src/main/jni/CMakeLists.txt"
+            }
         }
-    }}
+    }
 } else if (project.COMPILE_JS_ENGINE == 'JSC') {
     apply from: 'fetch_jsc_libs.gradle'
     apply from: 'build_jsc.gradle'
