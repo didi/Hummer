@@ -116,5 +116,11 @@ export function setMemoryByKey(key:string, content: string){
 
 export function getMemoryByKey(key:string){
   let data = Memory.get(key);
+  if (data) {
+    // 兼容新老版本store 避免页面报错
+    if (!data.startsWith('Memory_')) {
+      return data
+    }
+  }
   return data && data.slice(7);
 }
