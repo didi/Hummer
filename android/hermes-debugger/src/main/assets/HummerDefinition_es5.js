@@ -160,6 +160,12 @@ var clearInterval = timer => {
   }
 };
 
+var setImmediate = (func) => {
+    var timer = new Timer();
+    timer.setTimeout(func, 0);
+    return timer;
+};
+
 var NotifyCenter = {
   addEventListener: (event, callback) => {
     invoke("NotifyCenter", 0, "addEventListener", event, callback);
