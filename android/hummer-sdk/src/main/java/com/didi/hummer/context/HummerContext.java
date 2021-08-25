@@ -191,6 +191,7 @@ public class HummerContext extends ContextWrapper {
         stop();
         pause();
         destroy();
+        NotifyCenter.release(getContext());
         NotifyCenter.release(mJsContext);
     }
 
