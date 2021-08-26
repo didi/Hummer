@@ -25,6 +25,8 @@ import com.didi.hummer.utils.blankj.Utils;
 import com.facebook.soloader.SoLoader;
 import com.getkeepsafe.relinker.ReLinker;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +35,8 @@ import java.util.Map;
  */
 public class HummerSDK {
 
-    @IntDef
+    @IntDef({JsEngine.JSC, JsEngine.QUICK_JS, JsEngine.V8, JsEngine.HERMES, JsEngine.NAPI_QJS, JsEngine.NAPI_HERMES})
+    @Retention(RetentionPolicy.SOURCE)
     public @interface JsEngine {
         int JSC         = 1;
         int QUICK_JS    = 2;
@@ -50,7 +53,7 @@ public class HummerSDK {
 
     public static Context appContext;
 
-    private static @HummerSDK.JsEngine int jsEngine = JsEngine.QUICK_JS;
+    private static @JsEngine int jsEngine = JsEngine.QUICK_JS;
 
     private static volatile boolean isInited;
 
