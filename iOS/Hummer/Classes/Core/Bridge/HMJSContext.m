@@ -6,7 +6,9 @@
 //
 
 #import <objc/runtime.h>
+#if __has_include(<Hummer/HMJSExecutor.h>)
 #import <Hummer/HMJSExecutor.h>
+#endif
 #import "HMJSCExecutor.h"
 #import "HMJSContext.h"
 #import "HMExportClass.h"
@@ -185,9 +187,11 @@ NS_ASSUME_NONNULL_END
     // context 和 WebSocket 对应
     if (!self.url && fileName.length > 0) {
         self.url = [NSURL URLWithString:fileName];
+#if __has_include(<Hummer/HMJSExecutor.h>)
         if ([self.context isKindOfClass:HMJSExecutor.class]) {
             [((HMJSExecutor *)self.context) enableDebuggerWithTitle:fileName];
         }
+#endif
     }
     
 #ifdef HMDEBUG
