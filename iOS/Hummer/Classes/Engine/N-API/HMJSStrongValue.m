@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_END
         if (executor) {
             if (napi_delete_reference(executor.env, ref) != NAPIExceptionOK) {
                 NAPIClearLastException(executor.env);
-                NSAssert(NO, @"napi_delete_reference error");
             }
         }
     });

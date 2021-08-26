@@ -800,6 +800,7 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         NSAssert(NO, CREATE_EXTERNAL_ERROR);
         goto exit;
     }
+    CFRetain((__bridge CFTypeRef)object);
     // 第一个参数是 private 对象，第二个参数是导出对象 JS 类名
     NAPIValue args[] = {
             externalValue,
@@ -856,6 +857,7 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         NSAssert(NO, CREATE_EXTERNAL_ERROR);
         goto exit;
     }
+    CFRetain((__bridge CFTypeRef)function);
     if ([self popExceptionWithStatus:napi_call_function(self.env, nil, createFunctionFunction, 1, &externalValue, &returnValueRef)]) {
         NSAssert(NO, CALL_FUNCTION_ERROR);
         goto exit;
@@ -1108,8 +1110,7 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return nil;
     }
     // 是原先原生转成的 JS 闭包
-    CHECK_COMMON(napi_get_value_external(self.env, externalValue, &externalPointer))
-    if ([(__bridge id) externalPointer isKindOfClass:NSClassFromString(@"NSBlock")]) {
+    if (napi_get_value_external(self.env, externalValue, &externalPointer) == NAPIErrorOK && [(__bridge id) externalPointer isKindOfClass:NSClassFromString(@"NSBlock")]) {
         // 本次 JS 闭包是原生返回，复用原先的闭包
         CHECK_COMMON(napi_close_handle_scope(self.env, handleScope))
 

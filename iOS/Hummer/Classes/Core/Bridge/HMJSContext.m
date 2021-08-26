@@ -110,8 +110,11 @@ NS_ASSUME_NONNULL_END
     NSAssert(dataAsset, @"builtin dataset 无法在 xcassets 中搜索到");
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
     
-//    _context = [[HMJSExecutor alloc] init];
+#if __has_include(<Hummer/HMJSExecutor.h>)
+    _context = [[HMJSExecutor alloc] init];
+#else
     _context = [[HMJSCExecutor alloc] init];
+#endif
     [[HMJSGlobal globalObject] weakReference:self];
     __weak typeof(self) weakSelf = self;
     _context.exceptionHandler = ^(HMExceptionModel *exception) {
