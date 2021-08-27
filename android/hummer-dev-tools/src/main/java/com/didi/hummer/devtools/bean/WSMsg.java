@@ -1,4 +1,4 @@
-package com.didi.hummer.devtools.ws;
+package com.didi.hummer.devtools.bean;
 
 import java.io.Serializable;
 

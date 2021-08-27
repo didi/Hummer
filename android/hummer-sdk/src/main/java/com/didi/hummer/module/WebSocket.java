@@ -1,11 +1,20 @@
 package com.didi.hummer.module;
 
-import com.didi.hummer.adapter.HummerAdapter;
-import com.didi.hummer.adapter.websocket.OnWebSocketEventListener;
+import android.text.TextUtils;
+
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
-import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.core.engine.JSCallback;
+import com.didi.hummer.lifecycle.ILifeCycle;
+import com.didi.hummer.utils.UIThreadUtil;
+
+import java.io.EOFException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocketListener;
 
 /**
  * WebSocket组件
@@ -13,73 +22,191 @@ import com.didi.hummer.core.engine.JSCallback;
  * Created by XiaoFeng on 2020-01-09.
  */
 @Component("WebSocket")
-public class WebSocket {
+public class WebSocket implements ILifeCycle {
 
-    private static JSCallback onOpenCallback;
-    private static JSCallback onCloseCallback;
-    private static JSCallback onErrorCallback;
-    private static JSCallback onMessageCallback;
+    public enum CloseCodes {
+        CLOSE_NORMAL(1000),
+        CLOSE_GOING_AWAY(1001),
+        CLOSE_PROTOCOL_ERROR(1002),
+        CLOSE_UNSUPPORTED(1003),
+        CLOSE_NO_STATUS(1005),
+        CLOSE_ABNORMAL(1006),
+        UNSUPPORTED_DATA(1007),
+        POLICY_VIOLATION(1008),
+        CLOSE_TOO_LARGE(1009),
+        MISSING_EXTENSION(1010),
+        INTERNAL_ERROR(1011),
+        SERVICE_RESTART(1012),
+        TRY_AGAIN_LATER(1013),
+        TLS_HANDSHAKE(1015);
 
-    @JsMethod("connect")
-    public static void connect(HummerContext context, String url) {
-        HummerAdapter.getWebSocketAdapter(context.getNamespace()).connect(url, new OnWebSocketEventListener() {
+        private int code;
+
+        CloseCodes(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+    }
+
+    private static OkHttpClient client;
+    private okhttp3.WebSocket webSocket;
+
+    public WebSocket(String url) {
+        if (client == null) {
+            client = new OkHttpClient();
+        }
+        connect(url);
+    }
+
+    @Override
+    public void onCreate() {}
+
+    @Override
+    public void onDestroy() {
+        close(CloseCodes.CLOSE_GOING_AWAY.getCode(), CloseCodes.CLOSE_GOING_AWAY.name());
+        if (onopen != null) {
+            onopen.release();
+            onopen = null;
+        }
+        if (onmessage != null) {
+            onmessage.release();
+            onmessage = null;
+        }
+        if (onclose != null) {
+            onclose.release();
+            onclose = null;
+        }
+        if (onerror != null) {
+            onerror.release();
+            onerror = null;
+        }
+    }
+
+    private void connect(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+
+        this.url = url;
+
+        okhttp3.Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newWebSocket(request, new WebSocketListener() {
             @Override
-            public void onOpen() {
-                if (onOpenCallback != null) {
-                    onOpenCallback.call();
-                }
+            public void onOpen(okhttp3.WebSocket webSocket, Response response) {
+                WebSocket.this.webSocket = webSocket;
+                UIThreadUtil.runOnUiThread(() -> {
+                    if (onopen != null) {
+                        onopen.call();
+                    }
+                });
             }
 
             @Override
-            public void onClose(int code, String reason) {
-                if (onCloseCallback != null) {
-                    onCloseCallback.call(code, reason);
-                }
+            public void onClosed(okhttp3.WebSocket webSocket, int code, String reason) {
+                UIThreadUtil.runOnUiThread(() -> {
+                    if (onclose != null) {
+                        onclose.call(code, reason);
+                    }
+                });
             }
 
             @Override
-            public void onError(String errMsg) {
-                if (onErrorCallback != null) {
-                    onErrorCallback.call(errMsg);
-                }
+            public void onFailure(okhttp3.WebSocket webSocket, Throwable t, Response response) {
+                t.printStackTrace();
+                UIThreadUtil.runOnUiThread(() -> {
+                    if (t instanceof EOFException) {
+                        if (onclose != null) {
+                            onclose.call(CloseCodes.CLOSE_NORMAL.getCode(), CloseCodes.CLOSE_NORMAL.name());
+                        }
+                    } else {
+                        if (onerror != null) {
+                            onerror.call(t.getMessage());
+                        }
+                    }
+                });
             }
 
             @Override
-            public void onMessage(String data) {
-                if (onMessageCallback != null) {
-                    onMessageCallback.call(data);
-                }
+            public void onMessage(okhttp3.WebSocket webSocket, String text) {
+                UIThreadUtil.runOnUiThread(() -> {
+                    if (onmessage != null) {
+                        onmessage.call(text);
+                    }
+                });
             }
         });
     }
 
     @JsMethod("close")
-    public static void close(HummerContext context, int code, String reason) {
-        HummerAdapter.getWebSocketAdapter(context.getNamespace()).close(code, reason);
+    public void close(int code, String reason) {
+        if (webSocket != null) {
+            webSocket.close(code, reason);
+        }
     }
 
     @JsMethod("send")
-    public static void send(HummerContext context, String data) {
-        HummerAdapter.getWebSocketAdapter(context.getNamespace()).send(data);
+    public void send(String text) {
+        if (webSocket != null) {
+            webSocket.send(text);
+        }
     }
 
-    @JsMethod("onOpen")
-    public static void onOpen(JSCallback callback) {
-        onOpenCallback = callback;
+    @JsMethod("addEventListener")
+    public void addEventListener(String eventName, JSCallback callback) {
+        switch (eventName) {
+            case "open":
+                onopen = callback;
+                break;
+            case "message":
+                onmessage = callback;
+                break;
+            case "close":
+                onclose = callback;
+                break;
+            case "error":
+                onerror = callback;
+                break;
+            default:
+                break;
+        }
     }
 
-    @JsMethod("onClose")
-    public static void onClose(JSCallback callback) {
-        onCloseCallback = callback;
+    @JsProperty("url")
+    public String url;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    public String getUrl() {
+        return url;
     }
 
-    @JsMethod("onError")
-    public static void onError(JSCallback callback) {
-        onErrorCallback = callback;
+    @JsProperty("onopen")
+    private JSCallback onopen;
+    public void setOnopen(JSCallback callback) {
+        onopen = callback;
     }
 
-    @JsMethod("onMessage")
-    public static void onMessage(JSCallback callback) {
-        onMessageCallback = callback;
+    @JsProperty("onmessage")
+    private JSCallback onmessage;
+    public void setOnmessage(JSCallback callback) {
+        onmessage = callback;
+    }
+
+    @JsProperty("onclose")
+    private JSCallback onclose;
+    public void setOnclose(JSCallback callback) {
+        onclose = callback;
+    }
+
+    @JsProperty("onerror")
+    private JSCallback onerror;
+    public void setOnerror(JSCallback callback) {
+        onerror = callback;
     }
 }

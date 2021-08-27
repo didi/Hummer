@@ -3,7 +3,7 @@ package com.didi.hummer.devtools.manager;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.devtools.bean.LogBean;
 import com.didi.hummer.devtools.ws.WebSocketManager;
-import com.didi.hummer.devtools.ws.WSMsg;
+import com.didi.hummer.devtools.bean.WSMsg;
 
 import java.util.ArrayList;
 import java.util.List;
