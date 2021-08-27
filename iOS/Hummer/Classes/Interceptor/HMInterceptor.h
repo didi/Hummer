@@ -39,7 +39,6 @@ typedef NS_ENUM(NSUInteger, HMInterceptorType) {
 @interface HMInterceptor : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
 
 + (nullable NSArray *)interceptors;
 

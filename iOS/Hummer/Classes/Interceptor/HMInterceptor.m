@@ -14,6 +14,12 @@
 @property (nonatomic, strong) NSMutableDictionary *interceptorMap;
 @property (nonatomic, copy) NSDictionary *protocolMap;
 
+NS_ASSUME_NONNULL_BEGIN
+
+- (void)loadExportInterceptor;
+
+NS_ASSUME_NONNULL_END
+
 @end
 
 @implementation HMInterceptor
@@ -34,7 +40,7 @@
         };
         self.interceptorMap = [self _initializeInterceptorMapWithType:_protocolMap.allKeys];
         
-        [self _loadExportInterceptor];
+        [self loadExportInterceptor];
     }
     return self;
 }
@@ -58,7 +64,7 @@ static HMInterceptor *__interceptors;
     return __interceptors;
 }
 
-- (void)_loadExportInterceptor {
+- (void)loadExportInterceptor {
     Dl_info info;
     dladdr(&__interceptors, &info);
         
