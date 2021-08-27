@@ -3,7 +3,9 @@ package com.didi.hummer.context;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.jsc.JSCHummerContext;
+import com.didi.hummer.context.napi.NAPIHummerContext;
 import com.didi.hummer.render.style.HummerLayout;
 
 /**
@@ -31,14 +33,16 @@ public class HummerContextFactory {
     }
 
     public static HummerContext createContext(@NonNull Context context) {
-        try {
-            if (contextCreator != null) {
-                return contextCreator.create(context);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (contextCreator != null) {
+            return contextCreator.create(context);
         }
-        return new JSCHummerContext(context);
+
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            return new NAPIHummerContext(context);
+        } else {
+            return new JSCHummerContext(context);
+        }
     }
 
     public static HummerContext createContext(@NonNull HummerLayout container) {
@@ -46,13 +50,15 @@ public class HummerContextFactory {
     }
 
     public static HummerContext createContext(@NonNull HummerLayout container, String namespace) {
-        try {
-            if (contextCreator != null) {
-                return contextCreator.create(container, namespace);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (contextCreator != null) {
+            return contextCreator.create(container, namespace);
         }
-        return new JSCHummerContext(container, namespace);
+
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            return new NAPIHummerContext(container, namespace);
+        } else {
+            return new JSCHummerContext(container, namespace);
+        }
     }
 }

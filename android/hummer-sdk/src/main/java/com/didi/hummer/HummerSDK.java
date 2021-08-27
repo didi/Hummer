@@ -90,17 +90,6 @@ public class HummerSDK {
 
             if (jsEngine == JsEngine.NAPI_QJS || jsEngine == JsEngine.NAPI_HERMES) {
                 JSException.init();
-                HummerContextFactory.setHummerContextCreator(new HummerContextFactory.IHummerContextCreator() {
-                    @Override
-                    public HummerContext create(@NonNull Context context) {
-                        return new NAPIHummerContext(context);
-                    }
-
-                    @Override
-                    public HummerContext create(@NonNull HummerLayout container, String namespace) {
-                        return new NAPIHummerContext(container, namespace);
-                    }
-                });
             } else {
                 HummerException.init();
             }
