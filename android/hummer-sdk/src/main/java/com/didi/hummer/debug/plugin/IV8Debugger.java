@@ -1,4 +1,4 @@
-package com.didi.hummer.plugin.interfaze;
+package com.didi.hummer.debug.plugin;
 
 /**
  * Created by XiaoFeng on 2019-11-07.

@@ -5,8 +5,8 @@ import android.content.Context;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.context.HummerContextFactory;
 import com.didi.hummer.core.util.HMLog;
-import com.didi.hummer.plugin.interfaze.IHermesDebugger;
-import com.didi.hummer.plugin.interfaze.IV8Debugger;
+import com.didi.hummer.debug.plugin.IHermesDebugger;
+import com.didi.hummer.debug.plugin.IV8Debugger;
 import com.didi.hummer.register.HummerRegister$$hummer_component;
 import com.didi.hummer.render.style.HummerLayout;
 

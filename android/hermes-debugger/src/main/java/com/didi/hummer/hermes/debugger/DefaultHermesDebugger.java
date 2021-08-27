@@ -1,8 +1,8 @@
 package com.didi.hummer.hermes.debugger;
 
+import com.didi.hummer.debug.plugin.IHermesDebugger;
 import com.didi.hummer.hermes.inspector.Inspector;
 import com.didi.hummer.hermes.inspector.InspectorPackagerConnection;
-import com.didi.hummer.plugin.interfaze.IHermesDebugger;
 
 /**
  * Created by XiaoFeng on 2020/9/4.
