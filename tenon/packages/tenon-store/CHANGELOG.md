@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0 (2021-08-24)
+
+
+### Features
+
+* 兼容新老版本store,避免页面报错 ([ab99934](https://github.com.cnpmjs.org/didi/Hummer/commit/ab9993442ff6a5007369e2ef2cd00e0039fe9386))
+* init tenon project ([6d3f979](https://github.com.cnpmjs.org/didi/Hummer/commit/6d3f97983f4174dc1591e67cc1183862785d1ccc))
+* Tenon Store 增加业务线隔离的逻辑 ([#84](https://github.com.cnpmjs.org/didi/Hummer/issues/84)) ([536ecbe](https://github.com.cnpmjs.org/didi/Hummer/commit/536ecbe2968b24caba07c5217a754444bc8dd49f))
+
+
+
+
+
 ## [1.2.7](https://github.com/didi/Hummer/compare/tenon_1.2.2...tenon_1.2.7) (2021-05-20)
 
 **Note:** Version bump only for package @hummer/tenon-store
