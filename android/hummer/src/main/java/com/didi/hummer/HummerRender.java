@@ -6,8 +6,11 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.navigator.NavPage;
+import com.didi.hummer.adapter.performance.IPerformanceAdapter;
+import com.didi.hummer.adapter.performance.PerfInfo;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
 import com.didi.hummer.core.engine.JSValue;
@@ -41,6 +44,9 @@ public class HummerRender {
     private AtomicBoolean isDestroyed = new AtomicBoolean(false);
     private HummerRenderCallback renderCallback;
     private HummerDevTools devTools;
+    private IPerformanceAdapter perfTracker;
+    private PerfInfo perfInfo = new PerfInfo();;
+    private long startTime;
 
     public interface HummerRenderCallback {
         void onSucceed(HummerContext hmContext, JSValue jsPage);
@@ -56,12 +62,17 @@ public class HummerRender {
     }
 
     public HummerRender(@NonNull HummerLayout container, String namespace, DevToolsConfig config) {
+        startTime = System.currentTimeMillis();
         hmContext = Hummer.createContext(container, namespace);
         EventTracer.traceEvent(namespace, EventTracer.EventName.CONTEXT_CREATE);
 
         if (DebugUtil.isDebuggable()) {
             devTools = new HummerDevTools(hmContext, config);
         }
+
+        perfTracker = HummerAdapter.getPerformanceAdapter(hmContext.getNamespace());
+        perfInfo.ctxInitTimeCost = System.currentTimeMillis() - startTime;
+        perfInfo.sdkVersion = BuildConfig.VERSION_NAME;
     }
 
     public HummerContext getHummerContext() {
@@ -117,20 +128,31 @@ public class HummerRender {
         hmContext.evaluateJavaScript(js, sourcePath);
         EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.JS_EVAL_FINISH);
 
+        float jsSize = js.length() / 1024f;
+        long timeCost = System.currentTimeMillis() - startTime;
+        perfInfo.jsBundleSize = jsSize;
+        perfInfo.jsEvalTimeCost = timeCost;
+
         Map<String, Object> params = new HashMap<>();
+        params.put(EventTracer.PARAM_KEY.IS_RENDER_SUCCESS, getHummerContext().getJsPage() != null);
         params.put(EventTracer.PARAM_KEY.SDK_VERSION, BuildConfig.VERSION_NAME);
         params.put(EventTracer.PARAM_KEY.PAGE_URL, sourcePath);
-        params.put(EventTracer.PARAM_KEY.RENDER_TIME_COST, (System.currentTimeMillis() - startTime));
-        params.put(EventTracer.PARAM_KEY.JS_SIZE, js.length() / 1024);
+        params.put(EventTracer.PARAM_KEY.RENDER_TIME_COST, timeCost);
+        params.put(EventTracer.PARAM_KEY.JS_SIZE, jsSize);
 
         if (renderCallback != null) {
             if (getHummerContext().getJsPage() != null) {
                 renderCallback.onSucceed(getHummerContext(), getHummerContext().getJsPage());
-                EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.RENDER_SUCCEED, params);
+                EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.RENDER_FINISH, params);
             } else {
                 renderCallback.onFailed(new RuntimeException("Page is empty!"));
-                EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.RENDER_FAILED, params);
+                EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.RENDER_FINISH, params);
             }
+        }
+
+        perfInfo.pageRenderTimeCost = System.currentTimeMillis() - this.startTime;
+        if (perfTracker != null) {
+            perfTracker.trackPerfInfo(perfInfo);
         }
     }
 
@@ -156,6 +178,7 @@ public class HummerRender {
     }
 
     private void requestJsBundle(String url, boolean isRefresh) {
+        long startTime = System.currentTimeMillis();
         NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
             if (isDestroyed.get()) {
                 if (renderCallback != null) {
@@ -178,6 +201,7 @@ public class HummerRender {
                 return;
             }
 
+            perfInfo.jsFetchTimeCost = (System.currentTimeMillis() - startTime);
             render(response.data, url);
 
             if (DebugUtil.isDebuggable() && isRefresh) {
@@ -276,6 +300,8 @@ public class HummerRender {
         }
         hmContext.getJsContext().getJSValue("Hummer").set("pageInfo", page);
         hmContext.setJsSourcePath(page.url);
+
+        perfInfo.pageUrl = page.url;
     }
 
     /**

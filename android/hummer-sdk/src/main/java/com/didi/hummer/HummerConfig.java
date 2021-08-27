@@ -6,6 +6,7 @@ import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
 import com.didi.hummer.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
+import com.didi.hummer.adapter.performance.IPerformanceAdapter;
 import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.scriptloader.impl.DefaultScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
@@ -69,6 +70,10 @@ public class HummerConfig {
      * 脚本加载适配器
      */
     private IScriptLoaderAdapter scriptLoaderAdapter;
+    /**
+     * 性能统计适配器
+     */
+    private IPerformanceAdapter performanceAdapter;
 
     private HummerConfig(Builder builder) {
         this.namespace = builder.namespace;
@@ -83,6 +88,7 @@ public class HummerConfig {
         this.storageAdapter = builder.storageAdapter;
         this.navAdapter = builder.navAdapter;
         this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
+        this.performanceAdapter = builder.performanceAdapter;
     }
 
     public String getNamespace() {
@@ -161,6 +167,10 @@ public class HummerConfig {
         return scriptLoaderAdapter;
     }
 
+    public IPerformanceAdapter getPerformanceAdapter() {
+        return performanceAdapter;
+    }
+
     public static class Builder {
         private String namespace = HummerSDK.NAMESPACE_DEFAULT;
         private JSLogger.Logger jsLogger;
@@ -174,6 +184,7 @@ public class HummerConfig {
         private IStorageAdapter storageAdapter;
         private INavigatorAdapter navAdapter;
         private IScriptLoaderAdapter scriptLoaderAdapter;
+        private IPerformanceAdapter performanceAdapter;
 
         public Builder setNamespace(String namespace) {
             this.namespace = namespace;
@@ -232,6 +243,11 @@ public class HummerConfig {
 
         public Builder setScriptLoaderAdapter(IScriptLoaderAdapter adapter) {
             scriptLoaderAdapter = adapter;
+            return this;
+        }
+
+        public Builder setPerformanceAdapter(IPerformanceAdapter adapter) {
+            performanceAdapter = adapter;
             return this;
         }
 
