@@ -374,7 +374,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
 
         getView().post(() -> {
             Rect rect = new Rect();
-            Float[] floats = ScreenUtils.getViewLocationOnScreen(getView(), context);
+            int[] floats = ScreenUtils.getViewLocationOnScreen(getView());
             getView().getHitRect(rect);
             Map<String, Object> values = new HashMap<>();
             values.put("width", DPUtil.px2dpF(context, getView().getWidth()));
@@ -383,10 +383,10 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
             values.put("right", DPUtil.px2dpF(context, rect.right));
             values.put("top", DPUtil.px2dpF(context, rect.top));
             values.put("bottom", DPUtil.px2dpF(context, rect.bottom));
-            values.put("windowLeft", floats[0]);
-            values.put("windowRight", floats[0] + DPUtil.px2dpF(context, getView().getWidth()));
+            values.put("windowLeft", DPUtil.px2dpF(context, floats[0]));
+            values.put("windowRight", DPUtil.px2dpF(context, floats[0] + getView().getWidth()));
             values.put("windowTop", DPUtil.px2dpF(context, floats[1]));
-            values.put("windowBottom", floats[1] + DPUtil.px2dpF(context, getView().getHeight()));
+            values.put("windowBottom", DPUtil.px2dpF(context, floats[1] + getView().getHeight()));
             callback.call(values);
         });
     }
