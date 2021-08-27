@@ -96,12 +96,9 @@ public class ScreenUtils {
      *
      * @return the view or viewGroup in screen
      */
-    public static Float[] getViewLocationOnScreen(View v, Context context) {
-        Float[] loc = new Float[2];
+    public static int[] getViewLocationOnScreen(View v) {
         int[] location = new int[2];
         v.getLocationInWindow(location);
-        loc[0] = DPUtil.px2dpF(context, location[0]);
-        loc[1] = DPUtil.px2dpF(context, location[1]);
-        return loc;
+        return location;
     }
 }
