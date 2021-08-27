@@ -35,13 +35,9 @@ public class EventTracer {
          */
         public static final String JS_EVAL_FINISH = "tech_hummer_js_eval_finish";
         /**
-         * RootView 页面渲染成功
+         * RootView 页面渲染结束
          */
-        public static final String RENDER_SUCCEED = "tech_hummer_render_succeed";
-        /**
-         * RootView 页面渲染失败
-         */
-        public static final String RENDER_FAILED = "tech_hummer_render_failed";
+        public static final String RENDER_FINISH = "tech_hummer_render_finish";
 
         /**
          * 通用EventName（保留之前老逻辑）
@@ -50,6 +46,10 @@ public class EventTracer {
     }
 
     public static class PARAM_KEY {
+        /**
+         * 页面渲染是否成功
+         */
+        public static final String IS_RENDER_SUCCESS = "is_render_success";
         /**
          * SDK版本号
          */
