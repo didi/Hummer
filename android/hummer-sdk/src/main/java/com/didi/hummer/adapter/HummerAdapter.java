@@ -7,7 +7,6 @@ import com.didi.hummer.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer.adapter.performance.IPerformanceAdapter;
 import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
-import com.didi.hummer.adapter.websocket.IWebSocketAdapter;
 
 /**
  * 全局适配器调度类
@@ -22,14 +21,6 @@ public class HummerAdapter {
 
     public static IHttpAdapter getHttpAdapter(String namespace) {
         return HummerSDK.getHummerConfig(namespace).getHttpAdapter();
-    }
-
-    public static IWebSocketAdapter getWebSocketAdapter() {
-        return getWebSocketAdapter(null);
-    }
-
-    public static IWebSocketAdapter getWebSocketAdapter(String namespace) {
-        return HummerSDK.getHummerConfig(namespace).getWebSocketAdapter();
     }
 
     public static IImageLoaderAdapter getImageLoaderAdapter() {

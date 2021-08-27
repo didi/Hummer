@@ -11,8 +11,6 @@ import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.scriptloader.impl.DefaultScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
 import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
-import com.didi.hummer.adapter.websocket.IWebSocketAdapter;
-import com.didi.hummer.adapter.websocket.impl.DefaultWebSocketAdapter;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
@@ -51,10 +49,6 @@ public class HummerConfig {
      */
     private IHttpAdapter httpAdapter;
     /**
-     * WebSocket适配器
-     */
-    private IWebSocketAdapter webSocketAdapter;
-    /**
      * 图片加载适配器
      */
     private IImageLoaderAdapter imageLoaderAdapter;
@@ -83,7 +77,6 @@ public class HummerConfig {
         this.isSupportRTL = builder.isSupportRTL;
         this.fontsAssetsPath = builder.fontsAssetsPath;
         this.httpAdapter = builder.httpAdapter;
-        this.webSocketAdapter = builder.webSocketAdapter;
         this.imageLoaderAdapter = builder.imageLoaderAdapter;
         this.storageAdapter = builder.storageAdapter;
         this.navAdapter = builder.navAdapter;
@@ -131,13 +124,6 @@ public class HummerConfig {
         return httpAdapter;
     }
 
-    public IWebSocketAdapter getWebSocketAdapter() {
-        if (webSocketAdapter == null) {
-            webSocketAdapter = new DefaultWebSocketAdapter();
-        }
-        return webSocketAdapter;
-    }
-
     public IImageLoaderAdapter getImageLoaderAdapter() {
         if (imageLoaderAdapter == null) {
             imageLoaderAdapter = new DefaultImageLoaderAdapter();
@@ -179,7 +165,6 @@ public class HummerConfig {
         private boolean isSupportRTL;
         private String fontsAssetsPath;
         private IHttpAdapter httpAdapter;
-        private IWebSocketAdapter webSocketAdapter;
         private IImageLoaderAdapter imageLoaderAdapter;
         private IStorageAdapter storageAdapter;
         private INavigatorAdapter navAdapter;
@@ -218,11 +203,6 @@ public class HummerConfig {
 
         public Builder setHttpAdapter(IHttpAdapter adapter) {
             httpAdapter = adapter;
-            return this;
-        }
-
-        public Builder setWebSocketAdapter(IWebSocketAdapter adapter) {
-            webSocketAdapter = adapter;
             return this;
         }
 

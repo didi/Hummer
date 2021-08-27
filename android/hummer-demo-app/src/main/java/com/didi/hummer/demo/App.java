@@ -10,7 +10,6 @@ import com.didi.hummer.adapter.http.impl.DefaultHttpAdapter;
 import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
-import com.didi.hummer.adapter.websocket.impl.DefaultWebSocketAdapter;
 
 /**
  * Created by XiaoFeng on 2019/3/25.
@@ -55,8 +54,6 @@ public class App extends Application {
                 .setImageLoaderAdapter(new DefaultImageLoaderAdapter())
                 // 自定义网络库
                 .setHttpAdapter(new DefaultHttpAdapter())
-                // 自定义长链接
-                .setWebSocketAdapter(new DefaultWebSocketAdapter())
                 // 自定义持久化存储
                 .setStorageAdapter(new DefaultStorageAdapter())
                 // 构造HummerConfig
