@@ -44,7 +44,9 @@ NS_ASSUME_NONNULL_END
     for (int i = 0; i < outCount; ++i) {
         SEL selector = method_getName(methods[i]);
         const char *charSelector = sel_getName(selector);
-        if (charSelector == NULL || charSelector[0] != '_') continue;
+        if (charSelector[0] != '_') {
+            continue;
+        }
         
         if (strstr(charSelector, "__hm_export_method_") == charSelector || strstr(charSelector, "__hm_export_property_") == charSelector) {
             BOOL isClass = (strstr(charSelector, "__hm_export_method_class_") == charSelector) || (strstr(charSelector, "__hm_export_property_class_") == charSelector);
