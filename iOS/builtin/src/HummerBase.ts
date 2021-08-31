@@ -7,7 +7,7 @@ export default class HummerBase extends Object {
         super()
         // 只有非导出组件才需要考虑缓存问题
         let className = this.constructor.name
-        if (!globalThis[this.constructor.name]) {
+        if (!globalThis[this.constructor.name] || globalThis[this.constructor.name] !== this.constructor) {
             className = this.constructor[exportedClassNameCache]
             // 1. 已缓存
             //   1. 已注入
@@ -28,12 +28,16 @@ export default class HummerBase extends Object {
                 let prototype = Object.getPrototypeOf(this)
                 // new HummerBase() 情况需要排除，不能进入循环
                 if (prototype !== HummerBase.prototype) {
+                    let isExportedClass = false
                     // 结束条件 1 找到导出组件
                     // 结束条件 2 prototype === HummerBase.prototype
                     do {
                         className = prototype.constructor.name
+                        if (globalThis[className] && prototype.constructor == globalThis[className]) {
+                            isExportedClass = true
+                        }
                         prototype = Object.getPrototypeOf(prototype)
-                    } while (!globalThis[className] && prototype !== HummerBase.prototype)
+                    } while (!isExportedClass && prototype !== HummerBase.prototype)
                 }
                 // 缓存
                 if (typeof className === 'string' && globalThis[className]) {
