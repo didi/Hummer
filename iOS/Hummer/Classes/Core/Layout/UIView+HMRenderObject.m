@@ -31,6 +31,10 @@ HMLayoutEngine hm_get_layout_engine() {
     return layoutEngine;
 }
 
+void HMChangeSizeThatFitsMode(HMSizeThatFitsMode newSizeThatFitsMode) {
+    sizeThatFitsMode = newSizeThatFitsMode;
+}
+
 void hm_change_layout_engine(HMLayoutEngine layoutEngine) {
     layoutEngine = layoutEngine;
 }
