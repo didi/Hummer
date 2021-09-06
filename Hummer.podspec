@@ -27,7 +27,7 @@ Hummer is a dynamic solution for client.
   s.author           = { 'ChasonTang' => 'tangjiacheng@didiglobal.com' }
   s.source           = { :git => 'https://github.com/didi/Hummer.git', :tag => s.version.to_s }
   s.prepare_command = <<-CMD
-    curl -o napi_ios_hermes.tar.gz -L https://github.com/OrangeLab/N-API/releases/download/2.0.3/napi_ios_hermes.tar.gz
+    curl -o napi_ios_hermes.tar.gz -L https://github.com/OrangeLab/N-API/releases/download/2.0.4/napi_ios_hermes.tar.gz
     tar zxf napi_ios_hermes.tar.gz
     rm -f napi_ios_hermes.tar.gz
   CMD
