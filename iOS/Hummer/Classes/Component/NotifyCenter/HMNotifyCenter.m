@@ -68,6 +68,7 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
         }
         eventHandlerDictionary[name] = callbackArray.copy;
     } else {
+        [eventHandlerDictionary removeObjectForKey:name];
         [[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:name
                                                       object:nil];
