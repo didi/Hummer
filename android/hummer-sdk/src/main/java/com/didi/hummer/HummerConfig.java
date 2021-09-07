@@ -6,7 +6,7 @@ import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
 import com.didi.hummer.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
-import com.didi.hummer.adapter.performance.IPerformanceAdapter;
+import com.didi.hummer.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.scriptloader.impl.DefaultScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
@@ -65,9 +65,9 @@ public class HummerConfig {
      */
     private IScriptLoaderAdapter scriptLoaderAdapter;
     /**
-     * 性能统计适配器
+     * 数据统计适配器
      */
-    private IPerformanceAdapter performanceAdapter;
+    private ITrackerAdapter trackerAdapter;
 
     private HummerConfig(Builder builder) {
         this.namespace = builder.namespace;
@@ -81,7 +81,7 @@ public class HummerConfig {
         this.storageAdapter = builder.storageAdapter;
         this.navAdapter = builder.navAdapter;
         this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
-        this.performanceAdapter = builder.performanceAdapter;
+        this.trackerAdapter = builder.trackerAdapter;
     }
 
     public String getNamespace() {
@@ -153,8 +153,8 @@ public class HummerConfig {
         return scriptLoaderAdapter;
     }
 
-    public IPerformanceAdapter getPerformanceAdapter() {
-        return performanceAdapter;
+    public ITrackerAdapter getTrackerAdapter() {
+        return trackerAdapter;
     }
 
     public static class Builder {
@@ -169,7 +169,7 @@ public class HummerConfig {
         private IStorageAdapter storageAdapter;
         private INavigatorAdapter navAdapter;
         private IScriptLoaderAdapter scriptLoaderAdapter;
-        private IPerformanceAdapter performanceAdapter;
+        private ITrackerAdapter trackerAdapter;
 
         public Builder setNamespace(String namespace) {
             this.namespace = namespace;
@@ -181,6 +181,7 @@ public class HummerConfig {
             return this;
         }
 
+        @Deprecated
         public Builder setEventTracer(EventTracer.Trace trace) {
             this.eventTracer = trace;
             return this;
@@ -226,8 +227,8 @@ public class HummerConfig {
             return this;
         }
 
-        public Builder setPerformanceAdapter(IPerformanceAdapter adapter) {
-            performanceAdapter = adapter;
+        public Builder setTrackerAdapter(ITrackerAdapter adapter) {
+            trackerAdapter = adapter;
             return this;
         }
 
