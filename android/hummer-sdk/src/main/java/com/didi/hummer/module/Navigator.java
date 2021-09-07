@@ -20,7 +20,8 @@ public class Navigator {
     public static void openPage(HummerContext context, NavPage page, JSCallback callback) {
         if (page != null) {
             // 如果是相对路径，转成绝对路径
-            page.url = JsSourceUtil.getRealResourcePath(page.url, context.getJsSourcePath());
+            page.url = JsSourceUtil.relativePath2AbsolutePath(page.url, context.getPageUrl());
+            page.sourcePath = JsSourceUtil.relativePath2AbsolutePath(page.url, context.getJsSourcePath());
         }
         HummerAdapter.getNavigatorAdapter(context.getNamespace()).openPage(context.getBaseContext(), page, data -> {
             if (callback != null) {

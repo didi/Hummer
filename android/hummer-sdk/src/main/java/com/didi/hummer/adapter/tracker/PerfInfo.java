@@ -1,14 +1,13 @@
-package com.didi.hummer.adapter.performance;
+package com.didi.hummer.adapter.tracker;
+
+import java.io.Serializable;
 
 /**
- * 页面相关性能信息
+ * 页面性能相关信息
  *
  * Created by XiaoFeng on 2021/8/27.
  */
-public class PerfInfo {
-
-    public String sdkVersion;
-    public String pageUrl;
+public class PerfInfo implements Serializable {
 
     /**
      * 容器初始化耗时

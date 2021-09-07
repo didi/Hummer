@@ -77,8 +77,22 @@ public class HummerContext extends ContextWrapper {
 
     /**
      * js文件源路径
+     *
+     * 有以下几种路径类型：
+     * 网络URL：http(s)://x.x.x.x/home/index.js
+     * Assets文件：assets:///xxx/index.js
+     * 本地文件：file:///data/data/xxx/files/xxx/index.js
      */
     protected String jsSourcePath = "";
+
+    /**
+     * 页面URL（即页面跳转时的URL，相对URL会被转成真实URL）
+     *
+     * 有以下两种URL类型：
+     * 网络URL：http(s)://x.x.x.x/home/index.js
+     * Hummer URL：hummer://home/index.js
+     */
+    protected String pageUrl = "";
 
     /**
      * 加入生命周期的各种判断，是为了适应网络加载情况下的异步执行JS
@@ -251,6 +265,14 @@ public class HummerContext extends ContextWrapper {
 
     public void setJsSourcePath(String jsSourcePath) {
         this.jsSourcePath = jsSourcePath;
+    }
+
+    public String getPageUrl() {
+        return pageUrl;
+    }
+
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
     }
 
     private void create() {

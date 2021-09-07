@@ -9,18 +9,18 @@ import android.widget.Toast;
 import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.navigator.NavPage;
-import com.didi.hummer.adapter.performance.IPerformanceAdapter;
-import com.didi.hummer.adapter.performance.PerfInfo;
+import com.didi.hummer.adapter.tracker.ITrackerAdapter;
+import com.didi.hummer.adapter.tracker.PerfInfo;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
+import com.didi.hummer.core.engine.napi.jni.JSException;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.devtools.DevToolsConfig;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.render.style.HummerLayout;
-import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.FileUtil;
 import com.didi.hummer.utils.JsSourceUtil;
@@ -44,8 +44,8 @@ public class HummerRender {
     private AtomicBoolean isDestroyed = new AtomicBoolean(false);
     private HummerRenderCallback renderCallback;
     private HummerDevTools devTools;
-    private IPerformanceAdapter perfTracker;
-    private PerfInfo perfInfo = new PerfInfo();;
+    private ITrackerAdapter trackerAdapter;
+    private PerfInfo perfInfo = new PerfInfo();
     private long startTime;
 
     public interface HummerRenderCallback {
@@ -64,15 +64,22 @@ public class HummerRender {
     public HummerRender(@NonNull HummerLayout container, String namespace, DevToolsConfig config) {
         startTime = System.currentTimeMillis();
         hmContext = Hummer.createContext(container, namespace);
-        EventTracer.traceEvent(namespace, EventTracer.EventName.CONTEXT_CREATE);
+
+        JSException.addJSContextExceptionCallback(hmContext.getJsContext(), e -> {
+            if (trackerAdapter != null) {
+                trackerAdapter.trackException(hmContext.getPageUrl(), e);
+            }
+        });
 
         if (DebugUtil.isDebuggable()) {
             devTools = new HummerDevTools(hmContext, config);
         }
 
-        perfTracker = HummerAdapter.getPerformanceAdapter(hmContext.getNamespace());
+        trackerAdapter = HummerAdapter.getTrackerAdapter(hmContext.getNamespace());
+        if (trackerAdapter != null) {
+            trackerAdapter.trackEvent(ITrackerAdapter.EventName.CONTEXT_CREATE, null);
+        }
         perfInfo.ctxInitTimeCost = System.currentTimeMillis() - startTime;
-        perfInfo.sdkVersion = BuildConfig.VERSION_NAME;
     }
 
     public HummerContext getHummerContext() {
@@ -98,7 +105,10 @@ public class HummerRender {
     public void onDestroy() {
         isDestroyed.set(true);
         hmContext.onDestroy();
-        EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.CONTEXT_DESTROY);
+
+        if (trackerAdapter != null) {
+            trackerAdapter.trackEvent(ITrackerAdapter.EventName.CONTEXT_DESTROY, null);
+        }
 
         if (DebugUtil.isDebuggable()) {
             HummerDebugger.release(hmContext);
@@ -123,10 +133,16 @@ public class HummerRender {
 
         long startTime = System.currentTimeMillis();
 
-        EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.JS_EVAL_START);
+        if (trackerAdapter != null) {
+            trackerAdapter.trackEvent(ITrackerAdapter.EventName.JS_EVAL_START, null);
+        }
+
         hmContext.setJsSourcePath(sourcePath);
         hmContext.evaluateJavaScript(js, sourcePath);
-        EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.JS_EVAL_FINISH);
+
+        if (trackerAdapter != null) {
+            trackerAdapter.trackEvent(ITrackerAdapter.EventName.JS_EVAL_FINISH, null);
+        }
 
         float jsSize = js.length() / 1024f;
         long timeCost = System.currentTimeMillis() - startTime;
@@ -134,25 +150,24 @@ public class HummerRender {
         perfInfo.jsEvalTimeCost = timeCost;
 
         Map<String, Object> params = new HashMap<>();
-        params.put(EventTracer.PARAM_KEY.IS_RENDER_SUCCESS, getHummerContext().getJsPage() != null);
-        params.put(EventTracer.PARAM_KEY.SDK_VERSION, BuildConfig.VERSION_NAME);
-        params.put(EventTracer.PARAM_KEY.PAGE_URL, sourcePath);
-        params.put(EventTracer.PARAM_KEY.RENDER_TIME_COST, timeCost);
-        params.put(EventTracer.PARAM_KEY.JS_SIZE, jsSize);
+        params.put(ITrackerAdapter.ParamKey.IS_RENDER_SUCCESS, getHummerContext().getJsPage() != null);
+        params.put(ITrackerAdapter.ParamKey.SDK_VERSION, BuildConfig.VERSION_NAME);
+        params.put(ITrackerAdapter.ParamKey.PAGE_URL, sourcePath);
+        params.put(ITrackerAdapter.ParamKey.RENDER_TIME_COST, timeCost);
+        params.put(ITrackerAdapter.ParamKey.JS_SIZE, jsSize);
 
         if (renderCallback != null) {
             if (getHummerContext().getJsPage() != null) {
                 renderCallback.onSucceed(getHummerContext(), getHummerContext().getJsPage());
-                EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.RENDER_FINISH, params);
             } else {
                 renderCallback.onFailed(new RuntimeException("Page is empty!"));
-                EventTracer.traceEvent(hmContext.getNamespace(), EventTracer.EventName.RENDER_FINISH, params);
             }
         }
 
         perfInfo.pageRenderTimeCost = System.currentTimeMillis() - this.startTime;
-        if (perfTracker != null) {
-            perfTracker.trackPerfInfo(perfInfo);
+        if (trackerAdapter != null) {
+            trackerAdapter.trackPerfInfo(hmContext.getPageUrl(), perfInfo);
+            trackerAdapter.trackEvent(ITrackerAdapter.EventName.RENDER_FINISH, params);
         }
     }
 
@@ -299,9 +314,8 @@ public class HummerRender {
             return;
         }
         hmContext.getJsContext().getJSValue("Hummer").set("pageInfo", page);
-        hmContext.setJsSourcePath(page.url);
-
-        perfInfo.pageUrl = page.url;
+        hmContext.setPageUrl(page.url);
+        hmContext.setJsSourcePath(page.sourcePath);
     }
 
     /**
