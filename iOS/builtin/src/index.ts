@@ -132,6 +132,9 @@ globalThis.setInterval = (handler, timeout) => {
 
 globalThis.clearInterval = timer => {
     // 强制类型转换
+    if (!timer) {
+        return
+    }
     (timer as unknown as Timer).clearInterval()
     globalThis.hummerValueStorageDelete(timer)
 }
