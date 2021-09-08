@@ -9,13 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXTERN NSString * const HMWebCloseEventName ;
-FOUNDATION_EXTERN NSString * const HMwebOpenEventName ;
-FOUNDATION_EXTERN NSString * const HMWebErrorEventName ;
-FOUNDATION_EXTERN NSString * const HMWebMessageEventName ;
-
 @interface HMWebSocket : NSObject
 
+- (void)close;
+
+- (void)clearAllBack;
 @end
+
+
 
 NS_ASSUME_NONNULL_END
