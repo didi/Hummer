@@ -157,6 +157,7 @@ globalThis.clearTimeout = timer => {
     if (!timer) {
         return
     }
+    (timer as unknown as Timer).clearTimeout()
     globalThis.hummerValueStorageDelete(timer)
 }
 
