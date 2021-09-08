@@ -3,6 +3,7 @@
 //
 
 #include "HummerJNI.h"
+#include "JSUtils.h"
 
 JavaVM *javaVM = NULL;
 
@@ -12,6 +13,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
         return -1;
     }
+    JSUtils::init(env);
     return JNI_VERSION_1_6;
 }
 

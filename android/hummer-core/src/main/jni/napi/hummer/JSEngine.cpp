@@ -39,8 +39,6 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
 extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_createJSContext(JNIEnv *env, jclass clazz) {
-    JSUtils::init(env);
-
     NAPIEnv globalEnv;
     NAPICreateEnv(&globalEnv);
 
