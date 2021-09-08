@@ -6,6 +6,7 @@ import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.core.engine.JSCallback;
+import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.utils.UIThreadUtil;
 
@@ -53,11 +54,18 @@ public class WebSocket implements ILifeCycle {
 
     private static OkHttpClient client;
     private okhttp3.WebSocket webSocket;
+    private JSValue jsValue;
 
-    public WebSocket(String url) {
+    public WebSocket(JSValue jsValue, String url) {
         if (client == null) {
             client = new OkHttpClient();
         }
+
+        this.jsValue = jsValue;
+        if (jsValue != null) {
+            jsValue.protect();
+        }
+
         connect(url);
     }
 
@@ -66,7 +74,9 @@ public class WebSocket implements ILifeCycle {
 
     @Override
     public void onDestroy() {
-        close(CloseCodes.CLOSE_GOING_AWAY.getCode(), CloseCodes.CLOSE_GOING_AWAY.name());
+        if (webSocket != null) {
+            webSocket.close(CloseCodes.CLOSE_GOING_AWAY.getCode(), CloseCodes.CLOSE_GOING_AWAY.name());
+        }
         if (onopen != null) {
             onopen.release();
             onopen = null;
@@ -144,9 +154,12 @@ public class WebSocket implements ILifeCycle {
     }
 
     @JsMethod("close")
-    public void close(int code, String reason) {
+    public void close() {
         if (webSocket != null) {
-            webSocket.close(code, reason);
+            webSocket.close(CloseCodes.CLOSE_NORMAL.getCode(), CloseCodes.CLOSE_NORMAL.name());
+        }
+        if (jsValue != null) {
+            jsValue.unprotect();
         }
     }
 

@@ -39,7 +39,7 @@ class RootView extends View {
             height: 40,
         };
         btn1.addEventListener('tap', e => {
-            this.ws = new WebSocket('ws://10.147.98.164:8000/proxy/native');
+            this.ws = new WebSocket('ws://x.x.x.x:8000');
             this.ws.onopen = () => {
                 console.log('WebSocket onOpen');
             };
@@ -52,18 +52,6 @@ class RootView extends View {
             this.ws.onerror = (errMsg) => {
                 console.log('WebSocket onError, errMsg = ' + errMsg);
             };
-            // this.ws.addEventListener('open', () => {
-            //     console.log('WebSocket onOpen');
-            // });
-            // this.ws.addEventListener('message', (text) => {
-            //     console.log('WebSocket onMessage, text = ' + text);
-            // });
-            // this.ws.addEventListener('close', (code, reason) => {
-            //     console.log('WebSocket onClose, code = ' + code + ', reason = ' + reason);
-            // });
-            // this.ws.addEventListener('error', (errMsg) => {
-            //     console.log('WebSocket onError, errMsg = ' + errMsg);
-            // });
         });
 
         let btn2 = new Button();
@@ -73,7 +61,7 @@ class RootView extends View {
             height: 40,
         };
         btn2.addEventListener('tap', e => {
-            this.ws.close(1000, 'normal close');
+            this.ws.close();
         });
 
         let btn3 = new Button();
