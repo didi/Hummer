@@ -1,22 +1,35 @@
 import {diff, cloneObject, getUUID, getNotifyEventKey, getMemoryKey,stringify, parseJson, getMemoryByKey, setMemoryByKey} from './utils/index'
 import {Operation, OperationType} from './utils/types'
 const id = getUUID();
-const MemoryStoreKey = getMemoryKey();
-const NotifyEvent = getNotifyEventKey();
 let cacheData:Record<string, any> = {}; 
+
+/**
+ * Hummer Store 插件配置项
+ */
+interface HummerPluginOptions {
+  /**
+   * 自定义的存储key
+   * 默认会通过 Hummer.env.namespace 生成对应的 Memory 存储 key
+   * 当应用中存在多个 Store 时，可以通过该缓存插件传入自定义的 key 做存储区分
+   */
+  store_key?: string
+}
 /**
  * 多页面同步数据
  * @param param Options
  */
 export function createHummerPlugin ({
-  
-} = {}) {
+  store_key
+}: HummerPluginOptions = {}) {
+  const MemoryStoreKey = getMemoryKey(store_key);
+  const NotifyEvent = getNotifyEventKey(store_key);
+
   return (store:any) => {
     // 初始化数据
-    initState(store)
+    initState(store, MemoryStoreKey)
     // 注册通知
     let notifyCenter =  Hummer.notifyCenter
-    notifyCenter.addEventListener(NotifyEvent, ({eventId, operations}:any) => {
+    notifyCenter.addEventListener(NotifyEvent, ({eventId, operations}: any) => {
       if(eventId === id){
         return
       }
@@ -45,7 +58,7 @@ export function createHummerPlugin ({
   }
 }
 
-function initState(store:any){
+function initState(store: any, MemoryStoreKey: string){
   let newData = getMemoryByKey(MemoryStoreKey);
   if(newData){
     newData = parseJson(newData);
