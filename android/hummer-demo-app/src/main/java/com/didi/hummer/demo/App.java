@@ -31,7 +31,7 @@ public class App extends Application {
 
 //        DoraemonKit.install(this, null, "cfe007137560fd511dfbcbbb3c9889c8");
 
-        Hummer.setJsEngine(HummerSDK.JsEngine.NAPI_QJS);
+//        Hummer.setJsEngine(HummerSDK.JsEngine.QUICK_JS);
 //        Hummer.initHermesDebugger(new DefaultHermesDebugger());
 
         // Hummer SDK
