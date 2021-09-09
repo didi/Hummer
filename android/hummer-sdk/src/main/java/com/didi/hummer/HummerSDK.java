@@ -51,7 +51,7 @@ public class HummerSDK {
 
     public static Context appContext;
 
-    private static @JsEngine int jsEngine = JsEngine.QUICK_JS;
+    private static @JsEngine int jsEngine = JsEngine.NAPI_QJS;
 
     private static volatile boolean isInited;
 
