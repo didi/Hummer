@@ -16,11 +16,13 @@
 #import "HMUtility.h"
 #import <Hummer/NSObject+Hummer.h>
 #import "HMWebSocketManage.h"
-//NS_ASSUME_NONNULL_BEGIN
+#import <SocketRocket/SRWebSocket.h>
+#import "NSData+HMConvertible.h"
+#import "NSString+HMConvertible.h"
 
-@interface HMWebSocket() <HMWebSocketDelegate>
+@interface HMWebSocket() <SRWebSocketDelegate>
 
-@property (nonatomic, strong)id <HMWebSocketAdaptor> webSocket;
+@property (nonatomic, strong) SRWebSocket *webSocket;
 
 @property (nonatomic, copy, nullable) HMFunctionType openCallBack;
 @property (nonatomic, copy, nullable) HMFunctionType closeCallBack;
@@ -47,18 +49,10 @@ HM_EXPORT_METHOD(send, __send:)
 
 - (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values {
     self = [super initWithHMValues:values];
-    self.webSocket = [[HMSRWebSocket alloc]init];
-    self.webSocket.delegate = self;
-    if(!self.webSocket){
-        HMAssert(!self.webSocket, @"webSocket alloc fail");
-    }else {
-        HMBaseValue * value = values.firstObject;
-        if (value && value.isString) {
-            NSString *wsUrl = value.toString;
-            [self WebSocket:wsUrl];
-        }
-        //发送通知
-        [[NSNotificationCenter defaultCenter]postNotificationName:HMNotificationNewWebSocket object:self];
+    HMBaseValue * value = values.firstObject;
+    if (value && value.isString) {
+        NSString *wsUrl = value.toString;
+        [self WebSocket:wsUrl];
     }
     return self;
 }
@@ -106,7 +100,14 @@ HM_EXPORT_METHOD(send, __send:)
 - (void)WebSocket:(NSString *)wsUrl {
     NSURL *URL = wsUrl.length > 0 ? [NSURL URLWithString:wsUrl] : nil;
     if (URL) {
-        [self.webSocket openWithWSUrl:URL];
+        self.webSocket = [[SRWebSocket alloc] initWithURL:wsUrl];
+        self.webSocket.delegate = self;
+        [self.webSocket open];
+    }
+    if (!self.webSocket) {
+        HMAssert(!self.webSocket, @"webSocket alloc fail");
+    }else {
+        [[NSNotificationCenter defaultCenter]postNotificationName:HMNotificationNewWebSocket object:self];
     }
 }
 
@@ -114,8 +115,9 @@ HM_EXPORT_METHOD(send, __send:)
 #pragma mark - web socket
 
 - (void)closeWithCode:(NSInteger)code reason:(NSString *)reason {
-    [self.webSocket close:code reason:reason];
-     self.webSocket.delegate = nil;
+    [self.webSocket closeWithCode:code reason:[reason hm_asString]];
+    self.webSocket.delegate = nil;
+    self.webSocket = nil;
 }
 
 - (void)sendWithText:(NSString *)text {
@@ -135,7 +137,7 @@ HM_EXPORT_METHOD(send, __send:)
 }
 
 - (void)close {
-    [self.webSocket close:1000 reason:nil];
+    [self.webSocket closeWithCode:1000 reason:nil];
 }
 
 
