@@ -111,7 +111,7 @@ NS_ASSUME_NONNULL_END
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
     
 #if __has_include(<Hummer/HMJSExecutor.h>)
-    _context = [[HMJSExecutor alloc] init];
+    _context = HMGetEngineType() == HMEngineTypeNAPI ? [[HMJSExecutor alloc] init] : [[HMJSCExecutor alloc] init];
 #else
     _context = [[HMJSCExecutor alloc] init];
 #endif
