@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         Hummer.startEngine(nil)
         window = UIWindow(frame: UIScreen.main.bounds)
-        guard let viewController = ViewController(url: "http://localhost:8000/index.js", params: nil, isNAPI: true) else { return true }
+        guard let viewController = ViewController(url: "http://localhost:8000/index.js", params: nil) else { return true }
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.navigationBar.isTranslucent = false;
         window?.rootViewController = navigationController;

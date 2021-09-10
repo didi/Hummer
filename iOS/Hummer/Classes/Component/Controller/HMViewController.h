@@ -43,13 +43,13 @@ NS_ASSUME_NONNULL_END
 /// @param URL Hummer包地址
 /// @param params 参数
 + (instancetype)hmxPageControllerWithURL:(NSString *)URL
-                                  params:(NSDictionary *)params isNAPI:(BOOL)isNAPI;
+                                  params:(NSDictionary *)params;
 
 /// 初始化Hummer页面
 /// @param URL URL Hummer包地址
 /// @param params params 参数
 - (instancetype)initWithURL:(NSString *)URL
-                     params:(NSDictionary *)params isNAPI:(BOOL)isNAPI;
+                     params:(NSDictionary *)params;
 
 ///  添加自定义顶部导航view，默认没有导航
 /// @param customNaviView 外部自定义的导航view
@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_END
 
  /// 渲染脚本
  /// @param script 脚本内容
- - (void)renderWithScript:(NSString *)script;
+ - (void)renderWithScript:(NSString *)script isNAPI:(BOOL)isNAPI;
 
  ///  通过context设置自定义bridge
  @property (nonatomic, weak, readonly) HMJSContext *context;

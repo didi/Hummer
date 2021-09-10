@@ -17,8 +17,6 @@
 
 @interface HMViewController ()
 
-@property (nonatomic, assign) BOOL isNAPI;
-
 @property (nonatomic, strong) UIView *naviView;
 @property (nonatomic, strong) UIView *hmRootView;
 
@@ -30,19 +28,18 @@
 @implementation HMViewController
 
 + (instancetype)hmxPageControllerWithURL:(NSString *)URL
-                                  params:(NSDictionary *)params isNAPI:(BOOL)isNAPI {
+                                  params:(NSDictionary *)params {
     if (!URL) {
         return nil;
     }
-    return [[self alloc] initWithURL:URL params:params isNAPI:isNAPI];
+    return [[self alloc] initWithURL:URL params:params];
 }
 
 - (instancetype)initWithURL:(NSString *)URL
-                     params:(NSDictionary *)params isNAPI:(BOOL)isNAPI {
+                     params:(NSDictionary *)params {
     if (self = [super init]) {
         self.URL = URL ;
         self.params = params;
-        _isNAPI = isNAPI;
     }
     return self;
 }
@@ -109,7 +106,7 @@
 
 #pragma mark -渲染脚本
 
-- (void)renderWithScript:(NSString *)script {
+- (void)renderWithScript:(NSString *)script isNAPI:(BOOL)isNAPI {
     if (script.length == 0) {
         return;
     }
@@ -123,7 +120,7 @@
     HMJSGlobal.globalObject.pageInfo = pData;
     
     //渲染脚本之前 注册bridge
-    HMJSContext *context = [HMJSContext contextInRootView:self.hmRootView isNAPI:self.isNAPI];
+    HMJSContext *context = [HMJSContext contextInRootView:self.hmRootView isNAPI:isNAPI];
     HM_SafeRunBlock(self.registerJSBridgeBlock,context);
     
     //执行脚本
