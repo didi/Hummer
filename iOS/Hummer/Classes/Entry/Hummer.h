@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)evaluateScript:(NSString *)jsScript
               fileName:(NSString *)fileName
-            inRootView:(UIView *)rootView isNAPI:(BOOL)isNAPI;
+            inRootView:(UIView *)rootView;
 
 @end
 

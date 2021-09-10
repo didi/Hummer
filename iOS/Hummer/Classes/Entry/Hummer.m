@@ -32,8 +32,8 @@
 
 + (void)evaluateScript:(NSString *)jsScript
               fileName:(NSString *)fileName
-            inRootView:(UIView *)rootView isNAPI:(BOOL)isNAPI {
-    HMJSContext *context = [HMJSContext contextInRootView:rootView isNAPI:YES];
+            inRootView:(UIView *)rootView {
+    HMJSContext *context = [HMJSContext contextInRootView:rootView];
     [context evaluateScript:jsScript fileName:fileName];
 }
 

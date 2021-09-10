@@ -106,7 +106,7 @@
 
 #pragma mark -渲染脚本
 
-- (void)renderWithScript:(NSString *)script isNAPI:(BOOL)isNAPI {
+- (void)renderWithScript:(NSString *)script {
     if (script.length == 0) {
         return;
     }
@@ -120,7 +120,7 @@
     HMJSGlobal.globalObject.pageInfo = pData;
     
     //渲染脚本之前 注册bridge
-    HMJSContext *context = [HMJSContext contextInRootView:self.hmRootView isNAPI:isNAPI];
+    HMJSContext *context = [HMJSContext contextInRootView:self.hmRootView];
     HM_SafeRunBlock(self.registerJSBridgeBlock,context);
     
     //执行脚本

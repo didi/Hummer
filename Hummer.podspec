@@ -27,9 +27,9 @@ Hummer is a dynamic solution for client.
   s.author           = { 'ChasonTang' => 'tangjiacheng@didiglobal.com' }
   s.source           = { :git => 'https://github.com/didi/Hummer.git', :tag => s.version.to_s }
   s.prepare_command = <<-CMD
-    curl -o napi_ios.tar.gz -L https://github.com/OrangeLab/N-API/releases/download/2.0.4/napi_ios.tar.gz
-    tar zxf napi_ios.tar.gz
-    rm -f napi_ios.tar.gz
+    curl -o napi_ios_hermes.tar.gz -L https://github.com/OrangeLab/N-API/releases/download/2.0.4/napi_ios_hermes.tar.gz
+    tar zxf napi_ios_hermes.tar.gz
+    rm -f napi_ios_hermes.tar.gz
   CMD
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
   
@@ -60,12 +60,12 @@ Hummer is a dynamic solution for client.
     ss.dependency 'SocketRocket', '~> 0.1'
   end
 
-  s.subspec "JavaScriptCore" do |ss|
-    ss.dependency 'Hummer/Core'
-    ss.dependency 'Hummer/N-API'
-    ss.vendored_library = 'libjsc.a'
-    ss.framework = "JavaScriptCore"
-  end
+  # s.subspec "JavaScriptCore" do |ss|
+  #   ss.dependency 'Hummer/Core'
+  #   ss.dependency 'Hummer/N-API'
+  #   ss.vendored_library = 'libjsc.a'
+  #   ss.framework = "JavaScriptCore"
+  # end
 
   # s.subspec "QuickJS" do |ss|
   #   ss.dependency 'Hummer/Core'

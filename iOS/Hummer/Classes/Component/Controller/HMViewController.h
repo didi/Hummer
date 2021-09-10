@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_END
 
  /// 渲染脚本
  /// @param script 脚本内容
- - (void)renderWithScript:(NSString *)script isNAPI:(BOOL)isNAPI;
+ - (void)renderWithScript:(NSString *)script;
 
  ///  通过context设置自定义bridge
  @property (nonatomic, weak, readonly) HMJSContext *context;
