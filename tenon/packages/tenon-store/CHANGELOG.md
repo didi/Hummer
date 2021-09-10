@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-store@1.3.0...@hummer/tenon-store@1.4.0) (2021-09-10)
+
+
+### Features
+
+* **tenon-store:** add custom cache key ([#284](https://github.com.cnpmjs.org/didi/Hummer/issues/284)) ([3767ec3](https://github.com.cnpmjs.org/didi/Hummer/commit/3767ec35871a80007b1a36b95ca06e3e3b9e5388))
+
+
+
+
+
 # 1.3.0 (2021-08-24)
 
 
