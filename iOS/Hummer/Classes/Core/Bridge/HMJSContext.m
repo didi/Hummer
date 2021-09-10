@@ -92,30 +92,50 @@ NS_ASSUME_NONNULL_END
 #endif
 }
 
-+ (instancetype)contextInRootView:(UIView *)rootView {
-    rootView.hm_context = [[HMJSContext alloc] init];
-    rootView.hm_context.rootView = rootView;
-    return rootView.hm_context;
++ (instancetype)contextInRootView:(UIView *)rootView isNAPI:(BOOL)isNAPI {
+    if (!rootView) {
+        return nil;
+    }
+    HMJSContext *jsContext = [[HMJSContext alloc] initWithIsNAPI:isNAPI];
+    if (!jsContext) {
+        return nil;
+    }
+    jsContext.rootView = rootView;
+    rootView.hm_context = jsContext;
+    
+    return jsContext;
 }
 
-- (instancetype)init {
+- (instancetype)initWithIsNAPI:(BOOL)isNAPI {
     self = [super init];
     NSBundle *frameworkBundle = [NSBundle bundleForClass:self.class];
     NSString *resourceBundlePath = [frameworkBundle pathForResource:@"Hummer" ofType:@"bundle"];
-    NSAssert(resourceBundlePath.length > 0, @"Hummer.bundle 不存在");
+    if (!resourceBundlePath) {
+        NSAssert(NO, @"Hummer.bundle 不存在");
+        
+        return nil;
+    }
     NSBundle *resourceBundle = [NSBundle bundleWithPath:resourceBundlePath];
-    NSAssert(resourceBundle, @"Hummer.bundle 不存在");
-    // TODO(唐佳诚): 修改文件名
+    if (!resourceBundle) {
+        NSAssert(NO, @"Hummer.bundle 不存在");
+        
+        return nil;
+    }
     NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:@"builtin" bundle:resourceBundle];
-    NSAssert(dataAsset, @"builtin dataset 无法在 xcassets 中搜索到");
+    if (!dataAsset) {
+        NSAssert(NO, @"builtin dataset 无法在 xcassets 中搜索到");
+        
+        return nil;
+    }
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
-    
 #if __has_include(<Hummer/HMJSExecutor.h>)
-    _context = [[HMJSExecutor alloc] init];
+    _context = isNAPI ? [[HMJSExecutor alloc] init] : [[HMJSCExecutor alloc] init];
 #else
     _context = [[HMJSCExecutor alloc] init];
 #endif
-    [[HMJSGlobal globalObject] weakReference:self];
+    if (!_context) {
+        return nil;
+    }
     __weak typeof(self) weakSelf = self;
     _context.exceptionHandler = ^(HMExceptionModel *exception) {
         NSArray<id<HMReporterProtocol>> *interceptors = [HMInterceptor interceptor:HMInterceptorTypeReporter];
@@ -143,7 +163,6 @@ NS_ASSUME_NONNULL_END
         }];
     };
     [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/builtin.js"]];
-
     NSMutableDictionary *classes = [NSMutableDictionary new];
     // 可以使用模型替代字典，转 JSON，做缓存
     [HMExportManager.sharedInstance.jsClasses enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportClass *_Nonnull obj, BOOL *_Nonnull stop) {
@@ -169,9 +188,13 @@ NS_ASSUME_NONNULL_END
         [classes setObject:class forKey:obj.jsClass];
     }];
     NSData *data = [NSJSONSerialization dataWithJSONObject:classes options:0 error:nil];
+    if (!data) {
+        return nil;
+    }
     NSString *classesStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [_context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
-
+    [[HMJSGlobal globalObject] weakReference:self];
+    
     return self;
 }
 

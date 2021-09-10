@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable, copy) void(^renderCompletion)(void);
 
-+ (instancetype)contextInRootView:(nullable UIView *)rootView;
++ (nullable instancetype)contextInRootView:(nullable UIView *)rootView isNAPI:(BOOL)isNAPI;
 
 /**
  * 只能调用一次
@@ -60,6 +60,10 @@ NS_ASSUME_NONNULL_BEGIN
  * @return JSValue
  */
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName;
+
+- (nullable instancetype)initWithIsNAPI:(BOOL)isNAPI NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
 
 NS_ASSUME_NONNULL_END
 
