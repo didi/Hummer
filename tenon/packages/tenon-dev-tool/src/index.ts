@@ -28,20 +28,32 @@ function getElementTagMap() {
  * DevTool 启动入口函数
  * @param container 页面实例，通过引用可以拿到整个视图树，以及视图上的各个实例
  */
+// Todo: hummer-front 兼容
+let isWebPlatform = __GLOBAL__.Hummer.pageInfo && JSON.stringify(__GLOBAL__.Hummer.pageInfo) === '{}'
+
 export function run(container:any){
   log('get ready~')
   const { url } = __GLOBAL__.Hummer.pageInfo
   let host = getPartUrlByParam(url, 'host')
   let port = getPartUrlByParam(url, 'port')
+  let wsTenon = `ws://${host}:${port}/proxy/tenon`
+  // Todo: hummer-front 兼容
+  if (isWebPlatform) {
+    // 本地 cli ip
+    wsTenon = 'ws://172.23.166.4:8000/proxy/tenon'
+  }
 
   let viewMap = {}
-    // 设置各种监听回调
+  // scoket连接 取Hummer PageInfo 信息
+  __GLOBAL__.WebSocket.connect(wsTenon);
+
+  // 设置各种监听回调
   __GLOBAL__.WebSocket.onOpen(() => {
     log('websocket opened~');
   });
 
   __GLOBAL__.WebSocket.onMessage((data: any) => {
-    let msg = JSON.parse(data)
+    let msg = JSON.parse(data), viewId:number, view:any
     switch (msg.method) {
       case 'getViewTree':
         let data = getViewData(container)
@@ -57,9 +69,9 @@ export function run(container:any){
         }))
         break;
       case 'getViewInfo':
-        let viewId:number = msg.params.viewId
+        viewId = msg.params.viewId
         // @ts-ignore
-        let view = viewMap[viewId]
+        view = viewMap[viewId]
         view.element.getRect((rect: any) => {
           view.element.dbg_highlight && view.element.dbg_highlight(true)
           __GLOBAL__.WebSocket.send(JSON.stringify({
@@ -74,13 +86,34 @@ export function run(container:any){
           }))
         })
         break;
+      case 'setViewStyle':
+        viewId = msg.params.viewId
+        // @ts-ignore
+        view = viewMap[viewId]
+        const style = msg.params.style
+        view.element.style = updateOptions(view.style, style)
+        __GLOBAL__.WebSocket.send(JSON.stringify({
+          type: 'view',
+          method: 'setStyleSuccess',
+          params: { }
+        }))
+        break;
       default:
         break;
     }
   });
+}
 
-  // scoket连接 取Hummer PageInfo 信息
-  __GLOBAL__.WebSocket.connect(`ws://${host}:${port}/proxy/tenon`);
+function updateOptions (oldOptions:any, newOptions:any) {
+  for (const key in oldOptions) {
+    if (!(key in newOptions)) {
+      delete oldOptions[key]
+    }
+  }
+  for (const key in newOptions) {
+    oldOptions[key] = newOptions[key]
+  }
+  return oldOptions
 }
 
 const log = function (str: String) {
