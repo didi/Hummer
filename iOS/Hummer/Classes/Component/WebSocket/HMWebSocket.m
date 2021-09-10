@@ -6,10 +6,7 @@
 //
 
 #import "HMWebSocket.h"
-#import "HMSRWebSocket.h"
 #import "HMExportManager.h"
-#import "HMWebSocketProtocol.h"
-#import "HMURLSessionWebSocket.h"
 #import "HMBaseExecutorProtocol.h"
 #import "HMBaseValue.h"
 #import "NSString+HMConvertible.h"
@@ -45,7 +42,6 @@ HM_EXPORT_METHOD(onmessage, __onmessage:)
 //method 方法
 HM_EXPORT_METHOD(close, __close:reason:)
 HM_EXPORT_METHOD(send, __send:)
-
 
 - (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values {
     self = [super initWithHMValues:values];
@@ -130,6 +126,7 @@ HM_EXPORT_METHOD(send, __send:)
 
 #pragma  mark - public
 - (void)clearAllBack {
+    self.webSocket = nil;
     self.openCallBack = nil;
     self.closeCallBack = nil;
     self.errorCallBack = nil;
@@ -140,34 +137,32 @@ HM_EXPORT_METHOD(send, __send:)
     [self.webSocket closeWithCode:1000 reason:nil];
 }
 
-
-
 #pragma mark - SRWebSocketDelegate
-- (void)webSocket:(id<HMWebSocketAdaptor>)webSocket didReceiveMessage:(id)message {
+
+- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
     HMSafeMainThread(^{
         HM_SafeRunBlock(self.messageCallBack, @[message ?:@""]);
     });
 }
 
-- (void)webSocket:(id<HMWebSocketAdaptor>)webSocket didFailWithError:(NSError *)error {
+- (void)webSocketDidOpen:(SRWebSocket *)webSocket {
+    HMSafeMainThread(^{
+        HM_SafeRunBlock(self.openCallBack, @[]);
+    });
+}
+
+- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     NSString *errorMsg = HMJSONEncode(error.userInfo) ?: @"WebSocket did fail";
     HMSafeMainThread(^{
         HM_SafeRunBlock(self.errorCallBack, @[errorMsg]);
     });
 }
 
-- (void)webSocketDidOpen:(id<HMWebSocketAdaptor>)webSocket {
-    HMSafeMainThread(^{
-        HM_SafeRunBlock(self.openCallBack, @[]);
-    });
-}
-
-- (void)webSocket:(id<HMWebSocketAdaptor>)webSocket didCloseWithCode:(NSInteger)code reason:(id<HMStringDataConvertible>)reason wasClean:(BOOL)wasClean {
+- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     HMSafeMainThread(^{
         HM_SafeRunBlock(self.closeCallBack,@[@(code),[reason hm_asString]?:@""]);
     });
 }
-
 
 @end
 
