@@ -20,8 +20,7 @@
 #import "HMBaseValue.h"
 #import "HMJSGlobal.h"
 #import <Hummer/HMDebug.h>
-#import "HMWebSocketManage.h"
-#import "HMWebSocket.h"
+#import <Hummer/HMWebSocket.h>
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, HMCLILogLevel) {
@@ -57,8 +56,6 @@ API_AVAILABLE(ios(13.0))
 
 @property (nonatomic, weak, nullable) UIView *rootView;
 
-@property (nonatomic, strong, nullable) HMWebSocketManage  *webSocketManage;
-
 #ifdef HMDEBUG
 @property (nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
 
@@ -88,12 +85,14 @@ NS_ASSUME_NONNULL_END
     if ([componentViewObject isKindOfClass:UIView.class]) {
         [((UIView *) componentViewObject) removeFromSuperview];
     }
-    [self.webSocketManage removeAllWebSocket];
     HMLogDebug(@"HMJSContext 销毁");
 #ifdef HMDEBUG
     self.context.webSocketHandler = nil;
     [self.webSocketTask cancel];
 #endif
+    [self.webSocketSet enumerateObjectsUsingBlock:^(HMWebSocket * _Nonnull obj, BOOL * _Nonnull stop) {
+        [obj close];
+    }];
 }
 
 + (instancetype)contextInRootView:(UIView *)rootView {
@@ -176,9 +175,6 @@ NS_ASSUME_NONNULL_END
     NSString *classesStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [_context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
 
-    //初始化 webSocket 管理者
-    self.webSocketManage = [[HMWebSocketManage alloc]init];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notifyNewWebSocketHandle:) name:HMNotificationNewWebSocket object:nil];
     return self;
 }
 
@@ -252,10 +248,4 @@ NS_ASSUME_NONNULL_END
     return [self.context evaluateScript:javaScriptString withSourceURL:url];
 }
 
-- (void)notifyNewWebSocketHandle:(NSNotification *)notify {
-    HMWebSocket *webSocket = (HMWebSocket *)notify.object;
-    if (webSocket) {
-        [self.webSocketManage addWebSocket:webSocket];
-    }
-}
 @end
