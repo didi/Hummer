@@ -48,7 +48,7 @@ HM_EXPORT_METHOD(send, __send:)
     HMBaseValue * value = values.firstObject;
     if (value && value.isString) {
         NSString *wsUrl = value.toString;
-        [self WebSocket:wsUrl];
+        [self webSocket:wsUrl];
     }
     return self;
 }
@@ -93,7 +93,7 @@ HM_EXPORT_METHOD(send, __send:)
 
 #pragma mark - Private
 
-- (void)WebSocket:(NSString *)wsUrl {
+- (void)webSocket:(NSString *)wsUrl {
     NSURL *URL = wsUrl.length > 0 ? [NSURL URLWithString:wsUrl] : nil;
     if (URL) {
         self.webSocket = [[SRWebSocket alloc] initWithURL:wsUrl];
@@ -152,9 +152,8 @@ HM_EXPORT_METHOD(send, __send:)
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
-    NSString *errorMsg = HMJSONEncode(error.userInfo) ?: @"WebSocket did fail";
     HMSafeMainThread(^{
-        HM_SafeRunBlock(self.errorCallBack, @[errorMsg]);
+        HM_SafeRunBlock(self.errorCallBack, @[]);
     });
 }
 
