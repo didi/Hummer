@@ -39,18 +39,18 @@ class RootView extends View {
             height: 40,
         };
         btn1.addEventListener('tap', e => {
-            this.ws = new WebSocket('ws://x.x.x.x:8000');
+            this.ws = new WebSocket('ws://x.x.x.x:8000/proxy/native');    
             this.ws.onopen = () => {
                 console.log('WebSocket onOpen');
             };
-            this.ws.onmessage = (text) => {
-                console.log('WebSocket onMessage, text = ' + text);
+            this.ws.onmessage = (event) => {
+                console.log('WebSocket onMessage, event.data = ' + event.data);
             };
-            this.ws.onclose = (code, reason) => {
-                console.log('WebSocket onClose, code = ' + code + ', reason = ' + reason);
+            this.ws.onclose = (event) => {
+                console.log('WebSocket onClose, event.code = ' + event.code + ', event.reason = ' + event.reason);
             };
-            this.ws.onerror = (errMsg) => {
-                console.log('WebSocket onError, errMsg = ' + errMsg);
+            this.ws.onerror = () => {
+                console.log('WebSocket onError');
             };
         });
 
