@@ -1,10 +1,3 @@
-//
-//  HMWebSocket.h
-//  Hummer
-//
-//  Copyright © 2021年 didi. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -13,9 +6,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)close;
 
-- (void)clearAllBack;
+- (instancetype)init NS_UNAVAILABLE;
+
 @end
-
-
 
 NS_ASSUME_NONNULL_END
