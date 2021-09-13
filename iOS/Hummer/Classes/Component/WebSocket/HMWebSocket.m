@@ -1,10 +1,3 @@
-//
-//  HMWebSocket.m
-//  Hummer
-//
-//  Copyright © 2021年 didi. All rights reserved.
-//
-
 #import "HMWebSocket.h"
 #import <Hummer/HMJSGlobal.h>
 #import <Hummer/HMExportManager.h>
