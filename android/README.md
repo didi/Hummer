@@ -3,7 +3,7 @@
 
 ### 添加 Hummer SDK 依赖
 ```java
-implementation 'io.github.didi.hummer:hummer:0.3.23'
+implementation 'io.github.didi.hummer:hummer:0.4.0'
 ```
 
 ### Application 中初始化 Hummer
@@ -174,7 +174,7 @@ if (jsPage != null) {
 ##### 接入步骤：
 1. 添加依赖
 ```
-debugImplementation 'io.github.didi.hummer:hermes-debugger:0.0.4'
+debugImplementation 'io.github.didi.hummer:hermes-debugger:0.0.5'
 ```
 
 2. 在Application的onCreate中调用

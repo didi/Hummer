@@ -1,5 +1,21 @@
 # Release Nodes
 
+### 0.4.0
+- 支持N-API引擎；
+- 更新混淆规则；
+- 升级Yoga版本至：1.19.0；
+- 升级SoLoader版本至：0.10.1；
+- 新增Canvas组件；
+- 重写WebSocket组件，对齐前端MDN标准组件API；
+- 新增性能统计适配器；
+- 移除Location定位组件；
+- Text组件支持长按复制功能；
+- Text组件支持垂直方向对齐功能；
+- Input组件支持done/next键盘收起；
+- Button组件去除默认背景和padding；
+- View.getRect方法新增window位置的获取；
+- 更新 CLI WebSocket URL；（需要和最新版CLI配合使用）
+
 ### 0.3.23
 - 修复TextArea组件在达到最大行数时输入回车，重复触发input事件的问题；
 - 修复quickjs引擎在debug模式下出现stackoverflow的问题；
