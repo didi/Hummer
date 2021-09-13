@@ -11,6 +11,8 @@ import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.utils.UIThreadUtil;
 
 import java.io.EOFException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -121,7 +123,11 @@ public class WebSocket implements ILifeCycle {
             public void onClosed(okhttp3.WebSocket webSocket, int code, String reason) {
                 UIThreadUtil.runOnUiThread(() -> {
                     if (onclose != null) {
-                        onclose.call(code, reason);
+                        // 包装一层CloseEvent结构体，对齐Web端WebSocket API
+                        Map<String, Object> closeEvent = new HashMap<>();
+                        closeEvent.put("code", code);
+                        closeEvent.put("reason", reason);
+                        onclose.call(closeEvent);
                     }
                 });
             }
@@ -136,7 +142,7 @@ public class WebSocket implements ILifeCycle {
                         }
                     } else {
                         if (onerror != null) {
-                            onerror.call(t.getMessage());
+                            onerror.call();
                         }
                     }
                 });
@@ -146,7 +152,10 @@ public class WebSocket implements ILifeCycle {
             public void onMessage(okhttp3.WebSocket webSocket, String text) {
                 UIThreadUtil.runOnUiThread(() -> {
                     if (onmessage != null) {
-                        onmessage.call(text);
+                        // 包装一层MessageEvent结构体，对齐Web端WebSocket API
+                        Map<String, Object> messageEvent = new HashMap<>();
+                        messageEvent.put("data", text);
+                        onmessage.call(messageEvent);
                     }
                 });
             }
