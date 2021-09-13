@@ -40,7 +40,7 @@ HM_EXPORT_METHOD(onerror, __onerror:)
 HM_EXPORT_METHOD(onmessage, __onmessage:)
 
 //method 方法
-HM_EXPORT_METHOD(close, __close:reason:)
+HM_EXPORT_METHOD(close, __close)
 HM_EXPORT_METHOD(send, __send:)
 
 - (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values {
@@ -79,10 +79,9 @@ HM_EXPORT_METHOD(send, __send:)
 }
 
 
-- (void)__close:(HMBaseValue *)jsCode reason:(HMBaseValue *)jsReason {
+- (void)__close:(HMBaseValue *)jsCode {
     NSInteger code = jsCode.isNumber ? jsCode.toNumber.intValue : 1000;
-    NSString *reason = jsReason.isString ? jsReason.toString : nil;
-    [self closeWithCode:code reason:reason];
+    [self closeWithCode:code reason:nil];
 }
 
 - (void)__send:(HMBaseValue *)jsValue {
@@ -112,8 +111,6 @@ HM_EXPORT_METHOD(send, __send:)
 
 - (void)closeWithCode:(NSInteger)code reason:(NSString *)reason {
     [self.webSocket closeWithCode:code reason:[reason hm_asString]];
-    self.webSocket.delegate = nil;
-    self.webSocket = nil;
 }
 
 - (void)sendWithText:(NSString *)text {

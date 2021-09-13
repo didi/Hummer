@@ -12,7 +12,7 @@
  * 单例的数组 或者 set 里面存放所有 打开的 WebSocket 和他们各自的回调方法。
  */
 @interface HMWebSocketManage ()
-@property(nonatomic, strong)NSMutableSet * webSocketSet;
+@property(nonatomic, strong)NSMutableArray * webSocketSet;
 @end
 
 
@@ -21,7 +21,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.webSocketSet =  [NSMutableSet set];
+        self.webSocketSet =  [NSMutableArray set];
     }
     return self;
 }
@@ -40,7 +40,7 @@
         return;
     }
     
-    [self.webSocketSet enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+    [self.webSocketSet enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         HMWebSocket *websocket =  (HMWebSocket *)obj;
         [websocket close];
         [websocket clearAllBack];
@@ -54,11 +54,11 @@
         return;
     }
     
-    [self.webSocketSet removeObject:webScoket];
     if ([webScoket isKindOfClass:[HMWebSocket class]]) {
+        [self.webSocketSet removeObject:webScoket];
         [webScoket close];
         [webScoket clearAllBack];
-         webScoket = nil;
+        webScoket = nil;
     }
 }
 
