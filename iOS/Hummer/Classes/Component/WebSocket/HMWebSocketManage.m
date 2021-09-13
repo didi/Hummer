@@ -21,7 +21,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.webSocketSet =  [NSMutableArray set];
+        self.webSocketSet =  [NSMutableArray new];
     }
     return self;
 }
