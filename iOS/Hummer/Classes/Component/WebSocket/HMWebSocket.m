@@ -64,7 +64,7 @@ HM_EXPORT_METHOD(send, send:)
     self.onMessage = nil;
     // 将自身从集合中移除
     if (self.context) {
-        NSMutableSet *webSocketSet = self.context.webSocketSet.mutableCopy;
+        NSMutableSet<HMWebSocket *> *webSocketSet = self.context.webSocketSet.mutableCopy;
         self.context.webSocketSet = nil;
         [webSocketSet removeObject:self];
         if (webSocketSet.count > 0) {
