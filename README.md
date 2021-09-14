@@ -71,23 +71,26 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 ## 近期规划
 
 ### 里程碑
-- 6月底
+- 6月份
     - iOS 版 DevTools 发布
     - Tenon React 一期版本发布
-- 7月底
+- 7月份
     - VSCode 调试插件预览版完成
     - N-API 预览版完成
-- 8月底
+- 8月份
     - 视图调试一期功能发布
-    - VSCode 调试插件正式版发布
     - N-API 正式发布
-- 9月底
+- 9月份
     - 视图调试二期功能发布
-    - VSCode 插件完整版发布
-    - mand-mobild for Hummer 版组件库一期版本发布
-    - Tenon React 二期版本发布
+    - VSCode 调试插件一期版本发布
     - Tenon Router 发布
-    - 公共包抽离能力发布
+- 10月份
+    - 公共包抽离能力（懒加载）发布
+    - VSCode 调试插件二期版本发布
+- 11月份
+    - VSCode 插件完整版本发布
+    - Tenon React 二期版本发布
+    - mand-mobild for Hummer 版组件库一期版本发布
 
 ### 具体事项
 #### 研发体验
@@ -103,16 +106,22 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [x] CLI 支持命令行日志输出 [@duanlikang](https://github.com/duanlikang)
     - [ ] 增强版 DevTools 支持（类似RN）
 - VSCode 插件
-    - [ ] VSCode 调试插件开发完成
-    - [ ] Tenon 支持代码提示和代码自动补全
+    - [ ] VSCode 调试插件一期功能开发完成 [@yFeii](https://github.com/yFeii)
+    - [ ] VSCode 调试插件二期功能开发完成 [@yFeii](https://github.com/yFeii)
+    - [ ] 插件中集成进视图调试功能 [@yFeii](https://github.com/yFeii)
+    - [ ] Tenon 支持代码提示和代码自动补全 [@yFeii](https://github.com/yFeii)
 - 视图调试一期
     - [x] Dev 页面展示视图树和节点样式（仅支持 Vue 项目）[@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@jayconscious](https://github.com/jayconscious)
     - [x] 原生侧高亮选中的UI控件（画框）[@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
 - 视图调试二期
-    - [ ] 支持 TS 项目
     - [ ] Dev 首页展示和交互优化
-    - [ ] 支持样式修改
+    - [x] 视图树显示优化 [@jayconscious](https://github.com/jayconscious)
+    - [x] 支持视图树节点搜索 [@jayconscious](https://github.com/jayconscious)
+    - [x] 支持样式修改 [@jayconscious](https://github.com/jayconscious)
+    - [ ] 支持多页面同时调试 [@jayconscious](https://github.com/jayconscious)
+    - [x] 支持窗口大小调整 [@jayconscious](https://github.com/jayconscious)
     - [ ] 支持日志折叠
+    - [ ] 支持 TS 项目视图调试
 
 #### 生态建设
 - Tenon React 一期 [@duanlikang](https://github.com/duanlikang)
@@ -153,7 +162,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [x] 原生实现 JS 执行 JS 能力 [@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
   - [ ] 公共包抽离
   - [ ] 页面懒加载（Tenon Router）
-- 多线程支持
+- 线程分离（异步渲染）
 
 #### 其他
 - N-API 抽象 JS 引擎
