@@ -10,6 +10,7 @@ import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.tracker.ITrackerAdapter;
+import com.didi.hummer.adapter.tracker.PerfCustomInfo;
 import com.didi.hummer.adapter.tracker.PerfInfo;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
@@ -144,21 +145,22 @@ public class HummerRender {
             trackerAdapter.trackEvent(ITrackerAdapter.EventName.JS_EVAL_FINISH, null);
         }
 
+        boolean isRenderSuccess = getHummerContext().getJsPage() != null;
         float jsSize = js.length() / 1024f;
         long timeCost = System.currentTimeMillis() - startTime;
         perfInfo.jsBundleSize = jsSize;
         perfInfo.jsEvalTimeCost = timeCost;
 
         Map<String, Object> params = new HashMap<>();
-        params.put(ITrackerAdapter.ParamKey.IS_RENDER_SUCCESS, getHummerContext().getJsPage() != null);
+        params.put(ITrackerAdapter.ParamKey.IS_RENDER_SUCCESS, isRenderSuccess);
         params.put(ITrackerAdapter.ParamKey.SDK_VERSION, BuildConfig.VERSION_NAME);
         params.put(ITrackerAdapter.ParamKey.PAGE_URL, sourcePath);
         params.put(ITrackerAdapter.ParamKey.RENDER_TIME_COST, timeCost);
         params.put(ITrackerAdapter.ParamKey.JS_SIZE, jsSize);
 
         if (renderCallback != null) {
-            if (getHummerContext().getJsPage() != null) {
-                renderCallback.onSucceed(getHummerContext(), getHummerContext().getJsPage());
+            if (isRenderSuccess) {
+                renderCallback.onSucceed(hmContext, getHummerContext().getJsPage());
             } else {
                 renderCallback.onFailed(new RuntimeException("Page is empty!"));
             }
@@ -167,6 +169,7 @@ public class HummerRender {
         perfInfo.pageRenderTimeCost = System.currentTimeMillis() - this.startTime;
         if (trackerAdapter != null) {
             trackerAdapter.trackPerfInfo(hmContext.getPageUrl(), perfInfo);
+            trackerAdapter.trackPerfCustomInfo(hmContext.getPageUrl(), new PerfCustomInfo("whiteScreenRate", "白屏率", "%", isRenderSuccess ? 100 : 0));
             trackerAdapter.trackEvent(ITrackerAdapter.EventName.RENDER_FINISH, params);
         }
     }
