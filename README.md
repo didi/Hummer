@@ -56,7 +56,8 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 | [Hummer CLI](https://github.com/OrangeLab/hummer-cli) | Hummer CLI 工具库  |
 | [Hummer CLI Template](https://github.com/OrangeLab/hummer-cli-template)   | Hummer CLI 的模板仓库  |
 | [Tenon Loader](https://github.com/OrangeLab/tenon-loader)   | Tenon Vue Loader  |
-| [Tenon Plugins ](https://github.com/OrangeLab/tenon-plugins)   | Tenon 的插件库  |
+| [Tenon Plugins](https://github.com/OrangeLab/tenon-plugins)   | Tenon 的插件库  |
+| [N-API](https://github.com/OrangeLab/N-API)   | 抽象 JS 引擎库  |
 
 ## 协议
 <img alt="Apache-2.0 license" src="https://www.apache.org/img/ASF20thAnniversary.jpg" width="128">
@@ -125,7 +126,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 支持 TS 项目视图调试
 
 #### 生态建设
-- Mpx2Tenon @[AdamCaoQAQ](https://github.com/AdamCaoQAQ)
+- Mpx2Tenon [@AdamCaoQAQ](https://github.com/AdamCaoQAQ)
   - [x] 基础编译流程打通
   - [x] 组件对接
   - [x] API对接
