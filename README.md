@@ -83,6 +83,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 - 9月份
     - 视图调试二期功能发布
     - VSCode 调试插件一期版本发布
+    - Mpx2Tenon 完成对接
     - Tenon Router 发布
 - 10月份
     - 公共包抽离能力（懒加载）发布
@@ -124,6 +125,11 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 支持 TS 项目视图调试
 
 #### 生态建设
+- Mpx2Tenon
+  - [x] 基础编译流程打通
+  - [x] 组件对接
+  - [x] API对接
+  - [ ] 细节打磨
 - Tenon React 一期 [@duanlikang](https://github.com/duanlikang)
   - [x] 基础组件对齐
   - [x] 基本事件模块对齐
