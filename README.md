@@ -125,7 +125,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 支持 TS 项目视图调试
 
 #### 生态建设
-- Mpx2Tenon [AdamCaoQAQ](https://github.com/AdamCaoQAQ)
+- Mpx2Tenon @[AdamCaoQAQ](https://github.com/AdamCaoQAQ)
   - [x] 基础编译流程打通
   - [x] 组件对接
   - [x] API对接
