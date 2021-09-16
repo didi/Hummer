@@ -37,7 +37,7 @@
 ### 0.3.21.5
 - 升级QuickJS至最新版2021-03-27，并且优化JS和Native异常堆栈输出信息；
 - 修复首次进入页面时，轮播组件的回调会回调两次的问题；
-- 修复Scroller直接不支持justifyContent、alignItems、padding等flex属性的问题；
+- 修复Scroller组件不支持justifyContent、alignItems、padding等flex属性的问题；
 - 修复富文本不支持自定义字体的问题；
 - 支持字体文件配置自定义Assets目录；
 - Image组件支持占位图和失败图，新增Image.load接口；

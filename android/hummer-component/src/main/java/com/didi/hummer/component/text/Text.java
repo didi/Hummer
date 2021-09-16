@@ -222,11 +222,11 @@ public class Text extends HMBase<TextView> {
         }
         switch (textVerticalAlign.toLowerCase()) {
             case "center":
+            default:
                 getView().setGravity(Gravity.CENTER_VERTICAL);
                 yGravity = Gravity.CENTER_VERTICAL;
                 break;
             case "top":
-            default:
                 getView().setGravity(Gravity.TOP);
                 yGravity = Gravity.TOP;
                 break;

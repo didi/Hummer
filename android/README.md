@@ -165,8 +165,11 @@ if (jsPage != null) {
 -keep @com.didi.hummer.annotation.Component class * {*;}
 -keep @com.didi.hummer.annotation.Module class * {*;}
 -keep class com.didi.hummer.core.engine.jsc.jni.** {*;}
+-keep class com.didi.hummer.core.engine.napi.** {*;}
+-keep class com.didi.hummer.core.exception.JSException {*;}
 -keep class com.didi.hummer.render.component.anim.AnimViewWrapper {*;}
 -keep class com.facebook.yoga.** {*;}
+-keep class com.facebook.jni.** {*;}
 ```
 
 ### 开启调试
@@ -184,8 +187,9 @@ Hummer.initHermesDebugger(new DefaultHermesDebugger());
 ```
 
 ##### 使用步骤：
-1. 打开 Chrome 浏览器，输入：```chrome://inspect```，点开【Discover network targets】后面的【Configure...】按钮，加入目标发现端口号：localhost:8081，并在terminal窗口输入以下命令映射设备端口号：```adb reverse tcp:8081 tcp:8081```。
-2. 在inspect页面找到你自己的页面的 ```inspect``` 入口，点击进入调试界面，切到 ```Sources``` 标签页下，按【cmd+P】快捷键，找到你自己的源文件，并设置好断点。
-3. 回到 App，点击【刷新】按钮，此时会自动跳转到刚才已打开的调试界面，并且代码应该已经运行到你的断点处了，可以点击右上角的按钮进行单步调试等操作。
+1. 开启debug服务：`hummer dev` & `hummer debug`，或者通过快捷命令：`npm run debug`，保持命令行窗口不要关闭。
+2. 打开 Chrome 浏览器，输入：`chrome://inspect`，点开【Discover network targets】后面的【Configure...】按钮，加入目标发现端口号：localhost:8081，并在terminal窗口输入以下命令映射设备端口号：`adb reverse tcp:8081 tcp:8081`。
+3. 在inspect页面找到你自己的页面的 `inspect` 入口，点击进入调试界面，切到 `Sources` 标签页下，按【cmd+P】快捷键，找到你自己的源文件，并设置好断点。
+4. 回到 App，点击【刷新】按钮，此时会自动跳转到刚才已打开的调试界面，并且代码应该已经运行到你的断点处了，可以点击右上角的按钮进行单步调试等操作。
 
 > 注：目前Hermes调试器内部有es6转es5的逻辑，所以打开页面时会稍微白屏一会，可以忽略。

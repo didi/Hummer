@@ -24,11 +24,17 @@ import java.util.Map;
  */
 public class HummerSinglePageActivity extends HummerActivity {
 
+    /**
+     * 设置该页面对应的namespace，用于做业务隔离（可选）
+     */
 //    @Override
 //    protected String getNamespace() {
 //        return "test_namespace";
 //    }
 
+    /**
+     * 初始化Hummer注册内容（原生侧向JS侧注册的类、全局变量和全局方法）
+     */
     @Override
     protected void initHummerRegister(HummerContext context) {
         super.initHummerRegister(context);
@@ -41,34 +47,58 @@ public class HummerSinglePageActivity extends HummerActivity {
 
         // Native向JS静态类注册回调方法（可选）
         // js中调用：Test.nativeFunc(111, 222);
-        hmRender.getHummerContext().registerJSFunction("Test.nativeFunc", new ICallback() {
-            @Override
-            public Object call(Object... params) {
-                Log.v("zdf", "Test.nativeFunc, params = " + Arrays.toString(params));
-                if (params.length > 4) {
-                    ((JSCallback) params[4]).call(12.34, true);
-                }
-                return "result1";
+        hmRender.getHummerContext().registerJSFunction("Test.nativeFunc", params -> {
+            Log.v("zdf", "Test.nativeFunc, params = " + Arrays.toString(params));
+            if (params.length > 4) {
+                ((JSCallback) params[4]).call(12.34, true);
             }
+            return "result1";
         });
     }
 
+    /**
+     * 渲染方式一：通过URL来源构造PageInfo信息，来渲染JS页面
+     */
+    @Override
+    protected NavPage getPageInfo() {
+        // URL来源一：通过Intent传入
+        return super.getPageInfo();
+
+        // URL来源二：assets文件路径
+        // return new NavPage("HelloWorld.js");
+
+        // URL来源三：手机设备文件路径
+        // return new NavPage("/sdcard/HelloWorld.js");
+
+        // URL来源四：网络url
+        // return new NavPage("http://x.x.x.x:8000/index.js");
+    }
+
+    /**
+     * 渲染方式二：直接通过JS来源渲染JS页面（此方式会丢失页面的PageInfo）
+     */
     @Override
     protected void renderHummer() {
-        // 方式一：通过Intent传入的url渲染JS页面
+        // JS来源一：通过Intent传入url
         super.renderHummer();
 
-        // 方式二：通过assets文件渲染JS页面
+        // JS来源二：assets文件
         // hmRender.renderWithAssets("HelloWorld.js");
 
-        // 方式三：通过url渲染JS页面
-        // hmRender.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/HelloWorld.js");
+        // JS来源三：手机设备文件
+        // hmRender.renderWithFile("/sdcard/HelloWorld.js");
 
-        // 方式四：通过JS内容渲染JS页面，需要先通过其实方式获取到JS内容
-        // String jsContent = "xxxx";
+        // JS来源四：网络url
+        // hmRender.renderWithUrl("http://x.x.x.x:8000/index.js");
+
+        // JS来源五：JS文本内容
+        // String jsContent = "let a = 1;";
         // hmRender.render(jsContent);
     }
 
+    /**
+     * 页面渲染成功的回调
+     */
     @Override
     protected void onPageRenderSucceed(@NonNull HummerContext hmContext, @NonNull JSValue jsPage) {
         Log.d("zdf", "onPageRenderSucceed");
@@ -89,12 +119,9 @@ public class HummerSinglePageActivity extends HummerActivity {
 
         // Native向JS对象注册回调方法（可选）
         // js中调用：this.nativeFunc(111, 222);
-        hmContext.registerJSFunction(jsPage, "nativeFunc", new ICallback() {
-            @Override
-            public Object call(Object... params) {
-                Log.v("zdf", "this.nativeFunc, params = " + Arrays.toString(params));
-                return "result2";
-            }
+        hmContext.registerJSFunction(jsPage, "nativeFunc", params -> {
+            Log.v("zdf", "this.nativeFunc, params = " + Arrays.toString(params));
+            return "result2";
         });
 
         // NotifyCenter全局通知消息
@@ -112,6 +139,9 @@ public class HummerSinglePageActivity extends HummerActivity {
 //        NotifyCenter.triggerEvent("testEvent", value);
     }
 
+    /**
+     * 页面渲染失败的回调
+     */
     @Override
     protected void onPageRenderFailed(@NonNull Exception e) {
         Log.e("zdf", "onPageRenderFailed, " + Log.getStackTraceString(e));

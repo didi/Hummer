@@ -37,27 +37,26 @@ public class HummerEmbeddedPageActivity extends AppCompatActivity {
         HummerLayout layout1 = findViewById(R.id.layout_hummer_1);
         // 构造函数中的namespace需和HummerConfig中的namespace配合使用，可不传
         hmRender1 = new HummerRender(layout1, "test_namespace");
-        // 页面加载回调（可选）
+        // 设置页面加载回调（可选）
         hmRender1.setRenderCallback(new HummerRender.HummerRenderCallback() {
             @Override
-            public void onSucceed(HummerContext hmContext, JSValue jsPage) {
-
-            }
+            public void onSucceed(HummerContext hmContext, JSValue jsPage) {}
 
             @Override
-            public void onFailed(Exception e) {
-
-            }
+            public void onFailed(Exception e) {}
         });
 
         // 方式一：通过assets文件渲染JS页面
-        // hmRender1.renderWithAssets("HelloWorld.js");
+        hmRender1.renderWithAssets("HelloWorld.js");
 
-        // 方式二：通过url渲染JS页面
-        hmRender1.renderWithUrl("http://xxx.xxx.xxx.xxx:8000/index.js");
+        // 方式二：通过手机设备文件渲染JS页面
+        // hmRender1.renderWithFile("/sdcard/HelloWorld.js");
 
-        // 方式三：通过JS内容渲染JS页面，需要先通过其实方式获取到JS内容
-        // String jsContent = "xxxx";
+        // 方式三：通过url渲染JS页面
+        // hmRender1.renderWithUrl("http://x.x.x.x:8000/index.js");
+
+        // 方式四：通过JS内容渲染JS页面
+        // String jsContent = "let a = 1;";
         // hmRender1.render(jsContent);
     }
 
@@ -68,28 +67,27 @@ public class HummerEmbeddedPageActivity extends AppCompatActivity {
         HummerLayout layout2 = findViewById(R.id.layout_hummer_2);
         // 构造函数中的namespace需和HummerConfig中的namespace配合使用，可不传
         hmRender2 = new HummerRender(layout2, "test_namespace");
-        // 页面加载回调（可选）
+        // 设置页面加载回调（可选）
         hmRender2.setRenderCallback(new HummerRender.HummerRenderCallback() {
             @Override
-            public void onSucceed(HummerContext hmContext, JSValue jsPage) {
-
-            }
+            public void onSucceed(HummerContext hmContext, JSValue jsPage) {}
 
             @Override
-            public void onFailed(Exception e) {
-
-            }
+            public void onFailed(Exception e) {}
         });
 
         // 方式一：通过assets文件渲染JS页面
-        // hmRender1.renderWithAssets("HelloWorld.js");
+        hmRender2.renderWithAssets("HelloWorld.js");
 
-        // 方式二：通过url渲染JS页面
-        hmRender2.renderWithUrl("http://xxx.xxx.xxx.xxx:8001/index.js");
+        // 方式二：通过手机设备文件渲染JS页面
+        // hmRender2.renderWithFile("/sdcard/HelloWorld.js");
 
-        // 方式三：通过JS内容渲染JS页面，需要先通过其实方式获取到JS内容
-        // String jsContent = "yyyy";
-        // hmRender1.render(jsContent);
+        // 方式三：通过url渲染JS页面
+        // hmRender2.renderWithUrl("http://x.x.x.x:8001/index.js");
+
+        // 方式四：通过JS内容渲染JS页面
+        // String jsContent = "let a = 1;";
+        // hmRender2.render(jsContent);
     }
 
     @Override
