@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.6.0...@hummer/tenon-vue@1.7.0) (2021-09-17)
+
+
+### Features
+
+* 添加本地runtime setStyle ([6eb1858](https://github.com.cnpmjs.org/didi/Hummer/commit/6eb1858579de7638846353e174a60983d4d42963))
+* development环境更新视图树结构 ([316b799](https://github.com.cnpmjs.org/didi/Hummer/commit/316b79922ee7e939eaf9f8b64ecb998ffc6bc04f))
+
+
+
+
+
 # [1.6.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.5.1...@hummer/tenon-vue@1.6.0) (2021-09-14)
 
 
