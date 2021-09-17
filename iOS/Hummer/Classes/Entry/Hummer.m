@@ -11,11 +11,7 @@
 
 @implementation Hummer
 
-
-
 + (void)startEngine:(void (^)(HMConfigEntry *))builder {
-    [HMInterceptor loadExportInterceptor];
-    
     [HMReporter reportPerformanceWithBlock:^(dispatch_block_t  _Nonnull finishBlock) {
         [HMExportManager.sharedInstance loadAllExportedComponent];
         finishBlock ? finishBlock() : nil;

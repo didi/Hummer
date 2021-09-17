@@ -14,6 +14,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, HMEngineType) {
+    HMEngineTypeJSC,
+    HMEngineTypeNAPI
+};
+
+HMEngineType HMGetEngineType(void);
+
+HMEngineType HMSetEngineType(HMEngineType newEngineType);
+
 typedef void (^HMExceptionHandler)(HMExceptionModel *exceptionModel);
 
 /**

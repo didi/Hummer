@@ -13,10 +13,11 @@ if (project.COMPILE_JS_ENGINE == 'All') {
     // 由于每个字gradle中只会设置一个cmake路径，所以这里需要设置一个总的cmake路径
     android {
         externalNativeBuild {
-        cmake {
-            path "src/main/jni/CMakeLists.txt"
+            cmake {
+                path "src/main/jni/CMakeLists.txt"
+            }
         }
-    }}
+    }
 } else if (project.COMPILE_JS_ENGINE == 'JSC') {
     apply from: 'fetch_jsc_libs.gradle'
     apply from: 'build_jsc.gradle'
@@ -43,9 +44,6 @@ android {
     ndkVersion "21.4.7075529"
 
     defaultConfig {
-
-        buildConfigField "long", "VERSION_CODE", "${defaultConfig.versionCode}"
-        buildConfigField "String","VERSION_NAME","\"${defaultConfig.versionName}\""
 
         ndk {
             abiFilters 'armeabi-v7a','x86','arm64-v8a','x86_64'

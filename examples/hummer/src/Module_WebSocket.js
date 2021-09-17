@@ -39,7 +39,19 @@ class RootView extends View {
             height: 40,
         };
         btn1.addEventListener('tap', e => {
-            WebSocket.connect('ws://x.x.x.x:9000/');
+            this.ws = new WebSocket('ws://x.x.x.x:8000/proxy/native');    
+            this.ws.onopen = () => {
+                console.log('WebSocket onOpen');
+            };
+            this.ws.onmessage = (event) => {
+                console.log('WebSocket onMessage, event.data = ' + event.data);
+            };
+            this.ws.onclose = (event) => {
+                console.log('WebSocket onClose, event.code = ' + event.code + ', event.reason = ' + event.reason);
+            };
+            this.ws.onerror = () => {
+                console.log('WebSocket onError');
+            };
         });
 
         let btn2 = new Button();
@@ -49,7 +61,7 @@ class RootView extends View {
             height: 40,
         };
         btn2.addEventListener('tap', e => {
-            WebSocket.close(1000, 'normal close');
+            this.ws.close();
         });
 
         let btn3 = new Button();
@@ -59,23 +71,8 @@ class RootView extends View {
             height: 40,
         };
         btn3.addEventListener('tap', e => {
-            WebSocket.send('test message!');
+            this.ws.send('test message!');
         });
-
-
-        WebSocket.onOpen(() => {
-            console.log('WebSocket onOpen');
-        });
-        WebSocket.onClose((code, reason) => {
-            console.log('WebSocket onClose, code = ' + code + ', reason = ' + reason);
-        });
-        WebSocket.onError((errMsg) => {
-            console.log('WebSocket onError, errMsg = ' + errMsg);
-        });
-        WebSocket.onMessage((data) => {
-            console.log('WebSocket onMessage, data = ' + data);
-        });
-
 
         let infoText = new Text();
         infoText.style = {

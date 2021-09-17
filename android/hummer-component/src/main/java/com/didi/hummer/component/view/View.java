@@ -12,6 +12,7 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.component.view.HummerLayoutExtendView;
+import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
 
 /**
@@ -122,6 +123,11 @@ public class View extends HummerLayoutExtendView {
     @JsMethod("empty")
     public void empty() {
         // 该方法用于测试
+    }
+
+    @JsMethod("dbg_view_tree")
+    public HummerNode dbg_view_tree() {
+        return getNode();
     }
 
     @Override

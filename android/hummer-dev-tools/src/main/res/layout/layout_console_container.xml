@@ -131,7 +131,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="函数树"
+            android:text="调用栈"
             android:textColor="@color/hummer_debug_tab_selector"
             android:textSize="14sp" />
 

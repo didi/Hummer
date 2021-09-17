@@ -14,6 +14,12 @@
 @property (nonatomic, strong) NSMutableDictionary *interceptorMap;
 @property (nonatomic, copy) NSDictionary *protocolMap;
 
+NS_ASSUME_NONNULL_BEGIN
+
+- (void)loadExportInterceptor;
+
+NS_ASSUME_NONNULL_END
+
 @end
 
 @implementation HMInterceptor
@@ -33,6 +39,8 @@
             @(HMInterceptorTypeJSCaller)      : @protocol(HMJSCallerIterceptor),
         };
         self.interceptorMap = [self _initializeInterceptorMapWithType:_protocolMap.allKeys];
+        
+        [self loadExportInterceptor];
     }
     return self;
 }
@@ -56,28 +64,25 @@ static HMInterceptor *__interceptors;
     return __interceptors;
 }
 
-+ (void)loadExportInterceptor {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        Dl_info info;
-        dladdr(&__interceptors, &info);
+- (void)loadExportInterceptor {
+    Dl_info info;
+    dladdr(&__interceptors, &info);
         
 #ifndef __LP64__
-        const struct mach_header *mhp = (struct mach_header*)info.dli_fbase;
-        unsigned long size = 0;
-        uint32_t *memory = (uint32_t*)getsectiondata(mhp, "__DATA", "hm_interceptor", & size);
+    const struct mach_header *mhp = (struct mach_header*)info.dli_fbase;
+    unsigned long size = 0;
+    uint32_t *memory = (uint32_t*)getsectiondata(mhp, "__DATA", "hm_interceptor", & size);
 #else /* defined(__LP64__) */
-        const struct mach_header_64 *mhp = (struct mach_header_64*)info.dli_fbase;
-        unsigned long size = 0;
-        uint64_t *memory = (uint64_t*)getsectiondata(mhp, "__DATA", "hm_interceptor", & size);
+    const struct mach_header_64 *mhp = (struct mach_header_64*)info.dli_fbase;
+    unsigned long size = 0;
+    uint64_t *memory = (uint64_t*)getsectiondata(mhp, "__DATA", "hm_interceptor", & size);
 #endif /* defined(__LP64__) */
         
-        for(int idx = 0; idx < size/sizeof(void*); ++idx){
-            char *string = (char*)memory[idx];
-            NSString *str = [NSString stringWithUTF8String:string];
-            [[HMInterceptor sharedInstance] _addLogInterceptorWithClass:NSClassFromString(str)];
-        }
-    });
+    for (int idx = 0; idx < size / sizeof(void *); ++idx) {
+        char *string = (char *)memory[idx];
+        NSString *str = [NSString stringWithUTF8String:string];
+        [self _addLogInterceptorWithClass:NSClassFromString(str)];
+    }
 }
 
 - (void)_addLogInterceptorWithClass:(Class)cls {

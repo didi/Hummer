@@ -51,6 +51,12 @@ static NAPIValue _Nullable hummerSetProperty(NAPIEnv _Nullable env, NAPICallback
 
 static NAPIValue _Nullable nativeLoggingHook(NAPIEnv _Nullable env, NAPICallbackInfo _Nullable callbackInfo);
 
+#if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
+
+static NAPIValue _Nullable setImmediate(NAPIEnv _Nullable env, NAPICallbackInfo _Nullable callbackInfo);
+
+#endif
+
 @interface HMJSExecutor ()
 
 @property (nonatomic, assign) NAPIEnv env;
@@ -360,6 +366,68 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
     return nil;
 }
+
+#if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
+
+NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
+    HMAssertMainQueue();
+    size_t argc = 1;
+    NAPIValue argv[1];
+    CHECK_COMMON(napi_get_cb_info(env, callbackInfo, &argc, argv, nil, nil))
+    if (argc != 1) {
+        assert(false);
+
+        return nil;
+    }
+    NAPIValueType valueType;
+    CHECK_COMMON(napi_typeof(env, argv[0], &valueType))
+    if (valueType != NAPIFunction) {
+        assert(false);
+        
+        return nil;
+    }
+    __weak HMJSExecutor *weakExecutor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
+    NAPIRef ref;
+    if ([weakExecutor popExceptionWithStatus:napi_create_reference(env, argv[0], 1, &ref)]) {
+        assert(false);
+        
+        return nil;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!weakExecutor) {
+            return;
+        }
+        NAPIHandleScope handleScope;
+        if (napi_open_handle_scope(weakExecutor.env, &handleScope) != NAPIErrorOK) {
+            assert(false);
+            
+            return;
+        }
+        NAPIValue functionValue;
+        if (napi_get_reference_value(weakExecutor.env, ref, &functionValue) != NAPIErrorOK) {
+            assert(false);
+            goto exit;
+        }
+        if ([weakExecutor popExceptionWithStatus:napi_delete_reference(weakExecutor.env, ref)]) {
+            assert(false);
+            goto exit;
+        }
+        NAPIValueType inlineValueType;
+        CHECK_COMMON(napi_typeof(env, functionValue, &inlineValueType))
+        if (inlineValueType != NAPIFunction) {
+            assert(false);
+            goto exit;
+        }
+        [weakExecutor popExceptionWithStatus:napi_call_function(weakExecutor.env, nil, functionValue, 0, nil, nil)];
+        
+    exit:
+        CHECK_COMMON(napi_close_handle_scope(weakExecutor.env, handleScope))
+    });
+    
+    return nil;
+}
+
+#endif
 
 @implementation HMJSExecutor
 
@@ -800,6 +868,7 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         NSAssert(NO, CREATE_EXTERNAL_ERROR);
         goto exit;
     }
+    CFRetain((__bridge CFTypeRef)object);
     // 第一个参数是 private 对象，第二个参数是导出对象 JS 类名
     NAPIValue args[] = {
             externalValue,
@@ -856,6 +925,7 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         NSAssert(NO, CREATE_EXTERNAL_ERROR);
         goto exit;
     }
+    CFRetain((__bridge CFTypeRef)function);
     if ([self popExceptionWithStatus:napi_call_function(self.env, nil, createFunctionFunction, 1, &externalValue, &returnValueRef)]) {
         NSAssert(NO, CALL_FUNCTION_ERROR);
         goto exit;
@@ -1108,8 +1178,7 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return nil;
     }
     // 是原先原生转成的 JS 闭包
-    CHECK_COMMON(napi_get_value_external(self.env, externalValue, &externalPointer))
-    if ([(__bridge id) externalPointer isKindOfClass:NSClassFromString(@"NSBlock")]) {
+    if (napi_get_value_external(self.env, externalValue, &externalPointer) == NAPIErrorOK && [(__bridge id) externalPointer isKindOfClass:NSClassFromString(@"NSBlock")]) {
         // 本次 JS 闭包是原生返回，复用原先的闭包
         CHECK_COMMON(napi_close_handle_scope(self.env, handleScope))
 
@@ -1131,7 +1200,7 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
             if (returnValueRef) {
                 return [[HMJSStrongValue alloc] initWithValueRef:returnValueRef executor:executor];
             }
-            CHECK_COMMON(napi_close_handle_scope(self.env, inlineHandleScope))
+            CHECK_COMMON(napi_close_handle_scope(executor.env, inlineHandleScope))
         }
 
         return (HMJSStrongValue *) nil;
@@ -1397,7 +1466,9 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 }
 
 - (instancetype)init {
+    BOOL initExecutorMap = NO;
     if (!HMExecutorMap) {
+        initExecutorMap = YES;
         HMExecutorMap = NSMapTable.strongToWeakObjectsMapTable;
     }
 
@@ -1459,6 +1530,15 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     }
 
 #if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
+    // setImmediate
+    NAPIValue setImmediateValue;
+    if ([self popExceptionWithStatus:napi_create_function(_env, nil, setImmediate, nil, &setImmediateValue)]) {
+        goto handleScopeError;
+    }
+    if ([self popExceptionWithStatus:napi_set_named_property(_env, globalValue, "setImmediate", setImmediateValue)]) {
+        goto handleScopeError;
+    }
+    
     if (!inspectorPackagerConnection) {
         NSString *escapedDeviceName = [[[UIDevice currentDevice] name]
                 stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
@@ -1479,7 +1559,9 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     envError:
     CHECK_COMMON(NAPIFreeEnv(_env))
     executorMapError:
-    HMExecutorMap = nil;
+    if (initExecutorMap) {
+        HMExecutorMap = nil;
+    }
 
     return nil;
 }

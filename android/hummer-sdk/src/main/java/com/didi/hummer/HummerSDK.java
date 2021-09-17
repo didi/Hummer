@@ -4,27 +4,27 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.navigator.impl.ActivityStackManager;
-import com.didi.hummer.context.HummerContext;
-import com.didi.hummer.context.HummerContextFactory;
-import com.didi.hummer.context.napi.NAPIHummerContext;
+import com.didi.hummer.adapter.tracker.ITrackerAdapter;
+import com.didi.hummer.adapter.tracker.SDKInfo;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.engine.napi.jni.JSException;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.core.util.DebugUtil;
-import com.didi.hummer.plugin.interfaze.IHermesDebugger;
-import com.didi.hummer.plugin.interfaze.IV8Debugger;
-import com.didi.hummer.render.style.HummerLayout;
+import com.didi.hummer.debug.plugin.IHermesDebugger;
+import com.didi.hummer.debug.plugin.IV8Debugger;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
 import com.didi.hummer.utils.blankj.Utils;
 import com.facebook.soloader.SoLoader;
 import com.getkeepsafe.relinker.ReLinker;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +33,8 @@ import java.util.Map;
  */
 public class HummerSDK {
 
-    @IntDef
+    @IntDef({JsEngine.JSC, JsEngine.QUICK_JS, JsEngine.V8, JsEngine.HERMES, JsEngine.NAPI_QJS, JsEngine.NAPI_HERMES})
+    @Retention(RetentionPolicy.SOURCE)
     public @interface JsEngine {
         int JSC         = 1;
         int QUICK_JS    = 2;
@@ -50,7 +51,7 @@ public class HummerSDK {
 
     public static Context appContext;
 
-    private static @HummerSDK.JsEngine int jsEngine = JsEngine.QUICK_JS;
+    private static @JsEngine int jsEngine = JsEngine.NAPI_QJS;
 
     private static volatile boolean isInited;
 
@@ -58,6 +59,9 @@ public class HummerSDK {
 
     private static IV8Debugger v8Debugger;
     private static IHermesDebugger hermesDebugger;
+
+    private static SDKInfo sdkInfo = new SDKInfo();
+    private static volatile boolean isSdkInfoTracked = false;
 
     public static boolean isSupport(Context context, @JsEngine int engine) {
         return loadJSEngine(context, engine);
@@ -76,6 +80,7 @@ public class HummerSDK {
     }
 
     public static void init(Context context, HummerConfig config) {
+        long startTime = System.currentTimeMillis();
         if (!isInited) {
             appContext = context.getApplicationContext();
             parseAppDebuggable(appContext);
@@ -87,25 +92,24 @@ public class HummerSDK {
 
             if (jsEngine == JsEngine.NAPI_QJS || jsEngine == JsEngine.NAPI_HERMES) {
                 JSException.init();
-                HummerContextFactory.setHummerContextCreator(new HummerContextFactory.IHummerContextCreator() {
-                    @Override
-                    public HummerContext create(@NonNull Context context) {
-                        return new NAPIHummerContext(context);
-                    }
-
-                    @Override
-                    public HummerContext create(@NonNull HummerLayout container, String namespace) {
-                        return new NAPIHummerContext(container, namespace);
-                    }
-                });
             } else {
                 HummerException.init();
             }
             isInited = true;
+
+            sdkInfo.jsEngine = jsEngine;
+            sdkInfo.isSdkInitSuccess = true;
+            sdkInfo.sdkInitTimeCost = (System.currentTimeMillis() - startTime);
         }
         addHummerConfig(config);
 
-        EventTracer.traceEvent(config != null ? config.getNamespace() : null, EventTracer.EventName.SDK_INIT);
+        String namespace = config != null ? config.getNamespace() : null;
+        ITrackerAdapter trackerAdapter = HummerAdapter.getTrackerAdapter(namespace);
+        if (!isSdkInfoTracked && trackerAdapter != null) {
+            trackerAdapter.trackSDKInfo(sdkInfo);
+            trackerAdapter.trackEvent(ITrackerAdapter.EventName.SDK_INIT, null);
+            isSdkInfoTracked = true;
+        }
     }
 
     public static void release() {

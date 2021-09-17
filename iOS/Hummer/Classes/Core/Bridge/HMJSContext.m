@@ -20,7 +20,7 @@
 #import "HMBaseValue.h"
 #import "HMJSGlobal.h"
 #import <Hummer/HMDebug.h>
-
+#import <Hummer/HMWebSocket.h>
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, HMCLILogLevel) {
@@ -90,6 +90,9 @@ NS_ASSUME_NONNULL_END
     self.context.webSocketHandler = nil;
     [self.webSocketTask cancel];
 #endif
+    [self.webSocketSet enumerateObjectsUsingBlock:^(HMWebSocket * _Nonnull obj, BOOL * _Nonnull stop) {
+        [obj close];
+    }];
 }
 
 + (instancetype)contextInRootView:(UIView *)rootView {
@@ -110,8 +113,11 @@ NS_ASSUME_NONNULL_END
     NSAssert(dataAsset, @"builtin dataset 无法在 xcassets 中搜索到");
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
     
-    _context = [[HMJSExecutor alloc] init];
-//    _context = [[HMJSCExecutor alloc] init];
+#if __has_include(<Hummer/HMJSExecutor.h>)
+    _context = HMGetEngineType() == HMEngineTypeNAPI ? [[HMJSExecutor alloc] init] : [[HMJSCExecutor alloc] init];
+#else
+    _context = [[HMJSCExecutor alloc] init];
+#endif
     [[HMJSGlobal globalObject] weakReference:self];
     __weak typeof(self) weakSelf = self;
     _context.exceptionHandler = ^(HMExceptionModel *exception) {
@@ -187,7 +193,11 @@ NS_ASSUME_NONNULL_END
     // context 和 WebSocket 对应
     if (!self.url && fileName.length > 0) {
         self.url = [NSURL URLWithString:fileName];
-        [((HMJSExecutor *)self.context) enableDebuggerWithTitle:fileName];
+#if __has_include(<Hummer/HMJSExecutor.h>)
+        if ([self.context isKindOfClass:HMJSExecutor.class]) {
+            [((HMJSExecutor *)self.context) enableDebuggerWithTitle:fileName];
+        }
+#endif
     }
     
 #ifdef HMDEBUG

@@ -1085,6 +1085,31 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         }
     }];
     
+    if (self.HMBorderBoxSizing) {
+        if (self.hm_borderModelCollection) {
+            self.hm_renderObject.borderTopWidth = self.hm_borderModelCollection.top.isShowBorder ? self.hm_borderModelCollection.top.borderWidth : YGUndefined;
+            self.hm_renderObject.borderBottomWidth = self.hm_borderModelCollection.bottom.isShowBorder ? self.hm_borderModelCollection.bottom.borderWidth : YGUndefined;
+            self.hm_renderObject.borderLeftWidth = self.hm_borderModelCollection.left.isShowBorder ? self.hm_borderModelCollection.left.borderWidth : YGUndefined;
+            self.hm_renderObject.borderRightWidth = self.hm_borderModelCollection.right.isShowBorder ? self.hm_borderModelCollection.right.borderWidth : YGUndefined;
+        } else if (self.layer.borderWidth > 0) {
+            self.hm_renderObject.borderWidth = self.layer.borderWidth;
+        } else {
+            self.hm_renderObject.borderWidth = YGUndefined;
+            self.hm_renderObject.borderTopWidth = YGUndefined;
+            self.hm_renderObject.borderBottomWidth = YGUndefined;
+            self.hm_renderObject.borderLeftWidth = YGUndefined;
+            self.hm_renderObject.borderRightWidth = YGUndefined;
+        }
+    } else {
+        self.hm_renderObject.borderWidth = YGUndefined;
+        self.hm_renderObject.borderTopWidth = YGUndefined;
+        self.hm_renderObject.borderBottomWidth = YGUndefined;
+        self.hm_renderObject.borderLeftWidth = YGUndefined;
+        self.hm_renderObject.borderRightWidth = YGUndefined;
+        //            self.hm_renderObject.borderStartWidth = YGUndefined;
+        //            self.hm_renderObject.borderEndWidth = YGUndefined;
+    }
+    
     // 设置样式之后，根据zindex 处理fixed
     [self hm_processFixedPositionWithContext:[HMJSGlobal.globalObject currentContext:style.context]];
     // 将动画相关信息记录到transitionAnimation

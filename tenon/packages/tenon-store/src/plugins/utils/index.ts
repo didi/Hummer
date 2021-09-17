@@ -69,12 +69,12 @@ export function getUUID(){
   return id
 }
 
-export function getNotifyEventKey(){
-  return `${NAMESPACE}_UPDATE_STORE`
+export function getNotifyEventKey(customKey?: string){
+  return `${customKey || NAMESPACE}_UPDATE_STORE`
 }
 
-export function getMemoryKey(){
-  return `${NAMESPACE}_STORE_MEMORY`
+export function getMemoryKey(customKey?: string){
+  return `${customKey || NAMESPACE}_STORE_MEMORY`
 }
 
 function randomString(length = 8, chars: string) {
@@ -116,5 +116,11 @@ export function setMemoryByKey(key:string, content: string){
 
 export function getMemoryByKey(key:string){
   let data = Memory.get(key);
+  if (data) {
+    // 兼容新老版本store 避免页面报错
+    if (!data.startsWith('Memory_')) {
+      return data
+    }
+  }
   return data && data.slice(7);
 }

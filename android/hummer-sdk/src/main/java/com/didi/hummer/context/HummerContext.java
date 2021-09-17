@@ -14,6 +14,7 @@ import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.core.util.HMLog;
+import com.didi.hummer.debug.InvokerAnalyzer;
 import com.didi.hummer.module.notifycenter.NotifyCenter;
 import com.didi.hummer.module.notifycenter.NotifyCenterInvoker;
 import com.didi.hummer.pool.ComponentPool;
@@ -23,7 +24,6 @@ import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.render.utility.DPUtil;
-import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.utils.AppUtils;
 import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.BarUtils;
@@ -67,12 +67,32 @@ public class HummerContext extends ContextWrapper {
     protected HummerLayout mContent;
     protected ComponentPool mComponentPool = new ComponentPool();
     protected JSContext mJsContext;
+    protected HMBase mJSRootView;
     protected JSValue mJsPage;
 
     /**
+     * invoke方法分析工具（用于调试阶段）
+     */
+    protected InvokerAnalyzer invokerAnalyzer;
+
+    /**
      * js文件源路径
+     *
+     * 有以下几种路径类型：
+     * 网络URL：http(s)://x.x.x.x/home/index.js
+     * Assets文件：assets:///xxx/index.js
+     * 本地文件：file:///data/data/xxx/files/xxx/index.js
      */
     protected String jsSourcePath = "";
+
+    /**
+     * 页面URL（即页面跳转时的URL，相对URL会被转成真实URL）
+     *
+     * 有以下两种URL类型：
+     * 网络URL：http(s)://x.x.x.x/home/index.js
+     * Hummer URL：hummer://home/index.js
+     */
+    protected String pageUrl = "";
 
     /**
      * 加入生命周期的各种判断，是为了适应网络加载情况下的异步执行JS
@@ -103,10 +123,11 @@ public class HummerContext extends ContextWrapper {
         HMLog.d("HummerNative", "HummerContext.new");
         this.namespace = namespace;
         this.mContainer = container;
-        this.mContent = new HummerLayout(this);
-        this.mContent.getYogaNode().setWidthPercent(100);
-        this.mContent.getYogaNode().setHeightPercent(100);
+        mContent = new HummerLayout(this);
+        mContent.getYogaNode().setWidthPercent(100);
+        mContent.getYogaNode().setHeightPercent(100);
         mContainer.addView(mContent);
+        invokerAnalyzer = InvokerAnalyzer.init();
     }
 
     public String getNamespace() {
@@ -165,6 +186,7 @@ public class HummerContext extends ContextWrapper {
 
     public void onDestroy() {
         HMLog.d("HummerNative", "HummerContext.onDestroy");
+        InvokerAnalyzer.release(invokerAnalyzer);
         destroy();
         NotifyCenter.release(mJsContext);
         releaseJSContext();
@@ -183,6 +205,7 @@ public class HummerContext extends ContextWrapper {
         stop();
         pause();
         destroy();
+        NotifyCenter.release(getContext());
         NotifyCenter.release(mJsContext);
     }
 
@@ -193,6 +216,7 @@ public class HummerContext extends ContextWrapper {
 
     public void render(HMBase base) {
         if (base != null) {
+            mJSRootView = base;
             mJsPage = base.getJSValue();
             mJsPage.protect();
             create();
@@ -211,8 +235,16 @@ public class HummerContext extends ContextWrapper {
         return mContainer;
     }
 
+    public HMBase getJSRootView() {
+        return mJSRootView;
+    }
+
     public JSValue getJsPage() {
         return mJsPage;
+    }
+
+    public InvokerAnalyzer getInvokerAnalyzer() {
+        return invokerAnalyzer;
     }
 
     public Context getContext() {
@@ -233,6 +265,14 @@ public class HummerContext extends ContextWrapper {
 
     public void setJsSourcePath(String jsSourcePath) {
         this.jsSourcePath = jsSourcePath;
+    }
+
+    public String getPageUrl() {
+        return pageUrl;
+    }
+
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
     }
 
     private void create() {

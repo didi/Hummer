@@ -43,12 +43,13 @@ NS_ASSUME_NONNULL_END
     Method *methods = class_copyMethodList(object_getClass(clazz), &outCount);
     for (int i = 0; i < outCount; ++i) {
         SEL selector = method_getName(methods[i]);
-        NSString *selectorName = NSStringFromSelector(selector);
-        if ([selectorName hasPrefix:@"__hm_export_method_"] || [selectorName hasPrefix:@"__hm_export_property_"]) {
-            BOOL isClass = NO;
-            if ([selectorName hasPrefix:@"__hm_export_method_class_"] || [selectorName  hasPrefix:@"__hm_export_property_class_"]) {
-                isClass = YES;
-            }
+        const char *charSelector = sel_getName(selector);
+        if (charSelector[0] != '_') {
+            continue;
+        }
+        
+        if (strstr(charSelector, "__hm_export_method_") == charSelector || strstr(charSelector, "__hm_export_property_") == charSelector) {
+            BOOL isClass = (strstr(charSelector, "__hm_export_method_class_") == charSelector) || (strstr(charSelector, "__hm_export_property_class_") == charSelector);
             [self loadMethodOrProperty:clazz withSelector:selector isClassMethodProperty:isClass];
         }
     }

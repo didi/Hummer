@@ -21,6 +21,7 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.event.view.InputEvent;
+import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
 
 @Component("Input")
@@ -148,8 +149,17 @@ public class Input extends HMBase<EditText> {
                 || actionId == EditorInfo.IME_ACTION_SEND
                 || actionId == EditorInfo.IME_ACTION_NEXT
                 || actionId == EditorInfo.IME_ACTION_DONE) {
-            handled = true;
-
+            switch (actionId) {
+                case EditorInfo.IME_ACTION_NEXT:
+                    handled = false;
+                    break;
+                case EditorInfo.IME_ACTION_DONE:
+                    setFocused(false);
+                    break;
+                default:
+                    handled = true;
+                    break;
+            }
             InputEvent inputEvent = new InputEvent();
             inputEvent.setType(InputEvent.HM_EVENT_TYPE_INPUT);
             inputEvent.setText(getView().getText().toString());
@@ -327,6 +337,13 @@ public class Input extends HMBase<EditText> {
     @JsAttribute("returnKeyType")
     public void setReturnKeyType(String type) {
         mProperty.setReturnKeyType(type);
+    }
+
+    @Override
+    public HummerNode getNode() {
+        HummerNode node = super.getNode();
+        node.setDesc(String.valueOf(getView().getText()));
+        return node;
     }
 
     @Override

@@ -7,6 +7,9 @@ android {
         versionCode VERSION_CODE
         versionName VERSION_NAME
 
+        buildConfigField "long", "VERSION_CODE", "${defaultConfig.versionCode}"
+        buildConfigField "String","VERSION_NAME","\"${defaultConfig.versionName}\""
+
 //        defaultPublishConfig project.VERSION.endsWith('-SNAPSHOT') ? 'debug' : 'release'
     }
 

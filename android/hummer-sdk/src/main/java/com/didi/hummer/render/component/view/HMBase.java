@@ -33,6 +33,7 @@ import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.YogaAttrUtils;
 import com.didi.hummer.sdk.R;
+import com.didi.hummer.utils.ScreenUtils;
 import com.facebook.yoga.YogaEdge;
 import com.facebook.yoga.YogaNode;
 import com.facebook.yoga.YogaPositionType;
@@ -169,7 +170,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     }
 
     public String getViewID() {
-        return hummerNode.getNodeId();
+        return hummerNode.getId();
     }
 
     public YogaNode getYogaNode() {
@@ -373,6 +374,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
 
         getView().post(() -> {
             Rect rect = new Rect();
+            int[] floats = ScreenUtils.getViewLocationOnScreen(getView());
             getView().getHitRect(rect);
             Map<String, Object> values = new HashMap<>();
             values.put("width", DPUtil.px2dpF(context, getView().getWidth()));
@@ -381,6 +383,10 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
             values.put("right", DPUtil.px2dpF(context, rect.right));
             values.put("top", DPUtil.px2dpF(context, rect.top));
             values.put("bottom", DPUtil.px2dpF(context, rect.bottom));
+            values.put("windowLeft", DPUtil.px2dpF(context, floats[0]));
+            values.put("windowRight", DPUtil.px2dpF(context, floats[0] + getView().getWidth()));
+            values.put("windowTop", DPUtil.px2dpF(context, floats[1]));
+            values.put("windowBottom", DPUtil.px2dpF(context, floats[1] + getView().getHeight()));
             callback.call(values);
         });
     }

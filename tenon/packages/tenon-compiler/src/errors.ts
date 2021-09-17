@@ -13,11 +13,12 @@ export function createDOMCompilerError(
   code: DOMErrorCodes,
   loc?: SourceLocation
 ): DOMCompilerError {
+  // vue 3.0.x -> 3.2.11 ts 报错 不能将类型“CompilerError”分配给类型“DOMCompilerError”。 加个类型断言
   return createCompilerError(
     code,
     loc,
     __DEV__ ? DOMErrorMessages : undefined
-  )
+  ) as DOMCompilerError
 }
 
 export const enum DOMErrorCodes {

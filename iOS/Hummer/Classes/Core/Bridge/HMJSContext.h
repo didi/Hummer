@@ -14,6 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class HMJSContext;
+@class HMWebSocket;
 
 @interface UIView (HMJSContext)
 
@@ -26,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 @interface HMJSContext : NSObject
+
+@property (nonatomic, nullable, copy) NSSet<HMWebSocket *> *webSocketSet;
 
 /**
  * 设置自身业务线的命名空间

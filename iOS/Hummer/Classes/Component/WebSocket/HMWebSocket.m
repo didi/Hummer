@@ -1,165 +1,149 @@
-//
-//  HMWebSocket.m
-//  Pods
-//
-//  Copyright © 2019年 didi. All rights reserved.
-//
-
 #import "HMWebSocket.h"
-#import "HMExportManager.h"
-#import "HMUtility.h"
-#import "HMBaseExecutorProtocol.h"
-#import "HMBaseValue.h"
-#import "HMWebSocketProtocol.h"
-#import "HMSRWebSocket.h"
-#import "HMURLSessionWebSocket.h"
-#import "NSString+HMConvertible.h"
-#import "NSData+HMConvertible.h"
+#import <Hummer/HMJSGlobal.h>
+#import <Hummer/HMExportManager.h>
+#import <Hummer/HMBaseValue.h>
+#import <Hummer/NSString+HMConvertible.h>
+#import <Hummer/NSObject+Hummer.h>
+#import <SocketRocket/SRWebSocket.h>
 
-//Close code: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+NS_ASSUME_NONNULL_BEGIN
 
-@interface HMWebSocket () <HMWebSocketDelegate>
+// TODO(ChasonTang): iOS 13 后替换为系统库
+@interface HMWebSocket () <SRWebSocketDelegate>
 
-@property (nonatomic, strong) id<HMWebSocketAdaptor> webSocket;
+/// 持有连接资源
+@property (nonatomic, strong, nullable) SRWebSocket *webSocket;
 
-@property (nonatomic, copy) HMFunctionType openCallback;
-@property (nonatomic, copy) HMFunctionType closeCallback;
-@property (nonatomic, copy) HMFunctionType errorCallback;
-@property (nonatomic, copy) HMFunctionType messageCallback;
+@property (nonatomic, copy, nullable) HMFunctionType onOpen;
+
+@property (nonatomic, copy, nullable) HMFunctionType onClose;
+
+@property (nonatomic, copy, nullable) HMFunctionType onError;
+
+@property (nonatomic, copy, nullable) HMFunctionType onMessage;
+
+@property (nonatomic, weak, nullable) HMJSContext *context;
+
+- (void)send:(nullable HMBaseValue *)data;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 @implementation HMWebSocket
 
-#pragma mark - Export
-
 HM_EXPORT_CLASS(WebSocket, HMWebSocket)
 
-HM_EXPORT_CLASS_METHOD(onOpen, __onOpen:)
-HM_EXPORT_CLASS_METHOD(onClose, __onClose:)
-HM_EXPORT_CLASS_METHOD(onError, __onError:)
-HM_EXPORT_CLASS_METHOD(onMessage, __onMessage:)
+HM_EXPORT_PROPERTY(onopen, onOpen, setOnOpen:)
 
-HM_EXPORT_CLASS_METHOD(connect, __connect:)
-HM_EXPORT_CLASS_METHOD(close, __close:reason:)
-HM_EXPORT_CLASS_METHOD(send, __send:)
+HM_EXPORT_PROPERTY(onclose, onClose, setOnClose:)
 
-+ (void)__onOpen:(HMFunctionType)openCallback
-{
-    [HMWebSocket sharedInstance].openCallback = openCallback;
-}
+HM_EXPORT_PROPERTY(onerror, onError, setOnError:)
 
-+ (void)__onClose:(HMFunctionType)closeCallback
-{
-    [HMWebSocket sharedInstance].closeCallback = closeCallback;
-}
+HM_EXPORT_PROPERTY(onmessage, onMessage, setOnMessage:)
 
-+ (void)__onError:(HMFunctionType)errorCallback
-{
-    [HMWebSocket sharedInstance].errorCallback = errorCallback;
-}
+HM_EXPORT_METHOD(close, close)
 
-+ (void)__onMessage:(HMFunctionType)messageCallback
-{
-    [HMWebSocket sharedInstance].messageCallback = messageCallback;
-}
+HM_EXPORT_METHOD(send, send:)
 
-+ (void)__connect:(HMBaseValue *)jsValue
-{
-    NSString *wsUrl = jsValue.isString ? jsValue.toString : @"";
-    [[HMWebSocket sharedInstance] openWithWSUrl:wsUrl];
-}
-
-+ (void)__close:(HMBaseValue *)jsCode reason:(HMBaseValue *)jsReason
-{
-    NSInteger code = jsCode.isNumber ? jsCode.toNumber.integerValue : 1000;
-    NSString *reason = jsReason.isString ? jsReason.toString : nil;
-    [[HMWebSocket sharedInstance] closeWithCode:code reason:reason];
-}
-
-+ (void)__send:(HMBaseValue *)jsValue
-{
-    NSString *text = jsValue.isString ? jsValue.toString : nil;
-    [[HMWebSocket sharedInstance] sendWithText:text];
-}
-
-#pragma mark - Private
-
-+ (instancetype)sharedInstance
-{
-    static HMWebSocket *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[HMWebSocket alloc] init];
-        sharedInstance.webSocket = [[HMSRWebSocket alloc] init];
-        sharedInstance.webSocket.delegate = sharedInstance;
-    });
-    return sharedInstance;
-}
-
-#pragma mark - web socket
-
-- (void)close
-{
-    [self.webSocket close:1000 reason:nil];
-    self.webSocket.delegate = nil;
+- (void)close {
+    HMAssertMainQueue();
+    [self.webSocket close];
     self.webSocket = nil;
-}
 
-- (void)closeWithCode:(NSInteger)code reason:(NSString *)reason
-{
-    [self.webSocket close:code reason:reason];
-    self.webSocket.delegate = nil;
-    self.webSocket = nil;
-}
-
-- (void)openWithWSUrl:(NSString *)wsUrl
-{
-    NSURL *URL = wsUrl.length > 0 ? [NSURL URLWithString:wsUrl] : nil;
-    if (URL) {
-        [self.webSocket openWithWSUrl:URL];
-    } else {
-        HMExecOnMainQueue(^{
-            HM_SafeRunBlock(self.errorCallback,@[@"WebSocket URL is nil"]);
-        });
+    self.onOpen = nil;
+    self.onError = nil;
+    self.onClose = nil;
+    self.onMessage = nil;
+    // 将自身从集合中移除
+    if (self.context) {
+        NSMutableSet<HMWebSocket *> *webSocketSet = self.context.webSocketSet.mutableCopy;
+        self.context.webSocketSet = nil;
+        [webSocketSet removeObject:self];
+        if (webSocketSet.count > 0) {
+            self.context.webSocketSet = webSocketSet;
+        }
     }
 }
 
-- (void)sendWithText:(NSString *)text
-{
-    if (text.length == 0) {
+- (void)send:(HMBaseValue *)data {
+    HMAssertMainQueue();
+    NSString *dataString = data.toString;
+    if (!dataString) {
         return;
     }
-    [self.webSocket send:text];
+    // 如果当前连接尚未准备好，则忽略错误，或者抛出 JS 异常
+    // 正常应当从 onopen 调用后开始 send
+    [self.webSocket sendString:dataString error:nil];
 }
 
-#pragma mark - SRWebSocketDelegate
+- (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values {
+    HMAssertMainQueue();
+    // 可空构造
+    HMBaseValue *urlValue = values.firstObject;
+    NSString *urlString = urlValue.toString;
+    if (!urlString || !HMCurrentExecutor) {
+        return nil;
+    }
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    if (!context) {
+        return nil;
+    }
+    NSURL *url = [NSURL URLWithString:urlString];
+    if (!url) {
+        return nil;
+    }
+    self = [super init];
+    _webSocket = [[SRWebSocket alloc] initWithURL:url];
+    _webSocket.delegate = self;
+    [_webSocket open];
+    _context = context;
 
-- (void)webSocket:(id<HMWebSocketAdaptor>)webSocket didReceiveMessage:(id)message{
-    HMExecOnMainQueue(^{
-        HM_SafeRunBlock(self.messageCallback,@[message?:@""]);
-    });
+    return self;
 }
 
-- (void)webSocket:(id<HMWebSocketAdaptor>)webSocket didFailWithError:(NSError *)error{
-    NSString *errorMsg = HMJSONEncode(error.userInfo) ?: @"WebSocket did fail";
-    HMExecOnMainQueue(^{
-        HM_SafeRunBlock(self.errorCallback,@[errorMsg]);
-    });
+/// MARK: - SRWebSocketDelegate
+
+// - webSocket:didReceiveMessage: 被废弃
+
+- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessageWithString:(NSString *)string {
+    HMAssertMainQueue();
+    // 调用回调
+    self.onMessage ? self.onMessage(@[string]) : nil;
 }
 
-- (void)webSocketDidOpen:(id<HMWebSocketAdaptor>)webSocket{
-    HMExecOnMainQueue(^{
-        HM_SafeRunBlock(self.openCallback,@[]);
-    });
+// - webSocket:didReceiveMessageWithData: 暂时不实现
+
+- (void)webSocketDidOpen:(SRWebSocket *)webSocket {
+    HMAssertMainQueue();
+    // 将自身加入到集合
+    if (!self.context) {
+        return;
+    }
+    NSMutableSet<HMWebSocket *> *webSocketSet = self.context.webSocketSet.mutableCopy;
+    self.context.webSocketSet = nil;
+    if (!webSocketSet) {
+        webSocketSet = NSMutableSet.set;
+    }
+    [webSocketSet addObject:self];
+    self.context.webSocketSet = webSocketSet;
 }
 
-- (void)webSocket:(id<HMWebSocketAdaptor>)webSocket didCloseWithCode:(NSInteger)code reason:(id<HMStringDataConvertible>)reason wasClean:(BOOL)wasClean{
-    HMExecOnMainQueue(^{
-        HM_SafeRunBlock(self.closeCallback,@[@(code),[reason hm_asString]?:@""]);
-    });
-
+- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
+    HMAssertMainQueue();
+    if (webSocket.readyState != SR_OPEN) {
+        // 主要是清理资源，防止连接建立失败后，依然存在闭包，并且需要调用 onclose
+        self.onClose ? self.onClose(@[@{}]) : nil;
+        [self close];
+    } else {
+        self.onError ? self.onError(@[@{}]) : nil;
+    }
 }
 
+- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
+    HMAssertMainQueue();
+    self.onClose ? self.onClose(@[@{}]) : nil;
+}
 
 @end
+

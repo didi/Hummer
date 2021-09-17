@@ -37,7 +37,6 @@ dependencies {
     } else {
         api 'com.didi.hummer:hummer-annotation:0.2.2'
     }
-    api 'com.didi.hummer:hummer-plugin-interface:0.0.1'
     api project(":hummer-core")
     annotationProcessor project(":hummer-compiler")
 

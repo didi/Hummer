@@ -26,33 +26,61 @@ Hummer is a dynamic solution for client.
   s.license          = { :type => 'Apache-2.0', :file => 'LICENSE' }
   s.author           = { 'ChasonTang' => 'tangjiacheng@didiglobal.com' }
   s.source           = { :git => 'https://github.com/didi/Hummer.git', :tag => s.version.to_s }
+  s.prepare_command = <<-CMD
+    curl -o napi_ios.tar.gz -L https://github.com/OrangeLab/N-API/releases/download/2.0.4/napi_ios.tar.gz
+    tar zxf napi_ios.tar.gz
+    rm -f napi_ios.tar.gz
+  CMD
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
   
   s.ios.deployment_target = '9.0'
   
   s.default_subspec        = "Core"
 
-  s.subspec "Hermes" do |ss|
+  s.subspec "N-API" do |ss|
     ss.pod_target_xcconfig = {
-      'HEADER_SEARCH_PATHS' => "$(PODS_TARGET_SRCROOT)/iOS/N-API/include $(PODS_TARGET_SRCROOT)/iOS/N-API/third_party/react-native/ReactCommon",
+      'HEADER_SEARCH_PATHS' => "$(PODS_TARGET_SRCROOT)/include"
+    }
+    ss.preserve_paths = 'include/napi/*.{h,def}'
+    ss.source_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m}'
+    ss.private_header_files = 'iOS/Hummer/Classes/Engine/N-API/HMJSExecutor+Private.h', 'iOS/Hummer/Classes/Engine/N-API/HMJS{Weak,Strong}Value.h', 'iOS/Hummer/Classes/Engine/N-API/HMJSValue.h'
+  end
+
+  s.subspec "Hermes" do |ss|
+    ss.dependency 'Hummer/Core'
+    ss.dependency 'Hummer/N-API'
+    ss.pod_target_xcconfig = {
+      'HEADER_SEARCH_PATHS' => "$(PODS_TARGET_SRCROOT)/iOS",
       'GCC_ENABLE_CPP_EXCEPTIONS' => 'NO',
       'GCC_ENABLE_CPP_RTTI' => 'NO'
     }
-    ss.vendored_library = 'iOS/N-API/napi/libhermes.a'
+    ss.vendored_library = 'libhermes.a'
     ss.library = 'c++'
     ss.framework = 'CoreFoundation'
     ss.source_files = 'iOS/Hermes/*.{h,m,mm}'
     ss.dependency 'SocketRocket', '~> 0.1'
   end
 
+  s.subspec "JavaScriptCore" do |ss|
+    ss.dependency 'Hummer/Core'
+    ss.dependency 'Hummer/N-API'
+    ss.vendored_library = 'libjsc.a'
+    ss.framework = "JavaScriptCore"
+  end
+
+  # s.subspec "QuickJS" do |ss|
+  #   ss.dependency 'Hummer/Core'
+  #   ss.dependency 'Hummer/N-API'
+  #   ss.vendored_library = 'libquickjs.a'
+  # end
+
   s.subspec "Core" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
-    ss.private_header_files = 'iOS/Hummer/Classes/Engine/N-API/HMJSExecutor+Private.h', 'iOS/Hummer/Classes/Engine/N-API/HMJS{Weak,Strong}Value.h', 'iOS/Hummer/Classes/Engine/N-API/HMJSValue.h'
+    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m}'
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
-    ss.frameworks = 'JavaScriptCore'
-    ss.dependency 'Hummer/Hermes'
+    ss.framework = 'JavaScriptCore'
     ss.dependency 'Yoga', '~> 1.14'
     ss.dependency 'SocketRocket', '~> 0.1'
   end

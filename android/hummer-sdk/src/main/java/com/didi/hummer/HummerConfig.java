@@ -6,12 +6,11 @@ import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
 import com.didi.hummer.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
+import com.didi.hummer.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.scriptloader.impl.DefaultScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
 import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
-import com.didi.hummer.adapter.websocket.IWebSocketAdapter;
-import com.didi.hummer.adapter.websocket.impl.DefaultWebSocketAdapter;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
@@ -50,10 +49,6 @@ public class HummerConfig {
      */
     private IHttpAdapter httpAdapter;
     /**
-     * WebSocket适配器
-     */
-    private IWebSocketAdapter webSocketAdapter;
-    /**
      * 图片加载适配器
      */
     private IImageLoaderAdapter imageLoaderAdapter;
@@ -69,6 +64,10 @@ public class HummerConfig {
      * 脚本加载适配器
      */
     private IScriptLoaderAdapter scriptLoaderAdapter;
+    /**
+     * 数据统计适配器
+     */
+    private ITrackerAdapter trackerAdapter;
 
     private HummerConfig(Builder builder) {
         this.namespace = builder.namespace;
@@ -78,11 +77,11 @@ public class HummerConfig {
         this.isSupportRTL = builder.isSupportRTL;
         this.fontsAssetsPath = builder.fontsAssetsPath;
         this.httpAdapter = builder.httpAdapter;
-        this.webSocketAdapter = builder.webSocketAdapter;
         this.imageLoaderAdapter = builder.imageLoaderAdapter;
         this.storageAdapter = builder.storageAdapter;
         this.navAdapter = builder.navAdapter;
         this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
+        this.trackerAdapter = builder.trackerAdapter;
     }
 
     public String getNamespace() {
@@ -125,13 +124,6 @@ public class HummerConfig {
         return httpAdapter;
     }
 
-    public IWebSocketAdapter getWebSocketAdapter() {
-        if (webSocketAdapter == null) {
-            webSocketAdapter = new DefaultWebSocketAdapter();
-        }
-        return webSocketAdapter;
-    }
-
     public IImageLoaderAdapter getImageLoaderAdapter() {
         if (imageLoaderAdapter == null) {
             imageLoaderAdapter = new DefaultImageLoaderAdapter();
@@ -161,6 +153,10 @@ public class HummerConfig {
         return scriptLoaderAdapter;
     }
 
+    public ITrackerAdapter getTrackerAdapter() {
+        return trackerAdapter;
+    }
+
     public static class Builder {
         private String namespace = HummerSDK.NAMESPACE_DEFAULT;
         private JSLogger.Logger jsLogger;
@@ -169,11 +165,11 @@ public class HummerConfig {
         private boolean isSupportRTL;
         private String fontsAssetsPath;
         private IHttpAdapter httpAdapter;
-        private IWebSocketAdapter webSocketAdapter;
         private IImageLoaderAdapter imageLoaderAdapter;
         private IStorageAdapter storageAdapter;
         private INavigatorAdapter navAdapter;
         private IScriptLoaderAdapter scriptLoaderAdapter;
+        private ITrackerAdapter trackerAdapter;
 
         public Builder setNamespace(String namespace) {
             this.namespace = namespace;
@@ -185,6 +181,7 @@ public class HummerConfig {
             return this;
         }
 
+        @Deprecated
         public Builder setEventTracer(EventTracer.Trace trace) {
             this.eventTracer = trace;
             return this;
@@ -210,11 +207,6 @@ public class HummerConfig {
             return this;
         }
 
-        public Builder setWebSocketAdapter(IWebSocketAdapter adapter) {
-            webSocketAdapter = adapter;
-            return this;
-        }
-
         public Builder setImageLoaderAdapter(IImageLoaderAdapter adapter) {
             imageLoaderAdapter = adapter;
             return this;
@@ -232,6 +224,11 @@ public class HummerConfig {
 
         public Builder setScriptLoaderAdapter(IScriptLoaderAdapter adapter) {
             scriptLoaderAdapter = adapter;
+            return this;
+        }
+
+        public Builder setTrackerAdapter(ITrackerAdapter adapter) {
+            trackerAdapter = adapter;
             return this;
         }
 

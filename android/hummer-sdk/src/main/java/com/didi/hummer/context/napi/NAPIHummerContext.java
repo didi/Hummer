@@ -6,8 +6,6 @@ import android.widget.Toast;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
-import com.didi.hummer.core.debug.InvokeTracker;
-import com.didi.hummer.core.debug.InvokerAnalyzerManager;
 import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.engine.base.IRecycler;
 import com.didi.hummer.core.engine.napi.NAPIContext;
@@ -16,6 +14,7 @@ import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.core.util.HMLog;
+import com.didi.hummer.debug.InvokerAnalyzer;
 import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
@@ -29,9 +28,9 @@ public class NAPIHummerContext extends HummerContext {
             return null;
         }
 
-        String className = (String) params[0];
+        String className = String.valueOf(params[0]);
         long objectID = ((Number) params[1]).longValue();
-        String methodName = (String) params[2];
+        String methodName = String.valueOf(params[2]);
         Object[] realParams = Arrays.copyOfRange(params, 3, params.length);
 
         if (DebugUtil.isDebuggable()) {
@@ -49,16 +48,13 @@ public class NAPIHummerContext extends HummerContext {
         Object ret = null;
         try {
             // <for debug>
-            InvokeTracker tracker = InvokerAnalyzerManager.getInstance().startTrack(mJsContext.getIdentify());
-            if (tracker != null) {
-                tracker.track(className, objectID, methodName, realParams);
-            }
+            InvokerAnalyzer.startTrack(invokerAnalyzer, className, objectID, methodName, params);
 
             // 执行具体的invoke方法，并得到Object类型的返回值
             ret = invoker.onInvoke(this, objectID, methodName, realParams);
 
             // <for debug>
-            InvokerAnalyzerManager.getInstance().stopTrack(mJsContext.getIdentify(), tracker);
+            InvokerAnalyzer.stopTrack(invokerAnalyzer);
         } catch (Exception e) {
             String jsStack = ExceptionUtil.getJSErrorStack(mJsContext);
             ExceptionUtil.addStackTrace(e, new StackTraceElement("<<JS_Stack>>", "", "\n" + jsStack, -1));
@@ -109,16 +105,12 @@ public class NAPIHummerContext extends HummerContext {
         // 异常回调注册
         JSException.addJSContextExceptionCallback(mJsContext, exceptionCallback);
 
-        // Debug模式下的视图树分析器初始化
-        InvokerAnalyzerManager.getInstance().init(mJsContext.getIdentify());
-
         onCreate();
     }
 
     @Override
     public void releaseJSContext() {
         JSException.removeJSContextExceptionCallback(mJsContext);
-        InvokerAnalyzerManager.getInstance().release(mJsContext.getIdentify());
         super.releaseJSContext();
     }
 }

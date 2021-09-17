@@ -1,6 +1,6 @@
 {
   "name": "@hummer/tenon-vue",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Tenon运行时",
   "homepage": "",
   "license": "ISC",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@hummer/tenon-dev-tool": "file:../tenon-dev-tool",
     "@hummer/tenon-utils": "file:../tenon-utils",
-    "@vue/reactivity": "^3.0.1",
-    "@vue/runtime-core": "^3.0.1"
+    "@vue/reactivity": "3.2.11",
+    "@vue/runtime-core": "3.2.11"
   }
 }

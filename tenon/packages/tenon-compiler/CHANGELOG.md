@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-compiler@1.2.13...@hummer/tenon-compiler@1.3.0) (2021-09-14)
+
+
+### Features
+
+* **tenon:** tenon-compiler & tenon-vue 依赖vue相关包版本锁定为3.2.11 ([91d8492](https://github.com.cnpmjs.org/didi/Hummer/commit/91d8492a99b017284591f7e1132dfcfb917e7215))
+
+
+
+
+
 ## [1.2.13](https://github.com/didi/Hummer/compare/@hummer/tenon-compiler@1.2.12...@hummer/tenon-compiler@1.2.13) (2021-06-28)
 
 **Note:** Version bump only for package @hummer/tenon-compiler

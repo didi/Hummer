@@ -56,7 +56,8 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 | [Hummer CLI](https://github.com/OrangeLab/hummer-cli) | Hummer CLI 工具库  |
 | [Hummer CLI Template](https://github.com/OrangeLab/hummer-cli-template)   | Hummer CLI 的模板仓库  |
 | [Tenon Loader](https://github.com/OrangeLab/tenon-loader)   | Tenon Vue Loader  |
-| [Tenon Plugins ](https://github.com/OrangeLab/tenon-plugins)   | Tenon 的插件库  |
+| [Tenon Plugins](https://github.com/OrangeLab/tenon-plugins)   | Tenon 的插件库  |
+| [N-API](https://github.com/OrangeLab/N-API)   | 抽象 JS 引擎库  |
 
 ## 协议
 <img alt="Apache-2.0 license" src="https://www.apache.org/img/ASF20thAnniversary.jpg" width="128">
@@ -65,28 +66,33 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 
 ## 团队成员
 - **负责人** [小枫](https://github.com/bbssyyuui)
-- **内部核心成员** [小枫](https://github.com/bbssyyuui), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
+- **内部核心成员** [小枫](https://github.com/bbssyyuui), [符孙浪](https://github.com/fusunlang), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
 - **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin), [jtsky](https://github.com/jtsky), [jayconscious](https://github.com/jayconscious), [宏宇](https://github.com/ringlong), [litianhao3615](https://github.com/litianhao3615), [Leo](https://github.com/firelion0725), [jueying-key](https://github.com/jueying-xiangfeng), [WorriesL](https://github.com/WorriesL)
 
 ## 近期规划
 
 ### 里程碑
-- 6月底
+- 6月份
     - iOS 版 DevTools 发布
     - Tenon React 一期版本发布
-- 7月底
+- 7月份
     - VSCode 调试插件预览版完成
     - N-API 预览版完成
-- 8月底
-    - 视图调试功能发布
-    - VSCode 调试插件正式版发布
+- 8月份
+    - 视图调试一期功能发布
     - N-API 正式发布
-- 9月底
-    - VSCode 插件完整版发布
-    - mand-mobild for Hummer 版组件库一期版本发布
-    - Tenon React 二期版本发布
+- 9月份
+    - 视图调试二期功能发布
+    - VSCode 调试插件一期版本发布
+    - Mpx2Tenon 完成对接
     - Tenon Router 发布
-    - 公共包抽离能力发布
+- 10月份
+    - 公共包抽离能力（懒加载）发布
+    - VSCode 调试插件二期版本发布
+- 11月份
+    - VSCode 插件完整版本发布
+    - Tenon React 二期版本发布
+    - mand-mobild for Hummer 版组件库一期版本发布
 
 ### 具体事项
 #### 研发体验
@@ -94,7 +100,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 设计和编写测试用例
     - [ ] 搜集和梳理两端不一致问题
     - [ ] 逐一解决两端不一致问题
-    - [ ] iOS 端完成部分组件自渲染
+    - [ ] iOS 端完成部分组件自渲染 [@ChasonTang](https://github.com/ChasonTang)
 - DevTools
     - [x] iOS 对齐 Android 端【开发工具】按钮功能，可以显示日志、异常堆栈和页面基本信息 [@宏宇](https://github.com/ringlong)
     - [ ] iOS 对齐 Android 端【刷新】按钮功能
@@ -102,14 +108,30 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [x] CLI 支持命令行日志输出 [@duanlikang](https://github.com/duanlikang)
     - [ ] 增强版 DevTools 支持（类似RN）
 - VSCode 插件
-    - [ ] VSCode 调试插件开发完成
-    - [ ] Tenon 支持代码提示和代码自动补全
-- 视图调试
-    - [x] Dev 页面展示视图树和节点样式 [@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@jayconscious](https://github.com/jayconscious)
+    - [ ] VSCode 调试插件一期功能开发完成 [@yFeii](https://github.com/yFeii)
+    - [ ] VSCode 调试插件二期功能开发完成 [@yFeii](https://github.com/yFeii)
+    - [ ] 插件中集成进视图调试功能 [@yFeii](https://github.com/yFeii)
+    - [ ] Tenon 支持代码提示和代码自动补全 [@yFeii](https://github.com/yFeii)
+- 视图调试一期
+    - [x] Dev 页面展示视图树和节点样式（仅支持 Vue 项目）[@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@jayconscious](https://github.com/jayconscious)
     - [x] 原生侧高亮选中的UI控件（画框）[@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
+- 视图调试二期
+    - [ ] Dev 首页展示和交互优化
+    - [x] 视图树显示优化 [@jayconscious](https://github.com/jayconscious)
+    - [x] 支持视图树节点搜索 [@jayconscious](https://github.com/jayconscious)
+    - [x] 支持样式修改 [@jayconscious](https://github.com/jayconscious)
+    - [ ] 支持多页面同时调试 [@jayconscious](https://github.com/jayconscious)
+    - [x] 支持窗口大小调整 [@jayconscious](https://github.com/jayconscious)
+    - [ ] 支持日志折叠
+    - [ ] 支持 TS 项目视图调试
 
 #### 生态建设
-- Tenon React 一期版本 [@duanlikang](https://github.com/duanlikang)
+- Mpx2Tenon [@AdamCaoQAQ](https://github.com/AdamCaoQAQ)
+  - [x] 基础编译流程打通
+  - [x] 组件对接
+  - [x] API对接
+  - [ ] 细节打磨
+- Tenon React 一期 [@duanlikang](https://github.com/duanlikang)
   - [x] 基础组件对齐
   - [x] 基本事件模块对齐
   - [x] 页面生命周期逻辑
@@ -119,7 +141,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [x] 支持 Ref
   - [x] 支持页面配置
   - [x] 一期功能文档编写
-- Tenon React 二期版本 [@duanlikang](https://github.com/duanlikang)
+- Tenon React 二期 [@duanlikang](https://github.com/duanlikang)
   - [x] 支持动画
   - [x] 事件模块重构
   - [x] 样式模块优化
@@ -132,8 +154,8 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 - Hummer 基础组件建设
   - [ ] 单选框（Radio）
   - [ ] 复选框（Checkbox）
-  - [ ] 普通进度条（Progress）
-  - [ ] 滑动进度条（Slider）
+  - [ ] 普通进度条（Progress）[@jueying-key](https://github.com/jueying-xiangfeng) [@WorriesL](https://github.com/WorriesL)
+  - [ ] 滑动进度条（Slider）[@jueying-key](https://github.com/jueying-xiangfeng) [@WorriesL](https://github.com/WorriesL)
   - [ ] 日期/时间选择器（DatePicker）
   - [ ] 图片选择器（ImagePicker）
   - [ ] 图片预览（ImageViewer）
@@ -147,7 +169,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [x] 原生实现 JS 执行 JS 能力 [@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
   - [ ] 公共包抽离
   - [ ] 页面懒加载（Tenon Router）
-- 多线程支持
+- 线程分离（异步渲染）
 
 #### 其他
 - N-API 抽象 JS 引擎

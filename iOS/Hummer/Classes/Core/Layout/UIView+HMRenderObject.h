@@ -31,6 +31,8 @@ FOUNDATION_EXTERN HMLayoutEngine hm_get_layout_engine(void);
 
 FOUNDATION_EXTERN HMSizeThatFitsMode HMGetSizeThatFitsMode(void);
 
+FOUNDATION_EXTERN void HMChangeSizeThatFitsMode(HMSizeThatFitsMode newSizeThatFitsMode);
+
 FOUNDATION_EXTERN void hm_change_layout_engine(HMLayoutEngine layoutEngine);
 
 FOUNDATION_EXTERN UIView *_Nullable hm_yoga_get_root_view(UIView *_Nullable currentView);
