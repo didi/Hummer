@@ -1,0 +1,18 @@
+export const Color = {
+    hm_linear_gradient: 'linear-gradient(90deg #15D0B4 #E2ED00)',
+    hm_yellow: '#E2ED00',
+    hm_green: '#15D0B4',
+    hm_blue: '#4A90E2',
+    hm_orange: '#F1CA19',
+    hm_purple: '#8484FF',
+    transparent: '#00000000',
+    black: '#000000',
+    white: '#FFFFFF',
+    red: '#FF0000',
+    green: '#00FF00',
+    blue: '#0000FF',
+    grey: '#808080',
+    light_grey: '#CCCCCC',
+    dark_grey: '#333333',
+    transparent_grey: '#00000060',
+}

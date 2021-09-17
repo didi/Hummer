@@ -1,0 +1,19 @@
+{
+  "name": "components_examples",
+  "version": "1.0.0",
+  "description": "Hummer Components Examples Project",
+  "author": "zhangdanfeng <zhangdanfeng@didichuxing.com>",
+  "scripts": {
+    "build": "hummer build",
+    "dev": "hummer dev",
+    "debug": "npm run dev & hummer debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.xiaojukeji.com:tenon/tenon-demo.git"
+  },
+  "dependencies": {
+    "@hummer/hummer-front": "^1.0.3"
+  },
+  "devDependencies": {}
+}
