@@ -71,11 +71,11 @@ class RootView extends Scroller {
     }
     this.appendChild(this.contentView);
 
-    this.initCommonViewStyle();
+    this.initNormalStyle();
     this.initViewComponents();
   }
 
-  initCommonViewStyle() {
+  initNormalStyle() {
     this.initGroupTitle('通用样式');
     this.initItem("通用布局样式", 'normal_layout_style.js');
     this.initItem("通用视图样式", 'normal_view_style.js');

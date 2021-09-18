@@ -1,7 +1,7 @@
 import { Hummer, View, Text, Image, ViewPager, ViewPagerStyle } from '@hummer/hummer-front'
-import { NormalContentView, OperationLayout } from '../common/CommonLayout';
-import { ComponentPage } from '../common/CommonPage'
-import { Color } from '../common/CommonColor'
+import { NormalContentView, OperationLayout } from '../../common/CommonLayout';
+import { ComponentPage } from '../../common/CommonPage'
+import { Color } from '../../common/CommonColor'
 
 class RootView extends ComponentPage {
   containers: Array<View>;

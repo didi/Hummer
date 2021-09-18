@@ -1,9 +1,9 @@
 import { Hummer, View, Text, Image } from '@hummer/hummer-front'
-import { GroupTitle, GroupContent } from '../common/CommonLayout'
-import { ComponentPage } from '../common/CommonPage'
-import { Color } from '../common/CommonColor'
-import { Style } from '../common/CommonStyle'
-import { Img } from '../common/CommonResource'
+import { GroupTitle, GroupContent } from '../../common/CommonLayout'
+import { ComponentPage } from '../../common/CommonPage'
+import { Color } from '../../common/CommonColor'
+import { Style } from '../../common/CommonStyle'
+import { Img } from '../../common/CommonResource'
 
 class RootView extends ComponentPage {
   constructor() {

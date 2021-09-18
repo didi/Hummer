@@ -1,6 +1,6 @@
 import { Hummer, View, Input } from '@hummer/hummer-front'
 import { InputPage } from './InputPage'
-import { Color } from '../common/CommonColor'
+import { Color } from '../../common/CommonColor'
 
 class RootView extends InputPage {
   constructor() {

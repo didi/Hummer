@@ -1,8 +1,8 @@
 import { Hummer, View, Text } from '@hummer/hummer-front'
-import { Page, ScrollContentView, GroupTitle, GroupContent } from '../common/CommonLayout'
-import { Color } from '../common/CommonColor'
-import { Style } from '../common/CommonStyle'
-import { Img } from '../common/CommonResource'
+import { Page, ScrollContentView, GroupTitle, GroupContent } from '../../common/CommonLayout'
+import { Color } from '../../common/CommonColor'
+import { Style } from '../../common/CommonStyle'
+import { Img } from '../../common/CommonResource'
 
 class RootView extends Page {
   contentView: View;

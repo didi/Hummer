@@ -1,8 +1,8 @@
 import { Hummer, View, Text, TextArea } from '@hummer/hummer-front'
-import { GroupTitle, GroupContent } from '../common/CommonLayout'
+import { GroupTitle, GroupContent } from '../../common/CommonLayout'
 import { InputPage } from '../input/InputPage'
-import { Color } from '../common/CommonColor'
-import { Style } from '../common/CommonStyle'
+import { Color } from '../../common/CommonColor'
+import { Style } from '../../common/CommonStyle'
 
 class RootView extends InputPage {
   constructor() {
