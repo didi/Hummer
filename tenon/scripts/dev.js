@@ -2,8 +2,7 @@
  * dev 脚本
  */
 const execa = require('execa')
-// const targets = ['tenon-compiler', 'tenon-utils', 'tenon-vue', 'tenon-store', 'tenon', 'tenon-react', 'tenon-core', 'tenon-dev-tool']
-const targets = ['tenon-utils', 'tenon-vue', 'tenon-dev-tool']
+const targets = ['tenon-compiler', 'tenon-utils', 'tenon-vue', 'tenon-store', 'tenon', 'tenon-react', 'tenon-core', 'tenon-dev-tool']
 
 run()
 async function run(){
