@@ -1,6 +1,6 @@
 import { Hummer, View } from '@hummer/hummer-front'
-import { ComponentPage } from '../common/CommonPage'
-import { Color } from '../common/CommonColor'
+import { ComponentPage } from '../../common/CommonPage'
+import { Color } from '../../common/CommonColor'
 
 class RootView extends ComponentPage {
   constructor() {

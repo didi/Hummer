@@ -1,7 +1,7 @@
 import { Hummer, View, List, ScrollEvent } from '@hummer/hummer-front'
-import { NormalContentView, ListTitleCell, ListItemCell, ListHoriItemCell, GridItemCell, WaterfallItemCell, PullRefreshCell, LoadMoreCell } from '../common/CommonLayout';
-import { ComponentPage } from '../common/CommonPage'
-import { Color } from '../common/CommonColor'
+import { NormalContentView, ListTitleCell, ListItemCell, ListHoriItemCell, GridItemCell, WaterfallItemCell, PullRefreshCell, LoadMoreCell } from '../../common/CommonLayout';
+import { ComponentPage } from '../../common/CommonPage'
+import { Color } from '../../common/CommonColor'
 
 const TYPE_TITLE = 1;
 const TYPE_ITEM = 2;

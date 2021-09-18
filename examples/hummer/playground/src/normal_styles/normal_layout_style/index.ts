@@ -1,9 +1,8 @@
 import { Hummer, View, Text, EventListener } from '@hummer/hummer-front'
-import { Page, GroupTitle, GroupContent, OperationLayout } from '../common/CommonLayout';
-import { ComponentPage } from '../common/CommonPage'
-import { InputPage } from '../input/InputPage';
-import { Color } from '../common/CommonColor';
-import { Style } from '../common/CommonStyle';
+import { Page, GroupTitle, GroupContent, OperationLayout } from '../../common/CommonLayout';
+import { ComponentPage } from '../../common/CommonPage'
+import { Color } from '../../common/CommonColor';
+import { Style } from '../../common/CommonStyle';
 
 class RootView extends ComponentPage {
   selectedDisplayItemView: View;

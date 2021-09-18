@@ -1,50 +1,10 @@
-import { Hummer, View, Text } from '@hummer/hummer-front'
-import { GroupTitle, GroupContent } from '../common/CommonLayout'
-import { ComponentPage } from '../common/CommonPage'
-import { Color } from '../common/CommonColor'
-import { Style } from '../common/CommonStyle'
+import { Hummer, View, Text, Input } from '@hummer/hummer-front'
+import { GroupTitle, GroupContent } from '../../common/CommonLayout'
+import { ComponentPage } from '../../common/CommonPage'
+import { Color } from '../../common/CommonColor'
+import { Style } from '../../common/CommonStyle'
 
-
-class RootView extends ComponentPage {
-  constructor() {
-    super();
-    this.setPageTitle('Text')
-  }
-
-  initContentView() {
-    super.initContentView();
-
-    // 通用
-    this.initBackgroundSetting(0);
-    this.initCornerRadiusSetting(0);
-    this.initBorderSetting(0);
-    this.initShadowSetting(0);
-
-    // Text
-    this.initTextAlignSetting(1);
-    this.initFontColorSetting(0);
-    this.initFontSizeSetting(2);
-    this.initFontStyleSetting(0);
-    this.initTextDecorationSetting(0);
-    this.initTextOverflowSetting(0);
-    this.initTextLineClampSetting(0);
-    this.initLetterSpacingSetting(0);
-    this.initlineSpacingSetting(1);
-  }
-
-  createDisplayView(): View {
-    let displayView = new Text();
-    displayView.text = 'This is a Text!\nThis is a Text!\nThis is a Text!\nThis is a Text!';
-    displayView.style = {
-      width: 220,
-      minHeight: 120,
-      backgroundColor: Color.hm_green,
-      textAlign: 'center',
-      fontSize: 22,
-      color: Color.black,
-    }
-    return displayView;
-  }
+export class InputPage extends ComponentPage {
 
   initTextAlignSetting(selectIndex: number = 1) {
     this.contentView.appendChild(new GroupTitle('文本对齐'));
@@ -82,7 +42,7 @@ class RootView extends ComponentPage {
     this.contentView.appendChild(new GroupTitle('文本颜色'));
 
     let layout = new GroupContent();
-    layout.style = { paddingLeft: 20 };
+    layout.style = { paddingLeft: 18 };
     this.contentView.appendChild(layout);
 
     let views = new Array<View>();
@@ -97,8 +57,74 @@ class RootView extends ComponentPage {
 
       view.addEventListener('tap', () => {
         this.selectItemWithBorder(views, i);
-        (<Text>this.displayView).style = {
+        (<Input>this.displayView).style = {
           color: textColors[i],
+        }
+      });
+
+      this.selectItemWithBorder(views, selectIndex);
+
+      layout.appendChild(view);
+    });
+  }
+
+  initPlaceholderColorSetting(selectIndex: number = 0) {
+    this.contentView.appendChild(new GroupTitle('占位提示文本颜色'));
+
+    let layout = new GroupContent();
+    layout.style = { paddingLeft: 18 };
+    this.contentView.appendChild(layout);
+
+    let views = new Array<View>();
+    let placeholderColors: string[] = [Color.transparent_grey, Color.hm_yellow, Color.hm_blue];
+    placeholderColors.forEach((color, i) => {
+      let view = new View();
+      view.style = {
+        width: 36,
+        height: 20,
+        marginTop: 8,
+        marginBottom: 8,
+        backgroundColor: color,
+      }
+      views.push(view);
+
+      view.addEventListener('tap', () => {
+        this.selectItemWithBorder(views, i);
+        (<Input>this.displayView).style = {
+          placeholderColor: placeholderColors[i],
+        }
+      });
+
+      this.selectItemWithBorder(views, selectIndex);
+
+      layout.appendChild(view);
+    });
+  }
+
+  initCursorColorSetting(selectIndex: number = 0) {
+    this.contentView.appendChild(new GroupTitle('光标颜色'));
+
+    let layout = new GroupContent();
+    layout.style = { paddingLeft: 18 };
+    this.contentView.appendChild(layout);
+
+    let views = new Array<View>();
+    let cursorColors: string[] = [Color.black, Color.hm_yellow, Color.hm_blue];
+    cursorColors.forEach((color, i) => {
+      let view = new View();
+      view.style = {
+        width: 36,
+        height: 20,
+        marginTop: 8,
+        marginBottom: 8,
+        backgroundColor: color,
+      }
+      views.push(view);
+
+      view.addEventListener('tap', () => {
+        this.selectItemWithBorder(views, i);
+        (<Input>this.displayView).style = {
+          cursorColor: cursorColors[i],
         }
       });
 
@@ -121,13 +147,12 @@ class RootView extends ComponentPage {
       view.text = size.toString();
       view.style = {
         ...Style.SelectTextItemStyle,
-        fontSize: size / 1.5,
       }
       views.push(view);
 
       view.addEventListener('tap', () => {
         this.selectItemWithBorder(views, i);
-        (<Text>this.displayView).style = {
+        (<Input>this.displayView).style = {
           fontSize: fontSizes[i],
         }
       });
@@ -138,29 +163,26 @@ class RootView extends ComponentPage {
     });
   }
 
-  initFontStyleSetting(selectIndex: number = 0) {
-    this.contentView.appendChild(new GroupTitle('文本样式'));
+  initMaxLengthSetting(selectIndex: number = 0) {
+    this.contentView.appendChild(new GroupTitle('最大输入长度'));
 
     let layout = new GroupContent();
     this.contentView.appendChild(layout);
 
     let views = new Array<View>();
-    let fontStyles: string[] = ['normal', 'bold', 'italic', 'bold & italic'];
-    fontStyles.forEach((style, i) => {
+    let maxLengths: number[] = [0, 3, 6, 9];
+    maxLengths.forEach((length, i) => {
       let view = new Text();
-      view.text = style;
+      view.text = length.toString();
       view.style = {
         ...Style.SelectTextItemStyle,
-        fontWeight: style === 'bold' || style === 'bold & italic' ? 'bold' : 'normal',
-        fontStyle: style === 'italic' || style === 'bold & italic' ? 'italic' : 'normal',
       }
       views.push(view);
 
       view.addEventListener('tap', () => {
         this.selectItemWithBorder(views, i);
-        (<Text>this.displayView).style = {
-          fontWeight: fontStyles[i] === 'bold' || fontStyles[i] === 'bold & italic' ? 'bold' : 'normal',
-          fontStyle: fontStyles[i] === 'italic' || fontStyles[i] === 'bold & italic' ? 'italic' : 'normal',
+        (<Input>this.displayView).style = {
+          maxLength: maxLengths[i],
         }
       });
 
@@ -170,28 +192,27 @@ class RootView extends ComponentPage {
     });
   }
 
-  initTextDecorationSetting(selectIndex: number = 0) {
-    this.contentView.appendChild(new GroupTitle('文本装饰'));
+  initTypesSetting(selectIndex: number = 0) {
+    this.contentView.appendChild(new GroupTitle('键盘类型'));
 
     let layout = new GroupContent();
     this.contentView.appendChild(layout);
 
     let views = new Array<View>();
-    let textDecorations = ['none', 'underline', 'line-through'];
-    type TextDecoration = 'none' | 'underline' | 'line-through';
-    textDecorations.forEach((decoration, i) => {
+    let types: string[] = ['default', 'number', 'tel', 'email', 'password'];
+    type Type = 'default' | 'number' | 'tel' | 'email' | 'password';
+    types.forEach((type, i) => {
       let view = new Text();
-      view.text = decoration;
+      view.text = type.toString();
       view.style = {
         ...Style.SelectTextItemStyle,
-        textDecoration: <TextDecoration>decoration,
       }
       views.push(view);
 
       view.addEventListener('tap', () => {
         this.selectItemWithBorder(views, i);
-        (<Text>this.displayView).style = {
-          textDecoration: <TextDecoration>textDecorations[i],
+        (<Input>this.displayView).style = {
+          type: <Type>types[i],
         }
       });
 
@@ -201,18 +222,18 @@ class RootView extends ComponentPage {
     });
   }
 
-  initTextOverflowSetting(selectIndex: number = 0) {
-    this.contentView.appendChild(new GroupTitle('文本省略'));
+  initReturnKeyTypesSetting(selectIndex: number = 0) {
+    this.contentView.appendChild(new GroupTitle('键盘返回按钮类型'));
 
     let layout = new GroupContent();
     this.contentView.appendChild(layout);
 
     let views = new Array<View>();
-    let textOverflows = ['ellipsis', 'clip'];
-    type TextOverflow = 'ellipsis' | 'clip';
-    textOverflows.forEach((overflow, i) => {
+    let returnKeyTypes: string[] = ['done', 'go', 'next', 'search', 'send'];
+    type ReturnKeyTypes = 'done' | 'go' | 'next' | 'search' | 'send';
+    returnKeyTypes.forEach((type, i) => {
       let view = new Text();
-      view.text = overflow === 'ellipsis' ? overflow + '...' : overflow;
+      view.text = type.toString();
       view.style = {
         ...Style.SelectTextItemStyle,
       }
@@ -220,8 +241,8 @@ class RootView extends ComponentPage {
 
       view.addEventListener('tap', () => {
         this.selectItemWithBorder(views, i);
-        (<Text>this.displayView).style = {
-          textOverflow: <TextOverflow>textOverflows[i],
+        (<Input>this.displayView).style = {
+          returnKeyType: <ReturnKeyTypes>returnKeyTypes[i],
         }
       });
 
@@ -231,17 +252,17 @@ class RootView extends ComponentPage {
     });
   }
 
-  initTextLineClampSetting(selectIndex: number = 0) {
-    this.contentView.appendChild(new GroupTitle('文本行数'));
+  initFocusSetting(selectIndex: number = 1) {
+    this.contentView.appendChild(new GroupTitle('焦点'));
 
     let layout = new GroupContent();
     this.contentView.appendChild(layout);
 
     let views = new Array<View>();
-    let textLineClamps: number[] = [0, 1, 2, 3];
-    textLineClamps.forEach((lineClamp, i) => {
+    let focuses: string[] = ['focus', 'unfocus'];
+    focuses.forEach((focus, i) => {
       let view = new Text();
-      view.text = lineClamp.toString();
+      view.text = focus;
       view.style = {
         ...Style.SelectTextItemStyle,
       }
@@ -249,9 +270,7 @@ class RootView extends ComponentPage {
 
       view.addEventListener('tap', () => {
         this.selectItemWithBorder(views, i);
-        (<Text>this.displayView).style = {
-          textLineClamp: textLineClamps[i],
-        }
+        (<Input>this.displayView).focused = focuses[i] === 'focus';
       });
 
       this.selectItemWithBorder(views, selectIndex);
@@ -260,37 +279,8 @@ class RootView extends ComponentPage {
     });
   }
 
-  initLetterSpacingSetting(selectIndex: number = 0) {
-    this.contentView.appendChild(new GroupTitle('字间距'));
-
-    let layout = new GroupContent();
-    this.contentView.appendChild(layout);
-
-    let views = new Array<View>();
-    let letterSpacings: number[] = [0, 0.5, 1];
-    letterSpacings.forEach((spacing, i) => {
-      let view = new Text();
-      view.text = spacing.toString();
-      view.style = {
-        ...Style.SelectTextItemStyle,
-      }
-      views.push(view);
-
-      view.addEventListener('tap', () => {
-        this.selectItemWithBorder(views, i);
-        (<Text>this.displayView).style = {
-          letterSpacing: letterSpacings[i],
-        }
-      });
-
-      this.selectItemWithBorder(views, selectIndex);
-
-      layout.appendChild(view);
-    });
-  }
-
-  initlineSpacingSetting(selectIndex: number = 1) {
-    this.contentView.appendChild(new GroupTitle('行间距'));
+  initEnableSetting(selectIndex: number = 0) {
+    this.contentView.appendChild(new GroupTitle('可用性'));
 
     let layout = new GroupContent();
     layout.style = {
@@ -299,27 +289,24 @@ class RootView extends ComponentPage {
     this.contentView.appendChild(layout);
 
     let views = new Array<View>();
-    let lineSpacings: number[] = [0.5, 1, 1.5, 2];
-    lineSpacings.forEach((spacing, i) => {
+    let enables: string[] = ['enable', 'disable'];
+    enables.forEach((enable, i) => {
       let view = new Text();
-      view.text = spacing.toString();
+      view.text = enable;
       view.style = {
         ...Style.SelectTextItemStyle,
+        color: enable !== 'disable' ? Color.black : Color.light_grey,
       }
       views.push(view);
 
       view.addEventListener('tap', () => {
         this.selectItemWithBorder(views, i);
-        (<Text>this.displayView).style = {
-          lineSpacingMulti: lineSpacings[i],
-        }
+        this.displayView.enabled = enables[i] !== 'disable';
       });
 
-      this.selectItemWithBorder(views, 1);
+      this.selectItemWithBorder(views, selectIndex);
 
       layout.appendChild(view);
     });
   }
 }
-
-Hummer.render(new RootView());
