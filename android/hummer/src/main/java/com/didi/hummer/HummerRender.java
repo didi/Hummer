@@ -179,8 +179,6 @@ public class HummerRender {
             return;
         }
 
-        requestJsBundle(url, false);
-
         if (DebugUtil.isDebuggable()) {
             // 调试插件
             HummerDebugger.init(hmContext, url);
@@ -193,6 +191,8 @@ public class HummerRender {
                 });
             }
         }
+
+        requestJsBundle(url, false);
     }
 
     private void requestJsBundle(String url, boolean isRefresh) {

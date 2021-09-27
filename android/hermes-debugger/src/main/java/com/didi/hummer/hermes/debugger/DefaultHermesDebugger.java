@@ -10,8 +10,6 @@ import com.didi.hummer.hermes.inspector.InspectorPackagerConnection;
 public class DefaultHermesDebugger implements IHermesDebugger {
 
     static {
-        // 这里后续会替换成加载专属debug库
-        System.loadLibrary("hermes");
         System.loadLibrary("hermes-debugger");
     }
 
