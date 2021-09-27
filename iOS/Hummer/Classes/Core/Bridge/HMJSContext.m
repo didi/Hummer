@@ -125,7 +125,7 @@ NS_ASSUME_NONNULL_END
     [[HMJSGlobal globalObject] weakReference:self];
     __weak typeof(self) weakSelf = self;
     _context.exceptionHandler = ^(HMExceptionModel *exception) {
-        NSArray<id <HMReporterProtocol>> *interceptors = [HMInterceptor interceptor:HMInterceptorTypeReporter];
+        NSArray<id<HMReporterProtocol>> *interceptors = [HMInterceptor interceptor:HMInterceptorTypeReporter];
         if (interceptors.count <= 0) {
             return;
         }
@@ -181,7 +181,6 @@ NS_ASSUME_NONNULL_END
 }
 
 #ifdef HMDEBUG
-
 - (void)handleWebSocket {
     if (@available(iOS 13, *)) {
         if (self.webSocketTask.state == NSURLSessionTaskStateCanceling || self.webSocketTask.state == NSURLSessionTaskStateCompleted) {
@@ -190,7 +189,6 @@ NS_ASSUME_NONNULL_END
         }
     }
 }
-
 #endif
 
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
@@ -202,7 +200,7 @@ NS_ASSUME_NONNULL_END
         self.url = [NSURL URLWithString:fileName];
 #if __has_include(<Hummer/HMJSExecutor.h>)
         if ([self.context isKindOfClass:HMJSExecutor.class]) {
-            [((HMJSExecutor *) self.context) enableDebuggerWithTitle:fileName];
+            [((HMJSExecutor *)self.context) enableDebuggerWithTitle:fileName];
         }
 #endif
     }
