@@ -8,12 +8,22 @@
 #import "HMJSGlobal.h"
 #import "HMConfig.h"
 #import "HMReporter.h"
+#import <Hummer/HMPluginManager.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+static const char *const CLOCK_GET_TIME_ERROR = "clock_gettime() error";
+
+NS_ASSUME_NONNULL_END
 
 @implementation Hummer
 
 
 
 + (void)startEngine:(void (^)(HMConfigEntry *))builder {
+    struct timespec beforeTimespec;
+    HMClockGetTime(&beforeTimespec);
+
     // 兼容代码
     [HMInterceptor loadExportInterceptor];
     
@@ -31,7 +41,11 @@
         [HMReporter reportValue:@(jsClassCount) forKey:HMExportClassesCount namespace:entry.namespace];
     } forKey:HMExportClasses namespace:entry.namespace];
     
-    
+    struct timespec afterTimespec;
+    HMClockGetTime(&afterTimespec);
+    struct timespec resultTimespec;
+    HMDiffTime(&beforeTimespec, &afterTimespec, &resultTimespec);
+    // TODO(ChasonTang): Rebase
 }
 
 + (void)addGlobalEnvironment:(NSDictionary *)params {

@@ -6,9 +6,13 @@
 //
 
 #import <objc/runtime.h>
+
 #if __has_include(<Hummer/HMJSExecutor.h>)
+
 #import <Hummer/HMJSExecutor.h>
+
 #endif
+
 #import "HMJSCExecutor.h"
 #import "HMJSContext.h"
 #import "HMExportClass.h"
@@ -17,8 +21,8 @@
 #import "HMInterceptor.h"
 #import "HMBaseValue.h"
 #import "HMExceptionModel.h"
-#import "HMBaseValue.h"
 #import "HMJSGlobal.h"
+#import <Hummer/HMPluginManager.h>
 #import <Hummer/HMDebug.h>
 #import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMWebSocket.h>
@@ -44,7 +48,7 @@ static inline HMCLILogLevel convertNativeLogLevel(HMLogLevel logLevel) {
             return HMCLILogLevelWarn;
         case HMLogLevelError:
             return HMCLILogLevelError;
-            
+
         default:
             // 正常不会传递
             return HMCLILogLevelError;
@@ -52,14 +56,15 @@ static inline HMCLILogLevel convertNativeLogLevel(HMLogLevel logLevel) {
 }
 
 #ifdef HMDEBUG
+
 API_AVAILABLE(ios(13.0))
 #endif
 @interface HMJSContext () // <NSURLSessionWebSocketDelegate>
 
-@property (nonatomic, weak, nullable) UIView *rootView;
+@property(nonatomic, weak, nullable) UIView *rootView;
 
 #ifdef HMDEBUG
-@property (nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
+@property(nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
 
 - (void)handleWebSocket;
 
@@ -92,7 +97,7 @@ NS_ASSUME_NONNULL_END
     self.context.webSocketHandler = nil;
     [self.webSocketTask cancel];
 #endif
-    [self.webSocketSet enumerateObjectsUsingBlock:^(HMWebSocket * _Nonnull obj, BOOL * _Nonnull stop) {
+    [self.webSocketSet enumerateObjectsUsingBlock:^(HMWebSocket *_Nonnull obj, BOOL *_Nonnull stop) {
         [obj close];
     }];
 }
@@ -114,7 +119,7 @@ NS_ASSUME_NONNULL_END
     NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:@"builtin" bundle:resourceBundle];
     NSAssert(dataAsset, @"builtin dataset 无法在 xcassets 中搜索到");
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
-    
+
 #if __has_include(<Hummer/HMJSExecutor.h>)
     _context = HMGetEngineType() == HMEngineTypeNAPI ? [[HMJSExecutor alloc] init] : [[HMJSCExecutor alloc] init];
 #else
@@ -123,7 +128,7 @@ NS_ASSUME_NONNULL_END
     [[HMJSGlobal globalObject] weakReference:self];
     __weak typeof(self) weakSelf = self;
     _context.exceptionHandler = ^(HMExceptionModel *exception) {
-        NSArray<id<HMReporterProtocol>> *interceptors = [HMInterceptor interceptor:HMInterceptorTypeReporter];
+        NSArray<id <HMReporterProtocol>> *interceptors = [HMInterceptor interceptor:HMInterceptorTypeReporter];
         if (interceptors.count <= 0) {
             return;
         }
@@ -174,6 +179,7 @@ NS_ASSUME_NONNULL_END
 }
 
 #ifdef HMDEBUG
+
 - (void)handleWebSocket {
     if (@available(iOS 13, *)) {
         if (self.webSocketTask.state == NSURLSessionTaskStateCanceling || self.webSocketTask.state == NSURLSessionTaskStateCompleted) {
@@ -182,6 +188,7 @@ NS_ASSUME_NONNULL_END
         }
     }
 }
+
 #endif
 
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
@@ -190,11 +197,11 @@ NS_ASSUME_NONNULL_END
         self.url = [NSURL URLWithString:fileName];
 #if __has_include(<Hummer/HMJSExecutor.h>)
         if ([self.context isKindOfClass:HMJSExecutor.class]) {
-            [((HMJSExecutor *)self.context) enableDebuggerWithTitle:fileName];
+            [((HMJSExecutor *) self.context) enableDebuggerWithTitle:fileName];
         }
 #endif
     }
-    
+
 #ifdef HMDEBUG
     if (@available(iOS 13, *)) {
         if (!self.webSocketTask && fileName.length > 0) {
@@ -211,7 +218,7 @@ NS_ASSUME_NONNULL_END
                     // 启动
                     [self.webSocketTask resume];
                     __weak typeof(self) weakSelf = self;
-                    self.context.webSocketHandler = ^(NSString * _Nullable logString, HMLogLevel logLevel) {
+                    self.context.webSocketHandler = ^(NSString *_Nullable logString, HMLogLevel logLevel) {
                         typeof(weakSelf) strongSelf = weakSelf;
                         // 避免 "(null)" 情况
                         NSString *jsonStr = @"";
@@ -233,7 +240,7 @@ NS_ASSUME_NONNULL_END
                         }
                     };
                     // 判断是否连通
-                    [self.webSocketTask sendPingWithPongReceiveHandler:^(NSError * _Nullable error) {
+                    [self.webSocketTask sendPingWithPongReceiveHandler:^(NSError *_Nullable error) {
                         typeof(weakSelf) strongSelf = weakSelf;
                         if (error) {
                             [strongSelf handleWebSocket];
@@ -249,6 +256,15 @@ NS_ASSUME_NONNULL_END
     if (fileName.length > 0) {
         url = [NSURL URLWithString:fileName];
     }
+
+    NSData *data = [javaScriptString dataUsingEncoding:NSUTF8StringEncoding];
+    if (data) {
+        [HMPluginManager.sharedInstance enumeratePluginWithPluginType:HMPluginTypeTrackEvent nameSpace:nil usingBlock:^(id <HMPluginProtocol> obj) {
+            // 不包括 \0
+            [((id <HMTrackEventPluginProtocol>) obj) trackJavaScriptBundleWithSize:@(data.length / 1024)];
+        }];
+    }
+
     return [self.context evaluateScript:javaScriptString withSourceURL:url];
 }
 

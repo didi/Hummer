@@ -1,4 +1,3 @@
-#import <dlfcn.h>
 #import "HMPluginManager.h"
 #import <Hummer/HMBaseExecutorProtocol.h>
 #import <mach-o/dyld.h>
@@ -6,6 +5,8 @@
 #import <objc/runtime.h>
 
 NS_ASSUME_NONNULL_BEGIN
+
+const char *const HUMMER_CLOCK_GET_TIME_ERROR = "clock_gettime() error";
 
 static inline void *_Nullable getSectionData(const struct mach_header *machHeader, const char *section, unsigned long *size);
 
@@ -19,7 +20,7 @@ static char *const WEAK_SELF_MUST_BE_VALID = "weakSelf must not be nil";
 
 @property(nonatomic, copy, nullable) NSDictionary<NSString *, NSArray<id <HMPluginProtocol>> *> *localPluginDictionary;
 
-- (void)loadAllPluginWithCompletionBlock:(void (^)(NSArray<id <HMPluginProtocol>> *_Nullable globalPluginArray, NSArray<id <HMPluginProtocol>> *_Nullable localPluginArray))completionBlock nameSpace:(nullable NSString *)nameSpace;
+- (void)loadAllPluginWithCompletionBlock:(void (^)())completionBlock;
 
 @end
 
@@ -49,7 +50,8 @@ void *_Nullable getSectionData(const struct mach_header *machHeader, const char 
 }
 
 - (void)enumeratePluginWithPluginType:(HMPluginType)pluginType nameSpace:(nullable NSString *)nameSpace usingBlock:(void (^)(id <HMPluginProtocol> obj))block {
-    [self loadAllPluginWithCompletionBlock:^(NSArray *globalPluginArray, NSArray *localPluginArray) {
+    __weak typeof(self) weakSelf = self;
+    [self loadAllPluginWithCompletionBlock:^() {
         Protocol *aProtocol = nil;
         switch (pluginType) {
             case HMPluginTypeTrackEvent:
@@ -57,29 +59,30 @@ void *_Nullable getSectionData(const struct mach_header *machHeader, const char 
                 break;
         }
         assert(aProtocol && "aProtocol cannot be nil");
-        [localPluginArray enumerateObjectsUsingBlock:^(id <HMPluginProtocol> obj, NSUInteger idx, BOOL *stop) {
+        assert(weakSelf && WEAK_SELF_MUST_BE_VALID);
+        typeof(weakSelf) strongSelf = weakSelf;
+        if (nameSpace) {
+            [strongSelf.localPluginDictionary[nameSpace] enumerateObjectsUsingBlock:^(id <HMPluginProtocol> obj, NSUInteger idx, BOOL *stop) {
+                if ([obj conformsToProtocol:aProtocol]) {
+                    block(obj);
+                }
+            }];
+        }
+        [strongSelf.globalPluginArray enumerateObjectsUsingBlock:^(id <HMPluginProtocol> obj, NSUInteger idx, BOOL *stop) {
             if ([obj conformsToProtocol:aProtocol]) {
                 block(obj);
             }
         }];
-        [globalPluginArray enumerateObjectsUsingBlock:^(id <HMPluginProtocol> obj, NSUInteger idx, BOOL *stop) {
-            if ([obj conformsToProtocol:aProtocol]) {
-                block(obj);
-            }
-        }];
-    }                            nameSpace:nameSpace];
+    }];
 }
 
-- (void)loadAllPluginWithCompletionBlock:(void (^)(NSArray<id <HMPluginProtocol>> *, NSArray<id <HMPluginProtocol>> *))completionBlock nameSpace:(NSString *)nameSpace {
+- (void)loadAllPluginWithCompletionBlock:(void (^)())completionBlock {
     HMAssertMainQueue();
     __weak typeof(self) weakSelf = self;
     if (self.pluginLoadSerialQueue) {
         dispatch_async(self.pluginLoadSerialQueue, ^{
-            assert(weakSelf && WEAK_SELF_MUST_BE_VALID);
             dispatch_async(dispatch_get_main_queue(), ^() {
-                assert(weakSelf && WEAK_SELF_MUST_BE_VALID);
-                typeof(weakSelf) strongSelf = weakSelf;
-                completionBlock(strongSelf.globalPluginArray, nameSpace ? strongSelf.localPluginDictionary[nameSpace] : nil);
+                completionBlock();
             });
         });
     }
@@ -155,7 +158,7 @@ void *_Nullable getSectionData(const struct mach_header *machHeader, const char 
             typeof(weakSelf) inlineStrongSelf = weakSelf;
             inlineStrongSelf.globalPluginArray = globalPluginArray;
             inlineStrongSelf.localPluginDictionary = localPluginDictionary;
-            completionBlock(inlineStrongSelf.globalPluginArray, nameSpace ? inlineStrongSelf.localPluginDictionary[nameSpace] : nil);
+            completionBlock();
         });
     });
 }
