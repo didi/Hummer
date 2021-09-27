@@ -96,7 +96,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 
 
 + (void)postException:(HMBaseValue *)exception {
-    
+
     NSDictionary *exceptionDic = exception.toDictionary;
     if (exceptionDic && HMCurrentExecutor.exceptionHandler) {
         HMExceptionModel *model = [[HMExceptionModel alloc] initWithParams:exceptionDic];
@@ -109,8 +109,8 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     HMExceptionModel *_exception = [self _evaluateString:jsString fileName:@""];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
     if (_exception) {
-        NSDictionary *err = @{@"code": @(-1),
-                @"message": @"javascript evalute exception"};
+        NSDictionary *err = @{@"code":@(-1),
+                               @"message":@"javascript evalute exception"};
         return [HMBaseValue valueWithObject:err inContext:context.context];
     }
     return [HMBaseValue valueWithObject:[NSNull null] inContext:context.context];
@@ -122,7 +122,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     NSURL *url = [NSURL URLWithString:_urlString];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
 
-    void (^checkException)(NSString *) = ^(NSString *jsString) {
+    void(^checkException)(NSString *) = ^(NSString *jsString) {
         HMExceptionModel *_exception = [self _evaluateString:jsString fileName:_urlString inContext:context];
         if (_exception) {
             NSDictionary *err = @{@"code":@(-1),
