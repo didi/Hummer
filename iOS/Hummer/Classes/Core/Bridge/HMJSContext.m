@@ -6,13 +6,9 @@
 //
 
 #import <objc/runtime.h>
-
 #if __has_include(<Hummer/HMJSExecutor.h>)
-
 #import <Hummer/HMJSExecutor.h>
-
 #endif
-
 #import "HMJSCExecutor.h"
 #import "HMJSContext.h"
 #import "HMExportClass.h"
@@ -27,7 +23,6 @@
 #import <Hummer/HMDebug.h>
 #import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMWebSocket.h>
-
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, HMCLILogLevel) {
@@ -49,7 +44,6 @@ static inline HMCLILogLevel convertNativeLogLevel(HMLogLevel logLevel) {
             return HMCLILogLevelWarn;
         case HMLogLevelError:
             return HMCLILogLevelError;
-
         default:
             // 正常不会传递
             return HMCLILogLevelError;
@@ -57,15 +51,14 @@ static inline HMCLILogLevel convertNativeLogLevel(HMLogLevel logLevel) {
 }
 
 #ifdef HMDEBUG
-
 API_AVAILABLE(ios(13.0))
 #endif
 @interface HMJSContext () // <NSURLSessionWebSocketDelegate>
 
-@property(nonatomic, weak, nullable) UIView *rootView;
+@property (nonatomic, weak, nullable) UIView *rootView;
 
 #ifdef HMDEBUG
-@property(nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
+@property (nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
 
 - (void)handleWebSocket;
 
@@ -98,7 +91,7 @@ NS_ASSUME_NONNULL_END
     self.context.webSocketHandler = nil;
     [self.webSocketTask cancel];
 #endif
-    [self.webSocketSet enumerateObjectsUsingBlock:^(HMWebSocket *_Nonnull obj, BOOL *_Nonnull stop) {
+    [self.webSocketSet enumerateObjectsUsingBlock:^(HMWebSocket * _Nonnull obj, BOOL * _Nonnull stop) {
         [obj close];
     }];
 }
@@ -203,7 +196,7 @@ NS_ASSUME_NONNULL_END
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
     struct timespec beforeTimespec;
     HMClockGetTime(&beforeTimespec);
-    
+
     // context 和 WebSocket 对应
     if (!self.url && fileName.length > 0) {
         self.url = [NSURL URLWithString:fileName];
@@ -277,7 +270,7 @@ NS_ASSUME_NONNULL_END
     }
 
     HMBaseValue *returnValue = [self.context evaluateScript:javaScriptString withSourceURL:url];
-    
+
     struct timespec afterTimespec;
     HMClockGetTime(&afterTimespec);
     struct timespec resultTimespec;
@@ -285,7 +278,7 @@ NS_ASSUME_NONNULL_END
     if (self.nameSpace) {
         [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackEvaluationWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)];
     }
-    
+
     return returnValue;
 }
 
