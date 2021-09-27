@@ -10,12 +10,6 @@
 #import "HMReporter.h"
 #import <Hummer/HMPluginManager.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
-static const char *const CLOCK_GET_TIME_ERROR = "clock_gettime() error";
-
-NS_ASSUME_NONNULL_END
-
 @implementation Hummer
 
 
@@ -45,7 +39,8 @@ NS_ASSUME_NONNULL_END
     HMClockGetTime(&afterTimespec);
     struct timespec resultTimespec;
     HMDiffTime(&beforeTimespec, &afterTimespec, &resultTimespec);
-    // TODO(ChasonTang): Rebase
+
+    [entry.trackEventPlugin trackEngineInitializationWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)];
 }
 
 + (void)addGlobalEnvironment:(NSDictionary *)params {

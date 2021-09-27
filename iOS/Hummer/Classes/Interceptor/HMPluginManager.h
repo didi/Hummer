@@ -1,10 +1,12 @@
 #import <Foundation/Foundation.h>
 
-#define _CONCAT(a, b) a##b
+@class HMExceptionModel;
 
-#define CONCAT(a, b) _CONCAT(a, b)
-
-#define UNUSED_UNIQUE_ID CONCAT(unused, __COUNTER__)
+//#define _CONCAT(a, b) a##b
+//
+//#define CONCAT(a, b) _CONCAT(a, b)
+//
+//#define UNUSED_UNIQUE_ID CONCAT(unused, __COUNTER__)
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,43 +24,53 @@ static inline void HMClockGetTime(struct timespec *timespec) {
 
 // 注意：正常情况下，以 sizeof(void *) 为长度存储，但是如果开启 ASan，会导致长度以 32/64/128 的长度划分红区，可以通过 attribute no_sanitize 关闭插桩
 
-typedef struct {
-    const char *const objcClass;
-    const char *const _Nullable nameSpace;
-} HMPluginDeclaration;
+//typedef struct {
+//    const char *const objcClass;
+//    const char *const _Nullable nameSpace;
+//} HMPluginDeclaration;
 
-#define HM_EXPORT_GLOBAL_PLUGIN(objcClass) __attribute__((used, section("__DATA, __hummer_plugin"))) static const HMPluginDeclaration UNUSED_UNIQUE_ID = { #objcClass, NULL };
+//#define HM_EXPORT_GLOBAL_PLUGIN(objcClass) __attribute__((used, section("__DATA, __hummer_plugin"))) static const HMPluginDeclaration UNUSED_UNIQUE_ID = { #objcClass, NULL };
+//
+//#define HM_EXPORT_LOCAL_PLUGIN(objcClass, nameSpace) __attribute__((used, section("__DATA, __hummer_plugin"))) static const HMPluginDeclaration UNUSED_UNIQUE_ID = { #objcClass, #nameSpace };
 
-#define HM_EXPORT_LOCAL_PLUGIN(objcClass, nameSpace) __attribute__((used, section("__DATA, __hummer_plugin"))) static const HMPluginDeclaration UNUSED_UNIQUE_ID = { #objcClass, #nameSpace };
+//@protocol HMPluginProtocol <NSObject>
+//@end
 
-@protocol HMPluginProtocol <NSObject>
-@end
+@protocol HMTrackEventPluginProtocol
 
-@protocol HMTrackEventPluginProtocol <HMPluginProtocol>
-
-//@optional
+@required
 
 - (void)trackEngineInitializationWithDuration:(NSNumber *)duration;
 
 - (void)trackJavaScriptBundleWithSize:(NSNumber *)size;
 
-@end
+- (void)trackPageRenderCompletionWithDuration:(NSNumber *)duration;
 
-typedef NS_ENUM(NSUInteger, HMPluginType) {
-    HMPluginTypeTrackEvent = 0
-};
+- (void)trackEvaluationWithDuration:(NSNumber *)duration;
 
-@interface HMPluginManager : NSObject
+- (void)trackPerformanceWithLabel:(NSString *)string localizableLabel:(NSString *)localizableLabel stringValue:(NSString *)stringValue unit:(NSString *)unit;
 
-+ (instancetype)sharedInstance;
+- (void)trackPerformanceWithLabel:(NSString *)string localizableLabel:(NSString *)localizableLabel numberValue:(NSNumber *)numberValue unit:(NSString *)unit;
 
-/// @breif 遍历对应类型插件
-/// @param pluginType 插件类型
-/// @param nameSpace 可选命名空间，如果传空，会遍历全局+局部所有的插件
-/// @param block 遍历闭包
-- (void)enumeratePluginWithPluginType:(HMPluginType)pluginType nameSpace:(nullable NSString *)nameSpace usingBlock:(void (^)(id <HMPluginProtocol> obj))block;
+- (void)trackJavaScriptExceptionWithExceptionModel:(HMExceptionModel *)exceptionModel;
 
 @end
+
+//typedef NS_ENUM(NSUInteger, HMPluginType) {
+//    HMPluginTypeTrackEvent = 0 // 暂时不使用
+//};
+
+//@interface HMPluginManager : NSObject
+//
+//+ (instancetype)sharedInstance;
+//
+///// @breif 遍历对应类型插件
+///// @param pluginType 插件类型
+///// @param nameSpace 可选命名空间，如果传空，会遍历全局+局部所有的插件
+///// @param block 遍历闭包
+//- (void)enumeratePluginWithPluginType:(HMPluginType)pluginType nameSpace:(nullable NSString *)nameSpace usingBlock:(void (^)(id <HMPluginProtocol> obj))block;
+//
+//@end
 
 static inline void HMDiffTime(const struct timespec *beforeTimespec, const struct timespec *afterTimespec, struct timespec *resultTimeSpec) {
     resultTimeSpec->tv_sec = afterTimespec->tv_sec - beforeTimespec->tv_sec;

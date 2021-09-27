@@ -22,6 +22,7 @@
 #import "HMBaseValue.h"
 #import "HMExceptionModel.h"
 #import "HMJSGlobal.h"
+#import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMPluginManager.h>
 #import <Hummer/HMDebug.h>
 #import <Hummer/HMConfigEntryManager.h>
@@ -109,7 +110,10 @@ NS_ASSUME_NONNULL_END
 }
 
 - (instancetype)init {
+    struct timespec createTimespec;
+    HMClockGetTime(&createTimespec);
     self = [super init];
+    _createTimespec = createTimespec;
     NSBundle *frameworkBundle = [NSBundle bundleForClass:self.class];
     NSString *resourceBundlePath = [frameworkBundle pathForResource:@"Hummer" ofType:@"bundle"];
     NSAssert(resourceBundlePath.length > 0, @"Hummer.bundle 不存在");
@@ -140,10 +144,15 @@ NS_ASSUME_NONNULL_END
                 @"stack": exception.stack ?: @""
         };
         HMLogError(@"%@", exceptionInfo);
+        if (weakSelf.nameSpace) {
+            // errorName -> message
+            // errorcode -> type
+            // errorMsg -> stack / type + message + stack
+            [HMConfigEntryManager.manager.configMap[weakSelf.nameSpace].trackEventPlugin trackJavaScriptExceptionWithExceptionModel:exception];
+        }
         typeof(weakSelf) strongSelf = weakSelf;
         [HMReporterInterceptor handleJSException:exceptionInfo namespace:strongSelf.nameSpace];
         [HMReporterInterceptor handleJSException:exceptionInfo context:strongSelf namespace:strongSelf.nameSpace];
-        
     };
     [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/builtin.js"]];
 
@@ -192,6 +201,9 @@ NS_ASSUME_NONNULL_END
 #endif
 
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
+    struct timespec beforeTimespec;
+    HMClockGetTime(&beforeTimespec);
+    
     // context 和 WebSocket 对应
     if (!self.url && fileName.length > 0) {
         self.url = [NSURL URLWithString:fileName];
@@ -258,14 +270,23 @@ NS_ASSUME_NONNULL_END
     }
 
     NSData *data = [javaScriptString dataUsingEncoding:NSUTF8StringEncoding];
-    if (data) {
-        [HMPluginManager.sharedInstance enumeratePluginWithPluginType:HMPluginTypeTrackEvent nameSpace:nil usingBlock:^(id <HMPluginProtocol> obj) {
-            // 不包括 \0
-            [((id <HMTrackEventPluginProtocol>) obj) trackJavaScriptBundleWithSize:@(data.length / 1024)];
-        }];
+    if (data && self.nameSpace) {
+        // 不包括 \0
+        // 单位 KB
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackJavaScriptBundleWithSize:@(data.length / 1024)];
     }
 
-    return [self.context evaluateScript:javaScriptString withSourceURL:url];
+    HMBaseValue *returnValue = [self.context evaluateScript:javaScriptString withSourceURL:url];
+    
+    struct timespec afterTimespec;
+    HMClockGetTime(&afterTimespec);
+    struct timespec resultTimespec;
+    HMDiffTime(&beforeTimespec, &afterTimespec, &resultTimespec);
+    if (self.nameSpace) {
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackEvaluationWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)];
+    }
+    
+    return returnValue;
 }
 
 @end

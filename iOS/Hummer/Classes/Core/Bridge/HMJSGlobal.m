@@ -23,8 +23,11 @@
 #import <Hummer/HMConfigEntryManager.h>
 
 #import <Hummer/HMDebug.h>
+
 #ifdef HMDEBUG
+
 #import "HMDevTools.h"
+
 #endif
 
 
@@ -40,12 +43,12 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 
 - (void)setBasicWidth:(nullable HMBaseValue *)basicWidth;
 
-@property (nonatomic, strong) NSMapTable<NSObject *, NSObject *> *contextGraph;
+@property(nonatomic, strong) NSMapTable<NSObject *, NSObject *> *contextGraph;
 
-@property (nonatomic, copy, nullable) NSMutableDictionary<NSString *, NSObject *> *envParams;
+@property(nonatomic, copy, nullable) NSMutableDictionary<NSString *, NSObject *> *envParams;
 
 // 根据 namespace 获取不同的 envParams;
-@property (nonatomic, strong, nullable) NSMutableDictionary<NSString *, NSMutableDictionary *> *envParamsMap;
+@property(nonatomic, strong, nullable) NSMutableDictionary<NSString *, NSMutableDictionary *> *envParamsMap;
 
 
 + (nullable HMBaseValue *)env;
@@ -90,13 +93,14 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
 
 HM_EXPORT_CLASS_METHOD(evaluateScript, evaluateScript:)
 
-HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:callback:)
+HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:
+    callback:)
 
 HM_EXPORT_CLASS_METHOD(postException, postException:)
 
 
-+ (void)postException:(HMBaseValue *)exception{
-    
++ (void)postException:(HMBaseValue *)exception {
+
     NSDictionary *exceptionDic = exception.toDictionary;
     if (exceptionDic && HMCurrentExecutor.exceptionHandler) {
         HMExceptionModel *model = [[HMExceptionModel alloc] initWithParams:exceptionDic];
@@ -109,20 +113,20 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     HMExceptionModel *_exception = [self _evaluateString:jsString fileName:@""];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
     if (_exception) {
-        NSDictionary *err = @{@"code":@(-1),
-                               @"message":@"javascript evalute exception"};
+        NSDictionary *err = @{@"code": @(-1),
+                @"message": @"javascript evalute exception"};
         return [HMBaseValue valueWithObject:err inContext:context.context];
     }
     return [HMBaseValue valueWithObject:[NSNull null] inContext:context.context];
 }
 
 + (void)evaluateScriptWithUrl:(HMBaseValue *)urlString callback:(HMFunctionType)callback {
-    
+
     NSString *_urlString = [urlString toString];
     NSURL *url = [NSURL URLWithString:_urlString];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-    
-    void(^checkException)(NSString *) = ^(NSString *jsString){
+
+    void (^checkException)(NSString *) = ^(NSString *jsString) {
         HMExceptionModel *_exception = [self _evaluateString:jsString fileName:_urlString inContext:context];
         if (_exception) {
             NSDictionary *err = @{@"code":@(-1),
@@ -138,8 +142,8 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     };
     [HMJSLoaderInterceptor loadWithSource:url namespace:context.nameSpace completion:^(NSError * _Nonnull error, NSString * _Nonnull script) {
         if (error) {
-            NSDictionary *err = @{@"code":@(error.code),
-                                  @"message":error.userInfo[NSLocalizedDescriptionKey] ? error.userInfo[NSLocalizedDescriptionKey] : @"http error"};
+            NSDictionary *err = @{@"code": @(error.code),
+                    @"message": error.userInfo[NSLocalizedDescriptionKey] ? error.userInfo[NSLocalizedDescriptionKey] : @"http error"};
             callback(@[err]);
             return;
         }
@@ -152,7 +156,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 
 + (HMNotifyCenter *)notifyCenter {
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-    
+
     return context.notifyCenter;
 }
 
@@ -164,7 +168,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     }
 }
 
-+ (NSDictionary<NSString *,NSObject *> *)pageInfo {
++ (NSDictionary<NSString *, NSObject *> *)pageInfo {
     return HMJSGlobal.globalObject.pageInfo;
 }
 
@@ -215,7 +219,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
  * phase1：hummerCall(JS调用)会区分 namespace，返回 _envParams + envParamsMap[namespace]
  * phase2：native 调用 addGlobalEnviroment 不区分 namespace。
  */
-- (NSMutableDictionary<NSString *, NSObject*> *)envParams {
+- (NSMutableDictionary<NSString *, NSObject *> *)envParams {
     if (!_envParams) {
         _envParams = NSMutableDictionary.dictionary;
         [_envParams addEntriesFromDictionary:[self getEnvironmentInfo]];
@@ -318,6 +322,14 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     // 添加debug按钮
 //    [HMDevTools showInContext:context];
 #endif
+
+    struct timespec renderTimespec;
+    HMClockGetTime(&renderTimespec);
+    struct timespec resultTimespec;
+    HMDiffTime(&context->_createTimespec, &renderTimespec, &resultTimespec);
+    if (context.nameSpace) {
+        [HMConfigEntryManager.manager.configMap[context.nameSpace].trackEventPlugin trackPageRenderCompletionWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)];
+    }
 }
 
 - (void)setBasicWidth:(HMBaseValue *)basicWidth {
@@ -326,7 +338,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     [HMConfig sharedInstance].pixel = width;
 }
 
-+ (NSMutableDictionary<NSString *, NSObject*> *)env {
++ (NSMutableDictionary<NSString *, NSObject *> *)env {
     return HMJSGlobal.globalObject.envParams;
 }
 
