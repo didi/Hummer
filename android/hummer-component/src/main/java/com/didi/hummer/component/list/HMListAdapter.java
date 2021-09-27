@@ -73,11 +73,13 @@ public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder
             return new ViewHolder(new View(mContext), null);
         }
 
-        JSValue createdView = (JSValue) createCallback.call(viewType);
-        if (createdView == null) {
+        Object createdViewObj = createCallback.call(viewType);
+        if (!(createdViewObj instanceof JSValue)) {
             return new ViewHolder(new View(mContext), null);
         }
 
+        JSValue createdView = (JSValue) createdViewObj;
+        createdView.protect();
         HMBase view = instanceManager.get(createdView.getLong("objID"));
 
         if (view == null) {

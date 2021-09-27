@@ -105,11 +105,12 @@ public class CyclePagerAdapter extends ReusePagerAdapter<CyclePagerAdapter.ViewH
             return new ViewHolder(makeDefaultImageView(realPosition), null);
         }
 
-        JSValue jsView = (JSValue) mOnItemViewCallback.call(realPosition);
-        if (jsView == null) {
+        Object jsViewObj = mOnItemViewCallback.call(realPosition);
+        if (!(jsViewObj instanceof JSValue)) {
             return new ViewHolder(makeDefaultImageView(realPosition), null);
         }
 
+        JSValue jsView = (JSValue) jsViewObj;
         jsView.protect();
         HMBase view = mInstanceManager.get(jsView.getLong("objID"));
 
