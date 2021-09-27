@@ -116,7 +116,6 @@ NS_ASSUME_NONNULL_END
     NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:@"builtin" bundle:resourceBundle];
     NSAssert(dataAsset, @"builtin dataset 无法在 xcassets 中搜索到");
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
-
 #if __has_include(<Hummer/HMJSExecutor.h>)
     _context = HMGetEngineType() == HMEngineTypeNAPI ? [[HMJSExecutor alloc] init] : [[HMJSCExecutor alloc] init];
 #else
@@ -204,7 +203,6 @@ NS_ASSUME_NONNULL_END
         }
 #endif
     }
-
 #ifdef HMDEBUG
     if (@available(iOS 13, *)) {
         if (!self.webSocketTask && fileName.length > 0) {
@@ -221,7 +219,7 @@ NS_ASSUME_NONNULL_END
                     // 启动
                     [self.webSocketTask resume];
                     __weak typeof(self) weakSelf = self;
-                    self.context.webSocketHandler = ^(NSString *_Nullable logString, HMLogLevel logLevel) {
+                    self.context.webSocketHandler = ^(NSString * _Nullable logString, HMLogLevel logLevel) {
                         typeof(weakSelf) strongSelf = weakSelf;
                         // 避免 "(null)" 情况
                         NSString *jsonStr = @"";
@@ -243,7 +241,7 @@ NS_ASSUME_NONNULL_END
                         }
                     };
                     // 判断是否连通
-                    [self.webSocketTask sendPingWithPongReceiveHandler:^(NSError *_Nullable error) {
+                    [self.webSocketTask sendPingWithPongReceiveHandler:^(NSError * _Nullable error) {
                         typeof(weakSelf) strongSelf = weakSelf;
                         if (error) {
                             [strongSelf handleWebSocket];

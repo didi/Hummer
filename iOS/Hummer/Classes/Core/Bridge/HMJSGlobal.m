@@ -23,11 +23,8 @@
 #import <Hummer/HMConfigEntryManager.h>
 
 #import <Hummer/HMDebug.h>
-
 #ifdef HMDEBUG
-
 #import "HMDevTools.h"
-
 #endif
 
 
@@ -43,12 +40,12 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 
 - (void)setBasicWidth:(nullable HMBaseValue *)basicWidth;
 
-@property(nonatomic, strong) NSMapTable<NSObject *, NSObject *> *contextGraph;
+@property (nonatomic, strong) NSMapTable<NSObject *, NSObject *> *contextGraph;
 
-@property(nonatomic, copy, nullable) NSMutableDictionary<NSString *, NSObject *> *envParams;
+@property (nonatomic, copy, nullable) NSMutableDictionary<NSString *, NSObject *> *envParams;
 
 // 根据 namespace 获取不同的 envParams;
-@property(nonatomic, strong, nullable) NSMutableDictionary<NSString *, NSMutableDictionary *> *envParamsMap;
+@property (nonatomic, strong, nullable) NSMutableDictionary<NSString *, NSMutableDictionary *> *envParamsMap;
 
 
 + (nullable HMBaseValue *)env;
@@ -93,8 +90,7 @@ HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
 
 HM_EXPORT_CLASS_METHOD(evaluateScript, evaluateScript:)
 
-HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:
-    callback:)
+HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:callback:)
 
 HM_EXPORT_CLASS_METHOD(postException, postException:)
 
