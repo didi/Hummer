@@ -1,7 +1,7 @@
 def fetch_dir = new File(project.buildDir, 'libs')
 def fetch_url = project.hasProperty('Hermes_LIBS_URL') ?
         new URL(project.getProperty('Hermes_LIBS_URL').toString()) :
-        new URL('https://github.com/OrangeLab/N-API/releases/download/2.0.3/napi_hermes_android.tar.gz')
+        new URL('https://github.com/OrangeLab/N-API/releases/download/2.0.4/napi_hermes_android.tar.gz')
 
 def zip_file = new File(fetch_dir, fetch_url.path.split('/').last())
 
@@ -35,7 +35,7 @@ task pickLibs(type: Copy, dependsOn: downloadLibs) {
     eachFile {
         def path_list = new LinkedList<>(it.relativePath.segments.toList())
         path_list.remove(0)
-        if (it.path.startsWith("napi/libs/")) {
+        if (it.path.startsWith("./libs/")) {
             path_list.add(1, "hermes")
         }
         it.relativePath = new RelativePath(true, path_list.toArray(new String[0]))
