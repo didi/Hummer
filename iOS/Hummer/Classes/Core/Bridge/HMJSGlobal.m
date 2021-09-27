@@ -96,7 +96,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 
 
 + (void)postException:(HMBaseValue *)exception {
-
+    
     NSDictionary *exceptionDic = exception.toDictionary;
     if (exceptionDic && HMCurrentExecutor.exceptionHandler) {
         HMExceptionModel *model = [[HMExceptionModel alloc] initWithParams:exceptionDic];
