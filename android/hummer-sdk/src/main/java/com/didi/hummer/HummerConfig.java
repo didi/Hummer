@@ -11,6 +11,7 @@ import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.scriptloader.impl.DefaultScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
 import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
+import com.didi.hummer.adapter.tracker.impl.EmptyTrackerAdapter;
 import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
@@ -154,6 +155,9 @@ public class HummerConfig {
     }
 
     public ITrackerAdapter getTrackerAdapter() {
+        if (trackerAdapter == null) {
+            trackerAdapter = new EmptyTrackerAdapter();
+        }
         return trackerAdapter;
     }
 
