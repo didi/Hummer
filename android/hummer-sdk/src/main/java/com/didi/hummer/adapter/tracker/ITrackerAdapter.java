@@ -109,7 +109,24 @@ public interface ITrackerAdapter {
     /**
      * JS异常上报
      *
+     * @param pageUrl
      * @param e
      */
     void trackException(String pageUrl, Exception e);
+
+    /**
+     * 保存bundle包信息
+     *
+     * @param pageUrl
+     * @param moduleName
+     * @param moduleVersion
+     */
+    void storeBundleInfo(String pageUrl, String moduleName, String moduleVersion);
+
+    /**
+     * 保存bundle包信息
+     *
+     * @param info
+     */
+    void storeBundleInfo(BundleInfo info);
 }
