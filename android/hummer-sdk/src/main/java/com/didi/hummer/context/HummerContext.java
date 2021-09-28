@@ -105,17 +105,14 @@ public class HummerContext extends ContextWrapper {
     protected HashMap<String, ICallback> mNativeCallbacks = new HashMap<>();
 
     /**
-     * function _classCallCheck(instance, Constructor) {
+     * 全局保存已通过babel转换后的代码
      */
-    protected Pattern pattern = Pattern.compile("function *_classCallCheck *\\( *\\w+ *, *\\w+ *\\) *\\{");
-    /**
-     * (()=>{})()
-     */
-    protected Pattern pattern1 = Pattern.compile("[\\s\\S]*\\(\\(\\) *=> *\\{[\\s\\S]*\\}\\)\\(\\)[\\s\\S]*;[\\s\\S]*");
-
-    protected Pattern pattern2 = Pattern.compile("\\s");
-
     private static final Map<String, String> globalBabelTransScriptMap = new HashMap<>();
+
+    /**
+     * 空白字符通配符（包括换行）
+     */
+    protected Pattern blankCharPattern = Pattern.compile("\\s");
 
     /**
      * 精简版构造函数，只用于JS代码执行，不能用做页面渲染
@@ -365,7 +362,7 @@ public class HummerContext extends ContextWrapper {
         String orgScript = script;
 
         // 替换换行等特殊字符，否则babel转换会报错
-        if (pattern2.matcher(script).find()) {
+        if (blankCharPattern.matcher(script).find()) {
             // \r -> \\r
             script = script.replace("\\r", "\\\\r");
             // \n -> \\n
