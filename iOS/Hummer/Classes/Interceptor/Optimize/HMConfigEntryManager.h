@@ -53,6 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMConfigEntryManager : NSObject
 
+@property(nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, HMConfigEntry *> *configMap DEPRECATED_MSG_ATTRIBUTE("参照其他 Interceptor 做处理");;
+
 + (instancetype)manager;
 - (void)addConfig:(HMConfigEntry *)config;
 
