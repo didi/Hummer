@@ -122,8 +122,6 @@ public class Input extends HMBase<EditText> {
             inputEvent.setState(InputEvent.HM_INPUT_STATE_ENDED);
             inputEvent.setTimestamp(System.currentTimeMillis());
             mEventManager.dispatchEvent(InputEvent.HM_EVENT_TYPE_INPUT, inputEvent);
-
-            KeyboardUtil.hideKeyboard(getView());
         }
     };
 
