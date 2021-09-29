@@ -15,6 +15,7 @@
 #import <Hummer/HMReporterProtocol.h>
 #import <Hummer/HMEventTrackProtocol.h>
 #import <Hummer/HMMemoryComponent.h>
+#import <Hummer/HMPluginManager.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) id<HMReporterProtocol> reporterInterceptor;
 
 @property (nonatomic, strong, readwrite) id<HMEventTrackProtocol> eventTrackInterceptor;
+
+@property(nonatomic, nullable, strong) id <HMTrackEventPluginProtocol> trackEventPlugin;
 
 @end
 
