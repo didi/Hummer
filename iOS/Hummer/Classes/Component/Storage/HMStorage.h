@@ -7,15 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Hummer/HMStorageProtocol.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+@interface HMStorageImp : NSObject<HMStorage>
+@property (nonatomic, strong, readonly) NSString *path;
+
+- (instancetype)initWithPath:(NSString *)path;
+@end
+
 @interface HMStorage : NSObject
 
-+ (BOOL)saveData:(id<NSCoding>)data forKey:(NSString *)key;
-+(id<NSCoding>)ObjectForKey:(NSString *)key;
-+ (BOOL)removeForKey:(NSString *)key;
-+ (BOOL)existForKey:(NSString *)key;
 
 @end
 

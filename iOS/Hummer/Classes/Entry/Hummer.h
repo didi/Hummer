@@ -13,7 +13,7 @@
 #import "HMInterceptor.h"
 #import "HMJSObject.h"
 #import "NSObject+Hummer.h"
-#import "HMInterceptorManager.h"
+#import <Hummer/HMConfigEntryManager.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

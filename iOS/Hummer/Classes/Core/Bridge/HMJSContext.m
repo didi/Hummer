@@ -20,7 +20,9 @@
 #import "HMBaseValue.h"
 #import "HMJSGlobal.h"
 #import <Hummer/HMDebug.h>
+#import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMWebSocket.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, HMCLILogLevel) {
@@ -133,17 +135,10 @@ NS_ASSUME_NONNULL_END
                 @"stack": exception.stack ?: @""
         };
         HMLogError(@"%@", exceptionInfo);
-        [interceptors enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj respondsToSelector:@selector(handleJSException:)]) {
-                [obj handleJSException:exceptionInfo];
-                
-                return;
-            }
-            typeof(weakSelf) strongSelf = weakSelf;
-            if ([obj respondsToSelector:@selector(handleJSException:context:)]) {
-                [obj handleJSException:exceptionInfo context:strongSelf];
-            }
-        }];
+        typeof(weakSelf) strongSelf = weakSelf;
+        [HMReporterInterceptor handleJSException:exceptionInfo namespace:strongSelf.nameSpace];
+        [HMReporterInterceptor handleJSException:exceptionInfo context:strongSelf namespace:strongSelf.nameSpace];
+        
     };
     [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/builtin.js"]];
 
@@ -208,7 +203,7 @@ NS_ASSUME_NONNULL_END
                 urlComponents.scheme = @"ws";
                 urlComponents.user = nil;
                 urlComponents.password = nil;
-                urlComponents.path = nil;
+                urlComponents.path = @"/proxy/native";
                 urlComponents.query = nil;
                 urlComponents.fragment = nil;
                 if (urlComponents.URL) {
@@ -219,14 +214,23 @@ NS_ASSUME_NONNULL_END
                     self.context.webSocketHandler = ^(NSString * _Nullable logString, HMLogLevel logLevel) {
                         typeof(weakSelf) strongSelf = weakSelf;
                         // 避免 "(null)" 情况
-                        NSURLSessionWebSocketMessage *webSocketMessage = [[NSURLSessionWebSocketMessage alloc] initWithString:[NSString stringWithFormat:@"{type:\"log\",data:{level:%lu,message:\"%@\"}}", convertNativeLogLevel(logLevel), logString.length > 0 ? logString : @""]];
-                        // 忽略错误
-                        [strongSelf.webSocketTask sendMessage:webSocketMessage completionHandler:^(NSError * _Nullable error) {
-                            typeof(weakSelf) strongSelf = weakSelf;
-                            if (error) {
-                                [strongSelf handleWebSocket];
-                            }
-                        }];
+                        NSString *jsonStr = @"";
+                        @try {
+                            jsonStr = _HMJSONStringWithObject(@{@"type":@"log",
+                                                      @"data":@{@"level":@(convertNativeLogLevel(logLevel)),
+                                                                @"message":logString.length > 0 ? logString : @""}});
+                        } @catch (NSException *exception) {
+                            HMLogError(@"native webSocket json 失败");
+                        } @finally {
+                            NSURLSessionWebSocketMessage *webSocketMessage = [[NSURLSessionWebSocketMessage alloc] initWithString:jsonStr];
+                            // 忽略错误
+                            [strongSelf.webSocketTask sendMessage:webSocketMessage completionHandler:^(NSError * _Nullable error) {
+                                typeof(weakSelf) strongSelf = weakSelf;
+                                if (error) {
+                                    [strongSelf handleWebSocket];
+                                }
+                            }];
+                        }
                     };
                     // 判断是否连通
                     [self.webSocketTask sendPingWithPongReceiveHandler:^(NSError * _Nullable error) {

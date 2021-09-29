@@ -20,6 +20,8 @@
 #import "HMJavaScriptLoader.h"
 #import "HMJSGlobal+Private.h"
 #import "HMExceptionModel.h"
+#import <Hummer/HMConfigEntryManager.h>
+
 #import <Hummer/HMDebug.h>
 #ifdef HMDEBUG
 #import "HMDevTools.h"
@@ -125,37 +127,22 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
         if (_exception) {
             NSDictionary *err = @{@"code":@(-1),
                                    @"message":@"javascript evalute exception"};
-            callback(@[err]);
+            if (callback) {
+                callback(@[err]);
+            }
         }else{
-            callback(@[[NSNull null]]);
+            if (callback) {
+                callback(@[[NSNull null]]);
+            }
         }
     };
-    
-    // TODO：拦截器
-    if ([HMInterceptor hasInterceptor:HMInterceptorTypeJSLoad]) {
-        [HMInterceptor enumerateInterceptor:HMInterceptorTypeJSLoad
-                                  withBlock:^(id<HMJSLoadInterceptor> interceptor,
-                                              NSUInteger idx,
-                                              BOOL * _Nonnull stop) {
-            [interceptor handleUrlString:_urlString completion:^(NSString * _Nonnull jsString) {
-                if (jsString) {
-                    *stop = YES;
-                    checkException(jsString);
-                    return;
-                }
-            }];
-        }];
-    }
-    
-    [HMJavaScriptLoader loadBundleWithURL:url onProgress:nil onComplete:^(NSError *error, HMDataSource *source) {
+    [HMJSLoaderInterceptor loadWithSource:url namespace:context.nameSpace completion:^(NSError * _Nonnull error, NSString * _Nonnull script) {
         if (error) {
             NSDictionary *err = @{@"code":@(error.code),
                                   @"message":error.userInfo[NSLocalizedDescriptionKey] ? error.userInfo[NSLocalizedDescriptionKey] : @"http error"};
             callback(@[err]);
             return;
         }
-        NSString *script = nil;
-        if(!error) script = [[NSString alloc] initWithData:source.data encoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_main_queue(), ^{
             checkException(script);
             return;

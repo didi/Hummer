@@ -14,7 +14,6 @@
 #import "HMBaseExecutorProtocol.h"
 #import "HMConverter.h"
 
-static NSInteger kHMDialogPopoverViewTag = 517212;
 
 @interface HMDialogPopoverView : UIView
 
@@ -31,7 +30,6 @@ static NSInteger kHMDialogPopoverViewTag = 517212;
     self = [super init];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:37.0/255.0 green:38.0/255.0 blue:45.0/255.0 alpha:0.4];
-        self.tag = kHMDialogPopoverViewTag;
     }
     return self;
 }
@@ -217,8 +215,17 @@ static NSInteger kHMDialogPopoverViewTag = 517212;
 }
 
 @end
-
-@implementation HMDialog
+/**
+ * 规范：
+ * 1.同一个实例：如果已经展示一个弹窗(不论是alert，还是custom等)，在不调用dismiss的情况下，直接调用下一个alert或者custom 等，此时不展示弹框。
+ * 2.多个实例： 多个实例弹窗叠加，后面的盖在前面的上层。
+ * 3.iOS 机制导致 cancelable 在 alertView 下 cancelable 属性失效
+ */
+@implementation HMDialog{
+    
+    HMDialogPopoverView *_popover;
+    BOOL _isPresenting;//是否已经展示弹窗
+}
 
 #pragma mark - Export
 
@@ -263,25 +270,14 @@ HM_EXPORT_PROPERTY(cancelable, __isCancelabled, __setCancelabled:)
     }
 }
 
-// MARK: - custom view
-
-static HMDialogPopoverView *_popover;
-
-//static void dismissPopover()
-//{
-//   if (_popover) {
-//       [_popover removeFromSuperview];
-//       _popover = nil;
-//   }
-//}
-
 - (void)__loading:(HMBaseValue *)jsContent {
+    if (_isPresenting) {return;}
+    _isPresenting = YES;
     NSString *content = jsContent.toString;
     if (!content) {
         return;
     }
     UIViewController *presenting = [HMDialog fix_getCurrentViewController];
-    [self _dismissPopoverAt:presenting];
     _popover = [[HMDialogPopoverView alloc] init];
     _popover.shouldDismissPopover = self.isCancelabled;
     
@@ -311,12 +307,14 @@ static HMDialogPopoverView *_popover;
 
 - (void)__customWithView:(HMBaseValue *)jsView
 {
+    if (_isPresenting) {return;}
+    _isPresenting = YES;
     UIView *view = jsView.hm_toObjCObject;
     if (!view) {
         return;
     }
+
     UIViewController *presenting = [HMDialog fix_getCurrentViewController];
-    [self _dismissPopoverAt:presenting];
     _popover = [[HMDialogPopoverView alloc] init];
     _popover.shouldDismissPopover = self.isCancelabled;
     [_popover addJSContentView:view presentingViewController:presenting];
@@ -324,11 +322,12 @@ static HMDialogPopoverView *_popover;
 
 - (void)customView:(UIView *)view
 {
+    if (_isPresenting) {return;}
+    _isPresenting = YES;
     if (!view) {
         return;
     }
     UIViewController *presenting = [HMDialog fix_getCurrentViewController];
-    [self _dismissPopoverAt:presenting];
     _popover = [[HMDialogPopoverView alloc] init];
     _popover.shouldDismissPopover = self.isCancelabled;
     [_popover addContentView:view presentingViewController:presenting];
@@ -336,6 +335,7 @@ static HMDialogPopoverView *_popover;
 
 - (void)__dismiss
 {
+    _isPresenting = NO;
     if (_popover) {
         [_popover removeFromSuperview];
         _popover = nil;
@@ -349,63 +349,6 @@ static HMDialogPopoverView *_popover;
     [self __dismiss];
 }
 
-//static HMPopoverViewController *_popover;
-//
-//- (void)__customWithView:(HMBaseValue *)jsView
-//{
-//    UIView *view = jsView.hm_toObjCObject;
-//    if (!view) {
-//        return;
-//    }
-//    UIViewController *presenting = [HMDialog fix_getCurrentViewController];
-//    if (!presenting) {
-//        return;
-//    }
-//    if (_popover) {
-//        [_popover dismissViewControllerAnimated:NO completion:nil];
-//    }
-//    _popover = [[HMPopoverViewController alloc] init];
-//    _popover.shouldDismissPopover = self.isCancelabled;
-//    [_popover addJSContentView:view presentingViewController:presenting];
-//    [presenting presentViewController:_popover animated:NO completion:nil];
-//}
-//
-//- (void)customView:(UIView *)view
-//{
-//    if (!view) {
-//        return;
-//    }
-//    UIViewController *presenting = [HMDialog fix_getCurrentViewController];
-//    if (!presenting) {
-//        return;
-//    }
-//    if (_popover) {
-//        [_popover dismissViewControllerAnimated:NO completion:nil];
-//    }
-//    _popover = [[HMPopoverViewController alloc] init];
-//    _popover.shouldDismissPopover = self.isCancelabled;
-//    [_popover addContentView:view presentingViewController:presenting];
-//    [presenting presentViewController:_popover animated:NO completion:nil];
-//}
-//
-//- (void)__dismiss
-//{
-//    if (_popover) {
-//        [_popover dismissViewControllerAnimated:NO completion:nil];
-//        [_popover removeFromParentViewController];
-//        [_popover didMoveToParentViewController:nil];
-//        _popover = nil;
-//    } else {
-//        [self dismissViewControllerAnimated:NO completion:nil];
-//    }
-//}
-//
-//- (void)dismiss
-//{
-//    [self __dismiss];
-//}
-
-// MARK: - Alert
 
 /**
 * 显示提示用户的警示框。当警示框出现后，用户需要点击[确定]按钮才能继续进行操作。
@@ -418,8 +361,10 @@ static HMDialogPopoverView *_popover;
 {
     NSString *title = jsMsg.isString ? jsMsg.toString : @"";
     NSString *btnText = jsBtnText.isString ? jsBtnText.toString : @"确认";
-    
+    if (_isPresenting) {return;}
+    _isPresenting = YES;
     [HMDialog dialogWithTitle:title message:nil showData:@[btnText] dialogType:HMDialogTypeCustomOneSure complement:^(NSInteger index) {
+        self->_isPresenting = NO;
         HMExecOnMainQueue(^{
             HM_SafeRunBlock(callback,@[]);
         });
@@ -428,12 +373,15 @@ static HMDialogPopoverView *_popover;
 
 - (void)__confirmWithTitle:(HMBaseValue *)jsTitle message:(HMBaseValue *)jsMsg okBtnText:(HMBaseValue *)jsOkBtnText cancelBtnText:(HMBaseValue *)jsCancelBtnText okCallback:(HMFuncCallback)okCallback cancelCallback:(HMFuncCallback)cancelCallback
 {
+    if (_isPresenting) {return;}
+    _isPresenting = YES;
     NSString *title = jsTitle.isString ? jsTitle.toString : @"";
     NSString *message = jsMsg.isString ? jsMsg.toString : nil;
     NSString *okBtnText = jsOkBtnText.isString ? jsOkBtnText.toString : @"确认";
     NSString *cancelBtnText = jsCancelBtnText.isString ? jsCancelBtnText.toString : @"取消";
-    
+
     [HMDialog dialogWithTitle:title message:message showData:@[okBtnText, cancelBtnText] dialogType:HMDialogTypeCustomDefault complement:^(NSInteger index) {
+        self->_isPresenting = NO;
         HMExecOnMainQueue(^{
             if (index == 0) {
                 HM_SafeRunBlock(okCallback,@[]);
@@ -446,28 +394,6 @@ static HMDialogPopoverView *_popover;
     }];
 }
 
-#pragma mark - private
-
-- (void)_dismissPopover {
-    [self _dismissPopoverAt:nil];
-}
-
-- (void)_dismissPopoverAt:(nullable UIViewController *)presenting {
-    if (presenting) {
-        presenting = [HMDialog fix_getCurrentViewController];
-    }
-    if (!presenting) {
-        return;
-    }
-    if (_popover) {
-        [self dismiss];
-    }
-    UIView *poped = [presenting.view.window viewWithTag:kHMDialogPopoverViewTag];
-    if (poped && [poped isKindOfClass:HMDialogPopoverView.class]) {
-        _popover = poped;
-        [self dismiss];
-    }
-}
 #pragma mark - helper
 
 /**
@@ -624,11 +550,8 @@ static HMDialogPopoverView *_popover;
         return nil;
     }
     
-    while (!ctrl.view.window && ctrl.presentedViewController) {
+    while (ctrl.presentedViewController) {
         ctrl = ctrl.presentedViewController;
-    }
-    if (!ctrl.view.window) {
-        return nil;
     }
     return ctrl;
 }
@@ -656,6 +579,7 @@ static HMDialogPopoverView *_popover;
     }
     return currentViewController;
 }
+
 
 @end
 

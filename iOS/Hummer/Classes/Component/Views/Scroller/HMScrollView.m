@@ -464,6 +464,7 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
 - (instancetype)initWithHMValues:(NSArray *)values {
     if (self = [super initWithHMValues:values]) {
         self.scrollDirection = HMScrollDirectionVertical;
+        self.alwaysBounceVertical = YES;
     }
     return self;
 }

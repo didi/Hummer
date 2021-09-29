@@ -262,7 +262,7 @@ HM_EXPORT_ATTRIBUTE(backgroundImage, __backgroundImage, HMStringOrigin:)
     if (imageString.length == 0) {
         HMLogWarning(@"URL 无效");
     }
-    [self hm_internalSetImageWithURL:imageString inJSBundleSource:nil context:nil completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+    [self hm_internalSetImageWithURL:imageString inJSBundleSource:nil context:nil completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
         if (image) {
             self.layer.contents = (__bridge id _Nullable)(image.CGImage);
         }

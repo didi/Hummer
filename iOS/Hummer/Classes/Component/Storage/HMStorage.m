@@ -11,6 +11,8 @@
 #import "HMExportManager.h"
 #import "HMJSGlobal.h"
 #import "HMBaseValue.h"
+#import <Hummer/HMConfigEntryManager.h>
+#import <Hummer/HMFileManager.h>
 
 @implementation HMStorage
 
@@ -25,6 +27,8 @@ HM_EXPORT_METHOD(get, __getObjectForKey:)
 HM_EXPORT_METHOD(remove,__removeObjectForKey:)
 
 HM_EXPORT_METHOD(exist,__existForKey:)
+
+HM_EXPORT_METHOD(removeAll,__removeAll)
 
 + (NSNumber *)__set:(HMBaseValue *)key object:(HMBaseValue *)object {
     if (object.isUndefined || object.isNull  || !key.isString) {
@@ -43,7 +47,9 @@ HM_EXPORT_METHOD(exist,__existForKey:)
         data  = object.toObject;
     }
     if (data) {
-        return @([HMStorage saveData:data forKey:key.toString]);
+        
+        id<HMStorage> storage = [HMStorageAdaptor storageWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+        return @([storage saveData:data forKey:key.toString]);
     }
 
     return @NO;
@@ -53,26 +59,55 @@ HM_EXPORT_METHOD(exist,__existForKey:)
     if (!key.isString) {
         return nil;
     }
-    return [HMStorage ObjectForKey:key.toString];
+    id<HMStorage> storage = [HMStorageAdaptor storageWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+    return [storage ObjectForKey:key.toString];
 }
 
 + (NSNumber *)__removeObjectForKey:(HMBaseValue *)key {
     if (!key.isString) {
         return @(NO);
     }
-    return @([HMStorage removeForKey:key.toString]);
+    id<HMStorage> storage = [HMStorageAdaptor storageWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+    return @([storage removeForKey:key.toString]);
 }
 
 + (NSNumber *)__existForKey:(HMBaseValue *)key {
     if (!key.isString) {
         return @(false);
     }
-    return @([HMStorage existForKey:key.toString]);
+    id<HMStorage> storage = [HMStorageAdaptor storageWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+    return @([storage existForKey:key.toString]);
 }
 
++ (void)__removeAll {
+    
+}
+@end
+
+@interface HMStorageImp()
+
+@property (nonatomic, strong, readwrite) NSString *path;
+
+@property (nonatomic, strong, readwrite) NSString *cachePath;
+
+@end
+
+@implementation HMStorageImp
+
+- (instancetype)initWithPath:(NSString *)path {
+    
+    self = [super init];
+    if (self) {
+        
+        _path = path;
+        _cachePath = [HMFileManager createDirectoryForKey:path];
+    }
+    return self;;
+}
 #pragma mark - common
 
-+ (BOOL)existForKey:(NSString *)key {
+- (BOOL)existForKey:(NSString *)key {
+    
     if (![NSString hm_isValidString:key]) {
         return NO;
     }
@@ -80,7 +115,8 @@ HM_EXPORT_METHOD(exist,__existForKey:)
     return [[NSFileManager defaultManager] fileExistsAtPath:fullPath];
 }
 
-+ (BOOL)removeForKey:(NSString *)key {
+
+- (BOOL)removeForKey:(NSString *)key {
     if (![self existForKey:key]) {
         return YES;
     }
@@ -90,37 +126,14 @@ HM_EXPORT_METHOD(exist,__existForKey:)
     return error!=nil;
 }
 
-+ (BOOL)removeAll {
+- (BOOL)removeAll {
     NSError * error ;
-    [[NSFileManager defaultManager ] removeItemAtPath:[self cacheDirectory] error:&error];
+    [[NSFileManager defaultManager] removeItemAtPath:self.cachePath error:&error];
     return error!=nil;
 }
 
-#pragma mark - File
 
-+ (NSString *)cacheKeyWithURL:(NSString *)URL {
-    if (![NSString hm_isValidString:URL]) {
-        return nil;
-    }
-    return [URL hm_md5String];
-}
-
-+ (BOOL)saveWithURL:(NSString *)URL key:(NSString *)key {
-    if (!URL.hm_isURLString || ![NSString hm_isValidString:key]) {
-        return NO;
-    }
-    NSURL * url = [NSURL URLWithString:URL];
-    NSString *fullPath = [self getFilePathWithKey:key];
-    NSError *moveError = nil;
-    [[NSFileManager defaultManager] moveItemAtURL:url
-                                            toURL:[NSURL fileURLWithPath:fullPath]
-                                            error:&moveError];
-    return !moveError;
-}
-
-#pragma mark - Archive
-
-+ (BOOL)saveData:(id<NSCoding>)data forKey:(NSString *)key {
+- (BOOL)saveData:(id<NSCoding>)data forKey:(NSString *)key {
     if (![NSString hm_isValidString:key]) {
         return YES;
     }
@@ -128,7 +141,7 @@ HM_EXPORT_METHOD(exist,__existForKey:)
     return ret;
 }
 
-+(id<NSCoding>)ObjectForKey:(NSString *)key {
+-(id<NSCoding>)ObjectForKey:(NSString *)key {
     if (![NSString hm_isValidString:key]) {
         return nil;
     }
@@ -136,45 +149,14 @@ HM_EXPORT_METHOD(exist,__existForKey:)
     return (id<NSCoding>)[NSKeyedUnarchiver unarchiveObjectWithFile:fullPath];
 }
 
-#pragma mark - UIImage
-
-+ (UIImage *)ImageWithKey:(NSString *)key {
-    NSData * data = [self dataWithKey:key];
-    if (!data) {
-        return nil;
-    }
-    return [UIImage imageWithData:data];
-}
-
-#pragma mark - NSData
-
-+ (NSData *)dataWithKey:(NSString *)key {
-    if (![NSString hm_isValidString:key]) {
-        return nil;
-    }
-    return [NSData dataWithContentsOfFile:[self getFilePathWithKey:key]];
-}
-
 #pragma mark - Private
 
-static NSString * __cacheDirectory;
-+ (NSString *)cacheDirectory {
-    if (!__cacheDirectory) {
-        __cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] ;
-        __cacheDirectory = [__cacheDirectory stringByAppendingPathComponent:@"HMCache"];
-        BOOL isDir = NO;
-        BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:__cacheDirectory isDirectory:&isDir];
-        if (!isExist || !isDir) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:__cacheDirectory withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-    }
-    return __cacheDirectory;
-}
-
-+ (NSString *)getFilePathWithKey:(NSString *)key {
+- (NSString *)getFilePathWithKey:(NSString *)key {
     NSAssert(key!=nil, @"hmStorage cache key can not be nil");
-    NSString * filePath = [[self cacheDirectory] stringByAppendingPathComponent:key];
+    NSString * filePath = [_cachePath stringByAppendingPathComponent:key];
     return filePath;
 }
+
+
 
 @end

@@ -7,23 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Hummer/HMMemoryComponent.h>
+
 
 @interface HMMemCache : NSObject
 
-+ (void)removeForKey:(NSString *)key;
+@end
 
-+ (void)setValue:(id)value forKey:(NSString *)key;
 
-+ (id)getValueForKey:(NSString *)key;
+@interface HMMemoryComponent : NSObject<HMMemoryComponent>
+@property (nonatomic, strong, readonly) NSString *namespace;
 
-+ (float)getFloatForKey:(NSString *)key;
-
-+ (NSUInteger)getIntegerForKey:(NSString *)key;
-
-+ (NSString *)getStringValueForForKey:(NSString *)key;
-
-+ (NSArray *)getArrayForForKey:(NSString *)key;
-
-+ (NSDictionary *)getDictionaryForForKey:(NSString *)key;
-
+- (instancetype)initWithNamespace:(NSString *)namespace;
 @end

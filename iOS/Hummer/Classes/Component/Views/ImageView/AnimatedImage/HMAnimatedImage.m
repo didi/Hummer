@@ -1,169 +1,178 @@
 //
-//  HMAnimatedImage.m
+//  HMImageCoder.m
 //  Hummer
 //
-//  Created by didi on 2020/11/25.
+//  Created by didi on 2021/8/31.
 //
 
+
 #import "HMAnimatedImage.h"
+#import "HMImageCoder.h"
+#import "HMImageCoderManager.h"
+#import "HMImageFrame.h"
+#import "UIImage+HMMetadata.h"
+#import "HMImageCoderHelper.h"
+#import "objc/runtime.h"
 
+static CGFloat HMImageScaleFromPath(NSString *string) {
+    if (string.length == 0 || [string hasSuffix:@"/"]) return 1;
+    NSString *name = string.stringByDeletingPathExtension;
+    __block CGFloat scale = 1;
+    
+    NSRegularExpression *pattern = [NSRegularExpression regularExpressionWithPattern:@"@[0-9]+\\.?[0-9]*x$" options:NSRegularExpressionAnchorsMatchLines error:nil];
+    [pattern enumerateMatchesInString:name options:kNilOptions range:NSMakeRange(0, name.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        scale = [string substringWithRange:NSMakeRange(result.range.location + 1, result.range.length - 2)].doubleValue;
+    }];
+    
+    return scale;
+}
 
-@interface HMGIFCoderFrame : NSObject
+@interface HMAnimatedImage ()
 
-@property (nonatomic, assign) NSUInteger index;
-@property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic, strong) id<HMAnimatedImageCoder> animatedCoder;
+@property (nonatomic, assign, readwrite) HMImageFormat animatedImageFormat;
+@property (atomic, copy) NSArray<HMImageFrame *> *loadedAnimatedImageFrames; // Mark as atomic to keep thread-safe
+@property (nonatomic, assign, getter=isAllFramesLoaded) BOOL allFramesLoaded;
 
 @end
 
-@implementation HMGIFCoderFrame
+@implementation HMAnimatedImage
+@dynamic scale; // call super
 
-@end
-
-@implementation HMAnimatedImage {
-    CGImageSourceRef _imageSource;
-    CGFloat _scale;
-    NSUInteger _loopCount;
-    NSUInteger _frameCount;
-    NSArray<HMGIFCoderFrame *> *_frames;
-}
-
-- (instancetype)initWithData:(NSData *)data scale:(CGFloat)scale {
-    
-    if (self = [super init]) {
-        CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
-        if (!imageSource) {
-            return nil;
-        }
-        
-        BOOL framesValid = [self scanAndCheckFramesValidWithSource:imageSource];
-        if (!framesValid) {
-            CFRelease(imageSource);
-            return nil;
-        }
-        
-        _imageSource = imageSource;
-        
-        // grab image at the first index
-        UIImage *image = [self animatedImageFrameAtIndex:0];
-        if (!image) {
-            return nil;
-        }
-        self = [super initWithCGImage:image.CGImage scale:MAX(scale, 1) orientation:image.imageOrientation];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+- (instancetype)initWithData:(NSData *)data scale:(CGFloat)scale options:(HMImageCoderOptions *)options {
+    if (!data || data.length == 0) {
+        return nil;
     }
-    
-    return self;
-}
-
-- (BOOL)scanAndCheckFramesValidWithSource:(CGImageSourceRef)imageSource {
-    
-    if (!imageSource) {
-        return NO;
-    }
-    NSUInteger frameCount = CGImageSourceGetCount(imageSource);
-    NSUInteger loopCount = [self imageLoopCountWithSource:imageSource];
-    NSMutableArray<HMGIFCoderFrame *> *frames = [NSMutableArray array];
-    
-    for (size_t i = 0; i < frameCount; i++) {
-        HMGIFCoderFrame *frame = [[HMGIFCoderFrame alloc] init];
-        frame.index = i;
-        frame.duration = [self frameDurationAtIndex:i source:imageSource];
-        [frames addObject:frame];
-    }
-    
-    _frameCount = frameCount;
-    _loopCount = loopCount;
-    _frames = [frames copy];
-    
-    return YES;
-}
-
-- (NSUInteger)imageLoopCountWithSource:(CGImageSourceRef)source {
-    
-    NSUInteger loopCount = 1;
-    NSDictionary *imageProperties = (__bridge_transfer NSDictionary *)CGImageSourceCopyProperties(source, nil);
-    NSDictionary *gifProperties = imageProperties[(__bridge NSString *)kCGImagePropertyGIFDictionary];
-    if (gifProperties) {
-        NSNumber *gifLoopCount = gifProperties[(__bridge NSString *)kCGImagePropertyGIFLoopCount];
-        if (gifLoopCount != nil) {
-            loopCount = gifLoopCount.unsignedIntegerValue;
-            // A loop count of 1 means it should repeat twice, 2 means, thrice, etc.
-            if (loopCount != 0) {
-                loopCount++;
+    data = [data copy]; // avoid mutable data
+    id<HMAnimatedImageCoder> animatedCoder = nil;
+    for (id<HMImageCoder>coder in [HMImageCoderManager sharedManager].coders.reverseObjectEnumerator) {
+        if ([coder conformsToProtocol:@protocol(HMAnimatedImageCoder)]) {
+            if ([coder canDecodeFromData:data]) {
+                if (!options) {
+                    options = @{HMImageCoderDecodeScaleFactor : @(scale)};
+                }
+                animatedCoder = [[[coder class] alloc] initWithAnimatedImageData:data options:options];
+                break;
             }
         }
     }
-    return loopCount;
+    if (!animatedCoder) {
+        return nil;
+    }
+    return [self initWithAnimatedCoder:animatedCoder scale:scale];
 }
 
-- (float)frameDurationAtIndex:(NSUInteger)index source:(CGImageSourceRef)source {
-    
-    float frameDuration = 0.1f;
-    CFDictionaryRef cfFrameProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil);
-    if (!cfFrameProperties) {
-        return frameDuration;
+- (instancetype)initWithAnimatedCoder:(id<HMAnimatedImageCoder>)animatedCoder scale:(CGFloat)scale {
+    if (!animatedCoder) {
+        return nil;
     }
-    NSDictionary *frameProperties = (__bridge NSDictionary *)cfFrameProperties;
-    NSDictionary *gifProperties = frameProperties[(NSString *)kCGImagePropertyGIFDictionary];
-    
-    NSNumber *delayTimeUnclampedProp = gifProperties[(NSString *)kCGImagePropertyGIFUnclampedDelayTime];
-    if (delayTimeUnclampedProp != nil && [delayTimeUnclampedProp floatValue] != 0.0f) {
-        frameDuration = [delayTimeUnclampedProp floatValue];
-    } else {
-        NSNumber *delayTimeProp = gifProperties[(NSString *)kCGImagePropertyGIFDelayTime];
-        if (delayTimeProp != nil) {
-            frameDuration = [delayTimeProp floatValue];
+    UIImage *image = [animatedCoder animatedImageFrameAtIndex:0];
+    if (!image) {
+        return nil;
+    }
+    self = [super initWithCGImage:image.CGImage scale:MAX(scale, 1) orientation:image.imageOrientation];
+    if (self) {
+        // Only keep the animated coder if frame count > 1, save RAM usage for non-animated image format (APNG/WebP)
+        if (animatedCoder.animatedImageFrameCount > 1) {
+            _animatedCoder = animatedCoder;
         }
+        NSData *data = [animatedCoder animatedImageData];
+        HMImageFormat format = [NSData hm_imageFormatForImageData:data];
+        _animatedImageFormat = format;
     }
-    
-    CFRelease(cfFrameProperties);
-    return frameDuration;
+    return self;
+}
+
+#pragma mark - Preload
+- (void)preloadAllFrames {
+    if (!_animatedCoder) {
+        return;
+    }
+    if (!self.isAllFramesLoaded) {
+        NSMutableArray<HMImageFrame *> *frames = [NSMutableArray arrayWithCapacity:self.animatedImageFrameCount];
+        for (size_t i = 0; i < self.animatedImageFrameCount; i++) {
+            UIImage *image = [self animatedImageFrameAtIndex:i];
+            NSTimeInterval duration = [self animatedImageDurationAtIndex:i];
+            HMImageFrame *frame = [HMImageFrame frameWithImage:image duration:duration]; // through the image should be nonnull, used as nullable for `animatedImageFrameAtIndex:`
+            [frames addObject:frame];
+        }
+        self.loadedAnimatedImageFrames = frames;
+        self.allFramesLoaded = YES;
+    }
+}
+
+- (void)unloadAllFrames {
+    if (!_animatedCoder) {
+        return;
+    }
+    if (self.isAllFramesLoaded) {
+        self.loadedAnimatedImageFrames = nil;
+        self.allFramesLoaded = NO;
+    }
+}
+#pragma mark - HMAnimatedImageProvider
+
+- (NSData *)animatedImageData {
+    return [self.animatedCoder animatedImageData];
 }
 
 - (NSUInteger)animatedImageLoopCount {
-    
-    return _loopCount;
+    return [self.animatedCoder animatedImageLoopCount];
 }
 
 - (NSUInteger)animatedImageFrameCount {
-    
-    return _frameCount;
-}
-
-- (NSTimeInterval)animatedImageDurationAtIndex:(NSUInteger)index {
-    
-    if (index >= _frameCount) {
-        return 0;
-    }
-    return _frames[index].duration;
+    return [self.animatedCoder animatedImageFrameCount];
 }
 
 - (UIImage *)animatedImageFrameAtIndex:(NSUInteger)index {
-    
-    CGImageRef imageRef = CGImageSourceCreateImageAtIndex(_imageSource, index, NULL);
-    if (!imageRef) {
+    if (index >= self.animatedImageFrameCount) {
         return nil;
     }
-    UIImage *image = [[UIImage alloc] initWithCGImage:imageRef scale:_scale orientation:UIImageOrientationUp];
-    CGImageRelease(imageRef);
-    return image;
+    if (self.isAllFramesLoaded) {
+        HMImageFrame *frame = [self.loadedAnimatedImageFrames objectAtIndex:index];
+        return frame.image;
+    }
+    return [self.animatedCoder animatedImageFrameAtIndex:index];
 }
 
-- (void)didReceiveMemoryWarning:(NSNotification *)notification {
-    
-    if (_imageSource) {
-        for (size_t i = 0; i < _frameCount; i++) {
-            CGImageSourceRemoveCacheAtIndex(_imageSource, i);
-        }
+- (NSTimeInterval)animatedImageDurationAtIndex:(NSUInteger)index {
+    if (index >= self.animatedImageFrameCount) {
+        return 0;
     }
+    if (self.isAllFramesLoaded) {
+        HMImageFrame *frame = [self.loadedAnimatedImageFrames objectAtIndex:index];
+        return frame.duration;
+    }
+    return [self.animatedCoder animatedImageDurationAtIndex:index];
 }
 
-- (void)dealloc {
-    
-    if (_imageSource) {
-        CFRelease(_imageSource);
-        _imageSource = NULL;
-    }
+@end
+
+
+@implementation HMAnimatedImage (Metadata)
+
+- (BOOL)hm_isAnimated {
+    return YES;
 }
+
+- (NSUInteger)hm_imageLoopCount {
+    return self.animatedImageLoopCount;
+}
+- (void)setHm_imageLoopCount:(NSUInteger)hm_imageLoopCount {
+
+    return;
+}
+
+- (HMImageFormat)hm_imageFormat {
+    return self.animatedImageFormat;
+}
+
+- (void)setHm_imageFormat:(HMImageFormat)hm_imageFormat {
+    return;
+}
+
+- (BOOL)hm_isVector {
+    return NO;
+}
+
 @end

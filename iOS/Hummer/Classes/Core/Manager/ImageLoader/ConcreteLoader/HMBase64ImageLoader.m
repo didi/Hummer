@@ -7,7 +7,7 @@
 
 #import "HMBase64ImageLoader.h"
 #import "HMUtility.h"
-
+#import "HMImageCoderManager.h"
 static NSString *const BASE64HEADERPREFIX = @"data:";
 
 @implementation HMBase64ImageLoader
@@ -35,7 +35,12 @@ static NSString *const BASE64HEADERPREFIX = @"data:";
         imageUrlString = [imageUrlString substringFromIndex:commaRange.location + 1];
     }
     NSData *imageData = [[NSData alloc] initWithBase64EncodedString:imageUrlString options:0];
-    completionBlock(imageData, NO, HMImageCacheTypeDisk, nil);
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        UIImage *image = HMImageLoaderDecodeImageData(imageData, [source hm_asUrl], context);
+        hm_safe_main_thread(^{
+            completionBlock(image?image:nil, nil, image?nil:HM_IMG_DECODE_ERROR);
+        });
+    });
     return operation;
 }
 

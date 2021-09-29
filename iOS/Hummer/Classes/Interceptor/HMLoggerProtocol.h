@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 - (BOOL)handleJSLog:(NSString *)log level:(HMLogLevel)level;
-- (BOOL)handleNativeLog:(NSString *)log level:(HMLogLevel)level;
+- (BOOL)handleNativeLog:(NSString *)log level:(HMLogLevel)level DEPRECATED_MSG_ATTRIBUTE("违背 namespace 设计");;
 
 @end
 

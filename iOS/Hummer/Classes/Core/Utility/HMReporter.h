@@ -11,10 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMReporter : NSObject
 
-+ (void)reportPerformanceWithBlock:(void (^)(dispatch_block_t finishBlock))excuteBlock
-                            forKey:(NSString *)reportKey;
-
-+ (void)reportValue:(id)value forKey:(NSString *)reportKey;
++ (void)reportPerformanceWithBlock:(void (^)(dispatch_block_t finishBlock))excuteBlock forKey:(NSString *)reportKey namespace:(NSString *)namespace;
++ (void)reportValue:(id)value forKey:(NSString *)reportKey namespace:(NSString *)namespace;
 
 @end
 

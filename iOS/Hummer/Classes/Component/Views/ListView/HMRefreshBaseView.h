@@ -52,7 +52,10 @@ NS_ASSUME_NONNULL_BEGIN
                           callback:(HMStateLoadChangedBlock)callback;
 /// 设置加载更多高度
 - (void)setLoadHeight:(CGFloat)height;
-/// 结束加载
+/**
+ * 设置上拉加载控件
+ * @param enable 下次能否继续触发加载更多
+ */
 - (void)endLoad:(BOOL)enabled;
 /// 重置状态
 - (void)reset;

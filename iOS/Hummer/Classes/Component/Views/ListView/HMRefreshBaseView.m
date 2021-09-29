@@ -170,18 +170,16 @@
 }
 
 - (void)endRefresh {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.25 animations:^{
-            UIEdgeInsets inset = self.scrollView.contentInset;
-            inset.top = 0;
-            self.scrollView.contentInset = inset;
-        }];
-        self.state = HMRefreshTypeNormal;
-        if (self.stateChangedBlock) {
-            self.stateChangedBlock(HMRefreshTypeNormal);
-        }
-        [self layoutContentView];
-    });
+    [UIView animateWithDuration:0.25 animations:^{
+        UIEdgeInsets inset = self.scrollView.contentInset;
+        inset.top = 0;
+        self.scrollView.contentInset = inset;
+    }];
+    self.state = HMRefreshTypeNormal;
+    if (self.stateChangedBlock) {
+        self.stateChangedBlock(HMRefreshTypeNormal);
+    }
+    [self layoutContentView];
 }
 
 - (void)beginRefresh {
@@ -325,24 +323,31 @@
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
+/**
+ * 设置上拉加载控件
+ * @param enable 下次能否继续触发加载更多
+ * 已经处在对应状态，仍会触发 state changed callback。
+ */
+- (void)endLoad:(BOOL)enabled
+{
 
-- (void)endLoad:(BOOL)enabled {
-    // 通知状态改变
-    if (self.state != HMLoadTypeRefreshing) {
-        return;
+    void(^doAnimation)(void) = ^(void){
+        self.isAnimated = YES;
+        UIEdgeInsets insets = self.scrollView.contentInset;
+        insets.bottom -= self.loadHeight;
+        [UIView animateWithDuration:0.25 animations:^{
+            self.scrollView.contentInset = insets;
+        } completion:^(BOOL finished) {
+            CGPoint offset = self.scrollView.contentOffset;
+            [self.scrollView setContentOffset:offset animated:NO];
+            self.isAnimated = NO;
+        }];
+    };
+    
+    if (self.isAnimated) {
+        doAnimation();
     }
-    
-    self.isAnimated = YES;
-    UIEdgeInsets insets = self.scrollView.contentInset;
-    insets.bottom -= self.loadHeight;
-    [UIView animateWithDuration:0.25 animations:^{
-        self.scrollView.contentInset = insets;
-    } completion:^(BOOL finished) {
-        CGPoint offset = self.scrollView.contentOffset;
-        [self.scrollView setContentOffset:offset animated:NO];
-        self.isAnimated = NO;
-    }];
-    
+
     HMLoadType state = enabled ? HMLoadTypeNormal : HMLoadTypeNoMoreData;
     self.state = state;
     if (self.stateChangedBlock) {

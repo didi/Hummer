@@ -10,6 +10,7 @@
 #import "NSString+Hummer.h"
 #import "HMUtility.h"
 #import "HMResourceModel.h"
+#import "HMImageCoderManager.h"
 
 @interface HMInternalSourceModel : NSObject
 
@@ -51,8 +52,7 @@
     NSArray *pathComponents = [_source pathComponents];
     //xx/xx/xx/xxx.png -> xxx.png
     NSString *imageName = pathComponents.lastObject;
-    NSArray *compoundNames = [imageName componentsSeparatedByString:@"."];
-    NSString *imageWithoutEx = compoundNames.firstObject;
+    NSString *imageWithoutEx = [imageName stringByDeletingPathExtension];
     if (![imageWithoutEx isEqualToString:@"/"]) {
         // iOS13之前 如果imageName为"/"或触发 _UIImageCollectImagePathsForPath进行路径处理，
         // 导致attempt to insert nil object from objects 类型的crash
@@ -60,9 +60,8 @@
         //phase1 image name
         self.imageNameWithoutExtension = imageWithoutEx;
     }
-    if (compoundNames.count>1) {
-        self.extensionName = compoundNames.lastObject;
-    }
+
+    self.extensionName = [imageName pathExtension];
     
     //phase2  get bundle
     NSBundle *mainBundle = [NSBundle mainBundle];
@@ -150,7 +149,7 @@
     BOOL isGif = context[HMImageManagerContextAnimatedImageClass];
     HMInternalSourceModel *model = [[HMInternalSourceModel alloc] initWithSource:sourceString];
     if (model.imageNameWithoutExtension == nil){
-        completionBlock(nil, NO, HMImageCacheTypeDisk, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorInvalidURL userInfo:@{NSLocalizedDescriptionKey : @"Invalid URL"}]);
+        completionBlock(nil, nil, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorInvalidURL userInfo:@{NSLocalizedDescriptionKey : @"Invalid URL"}]);
         return operation;
     }
     //phase1: bundle+imageName
@@ -177,16 +176,21 @@
     }
 
     if (imageData) {
-        completionBlock(imageData, YES, HMImageCacheTypeDisk, nil);
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{           
+            UIImage *image = HMImageLoaderDecodeImageData(imageData, [realSource hm_asUrl], context);
+            hm_safe_main_thread(^{
+                completionBlock(image?image:nil, nil, image?nil:HM_IMG_DECODE_ERROR);
+            });
+        });
         return operation;
     }
     
     if (image) {
-        completionBlock(image, NO, HMImageCacheTypeDisk, nil);
+        completionBlock(image, nil, nil);
         return operation;
     }
     NSError *error = [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorBadImageData userInfo:@{NSLocalizedDescriptionKey : @"can not fetch image data from local asset"}];
-    completionBlock(nil, NO, HMImageCacheTypeDisk, error);
+    completionBlock(nil, nil, error);
     return operation;
 }
 

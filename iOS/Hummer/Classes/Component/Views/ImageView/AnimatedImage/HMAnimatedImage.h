@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "HMImageCoder.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HMAnimatedImage : UIImage
@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSTimeInterval)animatedImageDurationAtIndex:(NSUInteger)index;
 - (UIImage *)animatedImageFrameAtIndex:(NSUInteger)index;
 
-- (instancetype)initWithData:(NSData *)data scale:(CGFloat)scale;
+- (nullable instancetype)initWithData:(nonnull NSData *)data scale:(CGFloat)scale options:(nullable HMImageCoderOptions *)options;
+
 @end
 
 NS_ASSUME_NONNULL_END

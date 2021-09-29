@@ -7,6 +7,7 @@
 
 #import "HMImageDownloadOperation.h"
 #import "HMUtility.h"
+#import "HMImageCoderManager.h"
 
 static NSString *const kCompletedCallbackKey = @"completed";
 
@@ -27,7 +28,11 @@ static NSString *const kCompletedCallbackKey = @"completed";
 @property (strong, nonatomic, nullable) NSError *responseError;
 
 @property (nonatomic, strong) NSMutableData *imageData;
+@property (nonatomic, strong) UIImage *image;
+
 @property (nonatomic, strong) NSURLRequest *request;
+
+@property (nonatomic, strong) HMImageLoaderContext *context;
 
 @property (nonatomic, strong) NSMutableArray <HMImageDownloadCallBackPair<NSString *,HMImageDownloaderCompletedBlock> *>*callbackBlocks;
 @end
@@ -37,10 +42,11 @@ static NSString *const kCompletedCallbackKey = @"completed";
 @synthesize executing = _executing;
 @synthesize finished = _finished;
 
-- (instancetype)initWithRequest:(NSURLRequest *)request inSession:(NSURLSession *)session {
+- (instancetype)initWithRequest:(NSURLRequest *)request inSession:(NSURLSession *)session context:(nullable HMImageLoaderContext *)context{
     
     self = [super init];
     if (self) {
+        _context = context;
         _session = session;
         _request = request;
         _expectedSize = 0;
@@ -70,7 +76,7 @@ static NSString *const kCompletedCallbackKey = @"completed";
         }
     }
 }
-
+// 主线程
 - (void)cancel {
     @synchronized (self) {
         [self cancelInternal];
@@ -144,23 +150,36 @@ didReceiveResponse:(NSURLResponse *)response
 
 - (void)URLSession:(__unused NSURLSession *)session task:(nonnull NSURLSessionDataTask *)task didCompleteWithError:(nullable NSError *)error {
     
-    if (self.isFinished) return;    
     @synchronized(self) {
+        if (self.isFinished) return;
         self.dataTask = nil;
     }
     if (error || self.responseError) {
         self.responseError = self.responseError ? self.responseError : error;
         NSError *err = [self.responseError copy];
-        [self notifyComplete:nil error:err];
+        [self notifyComplete:nil UIImage:nil error:err];
+        [self done];
     }else{
-        
-        NSData *data = [self.imageData copy];
-        [self notifyComplete:data error:nil];
+
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            NSData *data = [self.imageData copy];
+            self.image = HMImageLoaderDecodeImageData(data, self.request.URL ,self.context);
+            self.responseError = self.image?nil:HM_IMG_DECODE_ERROR;
+            if (self.image) {
+                UIImage *image = [self.image copy];
+                [self notifyComplete:data UIImage:image error:nil];
+            }else{
+                [self notifyComplete:nil UIImage:nil error:HM_IMG_DECODE_ERROR];
+            }
+            @synchronized (self) {
+                [self done];
+            }
+        });
     }
-    [self done];
 }
 
 #pragma mark <public>
+// 主线程调用。保证 operation 和主线程
 - (nonnull id)addHandlersForCompleted:(nullable HMImageDownloaderCompletedBlock)completedBlock{
     HMImageDownloadCallBackPair *callBackPair = [HMImageDownloadCallBackPair new];
     if (completedBlock) callBackPair[kCompletedCallbackKey] = completedBlock;
@@ -169,8 +188,9 @@ didReceiveResponse:(NSURLResponse *)response
         if (self.isFinished) {
 //            HMAssert(NO,@"添加已完成的下载任务。");
             NSData *data = [self.imageData copy];
+            UIImage *image = [self.image copy];
             NSError *err = [self.responseError copy];
-            [self notifyComplete:data error:err];
+            [self notifyComplete:data UIImage:image error:err];
         }
     }
     return callBackPair;
@@ -193,7 +213,7 @@ didReceiveResponse:(NSURLResponse *)response
         HMImageDownloaderCompletedBlock completedBlock = [token valueForKey:kCompletedCallbackKey];
         hm_safe_main_thread(^{
             if (completedBlock) {
-                completedBlock(nil, nil, HMImageCacheTypeNone, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorCancelled userInfo:@{NSLocalizedDescriptionKey : @"Operation cancelled by user during sending the request"}]);
+                completedBlock(nil, nil, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorCancelled userInfo:@{NSLocalizedDescriptionKey : @"Operation cancelled by user during sending the request"}]);
             }
         });
     }
@@ -202,19 +222,22 @@ didReceiveResponse:(NSURLResponse *)response
 
 #pragma mark <private>
 - (void)callCompletionBlocksWithError:(nullable NSError *)error {
-    [self notifyComplete:nil error:error];
+    [self notifyComplete:nil UIImage:nil error:error];
 }
 
-- (void)notifyComplete:(nullable NSData *)imageData error:(nullable NSError *)error {
+- (void)notifyComplete:(nullable NSData *)imageData UIImage:(UIImage *)image error:(nullable NSError *)error {
     NSMutableArray *blocks = nil;
     @synchronized (self) {
         blocks = [self.callbackBlocks mutableCopy];
         [self.callbackBlocks removeAllObjects];
     }
-    for (HMImageDownloadCallBackPair *pair in blocks) {
-         HMImageDownloaderCompletedBlock callback = pair[kCompletedCallbackKey];
-         callback(imageData, imageData?YES:NO, HMImageCacheTypeNone, error);
-    }
+    hm_safe_main_thread(^{
+        for (HMImageDownloadCallBackPair *pair in blocks) {
+             HMImageDownloaderCompletedBlock callback = pair[kCompletedCallbackKey];
+             callback(image, imageData, error);
+        }
+    });
+
 }
 
 - (void)done {

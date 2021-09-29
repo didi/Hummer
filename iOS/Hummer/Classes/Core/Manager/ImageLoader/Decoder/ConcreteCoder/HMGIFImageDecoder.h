@@ -6,10 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HMImageDecoder.h"
+#import "HMImageIOAnimatedCoder.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HMGIFImageDecoder : NSObject<HMImageDecoder>
+@interface HMGIFImageDecoder : HMImageIOAnimatedCoder
 
 
 @end

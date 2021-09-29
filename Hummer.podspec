@@ -27,7 +27,7 @@ Hummer is a dynamic solution for client.
   s.author           = { 'ChasonTang' => 'tangjiacheng@didiglobal.com' }
   s.source           = { :git => 'https://github.com/didi/Hummer.git', :tag => s.version.to_s }
   s.prepare_command = <<-CMD
-    curl -o napi_ios.tar.gz -L https://github.com/OrangeLab/N-API/releases/download/2.0.4/napi_ios.tar.gz
+    curl -o napi_ios.tar.gz -L https://pt-starfile.didistatic.com/static/starfile/node20210913/895f1e95e30aba5dd56d6f2ccf768b57/x54q2scLj51631514238585.zip
     tar zxf napi_ios.tar.gz
     rm -f napi_ios.tar.gz
   CMD
@@ -58,7 +58,7 @@ Hummer is a dynamic solution for client.
     ss.library = 'c++'
     ss.framework = 'CoreFoundation'
     ss.source_files = 'iOS/Hermes/*.{h,m,mm}'
-    ss.dependency 'SocketRocket', '~> 0.1'
+    ss.dependency 'SocketRocket', '~> 0.6'
   end
 
   s.subspec "JavaScriptCore" do |ss|
@@ -76,13 +76,18 @@ Hummer is a dynamic solution for client.
 
   s.subspec "Core" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
-    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m}'
+    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}'
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
     ss.framework = 'JavaScriptCore'
     ss.dependency 'Yoga', '~> 1.14'
-    ss.dependency 'SocketRocket', '~> 0.1'
+    ss.dependency 'SocketRocket', '~> 0.6'
+  end
+
+  s.subspec "WebP" do |ss|
+    ss.source_files = 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}'
+    ss.dependency 'libwebp', '~> 1.2.0'
   end
   
   # s.public_header_files = 'Pod/Classes/**/*.h'

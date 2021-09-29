@@ -46,8 +46,25 @@ typedef NS_ENUM(NSInteger, HMImageCacheType) {
 };
 
 typedef void(^HMImageLoadProcessBlock)(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType);
-typedef void(^HMImageCompletionBlock)(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType);
-typedef void(^HMImageLoaderCompletionBlock)(id _Nullable data, BOOL needCache, HMImageCacheType cacheType, NSError * _Nullable error);
+
+/**
+ * External interface
+ * exp: called from UIView,UIImageView category
+ *
+ * @param image          decoded image
+ * @param data           origin image data
+ * @param cacheType      source of image: memory disk none
+ */
+typedef void(^HMImageCompletionBlock)(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType);
+
+/**
+ * Internal interface
+ * exp: called from UIView,UIImageView category
+ *
+ * @param image          decoded image
+ * @param data           origin image data
+ */
+typedef void(^HMImageLoaderCompletionBlock)(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error);
 
 typedef NSString * HMImageLoaderContextOption NS_EXTENSIBLE_STRING_ENUM;
 typedef NSDictionary<HMImageLoaderContextOption, id> HMImageLoaderContext;
@@ -55,6 +72,9 @@ typedef NSDictionary<HMImageLoaderContextOption, id> HMImageLoaderContext;
 #define HM_LOCK(lock) dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
 #define HM_UNLOCK(lock) dispatch_semaphore_signal(lock);
 
+#ifndef HM_OPTIONS_CONTAINS
+#define HM_OPTIONS_CONTAINS(options, value) (((options) & (value)) == (value))
+#endif
 
 /// The HTTP status code for invalid download response (NSNumber *)
 FOUNDATION_EXPORT NSErrorUserInfoKey const _Nonnull HMWebImageErrorDownloadStatusCodeKey;
@@ -66,6 +86,6 @@ FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageManagerContex
 
 FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageManagerContextImageScaleFactor;
 FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageManagerContextImageResizeMode;
-FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageManagerContextImageResize;
+FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageManagerContextImageThumbnailPixelSize;
 FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageManagerContextNamespace;
 

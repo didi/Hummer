@@ -97,7 +97,9 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
     if (!params.isString) {
      
         NSDictionary *dic = params.toDictionary;
-        self.gifRepeatCount = dic[@"gifRepeatCount"];
+        if (dic[@"gifRepeatCount"]) {
+            self.gifRepeatCount = dic[@"gifRepeatCount"];
+        }
         srcString = dic[@"src"];
         placeholder = dic[@"placeholder"];
         errorSource = dic[@"failedImage"];
@@ -109,7 +111,6 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
     if ([srcString hasSuffix:@".gif"]) {
         context = @{HMImageManagerContextAnimatedImageClass:@"HMAnimatedImage"};
     }
-    
     [self realSetSrc:srcString placeholder:placeholder failedImage:errorSource context:context completionBlock:^(NSInteger srcType, BOOL isSuccess) {
         if (callback) {
             callback(@[@(srcType), @(isSuccess)]);
@@ -144,13 +145,13 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
 }
 
 - (void)realSetSrc:(NSString *)src placeholder:(NSString *)placeholder failedImage:(NSString *)failedImage context:(nullable HMImageLoaderContext *)context completionBlock:(HMImageLoadCompletionBlock)completionBlock {
-    
+
     self.imageSrc = src;
     if (self.imageSrc) {
         self.image = nil;
         __weak typeof(self) weakSelf = self;
         
-        [self hm_setImageWithURL:self.imageSrc placeholder:placeholder failedImage:failedImage inJSBundleSource:nil processBlock:nil context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+        [self hm_setImageWithURL:self.imageSrc placeholder:placeholder failedImage:failedImage inJSBundleSource:nil processBlock:nil context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
             typeof(weakSelf) strongSelf = weakSelf;
             if (error || !image) {
                 if (completionBlock) {
@@ -171,6 +172,7 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
                     }
                 }];
             }
+            // set UIAnimatedImage for ImageView.image, will cause animationRepeatCount invalidate
             if (context[HMImageManagerContextAnimatedImageClass]) {
                 if ([img isKindOfClass:HMAnimatedImage.class]) {
                     HMAnimatedImage *animatedImage = (HMAnimatedImage *)img;
@@ -178,9 +180,14 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
                     strongSelf.animationImages = animatedImage.hm_animatedImages;
                     strongSelf.animationDuration = animatedImage.hm_animatedDuration;
                     [strongSelf startAnimating];
-                }else{
+                } else{
                     HMAssert(NO,@"gif image is not a HMAnimatedImage`s instance");
                 }
+            }else if (image.hm_isAnimated){
+                strongSelf.image = img.images.lastObject;
+                strongSelf.animationImages = img.images;
+                strongSelf.animationDuration = img.duration;
+                [strongSelf startAnimating];               
             }else{
                 strongSelf.image = img;
                 // 停止动画
