@@ -108,16 +108,12 @@ HM_EXPORT_METHOD(drawImage,drawImageWithSrc:atX:y:width:height:)
     }
     
     __weak typeof(self) weakSelf = self;
-    [[HMImageManager sharedManager] load:srcString
-                        inJSBundleSource:nil
-                                 context:nil
-                              completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+    [[HMImageManager sharedManager] load:srcString inJSBundleSource:nil context:nil completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
         if (image) {
             [weakSelf.internal_canvas_impl drawImage:image
                                               atRect:HMCanvasCGRectMake(x, y, width, height)];
         }
-    }];
-    
+    }];    
 }
 
 /// 填充矩形
