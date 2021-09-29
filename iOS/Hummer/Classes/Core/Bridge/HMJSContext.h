@@ -26,7 +26,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)context:(HMJSContext *)context didRenderPage:(HMBaseValue *)page;
 
 @end
-@interface HMJSContext : NSObject
+@interface HMJSContext : NSObject {
+@public
+    struct timespec _createTimespec;
+}
 
 @property (nonatomic, nullable, copy) NSSet<HMWebSocket *> *webSocketSet;
 

@@ -15,6 +15,7 @@
 #import <Hummer/HMReporterProtocol.h>
 #import <Hummer/HMEventTrackProtocol.h>
 #import <Hummer/HMMemoryComponent.h>
+#import <Hummer/HMPluginManager.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,10 +46,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readwrite) id<HMEventTrackProtocol> eventTrackInterceptor;
 
+@property(nonatomic, nullable, strong) id <HMTrackEventPluginProtocol> trackEventPlugin;
+
 @end
 
 
 @interface HMConfigEntryManager : NSObject
+
+@property(nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, HMConfigEntry *> *configMap DEPRECATED_MSG_ATTRIBUTE("参照其他 Interceptor 做处理");;
 
 + (instancetype)manager;
 - (void)addConfig:(HMConfigEntry *)config;
