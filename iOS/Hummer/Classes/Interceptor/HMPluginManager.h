@@ -42,17 +42,17 @@ static inline void HMClockGetTime(struct timespec *timespec) {
 
 - (void)trackEngineInitializationWithDuration:(NSNumber *)duration;
 
-- (void)trackJavaScriptBundleWithSize:(NSNumber *)size;
+- (void)trackJavaScriptBundleWithSize:(NSNumber *)size pageUrl:(NSString *)pageUrl;
 
-- (void)trackPageRenderCompletionWithDuration:(NSNumber *)duration;
+- (void)trackPageRenderCompletionWithDuration:(NSNumber *)duration pageUrl:(NSString *)pageUrl;
 
-- (void)trackEvaluationWithDuration:(NSNumber *)duration;
+- (void)trackEvaluationWithDuration:(NSNumber *)duration pageUrl:(NSString *)pageUrl;
 
-- (void)trackPerformanceWithLabel:(NSString *)string localizableLabel:(NSString *)localizableLabel stringValue:(NSString *)stringValue unit:(NSString *)unit;
+- (void)trackPerformanceWithLabel:(NSString *)label localizableLabel:(NSString *)localizableLabel stringValue:(NSString *)stringValue unit:(NSString *)unit pageUrl:(NSString *)pageUrl;
 
-- (void)trackPerformanceWithLabel:(NSString *)string localizableLabel:(NSString *)localizableLabel numberValue:(NSNumber *)numberValue unit:(NSString *)unit;
+- (void)trackPerformanceWithLabel:(NSString *)label localizableLabel:(NSString *)localizableLabel numberValue:(NSNumber *)numberValue unit:(NSString *)unit pageUrl:(NSString *)pageUrl;
 
-- (void)trackJavaScriptExceptionWithExceptionModel:(HMExceptionModel *)exceptionModel;
+- (void)trackJavaScriptExceptionWithExceptionModel:(HMExceptionModel *)exceptionModel pageUrl:(NSString *)pageUrl;
 
 @end
 
