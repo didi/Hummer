@@ -1,7 +1,9 @@
+import { Hummer, View, Text, Input, InputEvent } from '@hummer/hummer-front'
+import { Color } from '../../common/CommonColor'
+
 class RootView extends View {
     constructor() {
         super();
-
         this.style = {
             width: '100%',
             height: '100%',
@@ -12,8 +14,9 @@ class RootView extends View {
         let titleView = new Text();
         titleView.text = "获取验证码"
         titleView.style = {
-            fontSize: 20,
+            fontSize: 26,
             fontWeight: 'bold',
+            color: Color.dark_grey,
         }
 
         let descView1 = new Text();
@@ -22,7 +25,7 @@ class RootView extends View {
             marginTop: 16,
         }
         let descView2 = new Text();
-        descView2.text = "+86 15858585858"
+        descView2.text = "+86 15888888888"
         descView2.style = {
             marginTop: 16,
         }
@@ -40,10 +43,11 @@ class RootView extends View {
 }
 
 class VerifyCodeView extends View {
-    initialize() {
+    constructor() {
+        super();
         this.style = {
             flexDirection: 'row',
-            width: '80%',
+            width: '90%',
             justifyContent: 'space-between',
         }
 
@@ -53,15 +57,17 @@ class VerifyCodeView extends View {
             input.style = {
                 width: 40,
                 height: 40,
-                borderRadius: 3,
-                borderWidth: 1,
-                borderColor: '#000000',
+                borderRadius: 6,
+                borderWidth: 2,
+                borderColor: Color.hm_green,
                 textAlign: 'center',
+                fontSize: 20,
                 type: 'number',
+                cursorColor: Color.hm_green,
                 maxLength: 1,
             }
 
-            input.addEventListener('input', (event) => {
+            input.addEventListener('input', (event: InputEvent) => {
                 if (event.state == 2) { // 输入中
                     if (event.text) { // 有内容输入
                         if (i < inputViews.length - 1) {

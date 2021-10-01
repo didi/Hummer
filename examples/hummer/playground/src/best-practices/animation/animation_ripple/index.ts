@@ -1,25 +1,30 @@
+import { Hummer, View, KeyframeAnimation } from '@hummer/hummer-front'
+import { Style } from '../../../common/CommonStyle'
+import { Color } from '../../../common/CommonColor'
+
 class RootView extends View {
     constructor() {
         super();
-
         this.style = {
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
+            ...Style.FullParentStyle,
+            ...Style.CenterStyle,
+            backgroundColor: Color.white,
         }
 
-        this.testRipple();
+        this.showRippleAnim();
     }
 
-    testRipple() {
+    /**
+     * 水波纹动画
+     */
+    showRippleAnim() {
         let innerView = new View;
         innerView.style = {
             position: 'absolute',
-            width: 40,
-            height: 40,
-            backgroundColor: '#800000',
-            borderRadius: 20,
+            width: 36,
+            height: 36,
+            backgroundColor: Color.hm_green,
+            borderRadius: 18,
         }
 
         let outerView = new View;
@@ -29,10 +34,10 @@ class RootView extends View {
             height: 100,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#80000022',
+            backgroundColor: Color.hm_green + '22',
             borderRadius: 50,
             borderWidth: 4,
-            borderColor: '#800000',
+            borderColor: Color.hm_green,
             borderStyle: 'solid',
         }
 
