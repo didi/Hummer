@@ -1,4 +1,5 @@
-import { Hummer, View, Text, Scroller, Image, Navigator } from '@hummer/hummer-front'
+import { Hummer, View, Text, Scroller, Image } from '@hummer/hummer-front'
+import { MainListGroupTitle, MainListItem } from '../common/CommonLayout'
 import { Style } from '../common/CommonStyle'
 import { Color } from '../common/CommonColor'
 import { Img } from '../common/CommonResource'
@@ -73,6 +74,8 @@ class RootView extends Scroller {
 
     this.initNormalStyle();
     this.initViewComponents();
+    this.initBestPractices();
+    this.initGames();
   }
 
   initNormalStyle() {
@@ -96,59 +99,32 @@ class RootView extends Scroller {
     this.initItem("ViewPager", 'view_pager.js');
   }
 
+  initBestPractices() {
+    this.initGroupTitle('最佳实践');
+    this.initItem("标题栏系列", 'titlebar.js');
+    this.initItem("底部栏系列", 'bottombar.js');
+    this.initItem("标题栏 + 底部栏", 'title_and_bottom_bar.js');
+    this.initItem("动画系列", 'animation.js');
+    this.initItem("跑马灯文字效果", 'marquee.js');
+    this.initItem("价格居中 + 标签", 'price_flag.js');
+    this.initItem("验证码页面", 'verification_code.js');
+  }
+
+  initGames() {
+    this.initGroupTitle('小游戏');
+    this.initItem("2048", 'game_2048.js');
+    this.initItem("贪吃蛇", 'game_snake.js');
+    this.initItem("俄罗斯方块", 'game_tetris.js');
+  }
+
   initGroupTitle(title: string) {
-    let text = new Text();
-    text.style = {
-      color: '#9B9B9B',
-      fontSize: 13,
-      marginTop: 24,
-      marginBottom: 3,
-      marginLeft: 20,
-    }
-    text.text = title;
-    this.contentView.appendChild(text);
+    let titleView = new MainListGroupTitle(title);
+    this.contentView.appendChild(titleView);
   }
 
   initItem(title: string, dstPageName: string) {
-    let layout = new View();
-    layout.style = {
-      flexDirection: 'row',
-      height: 64,
-      marginTop: 10,
-      backgroundColor: '#FFFFFF',
-      shadow: '1 2 12 #00000014',
-      borderRadius: 8,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    }
-
-    let text = new Text();
-    text.style = {
-      color: '#1F1944',
-      fontSize: 18,
-      marginLeft: 21,
-    }
-    text.text = title;
-
-    let image = new Image();
-    image.style = {
-      width: 16,
-      height: 16,
-      marginRight: 24,
-      resize: 'contain',
-    }
-    image.src = Img.ListRightArrow;
-
-    layout.appendChild(text);
-    layout.appendChild(image);
-    this.contentView.appendChild(layout);
-
-    layout.addEventListener('tap', (event) => {
-      let page = {
-        url: './' + dstPageName,
-      }
-      Navigator.openPage(page, null);
-    })
+    let itemView = new MainListItem(title, dstPageName);
+    this.contentView.appendChild(itemView);
   }
 }
 
