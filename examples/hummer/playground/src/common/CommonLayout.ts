@@ -101,6 +101,63 @@ export class ScrollContentView extends Scroller {
         }
     }
 }
+export class MainListGroupTitle extends Text {
+    constructor(title: string) {
+        super();
+
+        this.style = {
+            color: '#9B9B9B',
+            fontSize: 13,
+            marginTop: 24,
+            marginBottom: 3,
+            marginLeft: 20,
+        }
+        this.text = title;
+    }
+}
+export class MainListItem extends View {
+    constructor(title: string, dstPageName: string) {
+        super();
+
+        this.style = {
+            flexDirection: 'row',
+            height: 64,
+            marginTop: 10,
+            backgroundColor: '#FFFFFF',
+            shadow: '1 2 12 #00000014',
+            borderRadius: 8,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        }
+
+        let text = new Text();
+            text.style = {
+            color: '#1F1944',
+            fontSize: 18,
+            marginLeft: 21,
+        }
+        text.text = title;
+
+        let image = new Image();
+            image.style = {
+            width: 16,
+            height: 16,
+            marginRight: 24,
+            resize: 'contain',
+        }
+        image.src = Img.ListRightArrow;
+
+        this.appendChild(text);
+        this.appendChild(image);
+
+        this.addEventListener('tap', (event) => {
+            let page = {
+              url: './' + dstPageName,
+            }
+            Navigator.openPage(page);
+        })
+    }
+}
 
 export class GroupTitle extends Text {
     constructor(title: string) {

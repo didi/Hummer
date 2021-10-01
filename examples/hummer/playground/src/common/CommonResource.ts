@@ -1,6 +1,7 @@
 import hummerLogo from '../res/hummer_logo.png'
 import ListRightArrow from '../res/list_right_arrow.png'
 import NavigatorBack from '../res/navigator_back.png'
+import MenuIcon from '../res/menu_icon.png'
 
 export const Img = {
     // hummerLogo: require('../res/hummer_logo.png'),
@@ -9,4 +10,5 @@ export const Img = {
     hummerLogo: hummerLogo,
     ListRightArrow: ListRightArrow,
     NavigatorBack: NavigatorBack,
+    MenuIcon: MenuIcon,
 }
