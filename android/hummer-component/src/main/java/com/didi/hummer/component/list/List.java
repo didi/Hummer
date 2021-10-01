@@ -1,5 +1,6 @@
 package com.didi.hummer.component.list;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.component.R;
 import com.didi.hummer.component.input.FocusUtil;
+import com.didi.hummer.component.input.KeyboardUtil;
 import com.didi.hummer.component.list.decoration.GridSpacingItemDecoration;
 import com.didi.hummer.component.list.decoration.LinearSpacingItemDecoration;
 import com.didi.hummer.component.list.decoration.StaggeredGridSpacingItemDecoration;
@@ -103,6 +105,8 @@ public class List extends HMBase<SmartRefreshLayout> {
             scrollEvent.setDy(DPUtil.px2dpF(getContext(), dy));
             scrollEvent.setTimestamp(System.currentTimeMillis());
             mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
+
+            hideKeyboardIfNeed(dx, dy);
         }
 
         @Override
@@ -368,6 +372,21 @@ public class List extends HMBase<SmartRefreshLayout> {
         if (leftSpacing > 0 || rightSpacing > 0 || topSpacing > 0 || bottomSpacing > 0) {
             recyclerView.setPadding(leftSpacing, topSpacing, rightSpacing, bottomSpacing);
             recyclerView.setClipToPadding(false);
+        }
+    }
+
+    private void hideKeyboardIfNeed(int dx, int dy) {
+        int d = 0;
+        if (direction == DIRECTION_VERTICAL) {
+            d = Math.abs(dy);
+        } else if (direction == DIRECTION_HORIZONTAL) {
+            d = Math.abs(dx);
+        }
+        if (d > 20 && getView().getContext() instanceof Activity) {
+            Activity act = (Activity) getView().getContext();
+            if (act.getCurrentFocus() != null && act.getCurrentFocus().getWindowToken() != null) {
+                KeyboardUtil.hideKeyboard(act.getCurrentFocus());
+            }
         }
     }
 
