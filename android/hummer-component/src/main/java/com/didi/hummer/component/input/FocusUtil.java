@@ -41,9 +41,11 @@ public class FocusUtil {
     public static void clearFocus(Context context) {
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null && imm.isActive() && activity.getCurrentFocus() != null && activity.getCurrentFocus().getWindowToken() != null) {
-                clearFocus(activity.getCurrentFocus());
+            if (activity.getCurrentFocus() != null && activity.getCurrentFocus().getWindowToken() != null) {
+                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null && imm.isActive()) {
+                    clearFocus(activity.getCurrentFocus());
+                }
             }
         }
     }

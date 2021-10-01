@@ -1,5 +1,6 @@
 package com.didi.hummer.component.scroller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
@@ -7,6 +8,7 @@ import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
 
 import com.didi.hummer.component.input.FocusUtil;
+import com.didi.hummer.component.input.KeyboardUtil;
 
 /**
  * Created by XiaoFeng on 2019-12-25.
@@ -94,6 +96,8 @@ public class HScrollView extends HorizontalScrollView {
         if (onScrollListener != null) {
             onScrollListener.onScrollChanged(this, x, y, x - oldx, y - oldy);
         }
+
+        hideKeyboardIfNeed(Math.abs(x - oldx));
     }
 
     @Override
@@ -135,5 +139,14 @@ public class HScrollView extends HorizontalScrollView {
         }
         observer.onTouchEvent(ev);
         return super.onTouchEvent(ev);
+    }
+
+    private void hideKeyboardIfNeed(int d) {
+        if (d > 20 && getContext() instanceof Activity) {
+            Activity act = (Activity) getContext();
+            if (act.getCurrentFocus() != null && act.getCurrentFocus().getWindowToken() != null) {
+                KeyboardUtil.hideKeyboard(act.getCurrentFocus());
+            }
+        }
     }
 }
