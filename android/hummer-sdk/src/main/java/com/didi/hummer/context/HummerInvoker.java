@@ -11,6 +11,7 @@ import com.didi.hummer.render.component.view.BaseInvoker;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.RemUtil;
 import com.didi.hummer.tools.JSLogger;
+import com.didi.hummer.utils.JsSourceUtil;
 
 import java.util.Map;
 
@@ -58,6 +59,7 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                  *   3. JS文件读取错误：>-100，如：{errCode: -101, errMsg: "JavaScript file read error"}；
                  */
                 String url = String.valueOf(params[0]);
+                url = JsSourceUtil.relativePath2AbsolutePath(url, mHummerContext.pageUrl);
                 JSCallback callback = params.length > 1 ? (JSCallback) params[1] : null;
                 HummerAdapter.getScriptLoaderAdapter(mHummerContext.getNamespace()).loadScriptWithUrl(url, (script, errCode, errMsg) -> {
                     if (script == null) {
