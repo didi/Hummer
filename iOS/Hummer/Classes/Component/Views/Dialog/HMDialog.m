@@ -13,7 +13,7 @@
 #import "UIView+HMDom.h"
 #import "HMBaseExecutorProtocol.h"
 #import "HMConverter.h"
-
+#import <Hummer/HMJSGlobal.h>
 
 @interface HMDialogPopoverView : UIView
 
@@ -239,6 +239,8 @@ HM_EXPORT_METHOD(loading, __loading:)
 
 HM_EXPORT_PROPERTY(cancelable, __isCancelabled, __setCancelabled:)
 
+HM_EXPORT_PROPERTY(lowLayer, isLowLayer, setIsLowLayer:)
+
 - (void)dealloc
 {
     NSLog(@"%s", __func__);
@@ -314,7 +316,28 @@ HM_EXPORT_PROPERTY(cancelable, __isCancelabled, __setCancelabled:)
         return;
     }
 
-    UIViewController *presenting = [HMDialog fix_getCurrentViewController];
+    UIViewController *presenting = nil;
+    if (!self.isLowLayer) {
+        presenting = [HMDialog fix_getCurrentViewController];
+    } else {
+        if (!HMCurrentExecutor) {
+            NSAssert(NO, @"HMCurrentExecutor must be non-nil");
+            
+            return;
+        }
+        HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+        if (!context) {
+            NSAssert(NO, @"Current HMJSContext must be non-nil");
+            
+            return;
+        }
+        presenting = context.rootView.window.rootViewController;
+        if (!presenting) {
+            NSAssert(NO, @"context.rootView.window.rootViewController must be non-nil");
+            
+            return;
+        }
+    }
     _popover = [[HMDialogPopoverView alloc] init];
     _popover.shouldDismissPopover = self.isCancelabled;
     [_popover addJSContentView:view presentingViewController:presenting];

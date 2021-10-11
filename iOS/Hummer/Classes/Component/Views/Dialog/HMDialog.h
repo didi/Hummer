@@ -19,6 +19,9 @@ typedef NS_ENUM(NSInteger, HMDialogType) {
 
 @interface HMDialog : UIAlertController
 
+/// @brief 是否使用当前 Hummer 容器视图所在的 window 作为对话框显示层，目前只针对 custom 方法有效
+@property (nonatomic, assign) BOOL isLowLayer;
+
 @property (nonatomic, assign, getter=isCancelabled) BOOL cancelable;
 
 - (void)customView:(UIView *)view;
