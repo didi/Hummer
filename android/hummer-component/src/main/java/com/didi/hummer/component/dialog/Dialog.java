@@ -3,7 +3,6 @@ package com.didi.hummer.component.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,6 +40,21 @@ public class Dialog {
     public boolean cancelable = true;
 
     /**
+     * AlertDialog显示层级是否是低层级
+     *
+     * AlertDialog默认的层级是TYPE_APPLICATION(2)，如果设置为lowLayer的话，就变成TYPE_BASE_APPLICATION(1)
+     */
+    @JsProperty("lowLayer")
+    public boolean lowLayer = false;
+
+    private void setDialogLayer(AlertDialog dialog, boolean isLowLayer) {
+        if (isLowLayer && dialog != null && dialog.getWindow() != null) {
+            // 调整AlertDialog显示层级，使其保持在系统对话框层级之下（AlertDialog默认是TYPE_APPLICATION）
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_BASE_APPLICATION);
+        }
+    }
+
+    /**
      * 显示提示用户的警示框。当警示框出现后，用户需要点击[确定]按钮才能继续进行操作。
      *
      * @param msg 内容
@@ -60,7 +74,11 @@ public class Dialog {
                         callback.call();
                     }
                 })
-                .show();
+                .create();
+
+        setDialogLayer(dialog, lowLayer);
+
+        dialog.show();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
@@ -97,7 +115,11 @@ public class Dialog {
                         cancelCallback.call();
                     }
                 })
-                .show();
+                .create();
+
+        setDialogLayer(dialog, lowLayer);
+
+        dialog.show();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
@@ -112,7 +134,11 @@ public class Dialog {
         dialog = new AlertDialog.Builder(context, R.style.TransparentDialog)
                 .setCancelable(cancelable)
                 .setView(view)
-                .show();
+                .create();
+
+        setDialogLayer(dialog, lowLayer);
+
+        dialog.show();
     }
 
     @JsMethod("custom")
@@ -133,10 +159,12 @@ public class Dialog {
             dialog = new AlertDialog.Builder(context, R.style.TransparentDialog)
                     .setCancelable(cancelable)
                     .setView(customContainer)
-                    .show();
-        } else {
-            dialog.show();
+                    .create();
+
+            setDialogLayer(dialog, lowLayer);
         }
+
+        dialog.show();
 
         if (dialog.getWindow() != null) {
             // 设置Dialog原始布局宽度全屏，内容默认是居中显示
