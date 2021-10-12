@@ -3,6 +3,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define CHECK_COMMON(expr) \
+{ \
+    NAPICommonStatus commonStatus = expr; \
+    assert(commonStatus == NAPICommonOK); \
+}
+
 @interface HMJSExecutor (Private)
 
 @property (nonatomic, assign, readonly) NAPIEnv env;

@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) dispatch_queue_t jsQueue;
 
+//目前js运行在主线，因此在自线程进行重试。
+@property (nonatomic, strong) dispatch_queue_t retryQueue;
+
 @property (nonatomic, assign) BOOL closed;
 
 @property (nonatomic, assign) BOOL suppressConnectionErrors;
@@ -71,11 +74,14 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     dispatch_queue_t jsQueue = dispatch_queue_create("com.didi.hummer.WebSocketExecutor", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_t retryQueue = dispatch_queue_create("com.didi.hummer.Packager.RetryQueue", DISPATCH_QUEUE_SERIAL);
+
     if (!jsQueue) {
         return nil;
     }
     self = [super init];
     _jsQueue = jsQueue;
+    _retryQueue = retryQueue;
     _url = url.copy;
 
     return self;
@@ -200,7 +206,7 @@ NS_ASSUME_NONNULL_END
     if (self.webSocket) {
         [self abort:@"WebSocket exception" withCause:error];
     }
-    if (!self.closed && error.code != ECONNREFUSED) {
+    if (!self.closed) {
         [self reconnect];
     }
 }
@@ -319,7 +325,7 @@ NS_ASSUME_NONNULL_END
     }
 
     __weak HMInspectorPackagerConnection *weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, RECONNECT_DELAY_MS * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, RECONNECT_DELAY_MS * NSEC_PER_MSEC), self.retryQueue, ^{
         HMInspectorPackagerConnection *strongSelf = weakSelf;
         if (strongSelf && !strongSelf.closed) {
             [strongSelf connect];

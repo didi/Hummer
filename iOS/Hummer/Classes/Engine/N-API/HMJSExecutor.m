@@ -1,4 +1,5 @@
 #import "HMJSExecutor+Private.h"
+#import "HMNAPICppHelper.h"
 #import <Hummer/HMUtility.h>
 #import <Hummer/NSInvocation+Hummer.h>
 #import <Hummer/HMExportClass.h>
@@ -29,11 +30,6 @@ static NSString *const CREATE_STRING_ERROR = @"napi_create_string_utf8() error";
 
 static NSString *const CREATE_EXTERNAL_ERROR = @"napi_create_external() error";
 
-#define CHECK_COMMON(expr) \
-{ \
-    NAPICommonStatus commonStatus = expr; \
-    assert(commonStatus == NAPICommonOK); \
-}
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -60,6 +56,7 @@ static NAPIValue _Nullable setImmediate(NAPIEnv _Nullable env, NAPICallbackInfo 
 @interface HMJSExecutor ()
 
 @property (nonatomic, assign) NAPIEnv env;
+@property (nonatomic, strong) HMNAPICppHelper *heremsHelper;
 
 - (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable NAPIValue)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName;
 
@@ -1474,6 +1471,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
     HMAssertMainQueue();
     self = [super init];
+    _heremsHelper = [HMNAPICppHelper new];
     if (NAPICreateEnv(&self->_env) != NAPIErrorOK) {
         NSAssert(NO, @"NAPICreateEnv() error");
         goto executorMapError;
@@ -1567,7 +1565,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 }
 
 - (void)enableDebuggerWithTitle:(nullable NSString *)title {
-    CHECK_COMMON(NAPIEnableDebugger(self.env, title.UTF8String))
+    [self.heremsHelper napiCall_enableDebuggerAndMessageThread:self.env title:title];
 }
 
 - (BOOL)popExceptionWithStatus:(NAPIExceptionStatus)status {
