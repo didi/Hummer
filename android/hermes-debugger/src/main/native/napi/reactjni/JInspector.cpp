@@ -5,9 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "JInspector.h"
-
+#include <jni.h>
 #include <memory>
+#include <js_native_api.h>
+#include <js_native_api_debugger.h>
+#include <js_native_api_debugger_hermes_types.h>
+#include "JInspector.h"
+#include "JNativeRunnable.h"
+#include "JSUtils.h"
 
 #ifdef WITH_INSPECTOR
 
@@ -75,6 +80,24 @@ void JLocalConnection::registerNatives() {
   });
 }
 
+void JInspector::enableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr, const std::string &page_title, jni::alias_ref<JavaMessageQueueThread::javaobject> jsQueue) {
+  auto globalEnv = JSUtils::toJsContext(ctx_ptr);
+  auto pageTitle = page_title.c_str();
+
+  struct OpaqueMessageQueueThreadWrapper {
+      std::shared_ptr<facebook::react::MessageQueueThread> thread_;
+  } s;
+  s.thread_ = std::make_shared<facebook::react::JMessageQueueThread>(jsQueue);
+  NAPISetMessageQueueThread(globalEnv, (MessageQueueThreadWrapper) &s);
+
+  NAPIEnableDebugger(globalEnv, pageTitle);
+}
+
+void JInspector::disableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr) {
+  auto globalEnv = JSUtils::toJsContext(ctx_ptr);
+  NAPIDisableDebugger(globalEnv);
+}
+
 jni::global_ref<JInspector::javaobject> JInspector::instance(
     jni::alias_ref<jclass>) {
   static auto instance =
@@ -102,10 +125,13 @@ jni::local_ref<JLocalConnection::javaobject> JInspector::connect(
 void JInspector::registerNatives() {
   JLocalConnection::registerNatives();
   javaClassStatic()->registerNatives({
+      makeNativeMethod("enableDebugging", JInspector::enableDebugging),
+      makeNativeMethod("disableDebugging", JInspector::disableDebugging),
       makeNativeMethod("instance", JInspector::instance),
       makeNativeMethod("getPagesNative", JInspector::getPages),
       makeNativeMethod("connectNative", JInspector::connect),
   });
+  JNativeRunnable::registerNatives();
 }
 
 } // namespace react

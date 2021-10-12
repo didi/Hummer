@@ -1,8 +1,11 @@
 package com.didi.hummer.hermes.debugger;
 
+import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.debug.plugin.IHermesDebugger;
 import com.didi.hummer.hermes.inspector.Inspector;
 import com.didi.hummer.hermes.inspector.InspectorPackagerConnection;
+import com.didi.hummer.hermes.queue.MessageQueueThreadImpl;
+import com.didi.hummer.hermes.queue.MessageQueueThreadSpec;
 
 /**
  * Created by XiaoFeng on 2020/9/4.
@@ -33,7 +36,10 @@ public class DefaultHermesDebugger implements IHermesDebugger {
 
     @Override
     public void enableDebugging(long runtimeId, String jsSourcePath) {
-        Inspector.enableDebugging(runtimeId, "Hummer - " + jsSourcePath);
+        MessageQueueThreadImpl mqt = MessageQueueThreadImpl.create(MessageQueueThreadSpec.mainThreadSpec(), e -> {
+            HMLog.v("HummerDebug", "enableDebugging, mqt exception: " + e);
+        });
+        Inspector.enableDebugging(runtimeId, "Hummer - " + jsSourcePath, mqt);
     }
 
     @Override
