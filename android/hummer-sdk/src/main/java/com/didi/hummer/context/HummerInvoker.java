@@ -46,7 +46,7 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                  * - JS加载过程中存在异常，则返回不同类型错误码：
                  *   1. JS执行异常：-1～-100，如：{errCode: -1, errMsg: "JavaScript evaluate exception"}；
                  */
-                jsRet = mHummerContext.evaluateJavaScript(String.valueOf(params[0]));
+                jsRet = mHummerContext.evaluateJavaScript(String.valueOf(params[0]), "loadScript");
                 jsRet = makeHummerError(jsRet);
                 break;
             case "loadScriptWithUrl":
@@ -58,8 +58,7 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                  *   2. JS执行异常：-1～-100，如：{errCode: -1, errMsg: "JavaScript evaluate exception"}；
                  *   3. JS文件读取错误：>-100，如：{errCode: -101, errMsg: "JavaScript file read error"}；
                  */
-                String url = String.valueOf(params[0]);
-                url = JsSourceUtil.relativePath2AbsolutePath(url, mHummerContext.pageUrl);
+                String url = JsSourceUtil.relativePath2AbsolutePath(String.valueOf(params[0]), mHummerContext.getPageUrl());
                 JSCallback callback = params.length > 1 ? (JSCallback) params[1] : null;
                 HummerAdapter.getScriptLoaderAdapter(mHummerContext.getNamespace()).loadScriptWithUrl(url, (script, errCode, errMsg) -> {
                     if (script == null) {
@@ -68,7 +67,7 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                             callback.call(ret);
                         }
                     } else {
-                        Object ret = mHummerContext.evaluateJavaScript(script);
+                        Object ret = mHummerContext.evaluateJavaScript(script, url);
                         ret = makeHummerError(ret);
                         if (callback != null) {
                             callback.call(ret);
