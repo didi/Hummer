@@ -66,10 +66,12 @@ JLocalConnection::JLocalConnection(std::unique_ptr<ILocalConnection> connection)
     : connection_(std::move(connection)) {}
 
 void JLocalConnection::sendMessage(std::string message) {
+  if (connection_ == nullptr) return;
   connection_->sendMessage(std::move(message));
 }
 
 void JLocalConnection::disconnect() {
+  if (connection_ == nullptr) return;
   connection_->disconnect();
 }
 
