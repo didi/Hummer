@@ -12,8 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, HMBorderStyle) {
     HMBorderStyleNone = 0,
     HMBorderStyleSolid,
+    HMBorderStyleDotted,
     HMBorderStyleDashed,
-    HMBorderStyleDotted
 };
 
 @interface HMBorderModel : NSObject <NSCopying>
