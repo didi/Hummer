@@ -54,8 +54,8 @@ void ellipseGetIntersectionsWithLine(CGRect ellipseBounds, CGPoint lineStart, CG
     const CGFloat y1 = m * x1 + c;
     const CGFloat y2 = m * x2 + c;
 
-    intersections[0] = {x1 + ellipseCenter.x, y1 + ellipseCenter.y};
-    intersections[1] = {x2 + ellipseCenter.x, y2 + ellipseCenter.y};
+    intersections[0] = (CGPoint) {x1 + ellipseCenter.x, y1 + ellipseCenter.y};
+    intersections[1] = (CGPoint) {x2 + ellipseCenter.x, y2 + ellipseCenter.y};
 }
 
 CGFloat HMScreenScale(void) {
@@ -122,7 +122,7 @@ BOOL HMBorderColorsAreEqual(HMBorderColors borderColors) {
 }
 
 HMCornerInsets HMGetCornerInsets(HMCornerRadii cornerRadii, UIEdgeInsets edgeInsets) {
-    return {
+    return (HMCornerInsets) {
             {
                     MAX(0, cornerRadii.topLeft - edgeInsets.left),
                     MAX(0, cornerRadii.topLeft - edgeInsets.top),
@@ -236,7 +236,7 @@ UIImage *getSolidBorderImage(HMCornerRadii cornerRadii, CGSize viewSize, UIEdgeI
         if (cornerInsets.topLeft.width > 0 && cornerInsets.topLeft.height > 0) {
             CGPoint points[2];
             ellipseGetIntersectionsWithLine(
-                    {topLeft, {2 * cornerInsets.topLeft.width, 2 * cornerInsets.topLeft.height}},
+                    (CGRect) {topLeft, {2 * cornerInsets.topLeft.width, 2 * cornerInsets.topLeft.height}},
                     CGPointZero,
                     topLeft,
                     points);
@@ -249,10 +249,10 @@ UIImage *getSolidBorderImage(HMCornerRadii cornerRadii, CGSize viewSize, UIEdgeI
         if (cornerInsets.bottomLeft.width > 0 && cornerInsets.bottomLeft.height > 0) {
             CGPoint points[2];
             ellipseGetIntersectionsWithLine(
-                    {
+                    (CGRect) {
                             {bottomLeft.x, bottomLeft.y - 2 * cornerInsets.bottomLeft.height},
                             {2 * cornerInsets.bottomLeft.width, 2 * cornerInsets.bottomLeft.height}},
-                    {0, size.height},
+                    (CGPoint) {0, size.height},
                     bottomLeft,
                     points);
             if (!isnan(points[1].x) && !isnan(points[1].y)) {
@@ -264,10 +264,10 @@ UIImage *getSolidBorderImage(HMCornerRadii cornerRadii, CGSize viewSize, UIEdgeI
         if (cornerInsets.topRight.width > 0 && cornerInsets.topRight.height > 0) {
             CGPoint points[2];
             ellipseGetIntersectionsWithLine(
-                    {
+                    (CGRect) {
                             {topRight.x - 2 * cornerInsets.topRight.width, topRight.y},
                             {2 * cornerInsets.topRight.width, 2 * cornerInsets.topRight.height}},
-                    {size.width, 0},
+                    (CGPoint) {size.width, 0},
                     topRight,
                     points);
             if (!isnan(points[0].x) && !isnan(points[0].y)) {
@@ -279,10 +279,10 @@ UIImage *getSolidBorderImage(HMCornerRadii cornerRadii, CGSize viewSize, UIEdgeI
         if (cornerInsets.bottomRight.width > 0 && cornerInsets.bottomRight.height > 0) {
             CGPoint points[2];
             ellipseGetIntersectionsWithLine(
-                    {
+                    (CGRect) {
                             {bottomRight.x - 2 * cornerInsets.bottomRight.width, bottomRight.y - 2 * cornerInsets.bottomRight.height},
                             {2 * cornerInsets.bottomRight.width, 2 * cornerInsets.bottomRight.height}},
-                    {size.width, size.height},
+                    (CGPoint) {size.width, size.height},
                     bottomRight,
                     points);
             if (!isnan(points[0].x) && !isnan(points[0].y)) {

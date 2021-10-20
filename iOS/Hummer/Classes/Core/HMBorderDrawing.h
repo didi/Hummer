@@ -52,7 +52,7 @@ FOUNDATION_EXTERN CGPathRef HMPathCreateWithRoundedRect(CGRect bounds, HMCornerI
 ///
 /// borderWidth 浏览器默认 medium，在 Firefox 上为 3px，Hummer 默认 0 pt/dp
 ///
-/// borderStyle: dotted/dashed 要求边框宽度颜色一样
+/// borderStyle: dotted/dashed 要求 borderWidth/Color **四边**一样
 ///
 /// `borderInsets` defines the border widths for each edge.
 FOUNDATION_EXTERN UIImage *_Nullable HMGetBorderImage(HMBorderStyle borderStyle, CGSize viewSize, HMCornerRadii cornerRadii, UIEdgeInsets borderInsets, HMBorderColors borderColors, CGColorRef _Nullable backgroundColor, BOOL drawToEdge);
