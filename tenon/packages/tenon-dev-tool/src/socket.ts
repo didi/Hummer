@@ -1,11 +1,12 @@
 import { log } from './utils'
 
 let ws:any, currentType:string
-export default function (url:string, handlers:any) {
+export default function (url:string, handlers:any,requestintercept:Function) {
   ws = new __GLOBAL__.WebSocket(url);
   // 设置各种监听回调
   ws.onopen = () => {
     log('websocket opened~');
+    requestintercept(ws);
   }
 
   ws.onmessage = (event:any) => {
