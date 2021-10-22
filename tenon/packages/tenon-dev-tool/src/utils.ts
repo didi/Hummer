@@ -84,3 +84,10 @@ export const updateOptions = function (oldOptions:any, newOptions:any) {
 export const log = function (str: String) {
   console.log(`[RUNTIME_DEV_TOOL]: ${str}`)
 }
+
+export const guid = function () {
+  function S4() { 
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1)
+  }
+  return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4())
+}

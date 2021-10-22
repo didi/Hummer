@@ -1,15 +1,16 @@
 import initSocket, { sendMessage } from './socket'
-import { getPartUrlByParam, getViewData, updateOptions, log } from './utils'
+import { getPartUrlByParam, getViewData, updateOptions, log} from './utils'
+import { requestintercept } from './requestintercept'
 /**
  * DevTool 启动入口函数
  * @param container 页面实例，通过引用可以拿到整个视图树，以及视图上的各个实例
  */
 // Tip: hummer-front 兼容
 let isWebPlatform = __GLOBAL__.Hummer.pageInfo && JSON.stringify(__GLOBAL__.Hummer.pageInfo) === '{}'
-
 export function run(container:any){
   log('get ready~')
   const { url } = __GLOBAL__.Hummer.pageInfo
+  __GLOBAL__.flag = true;
   let host = getPartUrlByParam(url, 'host')
   let port = getPartUrlByParam(url, 'port')
   let wsTenonUrl = `ws://${host}:${port}/proxy/tenon`
@@ -60,5 +61,5 @@ export function run(container:any){
     }
   }
 
-  initSocket(wsTenonUrl, onSocketMsgHandlers)
+  initSocket(wsTenonUrl, onSocketMsgHandlers,requestintercept)
 }
