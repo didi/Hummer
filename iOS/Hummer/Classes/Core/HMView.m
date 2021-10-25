@@ -43,7 +43,7 @@ static void updateShadowPathForView(HMView *view);
 
 @property(nonatomic, nullable, copy) NSDictionary<NSString *, id <NSCopying, NSSecureCoding>> *styleStore;
 
-@property(nonatomic, assign) BOOL isBoxSizing;
+//@property(nonatomic, assign) BOOL isBoxSizing;
 
 @property(nonatomic, readonly) NSSet<NSString *> *flexStyleKeySet;
 
@@ -102,8 +102,7 @@ void updateShadowPathForView(HMView *view) {
     }
 }
 
-// TODO(ChasonTang): Rename to View, rename View to OldView
-HM_EXPORT_CLASS(NewView, HMView)
+HM_EXPORT_CLASS(View, HMView)
 
 @implementation HMView
 
@@ -152,13 +151,13 @@ HM_EXPORT_CLASS(NewView, HMView)
                 @"alignItems",
                 @"alignSelf",
                 @"aspectRatio",
-                @"borderBottomWidth",
-                @"borderEndWidth",
-                @"borderLeftWidth",
-                @"borderRightWidth",
-                @"borderStartWidth",
-                @"borderTopWidth",
-                @"borderWidth",
+//                @"borderBottomWidth",
+//                @"borderEndWidth",
+//                @"borderLeftWidth",
+//                @"borderRightWidth",
+//                @"borderStartWidth",
+//                @"borderTopWidth",
+//                @"borderWidth",
                 @"bottom",
                 @"display",
                 @"end",
@@ -343,13 +342,13 @@ HM_EXPORT_CLASS(NewView, HMView)
         borderRadiusList = @[borderRadiusList[0], borderRadiusList[1], borderRadiusList[2], borderRadiusList[1]];
     }
 
-    NSValue *listValue = list[0];
+    NSValue *listValue = borderRadiusList[0];
     self.borderTopLeftRadius = listValue.ygValue.unit == YOGA_TYPE_WRAPPER(YGUnitPoint) ? listValue.ygValue.value : -1;
-    listValue = list[1];
+    listValue = borderRadiusList[1];
     self.borderTopRightRadius = listValue.ygValue.unit == YOGA_TYPE_WRAPPER(YGUnitPoint) ? listValue.ygValue.value : -1;
-    listValue = list[2];
+    listValue = borderRadiusList[2];
     self.borderBottomRightRadius = listValue.ygValue.unit == YOGA_TYPE_WRAPPER(YGUnitPoint) ? listValue.ygValue.value : -1;
-    listValue = list[3];
+    listValue = borderRadiusList[3];
     self.borderBottomLeftRadius = listValue.ygValue.unit == YOGA_TYPE_WRAPPER(YGUnitPoint) ? listValue.ygValue.value : -1;
 }
 
@@ -408,12 +407,12 @@ HM_EXPORT_CLASS(NewView, HMView)
     self.layer.shadowColor = CGColorCreateCopyWithAlpha(color.CGColor, 1);
     self.layer.shadowRadius = shadowRadius;
     self.layer.shadowOffset = CGSizeMake(widthOffset, heightOffset);
-    // TODO(ChasonTang): [self.layer setNeedsDisplay];
+    [self.layer setNeedsDisplay];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)hm_style {
 #ifndef NDEBUG
-    return self.styleStore;
+    return (NSDictionary<NSString *, NSObject *> *) self.styleStore;
 #else
     return nil;
 #endif
@@ -439,7 +438,10 @@ HM_EXPORT_CLASS(NewView, HMView)
         if ([positionValueObject isKindOfClass:NSString.class]) {
             if ([((NSString *) positionValueObject).lowercaseString isEqualToString:@"fixed"]) {
                 styleStore = styleDictionary.mutableCopy;
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnusedValue"
                 styleDictionary = nil;
+#pragma clang diagnostic pop
                 styleStore[@"position"] = @"absolute";
                 styleDictionary = styleStore.copy;
                 self.hm_isFixedPosition = YES;
@@ -449,7 +451,6 @@ HM_EXPORT_CLASS(NewView, HMView)
         }
     }
 
-    BOOL oldBoxSizing = self.isBoxSizing;
     __block NSMutableDictionary<NSString *, id <NSCopying, NSSecureCoding>> *animationDictionary = nil;
     __block NSMutableDictionary<NSString *, id <NSCopying, NSSecureCoding>> *transitions = nil;
     [styleDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL *stop) {
@@ -470,6 +471,12 @@ HM_EXPORT_CLASS(NewView, HMView)
 
             return;
         }
+        if ([self.borderStyleSet containsObject:key]) {
+            [self hm_configureWithTarget:self.hm_renderObject cssAttribute:key value:obj converterManager:HMYogaConfig.defaulfConfig];
+            [self hm_configureWithTarget:self cssAttribute:key value:obj converterManager:HMAttrManager.sharedManager];
+
+            return;
+        }
         if ([self.flexStyleKeySet containsObject:key]) {
             // 默认情况下都启用 flexbox 布局
             [self hm_configureWithTarget:self.hm_renderObject cssAttribute:key value:obj converterManager:HMYogaConfig.defaulfConfig];
@@ -480,10 +487,10 @@ HM_EXPORT_CLASS(NewView, HMView)
         [self hm_configureWithTarget:self cssAttribute:key value:obj converterManager:HMAttrManager.sharedManager];
     }];
 
-    // 1. boxSizing: 'border-box' -> 'none'
+    // 1. boxSizing: 'none'
     // 2. boxSizing: 'border-box' && borderStyle: 'none'
     // => reset layout to undefined(NaN)
-    if ((oldBoxSizing && !self.HMBorderBoxSizing) || (self.HMBorderBoxSizing && self.borderStyle == HMBorderStyleNone)) {
+    if (!self.HMBorderBoxSizing || (self.HMBorderBoxSizing && self.borderStyle == HMBorderStyleNone)) {
         // rollback borderWidth style
         self.hm_renderObject.borderWidth = YGUndefined;
         self.hm_renderObject.borderBottomWidth = YGUndefined;
@@ -497,10 +504,10 @@ HM_EXPORT_CLASS(NewView, HMView)
     // 设置样式之后，根据 zIndex 处理 fixed
     [self hm_processFixedPositionWithContext:[HMJSGlobal.globalObject currentContext:style.context]];
     // 将动画相关信息记录到 transitionAnimation
-    [self.hm_transitionAnimation addAnimations:animationDictionary];
+    [self.hm_transitionAnimation addAnimations:(NSDictionary<NSString *, NSObject *> *) animationDictionary];
     // 初始化 transitionAnimation 对象
     if (!self.hm_transitionAnimation && transitions.count > 0) {
-        self.hm_transitionAnimation = [[HMTransitionAnimation alloc] initWithTransitions:transitions view:self];
+        self.hm_transitionAnimation = [[HMTransitionAnimation alloc] initWithTransitions:(NSDictionary<NSString *, NSObject *> *) transitions view:self];
     }
     [self hm_markDirty];
 }
