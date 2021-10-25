@@ -179,6 +179,20 @@ HM_EXPORT_CLASS(View, HMView)
                 @"marginStart",
                 @"marginTop",
                 @"marginVertical",
+                @"maxHeight",
+                @"maxWidth",
+                @"minHeight",
+                @"minWidth",
+//                @"overflow",
+                @"padding",
+                @"paddingBottom",
+                @"paddingEnd",
+                @"paddingHorizontal",
+                @"paddingLeft",
+                @"paddingRight",
+                @"paddingStart",
+                @"paddingTop",
+                @"paddingVertical",
                 @"position",
                 @"right",
                 @"start",
@@ -424,10 +438,14 @@ HM_EXPORT_CLASS(View, HMView)
 
 #ifndef NDEBUG
     {
-        NSMutableDictionary<NSString *, id <NSCopying, NSSecureCoding>> *styleStore = self.styleStore.mutableCopy;
-        self.styleStore = nil;
-        [styleStore addEntriesFromDictionary:styleDictionary];
-        self.styleStore = styleStore;
+        if (!self.styleStore) {
+            self.styleStore = styleDictionary;
+        } else {
+            NSMutableDictionary<NSString *, id <NSCopying, NSSecureCoding>> *styleStore = self.styleStore.mutableCopy;
+            self.styleStore = nil;
+            [styleStore addEntriesFromDictionary:styleDictionary];
+            self.styleStore = styleStore;
+        }
     };
 #endif
 
