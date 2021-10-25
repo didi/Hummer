@@ -1,10 +1,3 @@
-//
-//  HMBorderDrawing.m
-//  Pods
-//
-//  Created by 唐佳诚 on 2021/10/19.
-//
-
 #import "HMBorderDrawing.h"
 
 NS_ASSUME_NONNULL_BEGIN

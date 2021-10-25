@@ -1,10 +1,3 @@
-//
-//  HMView.m
-//  Hummer
-//
-//  Created by 唐佳诚 on 2021/10/20.
-//
-
 #import "HMView.h"
 #import <Hummer/HMConverter.h>
 #import <Hummer/UIView+HMImageLoader.h>

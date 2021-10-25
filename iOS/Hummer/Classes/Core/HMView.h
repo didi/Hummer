@@ -1,10 +1,3 @@
-//
-//  HMView.h
-//  Hummer
-//
-//  Created by 唐佳诚 on 2021/10/20.
-//
-
 #import <UIKit/UIKit.h>
 #import <Hummer/HMBorderModel.h>
 
