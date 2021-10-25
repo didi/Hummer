@@ -121,7 +121,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSDictionary<NSString *, NSObject *> *)hm_style;
 
-- (void)hm_setStyle:(HMBaseValue *)style;
+- (void)hm_setStyle:(nullable HMBaseValue *)style;
 
 - (void)hm_configureWithTarget:(id)target cssAttribute:(NSString *)cssAttribute value:(id)value converterManager:(id)converterManager;
 
