@@ -24,6 +24,7 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
         for (int i = 0; i < argc; i++) {
             jobject p = JSUtils::JsValueToJavaObject(globalEnv, argv[i]);
             env->SetObjectArrayElement(params, i, p);
+            env->DeleteLocalRef(p);
         }
     }
 
