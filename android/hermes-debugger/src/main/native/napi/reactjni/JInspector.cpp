@@ -82,7 +82,7 @@ void JLocalConnection::registerNatives() {
   });
 }
 
-void JInspector::enableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr, const std::string &page_title, jni::alias_ref<JavaMessageQueueThread::javaobject> jsQueue) {
+void JInspector::enableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr, const std::string &page_title, jni::alias_ref<JavaMessageQueueThread::javaobject> jsQueue, bool waitForDebugger) {
   auto globalEnv = JSUtils::toJsContext(ctx_ptr);
   auto pageTitle = page_title.c_str();
 
@@ -92,7 +92,7 @@ void JInspector::enableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr, const st
   s.thread_ = std::make_shared<facebook::react::JMessageQueueThread>(jsQueue);
   NAPISetMessageQueueThread(globalEnv, (MessageQueueThreadWrapper) &s);
 
-  NAPIEnableDebugger(globalEnv, pageTitle);
+  NAPIEnableDebugger(globalEnv, pageTitle, waitForDebugger);
 }
 
 void JInspector::disableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr) {

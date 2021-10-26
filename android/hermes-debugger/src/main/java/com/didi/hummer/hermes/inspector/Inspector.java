@@ -38,7 +38,7 @@ public class Inspector {
     }
   }
 
-  public static native void enableDebugging(long ctxPtr, String pageTitle, MessageQueueThread mqt);
+  public static native void enableDebugging(long ctxPtr, String pageTitle, MessageQueueThread mqt, boolean waitForDebugger);
   public static native void disableDebugging(long ctxPtr);
 
   private static native Inspector instance();
