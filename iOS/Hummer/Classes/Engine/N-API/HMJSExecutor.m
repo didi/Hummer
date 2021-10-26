@@ -1,5 +1,5 @@
 #import "HMJSExecutor+Private.h"
-#import "HMNAPICppHelper.h"
+#import "HMNAPIDebuggerHelper.h"
 #import <Hummer/HMUtility.h>
 #import <Hummer/NSInvocation+Hummer.h>
 #import <Hummer/HMExportClass.h>
@@ -8,13 +8,7 @@
 #import <Hummer/HMExceptionModel.h>
 #import <Hummer/HMJSStrongValue.h>
 #import <objc/runtime.h>
-
-#if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
-
-#import <Hummer/HMInspectorPackagerConnection.h>
-
-static HMInspectorPackagerConnection *inspectorPackagerConnection = nil;
-#endif
+#import <Hummer/HMDebugService.h>
 
 static NSString *const HANDLE_SCOPE_ERROR = @"napi_open_handle_scope() error";
 
@@ -56,7 +50,7 @@ static NAPIValue _Nullable setImmediate(NAPIEnv _Nullable env, NAPICallbackInfo 
 @interface HMJSExecutor ()
 
 @property (nonatomic, assign) NAPIEnv env;
-@property (nonatomic, strong) HMNAPICppHelper *heremsHelper;
+@property (nonatomic, strong) HMNAPIDebuggerHelper *heremsHelper;
 
 - (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable NAPIValue)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName;
 
@@ -109,17 +103,28 @@ static NAPIValue _Nullable setImmediate(NAPIEnv _Nullable env, NAPICallbackInfo 
 NS_ASSUME_NONNULL_END
 
 void hummerFinalize(void *finalizeData, void *finalizeHint) {
-    HMAssertMainQueue();
-    if (!finalizeData) {
-        assert(false);
+  
+    void(^finalizeWork)() = ^(){
+        HMAssertMainQueue();
+        if (!finalizeData) {
+            assert(false);
 
-        return;
-    }
-    // 不透明指针可能为原生对象，也可能为闭包
-    // 清空 hmWeakValue
-    HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) finalizeData) class]);
-    [((__bridge id) finalizeData) setHmWeakValue:nil];
-    CFRelease(finalizeData);
+            return;
+        }
+        // 不透明指针可能为原生对象，也可能为闭包
+        // 清空 hmWeakValue
+        HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) finalizeData) class]);
+        [((__bridge id) finalizeData) setHmWeakValue:nil];
+        CFRelease(finalizeData);
+    };
+#if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
+
+// hermes 调试下，由于 debugger 持有runtime，导致可能存在子线程释放的问题。
+    hm_safe_main_thread(finalizeWork);
+#else
+    finalizeWork();
+#endif
+   
 }
 
 NAPIValue hummerCall(NAPIEnv env, NAPICallbackInfo callbackInfo) {
@@ -1214,7 +1219,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return nil;
     }
     HMAssertMainQueue();
-    NAPIValue returnValueRef;
+    NAPIValue returnValueRef = nil;
     if (argumentArray.count <= 8) {
         // stack
         NAPIValue valueRefArray[argumentArray.count];
@@ -1454,10 +1459,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         }
         if (isUniqueExecutor) {
             HMExecutorMap = nil;
-#if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
-            [inspectorPackagerConnection closeQuietly];
-            inspectorPackagerConnection = nil;
-#endif
+            [[HMDebugService sharedService] stopDebugConnection];
         }
     });
 }
@@ -1471,7 +1473,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
     HMAssertMainQueue();
     self = [super init];
-    _heremsHelper = [HMNAPICppHelper new];
+    _heremsHelper = [HMNAPIDebuggerHelper new];
     if (NAPICreateEnv(&self->_env) != NAPIErrorOK) {
         NSAssert(NO, @"NAPICreateEnv() error");
         goto executorMapError;
@@ -1535,18 +1537,6 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     }
     if ([self popExceptionWithStatus:napi_set_named_property(_env, globalValue, "setImmediate", setImmediateValue)]) {
         goto handleScopeError;
-    }
-    
-    if (!inspectorPackagerConnection) {
-        NSString *escapedDeviceName = [[[UIDevice currentDevice] name]
-                stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-        NSString *escapedAppName = [[[NSBundle mainBundle] bundleIdentifier]
-                stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-        NSURL *inspectorDeviceUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://localhost:8081/inspector/device?name=%@&app=%@",
-                                                                                    escapedDeviceName,
-                                                                                    escapedAppName]];
-        inspectorPackagerConnection = [[HMInspectorPackagerConnection alloc] initWithUrl:inspectorDeviceUrl];
-        [inspectorPackagerConnection connect];
     }
 #endif
 
@@ -1640,7 +1630,6 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 //            HMLogError(@"Executor 发生异常：%@", errorModel);
         }
     }
-
 
     exit:
     CHECK_COMMON(napi_close_handle_scope(self.env, handleScope))

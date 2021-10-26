@@ -42,8 +42,8 @@ Hummer is a dynamic solution for client.
       'HEADER_SEARCH_PATHS' => "$(PODS_TARGET_SRCROOT)/include"
     }
     ss.preserve_paths = 'include/napi/*.{h,def}'
-    ss.source_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m}'
-    ss.private_header_files = 'iOS/Hummer/Classes/Engine/N-API/HMJSExecutor+Private.h', 'iOS/Hummer/Classes/Engine/N-API/HMJS{Weak,Strong}Value.h', 'iOS/Hummer/Classes/Engine/N-API/HMJSValue.h'
+    ss.source_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}'    
+    ss.private_header_files = 'iOS/Hummer/Classes/Engine/N-API/HMNAPIDebuggerHelper.h', 'iOS/Hummer/Classes/Engine/N-API/HMJSExecutor+Private.h', 'iOS/Hummer/Classes/Engine/N-API/HMJS{Weak,Strong}Value.h', 'iOS/Hummer/Classes/Engine/N-API/HMJSValue.h'
   end
 
   s.subspec "Hermes" do |ss|
@@ -59,6 +59,7 @@ Hummer is a dynamic solution for client.
     ss.framework = 'CoreFoundation'
     ss.source_files = 'iOS/Hermes/*.{h,m,mm}'
     ss.dependency 'SocketRocket', '~> 0.6'
+    ss.private_header_files = 'iOS/Hermes/RCTMessageThread.h'
   end
 
   s.subspec "JavaScriptCore" do |ss|
