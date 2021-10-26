@@ -58,7 +58,7 @@ class JInspector : public jni::HybridClass<JInspector> {
   static constexpr auto kJavaDescriptor =
       "Lcom/didi/hummer/hermes/inspector/Inspector;";
 
-  static void enableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr, const std::string &page_title, jni::alias_ref<JavaMessageQueueThread::javaobject> jsQueue);
+  static void enableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr, const std::string &page_title, jni::alias_ref<JavaMessageQueueThread::javaobject> jsQueue, bool waitForDebugger);
   static void disableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr);
 
   static jni::global_ref<JInspector::javaobject> instance(
