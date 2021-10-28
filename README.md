@@ -66,7 +66,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 
 ## 团队成员
 - **负责人** [小枫](https://github.com/bbssyyuui)
-- **内部核心成员** [小枫](https://github.com/bbssyyuui), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
+- **内部核心成员** [小枫](https://github.com/bbssyyuui), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [fangyeqing123](https://github.com/fangyeqing123), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
 - **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin), [jtsky](https://github.com/jtsky), [jayconscious](https://github.com/jayconscious), [宏宇](https://github.com/ringlong), [litianhao3615](https://github.com/litianhao3615), [Leo](https://github.com/firelion0725), [jueying-key](https://github.com/jueying-xiangfeng), [WorriesL](https://github.com/WorriesL)
 
 ## 近期规划
@@ -117,13 +117,13 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [x] Dev 页面展示视图树和节点样式（仅支持 Vue 项目）[@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@jayconscious](https://github.com/jayconscious)
     - [x] 原生侧高亮选中的UI控件（画框）[@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
 - 视图调试二期
-    - [x] Dev 首页展示和交互优化
+    - [x] Dev 首页展示和交互优化 [@fangyeqing123](https://github.com/fangyeqing123)
     - [x] 视图树显示优化 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持视图树节点搜索 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持样式修改 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持多页面同时调试 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持窗口大小调整 [@jayconscious](https://github.com/jayconscious)
-    - [x] 支持日志中对象折叠
+    - [x] 支持日志中对象折叠 [@fangyeqing123](https://github.com/fangyeqing123)
     - [ ] 支持 TS 项目视图调试
 
 #### 生态建设
