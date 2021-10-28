@@ -66,7 +66,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 
 ## 团队成员
 - **负责人** [小枫](https://github.com/bbssyyuui)
-- **内部核心成员** [小枫](https://github.com/bbssyyuui), [符孙浪](https://github.com/fusunlang), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
+- **内部核心成员** [小枫](https://github.com/bbssyyuui), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
 - **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [未小林](https://dribbble.com/Yikewxlin), [jtsky](https://github.com/jtsky), [jayconscious](https://github.com/jayconscious), [宏宇](https://github.com/ringlong), [litianhao3615](https://github.com/litianhao3615), [Leo](https://github.com/firelion0725), [jueying-key](https://github.com/jueying-xiangfeng), [WorriesL](https://github.com/WorriesL)
 
 ## 近期规划
@@ -90,8 +90,8 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - 页面内路由功能实现（Tenon Router）
     - Mpx2Tenon 完成对接
 - 11月份
-    - VSCode 插件完整版本发布
-    - Tenon React 二期版本发布
+    - 线程分离功能完成
+    - 开发文档补齐优化
 - 12月份
     - mand-mobild for Hummer 版组件库一期版本发布
 
@@ -110,20 +110,20 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 增强版 DevTools 支持（类似RN）
 - VSCode 插件
     - [x] VSCode 调试插件一期功能开发完成 [@yFeii](https://github.com/yFeii)
-    - [ ] VSCode 调试插件二期功能开发完成 [@yFeii](https://github.com/yFeii)
+    - [x] VSCode 调试插件二期功能开发完成 [@yFeii](https://github.com/yFeii)
     - [ ] 插件中集成进视图调试功能 [@yFeii](https://github.com/yFeii)
     - [ ] Tenon 支持代码提示和代码自动补全 [@yFeii](https://github.com/yFeii)
 - 视图调试一期
     - [x] Dev 页面展示视图树和节点样式（仅支持 Vue 项目）[@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@jayconscious](https://github.com/jayconscious)
     - [x] 原生侧高亮选中的UI控件（画框）[@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
 - 视图调试二期
-    - [ ] Dev 首页展示和交互优化
+    - [x] Dev 首页展示和交互优化
     - [x] 视图树显示优化 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持视图树节点搜索 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持样式修改 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持多页面同时调试 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持窗口大小调整 [@jayconscious](https://github.com/jayconscious)
-    - [ ] 支持日志折叠
+    - [x] 支持日志中对象折叠
     - [ ] 支持 TS 项目视图调试
 
 #### 生态建设
@@ -131,7 +131,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
   - [x] 基础编译流程打通
   - [x] 组件对接
   - [x] API对接
-  - [ ] 支持页面内路由
+  - [x] 支持页面内路由
   - [ ] 细节打磨
 - Tenon React 一期 [@duanlikang](https://github.com/duanlikang)
   - [x] 基础组件对齐
@@ -169,8 +169,8 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 #### 性能优化
 - 动态执行 JS
   - [x] 原生实现 JS 执行 JS 能力 [@小枫](https://github.com/bbssyyuui) [@yFeii](https://github.com/yFeii)
-  - [ ] 公共包抽离
-  - [ ] 页面懒加载（Tenon Router）
+  - [x] 公共包抽离
+  - [x] 页面懒加载（Tenon Router）
 - 线程分离（异步渲染）
 
 #### 其他
@@ -184,7 +184,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 *（~ 欢迎大家领取任务，给我们提交 PR ~）*
 
 ## QQ 交流群
-欢迎加入我们的 QQ 交流群【Hummer&Tenon交流群】(851327307)，有任何 Hummer 使用上的问题和建议，都可以在群里直接反馈，我们会第一时间跟进。
+欢迎加入我们的 QQ 交流群【Hummer&Tenon跨端交流群】(851327307)，有任何 Hummer 使用上的问题和建议，都可以在群里直接反馈，我们会第一时间跟进。
 <div style="height: 200px">    
  <img src="https://pt-starimg.didistatic.com/static/starimg/img/rvyykc2JhS1607601681131.png" height = "200" alt="QQ 交流群" />
 </div>
