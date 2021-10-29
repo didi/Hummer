@@ -274,6 +274,18 @@ public class List extends HMBase<SmartRefreshLayout> {
             default: {
                 int orientation = direction == DIRECTION_HORIZONTAL ? LinearLayoutManager.HORIZONTAL : LinearLayoutManager.VERTICAL;
                 layoutManager = new LinearLayoutManager(getContext(), orientation, false);
+//                layoutManager = new LinearLayoutManager(getContext(), orientation, false) {
+//                    /**
+//                     * 方法二：解决scrollToPosition时item无法滚动到屏幕开始处的问题
+//                     * 参考：https://www.jianshu.com/p/bde672af4e11
+//                     */
+//                    @Override
+//                    public void smoothScrollToPosition(RecyclerView view, RecyclerView.State state, int position) {
+//                        TopLinearSmoothScroller scroller = new TopLinearSmoothScroller(view.getContext());
+//                        scroller.setTargetPosition(position);
+//                        startSmoothScroll(scroller);
+//                    }
+//                };
                 break;
             }
             case MODE_GRID: {
@@ -615,7 +627,12 @@ public class List extends HMBase<SmartRefreshLayout> {
 
     @JsMethod("scrollToPosition")
     public void scrollToPosition(int position) {
-        recyclerView.scrollToPosition(position);
+        // 方法一：解决item无法滚动到屏幕开始处的问题（无平滑滚动效果）
+        if (layoutManager instanceof LinearLayoutManager) {
+            ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(position, 0);
+        }
+        // 平滑滚动
+//        recyclerView.smoothScrollToPosition(position);
     }
 
     @Override
