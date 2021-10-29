@@ -344,7 +344,7 @@
         }];
     };
     
-    if (self.isAnimated) {
+    if (!self.isAnimated) {
         doAnimation();
     }
 
