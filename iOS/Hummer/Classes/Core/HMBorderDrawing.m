@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^HMGraphicsImageDrawingActions)(CGContextRef _Nonnull context);
+typedef void (^HMGraphicsImageDrawingActions)(CGContextRef _Nullable context);
 
 static void pathAddEllipticArc(CGMutablePathRef _Nullable path, const CGAffineTransform *_Nullable m, CGPoint origin, CGSize size, CGFloat startAngle, CGFloat endAngle, BOOL clockwise);
 
@@ -81,7 +81,7 @@ UIEdgeInsets roundInsetsToPixel(UIEdgeInsets edgeInsets) {
     return edgeInsets;
 }
 
-BOOL HMDrawShouldUseOpaque(CGColorRef backgroundColor, BOOL hasCornerRadii, BOOL drawToEdge) {
+static BOOL drawShouldUseOpaque(CGColorRef _Nullable backgroundColor, BOOL hasCornerRadii, BOOL drawToEdge) {
     const CGFloat alpha = CGColorGetAlpha(backgroundColor);
     return (drawToEdge || !hasCornerRadii) && alpha == 1.0;
 }
@@ -362,7 +362,7 @@ UIImage *getSolidBorderImage(HMCornerRadii cornerRadii, CGSize viewSize, UIEdgeI
         CGPathRelease(insetPath);
     };
     
-    BOOL opaque = HMDrawShouldUseOpaque(backgroundColor, hasCornerRadii, drawToEdge);
+    BOOL opaque = drawShouldUseOpaque(backgroundColor, hasCornerRadii, drawToEdge);
     UIImage *image = uiGraphicsImageRendererToDrawing(uiactions, size, opaque);
     if (makeStretchable) {
         image = [image resizableImageWithCapInsets:edgeInsets];
@@ -418,12 +418,12 @@ UIImage *getDashedOrDottedBorderImage(HMBorderStyle borderStyle, HMCornerRadii c
 
         CGPathRelease(path);
     };
-    BOOL opaque = HMDrawShouldUseOpaque(backgroundColor, hasCornerRadii, drawToEdge);
+    BOOL opaque = drawShouldUseOpaque(backgroundColor, hasCornerRadii, drawToEdge);
     return uiGraphicsImageRendererToDrawing(uiactions, viewSize, opaque);
 }
 
 UIImage *uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions uiactions, CGSize size, BOOL opaque) {
-    UIImage *image;
+    UIImage *image = nil;
     if (@available(iOS 10.0, tvOS 10.0, *)) {
         UIGraphicsImageRendererFormat *uiFormat;
         // iOS 11.0.0 GM does have `preferredFormat`, but iOS 11 betas did not.
