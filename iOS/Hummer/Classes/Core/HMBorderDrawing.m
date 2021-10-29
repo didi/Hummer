@@ -12,8 +12,8 @@ static UIImage *_Nullable getDashedOrDottedBorderImage(HMBorderStyle borderStyle
 
 NS_INLINE BOOL cornerRadiiAreAboveThreshold(HMCornerRadii cornerRadii);
 
-static CGContextRef _Nullable uiGraphicsBeginImageContext(CGSize size, CGColorRef _Nullable backgroundColor, BOOL hasCornerRadii, BOOL drawToEdge);
-static UIImage *_Nullable uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions uiactions, CGSize size, CGColorRef backgroundColor, BOOL hasCornerRadii, BOOL drawToEdge);
+static CGContextRef _Nullable uiGraphicsBeginImageContext(CGSize size, BOOL opaque);
+static UIImage *_Nullable uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions uiactions, CGSize size, BOOL opaque);
 
 static UIEdgeInsets roundInsetsToPixel(UIEdgeInsets edgeInsets);
 
@@ -81,9 +81,12 @@ UIEdgeInsets roundInsetsToPixel(UIEdgeInsets edgeInsets) {
     return edgeInsets;
 }
 
-CGContextRef uiGraphicsBeginImageContext(CGSize size, CGColorRef backgroundColor, BOOL hasCornerRadii, BOOL drawToEdge) {
+BOOL HMDrawShouldUseOpaque(CGColorRef backgroundColor, BOOL hasCornerRadii, BOOL drawToEdge) {
     const CGFloat alpha = CGColorGetAlpha(backgroundColor);
-    const BOOL opaque = (drawToEdge || !hasCornerRadii) && alpha == 1.0;
+    return (drawToEdge || !hasCornerRadii) && alpha == 1.0;
+}
+
+CGContextRef uiGraphicsBeginImageContext(CGSize size, BOOL opaque) {
     // TODO: scale 传入 0.0 会使用设备主屏幕的 scale
     UIGraphicsBeginImageContextWithOptions(size, opaque, 0.0);
 
@@ -359,7 +362,8 @@ UIImage *getSolidBorderImage(HMCornerRadii cornerRadii, CGSize viewSize, UIEdgeI
         CGPathRelease(insetPath);
     };
     
-    UIImage *image = uiGraphicsImageRendererToDrawing(uiactions, size, backgroundColor, hasCornerRadii, drawToEdge);
+    BOOL opaque = HMDrawShouldUseOpaque(backgroundColor, hasCornerRadii, drawToEdge);
+    UIImage *image = uiGraphicsImageRendererToDrawing(uiactions, size, opaque);
     if (makeStretchable) {
         image = [image resizableImageWithCapInsets:edgeInsets];
     }
@@ -414,10 +418,11 @@ UIImage *getDashedOrDottedBorderImage(HMBorderStyle borderStyle, HMCornerRadii c
 
         CGPathRelease(path);
     };
-    return uiGraphicsImageRendererToDrawing(uiactions, viewSize, backgroundColor, hasCornerRadii, drawToEdge);
+    BOOL opaque = HMDrawShouldUseOpaque(backgroundColor, hasCornerRadii, drawToEdge);
+    return uiGraphicsImageRendererToDrawing(uiactions, viewSize, opaque);
 }
 
-UIImage *uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions uiactions, CGSize size, CGColorRef backgroundColor, BOOL hasCornerRadii, BOOL drawToEdge) {
+UIImage *uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions uiactions, CGSize size, BOOL opaque) {
     UIImage *image;
     if (@available(iOS 10.0, tvOS 10.0, *)) {
         UIGraphicsImageRendererFormat *uiFormat;
@@ -430,6 +435,7 @@ UIImage *uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions uiaction
         } else {
             uiFormat = [UIGraphicsImageRendererFormat defaultFormat];
         }
+        uiFormat.opaque = opaque;
         UIGraphicsImageRenderer *uiImageRenderer = [[UIGraphicsImageRenderer alloc] initWithSize:size format:uiFormat];
         UIGraphicsImageDrawingActions drawingActions = ^(UIGraphicsImageRendererContext *rendererContext) {
             if (uiactions) {
@@ -438,8 +444,10 @@ UIImage *uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions uiaction
         };
         image = [uiImageRenderer imageWithActions:drawingActions];
     } else {
-        CGContextRef ctx = uiGraphicsBeginImageContext(size, backgroundColor, hasCornerRadii, drawToEdge);
-        uiactions(ctx);
+        CGContextRef contextRef = uiGraphicsBeginImageContext(size, opaque);
+        if (uiactions) {
+            uiactions(contextRef);
+        }
         image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
     }
