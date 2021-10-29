@@ -39,32 +39,12 @@ public class DevToolsEntrance {
     private HummerDevTools.IParameterInjector mParameterInjector;
     private boolean mIsShown;
 
-    private ExceptionCallback mExceptionCallback = e -> {
-        mLogManager.addException(Log.getStackTraceString(e));
-    };
-
     public DevToolsEntrance(@NonNull HummerContext context) {
         mHummerContext = context;
         mJsContext = mHummerContext.getJsContext();
         mContainer = mHummerContext.getContainer();
 
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
-                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
-            JSException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
-        } else {
-            HummerException.addJSContextExceptionCallback(mJsContext, mExceptionCallback);
-        }
-
         initView(context);
-    }
-
-    public void release() {
-        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
-                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
-            JSException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
-        } else {
-            HummerException.removeJSContextExceptionCallback(mJsContext, mExceptionCallback);
-        }
     }
 
     private void initView(Context context) {
