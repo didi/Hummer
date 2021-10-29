@@ -2,6 +2,7 @@ package com.didi.hummer.context.jsc;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.didi.hummer.HummerSDK;
@@ -32,7 +33,7 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
         HummerException.addJSContextExceptionCallback(mJsContext, e -> {
             HummerSDK.getException(namespace).onException(e);
             if (DebugUtil.isDebuggable()) {
-                HMLog.e("HummerException", "Hummer Exception", e);
+                mJsContext.evaluateJavaScript("console.error(`" + Log.getStackTraceString(e) + "`)");
             }
         });
     }
@@ -53,7 +54,7 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
             HummerSDK.getException(namespace).onException(e);
 
             if (DebugUtil.isDebuggable()) {
-                HMLog.e("HummerException", "Hummer Exception", e);
+                mJsContext.evaluateJavaScript("console.error(`" + Log.getStackTraceString(e) + "`)");
                 Toast.makeText(HummerSDK.appContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
