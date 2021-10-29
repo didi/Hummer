@@ -13,7 +13,7 @@ static UIImage *_Nullable getDashedOrDottedBorderImage(HMBorderStyle borderStyle
 NS_INLINE BOOL cornerRadiiAreAboveThreshold(HMCornerRadii cornerRadii);
 
 static CGContextRef _Nullable uiGraphicsBeginImageContext(CGSize size, BOOL opaque);
-static UIImage *_Nullable uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions uiactions, CGSize size, BOOL opaque);
+static UIImage *_Nullable uiGraphicsImageRendererToDrawing(HMGraphicsImageDrawingActions _Nullable uiactions, CGSize size, BOOL opaque);
 
 static UIEdgeInsets roundInsetsToPixel(UIEdgeInsets edgeInsets);
 
