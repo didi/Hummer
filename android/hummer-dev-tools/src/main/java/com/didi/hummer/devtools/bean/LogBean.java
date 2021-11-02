@@ -17,7 +17,6 @@ public class LogBean implements Serializable {
     public static final int LEVEL_INFO = 3;
     public static final int LEVEL_WARN = 4;
     public static final int LEVEL_ERROR = 5;
-    public static final int LEVEL_EXCEPTION = 6;
 
     @SerializedName("level")
     private int level;
