@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -98,6 +100,11 @@ public class DefaultStorageAdapter implements IStorageAdapter {
     @Override
     public void removeAll() {
         getSP().edit().clear().putInt(KEY_VERSION, version).apply();
+    }
+
+    @Override
+    public Map<String, Object> getAll() {
+        return new HashMap<>(getSP().getAll());
     }
 
     @Override

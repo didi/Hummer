@@ -40,6 +40,11 @@ public class Memory {
         removeAll(context.getNamespace());
     }
 
+    @JsMethod("getAll")
+    public static Map<String, Object> getAll(HummerContext context) {
+        return getAll(context.getNamespace());
+    }
+
     @JsMethod("exist")
     public static boolean exist(HummerContext context, String key) {
         return exist(context.getNamespace(), key);
@@ -89,8 +94,8 @@ public class Memory {
         memoryStore.clear();
     }
 
-    public static Map<String, Object> getAll(HummerContext context) {
-        String namespace = checkNamespace(context.getNamespace());
+    public static Map<String, Object> getAll(String namespace) {
+        namespace = checkNamespace(namespace);
         return memoryStoreMap.get(namespace);
     }
 
