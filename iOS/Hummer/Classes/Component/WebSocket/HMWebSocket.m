@@ -109,7 +109,7 @@ HM_EXPORT_METHOD(send, send:)
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessageWithString:(NSString *)string {
     HMAssertMainQueue();
     // 调用回调
-    self.onMessage ? self.onMessage(@[string]) : nil;
+    self.onMessage ? self.onMessage(@[@{@"data": string}]) : nil;
 }
 
 // - webSocket:didReceiveMessageWithData: 暂时不实现
