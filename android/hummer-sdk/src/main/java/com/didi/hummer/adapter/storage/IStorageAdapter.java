@@ -1,5 +1,7 @@
 package com.didi.hummer.adapter.storage;
 
+import java.util.Map;
+
 /**
  * 存储适配器适配器
  *
@@ -16,6 +18,8 @@ public interface IStorageAdapter {
     void remove(String key);
 
     void removeAll();
+
+    Map<String, Object> getAll();
 
     boolean exist(String key);
 }
