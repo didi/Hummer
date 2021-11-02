@@ -32,6 +32,16 @@ public class DefaultHermesDebugger implements IHermesDebugger {
     private static String sIP;
     private static int sPort;
 
+    private class UrlInfo {
+        public String ip;
+        public int port;
+
+        public UrlInfo(String ip, int port) {
+            this.ip = ip;
+            this.port = port;
+        }
+    }
+
     private interface IPageListCallback {
         void onResult(List<String> pageList);
     }
@@ -53,9 +63,18 @@ public class DefaultHermesDebugger implements IHermesDebugger {
 
     @Override
     public void enableDebugging(long runtimeId, String jsSourcePath) {
-        pickIpFromUrlIfNeed(jsSourcePath);
+        UrlInfo info = pickIpAndPortFromUrlIfNeed(jsSourcePath);
+        if (info == null || TextUtils.isEmpty(info.ip) || info.port <= 0) {
+            return;
+        }
 
-        requestDebugPageList(pageList -> {
+        // 如果用户没有设置过WS的IP，则从页面URL中解析出IP，做一次兼容；
+        // 如果用户已设置了自定义的IP，则直接返回，不再做URL解析；
+        if (TextUtils.isEmpty(sIP) || sIP.equals(DEFAULT_DEBUGGER_IP)) {
+            sIP = info.ip;
+        }
+
+        requestDebugPageList(info.port, pageList -> {
             if (pageList == null || pageList.isEmpty()) {
                 return;
             }
@@ -77,30 +96,29 @@ public class DefaultHermesDebugger implements IHermesDebugger {
     /**
      * 从URL中解析出IP
      */
-    private void pickIpFromUrlIfNeed(String url) {
+    private UrlInfo pickIpAndPortFromUrlIfNeed(String url) {
         if (TextUtils.isEmpty(url)) {
-            return;
+            return null;
         }
 
-        // 如果用户已设置了自定义IP，则直接返回，不再做URL解析
-        if (!TextUtils.isEmpty(sIP) && !sIP.equals(DEFAULT_DEBUGGER_IP)) {
-            return;
-        }
-
+        UrlInfo info = null;
         try {
             Uri uri = Uri.parse(url);
-            sIP = uri.getHost();
+            String ip = uri.getHost();
+            int port = uri.getPort();
+            info = new UrlInfo(ip, port);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return info;
     }
 
     /**
      * 向Debugger服务请求当前的PageList，如果有内容返回，说明VSCode中的Debugger服务已开启；返回空数组说明没有开启。
      */
-    private void requestDebugPageList(IPageListCallback pageListCallback) {
-        String url = String.format("http:%s:%d/dev/page/list", sIP, sPort);
-        NetworkUtil.httpGet(url, (HttpCallback<HttpResponse<List<String>>>) response -> {
+    private void requestDebugPageList(int devPort, IPageListCallback pageListCallback) {
+        String url = String.format("http:%s:%d/dev/page/list?devPort=%d", sIP, sPort, devPort);
+        NetworkUtil.httpGet(url, 2000, (HttpCallback<HttpResponse<List<String>>>) response -> {
             if (response.error != null && response.error.code != 0) {
                 if (pageListCallback != null) {
                     pageListCallback.onResult(null);
