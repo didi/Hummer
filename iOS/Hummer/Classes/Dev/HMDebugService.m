@@ -82,10 +82,10 @@
     return ins;
 }
 
-- (NSArray *)getDevPages {
-    
+- (NSArray *)getDevPages:(NSNumber *)devPort {
+        
     dispatch_semaphore_t lock = dispatch_semaphore_create(0);
-    NSURLRequest *req = [NSURLRequest requestWithURL:[[self.debugHost stringByAppendingString:_devPagePath] hm_asUrl]];
+    NSURLRequest *req = [NSURLRequest requestWithURL:[[NSString stringWithFormat:@"%@%@?devPort=%@",self.debugHost,_devPagePath,devPort] hm_asUrl]];
     NSMutableArray *array = [[NSMutableArray alloc] init];
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if ([response isKindOfClass:NSHTTPURLResponse.class] && ((NSHTTPURLResponse *)response).statusCode == 200) {
@@ -104,23 +104,21 @@
     return [array copy];
 }
 
-- (void)getDevPagesAsync:(HMDebugServiceDevPagesCallBack)callback {
-
+- (void)getDevPages:(NSNumber *)port asyncCallback:(HMDebugServiceDevPagesCallBack)callback{
     dispatch_async(self.getPageQueue, ^{
-        NSArray *array = [self getDevPages];
+        NSArray *array = [self getDevPages:port];
         callback(array);
     });
 }
 
+// 手动设置,将不会做调试服务检查
 - (void)setDebugServiceHost:(NSString *)debugHost {
 
     _debugHost = debugHost;
-    bool debugServiceIsReady = [self getDevPages];
-    if (debugServiceIsReady) {
-        [self startDebugConnection];
-    }
+    [self startDebugConnection];
 }
 
+// 通过 dev/pages/list 判断是否为 debug host。
 - (NSArray *)guessDebugHostWithDevUrl:(id<HMURLConvertible>)devUrl autoConnect:(BOOL)autoConnect {
 
     NSURL *url = [devUrl hm_asUrl];
@@ -128,7 +126,7 @@
     NSNumber *port = url.port;
     if ([host isPureIP] && port) {
         self.debugHost = [NSString stringWithFormat:@"http://%@:%@", host, _debugPort];
-        NSArray *debugServiceIsReady = [self getDevPages];
+        NSArray *debugServiceIsReady = [self getDevPages:port];
         if (autoConnect && debugServiceIsReady) {
             [self startDebugConnection];
         }
@@ -138,9 +136,15 @@
 }
 
 - (BOOL)shouldWaitForDebugWithScriptUrl:(id<HMURLConvertible>)scriptUrl {
-
-    NSArray *debugablePages = [self getDevPages];
-    return [debugablePages containsObject:scriptUrl.hm_asString];
+    
+    NSURL *url = [scriptUrl hm_asUrl];
+    NSString *host = url.host;
+    NSNumber *port = url.port;
+    if ([host isPureIP] && port) {
+        NSArray *debugablePages = [self getDevPages:port];
+        return [debugablePages containsObject:scriptUrl.hm_asString];
+    }
+    return false;
 }
 
 - (void)startDebugConnection {

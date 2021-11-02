@@ -379,6 +379,7 @@ HM_EXPORT_CLASS(View, HMView)
     if (!backgroundColor) {
         self.backgroundColor = nil;
         [self.gradientLayer removeFromSuperlayer];
+        return;
     }
     NSParameterAssert([backgroundColor isKindOfClass:UIColor.class]);
     if ([backgroundColor isKindOfClass:HMGradientColor.class]) {

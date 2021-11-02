@@ -12,8 +12,6 @@
 NS_ASSUME_NONNULL_BEGIN
 /**
  * 考虑到 集成APP 的场景，hummer 没用使用 编译期写入 debug ip 的方案。
- *
- *
  */
 
 typedef void(^HMDebugServiceDevPagesCallBack)(NSArray *);
@@ -29,8 +27,8 @@ typedef void(^HMDebugServiceDevPagesCallBack)(NSArray *);
 // 通过 dev/pages/list 判断是否为 debug host。
 - (NSArray *)guessDebugHostWithDevUrl:(id<HMURLConvertible>)devUrl autoConnect:(BOOL)autoConnect;
 
-- (NSArray *)getDevPages;
-- (void)getDevPagesAsync:(HMDebugServiceDevPagesCallBack)callback;
+- (NSArray *)getDevPages:(NSNumber *)port;
+- (void)getDevPages:(NSNumber *)port asyncCallback:(HMDebugServiceDevPagesCallBack)callback;
 
 - (BOOL)shouldWaitForDebugWithScriptUrl:(id<HMURLConvertible>)scriptUrl;
 
