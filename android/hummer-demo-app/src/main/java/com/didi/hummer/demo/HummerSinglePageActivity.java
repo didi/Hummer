@@ -57,7 +57,7 @@ public class HummerSinglePageActivity extends HummerActivity {
     }
 
     /**
-     * 渲染方式一：通过URL来源构造PageInfo信息，来渲染JS页面
+     * 渲染方式一：通过URL来源构造PageInfo信息，来渲染JS页面（推荐）
      */
     @Override
     protected NavPage getPageInfo() {
@@ -75,7 +75,7 @@ public class HummerSinglePageActivity extends HummerActivity {
     }
 
     /**
-     * 渲染方式二：直接通过JS来源渲染JS页面（此方式会丢失页面的PageInfo）
+     * 渲染方式二：直接通过JS来源渲染JS页面（此方式会丢失页面的PageInfo，不推荐）
      */
     @Override
     protected void renderHummer() {
