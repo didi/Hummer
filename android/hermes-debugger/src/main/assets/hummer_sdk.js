@@ -38,6 +38,13 @@ var Storage = /*#__PURE__*/function (_Base) {
       invoke('Storage', 0, 'removeAll', ...args);
     }
   }, {
+    key: "getAll",
+    value: function getAll(...args) {
+      let stash = args;
+      args = transArgs(...args);
+      return invoke('Storage', 0, 'getAll', ...args);
+    }
+  }, {
     key: "exist",
     value: function exist(...args) {
       let stash = args;
@@ -51,61 +58,15 @@ var Storage = /*#__PURE__*/function (_Base) {
 
 __GLOBAL__.Storage = Storage;
 
-var Location = /*#__PURE__*/function (_Base2) {
-  _inherits(Location, _Base2);
+var Navigator = /*#__PURE__*/function (_Base2) {
+  _inherits(Navigator, _Base2);
 
-  var _super2 = _createSuper(Location);
-
-  function Location(...args) {
-    _classCallCheck(this, Location);
-
-    return _super2.call(this, 'Location', ...args);
-  }
-
-  _createClass(Location, [{
-    key: "getLastLocation",
-    value: function getLastLocation(...args) {
-      let stash = args;
-      args = transArgs(...args);
-      invoke('Location', this.objID, 'getLastLocation', ...args);
-    }
-  }, {
-    key: "startLocation",
-    value: function startLocation(...args) {
-      let stash = args;
-      args = transArgs(...args);
-      invoke('Location', this.objID, 'startLocation', ...args);
-    }
-  }, {
-    key: "stopLocation",
-    value: function stopLocation(...args) {
-      let stash = args;
-      args = transArgs(...args);
-      invoke('Location', this.objID, 'stopLocation', ...args);
-    }
-  }, {
-    key: "onError",
-    value: function onError(...args) {
-      let stash = args;
-      args = transArgs(...args);
-      invoke('Location', this.objID, 'onError', ...args);
-    }
-  }]);
-
-  return Location;
-}(Base);
-
-__GLOBAL__.Location = Location;
-
-var Navigator = /*#__PURE__*/function (_Base3) {
-  _inherits(Navigator, _Base3);
-
-  var _super3 = _createSuper(Navigator);
+  var _super2 = _createSuper(Navigator);
 
   function Navigator(...args) {
     _classCallCheck(this, Navigator);
 
-    return _super3.call(this, 'Navigator', ...args);
+    return _super2.call(this, 'Navigator', ...args);
   }
 
   _createClass(Navigator, null, [{
@@ -150,15 +111,15 @@ var Navigator = /*#__PURE__*/function (_Base3) {
 
 __GLOBAL__.Navigator = Navigator;
 
-var Timer = /*#__PURE__*/function (_Base4) {
-  _inherits(Timer, _Base4);
+var Timer = /*#__PURE__*/function (_Base3) {
+  _inherits(Timer, _Base3);
 
-  var _super4 = _createSuper(Timer);
+  var _super3 = _createSuper(Timer);
 
   function Timer(...args) {
     _classCallCheck(this, Timer);
 
-    return _super4.call(this, 'Timer', ...args);
+    return _super3.call(this, 'Timer', ...args);
   }
 
   _createClass(Timer, [{
@@ -196,65 +157,87 @@ var Timer = /*#__PURE__*/function (_Base4) {
 
 __GLOBAL__.Timer = Timer;
 
-var WebSocket = /*#__PURE__*/function (_Base5) {
-  _inherits(WebSocket, _Base5);
+var WebSocket = /*#__PURE__*/function (_Base4) {
+  _inherits(WebSocket, _Base4);
 
-  var _super5 = _createSuper(WebSocket);
+  var _super4 = _createSuper(WebSocket);
 
   function WebSocket(...args) {
     _classCallCheck(this, WebSocket);
 
-    return _super5.call(this, 'WebSocket', ...args);
+    return _super4.call(this, 'WebSocket', ...args);
   }
 
-  _createClass(WebSocket, null, [{
-    key: "connect",
-    value: function connect(...args) {
-      let stash = args;
-      args = transArgs(...args);
-      invoke('WebSocket', 0, 'connect', ...args);
-    }
-  }, {
+  _createClass(WebSocket, [{
     key: "close",
     value: function close(...args) {
       let stash = args;
       args = transArgs(...args);
-      invoke('WebSocket', 0, 'close', ...args);
+      invoke('WebSocket', this.objID, 'close', ...args);
     }
   }, {
     key: "send",
     value: function send(...args) {
       let stash = args;
       args = transArgs(...args);
-      invoke('WebSocket', 0, 'send', ...args);
+      invoke('WebSocket', this.objID, 'send', ...args);
     }
   }, {
-    key: "onOpen",
-    value: function onOpen(...args) {
+    key: "addEventListener",
+    value: function addEventListener(...args) {
       let stash = args;
       args = transArgs(...args);
-      invoke('WebSocket', 0, 'onOpen', ...args);
+      invoke('WebSocket', this.objID, 'addEventListener', ...args);
     }
   }, {
-    key: "onClose",
-    value: function onClose(...args) {
-      let stash = args;
-      args = transArgs(...args);
-      invoke('WebSocket', 0, 'onClose', ...args);
+    key: "url",
+    set: function (arg) {
+      this._url = arg;
+      arg = transSingleArg(arg);
+      invoke('WebSocket', this.objID, 'setUrl', arg);
+    },
+    get: function () {
+      return invoke('WebSocket', this.objID, 'getUrl');
     }
   }, {
-    key: "onError",
-    value: function onError(...args) {
-      let stash = args;
-      args = transArgs(...args);
-      invoke('WebSocket', 0, 'onError', ...args);
+    key: "onopen",
+    set: function (arg) {
+      this._onopen = arg;
+      arg = transSingleArg(arg);
+      invoke('WebSocket', this.objID, 'setOnopen', arg);
+    },
+    get: function () {
+      return this._onopen;
     }
   }, {
-    key: "onMessage",
-    value: function onMessage(...args) {
-      let stash = args;
-      args = transArgs(...args);
-      invoke('WebSocket', 0, 'onMessage', ...args);
+    key: "onmessage",
+    set: function (arg) {
+      this._onmessage = arg;
+      arg = transSingleArg(arg);
+      invoke('WebSocket', this.objID, 'setOnmessage', arg);
+    },
+    get: function () {
+      return this._onmessage;
+    }
+  }, {
+    key: "onclose",
+    set: function (arg) {
+      this._onclose = arg;
+      arg = transSingleArg(arg);
+      invoke('WebSocket', this.objID, 'setOnclose', arg);
+    },
+    get: function () {
+      return this._onclose;
+    }
+  }, {
+    key: "onerror",
+    set: function (arg) {
+      this._onerror = arg;
+      arg = transSingleArg(arg);
+      invoke('WebSocket', this.objID, 'setOnerror', arg);
+    },
+    get: function () {
+      return this._onerror;
     }
   }]);
 
@@ -263,15 +246,15 @@ var WebSocket = /*#__PURE__*/function (_Base5) {
 
 __GLOBAL__.WebSocket = WebSocket;
 
-var Memory = /*#__PURE__*/function (_Base6) {
-  _inherits(Memory, _Base6);
+var Memory = /*#__PURE__*/function (_Base5) {
+  _inherits(Memory, _Base5);
 
-  var _super6 = _createSuper(Memory);
+  var _super5 = _createSuper(Memory);
 
   function Memory(...args) {
     _classCallCheck(this, Memory);
 
-    return _super6.call(this, 'Memory', ...args);
+    return _super5.call(this, 'Memory', ...args);
   }
 
   _createClass(Memory, null, [{
@@ -303,6 +286,13 @@ var Memory = /*#__PURE__*/function (_Base6) {
       invoke('Memory', 0, 'removeAll', ...args);
     }
   }, {
+    key: "getAll",
+    value: function getAll(...args) {
+      let stash = args;
+      args = transArgs(...args);
+      return invoke('Memory', 0, 'getAll', ...args);
+    }
+  }, {
     key: "exist",
     value: function exist(...args) {
       let stash = args;
@@ -315,6 +305,38 @@ var Memory = /*#__PURE__*/function (_Base6) {
 }(Base);
 
 __GLOBAL__.Memory = Memory;
+
+var Tracker = /*#__PURE__*/function (_Base6) {
+  _inherits(Tracker, _Base6);
+
+  var _super6 = _createSuper(Tracker);
+
+  function Tracker(...args) {
+    _classCallCheck(this, Tracker);
+
+    return _super6.call(this, 'Tracker', ...args);
+  }
+
+  _createClass(Tracker, null, [{
+    key: "trackPerformance",
+    value: function trackPerformance(...args) {
+      let stash = args;
+      args = transArgs(...args);
+      invoke('Tracker', 0, 'trackPerformance', ...args);
+    }
+  }, {
+    key: "trackException",
+    value: function trackException(...args) {
+      let stash = args;
+      args = transArgs(...args);
+      invoke('Tracker', 0, 'trackException', ...args);
+    }
+  }]);
+
+  return Tracker;
+}(Base);
+
+__GLOBAL__.Tracker = Tracker;
 
 var Request = /*#__PURE__*/function (_Base7) {
   _inherits(Request, _Base7);
