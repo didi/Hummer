@@ -47,6 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, nullable, copy) NSURL *url;
 
+@property (nonatomic, nullable, copy) NSString *hummerUrl;
+
 @property (nonatomic, nullable, strong) HMNotifyCenter *notifyCenter;
 
 @property (nonatomic, strong) id <HMBaseExecutorProtocol>context;
@@ -66,6 +68,8 @@ NS_ASSUME_NONNULL_BEGIN
  * @return JSValue
  */
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName;
+
+- (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName hummerUrl:(nullable NSString *)hummerUrl;
 
 NS_ASSUME_NONNULL_END
 
