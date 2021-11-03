@@ -104,7 +104,9 @@ public class DefaultStorageAdapter implements IStorageAdapter {
 
     @Override
     public Map<String, Object> getAll() {
-        return new HashMap<>(getSP().getAll());
+        Map<String, Object> map = new HashMap<>(getSP().getAll());
+        map.remove(KEY_VERSION);
+        return map;
     }
 
     @Override
