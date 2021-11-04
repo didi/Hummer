@@ -163,17 +163,12 @@ HM_EXPORT_METHOD(getElementById, hm_getSubViewByID:)
 HM_EXPORT_METHOD(layout, hm_layoutRootView)
 
 
-- (void)setHm_jsValueLifeContainer:(NSMapTable *)hm_jsValueHandler {
+- (NSMapTable<UIView * , HMBaseValue *> *)hm_jsValueLifeContainer {
     
-    objc_setAssociatedObject(self, @selector(hm_jsValueLifeContainer), hm_jsValueHandler, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (NSMapTable *)hm_jsValueLifeContainer {
-    
-    NSMapTable *store = objc_getAssociatedObject(self, _cmd);
+    NSMapTable<UIView * , HMBaseValue *> *store = objc_getAssociatedObject(self, _cmd);
     if (!store) {
         store = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory];
-        self.hm_jsValueLifeContainer = store;
+        objc_setAssociatedObject(self, _cmd, store, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return store;
 }
