@@ -57,6 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) HMBorderModelCollection *hm_borderModelCollection;
 
+@property (nonatomic, strong, nullable) NSMapTable *hm_jsValueLifeContainer;
+
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSObject *> *hm_styleStore;
 
 @property (nonatomic, strong, nullable) HMTransitionAnimation *hm_transitionAnimation;
