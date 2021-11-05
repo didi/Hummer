@@ -5,11 +5,11 @@
 //  Created by didi on 2021/11/3.
 //
 
-#import "UIView+HMDescriptor.h"
-#import <Hummer/NSObject+HMDescriptor.h>
+#import "UIView+HMDescription.h"
+#import <Hummer/NSObject+HMDescription.h>
 #import <Hummer/NSObject+Hummer.h>
 
-@implementation UIView (HMDescriptor)
+@implementation UIView (HMDescription)
 
 - (nullable NSString *)hm_content {
     return nil;

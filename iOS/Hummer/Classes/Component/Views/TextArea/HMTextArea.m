@@ -15,10 +15,11 @@
 #import "HMInputEvent.h"
 #import "UIView+HMEvent.h"
 #import "UIView+HMDom.h"
+#import <Hummer/HMDescription.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HMTextArea() <UITextViewDelegate>
+@interface HMTextArea() <UITextViewDelegate, HMViewDescription>
 
 @property (nonatomic, strong, nullable) UILabel *placeholderLabel;
 
@@ -285,6 +286,18 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
         }
     }
     [self togglePlaceholder];
+}
+
+
+#pragma mark - <HMDescription>
+- (NSString *)hm_content {
+    
+    return self.text;
+}
+
+- (nullable NSArray<HMBaseValue *> *)hm_jsChildren {
+    
+    return nil;
 }
 
 @end

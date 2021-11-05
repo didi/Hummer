@@ -10,8 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol HMObjectDescriptor <NSObject>
+@protocol HMObjectDescription <NSObject>
 
+@optional
 - (nullable NSString *)hm_ID;
 
 - (NSString *)hm_objcClassName;
@@ -23,12 +24,13 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@protocol HMViewDescriptor <HMObjectDescriptor>
+@protocol HMViewDescription <HMObjectDescription>
 
-- (nullable NSString *)hm_content;
-
+@optional
 - (nullable NSArray<UIView *> *)hm_children;
 
+@required
+- (nullable NSString *)hm_content;
 - (nullable NSArray<HMBaseValue *> *)hm_jsChildren;
 
 @end

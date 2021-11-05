@@ -435,6 +435,9 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     }
 }
 
+#pragma mark - <HMDescription>
+
+
 @end
 
 @interface HMVerticalScrollView : HMScrollView

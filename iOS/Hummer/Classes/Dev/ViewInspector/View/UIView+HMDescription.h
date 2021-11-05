@@ -6,11 +6,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Hummer/HMDescriptor.h>
+#import <Hummer/HMDescription.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UIView (HMDescriptor)<HMViewDescriptor>
+@interface UIView (HMDescription)<HMViewDescription>
 
 @end
 

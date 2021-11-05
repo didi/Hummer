@@ -5,12 +5,12 @@
 //  Created by didi on 2021/11/3.
 //
 
-#import "NSObject+HMDescriptor.h"
+#import "NSObject+HMDescription.h"
 #import <Hummer/HMExportManager.h>
 #import <Hummer/HMExportClass.h>
 #import <Hummer/NSObject+Hummer.h>
 
-@implementation NSObject (HMDescriptor)
+@implementation NSObject (HMDescription)
 
 - (nullable NSString *)hm_ID {
     

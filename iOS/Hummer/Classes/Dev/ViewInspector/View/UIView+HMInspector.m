@@ -9,12 +9,14 @@
 #import <Hummer/HMViewInspector.h>
 #import <Hummer/HMExportManager.h>
 #import <Hummer/HMBaseExecutorProtocol.h>
-#import <Hummer/NSObject+HMDescriptor.h>
-#import <Hummer/UIView+HMDescriptor.h>
+#import <Hummer/NSObject+HMDescription.h>
+#import <Hummer/UIView+HMDescription.h>
 
 @implementation UIView (HMInspector)
 
 HM_EXPORT_METHOD(dbg_highlight, dbg_highlight:)
+
+HM_EXPORT_METHOD(dbg_getDescription, dbg_getDescription:depth:)
 
 - (void)dbg_highlight:(BOOL)isHighlight{
     
@@ -32,17 +34,18 @@ HM_EXPORT_METHOD(dbg_highlight, dbg_highlight:)
  * } Node
  */
 
-// depth：递归深度，0：全量，1：自身(及children)
+// depth：递归深度，<1：全量，>=1：自身children 除 children.children部分
 - (void)dbg_getDescription:(HMFunctionType)callBack depth:(NSInteger)depth {
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *res = [self _dbg_getDescriptionWithDepth: depth < 1 ? INT_MAX : depth];
+        callBack(@[res]);
+    });
    
 }
 
 - (nullable NSDictionary *)_dbg_getDescriptionWithDepth:(NSInteger)depth {
-    // base code
-    if (depth == 0) {
-        return nil;
-    }
+
     NSMutableDictionary *dic = [NSMutableDictionary new];
     [dic setObject:[self hm_ID] forKey:@"id"];
     [dic setObject:[self hm_jsClassName] forKey:@"tagName"];
@@ -50,16 +53,23 @@ HM_EXPORT_METHOD(dbg_highlight, dbg_highlight:)
     if ([self hm_content]) {
         [dic setObject:content forKey:@"content"];
     }
+    // base code
+    if (depth <= 0) {
+        return dic.copy;
+    }
     NSArray * children = [self hm_jsChildren];
+    //base code
     if (children) {
-        NSMutableArray *array = [NSMutableArray new];
-        [children enumerateObjectsUsingBlock:^(HMBaseValue*  _Nonnull jsValue, NSUInteger idx, BOOL * _Nonnull stop) {
-           
-            UIView *view = (UIView *)[jsValue toNativeObject];
-            [array addObject:[view _dbg_getDescriptionWithDepth:depth-1]];
-        }];
-        if (array.count>0) {
-            [dic setObject:children forKey:@"children"];
+        if (children) {
+            NSMutableArray *array = [NSMutableArray new];
+            [children enumerateObjectsUsingBlock:^(HMBaseValue*  _Nonnull jsValue, NSUInteger idx, BOOL * _Nonnull stop) {
+               
+                UIView *view = (UIView *)[jsValue toNativeObject];
+                [array addObject:[view _dbg_getDescriptionWithDepth:depth-1]];
+            }];
+            if (array.count>0) {
+                [dic setObject:array forKey:@"children"];
+            }
         }
     }
     return dic.copy;

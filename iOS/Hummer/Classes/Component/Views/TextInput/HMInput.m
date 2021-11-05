@@ -16,8 +16,9 @@
 #import "UIView+HMEvent.h"
 #import "UIView+HMDom.h"
 #import "HMBaseValue.h"
+#import <Hummer/HMDescription.h>
 
-@interface HMInput() <UITextFieldDelegate>
+@interface HMInput() <UITextFieldDelegate, HMViewDescription>
 
 @property (nonatomic, strong) UIColor *caretColor;
 
@@ -256,4 +257,14 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
     return YES;
 }
 
+#pragma mark - <HMDescription>
+- (NSString *)hm_content {
+    
+    return self.text;
+}
+
+- (nullable NSArray<HMBaseValue *> *)hm_jsChildren {
+    
+    return nil;
+}
 @end
