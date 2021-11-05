@@ -152,6 +152,9 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
 {
     [super layoutSubviews];
     
+    if (!CGRectEqualToRect(self.pageView.frame, self.bounds)) {
+        [self.layout forceInvalidate];
+    }
     self.pageView.frame = self.bounds;
 }
 

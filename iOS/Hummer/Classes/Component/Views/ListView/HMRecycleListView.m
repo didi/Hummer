@@ -94,8 +94,8 @@ NS_ASSUME_NONNULL_END
     
     UIView *jsContentView = self.contentView.subviews.lastObject;
     CGSize jsContentViewSize =[jsContentView hm_sizeThatFits:CGSizeMake(containerSize.width, CGFLOAT_MAX)];
-    jsContentViewSize.height = ceilf(((int)(jsContentViewSize.height*10))/10.0);
-    jsContentViewSize.width = ceilf(((int)(jsContentViewSize.width*10))/10.0);
+//    jsContentViewSize.height = ceilf(((int)(jsContentViewSize.height*10))/10.0);
+//    jsContentViewSize.width = ceilf(((int)(jsContentViewSize.width*10))/10.0);
     
     if ([attributes isKindOfClass:[HMListLayoutAttributes class]]) {
         HMListLayoutAttributes *listAttributes = (HMListLayoutAttributes *)attributes;

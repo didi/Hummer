@@ -5,9 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "JInspector.h"
-
+#include <jni.h>
 #include <memory>
+#include <js_native_api.h>
+#include <js_native_api_debugger.h>
+#include <js_native_api_debugger_hermes_types.h>
+#include "JInspector.h"
+#include "JNativeRunnable.h"
+#include "JSUtils.h"
 
 #ifdef WITH_INSPECTOR
 
@@ -61,10 +66,12 @@ JLocalConnection::JLocalConnection(std::unique_ptr<ILocalConnection> connection)
     : connection_(std::move(connection)) {}
 
 void JLocalConnection::sendMessage(std::string message) {
+  if (connection_ == nullptr) return;
   connection_->sendMessage(std::move(message));
 }
 
 void JLocalConnection::disconnect() {
+  if (connection_ == nullptr) return;
   connection_->disconnect();
 }
 
@@ -73,6 +80,24 @@ void JLocalConnection::registerNatives() {
       makeNativeMethod("sendMessage", JLocalConnection::sendMessage),
       makeNativeMethod("disconnect", JLocalConnection::disconnect),
   });
+}
+
+void JInspector::enableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr, const std::string &page_title, jni::alias_ref<JavaMessageQueueThread::javaobject> jsQueue, bool waitForDebugger) {
+  auto globalEnv = JSUtils::toJsContext(ctx_ptr);
+  auto pageTitle = page_title.c_str();
+
+  struct OpaqueMessageQueueThreadWrapper {
+      std::shared_ptr<facebook::react::MessageQueueThread> thread_;
+  } s;
+  s.thread_ = std::make_shared<facebook::react::JMessageQueueThread>(jsQueue);
+  NAPISetMessageQueueThread(globalEnv, (MessageQueueThreadWrapper) &s);
+
+  NAPIEnableDebugger(globalEnv, pageTitle, waitForDebugger);
+}
+
+void JInspector::disableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr) {
+  auto globalEnv = JSUtils::toJsContext(ctx_ptr);
+  NAPIDisableDebugger(globalEnv);
 }
 
 jni::global_ref<JInspector::javaobject> JInspector::instance(
@@ -102,10 +127,13 @@ jni::local_ref<JLocalConnection::javaobject> JInspector::connect(
 void JInspector::registerNatives() {
   JLocalConnection::registerNatives();
   javaClassStatic()->registerNatives({
+      makeNativeMethod("enableDebugging", JInspector::enableDebugging),
+      makeNativeMethod("disableDebugging", JInspector::disableDebugging),
       makeNativeMethod("instance", JInspector::instance),
       makeNativeMethod("getPagesNative", JInspector::getPages),
       makeNativeMethod("connectNative", JInspector::connect),
   });
+  JNativeRunnable::registerNatives();
 }
 
 } // namespace react

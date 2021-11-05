@@ -166,11 +166,14 @@ public class HummerRender {
             }
         }
 
-        perfInfo.pageRenderTimeCost = System.currentTimeMillis() - this.startTime;
-        if (trackerAdapter != null) {
-            trackerAdapter.trackPerfInfo(hmContext.getPageUrl(), perfInfo);
-            trackerAdapter.trackPerfCustomInfo(hmContext.getPageUrl(), new PerfCustomInfo("whiteScreenRate", "白屏率", "%", isRenderSuccess ? 0 : 100));
-            trackerAdapter.trackEvent(ITrackerAdapter.EventName.RENDER_FINISH, params);
+        // 这里加一个判断，用于过滤开发阶段hot reload时的重复累加计算和埋点上报
+        if (perfInfo.pageRenderTimeCost == 0) {
+            perfInfo.pageRenderTimeCost = System.currentTimeMillis() - this.startTime;
+            if (trackerAdapter != null) {
+                trackerAdapter.trackPerfInfo(hmContext.getPageUrl(), perfInfo);
+                trackerAdapter.trackPerfCustomInfo(hmContext.getPageUrl(), new PerfCustomInfo("whiteScreenRate", "白屏率", "%", isRenderSuccess ? 0 : 100));
+                trackerAdapter.trackEvent(ITrackerAdapter.EventName.RENDER_FINISH, params);
+            }
         }
     }
 

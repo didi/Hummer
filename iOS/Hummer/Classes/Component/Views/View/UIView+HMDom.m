@@ -162,6 +162,16 @@ HM_EXPORT_METHOD(getElementById, hm_getSubViewByID:)
 
 HM_EXPORT_METHOD(layout, hm_layoutRootView)
 
+
+- (NSMapTable<UIView * , HMBaseValue *> *)hm_jsValueLifeContainer {
+    
+    NSMapTable<UIView * , HMBaseValue *> *store = objc_getAssociatedObject(self, _cmd);
+    if (!store) {
+        store = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory];
+        objc_setAssociatedObject(self, _cmd, store, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return store;
+}
 - (CAShapeLayer *)hm_borderTopLayer {
     return objc_getAssociatedObject(self, _cmd);
 }
@@ -1215,7 +1225,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         [UIView hm_reSortFixedView:context];
     }
 }
-
+// 注意 fixed 的场景下，需要 手动使用 removeChild 进行解引用(但不需要 superview 正确)
 + (void)hm_reSortFixedView:(HMJSContext *)context{
     
     NSArray *rootSubViews = context.rootView.subviews;
@@ -1301,6 +1311,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         UIView *superView = view.superview;
         [view removeFromSuperview];
         [superView hm_markDirty];
+        [superView.hm_jsValueLifeContainer removeObjectForKey:view];
     }
     /* a -> a0 -> a00(with height), remove a00, a0's height not change.
     UIView *superView = view.superview;
@@ -1326,6 +1337,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
             BOOL *_Nonnull stop) {
         [obj removeFromSuperview];
     }];
+    [self.hm_jsValueLifeContainer removeAllObjects];
     [self hm_markDirty];
 }
 
@@ -1353,11 +1365,15 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     if (newView.superview != self) {
         UIView *parent = newView.superview;
         [newView removeFromSuperview];
+        //deref
+        [parent.hm_jsValueLifeContainer removeObjectForKey:newView];
         [parent hm_markDirty];
     }
     [oldView removeFromSuperview];
 
     [self insertSubview:newView atIndex:index];
+    //ref
+    [self.hm_jsValueLifeContainer setObject:newView.hmValue forKey:newView];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:newChild.context];
     [newView hm_processFixedPositionWithContext:context];
     [self hm_markDirty];
@@ -1389,6 +1405,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     if (newView.superview && newView.superview != self) {
         UIView *parent = newView.superview;
         [newView removeFromSuperview];
+        //deref
+        [parent.hm_jsValueLifeContainer removeObjectForKey:newView];
         [parent hm_markDirty];
     }
     if (newView && oldView){
@@ -1396,6 +1414,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     }else{
         [self addSubview:newView];
     }
+    //ref
+    [self.hm_jsValueLifeContainer setObject:newView.hmValue forKey:newView];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:newChild.context];
     [newView hm_processFixedPositionWithContext:context];
     [self hm_markDirty];

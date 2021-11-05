@@ -140,7 +140,7 @@ NS_ASSUME_NONNULL_END
             // errorName -> message
             // errorcode -> type
             // errorMsg -> stack / type + message + stack
-            [HMConfigEntryManager.manager.configMap[weakSelf.nameSpace].trackEventPlugin trackJavaScriptExceptionWithExceptionModel:exception pageUrl:weakSelf.url.absoluteString ?: @""];
+            [HMConfigEntryManager.manager.configMap[weakSelf.nameSpace].trackEventPlugin trackJavaScriptExceptionWithExceptionModel:exception pageUrl:weakSelf.hummerUrl ?: @""];
         }
         typeof(weakSelf) strongSelf = weakSelf;
         [HMReporterInterceptor handleJSException:exceptionInfo namespace:strongSelf.nameSpace];
@@ -191,8 +191,16 @@ NS_ASSUME_NONNULL_END
 #endif
 
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
+    return [self evaluateScript:javaScriptString fileName:fileName hummerUrl:nil];
+}
+    
+- (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName hummerUrl:(nullable NSString *)hummerUrl {
     struct timespec beforeTimespec;
     HMClockGetTime(&beforeTimespec);
+    
+    if (!self.hummerUrl && hummerUrl.length > 0) {
+        self.hummerUrl = hummerUrl;
+    }
 
     // context 和 WebSocket 对应
     if (!self.url && fileName.length > 0) {
@@ -262,7 +270,7 @@ NS_ASSUME_NONNULL_END
     if (data && self.nameSpace) {
         // 不包括 \0
         // 单位 KB
-        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackJavaScriptBundleWithSize:@(data.length / 1024) pageUrl:self.url.absoluteString ?: @""];
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackJavaScriptBundleWithSize:@(data.length / 1024) pageUrl:self.hummerUrl ?: @""];
     }
 
     HMBaseValue *returnValue = [self.context evaluateScript:javaScriptString withSourceURL:url];
@@ -272,7 +280,7 @@ NS_ASSUME_NONNULL_END
     struct timespec resultTimespec;
     HMDiffTime(&beforeTimespec, &afterTimespec, &resultTimespec);
     if (self.nameSpace) {
-        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackEvaluationWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)  pageUrl:self.url.absoluteString ?: @""];
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackEvaluationWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)  pageUrl:self.hummerUrl ?: @""];
     }
 
     return returnValue;

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HMNAPICppHelper : NSObject
+@interface HMNAPIDebuggerHelper : NSObject
 
 - (void)napiCall_enableDebuggerAndMessageThread:(NAPIEnv)env title:(nullable NSString *)title;
 - (void)napiCall_disableDebugger;

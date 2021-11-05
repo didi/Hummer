@@ -10,6 +10,7 @@
 #ifdef WITH_INSPECTOR
 
 #include <jsinspector/InspectorInterfaces.h>
+#include <JMessageQueueThread.h>
 
 #include <fbjni/fbjni.h>
 
@@ -56,6 +57,9 @@ class JInspector : public jni::HybridClass<JInspector> {
  public:
   static constexpr auto kJavaDescriptor =
       "Lcom/didi/hummer/hermes/inspector/Inspector;";
+
+  static void enableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr, const std::string &page_title, jni::alias_ref<JavaMessageQueueThread::javaobject> jsQueue, bool waitForDebugger);
+  static void disableDebugging(jni::alias_ref<jclass>, jlong ctx_ptr);
 
   static jni::global_ref<JInspector::javaobject> instance(
       jni::alias_ref<jclass>);

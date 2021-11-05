@@ -9,7 +9,7 @@ package com.didi.hummer.hermes.inspector;
 
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.Looper;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -199,13 +199,16 @@ public class InspectorPackagerConnection {
 
     private OkHttpClient mHttpClient;
     private WebSocket mWebSocket;
+    private HandlerThread mHandlerThread;
     private final Handler mHandler;
     private boolean mClosed;
     private boolean mSuppressConnectionErrors;
 
     public Connection(String url) {
       mUrl = url;
-      mHandler = new Handler(Looper.getMainLooper());
+      mHandlerThread = new HandlerThread("handlerThread");
+      mHandlerThread.start();
+      mHandler = new Handler(mHandlerThread.getLooper());
     }
 
     @Override
@@ -293,6 +296,7 @@ public class InspectorPackagerConnection {
         }
         mWebSocket = null;
       }
+      mHandlerThread.quitSafely();
     }
 
     public void send(final JSONObject object) {

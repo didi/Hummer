@@ -57,6 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) HMBorderModelCollection *hm_borderModelCollection;
 
+@property (nonatomic, strong, readonly) NSMapTable<UIView * , HMBaseValue *> *hm_jsValueLifeContainer;
+
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSObject *> *hm_styleStore;
 
 @property (nonatomic, strong, nullable) HMTransitionAnimation *hm_transitionAnimation;
@@ -121,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSDictionary<NSString *, NSObject *> *)hm_style;
 
-- (void)hm_setStyle:(HMBaseValue *)style;
+- (void)hm_setStyle:(nullable HMBaseValue *)style;
 
 - (void)hm_configureWithTarget:(id)target cssAttribute:(NSString *)cssAttribute value:(id)value converterManager:(id)converterManager;
 

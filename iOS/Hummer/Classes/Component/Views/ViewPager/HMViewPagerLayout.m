@@ -170,7 +170,7 @@
         return targetOffset;
     };
     
-    CGFloat boundedOffset = self.collectionView.contentSize.width - self.itemSpacing;
+    CGFloat boundedOffset = self.collectionView.contentSize.width - self.actualItemSize.width;
     CGFloat proposedContentOffsetX = calculateTargetOffset(proposedContentOffset.x, boundedOffset);
     CGFloat proposedContentOffsetY = proposedContentOffset.y;
     result = CGPointMake(proposedContentOffsetX, proposedContentOffsetY);
