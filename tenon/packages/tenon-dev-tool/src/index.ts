@@ -1,16 +1,16 @@
 import initSocket, { sendMessage } from './socket'
-import { getPartUrlByParam, getViewData, updateOptions, log} from './utils'
-import { requestintercept } from './requestintercept'
+import { getPartUrlByParam, getViewData, updateOptions, log } from './utils'
+import { getAllstorage } from './storageintercept'
 /**
  * DevTool 启动入口函数
  * @param container 页面实例，通过引用可以拿到整个视图树，以及视图上的各个实例
  */
 // Tip: hummer-front 兼容
 let isWebPlatform = __GLOBAL__.Hummer.pageInfo && JSON.stringify(__GLOBAL__.Hummer.pageInfo) === '{}'
-export function run(container:any){
+export function run(container: any) {
   log('get ready~')
   const { url } = __GLOBAL__.Hummer.pageInfo
-  __GLOBAL__.flag = true;
+  const { Storage, Memory } = __GLOBAL__
   let host = getPartUrlByParam(url, 'host')
   let port = getPartUrlByParam(url, 'port')
   let wsTenonUrl = `ws://${host}:${port}/proxy/tenon`
@@ -20,9 +20,9 @@ export function run(container:any){
     wsTenonUrl = 'ws://172.23.166.43:8000/proxy/tenon'
   }
   // @ts-ignore
-  let viewMap = {}, viewId:number, view:any
+  let viewMap = {}, viewId: number, view: any
   const onSocketMsgHandlers = {
-    'getViewTree': function(ws:any, params:any) {
+    'getViewTree': function (ws: any, params: any) {
       let data = getViewData(container)
       viewMap = data.viewMap
       sendMessage(ws, {
@@ -34,7 +34,7 @@ export function run(container:any){
         }
       })
     },
-    'getViewInfo': function(ws:any, params:any) {
+    'getViewInfo': function (ws: any, params: any) {
       viewId = params.viewId
       // @ts-ignore
       view = viewMap[viewId]
@@ -51,15 +51,32 @@ export function run(container:any){
         })
       })
     },
-    'setViewStyle': function(ws:any, params:any) {
+    'setViewStyle': function (ws: any, params: any) {
       viewId = params.viewId
       // @ts-ignore
       view = viewMap[viewId]
       const style = params.style
       view.element.style = updateOptions(view.style, style)
       sendMessage(ws, { method: 'setStyleSuccess' })
-    }
+    },
+    'setStorage': function (ws: any, params: any) {
+      const { type, key, value } = params.storage
+      switch (type) {
+        case 'delete':
+          Storage.remove(key)
+          break;
+        case 'revise':
+          Storage.set(key, value)
+          break;
+        default:
+          break;
+      }
+      sendMessage(ws, { method: 'setStorageSuccess' })
+    },
+    'getStorage': function (ws: any, params: any) {
+      Memory.set("_#_hummer_tenonIp_#_", params?.tenonIp);
+      getAllstorage(ws, params);
+    },
   }
-
-  initSocket(wsTenonUrl, onSocketMsgHandlers,requestintercept)
+  initSocket(wsTenonUrl, onSocketMsgHandlers)
 }

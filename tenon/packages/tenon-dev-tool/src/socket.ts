@@ -1,15 +1,19 @@
 import { log } from './utils'
+import { storageintercept } from './storageintercept'
+import { requestintercept } from './requestintercept'
 
 let ws:any, currentType:string
-export default function (url:string, handlers:any,requestintercept:Function) {
+export default function (url:string, handlers:any) {
   ws = new __GLOBAL__.WebSocket(url);
   // 设置各种监听回调
   ws.onopen = () => {
     log('websocket opened~');
+    storageintercept(ws);
     requestintercept(ws);
   }
 
   ws.onmessage = (event:any) => {
+    log(JSON.stringify(event))
     let msg = JSON.parse(event.data)
     currentType = msg.type || ''
     if (handlers[msg.method]) {
