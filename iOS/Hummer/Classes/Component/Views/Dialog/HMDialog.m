@@ -15,8 +15,6 @@
 #import "HMConverter.h"
 #import <Hummer/HMJSGlobal.h>
 
-static NSInteger kHMDialogPopoverViewTag = 517212;
-
 @interface HMDialogPopoverView : UIView
 
 @property (nonatomic) BOOL shouldDismissPopover;
@@ -338,7 +336,6 @@ HM_EXPORT_PROPERTY(lowLayer, isLowLayer, setIsLowLayer:)
             presenting = [HMDialog fix_getCurrentViewController];
         }
     }
-    [self _dismissPopoverAt:presenting];
     _popover = [[HMDialogPopoverView alloc] init];
     _popover.shouldDismissPopover = self.isCancelabled;
     [_popover addJSContentView:view presentingViewController:presenting];
