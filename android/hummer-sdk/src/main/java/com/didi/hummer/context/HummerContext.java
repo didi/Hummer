@@ -195,6 +195,7 @@ public class HummerContext extends ContextWrapper {
         HMLog.d("HummerNative", "HummerContext.onDestroy");
         InvokerAnalyzer.release(invokerAnalyzer);
         destroy();
+        NotifyCenter.release(getContext());
         NotifyCenter.release(mJsContext);
         releaseJSContext();
     }
