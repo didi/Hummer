@@ -60,6 +60,7 @@ Hummer is a dynamic solution for client.
     ss.source_files = 'iOS/Hermes/*.{h,m,mm}'
     ss.dependency 'SocketRocket', '~> 0.6'
     ss.private_header_files = 'iOS/Hermes/RCTMessageThread.h'
+    ss.preserve_path = 'iOS/jsinspector/InspectorInterfaces.h'
   end
 
   s.subspec "JavaScriptCore" do |ss|
