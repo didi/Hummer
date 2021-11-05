@@ -20,6 +20,10 @@
 - (HMBaseValue *)hmValue {
     id <HMBaseWeakValueProtocol> weakValue = objc_getAssociatedObject(self, _cmd);
     
+    if (!weakValue) {
+        return self.hmWeakValue.value;
+    }
+    
     HMBaseValue *value = weakValue.value;
     if (!value) {
         // 不存在了
