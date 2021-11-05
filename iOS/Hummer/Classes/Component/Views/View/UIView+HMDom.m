@@ -1097,27 +1097,27 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     
     if (self.HMBorderBoxSizing) {
         if (self.hm_borderModelCollection) {
-            self.hm_renderObject.borderTopWidth = self.hm_borderModelCollection.top.isShowBorder ? self.hm_borderModelCollection.top.borderWidth : YGUndefined;
-            self.hm_renderObject.borderBottomWidth = self.hm_borderModelCollection.bottom.isShowBorder ? self.hm_borderModelCollection.bottom.borderWidth : YGUndefined;
-            self.hm_renderObject.borderLeftWidth = self.hm_borderModelCollection.left.isShowBorder ? self.hm_borderModelCollection.left.borderWidth : YGUndefined;
-            self.hm_renderObject.borderRightWidth = self.hm_borderModelCollection.right.isShowBorder ? self.hm_borderModelCollection.right.borderWidth : YGUndefined;
+            self.hm_renderObject.borderTopWidth = self.hm_borderModelCollection.top.isShowBorder ? self.hm_borderModelCollection.top.borderWidth : YOGA_TYPE_WRAPPER(YGUndefined);
+            self.hm_renderObject.borderBottomWidth = self.hm_borderModelCollection.bottom.isShowBorder ? self.hm_borderModelCollection.bottom.borderWidth : YOGA_TYPE_WRAPPER(YGUndefined);
+            self.hm_renderObject.borderLeftWidth = self.hm_borderModelCollection.left.isShowBorder ? self.hm_borderModelCollection.left.borderWidth : YOGA_TYPE_WRAPPER(YGUndefined);
+            self.hm_renderObject.borderRightWidth = self.hm_borderModelCollection.right.isShowBorder ? self.hm_borderModelCollection.right.borderWidth : YOGA_TYPE_WRAPPER(YGUndefined);
         } else if (self.layer.borderWidth > 0) {
             self.hm_renderObject.borderWidth = self.layer.borderWidth;
         } else {
-            self.hm_renderObject.borderWidth = YGUndefined;
-            self.hm_renderObject.borderTopWidth = YGUndefined;
-            self.hm_renderObject.borderBottomWidth = YGUndefined;
-            self.hm_renderObject.borderLeftWidth = YGUndefined;
-            self.hm_renderObject.borderRightWidth = YGUndefined;
+            self.hm_renderObject.borderWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+            self.hm_renderObject.borderTopWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+            self.hm_renderObject.borderBottomWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+            self.hm_renderObject.borderLeftWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+            self.hm_renderObject.borderRightWidth = YOGA_TYPE_WRAPPER(YGUndefined);
         }
     } else {
-        self.hm_renderObject.borderWidth = YGUndefined;
-        self.hm_renderObject.borderTopWidth = YGUndefined;
-        self.hm_renderObject.borderBottomWidth = YGUndefined;
-        self.hm_renderObject.borderLeftWidth = YGUndefined;
-        self.hm_renderObject.borderRightWidth = YGUndefined;
-        //            self.hm_renderObject.borderStartWidth = YGUndefined;
-        //            self.hm_renderObject.borderEndWidth = YGUndefined;
+        self.hm_renderObject.borderWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderTopWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderBottomWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderLeftWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderRightWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        //            self.hm_renderObject.borderStartWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        //            self.hm_renderObject.borderEndWidth = YOGA_TYPE_WRAPPER(YGUndefined);
     }
     
     // 设置样式之后，根据zindex 处理fixed

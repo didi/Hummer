@@ -31,8 +31,8 @@
 
 #pragma mark <HMAnimator>
 - (BOOL)canStartAnimation {
-//    return !self.animatedView.hm_renderObject.isDirty;
-    return YES;
+    return !self.animatedView.hm_renderObject.isDirty;
+//    return YES;
 
 }
 

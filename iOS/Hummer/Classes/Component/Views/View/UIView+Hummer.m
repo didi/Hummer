@@ -14,7 +14,7 @@
 
 @implementation UIView(Hummer)
 
-HM_EXPORT_CLASS(OldView, UIView)
+HM_EXPORT_CLASS(View, UIView)
 
 - (instancetype)initWithHMValues:(NSArray *)values {
     self = [self init];

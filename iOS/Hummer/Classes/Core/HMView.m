@@ -95,7 +95,7 @@ void updateShadowPathForView(HMView *view) {
     }
 }
 
-HM_EXPORT_CLASS(View, HMView)
+HM_EXPORT_CLASS(NewView, HMView)
 
 @implementation HMView
 
@@ -504,13 +504,13 @@ HM_EXPORT_CLASS(View, HMView)
     // => reset layout to undefined(NaN)
     if (!self.HMBorderBoxSizing || (self.HMBorderBoxSizing && self.borderStyle == HMBorderStyleNone)) {
         // rollback borderWidth style
-        self.hm_renderObject.borderWidth = YGUndefined;
-        self.hm_renderObject.borderBottomWidth = YGUndefined;
-        self.hm_renderObject.borderEndWidth = YGUndefined;
-        self.hm_renderObject.borderLeftWidth = YGUndefined;
-        self.hm_renderObject.borderRightWidth = YGUndefined;
-        self.hm_renderObject.borderStartWidth = YGUndefined;
-        self.hm_renderObject.borderTopWidth = YGUndefined;
+        self.hm_renderObject.borderWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderBottomWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderEndWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderLeftWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderRightWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderStartWidth = YOGA_TYPE_WRAPPER(YGUndefined);
+        self.hm_renderObject.borderTopWidth = YOGA_TYPE_WRAPPER(YGUndefined);
     }
 
     // 设置样式之后，根据 zIndex 处理 fixed
