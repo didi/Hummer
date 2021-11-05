@@ -1,5 +1,6 @@
 import { log } from './utils'
 import { storageintercept } from './storageintercept'
+import { memoryintercept } from './memoryintercept'
 import { requestintercept } from './requestintercept'
 
 let ws:any, currentType:string
@@ -9,6 +10,7 @@ export default function (url:string, handlers:any) {
   ws.onopen = () => {
     log('websocket opened~');
     storageintercept(ws);
+    memoryintercept(ws);
     requestintercept(ws);
   }
 

@@ -1,6 +1,7 @@
 import initSocket, { sendMessage } from './socket'
 import { getPartUrlByParam, getViewData, updateOptions, log } from './utils'
-import { getAllstorage } from './storageintercept'
+import { getAllStorage } from './storageintercept'
+import { getAllMemory } from './memoryintercept'
 /**
  * DevTool 启动入口函数
  * @param container 页面实例，通过引用可以拿到整个视图树，以及视图上的各个实例
@@ -75,7 +76,25 @@ export function run(container: any) {
     },
     'getStorage': function (ws: any, params: any) {
       Memory.set("_#_hummer_tenonIp_#_", params?.tenonIp);
-      getAllstorage(ws, params);
+      getAllStorage(ws, params);
+    },
+    'setMemory': function (ws: any, params: any) {
+      const { type, key, value } = params.memory
+      switch (type) {
+        case 'delete':
+          Memory.remove(key)
+          break;
+        case 'revise':
+          Memory.set(key, value)
+          break;
+        default:
+          break;
+      }
+      sendMessage(ws, { method: 'setMemorySuccess' })
+    },
+    'getMemory': function (ws: any, params: any) {
+      Memory.set("_#_hummer_tenonIp_#_", params?.tenonIp);
+      getAllMemory(ws, params);
     },
   }
   initSocket(wsTenonUrl, onSocketMsgHandlers)

@@ -1,10 +1,12 @@
 import { sendMessage } from './socket'
-import { log } from './utils'
 const { __storageInterceptFlag__, Storage, Memory } = __GLOBAL__
-export const getAllstorage = (ws: any, params: any) => {
+export const getAllStorage = (ws: any, params: any) => {
     let storageAll = Storage.getAll();
     let newStorageAll = []
     for (const key in storageAll) {
+        if(/_#_hummer_.*_#_/.test(key)){
+            continue;
+        }
         let item = {
             key: key,
             value: storageAll[key],
@@ -25,7 +27,6 @@ export const storageintercept = (ws: any): void => {
     __GLOBAL__.__storageInterceptFlag__ = true
     !__storageInterceptFlag__ && (__GLOBAL__.__storageOriginSet__ = Storage.set, __GLOBAL__.__storageOriginRemove__ = Storage.remove, __GLOBAL__.__storageOriginRemoveAll__ = Storage.removeAll)
     Storage.set = function () {
-        log(JSON.stringify(__GLOBAL__));
         if (Memory.get("_#_hummer_tenonIp_#_")) {
             sendMessage(ws, {
                 type: 'storage',
@@ -43,7 +44,7 @@ export const storageintercept = (ws: any): void => {
     Storage.remove = function () {
         __GLOBAL__.__storageOriginRemove__.apply(this, arguments)
         if (Memory.get("_#_hummer_tenonIp_#_")) {
-            getAllstorage(ws, {tenonIp:Memory.get("_#_hummer_tenonIp_#_")})
+            getAllStorage(ws, {tenonIp:Memory.get("_#_hummer_tenonIp_#_")})
         }
     }
 
