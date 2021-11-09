@@ -14,9 +14,9 @@
 #import "UIView+HMEvent.h"
 #import "HMSwitchEvent.h"
 #import "HMBaseValue.h"
-#import <Hummer/HMDescription.h>
+#import <Hummer/UIView+HMInspector.h>
 
-@interface HMSwitch ()<HMViewDescription>
+@interface HMSwitch ()<HMViewInspectorDescription>
 
 @end
 @implementation HMSwitch
@@ -97,7 +97,7 @@ HM_EXPORT_ATTRIBUTE(thumbColor, thumbTintColor, HMStringToColor:)
     return self.isOn ? @"YES" : @"NO";
 }
 
-- (nullable NSArray<HMBaseValue *> *)hm_jsChildren {
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
     
     return nil;
 }

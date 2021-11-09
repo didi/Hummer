@@ -19,6 +19,8 @@
 #import <Hummer/UIImageView+HMImageLoader.h>
 #import <Hummer/HMAnimatedImage+Hummer.h>
 
+#import <Hummer/UIView+HMInspector.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HMImageViewLayer : CALayer
@@ -58,6 +60,10 @@ NS_ASSUME_NONNULL_END
         [imageView startAnimating];
     }
 }
+
+@end
+
+@interface HMImageView()<HMViewInspectorDescription>
 
 @end
 
@@ -213,6 +219,18 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
 
 - (void)setGifRepeatCount:(HMBaseValue *)src {
     self.animationRepeatCount = src.toNumber.intValue;
+}
+
+
+#pragma mark - <HMViewInspectorDescription>
+
+- (NSString *)hm_content {
+    return self.imageSrc;
+}
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    return nil;
 }
 
 @end

@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSObject (HMDescription)<HMObjectDescription>
 
+@property (nonatomic, strong, nullable) NSNumber *hummerId;
+
+- (NSString *)hm_description;
 @end
 
 NS_ASSUME_NONNULL_END

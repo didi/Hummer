@@ -15,11 +15,11 @@
 #import "HMInputEvent.h"
 #import "UIView+HMEvent.h"
 #import "UIView+HMDom.h"
-#import <Hummer/HMDescription.h>
+#import <Hummer/UIView+HMInspector.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HMTextArea() <UITextViewDelegate, HMViewDescription>
+@interface HMTextArea() <UITextViewDelegate, HMViewInspectorDescription>
 
 @property (nonatomic, strong, nullable) UILabel *placeholderLabel;
 
@@ -295,7 +295,7 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
     return self.text;
 }
 
-- (nullable NSArray<HMBaseValue *> *)hm_jsChildren {
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
     
     return nil;
 }

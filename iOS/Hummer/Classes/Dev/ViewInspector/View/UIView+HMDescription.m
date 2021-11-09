@@ -8,8 +8,12 @@
 #import "UIView+HMDescription.h"
 #import <Hummer/NSObject+HMDescription.h>
 #import <Hummer/NSObject+Hummer.h>
+#import <Hummer/HMUtility.h>
 
 @implementation UIView (HMDescription)
+
+#pragma mark <HMViewDescription>
+
 
 - (nullable NSString *)hm_content {
     return nil;
@@ -34,6 +38,23 @@
         }
     }];
     return jsChilds.copy;
+}
+
+- (HMBaseValue *)hm_jsViewValue {
+    return self.hmValue;
+}
+
+
+- (NSString *)hm_description {
+    
+    NSString *contentDesc = [[self hm_content] description];
+    NSString *childrenDesc = [[self hm_children] description];
+    NSString *jsChildrenDesc = [[self hm_jsChildren] description];
+    NSString *jsValueDesc = [[self hm_jsViewValue] description];
+    NSString *objcDesc = [super hm_description];
+   
+    NSString *desc = [NSString stringWithFormat:@"%@ content:%@,\n children:%@,\n sChildren:%@,\n jsValue:%@",objcDesc, contentDesc, childrenDesc, jsChildrenDesc, jsValueDesc];
+    return desc;
 }
 
 

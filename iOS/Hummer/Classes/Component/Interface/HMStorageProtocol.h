@@ -17,6 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)existForKey:(NSString *)key;
 - (BOOL)removeForKey:(NSString *)key;
 
+- (NSArray <NSString *> *)allKeys;
+
+- (NSDictionary *)getAll;
+
+
 - (BOOL)removeAll;
 @end
 

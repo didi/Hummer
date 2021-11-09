@@ -9,12 +9,25 @@
 #import <Hummer/HMExportManager.h>
 #import <Hummer/HMExportClass.h>
 #import <Hummer/NSObject+Hummer.h>
+#import <objc/runtime.h>
 
 @implementation NSObject (HMDescription)
 
+- (NSNumber *)hummerId {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setHummerId:(NSNumber *)hummerId {
+    objc_setAssociatedObject(self, @selector(hummerId), hummerId, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+
 - (nullable NSString *)hm_ID {
-    
-    return @"";
+    NSNumber *hid = self.hummerId;
+    if (hid) {
+        return [NSString stringWithFormat:@"%@", hid];
+    }
+    return nil;
 }
 
 - (NSString *)hm_objcClassName {
@@ -30,14 +43,14 @@
     return @"";
 }
 
-- (nullable HMBaseValue *)hm_jsObject {
-    return self.hmValue;
-}
 
-
-- (BOOL)isHMObject {
+- (NSString *)hm_description {
     
-    return [self hm_ID];
-}
+    NSString *idDesc = [[self hm_ID] description];
+    NSString *objcNameDesc = [[self hm_objcClassName] description];
+    NSString *jsNameDesc = [[self hm_jsClassName] description];
 
+   NSString *desc = [NSString stringWithFormat:@"id:%@,\n objcClassName:%@,\n jsClassName:%@,\n",idDesc, objcNameDesc, jsNameDesc];
+    return desc;
+}
 @end

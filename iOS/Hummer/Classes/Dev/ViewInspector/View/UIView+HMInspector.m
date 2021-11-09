@@ -11,6 +11,8 @@
 #import <Hummer/HMBaseExecutorProtocol.h>
 #import <Hummer/NSObject+HMDescription.h>
 #import <Hummer/UIView+HMDescription.h>
+#import <Hummer/NSObject+Hummer.h>
+#import <Hummer/HMUtility.h>
 
 @implementation UIView (HMInspector)
 
@@ -47,24 +49,43 @@ HM_EXPORT_METHOD(dbg_getDescription, dbg_getDescription:depth:)
 - (nullable NSDictionary *)_dbg_getDescriptionWithDepth:(NSInteger)depth {
 
     NSMutableDictionary *dic = [NSMutableDictionary new];
-    [dic setObject:[self hm_ID] forKey:@"id"];
-    [dic setObject:[self hm_jsClassName] forKey:@"tagName"];
-    NSString *content = [self hm_content];
-    if ([self hm_content]) {
+    NSString *hid = [self hm_displayID];
+    if (hid) {
+        [dic setObject:hid forKey:@"id"];
+    }
+    [dic setObject:[self hm_displayTagName] forKey:@"tagName"];
+    NSString *content = [self hm_displayContent];
+    NSString *alias = [self hm_displayAlias];
+    if (content) {
         [dic setObject:content forKey:@"content"];
+    }
+    if (alias) {
+        [dic setObject:alias forKey:@"alias"];
     }
     // base code
     if (depth <= 0) {
         return dic.copy;
     }
-    NSArray * children = [self hm_jsChildren];
+    HMBaseValue *jsValue = [self hm_displayJsElement];
+    if (jsValue) {
+        [dic setObject:jsValue forKey:@"element"];
+    }
+        
+    NSArray * children = [self hm_displayJsChildren];
+    
     //base code
     if (children) {
         if (children) {
             NSMutableArray *array = [NSMutableArray new];
-            [children enumerateObjectsUsingBlock:^(HMBaseValue*  _Nonnull jsValue, NSUInteger idx, BOOL * _Nonnull stop) {
+            [children enumerateObjectsUsingBlock:^(id<HMViewInspectorDescription>  _Nonnull v, NSUInteger idx, BOOL * _Nonnull stop) {
                
-                UIView *view = (UIView *)[jsValue toNativeObject];
+                // 正常逻辑应该按照
+                UIView *view;
+                if ([v isKindOfClass:UIView.class]) {
+                    view = (UIView *)v;
+                }else if([v isKindOfClass:HMBaseValue.class]){
+                    view = (UIView *)((HMBaseValue *)v).toNativeObject;
+                }
                 [array addObject:[view _dbg_getDescriptionWithDepth:depth-1]];
             }];
             if (array.count>0) {
@@ -75,5 +96,47 @@ HM_EXPORT_METHOD(dbg_getDescription, dbg_getDescription:depth:)
     return dic.copy;
 }
 
+
+#pragma mark <HMViewInspectorDescription>
+
+
+// js 类名，默认实现为 hm_ID
+- (nullable NSString *)hm_displayID {
+    return [self hm_ID];
+}
+
+// js 类名，默认实现为 hm_jsClassName
+- (nullable NSString *)hm_displayTagName {
+    return [self hm_jsClassName];
+}
+
+- (nullable NSString *)hm_displayAlias {
+    
+    return nil;
+}
+
+- (nullable NSString *)hm_displayContent {
+    
+    return [self hm_content];
+}
+
+- (HMBaseValue *)hm_displayJsElement {
+    return [self hm_jsViewValue];
+}
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    NSArray *jsChildren = [self hm_jsChildren];
+    if (jsChildren) {
+        NSMutableArray *array = [NSMutableArray new];
+        [jsChildren enumerateObjectsUsingBlock:^(HMBaseValue*  _Nonnull jsValue, NSUInteger idx, BOOL * _Nonnull stop) {
+           
+            UIView *view = (UIView *)[jsValue toNativeObject];
+            [array addObject:view];
+        }];
+        return array;
+    }
+    return nil;
+}
 
 @end

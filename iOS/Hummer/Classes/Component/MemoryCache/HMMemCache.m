@@ -22,6 +22,8 @@ HM_EXPORT_CLASS_METHOD(set, __setKey:value:)
 HM_EXPORT_CLASS_METHOD(get, __getValueForKey:)
 HM_EXPORT_CLASS_METHOD(remove, __removeForKey:)
 HM_EXPORT_CLASS_METHOD(exist, __existForKey:)
+HM_EXPORT_CLASS_METHOD(getAll,__getAll)
+HM_EXPORT_CLASS_METHOD(allKeys,__allKeys)
 
 static NSMutableDictionary *  __HMConfigMap ;
 
@@ -61,6 +63,18 @@ static NSMutableDictionary *  __HMConfigMap ;
     }
     id<HMMemoryComponent> mem = [HMMemoryAdaptor memoryWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
     return [mem getValueForKey:keyString] ? YES : FALSE;
+}
+
++ (nonnull NSArray<NSString *> *)__allKeys {
+    
+    id<HMMemoryComponent> mem = [HMMemoryAdaptor memoryWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+    return [mem allKeys];
+}
+
++ (NSDictionary *)__getAll {
+ 
+    id<HMMemoryComponent> mem = [HMMemoryAdaptor memoryWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+    return [mem getAll];
 }
 
 @end
@@ -138,5 +152,22 @@ static NSMutableDictionary *  __HMConfigMap ;
 - (void)setValue:(nonnull id)value forKey:(nonnull NSString *)key {
     [self.cache setObject:value forKey:key];
 }
+
+- (nonnull NSArray<NSString *> *)allKeys {
+    
+    //A new array containing the dictionary’s keys, or an empty array if the dictionary has no entries.
+    return [self.cache allKeys];
+}
+
+
+- (nonnull NSDictionary *)getAll {
+    
+    NSDictionary *dic = self.cache.copy;
+    if (dic) {
+        return dic;
+    }
+    return @{};
+}
+
 
 @end
