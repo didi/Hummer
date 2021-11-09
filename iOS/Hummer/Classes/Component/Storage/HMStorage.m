@@ -28,6 +28,10 @@ HM_EXPORT_METHOD(remove,__removeObjectForKey:)
 
 HM_EXPORT_METHOD(exist,__existForKey:)
 
+HM_EXPORT_METHOD(getAll,__getAll)
+
+HM_EXPORT_METHOD(allKeys,__allKeys)
+
 HM_EXPORT_METHOD(removeAll,__removeAll)
 
 + (NSNumber *)__set:(HMBaseValue *)key object:(HMBaseValue *)object {
@@ -81,7 +85,22 @@ HM_EXPORT_METHOD(removeAll,__removeAll)
 
 + (void)__removeAll {
     
+    id<HMStorage> storage = [HMStorageAdaptor storageWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+    [storage removeAll];
 }
+
++ (nonnull NSArray<NSString *> *)__allKeys {
+    
+    id<HMStorage> storage = [HMStorageAdaptor storageWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+    return [storage allKeys];
+}
+
++ (NSDictionary *)__getAll {
+ 
+    id<HMStorage> storage = [HMStorageAdaptor storageWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
+    return [storage getAll];
+}
+
 @end
 
 @interface HMStorageImp()
@@ -147,6 +166,32 @@ HM_EXPORT_METHOD(removeAll,__removeAll)
     }
     NSString *fullPath = [self getFilePathWithKey:key];
     return (id<NSCoding>)[NSKeyedUnarchiver unarchiveObjectWithFile:fullPath];
+}
+
+- (nonnull NSArray<NSString *> *)allKeys {
+
+    NSArray<NSString *> *keys = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.cachePath error:nil];
+    if (keys) {
+     
+        return keys;
+    }
+    return @[];
+}
+
+- (NSDictionary *)getAll {
+    NSArray<NSString *> *keys = [self allKeys];
+    if (keys) {
+        NSMutableDictionary *res = [NSMutableDictionary new];
+        [keys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            id value = [self ObjectForKey:obj];
+            if (value) {
+                
+                [res setObject:value forKey:obj];
+            }
+        }];
+        return res;
+    }
+    return @{};
 }
 
 #pragma mark - Private

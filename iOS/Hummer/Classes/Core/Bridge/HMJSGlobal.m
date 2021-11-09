@@ -86,6 +86,8 @@ HM_EXPORT_CLASS_PROPERTY(pageInfo, pageInfo, setPageInfo:)
 
 HM_EXPORT_CLASS_METHOD(render, render:)
 
+HM_EXPORT_CLASS_METHOD(getRootView, getRootView)
+
 HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
 
 HM_EXPORT_CLASS_METHOD(evaluateScript, evaluateScript:)
@@ -162,6 +164,12 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
         HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
         context.notifyCenter = notifyCenterObject;
     }
+}
+
++ (HMBaseValue *)getRootView{
+    
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    return context.componentView;
 }
 
 + (NSDictionary<NSString *, NSObject *> *)pageInfo {

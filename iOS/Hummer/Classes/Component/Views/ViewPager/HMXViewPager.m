@@ -15,6 +15,8 @@
 #import "UIImageView+HMImageLoader.h"
 #import "HMBaseValue.h"
 
+#import <Hummer/UIView+HMInspector.h>
+
 @interface HMXCycleScrollCell : UICollectionViewCell
 @property(nonatomic, strong) UIImageView *imageView;
 @property(nonatomic, strong) id dataSource;
@@ -64,7 +66,7 @@
 
 @end
 
-@interface HMXViewPager () <UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate>
+@interface HMXViewPager () <UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,HMViewInspectorDescription>
 @property (nonatomic, strong) HMFuncCallback itemUpdatedCallback;
 @property (nonatomic, strong) HMFuncCallback itemChangedCallback;
 @property (nonatomic, strong) HMFuncCallback itemClickCallback;
@@ -328,5 +330,16 @@ HM_EXPORT_METHOD(setCurrentItem, setCurrentItem:)
     [self.dragScrollView setContentOffset:CGPointMake(_lastX + CGRectGetWidth(self.bounds), 0) animated:YES];
     _lastX += CGRectGetWidth(self.bounds);
 }
+
+
+#pragma mark - <HMViewInspectorDescription>
+
+
+// 屏蔽 header/footer 原生视图
+- (NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    return nil;
+}
+
 
 @end

@@ -27,6 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSDictionary *)getDictionaryForForKey:(NSString *)key;
 
+
+- (NSArray <NSString *> *)allKeys;
+
+- (NSDictionary *)getAll;
+
 @end
 
 NS_ASSUME_NONNULL_END

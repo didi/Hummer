@@ -16,6 +16,8 @@
 #import "UIView+HMDom.h"
 #import "UIView+HMRenderObject.h"
 #import "HMRefreshBaseView.h"
+#import <Hummer/HMDescription.h>
+#import <Hummer/UIView+HMDescription.h>
 
 @interface HMScrollView ()<UIScrollViewDelegate>
 @property(nonatomic,copy) HMFuncCallback onScrollToTopLisener;
@@ -435,9 +437,12 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     }
 }
 
+#pragma mark - <HMDescription>
+
+
 @end
 
-@interface HMVerticalScrollView : HMScrollView
+@interface HMVerticalScrollView : HMScrollView<HMViewInspectorDescription>
 @property (nonatomic, strong) HMRefreshHeaderView *refreshView;
 @property (nonatomic, strong) HMLoadFooterView *loadView;
 
@@ -560,6 +565,25 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
     [subView hm_applyLayoutPreservingOrigin:NO affectedShadowViews:nil];
     //    self.loadView.insets = self.sectionInsets;
     [self.loadView setLoadHeight:ceil(size.height)];
+}
+
+
+#pragma mark - <HMViewInspectorDescription>
+// 屏蔽 header/footer 原生视图
+- (NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    NSMutableArray *res = [NSMutableArray new];
+    if (self.refreshView.contentViewValue) {
+        [res addObject:self.refreshView];
+    }
+    NSArray *children = [self hm_jsChildren];
+    if (children) {
+        [res addObjectsFromArray:children];
+    }
+    if (self.loadView.contentViewValue) {
+        [res addObject:self.loadView];
+    }
+    return res.copy;
 }
 
 @end
