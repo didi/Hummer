@@ -94,7 +94,7 @@ public class Button extends HMBase<android.widget.Button> {
         getView().setText(text);
         requestLayout();
 
-        getNode().setDesc(text);
+        getNode().setContent(text);
     }
 
     @JsProperty("pressed")

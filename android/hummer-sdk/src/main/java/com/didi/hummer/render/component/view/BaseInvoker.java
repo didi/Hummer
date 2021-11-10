@@ -103,6 +103,12 @@ public abstract class BaseInvoker<T> implements Invoker {
                 base.dbg_highlight(params.length > 0 ? params[0] : null);
                 break;
             }
+            case "dbg_getDescription": {
+                JSCallback callback = params.length > 0 ? (JSCallback) params[0] : null;
+                int depth = params.length > 1 ? ((Number) params[1]).intValue() : 0;
+                base.dbg_getDescription(callback, depth);
+                break;
+            }
             case "recycle": {
                 // 已弃用
                 break;

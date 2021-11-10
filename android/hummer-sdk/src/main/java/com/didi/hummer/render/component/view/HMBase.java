@@ -20,6 +20,7 @@ import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.debug.Highlight;
 import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.render.component.anim.AnimViewWrapper;
@@ -406,6 +407,9 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         setVisibility(VISIBILITY_VISIBLE);
     }
 
+    /**
+     * 高亮某个视图节点（仅debug模式下可用）
+     */
     @JsMethod("dbg_highlight")
     public void dbg_highlight(Object config) {
         if (config == null) {
@@ -422,6 +426,27 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         } else if (config instanceof Map) {
             // do something
         }
+    }
+
+    /**
+     * 获取JS侧的视图树（仅debug模式下可用）
+     *
+     * @param depth 遍历深度
+     */
+    @JsMethod("dbg_getDescription")
+    public void dbg_getDescription(JSCallback callback, int depth) {
+        if (!DebugUtil.isDebuggable() || callback == null) {
+            return;
+        }
+
+        if (depth <= 0) {
+            depth = Integer.MAX_VALUE;
+        }
+        int fDepth = depth;
+        getView().post(() -> {
+            JSValue node = getNode().getJSNodeTree(fDepth);
+            callback.call(node);
+        });
     }
 
     public static final String VISIBILITY_VISIBLE = "visible";

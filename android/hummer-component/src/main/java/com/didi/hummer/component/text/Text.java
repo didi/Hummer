@@ -21,6 +21,7 @@ import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerStyleUtils;
 
@@ -66,8 +67,6 @@ public class Text extends HMBase<TextView> {
     private void setRowText(CharSequence text) {
         getView().setText(text);
         requestLayout();
-
-        getNode().setDesc(String.valueOf(text));
     }
 
     @SuppressWarnings("deprecation")
@@ -83,15 +82,18 @@ public class Text extends HMBase<TextView> {
     private String text;
     public void setText(String text) {
         setRowText(text);
+        getNode().setContent(text);
     }
 
     @JsProperty("richText")
     private Object richText;
     public void setRichText(Object richText) {
         if (richText instanceof String) {
+            setText((String) richText);
             return;
         }
         RichTextHelper.generateRichText(this, richText, this::setRowText);
+        getNode().setContent(HMGsonUtil.toJson(richText));
     }
 
     @Deprecated
@@ -99,6 +101,7 @@ public class Text extends HMBase<TextView> {
     private String formattedText;
     public void setFormattedText(String formattedText) {
         setRowText(fromHtml(formattedText));
+        getNode().setContent(formattedText);
     }
 
     @JsProperty("textCopyEnable")
