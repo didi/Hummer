@@ -39,6 +39,9 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                 HMBase v = mInstanceManager.get(objId);
                 mHummerContext.render(v);
                 break;
+            case "getRootView":
+                jsRet = mHummerContext.getJsPage();
+                break;
             case "loadScript":
                 /**
                  * 返回值说明：

@@ -54,8 +54,8 @@ public class ComponentTreeFormat {
             strLog.append(node.getObjId()).append(".");
         }
         strLog.append(node.getName());
-        if (!TextUtils.isEmpty(node.getDesc())) {
-            strLog.append(" (").append(node.getDesc()).append(")");
+        if (!TextUtils.isEmpty(node.getContent())) {
+            strLog.append(" (").append(node.getContent()).append(")");
         }
         strLog.append('\n');
 

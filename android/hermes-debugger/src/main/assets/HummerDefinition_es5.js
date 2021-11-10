@@ -184,6 +184,9 @@ var Hummer = {
   render: view => {
     invoke("Hummer", 0, "render", view.objID);
   },
+  getRootView: () => {
+    return invoke("Hummer", 0, "getRootView");
+  },
   loadScript: script => {
     return invoke("Hummer", 0, "loadScript", script);
   },
@@ -266,6 +269,13 @@ let Base = /*#__PURE__*/function () {
       let stash = arg;
       arg = transSingleArg(arg);
       invoke(this.className, this.objID, "dbg_highlight", arg);
+    }
+  }, {
+    key: "dbg_getDescription",
+    value: function dbg_getDescription(...args) {
+      let stash = args;
+      args = transArgs(...args);
+      invoke(this.className, this.objID, "dbg_getDescription", ...args);
     }
   }, {
     key: "style",

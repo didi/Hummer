@@ -340,7 +340,7 @@ public class Input extends HMBase<EditText> {
     @Override
     public HummerNode getNode() {
         HummerNode node = super.getNode();
-        node.setDesc(String.valueOf(getView().getText()));
+        node.setContent(String.valueOf(getView().getText()));
         return node;
     }
 
