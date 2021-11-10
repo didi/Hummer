@@ -529,9 +529,8 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         } else if (HMEncodingTypeIsCNumber(type)) {
             // js 只存在 double 和 bool 类型，但原生需要区分具体类型。
             param = [(HMJSExecutor *) HMCurrentExecutor toNumberWithValueRef:arguments[i + (isClass ? 0 : 1)] isForce:NO];
-        } else {
-            HMLogError(HUMMER_UN_SUPPORT_TYPE_TEMPLATE, objCType);
         }
+        HMAssert(param, HUMMER_UN_MATCH_ARGS_TYPE_TEMPLATE, objCType, [self typeStringOfWithValueRef:arguments[i + (isClass ? 0 : 1)]]);
         [invocation hm_setArgument:param atIndex:i encodingType:type];
     }
     [invocation invoke];
@@ -664,6 +663,32 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     return valueType;
 }
 
+- (NSString *)typeStringOfWithValueRef:(NAPIValue)valueRef {
+
+    NAPIValueType valueType = [self typeOfWithValueRef:valueRef];
+    switch (valueType) {
+        case NAPIUndefined:
+            return @"undefined";
+        case NAPINull:
+            return @"null";
+        case NAPIBoolean:
+            return @"boolean";
+        case NAPINumber:
+            return @"number";
+        case NAPIString:
+            return @"string";
+        case NAPIObject:
+            return @"object";
+        case NAPIFunction:
+            return @"function";
+        case NAPIExternal:
+            return @"external";
+        default:
+            break;
+    }
+    return @"unknow";
+}
+
 - (BOOL)isDictionaryWithValueRef:(nullable NAPIValue)valueRef {
     if (!valueRef) {
         return NO;
@@ -765,7 +790,8 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     HMAssertMainQueue();
     NSNumber *returnValue = nil;
     NAPIHandleScope handleScope = nil;
-    if (isForce && [self typeOfWithValueRef:valueRef] != NAPINumber) {
+    NAPIValueType vType = [self typeOfWithValueRef:valueRef];
+    if (isForce && vType != NAPINumber) {
         if (napi_open_handle_scope(self.env, &handleScope) != NAPIErrorOK) {
             NSAssert(NO, HANDLE_SCOPE_ERROR);
 
@@ -776,11 +802,20 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
             goto exit;
         }
     }
-    double doubleValue;
-    if (napi_get_value_double(self.env, valueRef, &doubleValue) != NAPIErrorOK) {
-        goto exit;
+    
+    if (vType == NAPIBoolean) {
+        bool boolValue;
+        if (napi_get_value_bool(self.env, valueRef, &boolValue) != NAPIErrorOK) {
+            goto exit;
+        }
+        returnValue = @(boolValue);
+    }else{
+        double doubleValue;
+        if (napi_get_value_double(self.env, valueRef, &doubleValue) != NAPIErrorOK) {
+            goto exit;
+        }
+        returnValue = @(doubleValue);
     }
-    returnValue = @(doubleValue);
 
     exit:
     if (handleScope) {
