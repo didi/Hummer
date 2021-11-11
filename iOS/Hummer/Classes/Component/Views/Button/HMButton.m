@@ -27,6 +27,7 @@
 
 @property (nonatomic, copy) NSString *fontFamily;
 @property (nonatomic, assign) CGFloat fontSize;
+@property (nonatomic, assign) UIFontWeight fontWeight;
 
 @property (nonatomic, strong) UIColor *normalBackgroundColor;
 @property (nonatomic, strong) UIColor *normalTitleColor;
@@ -49,6 +50,7 @@ HM_EXPORT_ATTRIBUTE(textAlign, textAlignment, HMStringToTextAlignment:)
 HM_EXPORT_ATTRIBUTE(fontFamily, fontFamily, HMStringOrigin:)
 HM_EXPORT_ATTRIBUTE(fontSize, fontSize, HMStringToFloat:)
 HM_EXPORT_ATTRIBUTE(color, textColor, HMStringToColor:)
+HM_EXPORT_ATTRIBUTE(fontWeight, fontWeight, HMStringToFontWeight:)
 
 - (instancetype)init {
     self = [super init];
@@ -145,6 +147,20 @@ HM_EXPORT_ATTRIBUTE(color, textColor, HMStringToColor:)
     }
 }
 
+- (void)setFontWeight:(UIFontWeight)fontWeight {
+    _fontWeight = fontWeight;
+    [self updateFont];
+}
+
+- (void)updateFont {
+    UIFontDescriptor *fontDescriptor = _fontFamily ? [UIFontDescriptor fontDescriptorWithName:_fontFamily size:_fontSize] : [UIFont systemFontOfSize:_fontSize].fontDescriptor;
+    if (_fontWeight) {
+        UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | UIFontDescriptorTraitBold];
+        fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;
+    }
+    self.titleLabel.font = [UIFont fontWithDescriptor:fontDescriptor size:_fontSize];
+}
+
 #pragma mark - Export Attribute
 
 // 复写父类方法
@@ -171,16 +187,12 @@ HM_EXPORT_ATTRIBUTE(color, textColor, HMStringToColor:)
     UIFont *font = [UIFont fontWithName:_fontFamily size:_fontSize];
     NSAssert(font, @"cannot find font with name %@", fontFamily);
     font = font ?: [UIFont systemFontOfSize:_fontSize];
-    self.titleLabel.font = [UIFont fontWithName:_fontFamily size:_fontSize];
+    [self updateFont];
 }
 
 - (void)setFontSize:(CGFloat)fontSize {
     _fontSize = fontSize;
-    if (_fontFamily) {
-        self.titleLabel.font = [UIFont fontWithName:_fontFamily size:_fontSize];
-    } else {
-        self.titleLabel.font = [UIFont systemFontOfSize:_fontSize];
-    }
+    [self updateFont];
 }
 
 - (void)setTextColor:(UIColor *)color {
