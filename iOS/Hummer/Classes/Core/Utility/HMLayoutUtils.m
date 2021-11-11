@@ -33,9 +33,10 @@
     
 //    CGSize size = [view hm_sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
     CGRect rectOnWindow = CGRectZero;
+    UIWindow *tempWindow = hm_key_window();
     
-    if (hm_key_window()) {
-        rectOnWindow = [view convertRect:view.bounds toView:hm_key_window()];
+    if (tempWindow) {
+        rectOnWindow = [view convertRect:view.bounds toView:tempWindow];
     }
     
     return @{
