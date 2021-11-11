@@ -12,9 +12,11 @@ import com.didi.hummer.component.R;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.lifecycle.IFullLifeCycle;
 import com.didi.hummer.pool.ObjectPool;
 import com.didi.hummer.render.component.view.HMBase;
+import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
 import com.zhpan.bannerview.BannerViewPager;
 import com.zhpan.bannerview.constants.PageStyle;
@@ -106,6 +108,7 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
 
                     @Override
                     public void onPageSelected(int position) {
+                        refreshNodeTree();
                         if (mOnPageChangeListener != null && !isDataSetting) {
                             mOnPageChangeListener.call(position, mData.size());
                         }
@@ -278,6 +281,8 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
         isDataSetting = false;
 
         setCurrentItem(0);
+
+        refreshNodeTree();
     }
 
     @JsMethod("setCurrentItem")
@@ -313,6 +318,39 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
     public void onItemView(JSCallback callback) {
         mOnItemViewCallback = callback;
         adapter.setOnItemViewCallback(callback);
+    }
+
+    @JsMethod("dbg_getDescription")
+    public void dbg_getDescription(JSCallback callback, int depth) {
+        refreshNodeTree();
+        super.dbg_getDescription(callback, depth);
+    }
+
+    private void refreshNodeTree() {
+        if (!DebugUtil.isDebuggable()) {
+            return;
+        }
+
+        getView().post(() -> {
+            getNode().removeAll();
+            int count = Math.min(getView().getViewPager().getChildCount(), adapter.getItemCount());
+            int curPosition = getView().getCurrentItem();
+            int firstPosition = count > 1 && curPosition > 0 ? curPosition - 1 : curPosition;
+            int lastPosition = count > 1 && curPosition < count - 1 ? curPosition + 1 : curPosition;
+            for (int i = firstPosition; i <= lastPosition; i++) {
+                View child = getView().getViewPager().getChildAt(i);
+                if (child != null) {
+                    Object vh = getView().getViewPager().getChildAt(i).getTag(R.id.holder_id);
+                    if (vh instanceof CyclePagerAdapter.ViewHolder) {
+                        HummerNode node = ((CyclePagerAdapter.ViewHolder) vh).getNode();
+                        if (node != null) {
+                            node.setAlias(String.valueOf(i));
+                            getNode().appendChild(node);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @JsAttribute("itemSpacing")

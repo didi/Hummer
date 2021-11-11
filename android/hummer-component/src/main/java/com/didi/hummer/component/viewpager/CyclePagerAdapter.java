@@ -13,6 +13,7 @@ import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.pool.ObjectPool;
 import com.didi.hummer.render.component.view.HMBase;
+import com.didi.hummer.render.style.HummerNode;
 import com.zhpan.bannerview.utils.BannerUtils;
 
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class CyclePagerAdapter extends ReusePagerAdapter<CyclePagerAdapter.ViewH
             return new ViewHolder(makeDefaultImageView(realPosition), null);
         }
 
-        return new ViewHolder(view.getView(), jsView);
+        return new ViewHolder(view.getView(), view);
     }
 
     @Override
@@ -129,12 +130,14 @@ public class CyclePagerAdapter extends ReusePagerAdapter<CyclePagerAdapter.ViewH
     public class ViewHolder extends ReusePagerAdapter.Holder {
 
         private boolean isJustCreated = true;
-        private JSValue jsView;
+        private HMBase hmBase;
+        private JSValue jsValue;
         private int position;
 
-        public ViewHolder(View view, JSValue jsValue) {
+        public ViewHolder(View view, HMBase hmBase) {
             super(view);
-            this.jsView = jsValue;
+            this.hmBase = hmBase;
+            this.jsValue = hmBase == null ? null : hmBase.getJSValue();
 
             itemView.setOnClickListener(v -> {
                 if (mOnItemClickListener != null) {
@@ -151,8 +154,8 @@ public class CyclePagerAdapter extends ReusePagerAdapter<CyclePagerAdapter.ViewH
                 return;
             }
 
-            if (mOnItemViewCallback != null && jsView != null) {
-                mOnItemViewCallback.call(position, jsView);
+            if (mOnItemViewCallback != null && jsValue != null) {
+                mOnItemViewCallback.call(position, jsValue);
             } else {
                 if (itemView instanceof ImageView) {
                     String url = mList.get(position).toString();
@@ -161,6 +164,10 @@ public class CyclePagerAdapter extends ReusePagerAdapter<CyclePagerAdapter.ViewH
                     }
                 }
             }
+        }
+
+        public HummerNode getNode() {
+            return hmBase == null ? null : hmBase.getNode();
         }
     }
 }

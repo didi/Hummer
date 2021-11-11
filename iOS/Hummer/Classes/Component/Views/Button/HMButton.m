@@ -19,7 +19,9 @@
 #import "HMUtility.h"
 #import "HMBaseValue.h"
 
-@interface HMButton()
+#import <Hummer/UIView+HMInspector.h>
+
+@interface HMButton()<HMViewInspectorDescription>
 
 @property (nonatomic, assign) NSTextAlignment textAlign;
 
@@ -195,5 +197,18 @@ HM_EXPORT_ATTRIBUTE(color, textColor, HMStringToColor:)
     void (*msgSend)(struct objc_super *, SEL,UIColor * color) = (__typeof__(msgSend)) objc_msgSendSuper;
     msgSend(&superInfo,@selector(set__backgroundColor:),backgroundColor);
 }
+
+
+#pragma mark - <HMViewInspectorDescription>
+
+- (NSString *)hm_content {
+    return self.titleLabel.text;
+}
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    return nil;
+}
+
 
 @end

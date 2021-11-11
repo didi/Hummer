@@ -7,6 +7,8 @@ import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.context.HummerContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,6 +40,16 @@ public class Memory {
     @JsMethod("removeAll")
     public static void removeAll(HummerContext context) {
         removeAll(context.getNamespace());
+    }
+
+    @JsMethod("getAll")
+    public static Map<String, Object> getAll(HummerContext context) {
+        return getAll(context.getNamespace());
+    }
+
+    @JsMethod("allKeys")
+    public static List<String> allKeys(HummerContext context) {
+        return allKeys(context.getNamespace());
     }
 
     @JsMethod("exist")
@@ -89,9 +101,14 @@ public class Memory {
         memoryStore.clear();
     }
 
-    public static Map<String, Object> getAll(HummerContext context) {
-        String namespace = checkNamespace(context.getNamespace());
+    public static Map<String, Object> getAll(String namespace) {
+        namespace = checkNamespace(namespace);
         return memoryStoreMap.get(namespace);
+    }
+
+    public static List<String> allKeys(String namespace) {
+        namespace = checkNamespace(namespace);
+        return new ArrayList<>(memoryStoreMap.get(namespace).keySet());
     }
 
     public static boolean exist(String namespace, String key) {

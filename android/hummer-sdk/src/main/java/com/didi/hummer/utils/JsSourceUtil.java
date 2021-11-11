@@ -88,7 +88,7 @@ public class JsSourceUtil {
 
         String pathDir = getPathDir(referAbsolutePath);
         if (TextUtils.isEmpty(pathDir)) {
-            return relativePath;
+            return relativePath.substring(2);
         }
 
         return pathDir + relativePath.substring(2);

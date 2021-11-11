@@ -1,5 +1,19 @@
 # Release Nodes
 
+### 0.4.2
+- 支持VSCode插件调试功能；
+- 支持Hummer项目的视图调试功能；
+- 修复local reference overflow问题；
+- 修复List和ViewPager组件可能引起的类型转换crash问题；
+- 修复Input组件失焦时键盘自动收起的问题；
+- 修复List和Scroller组件滑动时键盘可能无法消失的问题；
+- 修复List组件scrollToPosition不准的问题；
+- Dialog组件新增lowLayer属性，支持把对话框层级调低至系统默认对话框之下；
+- Memory和Storage组件新增getAll、allKeys方法；
+- Hummer.loadScriptWithUrl支持相对路径；
+- 边框颜色默认值改为黑色，和iOS对齐；
+- 兼容子控件被重复添加至多个父容器的问题；
+
 ### 0.4.1
 - 支持N-API引擎；
 - 更新混淆规则；

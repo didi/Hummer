@@ -10,6 +10,7 @@ import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.pool.ObjectPool;
 import com.didi.hummer.render.component.view.HMBase;
+import com.didi.hummer.render.style.HummerNode;
 
 public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder> {
 
@@ -70,12 +71,12 @@ public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (createCallback == null) {
-            return new ViewHolder(new View(mContext), null);
+            return new ViewHolder(null);
         }
 
         Object createdViewObj = createCallback.call(viewType);
         if (!(createdViewObj instanceof JSValue)) {
-            return new ViewHolder(new View(mContext), null);
+            return new ViewHolder(null);
         }
 
         JSValue createdView = (JSValue) createdViewObj;
@@ -83,20 +84,20 @@ public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder
         HMBase view = instanceManager.get(createdView.getLong("objID"));
 
         if (view == null) {
-            return new ViewHolder(new View(mContext), null);
+            return new ViewHolder(null);
         }
 
-        return new ViewHolder(view.getView(), createdView);
+        return new ViewHolder(view);
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        if (updateCallback == null || viewHolder.getJSView() == null) {
+        if (updateCallback == null || viewHolder.getJSValue() == null) {
             return;
         }
 
-        updateCallback.call(position, viewHolder.getJSView());
+        updateCallback.call(position, viewHolder.getJSValue());
     }
 
     @Override
@@ -138,16 +139,20 @@ public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private JSValue mJSView;
+        private HMBase hmBase;
 
-        public ViewHolder(View itemView, JSValue jsValue) {
-            super(itemView);
+        public ViewHolder(HMBase hmBase) {
+            super(hmBase == null ? new View(mContext) : hmBase.getView());
             setLayoutParams(itemView);
-            mJSView = jsValue;
+            this.hmBase = hmBase;
         }
 
-        public JSValue getJSView() {
-            return mJSView;
+        public JSValue getJSValue() {
+            return hmBase == null ? null : hmBase.getJSValue();
+        }
+
+        public HummerNode getNode() {
+            return hmBase == null ? null : hmBase.getNode();
         }
     }
 }

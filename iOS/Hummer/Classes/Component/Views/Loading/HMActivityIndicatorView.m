@@ -13,6 +13,12 @@
 #import "HMUtility.h"
 #import "UIView+HMRenderObject.h"
 
+#import <Hummer/UIView+HMInspector.h>
+
+@interface HMActivityIndicatorView ()<HMViewInspectorDescription>
+
+@end
+
 @implementation HMActivityIndicatorView
 
 HM_EXPORT_CLASS(Loading, HMActivityIndicatorView)
@@ -36,4 +42,13 @@ HM_EXPORT_CLASS(Loading, HMActivityIndicatorView)
     }
 }
 
+
+#pragma mark <HMViewInspectorDescription>
+- (NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    return nil;
+}
+
+- (id)hm_displayContent {
+    return nil;
+}
 @end

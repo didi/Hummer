@@ -58,7 +58,7 @@ Hummer is a dynamic solution for client.
     ss.library = 'c++'
     ss.framework = 'CoreFoundation'
     ss.source_files = 'iOS/Hermes/*.{h,m,mm}'
-    ss.dependency 'SocketRocket', '~> 0.6'
+    ss.dependency 'SocketRocket', '~> 0.1'
     ss.private_header_files = 'iOS/Hermes/RCTMessageThread.h'
     ss.preserve_path = 'iOS/jsinspector/InspectorInterfaces.h'
   end
@@ -84,7 +84,7 @@ Hummer is a dynamic solution for client.
     }
     ss.framework = 'JavaScriptCore'
     ss.dependency 'Yoga', '~> 1.14'
-    ss.dependency 'SocketRocket', '~> 0.6'
+    ss.dependency 'SocketRocket', '~> 0.1'
   end
 
   s.subspec "WebP" do |ss|

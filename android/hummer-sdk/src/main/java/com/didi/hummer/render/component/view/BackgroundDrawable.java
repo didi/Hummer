@@ -266,7 +266,7 @@ public class BackgroundDrawable extends Drawable {
         public Border() {
             this.style = new Rect(BorderStyle.SOLID, BorderStyle.SOLID, BorderStyle.SOLID, BorderStyle.SOLID);
             this.width = new RectF();
-            this.color = new Rect();
+            this.color = new Rect(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK);
             this.radius = new BorderRadius();
         }
 

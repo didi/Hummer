@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HMViewPagerCell : UICollectionViewCell
 
 @property (nonatomic, nullable, strong) HMBaseValue *contentViewValue;
+@property (nonatomic, copy) NSIndexPath *indexPath;
 
 - (void)setImageURL:(NSString *)url;
 

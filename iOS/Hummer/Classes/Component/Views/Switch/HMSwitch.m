@@ -14,7 +14,11 @@
 #import "UIView+HMEvent.h"
 #import "HMSwitchEvent.h"
 #import "HMBaseValue.h"
+#import <Hummer/UIView+HMInspector.h>
 
+@interface HMSwitch ()<HMViewInspectorDescription>
+
+@end
 @implementation HMSwitch
 
 HM_EXPORT_CLASS(Switch, HMSwitch)
@@ -87,4 +91,14 @@ HM_EXPORT_ATTRIBUTE(thumbColor, thumbTintColor, HMStringToColor:)
     [super hm_removeEvent:eventName withListener:listener];
 }
 
+#pragma mark - <HMDescription>
+- (NSString *)hm_content {
+    
+    return self.isOn ? @"YES" : @"NO";
+}
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    return nil;
+}
 @end
