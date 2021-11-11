@@ -562,9 +562,16 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     }
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    [self scrollToItemAtIndexPath:indexPath
-                 atScrollPosition:UICollectionViewScrollPositionTop
-                         animated:YES];
+    //根据UICollectionViewScrollDirection设置不同的UICollectionViewScrollPosition
+    if(_direction == UICollectionViewScrollDirectionHorizontal){
+        [self scrollToItemAtIndexPath:indexPath
+                     atScrollPosition:UICollectionViewScrollPositionLeft
+                             animated:YES];
+    }else{
+        [self scrollToItemAtIndexPath:indexPath
+                     atScrollPosition:UICollectionViewScrollPositionTop
+                             animated:YES];
+    }
 }
 
 - (void)scrollToX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue {
