@@ -90,9 +90,9 @@ HM_EXPORT_CLASS_METHOD(getRootView, getRootView)
 
 HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
 
-HM_EXPORT_CLASS_METHOD(evaluateScript, evaluateScript:)
+HM_EXPORT_CLASS_METHOD(loadScript, evaluateScript:)
 
-HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:callback:)
+HM_EXPORT_CLASS_METHOD(loadScriptWithUrl, evaluateScriptWithUrl:callback:)
 
 HM_EXPORT_CLASS_METHOD(postException, postException:)
 
