@@ -10,7 +10,10 @@
 @implementation NSURL (Hummer)
 
 - (nullable NSURL *)hm_asFileUrl {
-    return self;
+    if (self.isFileURL) {
+        return self;
+    }
+    return [NSURL fileURLWithPath:self.path];
 }
 
 - (nullable NSString *)hm_asString {

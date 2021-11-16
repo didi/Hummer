@@ -82,13 +82,16 @@
 
 @implementation HMJSLoaderInterceptor
 // 不需要兼容
-+ (BOOL)loadWithSource:(id<HMURLConvertible>)source namespace:(nonnull NSString *)namespace completion:(HMJSLoaderCompleteBlock)completion{
+
++ (BOOL)loadWithSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource namespace:(NSString *)namespace completion:(HMJSLoaderCompleteBlock)completion {
+    
     Class<HMJSLoader> loader = [HMCEMInstance.configMap objectForKey:namespace].jsLoaderInterceptor;
-    if ([loader loadWithSource:source completion:completion]) {
+    if ([loader loadWithSource:source inJSBundleSource:bundleSource completion:completion]) {
         return YES;
     }
-    return [HMCEMInstance.defaultConfig.jsLoaderInterceptor loadWithSource:source completion:completion];
-}
+    Class<HMJSLoader> defaultLoader = HMCEMInstance.defaultConfig.jsLoaderInterceptor;
+    return [defaultLoader loadWithSource:source inJSBundleSource:bundleSource completion:completion];
+}    
 
 @end
 
