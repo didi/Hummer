@@ -32,10 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 //替换默认 storage 实现
 @property (nonatomic, strong) id<HMStorage> storage;
 
-// 如 canLoad 返回false。则继续使用 sdk 内部 imageloader。
 @property (nonatomic, strong) id<HMImageLoader> imageLoaderInterceptor;
 
-// 如 canLoad 返回false。则继续使用 sdk 内部 imageloader。
 @property (nonatomic, strong) Class<HMJSLoader> jsLoaderInterceptor;
 
 @property (nonatomic, strong) id<HMJSCallerIterceptor> jsCallerInterceptor;
@@ -73,7 +71,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMJSLoaderInterceptor : NSObject
 
-+ (BOOL)loadWithSource:(id<HMURLConvertible>)source namespace:(NSString *)namespace completion:(HMJSLoaderCompleteBlock)completion;
+/**
+ * @brief jsLoader 拦截器方法。
+ * @param source 原始参数，如果传递相对路径，则根据 bundleSource 解析。
+ * @param bundleSource 容器原始Url。
+*/
++ (BOOL)loadWithSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource  namespace:(NSString *)namespace completion:(HMJSLoaderCompleteBlock)completion;
 @end
 
 
