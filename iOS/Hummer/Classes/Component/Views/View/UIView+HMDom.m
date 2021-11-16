@@ -474,9 +474,12 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
             self.hm_gradientLayer = CAGradientLayer.layer;
             [self.layer insertSublayer:self.hm_gradientLayer atIndex:0];
         }
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
         self.hm_gradientLayer.colors = @[(id) gradientColor.beginColor.CGColor, (id) gradientColor.endColor.CGColor];
         self.hm_gradientLayer.startPoint = gradientColor.beginPoint;
         self.hm_gradientLayer.endPoint = gradientColor.endPoint;
+        [CATransaction commit];
     } else {
         [self.hm_gradientLayer removeFromSuperlayer];
         self.hm_gradientLayer = nil;
