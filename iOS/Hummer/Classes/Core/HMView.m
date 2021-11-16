@@ -395,8 +395,8 @@ HM_EXPORT_CLASS(NewView, HMView)
         self.gradientLayer.colors = @[(id) gradientColor.beginColor.CGColor, (id) gradientColor.endColor.CGColor];
         self.gradientLayer.startPoint = gradientColor.beginPoint;
         self.gradientLayer.endPoint = gradientColor.endPoint;
-        [CATransaction commit];
         self.gradientLayer.frame = self.bounds;
+        [CATransaction commit];
     } else {
         [self.gradientLayer removeFromSuperlayer];
         self.backgroundColor = backgroundColor;

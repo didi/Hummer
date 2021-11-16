@@ -846,7 +846,10 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
 
 - (void)hm_layoutBackgroundColor {
     if (self.hm_gradientLayer) {
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
         self.hm_gradientLayer.frame = self.bounds;
+        [CATransaction commit];
     }
     if (self.hm_backgroundColorShapeLayer) {
         if (self.layer.sublayers.firstObject != self.hm_backgroundColorShapeLayer) {
