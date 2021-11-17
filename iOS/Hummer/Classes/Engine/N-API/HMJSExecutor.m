@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_END
 
 void hummerFinalize(void *finalizeData, void *finalizeHint) {
   
-    void(^finalizeWork)() = ^(){
+    void(^finalizeWork)(void) = ^(){
         HMAssertMainQueue();
         if (!finalizeData) {
             assert(false);
@@ -114,7 +114,7 @@ void hummerFinalize(void *finalizeData, void *finalizeHint) {
         // 不透明指针可能为原生对象，也可能为闭包
         // 清空 hmWeakValue
         HMLogDebug(HUMMER_DESTROY_TEMPLATE, [((__bridge id) finalizeData) class]);
-        [((__bridge id) finalizeData) setHmWeakValue:nil];
+        [((__bridge id) finalizeData) hm_setWeakValue:nil];
         CFRelease(finalizeData);
     };
 #if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
@@ -232,7 +232,7 @@ NAPIValue hummerCreate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return nil;
     }
     // 关联 hm_value
-    opaquePointer.hmWeakValue = [[HMJSWeakValue alloc] initWithValueRef:argv[1] executor:executor];
+    [opaquePointer hm_setWeakValue:[[HMJSWeakValue alloc] initWithValueRef:argv[1] executor:executor]];
     // 引用计数 +1
     HMLogDebug(HUMMER_CREATE_TEMPLATE, className);
     NAPIValue externalValue;
@@ -869,13 +869,13 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return nil;
     }
     HMAssertMainQueue();
-    id <HMBaseWeakValueProtocol> baseWeakValue = [object hmWeakValue];
-    if ([baseWeakValue isKindOfClass:HMJSWeakValue.class] && ((HMJSWeakValue *) baseWeakValue).executor == self) {
+    HMBaseValue *strongValue = object.hmValue;
+    if (strongValue.context == self) {
+        NSAssert([strongValue isKindOfClass:HMJSStrongValue.class], @"hmValue type error.");
+        
         // 先判断 hmValue，这样后续的闭包转换和原生组件导出可以减少调用
         // 做严格判断，同上下文才能复用 hmValue
-        HMJSWeakValue *weakValue = (HMJSWeakValue *) baseWeakValue;
-
-        return weakValue.valueRef;
+        return ((HMJSStrongValue *) strongValue).valueRef;
     }
     NAPIEscapableHandleScope escapableHandleScope;
     if (napi_open_escapable_handle_scope(self.env, &escapableHandleScope) != NAPIErrorOK) {
@@ -919,7 +919,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         returnValueRef = nil;
         goto exit;
     }
-    object.hmWeakValue = [[HMJSWeakValue alloc] initWithValueRef:returnValueRef executor:self];
+    [object hm_setWeakValue:[[HMJSWeakValue alloc] initWithValueRef:returnValueRef executor:self]];
 
     exit:
     CHECK_COMMON(napi_close_escapable_handle_scope(self.env, escapableHandleScope))
@@ -932,13 +932,13 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return nil;
     }
     HMAssertMainQueue();
-    id <HMBaseWeakValueProtocol> baseWeakValue = self.hmWeakValue;
-    if ([baseWeakValue isKindOfClass:HMJSWeakValue.class] && ((HMJSWeakValue *) baseWeakValue).executor == self) {
+    HMBaseValue *strongValue = self.hmValue;
+    if (strongValue.context == self) {
+        NSAssert([strongValue isKindOfClass:HMJSStrongValue.class], @"hmValue type error.");
         // 先判断 hmValue，这样后续的闭包转换和原生组件导出可以减少调用
         // 做严格判断，同上下文才能复用 hmValue
-        HMJSWeakValue *weakValue = (HMJSWeakValue *) baseWeakValue;
 
-        return weakValue.valueRef;
+        return ((HMJSStrongValue *) strongValue).valueRef;
     }
     NAPIEscapableHandleScope escapableHandleScope;
     if (napi_open_escapable_handle_scope(self.env, &escapableHandleScope) != NAPIErrorOK) {
@@ -971,7 +971,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         returnValueRef = nil;
         goto exit;
     }
-    [function setHmWeakValue:[[HMJSWeakValue alloc] initWithValueRef:returnValueRef executor:self]];
+    [function hm_setWeakValue:[[HMJSWeakValue alloc] initWithValueRef:returnValueRef executor:self]];
 
     exit:
     CHECK_COMMON(napi_close_escapable_handle_scope(self.env, escapableHandleScope))
@@ -1181,16 +1181,19 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return [self toValueRefWithArray:object];
     } else if ([object isKindOfClass:NSDictionary.class]) {
         return [self toValueRefWithDictionary:object];
-    } else if ([[object hmWeakValue] isKindOfClass:HMJSWeakValue.class] && ((HMJSWeakValue *) [object hmWeakValue]).executor == self) {
-        // 先判断 hmValue，这样后续的闭包转换和原生组件导出可以减少调用
-        // 做严格判断，同上下文才能复用 hmValue
-        HMJSWeakValue *weakValue = (HMJSWeakValue *) [object hmWeakValue];
-
-        return weakValue.valueRef;
-    } else if ([object isKindOfClass:NSClassFromString(@"NSBlock")]) {
-        return [self toValueRefWithFunction:object];
     } else {
-        return [self toValueRefWithNativeObject:object];
+        HMBaseValue *strongValue = [object hmValue];
+        if (strongValue.context == self) {
+            NSAssert([strongValue isKindOfClass:HMJSStrongValue.class], @"hmValue type error.");
+            // 先判断 hmValue，这样后续的闭包转换和原生组件导出可以减少调用
+            // 做严格判断，同上下文才能复用 hmValue
+            
+            return ((HMJSStrongValue *) strongValue).valueRef;
+        } else if ([object isKindOfClass:NSClassFromString(@"NSBlock")]) {
+            return [self toValueRefWithFunction:object];
+        } else {
+            return [self toValueRefWithNativeObject:object];
+        }
     }
 }
 

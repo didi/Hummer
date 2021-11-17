@@ -16,14 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSObject (Hummer) <HMJSObject>
 
-/**
- * 原生导出对象或者闭包才有，这个 property 限制了原生对象和闭包只能在一个 JSContext 中
- */
-@property (nonatomic, strong, nullable) HMBaseValue *hmValue;
+/// @brief JavaScript value 强引用，未来将会变为 readonly，引擎层应当使用 -hm_setWeakValue: 设置
+@property (nullable) HMBaseValue *hmValue;
 
-@property (nonatomic, strong, nullable) id<HMBaseWeakValueProtocol> hmWeakValue;
+@property (nullable, readonly) id <HMBaseExecutorProtocol> hmContext;
 
-@property (nonatomic, weak, nullable, readonly) id <HMBaseExecutorProtocol> hmContext;
+/// @brief 新版 N-API 引擎使用该接口设置弱引用
+- (void)hm_setWeakValue:(nullable id <HMBaseWeakValueProtocol>)weakValue;
 
 @end
 
