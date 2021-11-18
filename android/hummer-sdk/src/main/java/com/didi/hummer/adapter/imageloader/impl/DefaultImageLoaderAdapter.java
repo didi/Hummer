@@ -59,12 +59,12 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
             RequestOptions requestOptions = new RequestOptions();
             if (view.getScaleType() == ImageView.ScaleType.CENTER) {
                 requestOptions.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-                if (placeholder != null) {
-                    requestOptions.placeholder(placeholder);
-                }
-                if (failedImage != null) {
-                    requestOptions.error(failedImage);
-                }
+            }
+            if (placeholder != null) {
+                requestOptions.placeholder(placeholder);
+            }
+            if (failedImage != null) {
+                requestOptions.error(failedImage);
             }
             if (completeCallback != null) {
                 Glide.with(view.getContext()).load(url).apply(requestOptions).listener(new RequestListener<Drawable>() {
@@ -116,12 +116,12 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
             RequestOptions requestOptions = new RequestOptions();
             if (view.getScaleType() == ImageView.ScaleType.CENTER) {
                 requestOptions.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-                if (placeholder != null) {
-                    requestOptions.placeholder(placeholder);
-                }
-                if (failedImage != null) {
-                    requestOptions.error(failedImage);
-                }
+            }
+            if (placeholder != null) {
+                requestOptions.placeholder(placeholder);
+            }
+            if (failedImage != null) {
+                requestOptions.error(failedImage);
             }
             Glide.with(view.getContext()).asGif().load(url).listener(new RequestListener<GifDrawable>() {
                 @Override
