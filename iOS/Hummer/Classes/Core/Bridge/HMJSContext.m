@@ -191,7 +191,7 @@ NS_ASSUME_NONNULL_END
 #endif
 
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
-    return [self evaluateScript:javaScriptString fileName:fileName hummerUrl:nil];
+    return [self evaluateScript:javaScriptString fileName:fileName hummerUrl:fileName];
 }
     
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName hummerUrl:(nullable NSString *)hummerUrl {
