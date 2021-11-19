@@ -28,14 +28,15 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 - **易上手：** Hummer API + Tenon Reactive Framework，兼顾客户端和前端的开发体验，造就极低的学习门槛；
 - **高可用：** 已在滴滴内部多个业务中得到完整验证，整体 Crash 率低于 0.01%；
 - **高性能：** 基于原生组件和模块，可以最大化利用原生渲染的性能优势以及平台能力；
-- **跨平台：** 一套代码可以编译并运行于 iOS 和 Android 平台，使用 Tenon 可以快速兼容基于Vue 开发的 Web 应用；
-- **动态化：** 利用 JavaScript 解释执行的特性，可以快速部署动态页面，配合Hummer Nest 平台可以实现云端发布；
+- **跨平台：** 一套代码可以编译并运行于 iOS 和 Android 平台，使用 Tenon 可以快速兼容基于 Vue 开发的 Web 应用；
+- **动态化：** 利用 JavaScript 解释执行的特性，可以快速部署动态页面，配合 Hummer Nest 平台可以实现云端发布；
 
 ## 开始使用
 - 官方文档请访问 [Hummer 官网](https://hummer.didi.cn/)，点击[【快速开始】](https://hummer.didi.cn/doc#/zh-CN/)按钮。
 - 想创建一个全新的 Hummer 跨端应用，请参考 [创建一个全新应用](https://hummer.didi.cn/doc#/zh-CN/new_project_doc)。
 - 想在现有客户端项目中集成 Hummer 跨端框架，请参考 [Android 端接入文档](https://hummer.didi.cn/doc#/zh-CN/android_doc) 和 [iOS 端接入文档](https://hummer.didi.cn/doc#/zh-CN/ios_doc)。
 - 想了解更多客户端集成 Hummer 时的高阶用法，请参考 [Android 进阶](https://hummer.didi.cn/doc#/zh-CN/android_doc_advanced) 和 [iOS 进阶](https://hummer.didi.cn/doc#/zh-CN/ios_doc_advanced)。
+- 想了解更多 Hummer 调试相关的使用说明，请参考 [调试文档](https://hummer.didi.cn/doc#/zh-CN/debugger)。
 - 想了解更多 Hummer CLI 脚手架的使用说明，请参考 [CLI 使用教程](https://hummer.didi.cn/doc#/zh-CN/cli_doc)。
 - 想了解更多 Hummer 相关的基准测试报告，请参考 [Hummer Standard Benchmarks](https://github.com/OrangeLab/hummer-standard-benchmarks)。
 
@@ -101,7 +102,8 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [ ] 设计和编写测试用例
     - [ ] 搜集和梳理两端不一致问题
     - [ ] 逐一解决两端不一致问题
-    - [ ] iOS 端完成部分组件自渲染 [@ChasonTang](https://github.com/ChasonTang)
+    - [x] iOS 端完组件自渲染一期（View） [@ChasonTang](https://github.com/ChasonTang)
+    - [ ] iOS 端完组件自渲染二期（Text, Button, Image） [@ChasonTang](https://github.com/ChasonTang)
 - DevTools
     - [x] iOS 对齐 Android 端【开发工具】按钮功能，可以显示日志、异常堆栈和页面基本信息 [@宏宇](https://github.com/ringlong)
     - [ ] iOS 对齐 Android 端【刷新】按钮功能
@@ -124,7 +126,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
     - [x] 支持多页面同时调试 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持窗口大小调整 [@jayconscious](https://github.com/jayconscious)
     - [x] 支持日志中对象折叠 [@fangyeqing123](https://github.com/fangyeqing123)
-    - [ ] 支持 TS 项目视图调试
+    - [x] 支持 TS 项目视图调试 [@fangyeqing123](https://github.com/fangyeqing123) [@AdamCaoQAQ](https://github.com/AdamCaoQAQ) [@yFeii](https://github.com/yFeii) [@小枫](https://github.com/bbssyyuui)
 
 #### 生态建设
 - Mpx2Tenon [@AdamCaoQAQ](https://github.com/AdamCaoQAQ)
@@ -190,7 +192,7 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 </div>
 
 ## 微信公众号
-我们团队的官方技术公众号【滴滴OrangeLab】，欢迎关注，我们会在这里持续输出团队内部比较有深度的技术沉淀和经验分享，欢迎一起交流。
+欢迎关注我们团队的官方技术公众号【滴滴OrangeLab】，我们会在这里持续输出团队内部比较有深度的技术沉淀和经验分享，欢迎一起交流。
 <div style="height: 200px">
  <img alt="滴滴OrangeLab" src="https://pt-starimg.didistatic.com/static/starimg/img/cPlaMme4g81616682162304.jpg" height = "200" />
 </div>
