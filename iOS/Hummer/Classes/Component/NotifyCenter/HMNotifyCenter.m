@@ -52,7 +52,7 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
     }
     NSMutableDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerDictionary = self.eventHandlerMap.mutableCopy;
     NSMutableArray<HMBaseValue *> *callbackArray = eventHandlerDictionary[name].mutableCopy;
-    if (callback) {
+    if (callback && !callback.isUndefined && !callback.isNull) {
         // try to remove a specific listener
         [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             HMAssert(obj.context, @"obj.context == nil");

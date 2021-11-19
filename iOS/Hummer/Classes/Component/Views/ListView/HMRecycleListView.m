@@ -548,8 +548,11 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     NSInteger count = countValue.toNumber.integerValue;
     self.cellCount = count;
     
-    [self.collectionViewLayout invalidateLayout];
-    [self reloadData];
+    //fix: 偶现白屏
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionViewLayout invalidateLayout];
+        [self reloadData];
+    });
 }
 
 - (void)scrollToIndex:(HMBaseValue *)value {
