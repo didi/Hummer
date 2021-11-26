@@ -16,6 +16,7 @@
 #import <Hummer/HMEventTrackProtocol.h>
 #import <Hummer/HMMemoryComponent.h>
 #import <Hummer/HMPluginManager.h>
+#import <Hummer/HMRouterProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -47,6 +48,9 @@ extern NSString * const HMDefaultNamespace;
 
 @property(nonatomic, nullable, strong) id <HMTrackEventPluginProtocol> trackEventPlugin;
 
+@property(nonatomic, nullable, strong) id <HMRouterProtocol> routerInterceptor;
+
+
 @end
 
 
@@ -55,14 +59,32 @@ extern NSString * const HMDefaultNamespace;
 @property(nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, HMConfigEntry *> *configMap DEPRECATED_MSG_ATTRIBUTE("参照其他 Interceptor 做处理");;
 
 + (instancetype)manager;
-- (void)addConfig:(HMConfigEntry *)config;
-
-
-@end
 
 /**
  * 注意 注解 和 addConfig 只能使用一种方式。
  */
+- (void)addConfig:(HMConfigEntry *)config;
+
+@end
+
+
+
+
+@interface HMRouterInterceptor : NSObject
+
+/// 自定义方式打开视图控制器
+///
+/// @return 返回YES表示处理，返回NO表示不处理;
+///
++ (BOOL)handleOpenViewController:(__kindof UIViewController *)viewController pageInfo:(HMNavigatorPageInfo *)pageInfo namespace:(NSString *)namespace;
+
++ (BOOL)handlePopWithViewController:(nullable UIViewController *)viewController animated:(BOOL)animated namespace:(NSString *)namespace;
+
++ (BOOL)handlePopToRootWithParams:(NSDictionary *)params  namespace:(NSString *)namespace;
+
++ (BOOL)handlePopBackWithCount:(NSUInteger)count params:(NSDictionary *)params namespace:(NSString *)namespace;
+
+@end
 
 @interface HMImageLoaderInterceptor : NSObject
 

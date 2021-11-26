@@ -31,16 +31,16 @@
     self = [super initWithFrame:frame];
     if (self) {
         _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
-        _imageView.isHmLayoutEnabled = NO;
+//        _imageView.isHmLayoutEnabled = NO;
         [self.contentView addSubview:self.imageView];
         
         self.clipsToBounds = YES;
-        self.isHmLayoutEnabled = NO;
-        [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
+//        self.isHmLayoutEnabled = NO;
+//        [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
 //            layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionColumn);
 //            layout.justifyContent = YOGA_TYPE_WRAPPER(YGJustifyCenter);
 //            layout.alignItems = YOGA_TYPE_WRAPPER(YGAlignStretch);
-        }];
+//        }];
     }
     return self;
 }
@@ -64,12 +64,14 @@
     self.imageView.hidden = YES;
     self.imageHref = nil;
     [self.contentView addSubview:view];
-    [self.contentView hm_markDirty];
+//    [view hm_markDirty];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self.contentView hm_applyLayoutPreservingOrigin:YES affectedShadowViews:nil];
+    if (!CGRectEqualToRect(self.contentView.subviews.lastObject.frame, self.contentView.bounds)) {
+        self.contentView.subviews.lastObject.frame = self.contentView.bounds;
+    }
 }
 
 
