@@ -442,7 +442,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
 
 @end
 
-@interface HMVerticalScrollView : HMScrollView<HMViewInspectorDescription>
+@interface HMVerticalScrollView()<HMViewInspectorDescription>
 @property (nonatomic, strong) HMRefreshHeaderView *refreshView;
 @property (nonatomic, strong) HMLoadFooterView *loadView;
 
@@ -588,7 +588,7 @@ HM_EXPORT_PROPERTY(onLoadMore, loadMoreCallback, setLoadMoreCallback:)
 
 @end
 
-@interface HMHorizontalScrollView : HMScrollView
+@interface HMHorizontalScrollView ()
 @end
 
 @implementation HMHorizontalScrollView

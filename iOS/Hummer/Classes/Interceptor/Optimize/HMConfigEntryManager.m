@@ -18,6 +18,8 @@
 #import <Hummer/HMLogger.h>
 #import <Hummer/HMUpgradeManager.h>
 
+NSString * const HMDefaultNamespace = @"namespace.hummer.default";
+
 
 @implementation HMConfigEntry
 

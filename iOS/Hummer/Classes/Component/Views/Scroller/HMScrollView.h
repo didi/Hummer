@@ -18,3 +18,10 @@ typedef NS_ENUM(NSUInteger, HMScrollDirection) {
 
 @end
 
+@interface HMVerticalScrollView : HMScrollView
+
+@end
+
+@interface HMHorizontalScrollView : HMScrollView
+
+@end

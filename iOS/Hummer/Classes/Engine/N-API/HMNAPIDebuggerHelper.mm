@@ -9,10 +9,10 @@
 #import "HMNAPIDebuggerHelper.h"
 
 #if __has_include(<Hummer/HMInspectorPackagerConnection.h>)
+#import "RCTMessageThread.h"
 #import <Hummer/HMDebugService.h>
 #import <napi/js_native_api_debugger.h>
 #import <napi/js_native_api_debugger_hermes_types.h>
-#import "RCTMessageThread.h"
 
 #endif
 
