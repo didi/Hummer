@@ -6,8 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Hummer/HMBaseExecutorProtocol.h>
 
-@class HMBaseValue, HMNotifyCenter;
+@class HMBaseValue, HMNotifyCenter, HMExceptionModel;
 
 @protocol HMBaseExecutorProtocol;
 
@@ -31,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
     struct timespec _createTimespec;
 }
 
+@property (nonatomic, weak) id <HMJSContextDelegate> delegate;
+
 @property (nonatomic, nullable, copy) NSSet<HMWebSocket *> *webSocketSet;
 
 /**
@@ -51,13 +54,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable, strong) HMNotifyCenter *notifyCenter;
 
-@property (nonatomic, strong) id <HMBaseExecutorProtocol>context;
+@property (nonatomic, strong, readonly) id <HMBaseExecutorProtocol>context;
 
 @property (nonatomic, weak, readonly, nullable) UIView *rootView;
 
 @property (nonatomic, nullable, strong) HMBaseValue *componentView;
 
 @property (nonatomic, nullable, copy) void(^renderCompletion)(void);
+
+
+/**
+ * executor call back
+ */
+@property (nonatomic, copy, nullable) void (^exceptionHandler)(HMExceptionModel *exception);
+
+@property (nonatomic, copy, nullable) void (^consoleHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
 
 + (instancetype)contextInRootView:(nullable UIView *)rootView;
 
@@ -71,8 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName hummerUrl:(nullable NSString *)hummerUrl;
 
-NS_ASSUME_NONNULL_END
 
-@property (nonatomic, weak) id <HMJSContextDelegate> delegate;
+NS_ASSUME_NONNULL_END
 
 @end

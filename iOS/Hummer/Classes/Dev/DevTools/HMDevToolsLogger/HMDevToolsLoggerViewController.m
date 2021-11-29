@@ -43,7 +43,7 @@
     [_tableView reloadData];
     
     __weak typeof(self) weakSelf = self;
-    _context.context.consoleHandler = ^(NSString * _Nullable logString, HMLogLevel logLevel) {
+    [_context.context addConsoleHandler:^(NSString * _Nullable logString, HMLogLevel logLevel) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         HMDevToolsLogger *logger = HMDevToolsLogger.new;
         static NSDateFormatter *formatter;
@@ -52,7 +52,7 @@
           formatter = NSDateFormatter.new;
           formatter.dateFormat = @"HH:mm:ss.SSS";
         });
-        
+
         NSString *date = [formatter stringFromDate:NSDate.date];
 
         logger.logString = [NSString stringWithFormat:@"[%@] %@", date, logString];
@@ -60,7 +60,7 @@
         logger.expended = NO;
         [strongSelf.dataArray addObject:logger];
         [strongSelf.tableView reloadData];
-    };
+    } key:self];
 }
 
 #pragma mark - UITableViewDataSource & UITableViewDelegate
