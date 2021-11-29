@@ -5,7 +5,7 @@ import { getClassStyle } from '../../utils/style'
 
 let __view_id = 0;
 export class Base {
-  public _scopedId: string | null = null
+  public _scopedIds = new Set<string>();
   public __NAME: Symbol | null = null;
   public element: any = null;
   public dataset: any = {};
@@ -45,20 +45,21 @@ export class Base {
   }
 
   public setScopeId(id: string) {
-    // Scoped Id 只创建一次，避免 Slot 重复赋值，导致 scoped Id 错乱的问题
-    if (!this._scopedId) {
-      this._scopedId = id
-      this.updateStyle()
-    }
+    this._scopedIds.add(id)
+    this.updateStyle();
   }
 
   public updateStyle() {
-    if (!this._scopedId) return
-    let className = this.getAttribute('class')
-    let elementStyle = getClassStyle(this, className, true, this._scopedId)
-    if (Object.keys(elementStyle).length > 0) {
-      this.setStyle(elementStyle)
+    if (!this._scopedIds.size) {
+      return
     }
+    let className = this.getAttribute('class');
+    this._scopedIds.forEach(scopedId => {
+        let elementStyle = getClassStyle(this, className, true, scopedId);
+        if (Object.keys(elementStyle).length > 0) {
+            this.setStyle(elementStyle);
+        }
+    })
   }
 
   // Mounted 生命周期
