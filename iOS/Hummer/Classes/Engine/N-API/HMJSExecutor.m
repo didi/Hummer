@@ -52,6 +52,9 @@ static NAPIValue _Nullable setImmediate(NAPIEnv _Nullable env, NAPICallbackInfo 
 @property (nonatomic, assign) NAPIEnv env;
 @property (nonatomic, strong) HMNAPIDebuggerHelper *heremsHelper;
 
+@property (nonatomic, strong) NSMapTable<id, HMExceptionHandler> *exceptionHandlerMap;
+@property (nonatomic, strong) NSMapTable<id, HMConsoleHandler> *consoleHandlerMap;
+
 - (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable NAPIValue)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName;
 
 - (nullable NAPIValue)hummerCallNativeWithArgumentCount:(size_t)argumentCount arguments:(NAPIValue *_Nullable)arguments target:(nullable id)target selector:(nullable SEL)selector methodSignature:(nullable NSMethodSignature *)methodSignature;
@@ -98,6 +101,9 @@ static NAPIValue _Nullable setImmediate(NAPIEnv _Nullable env, NAPICallbackInfo 
 
 - (nullable id)toObjectWithValueRef:(nullable NAPIValue)valueRef isPortableConvert:(BOOL)isPortableConvert;
 
+- (void)triggerExceptionHandler:(HMExceptionModel *)model;
+
+- (void)triggerConsoleHandler:(NSString *)logString level:(HMLogLevel)logLevel;
 @end
 
 NS_ASSUME_NONNULL_END
@@ -355,15 +361,9 @@ NAPIValue nativeLoggingHook(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
         return nil;
     }
-    [HMLogger printJSLog:logString level:logLevel];
     if ([[HMExecutorMap objectForKey:[NSValue valueWithPointer:env]] isKindOfClass:HMJSExecutor.class]) {
         HMJSExecutor *executor = (HMJSExecutor *) [HMExecutorMap objectForKey:[NSValue valueWithPointer:env]];
-        if (executor.consoleHandler) {
-            executor.consoleHandler(logString, logLevel);
-        }
-        if (executor.webSocketHandler) {
-            executor.webSocketHandler(logString, logLevel);
-        }
+        [executor triggerConsoleHandler:logString level:logLevel];
     }
 
     return nil;
@@ -1517,6 +1517,9 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         goto executorMapError;
     }
     [HMExecutorMap setObject:self forKey:[NSValue valueWithPointer:_env]];
+    _exceptionHandlerMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory];
+    _consoleHandlerMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory];
+
     // 注入对象
     NAPIHandleScope handleScope;
     if (napi_open_handle_scope(_env, &handleScope) != NAPIErrorOK) {
@@ -1662,11 +1665,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
             CHECK_COMMON(NAPIFreeUTF8String(self.env, utf8String))
         }
 
-        if (self.exceptionHandler) {
-            self.exceptionHandler(exceptionModel);
-//        } else {
-//            HMLogError(@"Executor 发生异常：%@", errorModel);
-        }
+        [self triggerExceptionHandler:exceptionModel];
     }
 
     exit:
@@ -2043,4 +2042,32 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     CHECK_COMMON(napi_close_handle_scope(self.env, handleScope))
 }
 
+
+- (void)addExceptionHandler:(HMExceptionHandler)handler key:(id)key {
+    [self.exceptionHandlerMap setObject:handler forKey:key];
+}
+
+- (void)addConsoleHandler:(HMConsoleHandler)handler key:(id)key {
+    [self.consoleHandlerMap setObject:handler forKey:key];
+}
+
+- (void)triggerExceptionHandler:(HMExceptionModel *)model {
+    
+    NSEnumerator *enumer = [self.exceptionHandlerMap objectEnumerator];
+    HMExceptionHandler handler = [enumer nextObject];
+    while (handler) {
+        handler(model);
+        handler = [enumer nextObject];
+    }
+}
+
+- (void)triggerConsoleHandler:(NSString *)logString level:(HMLogLevel)logLevel {
+
+    NSEnumerator *enumer = [self.consoleHandlerMap objectEnumerator];
+    HMConsoleHandler handler = [enumer nextObject];
+    while (handler) {
+        handler(logString, logLevel);
+        handler = [enumer nextObject];
+    }
+}
 @end

@@ -19,11 +19,24 @@ typedef NS_ENUM(NSUInteger, HMEngineType) {
     HMEngineTypeNAPI
 };
 
+typedef NS_ENUM(NSUInteger, HMLogLevel) {
+  HMLogLevelTrace = 0,
+  HMLogLevelInfo,
+  HMLogLevelWarning,
+  HMLogLevelError,
+  HMLogLevelFatal
+};
+
 HMEngineType HMGetEngineType(void);
 
 HMEngineType HMSetEngineType(HMEngineType newEngineType);
 
 typedef void (^HMExceptionHandler)(HMExceptionModel *exceptionModel);
+
+typedef void (^HMLogHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
+
+typedef HMLogHandler HMConsoleHandler;
+typedef HMLogHandler HMWebSocketHandler;
 
 /**
  * 如果是原生给 JS 的闭包，由 JS 调用，参数为 NSArray<HMBaseValue *> *，返回值为 id
@@ -37,13 +50,6 @@ typedef void (^HMExceptionHandler)(HMExceptionModel *exceptionModel);
  */
 typedef id _Nullable (^HMFunctionType)(NSArray *_Nullable value);
 
-typedef NS_ENUM(NSUInteger, HMLogLevel) {
-  HMLogLevelTrace = 0,
-  HMLogLevelInfo,
-  HMLogLevelWarning,
-  HMLogLevelError,
-  HMLogLevelFatal
-};
 
 // 兼容以前代码
 typedef HMFunctionType HMFuncCallback;
@@ -56,11 +62,14 @@ typedef HMFunctionType HMFuncCallback;
 
 @property (nonatomic, readonly, strong) HMBaseValue *globalObject;
 
-@property (nonatomic, copy, nullable) void (^exceptionHandler)(HMExceptionModel *exception);
+ /// 添加异常回调，不需要手动移除，内部为 NSMapTable，handler 生命周期跟随 key 的生命周期。
+ /// @param key 普通对象。
+- (void)addExceptionHandler:(HMExceptionHandler)handler key:(id)key;
 
-@property (nonatomic, copy, nullable) void (^webSocketHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
+/// 添加 console 回调，不需要手动移除，内部为 NSMapTable，handler 生命周期跟随 key 的生命周期。
+/// @param key 普通对象。
+- (void)addConsoleHandler:(HMConsoleHandler)handler key:(id)key;
 
-@property (nonatomic, copy, nullable) void (^consoleHandler)(NSString *_Nullable logString, HMLogLevel logLevel);
 
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)script withSourceURL:(nullable NSURL *)sourceURL;
 

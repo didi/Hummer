@@ -57,6 +57,8 @@ API_AVAILABLE(ios(13.0))
 
 @property (nonatomic, weak, nullable) UIView *rootView;
 
+@property (nonatomic, strong, readwrite) id <HMBaseExecutorProtocol>context;
+
 #ifdef HMDEBUG
 @property (nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
 
@@ -88,7 +90,6 @@ NS_ASSUME_NONNULL_END
     }
     HMLogDebug(@"HMJSContext 销毁");
 #ifdef HMDEBUG
-    self.context.webSocketHandler = nil;
     [self.webSocketTask cancel];
 #endif
     [self.webSocketSet enumerateObjectsUsingBlock:^(HMWebSocket * _Nonnull obj, BOOL * _Nonnull stop) {
@@ -121,19 +122,52 @@ NS_ASSUME_NONNULL_END
 #else
     _context = [[HMJSCExecutor alloc] init];
 #endif
+    [self setupExecutorCallBack];
     [[HMJSGlobal globalObject] weakReference:self];
+    [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/builtin.js"]];
+    
+    NSMutableDictionary *classes = [NSMutableDictionary new];
+    // 可以使用模型替代字典，转 JSON，做缓存
+    [HMExportManager.sharedInstance.jsClasses enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportClass *_Nonnull obj, BOOL *_Nonnull stop) {
+        NSMutableArray *methodPropertyArray = [NSMutableArray arrayWithCapacity:obj.classMethodPropertyList.count + obj.instanceMethodPropertyList.count];
+        [obj.classMethodPropertyList enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportBaseClass *_Nonnull obj, BOOL *_Nonnull stop) {
+            [methodPropertyArray addObject:@{
+                @"nameString": obj.jsFieldName,
+                @"isClass": @YES,
+                @"isMethod": @([obj isKindOfClass:HMExportMethod.class])
+            }];
+        }];
+        [obj.instanceMethodPropertyList enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportBaseClass *_Nonnull obj, BOOL *_Nonnull stop) {
+            [methodPropertyArray addObject:@{
+                @"nameString": obj.jsFieldName,
+                @"isClass": @NO,
+                @"isMethod": @([obj isKindOfClass:HMExportMethod.class])
+            }];
+        }];
+        NSDictionary *class = @{
+            @"methodPropertyList": methodPropertyArray,
+            @"superClassName": obj.superClassReference.jsClass ?: @""
+        };
+        [classes setObject:class forKey:obj.jsClass];
+    }];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:classes options:0 error:nil];
+    NSString *classesStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    [_context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
+    
+    return self;
+}
+
+
+- (void)setupExecutorCallBack {
     __weak typeof(self) weakSelf = self;
-    _context.exceptionHandler = ^(HMExceptionModel *exception) {
-        NSArray<id<HMReporterProtocol>> *interceptors = [HMInterceptor interceptor:HMInterceptorTypeReporter];
-        if (interceptors.count <= 0) {
-            return;
-        }
+    [_context addExceptionHandler:^(HMExceptionModel * _Nonnull exception) {
+        
         NSDictionary<NSString *, NSObject *> *exceptionInfo = @{
-                @"column": exception.column ?: @0,
-                @"line": exception.line ?: @0,
-                @"message": exception.message ?: @"",
-                @"name": exception.name ?: @"",
-                @"stack": exception.stack ?: @""
+            @"column": exception.column ?: @0,
+            @"line": exception.line ?: @0,
+            @"message": exception.message ?: @"",
+            @"name": exception.name ?: @"",
+            @"stack": exception.stack ?: @""
         };
         HMLogError(@"%@", exceptionInfo);
         if (weakSelf.nameSpace) {
@@ -145,45 +179,56 @@ NS_ASSUME_NONNULL_END
         typeof(weakSelf) strongSelf = weakSelf;
         [HMReporterInterceptor handleJSException:exceptionInfo namespace:strongSelf.nameSpace];
         [HMReporterInterceptor handleJSException:exceptionInfo context:strongSelf namespace:strongSelf.nameSpace];
-    };
-    [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/builtin.js"]];
-
-    NSMutableDictionary *classes = [NSMutableDictionary new];
-    // 可以使用模型替代字典，转 JSON，做缓存
-    [HMExportManager.sharedInstance.jsClasses enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportClass *_Nonnull obj, BOOL *_Nonnull stop) {
-        NSMutableArray *methodPropertyArray = [NSMutableArray arrayWithCapacity:obj.classMethodPropertyList.count + obj.instanceMethodPropertyList.count];
-        [obj.classMethodPropertyList enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportBaseClass *_Nonnull obj, BOOL *_Nonnull stop) {
-            [methodPropertyArray addObject:@{
-                    @"nameString": obj.jsFieldName,
-                    @"isClass": @YES,
-                    @"isMethod": @([obj isKindOfClass:HMExportMethod.class])
-            }];
-        }];
-        [obj.instanceMethodPropertyList enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportBaseClass *_Nonnull obj, BOOL *_Nonnull stop) {
-            [methodPropertyArray addObject:@{
-                    @"nameString": obj.jsFieldName,
-                    @"isClass": @NO,
-                    @"isMethod": @([obj isKindOfClass:HMExportMethod.class])
-            }];
-        }];
-        NSDictionary *class = @{
-                @"methodPropertyList": methodPropertyArray,
-                @"superClassName": obj.superClassReference.jsClass ?: @""
-        };
-        [classes setObject:class forKey:obj.jsClass];
-    }];
-    NSData *data = [NSJSONSerialization dataWithJSONObject:classes options:0 error:nil];
-    NSString *classesStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [_context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
-
-    return self;
+        if (strongSelf.exceptionHandler) {
+            strongSelf.exceptionHandler(exception);
+        }
+    } key:self];
+    
+    
+    [_context addConsoleHandler:^(NSString * _Nullable logString, HMLogLevel logLevel) {
+        
+        typeof(weakSelf) strongSelf = weakSelf;
+        [HMLoggerInterceptor handleJSLog:logString level:logLevel namespace:strongSelf.nameSpace];
+        if (strongSelf.consoleHandler) {
+            strongSelf.consoleHandler(logString, logLevel);
+        }
+        
+        [strongSelf handleConsoleToWS:logString level:logLevel];
+    } key:self];
+    
+    
 }
 
+- (void)handleConsoleToWS:(NSString *)logString level:(HMLogLevel)logLevel {
+    // 避免 "(null)" 情况
+    NSString *jsonStr = @"";
+    @try {
+        jsonStr = _HMJSONStringWithObject(@{@"type":@"log",
+                                            @"data":@{@"level":@(convertNativeLogLevel(logLevel)),
+                                                      @"message":logString.length > 0 ? logString : @""}});
+    } @catch (NSException *exception) {
+        HMLogError(@"native webSocket json 失败");
+    } @finally {
+        if (@available(iOS 13.0, *)) {
+            if (self.webSocketTask) {
+                NSURLSessionWebSocketMessage *webSocketMessage = [[NSURLSessionWebSocketMessage alloc] initWithString:jsonStr];
+                // 忽略错误
+                __weak typeof(self) weakSelf = self;
+                [self.webSocketTask sendMessage:webSocketMessage completionHandler:^(NSError * _Nullable error) {
+                    typeof(weakSelf) strongSelf = weakSelf;
+                    if (error) {
+                        [strongSelf handleWebSocket];
+                    }
+                }];
+            }
+        }
+    }
+    
+}
 #ifdef HMDEBUG
 - (void)handleWebSocket {
     if (@available(iOS 13, *)) {
         if (self.webSocketTask.state == NSURLSessionTaskStateCanceling || self.webSocketTask.state == NSURLSessionTaskStateCompleted) {
-            self.context.webSocketHandler = nil;
             self.webSocketTask = nil;
         }
     }
@@ -193,7 +238,7 @@ NS_ASSUME_NONNULL_END
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
     return [self evaluateScript:javaScriptString fileName:fileName hummerUrl:fileName];
 }
-    
+
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName hummerUrl:(nullable NSString *)hummerUrl {
     struct timespec beforeTimespec;
     HMClockGetTime(&beforeTimespec);
@@ -201,7 +246,7 @@ NS_ASSUME_NONNULL_END
     if (!self.hummerUrl && hummerUrl.length > 0) {
         self.hummerUrl = hummerUrl;
     }
-
+    
     // context 和 WebSocket 对应
     if (!self.url && fileName.length > 0) {
         self.url = [NSURL URLWithString:fileName];
@@ -227,27 +272,6 @@ NS_ASSUME_NONNULL_END
                     // 启动
                     [self.webSocketTask resume];
                     __weak typeof(self) weakSelf = self;
-                    self.context.webSocketHandler = ^(NSString * _Nullable logString, HMLogLevel logLevel) {
-                        typeof(weakSelf) strongSelf = weakSelf;
-                        // 避免 "(null)" 情况
-                        NSString *jsonStr = @"";
-                        @try {
-                            jsonStr = _HMJSONStringWithObject(@{@"type":@"log",
-                                                      @"data":@{@"level":@(convertNativeLogLevel(logLevel)),
-                                                                @"message":logString.length > 0 ? logString : @""}});
-                        } @catch (NSException *exception) {
-                            HMLogError(@"native webSocket json 失败");
-                        } @finally {
-                            NSURLSessionWebSocketMessage *webSocketMessage = [[NSURLSessionWebSocketMessage alloc] initWithString:jsonStr];
-                            // 忽略错误
-                            [strongSelf.webSocketTask sendMessage:webSocketMessage completionHandler:^(NSError * _Nullable error) {
-                                typeof(weakSelf) strongSelf = weakSelf;
-                                if (error) {
-                                    [strongSelf handleWebSocket];
-                                }
-                            }];
-                        }
-                    };
                     // 判断是否连通
                     [self.webSocketTask sendPingWithPongReceiveHandler:^(NSError * _Nullable error) {
                         typeof(weakSelf) strongSelf = weakSelf;
@@ -260,21 +284,21 @@ NS_ASSUME_NONNULL_END
         }
     }
 #endif
-
+    
     NSURL *url = nil;
     if (fileName.length > 0) {
         url = [NSURL URLWithString:fileName];
     }
-
+    
     NSData *data = [javaScriptString dataUsingEncoding:NSUTF8StringEncoding];
     if (data && self.nameSpace) {
         // 不包括 \0
         // 单位 KB
         [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackJavaScriptBundleWithSize:@(data.length / 1024) pageUrl:self.hummerUrl ?: @""];
     }
-
+    
     HMBaseValue *returnValue = [self.context evaluateScript:javaScriptString withSourceURL:url];
-
+    
     struct timespec afterTimespec;
     HMClockGetTime(&afterTimespec);
     struct timespec resultTimespec;
@@ -282,7 +306,7 @@ NS_ASSUME_NONNULL_END
     if (self.nameSpace) {
         [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackEvaluationWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)  pageUrl:self.hummerUrl ?: @""];
     }
-
+    
     return returnValue;
 }
 
