@@ -192,13 +192,15 @@ NS_ASSUME_NONNULL_END
         if (strongSelf.consoleHandler) {
             strongSelf.consoleHandler(logString, logLevel);
         }
-        
+#ifdef HMDEBUG
         [strongSelf handleConsoleToWS:logString level:logLevel];
+#endif
+
     } key:self];
     
     
 }
-
+#ifdef HMDEBUG
 - (void)handleConsoleToWS:(NSString *)logString level:(HMLogLevel)logLevel {
     // 避免 "(null)" 情况
     NSString *jsonStr = @"";
@@ -223,8 +225,9 @@ NS_ASSUME_NONNULL_END
             }
         }
     }
-    
 }
+#endif
+
 #ifdef HMDEBUG
 - (void)handleWebSocket {
     if (@available(iOS 13, *)) {
