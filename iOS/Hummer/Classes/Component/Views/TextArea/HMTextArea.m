@@ -121,6 +121,7 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
         frame.size = [self.placeholderLabel sizeThatFits:frame.size];
         self.placeholderLabel.frame = frame;
     }
+    [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
