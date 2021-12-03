@@ -48,9 +48,10 @@ public class Switch extends HMBase<android.widget.Switch> implements CompoundBut
      */
     @JsProperty("checked")
     private boolean checked;
-
     public void setChecked(boolean checked) {
         doChecked(checked);
+
+        getNode().setContent(checked ? "Yes" : "No");
     }
 
     @JsAttribute("onColor")

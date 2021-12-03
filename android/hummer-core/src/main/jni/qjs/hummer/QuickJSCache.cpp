@@ -2,14 +2,17 @@
 // Created by maxiee on 2019-11-20.
 //
 
+#include <mutex>
 #include "QuickJSCache.h"
 #include "HummerJNI.h"
 
-std::map<long, JSContext*> QuickJSCache::cachedJSContext;
+std::mutex mtx;
 
+std::map<long, JSContext*> QuickJSCache::cachedJSContext;
 long QuickJSCache::idCachedContext = 0;
 
 long QuickJSCache::getJSContextId(JSContext *context) {
+    std::lock_guard<std::mutex> locker(mtx);
     std::map<long, JSContext*>::iterator it;
     for (it = cachedJSContext.begin(); it != cachedJSContext.end(); it++) {
         if (context == it->second) {
@@ -22,6 +25,7 @@ long QuickJSCache::getJSContextId(JSContext *context) {
 }
 
 JSContext* QuickJSCache::getJSContext(long contextId) {
+    std::lock_guard<std::mutex> locker(mtx);
     auto iter = cachedJSContext.find(contextId);
     if (iter != cachedJSContext.end()) {
         return iter->second;
@@ -30,5 +34,6 @@ JSContext* QuickJSCache::getJSContext(long contextId) {
 }
 
 void QuickJSCache::removeJSContext(long contextId) {
+    std::lock_guard<std::mutex> locker(mtx);
     cachedJSContext.erase(contextId);
 }

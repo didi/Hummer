@@ -70,7 +70,6 @@ export function render(App:any){
   let instance = app.mount(container);
   initPageLifeCycle(container, instance, App)
   container.render();
-
   if(NODE_DEBUG_ENV){
     // dev环境开启devtool
     require('@hummer/tenon-dev-tool').run(container)

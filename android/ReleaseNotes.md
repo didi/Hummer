@@ -1,5 +1,35 @@
 # Release Nodes
 
+### 0.4.2
+- 支持VSCode插件调试功能；
+- 支持Hummer项目的视图调试功能；
+- 修复local reference overflow问题；
+- 修复List和ViewPager组件可能引起的类型转换crash问题；
+- 修复Input组件失焦时键盘自动收起的问题；
+- 修复List和Scroller组件滑动时键盘可能无法消失的问题；
+- 修复List组件scrollToPosition不准的问题；
+- Dialog组件新增lowLayer属性，支持把对话框层级调低至系统默认对话框之下；
+- Memory和Storage组件新增getAll、allKeys方法；
+- Hummer.loadScriptWithUrl支持相对路径；
+- 边框颜色默认值改为黑色，和iOS对齐；
+- 兼容子控件被重复添加至多个父容器的问题；
+
+### 0.4.1
+- 支持N-API引擎；
+- 更新混淆规则；
+- 升级Yoga版本至：1.19.0；
+- 升级SoLoader版本至：0.10.1；
+- 新增Canvas组件；
+- 重写WebSocket组件，对齐前端MDN标准组件API；
+- 新增性能统计适配器；
+- 移除Location定位组件；
+- Text组件支持长按复制功能；
+- Text组件支持垂直方向对齐功能；
+- Input组件支持done/next键盘收起；
+- Button组件去除默认背景和padding；
+- View.getRect方法新增window位置的获取；
+- 更新 CLI WebSocket URL；（需要和最新版CLI配合使用）
+
 ### 0.3.23
 - 修复TextArea组件在达到最大行数时输入回车，重复触发input事件的问题；
 - 修复quickjs引擎在debug模式下出现stackoverflow的问题；
@@ -21,7 +51,7 @@
 ### 0.3.21.5
 - 升级QuickJS至最新版2021-03-27，并且优化JS和Native异常堆栈输出信息；
 - 修复首次进入页面时，轮播组件的回调会回调两次的问题；
-- 修复Scroller直接不支持justifyContent、alignItems、padding等flex属性的问题；
+- 修复Scroller组件不支持justifyContent、alignItems、padding等flex属性的问题；
 - 修复富文本不支持自定义字体的问题；
 - 支持字体文件配置自定义Assets目录；
 - Image组件支持占位图和失败图，新增Image.load接口；

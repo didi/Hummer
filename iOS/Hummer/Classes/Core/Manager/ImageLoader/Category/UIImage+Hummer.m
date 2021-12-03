@@ -6,6 +6,8 @@
 //
 
 #import "UIImage+Hummer.h"
+#import "NSData+Hummer.h"
+#import <objc/runtime.h>
 
 @implementation UIImage (Hummer)
 static CGFloat HMCeilValue(CGFloat value, CGFloat scale)
@@ -224,4 +226,9 @@ CGSize HMTargetSize(CGSize sourceSize, CGFloat sourceScale,
     CGImageRelease(imageRef);
     return image;
 }
+
+
+
+
+
 @end

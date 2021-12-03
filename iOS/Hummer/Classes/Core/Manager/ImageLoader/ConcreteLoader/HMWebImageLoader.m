@@ -38,7 +38,7 @@
     self.session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
     self.downloadQueue = [[NSOperationQueue alloc] init];
     self.downloadQueue.maxConcurrentOperationCount = 5;
-    self.downloadQueue.name = @"hummer.imagedownload.queue";
+    self.downloadQueue.name = @"com.hummer.imagedownload.queue";
     self.lock = dispatch_semaphore_create(1);
     
     NSMutableDictionary<NSString *, NSString *> *headerDictionary = [NSMutableDictionary dictionary];
@@ -104,10 +104,17 @@
     NSURL *imageUrl = [[self fixSource:source inJSBundleSource:bundleSource] hm_asUrl];
     if (!imageUrl) {return nil;}
     id cancelToken = nil;
+    /**
+     * 保证 下载任务+解码任务 完成之前，operation 处于进行中状态。
+     * 除此之外，保证在写入缓存之前，下一次同url 任务不被下载：在主线程 触发下载回调
+     * 1. 下一次同url 执行，晚于异步主线程回调，此为正常现象。
+     * 2. 下一次同url 执行，早于异步主线程回调，而 completionBlock 在异步触发，则可能导致重复下载。
+     * 由于2的缘故，需要把 finish 操作也放在主线程。但实际 operation.completionBlock 仍在子线程，只不过保证了缓存设置早于 finish。
+     */
     HM_LOCK(self.lock);
     HMImageDownloadOperation *operation = [self.URLOperations objectForKey:imageUrl];
     if (!operation || operation.isFinished || operation.isCancelled) {
-        operation = [self createOperationForUrl:imageUrl];
+        operation = [self createOperationForUrl:imageUrl context:context];
         self.URLOperations[imageUrl] = operation;
         __weak typeof(self) wself = self;
         operation.completionBlock = ^{
@@ -163,11 +170,12 @@
     return target;
 }
 
-- (HMImageDownloadOperation *)createOperationForUrl:(NSURL *)url{
+- (HMImageDownloadOperation *)createOperationForUrl:(NSURL *)url context:(nullable HMImageLoaderContext *)context {
+
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.allHTTPHeaderFields = self.HTTPHeaders;
     request.HTTPShouldUsePipelining = YES;
-    HMImageDownloadOperation *operation = [[HMImageDownloadOperation alloc] initWithRequest:request inSession:self.session];
+    HMImageDownloadOperation *operation = [[HMImageDownloadOperation alloc] initWithRequest:request inSession:self.session context:context];
     return operation;
 }
 @end

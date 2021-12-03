@@ -17,6 +17,8 @@
 #import "NSInvocation+Hummer.h"
 #import "HMUtility.h"
 #import "HMInterceptor.h"
+#import "HMConfigEntryManager.h"
+#import <Hummer/HMJSGlobal.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,6 +47,9 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 @interface HMJSCExecutor ()
 
 @property (nonatomic, assign) JSGlobalContextRef contextRef;
+
+@property (nonatomic, strong) NSMapTable<id, HMExceptionHandler> *exceptionHandlerMap;
+@property (nonatomic, strong) NSMapTable<id, HMConsoleHandler> *consoleHandlerMap;
 
 @property (nonatomic, nullable, copy) NSHashTable<HMJSCStrongValue *> *strongValueReleasePool;
 
@@ -96,6 +101,8 @@ static JSContextGroupRef _Nullable virtualMachineRef = NULL;
 
 - (nullable id)convertValueRefToObject:(nullable JSValueRef)valueRef isPortableConvert:(BOOL)isPortableConvert;
 
+- (void)triggerExceptionHandler:(HMExceptionModel *)model;
+- (void)triggerConsoleHandler:(NSString *)logString level:(HMLogLevel)logLevel;
 @end
 
 NS_ASSUME_NONNULL_END
@@ -109,13 +116,8 @@ JSValueRef _Nullable nativeLoggingHook(JSContextRef ctx, JSObjectRef function, J
     NSString *logString = [executor convertValueRefToString:arguments[0] isForce:NO];
     HMLogLevel logLevel = [executor convertValueRefToNumber:arguments[1] isForce:NO].unsignedIntegerValue;
     // 日志中间件
-    [HMLogger printJSLog:logString level:logLevel];
-    if (executor.consoleHandler) {
-        executor.consoleHandler(logString, logLevel);
-    }
-    if (executor.webSocketHandler) {
-        executor.webSocketHandler(logString, logLevel);
-    }
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
+    [executor triggerConsoleHandler:logString level:logLevel];
     
     return NULL;
 }
@@ -155,14 +157,10 @@ JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObject
     id target = nil;
     SEL selector = nil;
     NSMethodSignature *methodSignature = nil;
-
+    
     // jscall回调
-    NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
-    if (interceptors.count > 0) {
-        for (id<HMJSCallerIterceptor> jscaller in interceptors) {
-            [jscaller callWithJSClassName:className functionName:functionName];
-        }
-    }
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
+    [HMJSCallerIterceptor callWithJSClassName:className functionName:functionName namespace:context.nameSpace];
 
     // 最后一个参数无效
     [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
@@ -200,12 +198,9 @@ JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObje
         return NULL;
     }
 
-    NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
-    if (interceptors.count > 0) {
-        for (id<HMJSCallerIterceptor> jscaller in interceptors) {
-            [jscaller callWithJSClassName:className functionName:@"constructor"];
-        }
-    }
+    // jscall回调
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
+    [HMJSCallerIterceptor callWithJSClassName:className functionName:@"constructor" namespace:context.nameSpace];
     
     // 创建对象
     NSObject *opaquePointer = NULL;
@@ -355,6 +350,9 @@ void hummerFinalize(JSObjectRef object) {
         virtualMachineRef = JSContextGroupCreate();
     }
     _contextRef = JSGlobalContextCreateInGroup(virtualMachineRef, NULL);
+    _exceptionHandlerMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory];
+    _consoleHandlerMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory];
+
 //    _contextRef = JSGlobalContextCreate(NULL);
     [HMExecutorMap setObject:self forKey:[NSValue valueWithPointer:_contextRef]];
 
@@ -528,12 +526,10 @@ void hummerFinalize(JSObjectRef object) {
     [self hummerExtractExportWithFunctionPropertyName:propertyName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:isSetter jsClassName:className];
 
     if (isSetter) {
-        NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
-        if (interceptors.count > 0) {
-            for (id<HMJSCallerIterceptor> jscaller in interceptors) {
-                [jscaller callWithJSClassName:className functionName:[@"set" stringByAppendingString:propertyName.capitalizedString]];
-            }
-        }
+        
+        // jscall回调
+        HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self];
+        [HMJSCallerIterceptor callWithJSClassName:className functionName:[@"set" stringByAppendingString:propertyName.capitalizedString] namespace:context.nameSpace];
     }
 
     return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
@@ -965,12 +961,7 @@ void hummerFinalize(JSObjectRef object) {
     errorModel.name = [self convertValueRefToString:nameValueRef isForce:NO];
     errorModel.stack = [self convertValueRefToString:stackValueRef isForce:NO];
 
-    if (self.exceptionHandler) {
-        self.exceptionHandler(errorModel);
-    } else {
-        HMLogError(@"Executor 发生异常：%@", errorModel);
-    }
-
+    [self triggerExceptionHandler:errorModel];
     JSStringRelease(columnString);
     JSStringRelease(lineString);
     JSStringRelease(messageString);
@@ -1678,5 +1669,34 @@ void hummerFinalize(JSObjectRef object) {
 
     return nil;
 }
+
+- (void)addExceptionHandler:(HMExceptionHandler)handler key:(id)key {
+    [self.exceptionHandlerMap setObject:handler forKey:key];
+}
+
+- (void)addConsoleHandler:(HMConsoleHandler)handler key:(id)key {
+    [self.consoleHandlerMap setObject:handler forKey:key];
+}
+
+- (void)triggerExceptionHandler:(HMExceptionModel *)model {
+    
+    NSEnumerator *enumer = [self.exceptionHandlerMap objectEnumerator];
+    HMExceptionHandler handler = [enumer nextObject];
+    while (handler) {
+        handler(model);
+        handler = [enumer nextObject];
+    }
+}
+
+- (void)triggerConsoleHandler:(NSString *)logString level:(HMLogLevel)logLevel {
+
+    NSEnumerator *enumer = [self.consoleHandlerMap objectEnumerator];
+    HMConsoleHandler handler = [enumer nextObject];
+    while (handler) {
+        handler(logString, logLevel);
+        handler = [enumer nextObject];
+    }
+}
+
 
 @end

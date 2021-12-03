@@ -77,8 +77,22 @@ public class HummerContext extends ContextWrapper {
 
     /**
      * js文件源路径
+     *
+     * 有以下几种路径类型：
+     * 网络URL：http(s)://x.x.x.x/home/index.js
+     * Assets文件：assets:///xxx/index.js
+     * 本地文件：file:///data/data/xxx/files/xxx/index.js
      */
     protected String jsSourcePath = "";
+
+    /**
+     * 页面URL（即页面跳转时的URL，相对URL会被转成真实URL）
+     *
+     * 有以下两种URL类型：
+     * 网络URL：http(s)://x.x.x.x/home/index.js
+     * Hummer URL：hummer://home/index.js
+     */
+    protected String pageUrl = "";
 
     /**
      * 加入生命周期的各种判断，是为了适应网络加载情况下的异步执行JS
@@ -90,8 +104,15 @@ public class HummerContext extends ContextWrapper {
     protected HashMap<String, Invoker> mRegistry = new HashMap<>();
     protected HashMap<String, ICallback> mNativeCallbacks = new HashMap<>();
 
-    protected Pattern pattern = Pattern.compile("function *_classCallCheck *\\( *\\w+ *, *\\w+ *\\) *\\{");
-    protected Pattern pattern2 = Pattern.compile("\\s");
+    /**
+     * 全局保存已通过babel转换后的代码
+     */
+    private static final Map<String, String> globalBabelTransScriptMap = new HashMap<>();
+
+    /**
+     * 空白字符通配符（包括换行）
+     */
+    protected Pattern blankCharPattern = Pattern.compile("\\s");
 
     /**
      * 精简版构造函数，只用于JS代码执行，不能用做页面渲染
@@ -174,6 +195,7 @@ public class HummerContext extends ContextWrapper {
         HMLog.d("HummerNative", "HummerContext.onDestroy");
         InvokerAnalyzer.release(invokerAnalyzer);
         destroy();
+        NotifyCenter.release(getContext());
         NotifyCenter.release(mJsContext);
         releaseJSContext();
     }
@@ -191,6 +213,7 @@ public class HummerContext extends ContextWrapper {
         stop();
         pause();
         destroy();
+        NotifyCenter.release(getContext());
         NotifyCenter.release(mJsContext);
     }
 
@@ -250,6 +273,14 @@ public class HummerContext extends ContextWrapper {
 
     public void setJsSourcePath(String jsSourcePath) {
         this.jsSourcePath = jsSourcePath;
+    }
+
+    public String getPageUrl() {
+        return pageUrl;
+    }
+
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
     }
 
     private void create() {
@@ -313,8 +344,12 @@ public class HummerContext extends ContextWrapper {
     }
 
     private String babelTransformCode(String script, String scriptId) {
-        if (script == null || pattern.matcher(script).find()) {
+        if (script == null || script.contains("__esModule")) {
             return script;
+        }
+
+        if (globalBabelTransScriptMap.containsKey(scriptId)) {
+            return globalBabelTransScriptMap.get(scriptId);
         }
 
         if ("hummer_sdk.js".equals(scriptId)) {
@@ -325,8 +360,10 @@ public class HummerContext extends ContextWrapper {
             return AssetsUtil.readFile("hummer_component.js");
         }
 
+        String orgScript = script;
+
         // 替换换行等特殊字符，否则babel转换会报错
-        if (pattern2.matcher(script).find()) {
+        if (blankCharPattern.matcher(script).find()) {
             // \r -> \\r
             script = script.replace("\\r", "\\\\r");
             // \n -> \\n
@@ -339,8 +376,12 @@ public class HummerContext extends ContextWrapper {
 
         // es6 -> es5
         script = String.format("Babel.transformCode(`%s`);", script);
-        script = (String) mJsContext.evaluateJavaScript(script);
-
+        Object ret = mJsContext.evaluateJavaScript(script);
+        if (!(ret instanceof String)) {
+            return orgScript;
+        }
+        script = (String) ret;
+        globalBabelTransScriptMap.put(scriptId, script);
         return script;
     }
 

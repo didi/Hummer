@@ -98,11 +98,19 @@ static facebook::react::IInspector *getInstance() {
 }
 
 - (void)sendMessage:(NSString *)message {
-    _connection->sendMessage([message UTF8String]);
+    @synchronized (self) {
+        if (_connection) {
+            _connection->sendMessage([message UTF8String]);
+        }
+    }
 }
 
 - (void)disconnect {
-    _connection->disconnect();
+    @synchronized (self) {
+        if (_connection) {
+            _connection->disconnect();
+        }
+    }
 }
 
 @end

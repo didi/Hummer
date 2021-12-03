@@ -15,7 +15,9 @@
 #import "HMUtility.h"
 #import "HMAttributesItem.h"
 
-@interface HMLabel() <HMAttributesBuilderDelegate>
+#import <Hummer/UIView+HMInspector.h>
+
+@interface HMLabel() <HMAttributesBuilderDelegate, HMViewInspectorDescription>
 
 @property (nonatomic, copy) NSDictionary *textDecoration;
 @property (nonatomic, assign) bool textWrap;
@@ -34,6 +36,11 @@
 
 @property (nonatomic, copy) NSString *formattedText;
 @property (nonatomic, strong) HMAttributesBuilder *builder;
+
+// text/richText
+@property (nonatomic, strong) HMBaseValue *textValue;
+@property (nonatomic, strong) HMBaseValue *richTextValue;
+@property (nonatomic, assign) BOOL didSetRichText;
 
 - (void)commonInit;
 
@@ -119,7 +126,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
 #pragma mark - Export Property
 
 - (HMBaseValue *)__text {
-    return [HMBaseValue valueWithObject:self.text inContext:self.hmContext];
+    return self.textValue;
 }
 
 - (void)__setText:(HMBaseValue *)value {
@@ -127,7 +134,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     if (!value.isString) {
         return;
     }
-    
+    self.textValue = value;
     [self removeBuilder];
 
     NSString *text = [value toString];
@@ -159,7 +166,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
 }
 
 - (HMBaseValue *)__richText {
-    return [HMBaseValue valueWithObject:self.text inContext:self.hmContext];
+    return self.richTextValue;
 }
 
 - (void)__setRichText:(HMBaseValue *)value {
@@ -171,6 +178,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
         return;
     }
 
+    self.richTextValue = value;
     [self removeBuilder];
 
     // rich text
@@ -453,4 +461,30 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     return action == @selector(textCopyAction);
 }
 
+
+- (void)setTextValue:(HMBaseValue *)textValue {
+    _textValue = textValue;
+    _didSetRichText = NO;
+}
+
+- (void)setRichTextValue:(HMBaseValue *)richTextValue {
+    _richTextValue = richTextValue;
+    _didSetRichText = YES;
+}
+#pragma mark - <HMViewInspectorDescription>
+
+- (NSString *)hm_content {
+    
+    return self.didSetRichText ? [self.attributedText description] : self.text;
+}
+
+- (id)hm_displayContent {
+    
+    return self.didSetRichText ? self.richTextValue : self.textValue;
+}
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+
+    return nil;
+}
 @end

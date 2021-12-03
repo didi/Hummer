@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param scheme 协议名
  * @param pageBuilder 构造闭包
  */
-+ (void)registerScheme:(NSString *)scheme pageBuilder:(HMPageBuilder)pageBuilder;
++ (void)registerScheme:(NSString *)scheme pageBuilder:(HMPageBuilder)pageBuilder DEPRECATED_MSG_ATTRIBUTE("使用 + registerScheme:nameSpace:pageBuilder: 替代");
 
 /**
  * @brief 注册 scheme，用于解决 hummer://Unipay 这样的路径解析，默认会处理以下内容
@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)registerScheme:(NSString *)scheme nameSpace:(NSString *)nameSpace pageBuilder:(HMPageBuilder)pageBuilder;
 
-+ (void)registerPages:(NSDictionary<NSString *, HMPageBuilder> *)pages DEPRECATED_MSG_ATTRIBUTE("使用 + registerScheme:pageBuilder: 替代");
++ (void)registerPages:(NSDictionary<NSString *, HMPageBuilder> *)pages DEPRECATED_MSG_ATTRIBUTE("使用 + registerScheme:nameSpace:pageBuilder: 替代");
 
 + (void)registerPage:(NSString *)route builder:(HMPageBuilder)builder DEPRECATED_MSG_ATTRIBUTE("使用 + registerScheme:pageBuilder: 替代");
 
@@ -51,14 +51,9 @@ NS_ASSUME_NONNULL_BEGIN
  * @brief 移除注册的 scheme
  * @param scheme 协议名
  */
-+ (void)removePageBuilderForScheme:(NSString *)scheme;
++ (void)removePageBuilderForScheme:(NSString *)scheme DEPRECATED_MSG_ATTRIBUTE("使用 + removePageBuilderForScheme:nameSpace: 替代");;
 + (void)removePageBuilderForScheme:(NSString *)scheme nameSpace:(nullable NSString *)nameSpace;
 
-+ (void)__popPage:(nullable HMBaseValue *)params;
-
-+ (void)__popToPage:(HMBaseValue *)params;
-
-+ (void)__popToRootPage:(HMBaseValue *)params;
 
 + (instancetype)sharedInstance;
 

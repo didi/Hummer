@@ -12,10 +12,18 @@ import java.lang.reflect.Type;
 public class NetworkUtil {
 
     public static <T> void httpGet(String url, HttpCallback<T> callback) {
-        HummerAdapter.getHttpAdapter().request(url, IHttpAdapter.METHOD_GET, 10000, null, null, callback, null);
+        httpGet(url, 10000, callback);
+    }
+
+    public static <T> void httpGet(String url, int timeout, HttpCallback<T> callback) {
+        HummerAdapter.getHttpAdapter().request(url, IHttpAdapter.METHOD_GET, timeout, null, null, callback, null);
     }
 
     public static <T> void httpGet(String url, HttpCallback<T> callback, Type type) {
-        HummerAdapter.getHttpAdapter().request(url, IHttpAdapter.METHOD_GET, 10000, null, null, callback, type);
+        httpGet(url, 10000, callback, type);
+    }
+
+    public static <T> void httpGet(String url, int timeout, HttpCallback<T> callback, Type type) {
+        HummerAdapter.getHttpAdapter().request(url, IHttpAdapter.METHOD_GET, timeout, null, null, callback, type);
     }
 }

@@ -13,7 +13,6 @@
 #import "HMReporterProtocol.h"
 #import "HMRouterProtocol.h"
 #import "HMImageProtocol.h"
-#import "HMJSLoadInterceptor.h"
 #import "HMJSCallerIterceptor.h"
 
 #import "HMEventTrackProtocol.h"
@@ -36,9 +35,10 @@ typedef NS_ENUM(NSUInteger, HMInterceptorType) {
     HMInterceptorTypeJSCaller
 };
 
+DEPRECATED_MSG_ATTRIBUTE("HMInterceptor is deprecated. Use HMConfigEntryManager instead")
 @interface HMInterceptor : NSObject
 
-- (instancetype)init NS_UNAVAILABLE;
++ (void)loadExportInterceptor;
 
 + (nullable NSArray *)interceptors;
 

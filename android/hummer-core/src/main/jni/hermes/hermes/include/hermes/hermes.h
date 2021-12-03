@@ -10,11 +10,13 @@
 
 #include <exception>
 #include <list>
+#include <map>
 #include <memory>
 #include <string>
 
 #include <hermes/Public/RuntimeConfig.h>
 #include <jsi/jsi.h>
+#include <unordered_map>
 
 #ifndef HERMES_EXPORT
 #ifdef _MSC_VER
@@ -97,9 +99,12 @@ class HERMES_EXPORT HermesRuntime : public jsi::Runtime {
   static void dumpSampledTraceToStream(llvh::raw_ostream &stream);
 
   /// Return the executed JavaScript function info.
-  /// Each function info is a 64bit integer with the module id encoded in
-  /// upper 32bit and function virtual offset in lower 32bit.
-  static std::vector<int64_t> getExecutedFunctions();
+  /// This information holds the segmentID, Virtualoffset and sourceURL.
+  /// This information is needed specifically to be able to symbolicate non-CJS
+  /// bundles correctly. This API will be simplified later to simply return a
+  /// segmentID and virtualOffset, when we are able to only support CJS bundles.
+  static std::unordered_map<std::string, std::vector<std::string>>
+  getExecutedFunctions();
 
   /// \return whether code coverage profiler is enabled or not.
   static bool isCodeCoverageProfilerEnabled();
@@ -130,6 +135,16 @@ class HERMES_EXPORT HermesRuntime : public jsi::Runtime {
   uint64_t getUniqueID(const jsi::Object &o) const;
   uint64_t getUniqueID(const jsi::String &s) const;
   uint64_t getUniqueID(const jsi::PropNameID &pni) const;
+
+  /// Same as the other \c getUniqueID, except it can return 0 for some values.
+  /// 0 means there is no ID associated with the value.
+  uint64_t getUniqueID(const jsi::Value &val) const;
+
+  /// From an ID retrieved from \p getUniqueID, go back to the object.
+  /// NOTE: This is much slower in general than the reverse operation, and takes
+  /// up more memory. Don't use this unless it's absolutely necessary.
+  /// \return a jsi::Object if a matching object is found, else returns null.
+  jsi::Value getObjectForID(uint64_t id);
 
   /// Get a structure representing the environment-dependent behavior, so
   /// it can be written into the trace for later replay.
@@ -196,6 +211,17 @@ class HERMES_EXPORT HermesRuntime : public jsi::Runtime {
   void watchTimeLimit(uint32_t timeoutInMs);
   /// Unregister this runtime for execution time limit monitoring.
   void unwatchTimeLimit();
+
+  /// Same as \c evaluate JavaScript but with a source map, which will be
+  /// applied to exception traces and debug information.
+  ///
+  /// This is an experimental Hermes-specific API. In the future it may be
+  /// renamed, moved or combined with another API, but the provided
+  /// functionality will continue to be available in some form.
+  jsi::Value evaluateJavaScriptWithSourceMap(
+      const std::shared_ptr<const jsi::Buffer> &buffer,
+      const std::shared_ptr<const jsi::Buffer> &sourceMapBuf,
+      const std::string &sourceURL);
 
  private:
   // Only HermesRuntimeImpl can subclass this.

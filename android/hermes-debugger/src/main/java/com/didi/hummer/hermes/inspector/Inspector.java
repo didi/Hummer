@@ -7,6 +7,7 @@
 
 package com.didi.hummer.hermes.inspector;
 
+import com.didi.hummer.hermes.queue.MessageQueueThread;
 import com.facebook.jni.HybridData;
 import com.facebook.jni.annotations.DoNotStrip;
 
@@ -37,7 +38,7 @@ public class Inspector {
     }
   }
 
-  public static native void enableDebugging(long ctxPtr, String pageTitle);
+  public static native void enableDebugging(long ctxPtr, String pageTitle, MessageQueueThread mqt, boolean waitForDebugger);
   public static native void disableDebugging(long ctxPtr);
 
   private static native Inspector instance();

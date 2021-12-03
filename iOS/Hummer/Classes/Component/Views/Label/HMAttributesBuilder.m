@@ -99,15 +99,14 @@
             }
         }
         if (item.image && item.cachedImage && item.imageAlign == HMAttributesImageAlignBaselineCenter) {
-            NSRangePointer ptr = nil;
-            NSDictionary *attributesDic = [result attributesAtIndex:0 effectiveRange:ptr];
             UIImage *image = item.cachedImage;
             NSTextAttachment *imageAttachment = [NSTextAttachment new];
             imageAttachment.image = image;
             imageAttachment.bounds = CGRectMake(0, (sself->_maxCapHeight.floatValue - image.size.height)/2, image.size.width, image.size.height);
             NSAttributedString *imageString = [NSAttributedString attributedStringWithAttachment:imageAttachment];
             NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithAttributedString:imageString];
-            [string addAttributes:attributesDic range:*ptr];
+            [result replaceCharactersInRange:range withAttributedString:string];
+            *hasChanged = YES;
         }
     }];
 }

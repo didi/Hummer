@@ -6,10 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HMImageDecoder.h"
+#import "HMImageCoder.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIImage (Hummer)
+
+
 
 + (UIImage *)hm_decodeImageWithData:(NSData *)data size:(CGSize)destSize scale:(CGFloat)destScale resizeMode:(HMResizeMode)resizeMode;
 @end

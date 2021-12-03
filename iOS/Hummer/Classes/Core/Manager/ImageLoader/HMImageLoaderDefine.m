@@ -18,5 +18,6 @@ HMImageLoaderContextOption const HMImageManagerContextImageTransformer = @"image
 //decoder
 HMImageLoaderContextOption const HMImageManagerContextImageScaleFactor = @"imageScaleFactor";
 HMImageLoaderContextOption const HMImageManagerContextImageResizeMode = @"imageResizeMode";
-HMImageLoaderContextOption const HMImageManagerContextImageResize = @"imageResize";
+
+HMImageLoaderContextOption const HMImageManagerContextImageThumbnailPixelSize = @"thumbnailPixelSize";
 

@@ -6,6 +6,8 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import com.didi.hummer.render.component.view.HMBase;
 import com.facebook.yoga.YogaConstants;
@@ -233,6 +235,12 @@ public class HummerLayout extends YogaLayout {
     public void addView(@NonNull HMBase subview, int index) {
         if (subview == null) {
             return;
+        }
+
+        // 兼容子控件被重复添加至多个父容器的问题："The specified child already has a parent."
+        ViewParent parent = subview.getView().getParent();
+        if (parent instanceof ViewGroup) {
+            ((ViewGroup) parent).removeView(subview.getView());
         }
 
         addView(subview.getView(), subview.getYogaNode());

@@ -134,7 +134,7 @@
 
 #pragma mark - View 生命周期管理
 - (BOOL)hm_didClickGoBack {
-    if ([self callJSWithFunc:@"onBack" arguments:@[]]) {return YES;}
+    if ([[self callJSWithFunc:@"onBack" arguments:@[]] toBool]) {return YES;}
     if ([self respondsToSelector:@selector(hm_triggerNativeGoBack)]) {
         [self hm_triggerNativeGoBack];
     }else{
@@ -208,7 +208,8 @@
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
     id object = _HMObjectFromJSONString(message);
     if ([object isKindOfClass:[NSDictionary class]]) {
-        NSString *URLString = [object valueForKey:@"params"];
+        NSDictionary *urlParam = [object valueForKey:@"params"];
+        NSString *URLString = [urlParam valueForKey:@"url"];
         NSURL * URL  = [NSURL URLWithString:URLString];
         if (!URL) {
             return;

@@ -7,23 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Hummer/HMMemoryComponent.h>
+/**
+ * 内部会根据 js 上下文查找 对应 namespace 的 memory 组件
+ * 注意： 如果native侧直接调用，需要通过 HMMemoryAdaptor 获取对应 namespace 的 memory 组件。见 HMConfigEntryManager.h
+ *
+ * 存储方式：key为文件名，value为对应文件
+ */
 
 @interface HMMemCache : NSObject
 
-+ (void)removeForKey:(NSString *)key;
+@end
 
-+ (void)setValue:(id)value forKey:(NSString *)key;
 
-+ (id)getValueForKey:(NSString *)key;
+@interface HMMemoryComponent : NSObject<HMMemoryComponent>
+@property (nonatomic, strong, readonly) NSString *namespace;
 
-+ (float)getFloatForKey:(NSString *)key;
-
-+ (NSUInteger)getIntegerForKey:(NSString *)key;
-
-+ (NSString *)getStringValueForForKey:(NSString *)key;
-
-+ (NSArray *)getArrayForForKey:(NSString *)key;
-
-+ (NSDictionary *)getDictionaryForForKey:(NSString *)key;
-
+- (instancetype)initWithNamespace:(NSString *)namespace;
 @end

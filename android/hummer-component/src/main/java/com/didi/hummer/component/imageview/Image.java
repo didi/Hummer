@@ -194,7 +194,7 @@ public class Image extends HMBase<RoundedImageView> {
         }
         ImageRenderUtil.renderImage((HummerContext) getContext(), getView(), url, placeholder, failedImage, callback, completeCallback);
 
-        getNode().setDesc(url);
+        getNode().setContent(url);
     }
 
     private void loadGif(String url, int repeatCount) {
@@ -208,7 +208,7 @@ public class Image extends HMBase<RoundedImageView> {
         }
         ImageRenderUtil.renderGif((HummerContext) getContext(), getView(), url, placeholder, failedImage, repeatCount, callback, completeCallback);
 
-        getNode().setDesc(url);
+        getNode().setContent(url);
     }
 
     @Override

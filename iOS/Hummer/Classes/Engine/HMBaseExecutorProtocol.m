@@ -9,6 +9,19 @@
 #import "HMUtility.h"
 #import "HMExceptionModel.h"
 
+static HMEngineType engineType = HMEngineTypeJSC;
+
+HMEngineType HMGetEngineType(void) {
+    return engineType;
+}
+
+HMEngineType HMSetEngineType(HMEngineType newEngineType) {
+    HMEngineType oldEngineType = engineType;
+    engineType = newEngineType;
+    
+    return oldEngineType;
+}
+
 NSArray<HMBaseValue *> *_Nullable HMOtherArguments = nil;
 
 id <HMBaseExecutorProtocol> _Nullable HMCurrentExecutor = nil;
@@ -20,6 +33,8 @@ NSString *const HUMMER_CALL_NATIVE_SELECTOR_ERROR = @"hummerCallNative() selecto
 NSString *const HUMMER_CALL_NATIVE_METHOD_SIGNATURE_ERROR = @"hummerCallNative() methodSignature == nil";
 
 NSString *const HUMMER_UN_SUPPORT_TYPE_TEMPLATE = @"不支持的类型 %s";
+
+NSString *const HUMMER_UN_MATCH_ARGS_TYPE_TEMPLATE = @"参数类型不匹配，OC目标参数类型: %s，js参数类型: %@";
 
 NSString *const HUMMER_CREATE_ERROR = @"严重错误，hummerCreate() 函数必须至少有一个字符串参数，一个 JSValue this 指针";
 

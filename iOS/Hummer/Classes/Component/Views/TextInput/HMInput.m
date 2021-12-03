@@ -16,8 +16,9 @@
 #import "UIView+HMEvent.h"
 #import "UIView+HMDom.h"
 #import "HMBaseValue.h"
+#import <Hummer/UIView+HMInspector.h>
 
-@interface HMInput() <UITextFieldDelegate>
+@interface HMInput() <UITextFieldDelegate, HMViewInspectorDescription>
 
 @property (nonatomic, strong) UIColor *caretColor;
 
@@ -254,6 +255,17 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
                            kHMInputText:self.text?:@""};
     [self hm_notifyWithEventName:HMInputEventName argument:dict];
     return YES;
+}
+
+#pragma mark - <HMDescription>
+- (NSString *)hm_content {
+    
+    return self.text;
+}
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    return nil;
 }
 
 @end

@@ -61,14 +61,14 @@ const printLog = (funcName, ...msgs) => {
         let msg = '';
         if (msgs.length == 1) {
             let m = msgs[0];
-            if (m instanceof Function) {
+            if (typeof m === 'undefined') {
+                msg = 'undefined';
+            } else if (m == null) {
+                msg = 'null';
+            } else if (m instanceof Function) {
                 msg = m.toString();
             } else if (m instanceof Object) {
                 msg = JSON.stringify(m);
-            } else if (typeof m === 'undefined') {
-                msg = 'undefined';
-            } else if (typeof m === 'null') {
-                msg = 'null';
             } else {
                 msg = m.toString();
             }
@@ -78,16 +78,16 @@ const printLog = (funcName, ...msgs) => {
                     msg = msg.concat(', ');
                 }
                 let m = msgs[i];
-                if (m instanceof Function) {
+                if (typeof m === 'undefined') {
+                    msg = msg.concat('undefined');
+                } else if (m == null) {
+                    msg = msg.concat('null');
+                } else if (m instanceof Function) {
                     msg = msg.concat(m.toString());
                 } else if (m instanceof Object) {
                     msg = msg.concat(JSON.stringify(m));
-                } else if (typeof m === 'undefined') {
-                    msg = msg.concat('undefined');
-                } else if (typeof m === 'null') {
-                    msg = msg.concat('null');
                 } else {
-                    msg = msg.concat(m);
+                    msg = msg.concat(m.toString());
                 }
             }
         }
@@ -137,6 +137,9 @@ const Hummer = {
     },
     render: (view) => {
         invoke("Hummer", 0, "render", view.objID);
+    },
+    getRootView: () => {
+        return invoke("Hummer", 0, "getRootView");
     },
     loadScript: (script) => {
         return invoke("Hummer", 0, "loadScript", script);
@@ -275,6 +278,12 @@ class Base {
         let stash = arg;
         arg = transSingleArg(arg);
         invoke(this.className, this.objID, "dbg_highlight", arg);
+    }
+
+    dbg_getDescription(...args) {
+        let stash = args;
+        args = transArgs(...args);
+        invoke(this.className, this.objID, "dbg_getDescription", ...args);
     }
 }
 

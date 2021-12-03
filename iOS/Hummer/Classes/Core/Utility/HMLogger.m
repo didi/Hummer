@@ -27,22 +27,25 @@ void _HMLogInternal(HMLogLevel level,
     va_start(args, format);
     NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
     va_end(args);
+
     
-    NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeLog];
-    BOOL isIntercept = NO;
-    if (interceptors.count > 0) {
-        for (id <HMLoggerProtocol> interceptor in interceptors) {
-            if ([interceptor respondsToSelector:@selector(handleNativeLog:level:)]) {
-                isIntercept = [interceptor handleNativeLog:message level:level];
-            }
-        }
-    }
-    
-    if (!isIntercept) {
 #if DEBUG
         NSLog(@"%@ 函数名:%@, 文件名:%@, 行数:%lu, %@", levelString, func, file, (unsigned long)line, message);
 #endif
-    }
+}
+
+- (BOOL)handleNativeLog:(NSString *)log level:(HMLogLevel)level {
+
+    return YES;
+}
+
+- (BOOL)handleJSLog:(NSString *)log level:(HMLogLevel)level {
+    
+    if (level == HMLogLevelInfo)     { HMLogInfo(@"%@", log); }
+    if (level == HMLogLevelWarning)  { HMLogWarning(@"%@", log); }
+    if (level == HMLogLevelError)    { HMLogError(@"%@", log); }
+    if (level == HMLogLevelTrace)    { HMLogTrace(@"%@", log); }
+    return YES;
 }
 
 + (void)printJSLog:(NSString *)log level:(HMLogLevel)logLevel {

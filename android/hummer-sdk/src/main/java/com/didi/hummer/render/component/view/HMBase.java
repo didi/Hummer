@@ -20,6 +20,7 @@ import com.didi.hummer.annotation.JsProperty;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.debug.Highlight;
 import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.render.component.anim.AnimViewWrapper;
@@ -33,6 +34,7 @@ import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.YogaAttrUtils;
 import com.didi.hummer.sdk.R;
+import com.didi.hummer.utils.ScreenUtils;
 import com.facebook.yoga.YogaEdge;
 import com.facebook.yoga.YogaNode;
 import com.facebook.yoga.YogaPositionType;
@@ -373,6 +375,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
 
         getView().post(() -> {
             Rect rect = new Rect();
+            int[] floats = ScreenUtils.getViewLocationOnScreen(getView());
             getView().getHitRect(rect);
             Map<String, Object> values = new HashMap<>();
             values.put("width", DPUtil.px2dpF(context, getView().getWidth()));
@@ -381,6 +384,10 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
             values.put("right", DPUtil.px2dpF(context, rect.right));
             values.put("top", DPUtil.px2dpF(context, rect.top));
             values.put("bottom", DPUtil.px2dpF(context, rect.bottom));
+            values.put("windowLeft", DPUtil.px2dpF(context, floats[0]));
+            values.put("windowRight", DPUtil.px2dpF(context, floats[0] + getView().getWidth()));
+            values.put("windowTop", DPUtil.px2dpF(context, floats[1]));
+            values.put("windowBottom", DPUtil.px2dpF(context, floats[1] + getView().getHeight()));
             callback.call(values);
         });
     }
@@ -400,6 +407,9 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         setVisibility(VISIBILITY_VISIBLE);
     }
 
+    /**
+     * 高亮某个视图节点（仅debug模式下可用）
+     */
     @JsMethod("dbg_highlight")
     public void dbg_highlight(Object config) {
         if (config == null) {
@@ -416,6 +426,27 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         } else if (config instanceof Map) {
             // do something
         }
+    }
+
+    /**
+     * 获取JS侧的视图树（仅debug模式下可用）
+     *
+     * @param depth 遍历深度
+     */
+    @JsMethod("dbg_getDescription")
+    public void dbg_getDescription(JSCallback callback, int depth) {
+        if (!DebugUtil.isDebuggable() || callback == null) {
+            return;
+        }
+
+        if (depth <= 0) {
+            depth = Integer.MAX_VALUE;
+        }
+        int fDepth = depth;
+        getView().post(() -> {
+            JSValue node = getNode().getJSNodeTree(fDepth);
+            callback.call(node);
+        });
     }
 
     public static final String VISIBILITY_VISIBLE = "visible";

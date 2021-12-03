@@ -26,9 +26,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)handlePopWithViewController:(nullable UIViewController *)viewController animated:(BOOL)animated;
 
-- (BOOL)handlePopToRootWithAnimated:(BOOL)animated;
+- (BOOL)handlePopToRootWithParams:(NSDictionary *)params;
 
-- (BOOL)handlePopBackWithCount:(NSUInteger)count animated:(BOOL)animated;
+- (BOOL)handlePopBackWithCount:(NSUInteger)count params:(NSDictionary *)params;
+
 
 @end
 

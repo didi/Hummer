@@ -23,6 +23,23 @@
     objc_setAssociatedObject(self, @selector(hm_webImageOperation), hmWebImageOperation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (id <HMImageLoaderOperation>)hm_webImageOperationPlaceholder {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setHm_webImageOperationPlaceholder:(id <HMImageLoaderOperation>)hmWebImageOperationPlaceholder {
+    objc_setAssociatedObject(self, @selector(hm_webImageOperationPlaceholder), hmWebImageOperationPlaceholder, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (id <HMImageLoaderOperation>)hm_webImageOperationError {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setHm_webImageOperationError:(id <HMImageLoaderOperation>)hmWebImageOperationError {
+    objc_setAssociatedObject(self, @selector(hm_webImageOperationError), hmWebImageOperationError, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+
 - (void)hm_internalSetImageWithURL:(id<HMURLConvertible>)source
                        placeholder:(nullable id<HMURLConvertible>)placeholderSource
                        failedImage:(nullable id<HMURLConvertible>)failedImageSource
@@ -43,9 +60,14 @@
         }
     }
     [[self hm_webImageOperation] cancel];
+    [[self hm_webImageOperationPlaceholder] cancel];
+    [[self hm_webImageOperationError] cancel];
+
+    self.hm_webImageOperationPlaceholder = nil;
+    self.hm_webImageOperationError = nil;
 
     if (placeholderSource) {
-        [[HMImageManager sharedManager] load:placeholderSource inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+       self.hm_webImageOperationPlaceholder = [[HMImageManager sharedManager] load:placeholderSource inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
             if ([self isKindOfClass:UIImageView.class]) {
                 UIImageView *imageView = (UIImageView *)self;
                 if (imageView.image) { return;}
@@ -54,10 +76,10 @@
         }];
     }
 
-
-    self.hm_webImageOperation = [[HMImageManager sharedManager] load:source inJSBundleSource:bundle context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+    __weak typeof(self) wSelf = self;
+    self.hm_webImageOperation = [[HMImageManager sharedManager] load:source inJSBundleSource:bundle context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
         if (error && failedImageSource) {
-            [[HMImageManager sharedManager] load:failedImageSource inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+            wSelf.hm_webImageOperationError =  [[HMImageManager sharedManager] load:failedImageSource inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
                 if ([self isKindOfClass:UIImageView.class]) {
                     UIImageView *imageView = (UIImageView *)self;
                     imageView.image = image;
@@ -65,7 +87,7 @@
             }];
         }
         if (completionBlock) {
-            completionBlock(image,error,cacheType);
+            completionBlock(image,data,error,cacheType);
         }
     }];
 }

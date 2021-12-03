@@ -3,7 +3,10 @@ package com.didi.hummer.utils;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
+import android.view.View;
 import android.view.WindowManager;
+
+import com.didi.hummer.render.utility.DPUtil;
 
 /**
  * Created by XiaoFeng on 2019-10-18.
@@ -86,5 +89,16 @@ public class ScreenUtils {
      */
     public static int getScreenDensityDpi(Context context) {
         return context.getResources().getDisplayMetrics().densityDpi;
+    }
+
+    /**
+     * Return the view or viewGroup in screen
+     *
+     * @return the view or viewGroup in screen
+     */
+    public static int[] getViewLocationOnScreen(View v) {
+        int[] location = new int[2];
+        v.getLocationInWindow(location);
+        return location;
     }
 }

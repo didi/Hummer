@@ -23,7 +23,6 @@
 
 @implementation HMImageLoaderOperation
 
-
 - (BOOL)isCancel {
     return self.isCancelled;
 }
@@ -31,8 +30,34 @@
 - (void)cancel {
     self.isCancelled = YES;
 }
+@end
 
+@interface HMImageCombinedOperation()
+@property (nonatomic, assign) BOOL isCancelled;
+@end
 
+@implementation HMImageCombinedOperation
 
+- (BOOL)isCancel {
+    return self.isCancelled;
+}
+
+- (void)cancel {
+
+    @synchronized(self) {
+        if (self.isCancelled) {
+            return;
+        }
+        self.isCancelled = YES;
+        if (self.cacheOperation) {
+        
+            [self.cacheOperation cancel];
+        }
+    
+        if (self.loaderOperation) {
+            [self.loaderOperation cancel];
+        }
+    }
+}
 
 @end

@@ -16,6 +16,8 @@
 #import "HMLongPressEvent.h"
 #import "HMJSGlobal.h"
 #import "HMBaseValue.h"
+#import <Hummer/HMConfigEntryManager.h>
+#import <Hummer/HMEventTrackManager.h>
 
 @import ObjectiveC.runtime;
 
@@ -194,6 +196,10 @@ HM_EXPORT_METHOD(removeEventListener, hm_removeEvent:withListener:)
     if (callbackArray.count == 0) {
         return;
     }
+    
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self.hmContext];
+    [HMEventTrackManager trackWithGesture:gesture namespace:context.nameSpace];
+
     NSTimeInterval timestamp = floor(NSDate.date.timeIntervalSince1970) * 1000;
     CGPoint location = [gesture locationInView:gesture.view];
     if ([gesture isKindOfClass:UITapGestureRecognizer.class]) {

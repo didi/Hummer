@@ -8,11 +8,12 @@
 #import "HMRefreshBaseView.h"
 #import "UIView+HMRenderObject.h"
 #import "UIView+HMDom.h"
+#import <Hummer/UIView+HMInspector.h>
 
 #define HMDefaultRefreshHeight 44
 #define HMDefaultLoadhHeight 44
 
-@interface HMRefreshBaseView () <UIScrollViewDelegate>
+@interface HMRefreshBaseView () <UIScrollViewDelegate, HMViewInspectorDescription>
 
 @property (nonatomic, strong) UIView * contentView;
 
@@ -99,6 +100,35 @@
     [self setNeedsLayout];
 }
 
+#pragma mark - <HMViewInspectorDescription>
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayJsChildren];
+}
+
+- (HMBaseValue *)hm_displayJsElement {
+    return self.contentViewValue;
+}
+
+- (NSString *)hm_displayID {
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_ID];
+}
+
+- (id)hm_displayContent {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayContent];
+}
+
+- (NSString *)hm_displayTagName {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayTagName];
+}
+
 @end
 
 @interface HMRefreshHeaderView ()
@@ -170,18 +200,16 @@
 }
 
 - (void)endRefresh {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.25 animations:^{
-            UIEdgeInsets inset = self.scrollView.contentInset;
-            inset.top = 0;
-            self.scrollView.contentInset = inset;
-        }];
-        self.state = HMRefreshTypeNormal;
-        if (self.stateChangedBlock) {
-            self.stateChangedBlock(HMRefreshTypeNormal);
-        }
-        [self layoutContentView];
-    });
+    [UIView animateWithDuration:0.25 animations:^{
+        UIEdgeInsets inset = self.scrollView.contentInset;
+        inset.top = 0;
+        self.scrollView.contentInset = inset;
+    }];
+    self.state = HMRefreshTypeNormal;
+    if (self.stateChangedBlock) {
+        self.stateChangedBlock(HMRefreshTypeNormal);
+    }
+    [self layoutContentView];
 }
 
 - (void)beginRefresh {
@@ -214,6 +242,13 @@
     } else if (type == HMRefreshTypeRefreshing) {
         [self beginRefresh];
     }
+}
+
+#pragma mark - <HMViewInspectorDescription>
+
+- (NSString *)hm_displayAlias {
+    
+    return @"Header";
 }
 
 @end
@@ -325,24 +360,31 @@
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
+/**
+ * 设置上拉加载控件
+ * @param enable 下次能否继续触发加载更多
+ * 已经处在对应状态，仍会触发 state changed callback。
+ */
+- (void)endLoad:(BOOL)enabled
+{
 
-- (void)endLoad:(BOOL)enabled {
-    // 通知状态改变
-    if (self.state != HMLoadTypeRefreshing) {
-        return;
+    void(^doAnimation)(void) = ^(void){
+        self.isAnimated = YES;
+        UIEdgeInsets insets = self.scrollView.contentInset;
+        insets.bottom -= self.loadHeight;
+        [UIView animateWithDuration:0.25 animations:^{
+            self.scrollView.contentInset = insets;
+        } completion:^(BOOL finished) {
+            CGPoint offset = self.scrollView.contentOffset;
+            [self.scrollView setContentOffset:offset animated:NO];
+            self.isAnimated = NO;
+        }];
+    };
+    
+    if (!self.isAnimated) {
+        doAnimation();
     }
-    
-    self.isAnimated = YES;
-    UIEdgeInsets insets = self.scrollView.contentInset;
-    insets.bottom -= self.loadHeight;
-    [UIView animateWithDuration:0.25 animations:^{
-        self.scrollView.contentInset = insets;
-    } completion:^(BOOL finished) {
-        CGPoint offset = self.scrollView.contentOffset;
-        [self.scrollView setContentOffset:offset animated:NO];
-        self.isAnimated = NO;
-    }];
-    
+
     HMLoadType state = enabled ? HMLoadTypeNormal : HMLoadTypeNoMoreData;
     self.state = state;
     if (self.stateChangedBlock) {
@@ -352,4 +394,11 @@
     [self layoutIfNeeded];
 }
 
+
+#pragma mark - <HMViewInspectorDescription>
+
+- (NSString *)hm_displayAlias {
+    
+    return @"Footer";
+}
 @end

@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Hummer/HMConfigEntryManager.h>
 
 typedef NS_ENUM(NSInteger, HMJSLoaderError) {
     HMJSLoaderErrorNoScriptURL = 1,
@@ -32,14 +33,14 @@ typedef NS_ENUM(NSInteger, HMJSLoaderError) {
 typedef void (^HMLoaderProgressBlock)(HMLoaderProgress *progressData);
 typedef void (^HMLoaderCompleteBlock)(NSError *error, HMDataSource *source);
 
-@interface HMJavaScriptLoader : NSObject
+@interface HMJavaScriptLoader : NSObject<HMJSLoader>
 
 + (void)loadBundleWithURL:(NSURL*)url
                onProgress:(HMLoaderProgressBlock)progressBlock
-               onComplete:(HMLoaderCompleteBlock)completeBlock;
+               onComplete:(HMLoaderCompleteBlock)completeBlock DEPRECATED_MSG_ATTRIBUTE("使用 +loadWithSource:completion: 替代");
 
 + (NSData *)syncJsBundleAtURL:(NSURL *)scriptURL
                  sourceLength:(unsigned int *)sourceLength
-                        error:(NSError **)error;
+                        error:(NSError **)error DEPRECATED_MSG_ATTRIBUTE("使用 +loadWithSource:completion: 替代");
 
 @end

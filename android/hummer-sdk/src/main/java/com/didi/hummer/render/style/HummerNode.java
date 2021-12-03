@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.didi.hummer.core.engine.JSContext;
+import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.YogaNodeUtil;
@@ -36,11 +38,14 @@ public class HummerNode implements Serializable {
     @SerializedName("objId")
     private long objId;
 
-    @SerializedName("name")
+    @SerializedName("tagName")
     private String name;
 
-    @SerializedName("desc")
-    private String desc;
+    @SerializedName("alias")
+    private String alias;
+
+    @SerializedName("content")
+    private String content;
 
     @SerializedName("style")
     private Map<String, Object> style = new HashMap<>();
@@ -113,12 +118,20 @@ public class HummerNode implements Serializable {
         return name;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public List<HummerNode> getChildren() {
@@ -150,5 +163,34 @@ public class HummerNode implements Serializable {
             children.remove(oldNode);
             children.add(index, newNode);
         }
+    }
+
+    /**
+     * 构造JS侧的视图节点树
+     *
+     * @param depth
+     * @return
+     */
+    public JSValue getJSNodeTree(int depth) {
+        if (linkView == null || linkView.getJSValue() == null) {
+            return null;
+        }
+
+        JSContext jsContext = linkView.getJSValue().getJSContext();
+        JSValue jsNode = (JSValue) jsContext.evaluateJavaScript("new Object();");
+        jsNode.set("id", objId);
+        jsNode.set("tagName", name);
+        jsNode.set("alias", alias);
+        jsNode.set("content", content);
+        jsNode.set("element", linkView.getJSValue());
+
+        if (depth > 0 && !this.children.isEmpty()) {
+            JSValue children = (JSValue) jsContext.evaluateJavaScript("new Array();");
+            for (HummerNode n : this.children) {
+                children.callFunction("push", n.getJSNodeTree(--depth));
+            }
+            jsNode.set("children", children);
+        }
+        return jsNode;
     }
 }

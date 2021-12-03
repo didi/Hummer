@@ -5,8 +5,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import com.didi.hummer.adapter.websocket.OnWebSocketEventListener;
-import com.didi.hummer.adapter.websocket.impl.DefaultWebSocketAdapter;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
 /**
  * 开发调试模式下的WebSocket管理类，负责和CLI建立连接，带有重连功能
@@ -19,84 +22,96 @@ public class WebSocketManager {
         void onMsgReceived(String msg);
     }
 
-    private DefaultWebSocketAdapter webSocketAdapter;
-
     private static final int RECONNECT_DELAY_MS = 2000;
 
+    private static OkHttpClient client;
+    private WebSocket webSocket;
     private String mWsUrl;
     private Handler mHandler;
     private boolean mClosed;
-    private boolean mIsReconnecting;
+    private boolean mIsReconnectWaiting;
+
+    public WebSocketManager() {
+        mHandler = new Handler(Looper.getMainLooper());
+        if (client == null) {
+            client = new OkHttpClient();
+        }
+    }
 
     public void connect(String url, WSMsgListener listener) {
-        mHandler = new Handler(Looper.getMainLooper());
         mWsUrl = toWSUrl(url);
-        if (TextUtils.isEmpty(mWsUrl)) {
+        doConnect(mWsUrl, listener);
+    }
+
+    private void doConnect(String url, WSMsgListener listener) {
+        if (TextUtils.isEmpty(url)) {
             return;
         }
 
-        if (webSocketAdapter != null) {
-            webSocketAdapter.destroy();
-        }
+        okhttp3.Request request = new Request.Builder()
+                .url(url)
+                .build();
 
-        webSocketAdapter = new DefaultWebSocketAdapter();
-        webSocketAdapter.connect(mWsUrl, new OnWebSocketEventListener() {
+        client.newWebSocket(request, new WebSocketListener() {
             @Override
-            public void onOpen() {
-
+            public void onOpen(okhttp3.WebSocket webSocket, Response response) {
+                WebSocketManager.this.webSocket = webSocket;
             }
 
             @Override
-            public void onClose(int code, String reason) {
+            public void onClosed(okhttp3.WebSocket webSocket, int code, String reason) {
                 if (!mClosed) {
                     reconnect(listener);
                 }
             }
 
             @Override
-            public void onError(String errMsg) {
+            public void onFailure(okhttp3.WebSocket webSocket, Throwable t, Response response) {
+                t.printStackTrace();
                 if (!mClosed) {
                     reconnect(listener);
                 }
             }
 
             @Override
-            public void onMessage(String text) {
-                if (listener != null) {
-                    listener.onMsgReceived(text);
-                }
+            public void onMessage(okhttp3.WebSocket webSocket, String text) {
+                mHandler.post(() -> {
+                    if (listener != null) {
+                        listener.onMsgReceived(text);
+                    }
+                });
             }
         });
     }
 
     private void reconnect(WSMsgListener listener) {
-        if (mClosed || mIsReconnecting) {
+        if (mClosed || mIsReconnectWaiting) {
             return;
         }
-        mIsReconnecting = true;
-        mHandler.postDelayed((Runnable) () -> {
+        mIsReconnectWaiting = true;
+        mHandler.postDelayed(() -> {
             if (!mClosed) {
-                connect(mWsUrl, listener);
+                doConnect(mWsUrl, listener);
             }
-            mIsReconnecting = false;
+            mIsReconnectWaiting = false;
         }, RECONNECT_DELAY_MS);
     }
 
     public void sendMsg(String msg) {
-        if (webSocketAdapter != null) {
-            webSocketAdapter.send(msg);
+        if (webSocket != null) {
+            webSocket.send(msg);
         }
     }
 
     public void close() {
         mClosed = true;
-        if (webSocketAdapter != null) {
+        if (webSocket != null) {
             try {
-                webSocketAdapter.close(1000, "End of session");
+                webSocket.close(1000, "End of session");
             } catch (Exception e) {
                 // swallow, no need to handle it here
             }
-            webSocketAdapter = null;
+            webSocket = null;
         }
     }
 
@@ -121,10 +136,6 @@ public class WebSocketManager {
 
         Uri uri = Uri.parse(url);
 
-        // 如果是CML的链接，需要特殊处理一下端口号，因为CML的CLI会占用原始端口（如：http://x.x.x.x:8000/tenon/index.js）
-        if (uri.getPath().startsWith("/tenon")) {
-            return "ws://" + uri.getHost() + ":39340" + "/proxy/native";
-        }
         return "ws://" + uri.getAuthority() + "/proxy/native";
     }
 }

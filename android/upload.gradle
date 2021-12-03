@@ -1,9 +1,4 @@
 if (project.publishArchivesType == '1') {
-    // 如果打JSC的包，加一下后缀
-    if (project.COMPILE_JS_ENGINE.equals('All') || project.COMPILE_JS_ENGINE.equals('JSC')) {
-        project.ARTIFACT_ID += "-with-jsc"
-    }
-
     apply from: '../upload_maven.gradle'
 } else if (project.publishArchivesType == '2') {
     apply from: '../upload_jcenter.gradle'

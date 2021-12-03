@@ -2,8 +2,12 @@
 // Created by XiaoFeng on 2020-08-20.
 //
 
+#include <mutex>
 #include "HermesCache.h"
 #include "HummerJNI.h"
+
+std::mutex mtx1;
+std::mutex mtx2;
 
 std::map<long, std::shared_ptr<HermesRuntime>> HermesCache::cachedRuntime;
 std::map<long, Value> HermesCache::cachedJSValue;
@@ -11,6 +15,7 @@ std::map<long, Value> HermesCache::cachedJSValue;
 long HermesCache::idCachedValue = 0;
 
 long HermesCache::getRuntimeId(std::shared_ptr<HermesRuntime> runtime) {
+    std::lock_guard<std::mutex> locker(mtx1);
     std::map<long, std::shared_ptr<HermesRuntime>>::iterator it;
     for (it = cachedRuntime.begin(); it != cachedRuntime.end(); it++) {
         if (runtime == it->second) {
@@ -23,6 +28,7 @@ long HermesCache::getRuntimeId(std::shared_ptr<HermesRuntime> runtime) {
 }
 
 std::shared_ptr<HermesRuntime> HermesCache::getRuntime(long contextId) {
+    std::lock_guard<std::mutex> locker(mtx1);
     auto iter = cachedRuntime.find(contextId);
     if (iter != cachedRuntime.end()) {
         return iter->second;
@@ -31,10 +37,12 @@ std::shared_ptr<HermesRuntime> HermesCache::getRuntime(long contextId) {
 }
 
 void HermesCache::removeRuntime(long contextId) {
+    std::lock_guard<std::mutex> locker(mtx1);
     cachedRuntime.erase(contextId);
 }
 
 long HermesCache::getJSValueId(Value& value) {
+    std::lock_guard<std::mutex> locker(mtx2);
     std::map<long, Value>::iterator it;
     for (it = cachedJSValue.begin(); it != cachedJSValue.end(); it++) {
         if (&value == &it->second) {
@@ -47,6 +55,7 @@ long HermesCache::getJSValueId(Value& value) {
 }
 
 Value HermesCache::getJSValue(Runtime& runtime, long valueId) {
+    std::lock_guard<std::mutex> locker(mtx2);
     if (valueId == -1) {
         return Value();
     }

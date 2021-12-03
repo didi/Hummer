@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface HMLocalStorage : NSObject
+DEPRECATED_MSG_ATTRIBUTE("HMLocalStorage is deprecated. Use HMStorage instead")
+@interface HMLocalStorage : NSObject 
 
 @end

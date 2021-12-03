@@ -14,9 +14,26 @@ public class NavPage implements Serializable {
     public String id;
 
     /**
-     * 页面url
+     * 页面URL
+     *
+     * 具体格式如下：
+     * 网络URL: http(s)://x.x.x.x/xxx/index.js
+     * Hummer URL: hummer://home/index.js
+     * 相对URL: ./index.js
+     *
+     * 详见：https://hummer.didi.cn/doc#/zh-CN/navigator
      */
     public String url;
+
+    /**
+     * js文件源路径
+     *
+     * 有以下几种路径类型：
+     * 网络URL：http(s)://x.x.x.x/xxx/index.js
+     * Assets文件：assets:///xxx/index.js
+     * 本地文件：file:///data/data/xxx/files/xxx/index.js
+     */
+    public String sourcePath;
 
     /**
      * 是否需要转场动画
@@ -49,6 +66,7 @@ public class NavPage implements Serializable {
         return "NavPage{" +
                 "id='" + id + '\'' +
                 ", url='" + url + '\'' +
+                ", sourcePath='" + sourcePath + '\'' +
                 ", animated=" + animated +
                 ", closeSelf=" + closeSelf +
                 ", params=" + params +

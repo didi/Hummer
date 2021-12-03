@@ -50,6 +50,7 @@ public class Button extends HMBase<android.widget.Button> {
         orgTextColors = getView().getTextColors();
         orgTextSize = getView().getTextSize();
         orgTypeface = getView().getTypeface();
+        getView().setBackground(null);
         getView().setAllCaps(false);
         getView().setTypeface(null, Typeface.NORMAL);
         //fixed Button 总是在图层最上层的问题
@@ -66,12 +67,20 @@ public class Button extends HMBase<android.widget.Button> {
     @Override
     public void setBackgroundColor(Object color) {
         super.setBackgroundColor(color);
+        getView().setMinWidth(0);
+        getView().setMinHeight(0);
+        getView().setMinimumHeight(0);
+        getView().setMinimumWidth(0);
         getView().setPadding(0, 0, 0, 0);
     }
 
     @Override
     public void setBackgroundImage(String image) {
         super.setBackgroundImage(image);
+        getView().setMinWidth(0);
+        getView().setMinHeight(0);
+        getView().setMinimumHeight(0);
+        getView().setMinimumWidth(0);
         getView().setPadding(0, 0, 0, 0);
     }
 
@@ -85,7 +94,7 @@ public class Button extends HMBase<android.widget.Button> {
         getView().setText(text);
         requestLayout();
 
-        getNode().setDesc(text);
+        getNode().setContent(text);
     }
 
     @JsProperty("pressed")

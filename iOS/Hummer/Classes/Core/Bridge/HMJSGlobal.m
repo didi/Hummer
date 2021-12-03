@@ -20,6 +20,8 @@
 #import "HMJavaScriptLoader.h"
 #import "HMJSGlobal+Private.h"
 #import "HMExceptionModel.h"
+#import <Hummer/HMConfigEntryManager.h>
+
 #import <Hummer/HMDebug.h>
 #ifdef HMDEBUG
 #import "HMDevTools.h"
@@ -84,21 +86,24 @@ HM_EXPORT_CLASS_PROPERTY(pageInfo, pageInfo, setPageInfo:)
 
 HM_EXPORT_CLASS_METHOD(render, render:)
 
+HM_EXPORT_CLASS_METHOD(getRootView, getRootView)
+
 HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
 
-HM_EXPORT_CLASS_METHOD(evaluateScript, evaluateScript:)
+HM_EXPORT_CLASS_METHOD(loadScript, evaluateScript:)
 
-HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:callback:)
+HM_EXPORT_CLASS_METHOD(loadScriptWithUrl, evaluateScriptWithUrl:callback:)
 
 HM_EXPORT_CLASS_METHOD(postException, postException:)
 
 
-+ (void)postException:(HMBaseValue *)exception{
-    
++ (void)postException:(HMBaseValue *)exception {
+
     NSDictionary *exceptionDic = exception.toDictionary;
-    if (exceptionDic && HMCurrentExecutor.exceptionHandler) {
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    if (exceptionDic && context.exceptionHandler) {
         HMExceptionModel *model = [[HMExceptionModel alloc] initWithParams:exceptionDic];
-        HMCurrentExecutor.exceptionHandler(model);
+        context.exceptionHandler(model);
     }
 }
 
@@ -115,47 +120,33 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 }
 
 + (void)evaluateScriptWithUrl:(HMBaseValue *)urlString callback:(HMFunctionType)callback {
-    
+
     NSString *_urlString = [urlString toString];
     NSURL *url = [NSURL URLWithString:_urlString];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-    
-    void(^checkException)(NSString *) = ^(NSString *jsString){
+
+    void(^checkException)(NSString *) = ^(NSString *jsString) {
         HMExceptionModel *_exception = [self _evaluateString:jsString fileName:_urlString inContext:context];
         if (_exception) {
             NSDictionary *err = @{@"code":@(-1),
                                    @"message":@"javascript evalute exception"};
-            callback(@[err]);
+            if (callback) {
+                callback(@[err]);
+            }
         }else{
-            callback(@[[NSNull null]]);
+            if (callback) {
+                callback(@[[NSNull null]]);
+            }
         }
     };
-    
-    // TODO：拦截器
-    if ([HMInterceptor hasInterceptor:HMInterceptorTypeJSLoad]) {
-        [HMInterceptor enumerateInterceptor:HMInterceptorTypeJSLoad
-                                  withBlock:^(id<HMJSLoadInterceptor> interceptor,
-                                              NSUInteger idx,
-                                              BOOL * _Nonnull stop) {
-            [interceptor handleUrlString:_urlString completion:^(NSString * _Nonnull jsString) {
-                if (jsString) {
-                    *stop = YES;
-                    checkException(jsString);
-                    return;
-                }
-            }];
-        }];
-    }
-    
-    [HMJavaScriptLoader loadBundleWithURL:url onProgress:nil onComplete:^(NSError *error, HMDataSource *source) {
+    [HMJSLoaderInterceptor loadWithSource:url inJSBundleSource:context.url namespace:context.nameSpace completion:^(NSError * _Nullable error, NSString * _Nullable script) {
+
         if (error) {
-            NSDictionary *err = @{@"code":@(error.code),
-                                  @"message":error.userInfo[NSLocalizedDescriptionKey] ? error.userInfo[NSLocalizedDescriptionKey] : @"http error"};
+            NSDictionary *err = @{@"code": @(error.code),
+                    @"message": error.userInfo[NSLocalizedDescriptionKey] ? error.userInfo[NSLocalizedDescriptionKey] : @"http error"};
             callback(@[err]);
             return;
         }
-        NSString *script = nil;
-        if(!error) script = [[NSString alloc] initWithData:source.data encoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_main_queue(), ^{
             checkException(script);
             return;
@@ -165,7 +156,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 
 + (HMNotifyCenter *)notifyCenter {
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-    
+
     return context.notifyCenter;
 }
 
@@ -177,7 +168,13 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     }
 }
 
-+ (NSDictionary<NSString *,NSObject *> *)pageInfo {
++ (HMBaseValue *)getRootView{
+    
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    return context.componentView;
+}
+
++ (NSDictionary<NSString *, NSObject *> *)pageInfo {
     return HMJSGlobal.globalObject.pageInfo;
 }
 
@@ -228,7 +225,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
  * phase1：hummerCall(JS调用)会区分 namespace，返回 _envParams + envParamsMap[namespace]
  * phase2：native 调用 addGlobalEnviroment 不区分 namespace。
  */
-- (NSMutableDictionary<NSString *, NSObject*> *)envParams {
+- (NSMutableDictionary<NSString *, NSObject *> *)envParams {
     if (!_envParams) {
         _envParams = NSMutableDictionary.dictionary;
         [_envParams addEntriesFromDictionary:[self getEnvironmentInfo]];
@@ -331,6 +328,14 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     // 添加debug按钮
 //    [HMDevTools showInContext:context];
 #endif
+
+    struct timespec renderTimespec;
+    HMClockGetTime(&renderTimespec);
+    struct timespec resultTimespec;
+    HMDiffTime(&context->_createTimespec, &renderTimespec, &resultTimespec);
+    if (context.nameSpace) {
+        [HMConfigEntryManager.manager.configMap[context.nameSpace].trackEventPlugin trackPageRenderCompletionWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000) pageUrl:context.hummerUrl ?: @""];
+    }
 }
 
 - (void)setBasicWidth:(HMBaseValue *)basicWidth {
@@ -339,7 +344,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     [HMConfig sharedInstance].pixel = width;
 }
 
-+ (NSMutableDictionary<NSString *, NSObject*> *)env {
++ (NSMutableDictionary<NSString *, NSObject *> *)env {
     return HMJSGlobal.globalObject.envParams;
 }
 

@@ -15,6 +15,7 @@
 #import "HMBaseExecutorProtocol.h"
 #import <Hummer/HMBaseValue.h>
 #import <Hummer/HMURLUtility.h>
+#import <Hummer/HMLogger.h>
 
 @interface HMRequest()
 
@@ -23,6 +24,9 @@
 @property (nonatomic, assign) NSTimeInterval timeout;
 @property (nonatomic, strong) NSDictionary *header;
 @property (nonatomic, strong) NSDictionary *param;
+
+
+@property (nonatomic, strong) HMBaseValue *oriParamValue;
 
 @end
 
@@ -139,7 +143,23 @@ typedef NSMutableDictionary HMPrimitiveResponse;
                     [request setHTTPBody:[query dataUsingEncoding:NSUTF8StringEncoding]];
                 }
             }else{
-                NSData *data = [NSJSONSerialization dataWithJSONObject:self.param options:0 error:nil];
+                NSData *data = nil;
+                if (HMCurrentExecutor) {
+                    HMBaseValue *global = HMCurrentExecutor.globalObject;
+                    HMBaseValue *JSONObj = [HMCurrentExecutor getWithValue:global propertyName:@"JSON"];
+                    HMBaseValue *res = [JSONObj invokeMethod:@"stringify" withArguments:@[self.oriParamValue]];
+                    NSString *jsonStr = [res toString];
+                    if (jsonStr) {
+                        data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+                    }
+                }
+                if (!data) {
+                    if ([NSJSONSerialization isValidJSONObject:self.param]) {
+                        data = [NSJSONSerialization dataWithJSONObject:self.param options:0 error:nil];
+                    }else{
+                        HMLogError(@"HMRequest JSON Serialization failed");
+                    }
+                }
                 request.HTTPBody = data;
             }
         }
@@ -186,6 +206,7 @@ typedef NSMutableDictionary HMPrimitiveResponse;
 }
 
 - (void)__setParam:(HMBaseValue *)param {
+    self.oriParamValue = param;
     self.param = [param toObject];
 }
 
@@ -207,5 +228,6 @@ typedef NSMutableDictionary HMPrimitiveResponse;
     }];
     [dataTask resume];
 }
+
 
 @end

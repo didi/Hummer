@@ -163,7 +163,7 @@
 
 + (NSNumber *)convertStyleStringToNumber:(NSString *)style
 {
-    return @(style.integerValue);
+    return @(style.doubleValue);
 }
 
 + (NSDictionary *)convertTransform:(NSString *)funcStr

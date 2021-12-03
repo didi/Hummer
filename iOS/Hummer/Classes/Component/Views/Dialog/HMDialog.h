@@ -17,9 +17,22 @@ typedef NS_ENUM(NSInteger, HMDialogType) {
     HMDialogTypeCustomDestructiveCenter     //自定义选择项（一个也着重）
 };
 
+
+typedef NS_ENUM(NSUInteger, HMDialogStyle) {
+    HMDialogStyleAlert,
+    HMDialogStyleConfirm,
+    HMDialogStyleLoading,
+    HMDialogStyleCustom
+};;
+
 @interface HMDialog : UIAlertController
 
+/// @brief 是否使用当前 Hummer 容器视图所在的 window 作为对话框显示层，目前只针对 custom 方法有效
+@property (nonatomic, assign) BOOL isLowLayer;
+
 @property (nonatomic, assign, getter=isCancelabled) BOOL cancelable;
+
+@property (nonatomic, assign, readonly) HMDialogStyle dStyle;
 
 - (void)customView:(UIView *)view;
 

@@ -22,12 +22,12 @@
                 completion:(HMImageCompletionBlock)completionBlock {
     
     __weak typeof(self) wSelf = self;
-    [self hm_internalSetImageWithURL:source placeholder:placeholderSource failedImage:failedImageSource inJSBundleSource:bundleSource processBlock:process context:context completion:^(UIImage * _Nullable image, NSError * _Nullable error, HMImageCacheType cacheType) {
+    [self hm_internalSetImageWithURL:source placeholder:placeholderSource failedImage:failedImageSource inJSBundleSource:bundleSource processBlock:process context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
         if (image) {
             wSelf.image = image;
         }
         if (completionBlock) {
-            completionBlock(image,error,cacheType);
+            completionBlock(image,data,error,cacheType);
         }
     }];
 }

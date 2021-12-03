@@ -2,8 +2,12 @@
 // Created by XiaoFeng on 2021/6/24.
 //
 
+#include <mutex>
 #include "JSUtils.h"
 #include "HummerJNI.h"
+
+std::mutex mtx1;
+std::mutex mtx2;
 
 jclass JSUtils::numberCls;
 jclass JSUtils::doubleCls;
@@ -60,6 +64,7 @@ void JSUtils::init(JNIEnv *env) {
 }
 
 NAPIEnv JSUtils::toJsContext(int64_t envPtr) {
+    std::lock_guard<std::mutex> locker(mtx1);
     auto iter = jsContextIdMap.find(envPtr);
     if (iter != jsContextIdMap.end()) {
         return iter->second;
@@ -68,6 +73,7 @@ NAPIEnv JSUtils::toJsContext(int64_t envPtr) {
 }
 
 int64_t JSUtils::toJsContextPtr(NAPIEnv env) {
+    std::lock_guard<std::mutex> locker(mtx1);
     std::map<int64_t, NAPIEnv>::iterator it;
     for (it = jsContextIdMap.begin(); it != jsContextIdMap.end(); it++) {
         if (env == it->second) {
@@ -80,14 +86,17 @@ int64_t JSUtils::toJsContextPtr(NAPIEnv env) {
 }
 
 void JSUtils::removeJSContext(int64_t envPtr) {
+    std::lock_guard<std::mutex> locker(mtx1);
     jsContextIdMap.erase(envPtr);
 }
 
 void JSUtils::addHandleScope(int64_t envPtr, NAPIHandleScope scope) {
+    std::lock_guard<std::mutex> locker(mtx2);
     handleScopeMap.insert(std::make_pair(envPtr, scope));
 }
 
 NAPIHandleScope JSUtils::getHandleScope(int64_t envPtr) {
+    std::lock_guard<std::mutex> locker(mtx2);
     auto iter = handleScopeMap.find(envPtr);
     if (iter != handleScopeMap.end()) {
         return iter->second;
@@ -96,6 +105,7 @@ NAPIHandleScope JSUtils::getHandleScope(int64_t envPtr) {
 }
 
 void JSUtils::removeHandleScope(int64_t envPtr) {
+    std::lock_guard<std::mutex> locker(mtx2);
     handleScopeMap.erase(envPtr);
 }
 

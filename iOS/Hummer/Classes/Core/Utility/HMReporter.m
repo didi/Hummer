@@ -8,8 +8,7 @@
 #import "HMReporter.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import "HMInterceptor.h"
-
+#import <Hummer/HMConfigEntryManager.h>
 @interface HMReporter ()
 
 @property (nonatomic, assign) CFTimeInterval beginTime;
@@ -20,7 +19,7 @@
 @implementation HMReporter
 
 + (void)reportPerformanceWithBlock:(void (^)(dispatch_block_t _Nonnull))excuteBlock
-                            forKey:(NSString *)reportKey {
+                            forKey:(NSString *)reportKey namespace:(nonnull NSString *)namespace{
     if (!excuteBlock || reportKey.length == 0) { return; }
     CFTimeInterval beginTime = CACurrentMediaTime() * 1000;
     
@@ -30,30 +29,15 @@
             
             CFTimeInterval diff = endTime - beginTime;
             if (diff > 0.f) {
-                [HMInterceptor enumerateInterceptor:HMInterceptorTypeReporter
-                                          withBlock:^(id <HMReporterProtocol> interceptor,
-                                                      NSUInteger idx,
-                                                      BOOL * _Nonnull stop) {
-                    if ([interceptor respondsToSelector:@selector(handleJSPerformanceWithKey:info:)]) {
-                        [interceptor handleJSPerformanceWithKey:reportKey
-                                                           info:@{reportKey : @(diff)}];
-                    }
-                }];
+                [HMReporterInterceptor handleJSPerformanceWithKey:reportKey info:@{reportKey : @(diff)} namespace:namespace];
             }
         });
     }
 }
 
-+ (void)reportValue:(id)value forKey:(NSString *)reportKey {
-    [HMInterceptor enumerateInterceptor:HMInterceptorTypeReporter
-                              withBlock:^(id <HMReporterProtocol> interceptor,
-                                          NSUInteger idx,
-                                          BOOL * _Nonnull stop) {
-        if ([interceptor respondsToSelector:@selector(handleJSPerformanceWithKey:info:)]) {
-            [interceptor handleJSPerformanceWithKey:reportKey
-                                               info:@{reportKey : value}];
-        }
-    }];
++ (void)reportValue:(id)value forKey:(NSString *)reportKey namespace:(nonnull NSString *)namespace{
+    [HMReporterInterceptor handleJSPerformanceWithKey:reportKey info:@{reportKey : value} namespace:namespace];
+
 }
 
 @end

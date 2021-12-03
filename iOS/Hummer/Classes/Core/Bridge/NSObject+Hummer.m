@@ -19,23 +19,15 @@
 
 - (HMBaseValue *)hmValue {
     id <HMBaseWeakValueProtocol> weakValue = objc_getAssociatedObject(self, _cmd);
-    
     HMBaseValue *value = weakValue.value;
     if (!value) {
         // 不存在了
         objc_setAssociatedObject(self, _cmd, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
         return nil;
     }
 
     return value;
-}
-
-- (id <HMBaseWeakValueProtocol>)hmWeakValue {
-    return objc_getAssociatedObject(self, @selector(hmValue));
-}
-
-- (void)setHmWeakValue:(id <HMBaseWeakValueProtocol>)hmWeakValue {
-    objc_setAssociatedObject(self, @selector(hmValue), hmWeakValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)setHmValue:(HMBaseValue *)value {
@@ -47,6 +39,10 @@
 
 - (id <HMBaseExecutorProtocol>)hmContext {
     return self.hmValue.context;
+}
+
+- (void)hm_setWeakValue:(id<HMBaseWeakValueProtocol>)weakValue {
+    objc_setAssociatedObject(self, @selector(hmValue), weakValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

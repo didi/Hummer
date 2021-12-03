@@ -36,7 +36,7 @@ public class HummerSinglePageFragment extends HummerFragment {
 
 //    @Override
 //    protected String getNamespace() {
-//        return "my_demo";
+//        return "test_namespace";
 //    }
 
     @Override

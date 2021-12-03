@@ -5,54 +5,48 @@
 //  Created by didi on 2020/11/19.
 //
 
+#import <Foundation/Foundation.h>
 #import "HMImageCache.h"
-#import "HMImageDecoder.h"
 
-@interface HMImageCache()
+@interface HMStorageExpiration ()
 
-@property (nonatomic, strong) NSCache *decodedImageCache;
+@property(nonatomic, assign) NSInteger type;    //0:never, 1:interval(second), 2:interval(day)
+@property(nonatomic, assign) NSInteger interval;
 
 @end
+@implementation HMStorageExpiration
 
-@implementation HMImageCache
-
-static NSString *HMCacheKeyForImage(NSString *imageTag, CGSize size, CGFloat scale,HMResizeMode resizeMode) {
-  return [NSString stringWithFormat:@"%@|%g|%g|%g|%lld",
-          imageTag, size.width, size.height, scale, (long long)resizeMode];
++ (HMStorageExpiration *)never{
+    HMStorageExpiration *expiration = [HMStorageExpiration new];
+    expiration.type = 0;
+    return expiration;
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _decodedImageCache = [[NSCache alloc] init];
-        _decodedImageCache.totalCostLimit = 20 * 1024 * 1024;
-        _decodedImageCache.name = @"com.hummer.imageCache";
++ (HMStorageExpiration *)seconds:(NSTimeInterval)seconds{
+    HMStorageExpiration *expiration = [HMStorageExpiration new];
+    expiration.type = 1;
+    expiration.interval = seconds;
+    return expiration;
+}
+
++ (HMStorageExpiration *)days:(NSInteger)day{
+    NSTimeInterval duration = 86400 * day;
+    HMStorageExpiration *expiration = [self seconds:duration];
+    expiration.type = 2;
+    return expiration;
+}
+
+- (NSDate *)estimatedExpirationSinceNow {
+    if (self.type == 0) {
+        return [NSDate distantFuture];
     }
-    return self;
+    return [[NSDate date] dateByAddingTimeInterval:self.interval];
 }
 
-- (void)addImageToCache:(UIImage *)image forKey:(NSString *)cacheKey {
-    if (!image) {return;}
-    [self.decodedImageCache setObject:image forKey:cacheKey];
+- (BOOL)isExpired {
+    return NO;
 }
 
-- (nullable UIImage *)imageForUrl:(NSString *)url context:(HMImageLoaderContext *)context{
-    
-    CGSize destSize = [context[HMImageManagerContextImageResize] CGSizeValue];
-    CGFloat scale = [context[HMImageManagerContextImageScaleFactor] floatValue];
-    HMResizeMode mode = [context[HMImageManagerContextImageResizeMode] integerValue];
-    NSString *tag = url;
-    NSString *key = HMCacheKeyForImage(tag, destSize, scale, mode);
-    return [self.decodedImageCache objectForKey:key];
-}
 
-- (void)addImageToCache:(UIImage *)image url:(NSString *)url context:(HMImageLoaderContext *)context {
-    CGSize destSize = [context[HMImageManagerContextImageResize] CGSizeValue];
-    CGFloat scale = [context[HMImageManagerContextImageScaleFactor] floatValue];
-    HMResizeMode mode = [context[HMImageManagerContextImageResizeMode] integerValue];
-    NSString *tag = url;
-    NSString *key = HMCacheKeyForImage(tag, destSize, scale, mode);
-    [self addImageToCache:image forKey:key];
-}
 
 @end

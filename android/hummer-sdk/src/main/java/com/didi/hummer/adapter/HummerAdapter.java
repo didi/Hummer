@@ -4,9 +4,9 @@ import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.http.IHttpAdapter;
 import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer.adapter.navigator.INavigatorAdapter;
+import com.didi.hummer.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer.adapter.scriptloader.IScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
-import com.didi.hummer.adapter.websocket.IWebSocketAdapter;
 
 /**
  * 全局适配器调度类
@@ -21,14 +21,6 @@ public class HummerAdapter {
 
     public static IHttpAdapter getHttpAdapter(String namespace) {
         return HummerSDK.getHummerConfig(namespace).getHttpAdapter();
-    }
-
-    public static IWebSocketAdapter getWebSocketAdapter() {
-        return getWebSocketAdapter(null);
-    }
-
-    public static IWebSocketAdapter getWebSocketAdapter(String namespace) {
-        return HummerSDK.getHummerConfig(namespace).getWebSocketAdapter();
     }
 
     public static IImageLoaderAdapter getImageLoaderAdapter() {
@@ -61,5 +53,13 @@ public class HummerAdapter {
 
     public static IScriptLoaderAdapter getScriptLoaderAdapter(String namespace) {
         return HummerSDK.getHummerConfig(namespace).getScriptLoaderAdapter();
+    }
+
+    public static ITrackerAdapter getTrackerAdapter() {
+        return getTrackerAdapter(null);
+    }
+
+    public static ITrackerAdapter getTrackerAdapter(String namespace) {
+        return HummerSDK.getHummerConfig(namespace).getTrackerAdapter();
     }
 }
