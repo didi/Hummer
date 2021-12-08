@@ -14,6 +14,7 @@ export function run(container: any) {
   const { Storage, Memory } = __GLOBAL__
   let host = getPartUrlByParam(url, 'host')
   let port = getPartUrlByParam(url, 'port')
+  let path = getPartUrlByParam(url, 'path')
   let wsTenonUrl = `ws://${host}:${port}/proxy/tenon`
   // Tip: hummer-front 兼容
   if (isWebPlatform) {
@@ -31,6 +32,7 @@ export function run(container: any) {
         params: {
           ...params,
           viewTree: [data.simpleRoot],
+          path:path,
           baseInfo: __GLOBAL__.Hummer.env
         }
       })
