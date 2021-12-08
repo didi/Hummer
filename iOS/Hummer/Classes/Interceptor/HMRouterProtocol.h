@@ -30,6 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)handlePopBackWithCount:(NSUInteger)count params:(NSDictionary *)params;
 
+/// 兼容老版(注解)拦截器，新版(HMConfigEntryManager)拦截器不需要实现如下协议。
+- (BOOL)handlePopToRootWithAnimated:(BOOL)animated DEPRECATED_MSG_ATTRIBUTE("使用 - handlePopToRootWithParams: 替代");
+
+- (BOOL)handlePopBackWithCount:(NSUInteger)count animated:(BOOL)animated DEPRECATED_MSG_ATTRIBUTE("使用 + handlePopBackWithCount:params: 替代");
 
 @end
 
