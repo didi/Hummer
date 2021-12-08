@@ -41,7 +41,9 @@ dependencies {
     annotationProcessor project(":hummer-compiler")
 
     // Yoga
-    api 'com.facebook.yoga.android:yoga-layout:1.19.0'
+    api ('com.facebook.yoga.android:yoga-layout:1.19.0') {
+        exclude(group: 'com.facebook.yoga', module: 'proguard-annotations')
+    }
     implementation 'com.facebook.soloader:soloader:0.10.1'
 
     // relinker
