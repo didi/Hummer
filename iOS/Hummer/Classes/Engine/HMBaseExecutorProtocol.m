@@ -34,6 +34,8 @@ NSString *const HUMMER_CALL_NATIVE_METHOD_SIGNATURE_ERROR = @"hummerCallNative()
 
 NSString *const HUMMER_UN_SUPPORT_TYPE_TEMPLATE = @"不支持的类型 %s";
 
+NSString *const HUMMER_UN_MATCH_ARGS_TYPE_TEMPLATE = @"参数类型不匹配，OC目标参数类型: %s，js参数类型: %@";
+
 NSString *const HUMMER_CREATE_ERROR = @"严重错误，hummerCreate() 函数必须至少有一个字符串参数，一个 JSValue this 指针";
 
 NSString *const HUMMER_CAN_NOT_CREATE_NATIVE_OBJECT = @"%@ 类无法创建原生对象";

@@ -99,14 +99,14 @@ var printLog = (funcName, ...msgs) => {
     if (msgs.length == 1) {
       let m = msgs[0];
 
-      if (m instanceof Function) {
+      if (typeof m === 'undefined') {
+          msg = 'undefined';
+      } else if (m == null) {
+          msg = 'null';
+      } else if (m instanceof Function) {
         msg = m.toString();
       } else if (m instanceof Object) {
         msg = JSON.stringify(m);
-      } else if (typeof m === 'undefined') {
-        msg = 'undefined';
-      } else if (typeof m === 'null') {
-        msg = 'null';
       } else {
         msg = m.toString();
       }
@@ -118,16 +118,16 @@ var printLog = (funcName, ...msgs) => {
 
         let m = msgs[i];
 
-        if (m instanceof Function) {
+        if (typeof m === 'undefined') {
+            msg = msg.concat('undefined');
+        } else if (m == null) {
+            msg = msg.concat('null');
+        } else if (m instanceof Function) {
           msg = msg.concat(m.toString());
         } else if (m instanceof Object) {
           msg = msg.concat(JSON.stringify(m));
-        } else if (typeof m === 'undefined') {
-          msg = msg.concat('undefined');
-        } else if (typeof m === 'null') {
-          msg = msg.concat('null');
         } else {
-          msg = msg.concat(m);
+          msg = msg.concat(m.toString());
         }
       }
     }
@@ -183,6 +183,9 @@ var Hummer = {
   },
   render: view => {
     invoke("Hummer", 0, "render", view.objID);
+  },
+  getRootView: () => {
+    return invoke("Hummer", 0, "getRootView");
   },
   loadScript: script => {
     return invoke("Hummer", 0, "loadScript", script);
@@ -266,6 +269,13 @@ let Base = /*#__PURE__*/function () {
       let stash = arg;
       arg = transSingleArg(arg);
       invoke(this.className, this.objID, "dbg_highlight", arg);
+    }
+  }, {
+    key: "dbg_getDescription",
+    value: function dbg_getDescription(...args) {
+      let stash = args;
+      args = transArgs(...args);
+      invoke(this.className, this.objID, "dbg_getDescription", ...args);
     }
   }, {
     key: "style",

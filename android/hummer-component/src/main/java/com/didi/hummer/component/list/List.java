@@ -27,9 +27,11 @@ import com.didi.hummer.component.refresh.PullRefreshState;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.pool.ObjectPool;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.event.view.ScrollEvent;
+import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.YogaNodeUtil;
@@ -127,6 +129,7 @@ public class List extends HMBase<SmartRefreshLayout> {
                     scrollEvent.setDy(0);
                     scrollEvent.setTimestamp(System.currentTimeMillis());
                     mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
+                    refreshNodeTree();
                     break;
                 case RecyclerView.SCROLL_STATE_DRAGGING:
                     isScrollStarted = true;
@@ -274,6 +277,18 @@ public class List extends HMBase<SmartRefreshLayout> {
             default: {
                 int orientation = direction == DIRECTION_HORIZONTAL ? LinearLayoutManager.HORIZONTAL : LinearLayoutManager.VERTICAL;
                 layoutManager = new LinearLayoutManager(getContext(), orientation, false);
+//                layoutManager = new LinearLayoutManager(getContext(), orientation, false) {
+//                    /**
+//                     * 方法二：解决scrollToPosition时item无法滚动到屏幕开始处的问题
+//                     * 参考：https://www.jianshu.com/p/bde672af4e11
+//                     */
+//                    @Override
+//                    public void smoothScrollToPosition(RecyclerView view, RecyclerView.State state, int position) {
+//                        TopLinearSmoothScroller scroller = new TopLinearSmoothScroller(view.getContext());
+//                        scroller.setTargetPosition(position);
+//                        startSmoothScroll(scroller);
+//                    }
+//                };
                 break;
             }
             case MODE_GRID: {
@@ -506,6 +521,7 @@ public class List extends HMBase<SmartRefreshLayout> {
     @JsProperty("refreshView")
     private HMBase refreshView;
     public void setRefreshView(HMBase view) {
+        refreshView = view;
         refreshLayout.setEnableRefresh(true);
         hummerHeader.addHeaderView(view);
     }
@@ -513,6 +529,7 @@ public class List extends HMBase<SmartRefreshLayout> {
     @JsProperty("loadMoreView")
     private HMBase loadMoreView;
     public void setLoadMoreView(HMBase view) {
+        loadMoreView = view;
         refreshLayout.setEnableLoadMore(true);
         hummerFooter.addFooterView(view);
     }
@@ -577,6 +594,8 @@ public class List extends HMBase<SmartRefreshLayout> {
             adapter.refresh(count, isLoadingMore);
         }
         isLoadingMore = false;
+
+        refreshNodeTree();
     }
 
     @JsMethod("stopPullRefresh")
@@ -615,7 +634,51 @@ public class List extends HMBase<SmartRefreshLayout> {
 
     @JsMethod("scrollToPosition")
     public void scrollToPosition(int position) {
-        recyclerView.scrollToPosition(position);
+        // 方法一：解决item无法滚动到屏幕开始处的问题（无平滑滚动效果）
+        if (layoutManager instanceof LinearLayoutManager) {
+            ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(position, 0);
+        }
+        // 平滑滚动
+//        recyclerView.smoothScrollToPosition(position);
+    }
+
+    @JsMethod("dbg_getDescription")
+    public void dbg_getDescription(JSCallback callback, int depth) {
+        refreshNodeTree();
+        super.dbg_getDescription(callback, depth);
+    }
+
+    private void refreshNodeTree() {
+        if (!DebugUtil.isDebuggable()) {
+            return;
+        }
+
+        getView().post(() -> {
+            getNode().removeAll();
+
+            if (refreshView != null) {
+                refreshView.getNode().setAlias("Header");
+                getNode().appendChild(refreshView.getNode());
+            }
+
+            int firstPosition = ListUtil.getFirstVisibleItemPosition(layoutManager);
+            int lastPosition = ListUtil.getLastVisibleItemPosition(layoutManager);
+            for (int i = firstPosition; i <= lastPosition; i++) {
+                RecyclerView.ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(i);
+                if (vh instanceof HMListAdapter.ViewHolder) {
+                    HummerNode node = ((HMListAdapter.ViewHolder) vh).getNode();
+                    if (node != null) {
+                        node.setAlias(String.valueOf(i));
+                        getNode().appendChild(node);
+                    }
+                }
+            }
+
+            if (loadMoreView != null) {
+                loadMoreView.getNode().setAlias("Footer");
+                getNode().appendChild(loadMoreView.getNode());
+            }
+        });
     }
 
     @Override

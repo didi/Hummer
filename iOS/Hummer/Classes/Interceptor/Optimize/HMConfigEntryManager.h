@@ -16,9 +16,11 @@
 #import <Hummer/HMEventTrackProtocol.h>
 #import <Hummer/HMMemoryComponent.h>
 #import <Hummer/HMPluginManager.h>
+#import <Hummer/HMRouterProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString * const HMDefaultNamespace;
 
 /**
  * hummer sdk 初始化注入配置, 分为拦截器和插件。使用 namespace 区分
@@ -32,10 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 //替换默认 storage 实现
 @property (nonatomic, strong) id<HMStorage> storage;
 
-// 如 canLoad 返回false。则继续使用 sdk 内部 imageloader。
 @property (nonatomic, strong) id<HMImageLoader> imageLoaderInterceptor;
 
-// 如 canLoad 返回false。则继续使用 sdk 内部 imageloader。
 @property (nonatomic, strong) Class<HMJSLoader> jsLoaderInterceptor;
 
 @property (nonatomic, strong) id<HMJSCallerIterceptor> jsCallerInterceptor;
@@ -48,6 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, nullable, strong) id <HMTrackEventPluginProtocol> trackEventPlugin;
 
+@property(nonatomic, nullable, strong) id <HMRouterProtocol> routerInterceptor;
+
+
 @end
 
 
@@ -56,14 +59,32 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, HMConfigEntry *> *configMap DEPRECATED_MSG_ATTRIBUTE("参照其他 Interceptor 做处理");;
 
 + (instancetype)manager;
-- (void)addConfig:(HMConfigEntry *)config;
-
-
-@end
 
 /**
  * 注意 注解 和 addConfig 只能使用一种方式。
  */
+- (void)addConfig:(HMConfigEntry *)config;
+
+@end
+
+
+
+
+@interface HMRouterInterceptor : NSObject
+
+/// 自定义方式打开视图控制器
+///
+/// @return 返回YES表示处理，返回NO表示不处理;
+///
++ (BOOL)handleOpenViewController:(__kindof UIViewController *)viewController pageInfo:(HMNavigatorPageInfo *)pageInfo namespace:(NSString *)namespace;
+
++ (BOOL)handlePopWithViewController:(nullable UIViewController *)viewController animated:(BOOL)animated namespace:(NSString *)namespace;
+
++ (BOOL)handlePopToRootWithParams:(NSDictionary *)params  namespace:(NSString *)namespace;
+
++ (BOOL)handlePopBackWithCount:(NSUInteger)count params:(NSDictionary *)params namespace:(NSString *)namespace;
+
+@end
 
 @interface HMImageLoaderInterceptor : NSObject
 
@@ -73,7 +94,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMJSLoaderInterceptor : NSObject
 
-+ (BOOL)loadWithSource:(id<HMURLConvertible>)source namespace:(NSString *)namespace completion:(HMJSLoaderCompleteBlock)completion;
+/**
+ * @brief jsLoader 拦截器方法。
+ * @param source 原始参数，如果传递相对路径，则根据 bundleSource 解析。
+ * @param bundleSource 容器原始Url。
+*/
++ (BOOL)loadWithSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource  namespace:(NSString *)namespace completion:(HMJSLoaderCompleteBlock)completion;
 @end
 
 

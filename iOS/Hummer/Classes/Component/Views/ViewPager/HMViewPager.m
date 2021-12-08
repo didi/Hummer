@@ -19,6 +19,8 @@
 #import "HMViewPagerLayout.h"
 #import "HMViewPagerLayoutCardAnimator.h"
 
+#import <Hummer/UIView+HMInspector.h>
+
 @interface HMViewPagerItem : NSObject
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, strong, nullable) id data;
@@ -27,7 +29,7 @@
 @implementation HMViewPagerItem
 @end
 
-@interface HMViewPager () <UICollectionViewDataSource, UICollectionViewDelegate, HMViewPagerLayoutProvider, UIScrollViewDelegate>
+@interface HMViewPager () <UICollectionViewDataSource, UICollectionViewDelegate, HMViewPagerLayoutProvider, UIScrollViewDelegate, HMViewInspectorDescription>
 
 // MARK: Native
 
@@ -152,6 +154,9 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
 {
     [super layoutSubviews];
     
+    if (!CGRectEqualToRect(self.pageView.frame, self.bounds)) {
+        [self.layout forceInvalidate];
+    }
     self.pageView.frame = self.bounds;
 }
 
@@ -563,6 +568,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     
     // return a cell for displaying image
     if ([item.data isKindOfClass:NSString.class] && [item.data hasPrefix:@"http"]) {
+        cell.contentViewValue = nil;
         [cell setImageURL:item.data];
         return cell;
     }
@@ -664,6 +670,21 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     });
     [self scrollToIndex:self.currentIndex animated:YES];
     [self triggerItemChangedCallback];
+}
+
+#pragma mark - <HMViewInspectorDescription>
+
+
+// 屏蔽 header/footer 原生视图
+- (NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    NSMutableArray *res = [NSMutableArray new];
+
+    NSArray *children = self.pageView.visibleCells;
+    if (children) {
+        [res addObjectsFromArray:children];
+    }
+    return res.copy;
 }
 
 @end

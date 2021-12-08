@@ -13,6 +13,7 @@
 #import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMContainerModel.h"
 #import <Hummer/HMBaseValue.h>
+#import <Hummer/HMConfigEntryManager.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)popToPage:(NSString *)pageID animated:(BOOL)animated;
 
-+ (void)popToRootPage:(BOOL)animated;
++ (void)popToRootPage:(NSDictionary *)pageInfo;
 
 @end
 
@@ -172,9 +173,9 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
 
 + (void)__popPage:(HMBaseValue *)params {
     BOOL animated = YES;
-    if (params.isObject) {
-        NSDictionary *parameterDictionary = params.toDictionary;
-        id animatedObject = parameterDictionary[@"animated"];
+    NSDictionary *pageInfo = params.toDictionary;
+    if (pageInfo) {
+        id animatedObject = pageInfo[@"animated"];
         if ([animatedObject isKindOfClass:NSNumber.class]) {
             animated = ((NSNumber *) animatedObject).boolValue;
         }
@@ -185,7 +186,8 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
 }
 
 + (void)__popToPage:(HMBaseValue *)params {
-    if (!params.isObject) {
+    NSDictionary *pageInfo = params.toDictionary;
+    if (!pageInfo) {
         return;
     }
     NSDictionary *parameterDictioinary = params.toDictionary;
@@ -206,16 +208,8 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
 }
 
 + (void)__popToRootPage:(HMBaseValue *)params {
-    BOOL animated = YES;
-    if (!params.isObject) {
-        NSDictionary *parameterDictioinary = params.toDictionary;
-        id animatedObject = parameterDictioinary[@"animated"];
-        if ([animatedObject isKindOfClass:NSNumber.class]) {
-            animated = ((NSNumber *) animatedObject).boolValue;
-        }
-    }
-
-    [self popToRootPage:animated];
+    NSDictionary *pageInfo = params.toDictionary;
+    [self popToRootPage:pageInfo];
 }
 
 + (void)__popBackWithCount:(HMBaseValue *)count pageInfo:(HMBaseValue *)pageInfo {
@@ -224,31 +218,17 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     __block uint32_t countValue = count.toUInt32;
     
     BOOL animated = YES;
-    id animatedObject = pageInfo.toDictionary[@"animated"];
-    if ([animatedObject isKindOfClass:NSNumber.class]) {
-        animated = ((NSNumber *) animatedObject).boolValue;
-    }
-    
-    __block BOOL isHandled = NO;
-    if ([HMInterceptor hasInterceptor:HMInterceptorTypeRouter]) {
-        [HMInterceptor enumerateInterceptor:HMInterceptorTypeRouter
-                                  withBlock:^(id<HMRouterProtocol> interceptor,
-                                              NSUInteger idx,
-                                              BOOL * _Nonnull stop) {
-            if (![interceptor respondsToSelector:@selector(handlePopBackWithCount:animated:)]) {
-                return;
-            }
-            BOOL ret = [interceptor handlePopBackWithCount:countValue animated:animated];
-            if (ret) {
-                isHandled = YES;
-                *stop = YES;
-            }
-        }];
-    }
+    NSDictionary *params = pageInfo.toDictionary;
+
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    BOOL isHandled = [HMRouterInterceptor handlePopBackWithCount:countValue params:params namespace:context.nameSpace];
     if (isHandled) {
         return;
     }
-    
+    id animatedObject = params[@"animated"];
+    if ([animatedObject isKindOfClass:NSNumber.class]) {
+        animated = ((NSNumber *) animatedObject).boolValue;
+    }
     UIViewController *topViewController = HMTopViewController();
     HMContainerModel *containerModel = hm_nearest_container(topViewController);
     if (!containerModel.viewController || containerModel.containerType != HMContainerTypeNavigation) {
@@ -344,22 +324,7 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     }
     
     // 检查页面路由插件
-    __block BOOL isHandled = NO;
-    if ([HMInterceptor hasInterceptor:HMInterceptorTypeRouter]) {
-        [HMInterceptor enumerateInterceptor:HMInterceptorTypeRouter
-                                  withBlock:^(id<HMRouterProtocol> interceptor,
-                                              NSUInteger idx,
-                                              BOOL * _Nonnull stop) {
-            if (![interceptor respondsToSelector:@selector(handleOpenViewController:pageInfo:)]) {
-                return;
-            }
-            BOOL ret = [interceptor handleOpenViewController:viewController pageInfo:info];
-            if (ret) {
-                isHandled = YES;
-                *stop = YES;
-            }
-        }];
-    }
+    BOOL isHandled = [HMRouterInterceptor handleOpenViewController:viewController pageInfo:info namespace:info.nameSpace];
     if (isHandled) {
         return;
     }
@@ -376,22 +341,10 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
 }
 
 + (void)popPage:(BOOL)animated {
-    __block BOOL isHandled = NO;
-    if ([HMInterceptor hasInterceptor:HMInterceptorTypeRouter]) {
-        [HMInterceptor enumerateInterceptor:HMInterceptorTypeRouter
-                                  withBlock:^(id<HMRouterProtocol> interceptor,
-                                              NSUInteger idx,
-                                              BOOL * _Nonnull stop) {
-            if (![interceptor respondsToSelector:@selector(handlePopWithViewController:animated:)]) {
-                return;
-            }
-            BOOL ret = [interceptor handlePopWithViewController:nil animated:animated];
-            if (ret) {
-                isHandled = YES;
-                *stop = YES;
-            }
-        }];
-    }
+
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    BOOL isHandled = [HMRouterInterceptor handlePopWithViewController:nil animated:animated namespace:context.nameSpace];
+    
     if (isHandled) {
         return;
     }
@@ -415,22 +368,8 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     if (!viewController) {
         return;
     }
-    __block BOOL isHandled = NO;
-    if ([HMInterceptor hasInterceptor:HMInterceptorTypeRouter]) {
-        [HMInterceptor enumerateInterceptor:HMInterceptorTypeRouter
-                                  withBlock:^(id<HMRouterProtocol> interceptor,
-                                              NSUInteger idx,
-                                              BOOL * _Nonnull stop) {
-            if (![interceptor respondsToSelector:@selector(handlePopWithViewController:animated:)]) {
-                return;
-            }
-            BOOL ret = [interceptor handlePopWithViewController:viewController animated:animated];
-            if (ret) {
-                isHandled = YES;
-                *stop = YES;
-            }
-        }];
-    }
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    BOOL isHandled = [HMRouterInterceptor handlePopWithViewController:nil animated:animated namespace:context.nameSpace];
     if (isHandled) {
         return;
     }
@@ -443,25 +382,17 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     }
 }
 
-+ (void)popToRootPage:(BOOL)animated {
-    __block BOOL isHandled = NO;
-    if ([HMInterceptor hasInterceptor:HMInterceptorTypeRouter]) {
-        [HMInterceptor enumerateInterceptor:HMInterceptorTypeRouter
-                                  withBlock:^(id<HMRouterProtocol> interceptor,
-                                              NSUInteger idx,
-                                              BOOL * _Nonnull stop) {
-            if (![interceptor respondsToSelector:@selector(handlePopToRootWithAnimated:)]) {
-                return;
-            }
-            BOOL ret = [interceptor handlePopToRootWithAnimated:animated];
-            if (ret) {
-                isHandled = YES;
-                *stop = YES;
-            }
-        }];
-    }
++ (void)popToRootPage:(NSDictionary *)pageInfo {
+    
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    BOOL isHandled = [HMRouterInterceptor handlePopToRootWithParams:pageInfo namespace:context.nameSpace];
     if (isHandled) {
         return;
+    }
+    BOOL animated = YES;
+    id animatedObject = pageInfo[@"animated"];
+    if ([animatedObject isKindOfClass:NSNumber.class]) {
+        animated = ((NSNumber *) animatedObject).boolValue;
     }
     
     UIViewController *topViewController = HMTopViewController();

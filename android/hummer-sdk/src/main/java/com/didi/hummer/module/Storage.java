@@ -5,6 +5,9 @@ import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.context.HummerContext;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 存储组件
  *
@@ -33,6 +36,16 @@ public class Storage {
         removeAll(context.getNamespace());
     }
 
+    @JsMethod("getAll")
+    public static Map<String, Object> getAll(HummerContext context) {
+        return getAll(context.getNamespace());
+    }
+
+    @JsMethod("allKeys")
+    public static List<String> allKeys(HummerContext context) {
+        return allKeys(context.getNamespace());
+    }
+
     @JsMethod("exist")
     public static boolean exist(HummerContext context, String key) {
         return exist(context.getNamespace(), key);
@@ -52,6 +65,14 @@ public class Storage {
 
     public static void removeAll(String namespace) {
         HummerAdapter.getStorageAdapter(namespace).removeAll();
+    }
+
+    public static Map<String, Object> getAll(String namespace) {
+        return HummerAdapter.getStorageAdapter(namespace).getAll();
+    }
+
+    public static List<String> allKeys(String namespace) {
+        return HummerAdapter.getStorageAdapter(namespace).allKeys();
     }
 
     public static boolean exist(String namespace, String key) {

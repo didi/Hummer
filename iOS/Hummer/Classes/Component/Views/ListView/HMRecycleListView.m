@@ -25,6 +25,8 @@
 #import "HMWaterfallLayoutAttributes.h"
 #import "UIView+HMRenderObject.h"
 
+#import <Hummer/UIView+HMInspector.h>
+
 static NSString * const HMRecycleListViewListCellDefaultIdentifier = @"-1";
 
 typedef NS_ENUM(NSUInteger, HMScrollDirection) {
@@ -34,9 +36,11 @@ typedef NS_ENUM(NSUInteger, HMScrollDirection) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface _InnerCollectionViewCell : UICollectionViewCell
+@interface _InnerCollectionViewCell : UICollectionViewCell<HMViewInspectorDescription>
 
 @property (nonatomic, nullable, strong) HMBaseValue *contentViewValue;
+
+@property (nonatomic, copy) NSIndexPath *indexPath;
 
 - (void)commonInit;
 
@@ -94,8 +98,8 @@ NS_ASSUME_NONNULL_END
     
     UIView *jsContentView = self.contentView.subviews.lastObject;
     CGSize jsContentViewSize =[jsContentView hm_sizeThatFits:CGSizeMake(containerSize.width, CGFLOAT_MAX)];
-    jsContentViewSize.height = ceilf(((int)(jsContentViewSize.height*10))/10.0);
-    jsContentViewSize.width = ceilf(((int)(jsContentViewSize.width*10))/10.0);
+//    jsContentViewSize.height = ceilf(((int)(jsContentViewSize.height*10))/10.0);
+//    jsContentViewSize.width = ceilf(((int)(jsContentViewSize.width*10))/10.0);
     
     if ([attributes isKindOfClass:[HMListLayoutAttributes class]]) {
         HMListLayoutAttributes *listAttributes = (HMListLayoutAttributes *)attributes;
@@ -113,10 +117,46 @@ NS_ASSUME_NONNULL_END
     return attributes;
 }
 
+#pragma mark <HMViewInspectorDescription>
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayJsChildren];
+}
+
+- (HMBaseValue *)hm_displayJsElement {
+    return self.contentViewValue;
+}
+
+- (NSString *)hm_displayID {
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_ID];
+}
+
+- (id)hm_displayContent {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayContent];
+}
+
+- (NSString *)hm_displayTagName {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayTagName];
+}
+
+
+- (NSString *)hm_displayAlias {
+    return [NSString stringWithFormat:@"%ld",self.indexPath.row];
+}
+
+
 @end
 
 @interface HMRecycleListView () <UICollectionViewDataSource,
-                                 UICollectionViewDelegateFlowLayout>
+                                 UICollectionViewDelegateFlowLayout,
+                                 HMViewInspectorDescription>
 
 @property (nonatomic, copy) NSString *mode;
 @property (nonatomic, assign) UICollectionViewScrollDirection direction;
@@ -508,8 +548,11 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     NSInteger count = countValue.toNumber.integerValue;
     self.cellCount = count;
     
-    [self.collectionViewLayout invalidateLayout];
-    [self reloadData];
+    //fix: 偶现白屏
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionViewLayout invalidateLayout];
+        [self reloadData];
+    });
 }
 
 - (void)scrollToIndex:(HMBaseValue *)value {
@@ -522,9 +565,16 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     }
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    [self scrollToItemAtIndexPath:indexPath
-                 atScrollPosition:UICollectionViewScrollPositionTop
-                         animated:YES];
+    //根据UICollectionViewScrollDirection设置不同的UICollectionViewScrollPosition
+    if(_direction == UICollectionViewScrollDirectionHorizontal){
+        [self scrollToItemAtIndexPath:indexPath
+                     atScrollPosition:UICollectionViewScrollPositionLeft
+                             animated:YES];
+    }else{
+        [self scrollToItemAtIndexPath:indexPath
+                     atScrollPosition:UICollectionViewScrollPositionTop
+                             animated:YES];
+    }
 }
 
 - (void)scrollToX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue {
@@ -678,6 +728,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     // 2. 获取在客户端环境创建的重用 cell
     _InnerCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier
                                                                                forIndexPath:indexPath];
+    cell.indexPath = indexPath;
     // 3. 获取在 JS 环境中创建的实际展示的 view 对应的 jsValue
     HMBaseValue *cellJSValue = cell.contentView.subviews.lastObject.hmValue;
     
@@ -716,5 +767,35 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     
     return cell;
 }
+
+#pragma mark - <HMViewInspectorDescription>
+
+// 屏蔽 header/footer 原生视图
+- (NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    NSMutableArray *res = [NSMutableArray new];
+    if (self.refreshView.contentViewValue) {
+        [res addObject:self.refreshView];
+    }
+
+    NSArray <_InnerCollectionViewCell *>*children = self.visibleCells;
+    children = [children sortedArrayUsingComparator:^NSComparisonResult(_InnerCollectionViewCell  *obj1, _InnerCollectionViewCell  *obj2) {
+     
+        if (obj1.indexPath.row < obj2.indexPath.row) {
+            return NSOrderedAscending;
+        }else if (obj1.indexPath.row > obj2.indexPath.row) {
+            return NSOrderedDescending;
+        }
+        return NSOrderedSame;
+    }];
+    if (children) {
+        [res addObjectsFromArray:children];
+    }
+    if (self.loadView.contentViewValue) {
+        [res addObject:self.loadView];
+    }
+    return res.copy;
+}
+
 
 @end

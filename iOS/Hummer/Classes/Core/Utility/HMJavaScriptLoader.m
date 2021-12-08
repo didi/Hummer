@@ -103,16 +103,23 @@ static void syncJsBundleAtURL(NSURL *url,
     return source;
 }
 
-+ (BOOL)loadWithSource:(id<HMURLConvertible>)source completion:(HMJSLoaderCompleteBlock)completion{
++ (BOOL)loadWithSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource completion:(HMJSLoaderCompleteBlock)completion {
     
-    [self loadBundleWithURL:[source hm_asUrl] onProgress:nil onComplete:^(NSError *error, HMDataSource *source) {
+    NSString *sourceString = [source hm_asString];
+    NSURL *url = [source hm_asUrl];
+    if([sourceString hasPrefix:@"."]){
+        url = [NSURL URLWithString:[source hm_asString] relativeToURL:[bundleSource hm_asUrl]];
+    }
+    [self loadBundleWithURL:url onProgress:nil onComplete:^(NSError *error, HMDataSource *source) {
         if (completion) {
             NSString *script = [[NSString alloc] initWithData:source.data encoding:NSUTF8StringEncoding];
             completion(error, script);
         }
     }];
     return YES;
+    
 }
+
 @end
 
 static void syncJsBundleAtURL(NSURL *url,

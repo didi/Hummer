@@ -1,5 +1,5 @@
 import initSocket, { sendMessage } from './socket'
-import { getPartUrlByParam, getViewData, updateOptions, log } from './utils'
+import { getPartUrlByParam, getViewData, updateOptions, log, error, formatNode } from './utils'
 import { getAllStorage } from './storageintercept'
 import { getAllMemory } from './memoryintercept'
 /**
@@ -8,13 +8,21 @@ import { getAllMemory } from './memoryintercept'
  */
 // Tip: hummer-front 兼容
 let isWebPlatform = __GLOBAL__.Hummer.pageInfo && JSON.stringify(__GLOBAL__.Hummer.pageInfo) === '{}'
-export function run(container: any) {
-  log('get ready~')
+
+export function run(container: any, type: string = 'tenon-vue') {
+  let formatedNode = formatNode(container, type)
+  log('Socket Initializing')
   const { url } = __GLOBAL__.Hummer.pageInfo
   const { Storage, Memory } = __GLOBAL__
   let host = getPartUrlByParam(url, 'host')
   let port = getPartUrlByParam(url, 'port')
   let path = getPartUrlByParam(url, 'path')
+  let scheme = getPartUrlByParam(url, 'scheme')
+  // scheme错误 or 没有端口 报错&return
+  if (!['http', 'https'].includes(scheme) || !port) {
+    error(`invalid url[${url}], initialization failed`)
+    return
+  }
   let wsTenonUrl = `ws://${host}:${port}/proxy/tenon`
   // Tip: hummer-front 兼容
   if (isWebPlatform) {
@@ -25,7 +33,7 @@ export function run(container: any) {
   let viewMap = {}, viewId: number, view: any
   const onSocketMsgHandlers = {
     'getViewTree': function (ws: any, params: any) {
-      let data = getViewData(container)
+      let data = getViewData(formatedNode, type)
       viewMap = data.viewMap
       sendMessage(ws, {
         method: 'setViewTree',
@@ -49,7 +57,7 @@ export function run(container: any) {
             ...params,
             rect: rect,
             style: view.style,
-            className: view.className
+            className: view.className || ''
           }
         })
       })
@@ -100,4 +108,5 @@ export function run(container: any) {
     },
   }
   initSocket(wsTenonUrl, onSocketMsgHandlers)
+  log('Socket initializing complete')
 }

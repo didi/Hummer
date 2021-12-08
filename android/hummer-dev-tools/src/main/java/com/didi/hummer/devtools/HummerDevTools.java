@@ -65,7 +65,6 @@ public class HummerDevTools {
 
     public void release() {
         wsManager.close();
-        entrance.release();
     }
 
     /**

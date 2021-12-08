@@ -2,6 +2,7 @@ package com.didi.hummer.module.notifycenter;
 
 import android.content.Context;
 
+import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.base.ICallback;
 
 /**
@@ -16,6 +17,11 @@ public abstract class NotifyCallback implements ICallback {
 
     public NotifyCallback(Context context) {
         contextId = context.hashCode();
+        callbackId = hashCode();
+    }
+
+    public NotifyCallback(JSContext context) {
+        contextId = context.getIdentify();
         callbackId = hashCode();
     }
 

@@ -8,11 +8,12 @@
 #import "HMRefreshBaseView.h"
 #import "UIView+HMRenderObject.h"
 #import "UIView+HMDom.h"
+#import <Hummer/UIView+HMInspector.h>
 
 #define HMDefaultRefreshHeight 44
 #define HMDefaultLoadhHeight 44
 
-@interface HMRefreshBaseView () <UIScrollViewDelegate>
+@interface HMRefreshBaseView () <UIScrollViewDelegate, HMViewInspectorDescription>
 
 @property (nonatomic, strong) UIView * contentView;
 
@@ -97,6 +98,35 @@
 - (void)setInsets:(UIEdgeInsets)insets {
     _insets = insets;
     [self setNeedsLayout];
+}
+
+#pragma mark - <HMViewInspectorDescription>
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayJsChildren];
+}
+
+- (HMBaseValue *)hm_displayJsElement {
+    return self.contentViewValue;
+}
+
+- (NSString *)hm_displayID {
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_ID];
+}
+
+- (id)hm_displayContent {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayContent];
+}
+
+- (NSString *)hm_displayTagName {
+    
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_displayTagName];
 }
 
 @end
@@ -212,6 +242,13 @@
     } else if (type == HMRefreshTypeRefreshing) {
         [self beginRefresh];
     }
+}
+
+#pragma mark - <HMViewInspectorDescription>
+
+- (NSString *)hm_displayAlias {
+    
+    return @"Header";
 }
 
 @end
@@ -344,7 +381,7 @@
         }];
     };
     
-    if (self.isAnimated) {
+    if (!self.isAnimated) {
         doAnimation();
     }
 
@@ -357,4 +394,11 @@
     [self layoutIfNeeded];
 }
 
+
+#pragma mark - <HMViewInspectorDescription>
+
+- (NSString *)hm_displayAlias {
+    
+    return @"Footer";
+}
 @end

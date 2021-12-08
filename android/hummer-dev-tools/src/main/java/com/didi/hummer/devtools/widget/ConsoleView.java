@@ -323,7 +323,6 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
                 case LogBean.LEVEL_WARN:
                     tvConsole.setTextColor(0xFFFD6D40);
                     break;
-                case LogBean.LEVEL_EXCEPTION:
                 case LogBean.LEVEL_ERROR:
                     tvConsole.setTextColor(Color.RED);
                     break;

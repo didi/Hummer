@@ -11,8 +11,8 @@
 #import "HMBaseValue.h"
 
 NSString * const kHMScrollState     = @"state";
-NSString * const kHMScrollDeltaX    = @"deltaX";
-NSString * const kHMScrollDeltaY    = @"deltaY";
+NSString * const kHMScrollDeltaX    = @"dx";
+NSString * const kHMScrollDeltaY    = @"dy";
 NSString * const kHMScrollOffsetX   = @"offsetX";
 NSString * const kHMScrollOffsetY   = @"offsetY";
 

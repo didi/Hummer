@@ -45,10 +45,6 @@ public class HummerLogManager {
         sendLog2Cli(bean);
     }
 
-    public void addException(String exception) {
-        addLog(LogBean.LEVEL_EXCEPTION, exception);
-    }
-
     /**
      * 命令行显示日志，发送格式如下
      * {

@@ -12,7 +12,6 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.component.view.HummerLayoutExtendView;
-import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
 
 /**
@@ -39,7 +38,7 @@ public class View extends HummerLayoutExtendView {
             return;
         }
 
-        hummerNode.appendChild(child.getNode());
+        getNode().appendChild(child.getNode());
 
         // 以下控件需要限制子元素超出父容器
         if (child instanceof Image || child instanceof Scroller || child instanceof HorizontalScroller || child instanceof List || child instanceof ViewPager) {
@@ -56,7 +55,7 @@ public class View extends HummerLayoutExtendView {
             return;
         }
 
-        hummerNode.removeChild(child.getNode());
+        getNode().removeChild(child.getNode());
     }
 
     @Override
@@ -64,7 +63,7 @@ public class View extends HummerLayoutExtendView {
     public void removeAll() {
         super.removeAll();
 
-        hummerNode.removeAll();
+        getNode().removeAll();
     }
 
     @Override
@@ -76,7 +75,7 @@ public class View extends HummerLayoutExtendView {
             return;
         }
 
-        hummerNode.insertBefore(child.getNode(), existing.getNode());
+        getNode().insertBefore(child.getNode(), existing.getNode());
 
         // 以下控件需要限制子元素超出父容器
         if (child instanceof Image || child instanceof Scroller || child instanceof HorizontalScroller || child instanceof List || child instanceof ViewPager) {
@@ -93,7 +92,7 @@ public class View extends HummerLayoutExtendView {
             return;
         }
 
-        hummerNode.replaceChild(child.getNode(), old.getNode());
+        getNode().replaceChild(child.getNode(), old.getNode());
 
         // 以下控件需要限制子元素超出父容器
         if (child instanceof Image || child instanceof Scroller || child instanceof HorizontalScroller || child instanceof List || child instanceof ViewPager) {
@@ -123,11 +122,6 @@ public class View extends HummerLayoutExtendView {
     @JsMethod("empty")
     public void empty() {
         // 该方法用于测试
-    }
-
-    @JsMethod("dbg_view_tree")
-    public HummerNode dbg_view_tree() {
-        return getNode();
     }
 
     @Override

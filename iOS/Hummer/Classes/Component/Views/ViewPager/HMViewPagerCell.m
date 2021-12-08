@@ -15,10 +15,13 @@
 #import "UIImageView+HMImageLoader.h"
 #import <Hummer/UIView+HMDom.h>
 
-@interface HMViewPagerCell ()
+#import <Hummer/UIView+HMInspector.h>
+
+@interface HMViewPagerCell ()<HMViewInspectorDescription>
 
 @property (nonatomic, strong) UIImageView *imageView;
 
+@property (nonatomic, copy, nullable) NSString *imageHref;
 @end
 
 @implementation HMViewPagerCell
@@ -28,16 +31,16 @@
     self = [super initWithFrame:frame];
     if (self) {
         _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
-        _imageView.isHmLayoutEnabled = NO;
+//        _imageView.isHmLayoutEnabled = NO;
         [self.contentView addSubview:self.imageView];
         
         self.clipsToBounds = YES;
-        self.isHmLayoutEnabled = NO;
-        [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionColumn);
-            layout.justifyContent = YOGA_TYPE_WRAPPER(YGJustifyCenter);
-            layout.alignItems = YOGA_TYPE_WRAPPER(YGAlignStretch);
-        }];
+//        self.isHmLayoutEnabled = NO;
+//        [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
+//            layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionColumn);
+//            layout.justifyContent = YOGA_TYPE_WRAPPER(YGJustifyCenter);
+//            layout.alignItems = YOGA_TYPE_WRAPPER(YGAlignStretch);
+//        }];
     }
     return self;
 }
@@ -48,6 +51,8 @@
         return;
     }
     self.imageView.hidden = NO;
+    self.imageHref = url;
+    self.contentViewValue = nil;
     [self.imageView hm_setImageWithURL:url];
 }
 
@@ -57,8 +62,63 @@
         return;
     }
     self.imageView.hidden = YES;
+    self.imageHref = nil;
     [self.contentView addSubview:view];
-    [self.contentView hm_markDirty];
+//    [view hm_markDirty];
 }
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (!CGRectEqualToRect(self.contentView.subviews.lastObject.frame, self.contentView.bounds)) {
+        self.contentView.subviews.lastObject.frame = self.contentView.bounds;
+    }
+}
+
+
+#pragma mark <HMViewInspectorDescription>
+
+- (nullable NSArray<id<HMViewInspectorDescription>> *)hm_displayJsChildren {
+    if (self.contentViewValue) {
+        UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+        return [view hm_displayJsChildren];
+    }
+    return nil;
+}
+
+- (HMBaseValue *)hm_displayJsElement {
+    return self.contentViewValue;
+}
+
+- (NSString *)hm_displayID {
+    if (!self.contentViewValue) {
+        return nil;
+    }
+    UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+    return [view hm_ID];
+}
+
+- (id)hm_displayContent {
+    
+    if (self.contentViewValue) {
+        UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+        [view hm_displayContent];
+    }
+    return self.imageHref;
+}
+
+- (NSString *)hm_displayTagName {
+    
+    if (self.contentViewValue) {
+        UIView *view = (UIView *)[self.contentViewValue toNativeObject];
+        return [view hm_displayTagName];
+    }
+    return @"Image";
+}
+
+
+- (NSString *)hm_displayAlias {
+    return [NSString stringWithFormat:@"%ld",self.indexPath.row];
+}
+
 
 @end

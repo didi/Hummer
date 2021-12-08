@@ -86,11 +86,13 @@ HM_EXPORT_CLASS_PROPERTY(pageInfo, pageInfo, setPageInfo:)
 
 HM_EXPORT_CLASS_METHOD(render, render:)
 
+HM_EXPORT_CLASS_METHOD(getRootView, getRootView)
+
 HM_EXPORT_CLASS_METHOD(setBasicWidth, setBasicWidth:)
 
-HM_EXPORT_CLASS_METHOD(evaluateScript, evaluateScript:)
+HM_EXPORT_CLASS_METHOD(loadScript, evaluateScript:)
 
-HM_EXPORT_CLASS_METHOD(evaluateScriptWithUrl, evaluateScriptWithUrl:callback:)
+HM_EXPORT_CLASS_METHOD(loadScriptWithUrl, evaluateScriptWithUrl:callback:)
 
 HM_EXPORT_CLASS_METHOD(postException, postException:)
 
@@ -98,9 +100,10 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 + (void)postException:(HMBaseValue *)exception {
 
     NSDictionary *exceptionDic = exception.toDictionary;
-    if (exceptionDic && HMCurrentExecutor.exceptionHandler) {
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    if (exceptionDic && context.exceptionHandler) {
         HMExceptionModel *model = [[HMExceptionModel alloc] initWithParams:exceptionDic];
-        HMCurrentExecutor.exceptionHandler(model);
+        context.exceptionHandler(model);
     }
 }
 
@@ -136,7 +139,8 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
             }
         }
     };
-    [HMJSLoaderInterceptor loadWithSource:url namespace:context.nameSpace completion:^(NSError * _Nonnull error, NSString * _Nonnull script) {
+    [HMJSLoaderInterceptor loadWithSource:url inJSBundleSource:context.url namespace:context.nameSpace completion:^(NSError * _Nullable error, NSString * _Nullable script) {
+
         if (error) {
             NSDictionary *err = @{@"code": @(error.code),
                     @"message": error.userInfo[NSLocalizedDescriptionKey] ? error.userInfo[NSLocalizedDescriptionKey] : @"http error"};
@@ -162,6 +166,12 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
         HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
         context.notifyCenter = notifyCenterObject;
     }
+}
+
++ (HMBaseValue *)getRootView{
+    
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    return context.componentView;
 }
 
 + (NSDictionary<NSString *, NSObject *> *)pageInfo {
@@ -324,7 +334,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     struct timespec resultTimespec;
     HMDiffTime(&context->_createTimespec, &renderTimespec, &resultTimespec);
     if (context.nameSpace) {
-        [HMConfigEntryManager.manager.configMap[context.nameSpace].trackEventPlugin trackPageRenderCompletionWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000) pageUrl:context.url.absoluteString ?: @""];
+        [HMConfigEntryManager.manager.configMap[context.nameSpace].trackEventPlugin trackPageRenderCompletionWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000) pageUrl:context.hummerUrl ?: @""];
     }
 }
 
