@@ -657,7 +657,7 @@ CGPoint intersectionPoint(CGPoint firstLineBegin,
     if ([string isEqualToString:@"border-box"]) {
         return YES;
     } else {
-        NSAssert(!string || [string isEqualToString:@"none"], @"style.boxSizing must be none or border-box");
+        NSAssert(!string || [string isEqualToString:@"none"] || [string isEqualToString:@"content-box"], @"style.boxSizing must be none or border-box");
         
         return NO;
     }
