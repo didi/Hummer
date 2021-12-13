@@ -213,7 +213,10 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)hasProperty:(NSString *)propertyString {
-    HMBaseValue *value = self.context[propertyString];
+    if (!propertyString) {
+        return NO;
+    }
+    HMBaseValue *value = self[propertyString];
 
     return !value.isUndefined && !value.isNull;
 }
