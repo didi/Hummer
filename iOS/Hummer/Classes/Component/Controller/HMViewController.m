@@ -9,6 +9,7 @@
 #import "Hummer.h"
 #import "HMJSGlobal.h"
 #import <Hummer/HMBaseExecutorProtocol.h>
+#import <Hummer/HMRootViewLifeCycle.h>
 #import "HMBaseValue.h"
 
 #if __has_include(<SocketRocket/SRWebSocket.h>)
@@ -19,6 +20,8 @@
 
 @property (nonatomic, strong) UIView *naviView;
 @property (nonatomic, strong) UIView *hmRootView;
+
+@property (nonatomic, strong) HMRootViewLifeCycle *lifeCycle;
 
 @property (nonatomic, weak) HMJSContext  * context;
 @property (nonatomic, weak) UIView * pageView;
@@ -48,7 +51,6 @@
     if (nil == customNaviView) {
         return;
     }
-    
     [self.naviView removeFromSuperview];
     [self.view addSubview:customNaviView];
     self.naviView = customNaviView;
@@ -72,8 +74,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
+    self.lifeCycle = [HMRootViewLifeCycle create];
     [self initHMRootView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     
     if (!self.hm_pageID.length) {
         self.hm_pageID = @([self hash]).stringValue;
@@ -104,6 +108,22 @@
     }
 }
 
+
+- (void)didBecomeActive {
+    UIViewController *vc = HMTopViewController();
+    if (vc != self) {
+        return;
+    }
+    [self.lifeCycle onAppear];
+}
+
+- (void)didEnterBackground{
+    UIViewController *vc = HMTopViewController();
+    if (vc != self) {
+        return;
+    }
+    [self.lifeCycle onDisappear];
+}
 #pragma mark -渲染脚本
 
 - (void)renderWithScript:(NSString *)script {
@@ -127,9 +147,7 @@
     [context evaluateScript:script fileName:self.URL];
     self.pageView = self.hmRootView.subviews.firstObject;
     self.context = [[HMJSGlobal globalObject] currentContext:self.pageView.hmContext];
-    
-    //发送加载完成消息
-    [self callJSWithFunc:@"onCreate" arguments:@[]];
+    [self.lifeCycle setJSValue:self.pageView.hmValue];
 }
 
 #pragma mark - View 生命周期管理
@@ -146,12 +164,12 @@
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self callJSWithFunc:@"onAppear" arguments:@[]];
+    [self.lifeCycle onAppear];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self callJSWithFunc:@"onDisappear" arguments:@[]];
+    [self.lifeCycle onDisappear];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
@@ -172,7 +190,9 @@
 }
 
 - (void)dealloc {
-    [self callJSWithFunc:@"onDestroy" arguments:@[]];
+    [self.lifeCycle onDestroy];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 #pragma mark - Call Hummer
