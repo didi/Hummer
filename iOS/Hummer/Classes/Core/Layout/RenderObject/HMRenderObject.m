@@ -58,7 +58,7 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
       FIN##setter##Percent(__VA_ARGS__, ygvalue.value); \
       break;                                       \
   }
-#elif __has_include(<yoga/Yoga.h>)
+#elif __has_include(<yoga/Yoga.h>) || __has_include(<Yoga/Yoga.h>)
 #define HM_SET_YGVALUE(ygvalue, setter, ...)      \
   switch (ygvalue.unit) {                          \
     case YOGA_TYPE_WRAPPER(YGUnitAuto):                               \
@@ -88,6 +88,8 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
       setter##Percent(__VA_ARGS__, ygvalue.value); \
       break;                                       \
   }
+#else
+#error 依赖错误
 #endif
 
 + (YOGA_TYPE_WRAPPER(YGConfigRef))yogaConfig {
@@ -309,7 +311,7 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
   {                                                               \
     return FINYGNodeStyleGet##cssProp(_yogaNode);                    \
   }
-#elif __has_include(<yoga/Yoga.h>)
+#elif __has_include(<yoga/Yoga.h>) || __has_include(<Yoga/Yoga.h>)
 #define HM_DIMENSION_PROPERTY(setProp, getProp, cssProp)            \
   -(void)set##setProp : (YOGA_TYPE_WRAPPER(YGValue))value                               \
   {                                                                  \
@@ -329,6 +331,8 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
   {                                                               \
     return YGNodeStyleGet##cssProp(_yogaNode);                    \
   }
+#else
+#error 依赖错误
 #endif
 
 HM_DIMENSION_PROPERTY(Width, width, Width)
@@ -355,7 +359,7 @@ HM_MIN_MAX_DIMENSION_PROPERTY(MaxHeight, maxHeight, MaxHeight)
   {                                                                  \
     return FINYGNodeStyleGetPosition(_yogaNode, edge);                  \
   }
-#elif __has_include(<yoga/Yoga.h>)
+#elif __has_include(<yoga/Yoga.h>) || __has_include(<Yoga/Yoga.h>)
 #define HM_POSITION_PROPERTY(setProp, getProp, edge)                \
   -(void)set##setProp : (YOGA_TYPE_WRAPPER(YGValue))value                               \
   {                                                                  \
@@ -365,6 +369,8 @@ HM_MIN_MAX_DIMENSION_PROPERTY(MaxHeight, maxHeight, MaxHeight)
   {                                                                  \
     return YGNodeStyleGetPosition(_yogaNode, edge);                  \
   }
+#else
+#error 依赖错误
 #endif
 
 HM_POSITION_PROPERTY(Left, left, YOGA_TYPE_WRAPPER(YGEdgeLeft))
@@ -494,7 +500,7 @@ static inline YOGA_TYPE_WRAPPER(YGSize) HMShadowViewMeasure(YOGA_TYPE_WRAPPER(YG
   {                                                         \
     return FINYGNodeStyleGet##cssProp(_yogaNode);              \
   }
-#elif __has_include(<yoga/Yoga.h>)
+#elif __has_include(<yoga/Yoga.h>) || __has_include(<Yoga/Yoga.h>)
 #define HM_STYLE_PROPERTY(setProp, getProp, cssProp, type) \
   -(void)set##setProp : (type)value                         \
   {                                                         \
@@ -504,6 +510,8 @@ static inline YOGA_TYPE_WRAPPER(YGSize) HMShadowViewMeasure(YOGA_TYPE_WRAPPER(YG
   {                                                         \
     return YGNodeStyleGet##cssProp(_yogaNode);              \
   }
+#else
+#error 依赖错误
 #endif
 
 HM_STYLE_PROPERTY(Flex, flex, Flex, float)
@@ -655,7 +663,7 @@ HM_STYLE_PROPERTY(AspectRatio, aspectRatio, AspectRatio, float)
 {                                                                                  \
   FINYGNodeStyleSet##property(self.yogaNode, edge, lowercased_name);                      \
 }
-#elif __has_include(<yoga/Yoga.h>)
+#elif __has_include(<yoga/Yoga.h>) || __has_include(<Yoga/Yoga.h>)
 #define YG_EDGE_PROPERTY_GETTER(type, lowercased_name, capitalized_name, property, edge) \
 - (type)lowercased_name                                                                  \
 {                                                                                        \
@@ -667,6 +675,8 @@ HM_STYLE_PROPERTY(AspectRatio, aspectRatio, AspectRatio, float)
 {                                                                                  \
   YGNodeStyleSet##property(self.yogaNode, edge, lowercased_name);                      \
 }
+#else
+#error 依赖错误
 #endif
 
 #define YG_EDGE_PROPERTY(lowercased_name, capitalized_name, property, edge)         \
@@ -692,7 +702,7 @@ YG_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge)
       NSAssert(NO, @"Not implemented");                                                          \
   }                                                                                              \
 }
-#elif __has_include(<yoga/Yoga.h>)
+#elif __has_include(<yoga/Yoga.h>) || __has_include(<Yoga/Yoga.h>)
 #define YG_VALUE_EDGE_PROPERTY_SETTER(objc_lowercased_name, objc_capitalized_name, c_name, edge) \
 - (void)set##objc_capitalized_name:(YGValue)objc_lowercased_name                                 \
 {                                                                                                \
@@ -711,6 +721,8 @@ YG_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge)
       NSAssert(NO, @"Not implemented");                                                          \
   }                                                                                              \
 }
+#else
+#error 依赖错误
 #endif
 
 #define YG_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, property, edge)   \
