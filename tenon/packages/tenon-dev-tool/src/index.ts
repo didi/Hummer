@@ -16,6 +16,7 @@ export function run(container: any, type: string = 'tenon-vue') {
   const { Storage, Memory } = __GLOBAL__
   let host = getPartUrlByParam(url, 'host')
   let port = getPartUrlByParam(url, 'port')
+  let path = getPartUrlByParam(url, 'path')
   let scheme = getPartUrlByParam(url, 'scheme')
   // scheme错误 or 没有端口 报错&return
   if (!['http', 'https'].includes(scheme) || !port) {
@@ -39,6 +40,7 @@ export function run(container: any, type: string = 'tenon-vue') {
         params: {
           ...params,
           viewTree: [data.simpleRoot],
+          path:path,
           baseInfo: __GLOBAL__.Hummer.env
         }
       })
