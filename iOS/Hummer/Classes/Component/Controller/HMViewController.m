@@ -16,7 +16,7 @@
 #import <SocketRocket/SRWebSocket.h>
 #endif
 
-@interface HMViewController ()
+@interface HMViewController ()<HMJSContextDelegate>
 
 @property (nonatomic, strong) UIView *naviView;
 @property (nonatomic, strong) UIView *hmRootView;
@@ -147,6 +147,7 @@
     [context evaluateScript:script fileName:self.URL];
     self.pageView = self.hmRootView.subviews.firstObject;
     self.context = [[HMJSGlobal globalObject] currentContext:self.pageView.hmContext];
+    self.context.delegate = self;
     [self.lifeCycle setJSValue:self.pageView.hmValue];
 }
 
@@ -205,42 +206,25 @@
     return nil;
 }
 
-#ifdef DEBUG
-#if __has_include(<SocketRocket/SRWebSocket.h>)
 
-- (void)openWebSocketWithUrl:(NSString *)wsURLStr
-{
-    if (wsURLStr.length == 0) {
-        return;
-    }
+#pragma mark - HMJSContextDelegate
+
+- (void)context:(HMJSContext *)context reloadBundle:(NSDictionary *)bundleInfo {
     
-//    NSString *wsURLStr = @"ws://172.23.163.148:9000/";
-    NSURL *wsURL = [NSURL URLWithString:wsURLStr];
-    if (wsURL) {
-        SRWebSocket *webSocket = [[SRWebSocket alloc] initWithURL:wsURL];
-        webSocket.delegate = self;
-        [webSocket open];
-    }
-}
-
-#pragma mark - SRWebSocketDelegate
-
-- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
-    id object = _HMObjectFromJSONString(message);
-    if ([object isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *urlParam = [object valueForKey:@"params"];
-        NSString *URLString = [urlParam valueForKey:@"url"];
-        NSURL * URL  = [NSURL URLWithString:URLString];
-        if (!URL) {
+    __weak typeof(self)weakSelf = self;
+    HMExecOnMainQueue(^{
+        if (!weakSelf) {
             return;
         }
-        
         [self callJSWithFunc:@"onDestroy" arguments:@[]];
         [self.hmRootView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj removeFromSuperview];
         }];
-        
-        __weak typeof(self)weakSelf = self;
+        NSString *URLString = [bundleInfo valueForKey:@"url"];
+        NSURL * URL  = [NSURL URLWithString:URLString];
+        if (!URL) {
+            return;
+        }
         [HMJavaScriptLoader loadBundleWithURL:URL onProgress:^(HMLoaderProgress *progressData) {
         } onComplete:^(NSError *error, HMDataSource *source) {
             __strong typeof(self) self = weakSelf;
@@ -251,19 +235,6 @@
                 });
             }
         }];
-    }
-    NSLog(@"----->>> %@", message);
+    });
 }
-
-- (void)webSocketDidOpen:(SRWebSocket *)webSocket {
-    NSLog(@"----->>> %@", @"webSocketDidOpen");
-}
-
-- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
-    NSLog(@"----->>> %@", error.localizedFailureReason);
-}
-
-#endif
-#endif
-
 @end

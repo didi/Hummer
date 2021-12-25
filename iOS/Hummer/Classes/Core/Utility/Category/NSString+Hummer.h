@@ -18,7 +18,9 @@
 
 - (NSString *)hm_md5String;
 
-- (NSString *)hm_sh1String ;
+- (NSString *)hm_sh1String;
+
+- (BOOL)isPureIP;
 
 @property (nonatomic, readonly) BOOL hm_isHTTPURLString;
 
