@@ -24,7 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @protocol HMJSContextDelegate <NSObject>
+@optional
 - (void)context:(HMJSContext *)context didRenderPage:(HMBaseValue *)page;
+- (void)context:(HMJSContext *)context reloadBundle:(NSDictionary *)bundleInfo;
 
 @end
 @interface HMJSContext : NSObject {

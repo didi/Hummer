@@ -14,6 +14,9 @@
 #elif __has_include(<yoga/Yoga.h>)
 #include <yoga/Yoga.h>
 #define YOGA_TYPE_WRAPPER(type) type
+#elif __has_include(<Yoga/Yoga.h>)
+#include <Yoga/Yoga.h>
+#define YOGA_TYPE_WRAPPER(type) type
 #elif __has_include(<YogaKit/Yoga.h>)
 #include <YogaKit/Yoga.h>
 #define YOGA_TYPE_WRAPPER(type) type

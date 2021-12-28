@@ -23,6 +23,8 @@
 #import <Hummer/HMDebug.h>
 #import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMWebSocket.h>
+#import <Hummer/HMDevService.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, HMCLILogLevel) {
@@ -60,9 +62,8 @@ API_AVAILABLE(ios(13.0))
 @property (nonatomic, strong, readwrite) id <HMBaseExecutorProtocol>context;
 
 #ifdef HMDEBUG
-@property (nonatomic, nullable, strong) NSURLSessionWebSocketTask *webSocketTask;
+@property (nonatomic, nullable, strong) HMDevLocalConnection *devConnection;
 
-- (void)handleWebSocket;
 
 #endif
 
@@ -90,7 +91,7 @@ NS_ASSUME_NONNULL_END
     }
     HMLogDebug(@"HMJSContext 销毁");
 #ifdef HMDEBUG
-    [self.webSocketTask cancel];
+    [self.devConnection close];
 #endif
     [self.webSocketSet enumerateObjectsUsingBlock:^(HMWebSocket * _Nonnull obj, BOOL * _Nonnull stop) {
         [obj close];
@@ -202,6 +203,7 @@ NS_ASSUME_NONNULL_END
 }
 #ifdef HMDEBUG
 - (void)handleConsoleToWS:(NSString *)logString level:(HMLogLevel)logLevel {
+    return;
     // 避免 "(null)" 情况
     NSString *jsonStr = @"";
     @try {
@@ -211,32 +213,11 @@ NS_ASSUME_NONNULL_END
     } @catch (NSException *exception) {
         HMLogError(@"native webSocket json 失败");
     } @finally {
-        if (@available(iOS 13.0, *)) {
-            if (self.webSocketTask) {
-                NSURLSessionWebSocketMessage *webSocketMessage = [[NSURLSessionWebSocketMessage alloc] initWithString:jsonStr];
-                // 忽略错误
-                __weak typeof(self) weakSelf = self;
-                [self.webSocketTask sendMessage:webSocketMessage completionHandler:^(NSError * _Nullable error) {
-                    typeof(weakSelf) strongSelf = weakSelf;
-                    if (error) {
-                        [strongSelf handleWebSocket];
-                    }
-                }];
-            }
-        }
+        [self.devConnection sendMessage:jsonStr completionHandler:nil];       
     }
 }
 #endif
 
-#ifdef HMDEBUG
-- (void)handleWebSocket {
-    if (@available(iOS 13, *)) {
-        if (self.webSocketTask.state == NSURLSessionTaskStateCanceling || self.webSocketTask.state == NSURLSessionTaskStateCompleted) {
-            self.webSocketTask = nil;
-        }
-    }
-}
-#endif
 
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
     return [self evaluateScript:javaScriptString fileName:fileName hummerUrl:fileName];
@@ -260,32 +241,17 @@ NS_ASSUME_NONNULL_END
 #endif
     }
 #ifdef HMDEBUG
-    if (@available(iOS 13, *)) {
-        if (!self.webSocketTask && fileName.length > 0) {
-            NSURLComponents *urlComponents = [NSURLComponents componentsWithString:fileName];
-            if ([urlComponents.scheme isEqualToString:@"http"]) {
-                urlComponents.scheme = @"ws";
-                urlComponents.user = nil;
-                urlComponents.password = nil;
-                urlComponents.path = @"/proxy/native";
-                urlComponents.query = nil;
-                urlComponents.fragment = nil;
-                if (urlComponents.URL) {
-                    self.webSocketTask = [NSURLSession.sharedSession webSocketTaskWithURL:urlComponents.URL];
-                    // 启动
-                    [self.webSocketTask resume];
-                    __weak typeof(self) weakSelf = self;
-                    // 判断是否连通
-                    [self.webSocketTask sendPingWithPongReceiveHandler:^(NSError * _Nullable error) {
-                        typeof(weakSelf) strongSelf = weakSelf;
-                        if (error) {
-                            [strongSelf handleWebSocket];
-                        }
-                    }];
-                }
+    self.devConnection = [[HMDevService sharedService] getLocalConnection:fileName];
+    __weak typeof(self) weakSelf = self;
+    self.devConnection.receiveHandler = ^(NSDictionary * _Nonnull msg) {
+        typeof(weakSelf) strongSelf = weakSelf;
+        if (msg && [(NSString *)msg[@"type"] isEqualToString:@"ReloadBundle"]) {
+            if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(context:reloadBundle:)]) {
+                [strongSelf.delegate context:strongSelf reloadBundle:msg[@"params"]];
             }
         }
-    }
+        // reload
+    };
 #endif
     
     NSURL *url = nil;

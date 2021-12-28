@@ -9,16 +9,19 @@
 #import "Hummer.h"
 #import "HMJSGlobal.h"
 #import <Hummer/HMBaseExecutorProtocol.h>
+#import <Hummer/HMRootViewLifeCycle.h>
 #import "HMBaseValue.h"
 
 #if __has_include(<SocketRocket/SRWebSocket.h>)
 #import <SocketRocket/SRWebSocket.h>
 #endif
 
-@interface HMViewController ()
+@interface HMViewController ()<HMJSContextDelegate>
 
 @property (nonatomic, strong) UIView *naviView;
 @property (nonatomic, strong) UIView *hmRootView;
+
+@property (nonatomic, strong) HMRootViewLifeCycle *lifeCycle;
 
 @property (nonatomic, weak) HMJSContext  * context;
 @property (nonatomic, weak) UIView * pageView;
@@ -48,7 +51,6 @@
     if (nil == customNaviView) {
         return;
     }
-    
     [self.naviView removeFromSuperview];
     [self.view addSubview:customNaviView];
     self.naviView = customNaviView;
@@ -72,8 +74,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
+    self.lifeCycle = [HMRootViewLifeCycle create];
     [self initHMRootView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     
     if (!self.hm_pageID.length) {
         self.hm_pageID = @([self hash]).stringValue;
@@ -104,6 +108,22 @@
     }
 }
 
+
+- (void)didBecomeActive {
+    UIViewController *vc = HMTopViewController();
+    if (vc != self) {
+        return;
+    }
+    [self.lifeCycle onAppear];
+}
+
+- (void)didEnterBackground{
+    UIViewController *vc = HMTopViewController();
+    if (vc != self) {
+        return;
+    }
+    [self.lifeCycle onDisappear];
+}
 #pragma mark -渲染脚本
 
 - (void)renderWithScript:(NSString *)script {
@@ -127,9 +147,8 @@
     [context evaluateScript:script fileName:self.URL];
     self.pageView = self.hmRootView.subviews.firstObject;
     self.context = [[HMJSGlobal globalObject] currentContext:self.pageView.hmContext];
-    
-    //发送加载完成消息
-    [self callJSWithFunc:@"onCreate" arguments:@[]];
+    self.context.delegate = self;
+    [self.lifeCycle setJSValue:self.pageView.hmValue];
 }
 
 #pragma mark - View 生命周期管理
@@ -146,12 +165,12 @@
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self callJSWithFunc:@"onAppear" arguments:@[]];
+    [self.lifeCycle onAppear];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self callJSWithFunc:@"onDisappear" arguments:@[]];
+    [self.lifeCycle onDisappear];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
@@ -172,7 +191,9 @@
 }
 
 - (void)dealloc {
-    [self callJSWithFunc:@"onDestroy" arguments:@[]];
+    [self.lifeCycle onDestroy];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 #pragma mark - Call Hummer
@@ -185,42 +206,25 @@
     return nil;
 }
 
-#ifdef DEBUG
-#if __has_include(<SocketRocket/SRWebSocket.h>)
 
-- (void)openWebSocketWithUrl:(NSString *)wsURLStr
-{
-    if (wsURLStr.length == 0) {
-        return;
-    }
+#pragma mark - HMJSContextDelegate
+
+- (void)context:(HMJSContext *)context reloadBundle:(NSDictionary *)bundleInfo {
     
-//    NSString *wsURLStr = @"ws://172.23.163.148:9000/";
-    NSURL *wsURL = [NSURL URLWithString:wsURLStr];
-    if (wsURL) {
-        SRWebSocket *webSocket = [[SRWebSocket alloc] initWithURL:wsURL];
-        webSocket.delegate = self;
-        [webSocket open];
-    }
-}
-
-#pragma mark - SRWebSocketDelegate
-
-- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
-    id object = _HMObjectFromJSONString(message);
-    if ([object isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *urlParam = [object valueForKey:@"params"];
-        NSString *URLString = [urlParam valueForKey:@"url"];
-        NSURL * URL  = [NSURL URLWithString:URLString];
-        if (!URL) {
+    __weak typeof(self)weakSelf = self;
+    HMExecOnMainQueue(^{
+        if (!weakSelf) {
             return;
         }
-        
         [self callJSWithFunc:@"onDestroy" arguments:@[]];
         [self.hmRootView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj removeFromSuperview];
         }];
-        
-        __weak typeof(self)weakSelf = self;
+        NSString *URLString = [bundleInfo valueForKey:@"url"];
+        NSURL * URL  = [NSURL URLWithString:URLString];
+        if (!URL) {
+            return;
+        }
         [HMJavaScriptLoader loadBundleWithURL:URL onProgress:^(HMLoaderProgress *progressData) {
         } onComplete:^(NSError *error, HMDataSource *source) {
             __strong typeof(self) self = weakSelf;
@@ -231,19 +235,6 @@
                 });
             }
         }];
-    }
-    NSLog(@"----->>> %@", message);
+    });
 }
-
-- (void)webSocketDidOpen:(SRWebSocket *)webSocket {
-    NSLog(@"----->>> %@", @"webSocketDidOpen");
-}
-
-- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
-    NSLog(@"----->>> %@", error.localizedFailureReason);
-}
-
-#endif
-#endif
-
 @end

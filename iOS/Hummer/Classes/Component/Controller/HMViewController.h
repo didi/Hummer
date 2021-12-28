@@ -75,14 +75,4 @@ NS_ASSUME_NONNULL_END
 
 
 
-#ifdef DEBUG
-
- #pragma mark - ⚠️注意：以下为Debug模式下的内测逻辑
-
- ///  通过WebSocket实时渲染JS效果
- /// @param wsURLStr WebSocket地址，例如：NSString *wsURLStr = @"ws://192.168.3.102:9000/";
- - (void)openWebSocketWithUrl:(NSString *)wsURLStr;
-
-#endif
-
 @end

@@ -107,8 +107,6 @@ HM_EXPORT_METHOD(send, send:)
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
     if ([message isKindOfClass:NSString.class]) {
         [self webSocket:webSocket didReceiveMessageWithString:message];
-    } else if ([message isKindOfClass:NSData.class]) {
-        [self webSocket:webSocket didReceiveMessageWithData:message];
     } else {
         NSAssert(NO, @"webSocket:didReceiveMessage: pass unknown message object");
     }
