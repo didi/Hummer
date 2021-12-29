@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HMDevToolsHierarchyViewController : UITableViewController<HMDevToolsViewControllerProtocol>
 
 + (instancetype)hierarchyViewWithRootView:(UIView *)rootView;
+
+// 为了延迟视图树获取逻辑，必须手动调用触发逻辑
 - (void)refresh;
 @end
 

@@ -30,9 +30,6 @@
 - (instancetype)initWithRootView:(UIView *)rootView {
     if (self = [super initWithStyle:UITableViewStylePlain]) {
         _rootView = rootView;
-        if (rootView) {
-            [self configData];
-        }
     }
     return self;
 }
@@ -49,13 +46,8 @@
 }
 
 - (void)setContext:(HMJSContext *)context {
-    if ([_context isEqual:context]) {
-//        return;
-    }
     _context = context;
     _rootView = context.rootView;
-    
-    [self refresh];
 }
 
 - (void)refresh {
