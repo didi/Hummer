@@ -73,6 +73,12 @@
         [HMDevToolsMenuItem menuItemWithTitle:@"视图树" container:^UIViewController * _Nonnull(HMJSContext * _Nonnull context) {
             HMDevToolsHierarchyViewController *hierarchyVC = [HMDevToolsHierarchyViewController hierarchyViewWithRootView:context.rootView];
             return hierarchyVC;
+        } handler:^{
+            [self.containers enumerateObjectsUsingBlock:^(UIViewController<HMDevToolsViewControllerProtocol> * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([obj isKindOfClass:HMDevToolsHierarchyViewController.class]) {
+                    [(HMDevToolsHierarchyViewController *)obj refresh];
+                }
+            }];
         }],
         [HMDevToolsMenuItem menuItemWithTitle:@"函数树" container:^UIViewController * _Nonnull(HMJSContext * _Nonnull context) {
             return UIViewController.new;

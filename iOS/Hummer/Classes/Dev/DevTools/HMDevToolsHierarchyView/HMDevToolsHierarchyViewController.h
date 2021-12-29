@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HMDevToolsHierarchyViewController : UITableViewController<HMDevToolsViewControllerProtocol>
 
 + (instancetype)hierarchyViewWithRootView:(UIView *)rootView;
-
+- (void)refresh;
 @end
 
 NS_ASSUME_NONNULL_END

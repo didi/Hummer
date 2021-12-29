@@ -21,6 +21,7 @@ typedef UIViewController<HMDevToolsViewControllerProtocol> * _Nonnull (^HMDevToo
 @property (nonatomic, copy, readonly) HMDevToolsMenuViewControler container;
 
 + (instancetype)menuItemWithTitle:(NSString *)title container:(HMDevToolsMenuViewControler)container;
++ (instancetype)menuItemWithTitle:(NSString *)title container:(HMDevToolsMenuViewControler)container handler:(dispatch_block_t)handler;
 
 @end
 
