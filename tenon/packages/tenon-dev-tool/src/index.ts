@@ -35,15 +35,29 @@ export function run(container: any, type: string = 'tenon-vue') {
     'getViewTree': function (ws: any, params: any) {
       let data = getViewData(formatedNode, type)
       viewMap = data.viewMap
-      sendMessage(ws, {
-        method: 'setViewTree',
-        params: {
-          ...params,
-          viewTree: [data.simpleRoot],
-          path:path,
-          baseInfo: __GLOBAL__.Hummer.env
-        }
-      })
+      if (formatedNode?.element?.dbg_getDescription) {
+        formatedNode.element.dbg_getDescription((node: any) => {
+          sendMessage(ws, {
+            method: 'setViewTree',
+            params: {
+              ...params,
+              viewTree: [data.simpleRoot],
+              path: path,
+              baseInfo: __GLOBAL__.Hummer.env
+            }
+          })
+        })
+      } else {
+        sendMessage(ws, {
+          method: 'setViewTree',
+          params: {
+            ...params,
+            viewTree: [data.simpleRoot],
+            path: path,
+            baseInfo: __GLOBAL__.Hummer.env
+          }
+        })
+      }
     },
     'getViewInfo': function (ws: any, params: any) {
       viewId = params.viewId
