@@ -30,11 +30,6 @@
 - (instancetype)initWithRootView:(UIView *)rootView {
     if (self = [super initWithStyle:UITableViewStylePlain]) {
         _rootView = rootView;
-        if (rootView) {
-            _allViews = [HMDevToolsHierarchyHelper viewWithRecursiveSubviews:rootView];
-            _depthsForViews = [HMDevToolsHierarchyHelper hierarchyDepthsForViews:_allViews];
-            _displayedViews = _allViews.copy;
-        }
     }
     return self;
 }
@@ -51,17 +46,21 @@
 }
 
 - (void)setContext:(HMJSContext *)context {
-    if ([_context isEqual:context]) {
-        return;
-    }
     _context = context;
     _rootView = context.rootView;
-    _allViews = [HMDevToolsHierarchyHelper viewWithRecursiveSubviews:_rootView];
-    _depthsForViews = [HMDevToolsHierarchyHelper hierarchyDepthsForViews:_allViews];
-    _displayedViews = _allViews.copy;
+}
+
+- (void)refresh {
+    [self configData];
     [self.tableView reloadData];
 }
 
+#pragma mark - private
+- (void)configData {
+    _allViews = [HMDevToolsHierarchyHelper viewWithRecursiveSubviews:_rootView];
+    _depthsForViews = [HMDevToolsHierarchyHelper hierarchyDepthsForViews:_allViews];
+    _displayedViews = _allViews.copy;
+}
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
