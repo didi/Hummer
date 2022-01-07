@@ -205,8 +205,10 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
                 if (cacheType == HMImageCacheTypeNone) {
                     completionBlock(HMImageLoaderSrcTypeNetworking, YES);
 
-                } else if (cacheType == HMImageCacheTypeDisk) {
+                } else if (cacheType == HMImageCacheTypeDisk || cacheType == HMImageCacheTypeMemory) {
                     completionBlock(HMImageLoaderSrcTypeLocalResource, YES);
+                } else {
+                    completionBlock(HMImageLoaderSrcTypeUnknown, YES);
                 }
             }
         }];
