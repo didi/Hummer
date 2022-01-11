@@ -165,6 +165,10 @@ class RootView extends ComponentPage {
 
     // 解决阴影被裁切问题
     let scrollerWrapper = new View();
+    scrollerWrapper.style = {
+      width: '100%',
+      height: '100%',
+    }
     scrollerWrapper.appendChild(scroller);
 
     this.containers[0].appendChild(scrollerWrapper);
@@ -199,6 +203,10 @@ class RootView extends ComponentPage {
 
     // 解决阴影被裁切问题
     let scrollerWrapper = new View();
+    scrollerWrapper.style = {
+      width: '100%',
+      height: '100%',
+    }
     scrollerWrapper.appendChild(scroller);
 
     this.containers[1].appendChild(scrollerWrapper);
@@ -229,6 +237,10 @@ class RootView extends ComponentPage {
 
     // 解决阴影被裁切问题
     let scrollerWrapper = new View();
+    scrollerWrapper.style = {
+      width: '100%',
+      height: '100%',
+    }
     scrollerWrapper.appendChild(scroller);
 
     this.containers[2].appendChild(scrollerWrapper);
@@ -248,7 +260,10 @@ class RootView extends ComponentPage {
     // 解决阴影被裁切问题
     let scrollerWrapper = new View();
     scrollerWrapper.appendChild(scroller);
-
+    scrollerWrapper.style = {
+      width: '100%',
+      height: '100%',
+    }
     this.containers[3].appendChild(scrollerWrapper);
 
     // 下拉刷新和加载更多
