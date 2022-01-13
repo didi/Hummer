@@ -23,7 +23,7 @@
 #import <Hummer/HMConfigEntryManager.h>
 
 #import <Hummer/HMDebug.h>
-#ifdef HMDEBUG
+#if defined(HMDEBUG) && __has_include(<Hummer/HMDevTools.h>)
 #import "HMDevTools.h"
 #endif
 
@@ -323,10 +323,9 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     }
     [UIView hm_reSortFixedView:context];
 
-
-#ifdef HMDEBUG
+#if defined(HMDEBUG) && __has_include(<Hummer/HMDevTools.h>)
     // 添加debug按钮
-//    [HMDevTools showInContext:context];
+    [HMDevTools showInContext:context];
 #endif
 
     struct timespec renderTimespec;
