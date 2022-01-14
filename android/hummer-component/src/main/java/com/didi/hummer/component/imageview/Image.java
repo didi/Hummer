@@ -45,7 +45,7 @@ public class Image extends HMBase<RoundedImageView> {
     @Override
     public void onCreate() {
         super.onCreate();
-        getView().setScaleType(ImageView.ScaleType.CENTER);
+        getView().setScaleType(ImageView.ScaleType.FIT_XY);
         // 默认支持无障碍模式可聚焦
         getView().setFocusable(true);
     }
@@ -145,7 +145,6 @@ public class Image extends HMBase<RoundedImageView> {
     public void setContentMode(String resize) {
         switch (resize) {
             case "origin":
-            default:
                 getView().setScaleType(ImageView.ScaleType.CENTER);
                 break;
             case "contain":
@@ -155,6 +154,7 @@ public class Image extends HMBase<RoundedImageView> {
                 getView().setScaleType(ImageView.ScaleType.CENTER_CROP);
                 break;
             case "stretch":
+            default:
                 getView().setScaleType(ImageView.ScaleType.FIT_XY);
                 break;
         }
