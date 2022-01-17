@@ -1,13 +1,10 @@
 package com.didi.hummer.delegate;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
-
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 
@@ -15,38 +12,41 @@ import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
  * 默认Hummer页面
  * 使用代理方式加载 简化代码
  *
- * Created by Xingjm on 2022-01-17.
+ * Created by Xingjm on 2021-01-17.
  */
-public class HummerDelegateFragment extends Fragment {
+public class HummerDelegateActivity extends AppCompatActivity {
 
     private IHummerDelegagte mDelegate;
 
-    public static HummerDelegateFragment newInstance(@NonNull NavPage page) {
-        HummerDelegateFragment fragment = new HummerDelegateFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL, page);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDelegate = createHummerDelegate(getContext(), getPageInfo());
+        mDelegate = createHummerDelegate(this, getPageInfo());
         if (mDelegate == null) {
             throw new RuntimeException("Delegate cannot be null");
         }
         // 这是兜底的初始化，万一业务方没有及时做初始化，可以有一个兜底的
         mDelegate.initSDK();
+        View view = mDelegate.initViewAndRender();
+        setContentView(view);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return mDelegate.initViewAndRender();
+    public void onBackPressed() {
+        if (mDelegate.onBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
     }
 
-    public boolean onBackPressed() {
-        return mDelegate.onBackPressed();
+    @Override
+    public void finish() {
+        setPageResult();
+        super.finish();
+    }
+
+    protected void setPageResult() {
+        setResult(Activity.RESULT_OK, mDelegate.getJsPageResultIntent());
     }
 
     /**
@@ -64,9 +64,12 @@ public class HummerDelegateFragment extends Fragment {
      * 获取通过Intent传递过来的PageInfo（子类可以重写，用自己的方式获取PageInfo）
      */
     protected NavPage getPageInfo() {
-        if (getArguments() == null) {
-            return null;
+        NavPage page = null;
+        try {
+            page = (NavPage) getIntent().getSerializableExtra(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return (NavPage) getArguments().getSerializable(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL);
+        return page;
     }
 }

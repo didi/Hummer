@@ -1,12 +1,12 @@
 package com.didi.hummer.delegate;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.didi.hummer.HummerSDK;
+import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.component.input.FocusUtil;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
@@ -22,8 +22,8 @@ public class HummerDelegateAdapter extends AbsHummerDelegate {
 
     protected HummerLayout hmContainer;
 
-    public HummerDelegateAdapter(Context context, Bundle bundle) {
-        super(context, bundle);
+    public HummerDelegateAdapter(Context context, NavPage page) {
+        super(context, page);
     }
 
     @Override
