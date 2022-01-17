@@ -5,7 +5,7 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.didi.hummer.HummerRender;
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.navigator.NavPage;
-import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.devtools.DevToolsConfig;
@@ -31,7 +30,7 @@ public abstract class AbsHummerDelegate implements IHummerDelegagte, LifecycleOb
 
     protected HummerRender hmRender;
 
-    public AbsHummerDelegate(Context context, Bundle bundle) {
+    public AbsHummerDelegate(Context context, NavPage data) {
         if (context == null) {
             throw new RuntimeException("context must not be null!");
         }
@@ -41,7 +40,7 @@ public abstract class AbsHummerDelegate implements IHummerDelegagte, LifecycleOb
         } else {
             throw new RuntimeException("context must be LifecycleOwner!");
         }
-        initData(bundle);
+        initData(data);
     }
 
     @Override
@@ -66,18 +65,8 @@ public abstract class AbsHummerDelegate implements IHummerDelegagte, LifecycleOb
     /**
      * 初始化数据（子类可以重写，初始化自己需要的数据）
      */
-    protected void initData(Bundle bundle) {
-        page = getPageInfo(bundle);
-    }
-
-    /**
-     * 获取通过Intent传递过来的PageInfo（子类可以重写，用自己的方式获取PageInfo）
-     */
-    protected NavPage getPageInfo(Bundle bundle) {
-        if (bundle == null) {
-            return null;
-        }
-        return (NavPage) bundle.getSerializable(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL);
+    protected void initData(NavPage data) {
+        page = data;
     }
 
     /**
@@ -116,6 +105,11 @@ public abstract class AbsHummerDelegate implements IHummerDelegagte, LifecycleOb
     @Override
     public boolean onBackPressed() {
         return hmRender != null && hmRender.onBack();
+    }
+
+    @Override
+    public Intent getJsPageResultIntent() {
+        return hmRender.getJsPageResultIntent();
     }
 
     /**

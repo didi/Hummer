@@ -1,5 +1,6 @@
 package com.didi.hummer.delegate;
 
+import android.content.Intent;
 import android.view.View;
 
 /**
@@ -11,4 +12,5 @@ public interface IHummerDelegagte {
     void initSDK();
     View initViewAndRender();
     boolean onBackPressed();
+    Intent getJsPageResultIntent();
 }
