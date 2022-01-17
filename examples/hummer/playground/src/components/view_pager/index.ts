@@ -172,7 +172,6 @@ class RootView extends ComponentPage {
       if (!textView) {
         textView = new Text();
         textView.style = {
-          margin: 50,
           textAlign: 'center',
           fontSize: 30,
         }

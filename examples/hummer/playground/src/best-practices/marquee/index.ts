@@ -55,7 +55,7 @@ class MargueeView extends View {
             position: 'absolute',
             fontSize: 30,
             color: '#000000',
-            marginTop: 40,
+            // marginTop: 40,
             opacity: 0,
         };
 
