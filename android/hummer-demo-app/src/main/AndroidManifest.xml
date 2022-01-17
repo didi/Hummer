@@ -30,6 +30,9 @@
         <activity
             android:name=".HummerEmbeddedPageActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".HummerDelegatePageActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
