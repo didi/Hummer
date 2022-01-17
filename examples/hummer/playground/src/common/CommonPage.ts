@@ -68,7 +68,7 @@ export class ComponentPage extends Page {
     this.contentView.appendChild(layout);
 
     let views = new Array<View>();
-    let bgColors = [Color.hm_green, Color.hm_yellow, Color.hm_linear_gradient, Img.hummerLogo, Color.transparent];
+    let bgColors = [Color.hm_green, Color.hm_yellow, Color.hm_linear_gradient, Color.transparent];
     bgColors.forEach((color, i) => {
       let view = new Text();
       view.style = {
@@ -78,8 +78,6 @@ export class ComponentPage extends Page {
         textAlign: 'center',
       }
       if (i == 3) {
-        view.style = { backgroundImage: color }
-      } else if (i == 4) {
         view.text = '无';
         view.style = { backgroundColor: Color.hm_green + '20' }
       } else {
@@ -89,11 +87,7 @@ export class ComponentPage extends Page {
 
       view.addEventListener('tap', () => {
         this.selectItemWithBorder(views, i);
-        if (i == 3) {
-          this.displayView.style = { backgroundImage: bgColors[i] }
-        } else {
-          this.displayView.style = { backgroundColor: bgColors[i] }
-        }
+        this.displayView.style = { backgroundColor: bgColors[i] }
       });
 
       this.selectItemWithBorder(views, selectIndex);

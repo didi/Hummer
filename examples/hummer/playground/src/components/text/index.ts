@@ -37,7 +37,6 @@ class RootView extends ComponentPage {
     displayView.text = 'This is a Text!\nThis is a Text!\nThis is a Text!\nThis is a Text!';
     displayView.style = {
       width: 220,
-      minHeight: 120,
       backgroundColor: Color.hm_green,
       textAlign: 'center',
       fontSize: 22,
