@@ -106,7 +106,6 @@ class MargueeView extends View {
             this.tv1.style = {
                 transform: 'translate(0, 40)',
             }
-            console.log('动画结束3',this.curIndex)
         });
 
         this.anim4 = new KeyframeAnimation('opacity');
@@ -122,12 +121,10 @@ class MargueeView extends View {
 
         this.anim1.on('end', () => {
             this.curIndex = this.getNextIndex(this.curIndex);
-            console.log('动画结束1',this.curIndex)
         });
     }
 
     private doAnim(tv1, tv2) {
-        console.log(this.curIndex)
         tv1.text = this.data[this.curIndex];
         tv2.text = this.data[this.getNextIndex(this.curIndex)];
 
@@ -138,7 +135,6 @@ class MargueeView extends View {
     }
 
     private getNextIndex(curIndex) {
-        console.log((curIndex + 1) % this.data.length,this.data.length)
         return (curIndex + 1) % this.data.length;
     }
 }
