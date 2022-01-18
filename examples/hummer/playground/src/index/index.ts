@@ -97,6 +97,7 @@ class RootView extends Scroller {
     this.initItem("HorizontalScroller", 'hscroller.js');
     this.initItem("List", 'list.js');
     this.initItem("ViewPager", 'view_pager.js');
+    this.initItem("Canvas", 'canvas.js');
   }
 
   initBestPractices() {
