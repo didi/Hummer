@@ -7,6 +7,7 @@
 
 #import "HMDevToolsLoggerViewController.h"
 #import "HMJSContext.h"
+#import "HMExceptionModel.h"
 #import "HMDevToolsLoggerCell.h"
 #import "HMDevToolsLogger.h"
 
@@ -42,16 +43,18 @@
     [_dataArray removeAllObjects];
     [_tableView reloadData];
     
+    static NSDateFormatter *formatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+      formatter = NSDateFormatter.new;
+      formatter.dateFormat = @"HH:mm:ss.SSS";
+    });
+    
     __weak typeof(self) weakSelf = self;
     [_context.context addConsoleHandler:^(NSString * _Nullable logString, HMLogLevel logLevel) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         HMDevToolsLogger *logger = HMDevToolsLogger.new;
-        static NSDateFormatter *formatter;
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-          formatter = NSDateFormatter.new;
-          formatter.dateFormat = @"HH:mm:ss.SSS";
-        });
+        
 
         NSString *date = [formatter stringFromDate:NSDate.date];
 
@@ -60,6 +63,22 @@
         logger.expended = NO;
         [strongSelf.dataArray addObject:logger];
         [strongSelf.tableView reloadData];
+    } key:self];
+    
+    [_context.context addExceptionHandler:^(HMExceptionModel * _Nonnull exceptionModel) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+
+        HMDevToolsLogger *logger = HMDevToolsLogger.new;
+
+        NSString *date = [formatter stringFromDate:NSDate.date];
+        NSString *info = [NSString stringWithFormat:@"column:%@ line:%@, %@\nexception:%@\n\nstack:%@", exceptionModel.column?:@0, exceptionModel.line?:@0, exceptionModel.name?:@"", exceptionModel.message?:@"", exceptionModel.stack?:@""];
+
+        logger.logString = [NSString stringWithFormat:@"[%@] %@", date, info];
+        logger.logLevel = HMLogLevelError;
+        logger.expended = NO;
+        [strongSelf.dataArray addObject:logger];
+        [strongSelf.tableView reloadData];
+
     } key:self];
 }
 
