@@ -28,7 +28,7 @@ public class HummerDelegateImpl extends HummerDelegateAdapter {
     @Override
     protected void initHummerRegister(HummerContext context) {
         super.initHummerRegister(context);
-        HummerRegister$$hummer_demo_app.init(context);
+//        HummerRegister$$hummer_demo_app.init(context);
 
         Map<String, Object> data = new HashMap<>();
         data.put("dddd", 11111);
@@ -95,5 +95,10 @@ public class HummerDelegateImpl extends HummerDelegateAdapter {
     @Override
     protected void onPageRenderFailed(@NonNull Exception e) {
         Log.e("zdf", "onPageRenderFailed, " + Log.getStackTraceString(e));
+    }
+
+    @Override
+    protected String getNamespace() {
+        return "test_namespace";
     }
 }

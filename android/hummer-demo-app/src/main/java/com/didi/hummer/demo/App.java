@@ -10,6 +10,7 @@ import com.didi.hummer.adapter.http.impl.DefaultHttpAdapter;
 import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
+import com.didi.hummer.register.HummerRegister$$hummer_demo_app;
 
 /**
  * Created by XiaoFeng on 2019/3/25.
@@ -56,10 +57,11 @@ public class App extends Application {
                 .setHttpAdapter(new DefaultHttpAdapter())
                 // 自定义持久化存储
                 .setStorageAdapter(new DefaultStorageAdapter())
+                .addIndex(new HummerRegister$$hummer_demo_app())
                 // 构造HummerConfig
                 .builder();
-//        Hummer.init(this, config);
-        Hummer.init(this);
+        Hummer.init(this, config);
+//        Hummer.init(this);
     }
 
     @Override
