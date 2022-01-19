@@ -13,8 +13,12 @@ import com.didi.hummer.adapter.storage.IStorageAdapter;
 import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
 import com.didi.hummer.adapter.tracker.impl.EmptyTrackerAdapter;
 import com.didi.hummer.core.exception.ExceptionCallback;
+import com.didi.hummer.meta.ComponentInvokerIndex;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by XiaoFeng on 2019-10-16.
@@ -70,6 +74,8 @@ public class HummerConfig {
      */
     private ITrackerAdapter trackerAdapter;
 
+    private List<ComponentInvokerIndex> componentInvokerIndexes;
+
     private HummerConfig(Builder builder) {
         this.namespace = builder.namespace;
         this.jsLogger = builder.jsLogger;
@@ -83,6 +89,7 @@ public class HummerConfig {
         this.navAdapter = builder.navAdapter;
         this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
         this.trackerAdapter = builder.trackerAdapter;
+        this.componentInvokerIndexes = builder.componentInvokerIndexes;
     }
 
     public String getNamespace() {
@@ -161,6 +168,10 @@ public class HummerConfig {
         return trackerAdapter;
     }
 
+    public List<ComponentInvokerIndex> getComponentInvokerIndexes() {
+        return componentInvokerIndexes;
+    }
+
     public static class Builder {
         private String namespace = HummerSDK.NAMESPACE_DEFAULT;
         private JSLogger.Logger jsLogger;
@@ -174,6 +185,7 @@ public class HummerConfig {
         private INavigatorAdapter navAdapter;
         private IScriptLoaderAdapter scriptLoaderAdapter;
         private ITrackerAdapter trackerAdapter;
+        private List<ComponentInvokerIndex> componentInvokerIndexes;
 
         public Builder setNamespace(String namespace) {
             this.namespace = namespace;
@@ -233,6 +245,14 @@ public class HummerConfig {
 
         public Builder setTrackerAdapter(ITrackerAdapter adapter) {
             trackerAdapter = adapter;
+            return this;
+        }
+
+        public Builder addIndex(ComponentInvokerIndex index) {
+            if (componentInvokerIndexes == null) {
+                componentInvokerIndexes = new ArrayList<>();
+            }
+            componentInvokerIndexes.add(index);
             return this;
         }
 

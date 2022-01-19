@@ -5,13 +5,21 @@ import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.didi.hummer.HummerConfig;
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.component.input.FocusUtil;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.devtools.DevToolsConfig;
+import com.didi.hummer.meta.ComponentInvokerIndex;
+import com.didi.hummer.meta.ComponentJsCodeInfo;
+import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Hummer页面渲染实现类
@@ -62,6 +70,28 @@ public class HummerDelegateAdapter extends AbsHummerDelegate {
     @Override
     protected void initHummerRegister(HummerContext context) {
         // 子类按需实现，初始化自己的HummerRegister
+        HummerConfig config = HummerSDK.getHummerConfig(getNamespace());
+        if (config == null || config.getComponentInvokerIndexes() == null) {
+            return;
+        }
+
+        List<ComponentInvokerIndex> indexes = config.getComponentInvokerIndexes();
+        for (ComponentInvokerIndex index : indexes) {
+            Set<Invoker> invokers = index.getInvokerSet();
+            // 注入自定义的组件
+            if (invokers != null && !invokers.isEmpty()) {
+                Iterator<Invoker> iterator = invokers.iterator();
+                while (iterator.hasNext()) {
+                    context.registerInvoker(iterator.next());
+                }
+            }
+
+            ComponentJsCodeInfo jsCodeInfo = index.getJsCodeInfo();
+            // 执行根据自定义组件生成的JS字符串，即将Native组件转换后的Js组件
+            if (jsCodeInfo != null && !jsCodeInfo.isEmpty()) {
+                context.evaluateJavaScript(jsCodeInfo.getScript(), jsCodeInfo.getScriptId());
+            }
+        }
     }
 
     /**
