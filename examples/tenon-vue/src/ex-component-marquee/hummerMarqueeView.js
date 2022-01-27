@@ -11,7 +11,7 @@ class HummerMarqueeView extends View {
     this.anim3 = null
     this.anim4 = null
     this.data = []
-    this.anim1curIndex = -1
+    this.curIndex = -1
 
     this.style = {
       width: '100%',
