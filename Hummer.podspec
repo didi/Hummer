@@ -78,8 +78,7 @@ Hummer is a dynamic solution for client.
 
   s.subspec "Core" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
-    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}',
-    'iOS/Hummer/Classes/Dev/DevTools/**/*.{h,m}'
+    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}', 'iOS/Hummer/Classes/Dev/DevTools/**/*',  'iOS/Hummer/Classes/Dev/Performance/**/*'
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
@@ -104,7 +103,7 @@ Hummer is a dynamic solution for client.
   
   s.subspec "DevTools" do |ss|
     ss.dependency 'Hummer/Core'
-    ss.source_files = 'iOS/Hummer/Classes/Dev/DevTools/**/*.{h,m}'
+    ss.source_files = 'iOS/Hummer/Classes/Dev/DevTools/**/*.{h,m}', 'iOS/Hummer/Classes/Dev/Performance/**/*.{h,m}'
   end
   
   # s.public_header_files = 'Pod/Classes/**/*.h'
