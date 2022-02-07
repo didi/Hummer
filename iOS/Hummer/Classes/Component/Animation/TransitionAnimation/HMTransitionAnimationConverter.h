@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "HMViewAnimation.h"
-#import "HMBasicAnimation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

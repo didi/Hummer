@@ -84,7 +84,7 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.contentMode = UIViewContentModeCenter;
+        self.contentMode = UIViewContentModeScaleToFill;
         self.userInteractionEnabled = YES;
         self.clipsToBounds = YES;
 //        _internalImageView = [[HMAnimatedImageView alloc] init];
@@ -187,7 +187,8 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
                     strongSelf.animationDuration = animatedImage.hm_animatedDuration;
                     [strongSelf startAnimating];
                 } else{
-                    HMAssert(NO,@"gif image is not a HMAnimatedImage`s instance");
+                    //兜底逻辑。可能会导致 repeatCount 失效。
+                    strongSelf.image = img;
                 }
             }else if (image.hm_isAnimated){
                 strongSelf.image = img.images.lastObject;

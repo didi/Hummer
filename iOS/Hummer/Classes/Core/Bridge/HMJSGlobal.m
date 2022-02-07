@@ -175,11 +175,13 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 }
 
 + (NSDictionary<NSString *, NSObject *> *)pageInfo {
-    return HMJSGlobal.globalObject.pageInfo;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    return context.pageInfo;
 }
 
 + (void)setPageInfo:(HMBaseValue *)pageInfo {
-    HMJSGlobal.globalObject.pageInfo = pageInfo.toDictionary;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    context.pageInfo = pageInfo.toDictionary;
 }
 
 + (HMFunctionType)setTitle {

@@ -137,10 +137,13 @@
         pData[@"url"]=self.URL;
     }
     pData[@"params"] = self.params ?: @{};
-    HMJSGlobal.globalObject.pageInfo = pData;
     
     //渲染脚本之前 注册bridge
     HMJSContext *context = [HMJSContext contextInRootView:self.hmRootView];
+    context.pageInfo = pData;
+    if ([self respondsToSelector:@selector(hm_namespace)]) {
+        context.nameSpace = [self hm_namespace];
+    }
     HM_SafeRunBlock(self.registerJSBridgeBlock,context);
     
     //执行脚本

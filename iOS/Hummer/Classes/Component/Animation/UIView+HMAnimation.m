@@ -12,7 +12,6 @@
 #import "CAAnimation+Exp.h"
 #import <objc/runtime.h>
 #import "HMAnimationManager.h"
-#import "HMBasicAnimation.h"
 #import "UIView+HMRenderObject.h"
 #import "HMRenderObject.h"
 #import "UIView+HMDom.h"

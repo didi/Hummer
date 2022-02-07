@@ -8,8 +8,8 @@
 #import "HMDevGlobalWebSocket.h"
 #import <Hummer/HMDevService.h>
 #import <SocketRocket/SRWebSocket.h>
-#import "HMUtility.h"
 #import <objc/message.h>
+#import "HMUtility.h"
 
 @interface HMDevLocalConnection ()
 @property (nonatomic, copy, readwrite) NSString *pageUrl;

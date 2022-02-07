@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable, copy) NSString *pageId;
 
+@property (nonatomic, nullable, strong) NSDictionary *pageInfo;
 /**
  * 只读
  */
