@@ -23,8 +23,8 @@
 #import <Hummer/HMConfigEntryManager.h>
 
 #import <Hummer/HMDebug.h>
-#if defined(HMDEBUG) && __has_include(<Hummer/HMDevTools.h>)
-#import "HMDevTools.h"
+#if __has_include(<Hummer/HMDevTools.h>)
+#import <Hummer/HMDevTools.h>
 #endif
 
 
@@ -175,11 +175,13 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 }
 
 + (NSDictionary<NSString *, NSObject *> *)pageInfo {
-    return HMJSGlobal.globalObject.pageInfo;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    return context.pageInfo;
 }
 
 + (void)setPageInfo:(HMBaseValue *)pageInfo {
-    HMJSGlobal.globalObject.pageInfo = pageInfo.toDictionary;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    context.pageInfo = pageInfo.toDictionary;
 }
 
 + (HMFunctionType)setTitle {
@@ -323,7 +325,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     }
     [UIView hm_reSortFixedView:context];
 
-#if defined(HMDEBUG) && __has_include(<Hummer/HMDevTools.h>)
+#if __has_include(<Hummer/HMDevTools.h>)
     // 添加debug按钮
     [HMDevTools showInContext:context];
 #endif

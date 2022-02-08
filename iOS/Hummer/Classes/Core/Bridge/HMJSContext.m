@@ -99,8 +99,14 @@ NS_ASSUME_NONNULL_END
 }
 
 + (instancetype)contextInRootView:(UIView *)rootView {
-    rootView.hm_context = [[HMJSContext alloc] init];
+    HMJSContext *ctx = [[HMJSContext alloc] init];
+    rootView.hm_context = ctx;
     rootView.hm_context.rootView = rootView;
+    if (ctx.pageInfo == nil) {
+        //兼容写法，自定义容器会把 pageInfo 注入到 HMJSGlobal 中。这里复制给 context。
+        //把 pageInfo 和 context 绑定到一起。
+        ctx.pageInfo = [[HMJSGlobal globalObject] pageInfo];
+    }
     return rootView.hm_context;
 }
 
@@ -203,7 +209,6 @@ NS_ASSUME_NONNULL_END
 }
 #ifdef HMDEBUG
 - (void)handleConsoleToWS:(NSString *)logString level:(HMLogLevel)logLevel {
-    return;
     // 避免 "(null)" 情况
     NSString *jsonStr = @"";
     @try {

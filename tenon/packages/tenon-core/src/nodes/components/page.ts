@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {View as ViewComponent, Scroller as ScrollViewComponent, Hummer} from '@hummer/hummer-front'
 import {Base} from '../Base'
 

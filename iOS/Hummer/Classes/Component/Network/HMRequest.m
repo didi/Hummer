@@ -11,7 +11,6 @@
 #import "NSObject+Hummer.h"
 #import "HMExportManager.h"
 #import "HMInterceptor.h"
-#import "HMResponse.h"
 #import "HMBaseExecutorProtocol.h"
 #import <Hummer/HMBaseValue.h>
 #import <Hummer/HMURLUtility.h>

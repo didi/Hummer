@@ -191,7 +191,7 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
     HMLayoutMetrics layoutMetrics = self.layoutMetrics;
 
     // YGZeroOutLayoutRecursivly 递归设置 { 0, 0 } 后，如果是 absolute 元素，按照原来的 YogaKit 逻辑还是可能继续显示的
-    if (!HMUseDoubleAttributeControlHidden && layoutMetrics.displayType == HMDisplayTypeNone) {
+    if (layoutMetrics.displayType == HMDisplayTypeNone) {
         return nil;
     }
     NSMutableArray *affectedObjects = [NSMutableArray new];

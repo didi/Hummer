@@ -10,7 +10,6 @@
 #import <Hummer/HMJSCExecutor.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
 @interface HMJSGlobal : NSObject
 
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSObject *> *pageInfo;

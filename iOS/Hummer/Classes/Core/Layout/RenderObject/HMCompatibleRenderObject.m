@@ -70,7 +70,7 @@ YOGA_TYPE_WRAPPER(YGSize) HMCompatibleMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) node,
                 // 根据 height 缩放
                 // 1. YGMeasureModeUndefined + YGMeasureModeExactly
                 // 2. YGMeasureModeAtMost + YGMeasureModeExactly
-                if (height - imageSize.height < 0.0001) {
+                if (ABS(height - imageSize.height) < 0.0001) {
                     sizeThatFits = imageSize;
                 } else {
                     // 宽 / height == imageSize.width / imageSize.height -> 宽 = imageSize.width / imageSize.height * height
@@ -82,7 +82,7 @@ YOGA_TYPE_WRAPPER(YGSize) HMCompatibleMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) node,
                 // 2. YGMeasureModeAtMost + YGMeasureModeAtMost + width >= imageSize.width + height < imageSize.height
                 sizeThatFits = CGSizeMake(imageSize.width / imageSize.height * height, height);
             } else if ((heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeUndefined) && widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeExactly)) || (heightMode == YOGA_TYPE_WRAPPER(YGMeasureModeAtMost) && widthMode == YOGA_TYPE_WRAPPER(YGMeasureModeExactly))) {
-                if (width - imageSize.width < 0.0001) {
+                if (ABS(width - imageSize.width) < 0.0001) {
                     sizeThatFits = imageSize;
                 } else {
                     // 高 / width == imageSize.height / imageSize.width -> 高 = imageSize.height / imageSize.width * width

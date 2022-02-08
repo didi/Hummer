@@ -15,7 +15,6 @@
 #import <Hummer/HMMemCache.h>
 #import <Hummer/HMNavigator.h>
 #import <Hummer/HMRequest.h>
-#import <Hummer/HMResponse.h>
 #import <Hummer/HMNotifyCenter.h>
 #import <Hummer/HMStorage.h>
 #import <Hummer/HMTimer.h>
@@ -23,7 +22,7 @@
 
 // UI
 #import <Hummer/HMViewPager.h>
-#import <Hummer/HMView.h>
+//#import <Hummer/HMView.h>
 #import <Hummer/HMToast.h>
 #import <Hummer/HMInput.h>
 #import <Hummer/HMTextArea.h>
@@ -89,14 +88,13 @@ static inline void _checkInternalCommponets(void){
                                  NSStringFromClass(HMMemCache.class),
                                  NSStringFromClass(HMNavigator.class),
                                  NSStringFromClass(HMRequest.class),
-                                 NSStringFromClass(HMResponse.class),
                                  NSStringFromClass(HMNotifyCenter.class),
                                  NSStringFromClass(HMStorage.class),
                                  NSStringFromClass(HMTimer.class),
                                  NSStringFromClass(HMWebSocket.class),
                                  NSStringFromClass(UIView.class),
                                  NSStringFromClass(HMViewPager.class),
-                                 NSStringFromClass(HMView.class),
+//                                 NSStringFromClass(HMView.class),
                                  NSStringFromClass(HMToast.class),
                                  NSStringFromClass(HMInput.class),
                                  NSStringFromClass(HMTextArea.class),

@@ -331,7 +331,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     
     UICollectionViewScrollDirection direction = self.direction;
     // 水平滚动允许翻页
-    self.pagingEnabled = (direction == UICollectionViewScrollDirectionHorizontal);
+//    self.pagingEnabled = (direction == UICollectionViewScrollDirectionHorizontal);
     
     // 更新 layout
     if ([self.collectionViewLayout respondsToSelector:@selector(setScrollDirection:)] ) {
