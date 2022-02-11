@@ -49,15 +49,18 @@ public abstract class HummerLayoutExtendView extends HMBase<HummerLayout>
     public void onDestroy() {
         super.onDestroy();
 
-        // 释放所有子控件
-        if (!children.isEmpty()) {
-            for (HMBase child : children) {
-                if (child != null && child.getJSValue() != null) {
-                    child.getJSValue().unprotect();
+        // 这里在post中处理释放子控件的逻辑，是为了避免在GC流程中触发GC导致crash的问题
+        getView().post(() -> {
+            // 释放所有子控件
+            if (!children.isEmpty()) {
+                for (HMBase child : children) {
+                    if (child != null && child.getJSValue() != null) {
+                        child.getJSValue().unprotect();
+                    }
                 }
+                children.clear();
             }
-            children.clear();
-        }
+        });
     }
 
     public void appendChild(HMBase child) {
