@@ -12,19 +12,7 @@
     <view class="contentView">
       <view v-for="(value, key, index) in viewJson" :key="index">
         <text class="mainListGroupTitle">{{ key }}</text>
-        <view
-          class="mainListItem"
-          v-for="(item, idx) in value"
-          :key="idx"
-          @tap="goDemo(item.dstPageName)"
-        >
-          <text class="mainListText">{{ item.title }}</text>
-          <image
-            class="mainListImage"
-            resize="contain"
-            src="https://pt-starimg.didistatic.com/static/starimg/img/mKuP6LHRsJ1642409515837.png"
-          ></image>
-        </view>
+        <MainListItem :list="value"></MainListItem>
       </view>
     </view>
   </view>
@@ -73,33 +61,17 @@
     margin-bottom: 3;
     margin-left: 20;
   }
-  .mainListItem {
-    flex-direction: row;
-    height: 64;
-    margin-top: 10;
-    background-color: #ffffff;
-    box-shadow: 1 2 12 #00000014;
-    border-radius: 8;
-    justify-content: space-between;
-    align-items: center;
-    .mainListText {
-      color: #1f1944;
-      font-size: 18;
-      margin-left: 21;
-    }
-    .mainListImage {
-      width: 16;
-      height: 16;
-      margin-right: 24;
-    }
-  }
 }
 </style>
 
 <script>
+import MainListItem from "../component/MainListItem.vue";
 export default {
   pageConfig: {
     canScroll: true,
+  },
+  components: {
+    MainListItem,
   },
   data() {
     return {
@@ -182,30 +154,12 @@ export default {
             dstPageName: "animation.js",
           },
           {
-            title: "跑马灯文字效果",
-            dstPageName: "marquee.js",
-          },
-          {
             title: "价格居中 + 标签",
             dstPageName: "price_flag.js",
           },
           {
             title: "验证码页面",
             dstPageName: "verification_code.js",
-          },
-        ],
-        小游戏: [
-          {
-            title: "2048",
-            dstPageName: "game_2048.js",
-          },
-          {
-            title: "贪吃蛇",
-            dstPageName: "game_snake.js",
-          },
-          {
-            title: "俄罗斯方块",
-            dstPageName: "game_tetris.js",
           },
         ],
       },

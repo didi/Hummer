@@ -43,7 +43,8 @@ export function run(container: any, type: string = 'tenon-vue') {
               ...params,
               viewTree: [data.simpleRoot],
               path: path,
-              baseInfo: __GLOBAL__.Hummer.env
+              baseInfo: __GLOBAL__.Hummer.env,
+              devToolType: type
             }
           })
         })
@@ -54,7 +55,8 @@ export function run(container: any, type: string = 'tenon-vue') {
             ...params,
             viewTree: [data.simpleRoot],
             path: path,
-            baseInfo: __GLOBAL__.Hummer.env
+            baseInfo: __GLOBAL__.Hummer.env,
+            devToolType: type
           }
         })
       }

@@ -11,7 +11,6 @@
   "dependencies": {
     "@hummer/hummer-front": "^1.0.8",
     "@hummer/tenon-store": "^1.0.0",
-    "@hummer/tenon-vue": "^1.7.0",
     "@hummer/vue-plugin-canvas": "^0.5.0",
     "@hummer/vue-plugin-list": "^0.5.0",
     "@hummer/vue-plugin-viewpager": "^0.5.0"

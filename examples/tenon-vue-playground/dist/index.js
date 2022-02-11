@@ -2,6 +2,35 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/component/MainListItem.vue":
+/*!****************************************!*\
+  !*** ./src/component/MainListItem.vue ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _MainListItem_vue_vue_type_template_id_26bc1a96_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MainListItem.vue?vue&type=template&id=26bc1a96&scoped=true& */ "./src/component/MainListItem.vue?vue&type=template&id=26bc1a96&scoped=true&");
+/* harmony import */ var _MainListItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MainListItem.vue?vue&type=script&lang=js& */ "./src/component/MainListItem.vue?vue&type=script&lang=js&");
+/* harmony import */ var _MainListItem_vue_vue_type_style_index_0_id_26bc1a96_lang_less_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MainListItem.vue?vue&type=style&index=0&id=26bc1a96&lang=less&scoped=true& */ "./src/component/MainListItem.vue?vue&type=style&index=0&id=26bc1a96&lang=less&scoped=true&");
+
+
+
+
+;
+_MainListItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"].render = _MainListItem_vue_vue_type_template_id_26bc1a96_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render
+_MainListItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"].__scopeId = "data-v-26bc1a96"
+/* hot reload */
+if (false) {}
+
+_MainListItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"].__file = "src/component/MainListItem.vue"
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_MainListItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+/***/ }),
+
 /***/ "./src/index/app.vue":
 /*!***************************!*\
   !*** ./src/index/app.vue ***!
@@ -31,6 +60,21 @@ _app_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"].__file
 
 /***/ }),
 
+/***/ "./src/component/MainListItem.vue?vue&type=template&id=26bc1a96&scoped=true&":
+/*!***********************************************************************************!*\
+  !*** ./src/component/MainListItem.vue?vue&type=template&id=26bc1a96&scoped=true& ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_templateLoader_js_ruleSet_1_rules_2_cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_1_rules_7_use_0_MainListItem_vue_vue_type_template_id_26bc1a96_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_templateLoader_js_ruleSet_1_rules_2_cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_1_rules_7_use_0_MainListItem_vue_vue_type_template_id_26bc1a96_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./MainListItem.vue?vue&type=template&id=26bc1a96&scoped=true& */ "../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=template&id=26bc1a96&scoped=true&");
+
+
+/***/ }),
+
 /***/ "./src/index/app.vue?vue&type=template&id=554f69db&scoped=true&":
 /*!**********************************************************************!*\
   !*** ./src/index/app.vue?vue&type=template&id=554f69db&scoped=true& ***!
@@ -46,6 +90,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/component/MainListItem.vue?vue&type=style&index=0&id=26bc1a96&lang=less&scoped=true&":
+/*!**************************************************************************************************!*\
+  !*** ./src/component/MainListItem.vue?vue&type=style&index=0&id=26bc1a96&lang=less&scoped=true& ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_cli_hummer_cli_packages_plugin_build_node_modules_less_loader_dist_cjs_js_cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_1_rules_7_use_0_MainListItem_vue_vue_type_style_index_0_id_26bc1a96_lang_less_scoped_true___WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_cli_hummer_cli_packages_plugin_build_node_modules_less_loader_dist_cjs_js_cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_1_rules_7_use_0_MainListItem_vue_vue_type_style_index_0_id_26bc1a96_lang_less_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/less-loader/dist/cjs.js!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./MainListItem.vue?vue&type=style&index=0&id=26bc1a96&lang=less&scoped=true& */ "../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!../../../cli/hummer-cli/packages/plugin-build/node_modules/less-loader/dist/cjs.js!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=style&index=0&id=26bc1a96&lang=less&scoped=true&");
+ 
+
+/***/ }),
+
 /***/ "./src/index/app.vue?vue&type=style&index=0&id=554f69db&lang=less&scoped=true&":
 /*!*************************************************************************************!*\
   !*** ./src/index/app.vue?vue&type=style&index=0&id=554f69db&lang=less&scoped=true& ***!
@@ -57,6 +116,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* reexport safe */ _cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_cli_hummer_cli_packages_plugin_build_node_modules_less_loader_dist_cjs_js_cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_1_rules_7_use_0_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true___WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
 /* harmony import */ var _cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_cli_hummer_cli_packages_plugin_build_node_modules_less_loader_dist_cjs_js_cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_1_rules_7_use_0_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/less-loader/dist/cjs.js!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./app.vue?vue&type=style&index=0&id=554f69db&lang=less&scoped=true& */ "../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!../../../cli/hummer-cli/packages/plugin-build/node_modules/less-loader/dist/cjs.js!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/index/app.vue?vue&type=style&index=0&id=554f69db&lang=less&scoped=true&");
+ 
+
+/***/ }),
+
+/***/ "./src/component/MainListItem.vue?vue&type=script&lang=js&":
+/*!*****************************************************************!*\
+  !*** ./src/component/MainListItem.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _cli_hummer_cli_packages_plugin_build_node_modules_babel_loader_lib_index_js_clonedRuleSet_3_use_cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_1_rules_7_use_0_MainListItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _cli_hummer_cli_packages_plugin_build_node_modules_babel_loader_lib_index_js_clonedRuleSet_3_use_cli_hummer_cli_packages_plugin_build_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_1_rules_7_use_0_MainListItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/babel-loader/lib/index.js??clonedRuleSet-3.use!../../../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./MainListItem.vue?vue&type=script&lang=js& */ "../../../cli/hummer-cli/packages/plugin-build/node_modules/babel-loader/lib/index.js??clonedRuleSet-3.use!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=script&lang=js&");
  
 
 /***/ }),
@@ -76,6 +150,48 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=template&id=26bc1a96&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=template&id=26bc1a96&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var _hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hummer/tenon-vue */ "./node_modules/@hummer/tenon-vue/dist/tenon-vue.es.js");
+
+
+(0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-26bc1a96")
+const _hoisted_1 = ["onTap"]
+;(0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)()
+
+function render(_ctx, _cache) {
+  return ((0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("view", {
+    class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("commonMainListItem")
+  }, [
+    ((0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.list, (item, idx) => {
+      return ((0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("view", {
+        class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("mainListItem"),
+        key: idx,
+        onTap: $event => (_ctx.goDemo(item.dstPageName))
+      }, [
+        (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("text", {
+          class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("mainListText")
+        }, (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.title), 3 /* TEXT, CLASS */),
+        (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("image", {
+          class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("mainListImage"),
+          resize: "contain",
+          src: "https://pt-starimg.didistatic.com/static/starimg/img/mKuP6LHRsJ1642409515837.png"
+        }, null, 2 /* CLASS */)
+      ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_1))
+    }), 128 /* KEYED_FRAGMENT */))
+  ], 2 /* CLASS */))
+}
+
+/***/ }),
+
 /***/ "../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/index/app.vue?vue&type=template&id=554f69db&scoped=true&":
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/index/app.vue?vue&type=template&id=554f69db&scoped=true& ***!
@@ -89,11 +205,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hummer/tenon-vue */ "./node_modules/@hummer/tenon-vue/dist/tenon-vue.es.js");
 
 
-(0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-554f69db")
-const _hoisted_1 = ["onTap"]
-;(0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)()
-
 function render(_ctx, _cache) {
+  const _component_MainListItem = (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("MainListItem")
+
   return ((0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("view", {
     class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("page")
   }, [
@@ -120,27 +234,36 @@ function render(_ctx, _cache) {
           (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("text", {
             class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("mainListGroupTitle")
           }, (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(key), 3 /* TEXT, CLASS */),
-          ((0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(value, (item, idx) => {
-            return ((0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("view", {
-              class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("mainListItem"),
-              key: idx,
-              onTap: $event => (_ctx.goDemo(item.dstPageName))
-            }, [
-              (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("text", {
-                class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("mainListText")
-              }, (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.title), 3 /* TEXT, CLASS */),
-              (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("image", {
-                class: (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("mainListImage"),
-                resize: "contain",
-                src: "https://pt-starimg.didistatic.com/static/starimg/img/mKuP6LHRsJ1642409515837.png"
-              }, null, 2 /* CLASS */)
-            ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_1))
-          }), 128 /* KEYED_FRAGMENT */))
+          (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_MainListItem, { list: value }, null, 8 /* PROPS */, ["list"])
         ]))
       }), 128 /* KEYED_FRAGMENT */))
     ], 2 /* CLASS */)
   ], 2 /* CLASS */))
 }
+
+/***/ }),
+
+/***/ "../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!../../../cli/hummer-cli/packages/plugin-build/node_modules/less-loader/dist/cjs.js!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=style&index=0&id=26bc1a96&lang=less&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!../../../cli/hummer-cli/packages/plugin-build/node_modules/less-loader/dist/cjs.js!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=style&index=0&id=26bc1a96&lang=less&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hummer/tenon-vue */ "./node_modules/@hummer/tenon-vue/dist/tenon-vue.es.js");
+
+    
+    /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((function(){
+      
+    var ruleSetMap = {"global":{"classList":[]},"data-v-26bc1a96":{"classList":[{"selector":"mainListItem","n_selector":{"next":null,"value":"mainListItem","matchType":0,"relation":1},"style":{"borderRadius":"8","flexDirection":"row","height":"64","marginTop":"10","backgroundColor":"#ffffff","justifyContent":"space-between","alignItems":"center","shadow":"1 2 12 #00000014"},"matchType":0},{"selector":"mainListText","n_selector":{"next":null,"value":"mainListText","matchType":0,"relation":1},"style":{"color":"#1f1944","fontSize":"18","marginLeft":"21"},"matchType":0},{"selector":"mainListImage","n_selector":{"next":null,"value":"mainListImage","matchType":0,"relation":1},"style":{"width":"16","height":"16","marginRight":"24"},"matchType":0}]}};
+    var options = {"scoped":true,"id":"data-v-26bc1a96","packageName":"@hummer/tenon-vue"};
+  
+      return (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.collectStyle)(ruleSetMap, options);
+    })());
+  
 
 /***/ }),
 
@@ -159,7 +282,7 @@ __webpack_require__.r(__webpack_exports__);
     
     /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((function(){
       
-    var ruleSetMap = {"global":{"classList":[]},"data-v-554f69db":{"classList":[{"selector":"page","n_selector":{"next":null,"value":"page","matchType":0,"relation":0},"style":{"backgroundColor":"#ffffff","width":"100%","height":"100%","justifyContent":"center","alignItems":"center"},"matchType":0},{"selector":"topBackground","n_selector":{"next":null,"value":"topBackground","matchType":0,"relation":0},"style":{"width":"100%","height":"218","backgroundColor":"linear-gradient(90deg #15d0b4 #e2ed00)"},"matchType":0},{"selector":"logoView","n_selector":{"next":null,"value":"logoView","matchType":0,"relation":0},"style":{"borderRadius":"8","width":"90%","height":"190","marginTop":"-150","alignSelf":"center","backgroundColor":"#ffffff","justifyContent":"center","alignItems":"center","shadow":"1 2 12 #00000014"},"matchType":0},{"selector":"logoImage","n_selector":{"next":null,"value":"logoImage","matchType":0,"relation":0},"style":{"width":"180","height":"80"},"matchType":0},{"selector":"logoText","n_selector":{"next":null,"value":"logoText","matchType":0,"relation":0},"style":{"color":"#292a36","fontSize":"11","marginTop":"24"},"matchType":0},{"selector":"contentView","n_selector":{"next":null,"value":"contentView","matchType":0,"relation":0},"style":{"paddingTop":"18","paddingRight":"18","paddingBottom":"18","paddingLeft":"18","width":"100%","flexGrow":"1"},"matchType":0},{"selector":"mainListGroupTitle","n_selector":{"next":null,"value":"mainListGroupTitle","matchType":0,"relation":1},"style":{"color":"#9b9b9b","fontSize":"13","marginTop":"24","marginBottom":"3","marginLeft":"20"},"matchType":0},{"selector":"mainListItem","n_selector":{"next":null,"value":"mainListItem","matchType":0,"relation":1},"style":{"borderRadius":"8","flexDirection":"row","height":"64","marginTop":"10","backgroundColor":"#ffffff","justifyContent":"space-between","alignItems":"center","shadow":"1 2 12 #00000014"},"matchType":0},{"selector":"mainListText","n_selector":{"next":null,"value":"mainListText","matchType":0,"relation":1},"style":{"color":"#1f1944","fontSize":"18","marginLeft":"21"},"matchType":0},{"selector":"mainListImage","n_selector":{"next":null,"value":"mainListImage","matchType":0,"relation":1},"style":{"width":"16","height":"16","marginRight":"24"},"matchType":0}]}};
+    var ruleSetMap = {"global":{"classList":[]},"data-v-554f69db":{"classList":[{"selector":"page","n_selector":{"next":null,"value":"page","matchType":0,"relation":0},"style":{"backgroundColor":"#ffffff","width":"100%","height":"100%","justifyContent":"center","alignItems":"center"},"matchType":0},{"selector":"topBackground","n_selector":{"next":null,"value":"topBackground","matchType":0,"relation":0},"style":{"width":"100%","height":"218","backgroundColor":"linear-gradient(90deg #15d0b4 #e2ed00)"},"matchType":0},{"selector":"logoView","n_selector":{"next":null,"value":"logoView","matchType":0,"relation":0},"style":{"borderRadius":"8","width":"90%","height":"190","marginTop":"-150","alignSelf":"center","backgroundColor":"#ffffff","justifyContent":"center","alignItems":"center","shadow":"1 2 12 #00000014"},"matchType":0},{"selector":"logoImage","n_selector":{"next":null,"value":"logoImage","matchType":0,"relation":0},"style":{"width":"180","height":"80"},"matchType":0},{"selector":"logoText","n_selector":{"next":null,"value":"logoText","matchType":0,"relation":0},"style":{"color":"#292a36","fontSize":"11","marginTop":"24"},"matchType":0},{"selector":"contentView","n_selector":{"next":null,"value":"contentView","matchType":0,"relation":0},"style":{"paddingTop":"18","paddingRight":"18","paddingBottom":"18","paddingLeft":"18","width":"100%","flexGrow":"1"},"matchType":0},{"selector":"mainListGroupTitle","n_selector":{"next":null,"value":"mainListGroupTitle","matchType":0,"relation":1},"style":{"color":"#9b9b9b","fontSize":"13","marginTop":"24","marginBottom":"3","marginLeft":"20"},"matchType":0}]}};
     var options = {"scoped":true,"id":"data-v-554f69db","packageName":"@hummer/tenon-vue"};
   
       return (0,_hummer_tenon_vue__WEBPACK_IMPORTED_MODULE_0__.collectStyle)(ruleSetMap, options);
@@ -14281,6 +14404,43 @@ var index = {
 
 /***/ }),
 
+/***/ "../../../cli/hummer-cli/packages/plugin-build/node_modules/babel-loader/lib/index.js??clonedRuleSet-3.use!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../../../cli/hummer-cli/packages/plugin-build/node_modules/babel-loader/lib/index.js??clonedRuleSet-3.use!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/component/MainListItem.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    list: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    }
+  },
+
+  data() {
+    return {};
+  },
+
+  methods: {
+    goDemo(dstPageName) {
+      var page = {
+        url: "./" + dstPageName
+      };
+      Navigator.openPage(page);
+    }
+
+  }
+});
+
+/***/ }),
+
 /***/ "../../../cli/hummer-cli/packages/plugin-build/node_modules/babel-loader/lib/index.js??clonedRuleSet-3.use!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/index/app.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ../../../cli/hummer-cli/packages/plugin-build/node_modules/babel-loader/lib/index.js??clonedRuleSet-3.use!../../../cli/hummer-cli/packages/plugin-build/node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/index/app.vue?vue&type=script&lang=js& ***!
@@ -14291,9 +14451,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _component_MainListItem_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../component/MainListItem.vue */ "./src/component/MainListItem.vue");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   pageConfig: {
     canScroll: true
+  },
+  components: {
+    MainListItem: _component_MainListItem_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
 
   data() {
@@ -14356,24 +14521,11 @@ __webpack_require__.r(__webpack_exports__);
           title: "动画系列",
           dstPageName: "animation.js"
         }, {
-          title: "跑马灯文字效果",
-          dstPageName: "marquee.js"
-        }, {
           title: "价格居中 + 标签",
           dstPageName: "price_flag.js"
         }, {
           title: "验证码页面",
           dstPageName: "verification_code.js"
-        }],
-        小游戏: [{
-          title: "2048",
-          dstPageName: "game_2048.js"
-        }, {
-          title: "贪吃蛇",
-          dstPageName: "game_snake.js"
-        }, {
-          title: "俄罗斯方块",
-          dstPageName: "game_tetris.js"
         }]
       }
     };
