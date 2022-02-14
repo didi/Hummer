@@ -8,7 +8,7 @@
     "debug": "npm run dev & hummer debug"
   },
   "dependencies": {
-    "@hummer/hummer-front": "^1.0.0"
-  },
-  "devDependencies": {}
+    "@hummer/hummer-front": "^1.0.0",
+    "@hummer/tenon-dev-tool": "^0.2.2"
+  }
 }

@@ -31,7 +31,7 @@ class RootView extends ComponentPage {
             width,
             height
         }
-        canvas.lineWidth(3)
+        canvas.lineWidth(2)
         this.drawCanvas(width, height,canvas)
         this.appendChild(canvas);
     }
@@ -150,14 +150,14 @@ class RootView extends ComponentPage {
         //资源图片
         // let path = "ic_loading"
         //网络图片
-        let path = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F03%2F20170803110751_8NLev.thumb.700_0.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630219778&t=45bfb77ae5fe1722be22e141075a9af6"
+        let path = "https://pt-starimg.didistatic.com/static/starimg/img/26sthnf9YK1643269008518.png"
         //绝对路径
         // let path = "file://内部存储/bluetooth/test.jepg"
         canvas.drawImage(path, 180, 330, 50, 50)
 
     }
     drawCircle(width, height, canvas) {
-        canvas.fillCircle('200px', '300px', '50px')
+        canvas.fillCircle(100, 300, 20)
         canvas.strokeCircle(200, 300, 20)
         canvas.arc(300, 300, 20, Math.PI / 4, Math.PI / 5, false)
         canvas.strokeEllipse(100, 400, 300, 500)
