@@ -12,7 +12,12 @@ let isWebPlatform = __GLOBAL__.Hummer.pageInfo && JSON.stringify(__GLOBAL__.Humm
 export function run(container: any, type: string = 'tenon-vue') {
   let formatedNode = formatNode(container, type)
   log('Socket Initializing')
-  const { url } = __GLOBAL__.Hummer.pageInfo
+  const { url } = __GLOBAL__.Hummer.pageInfo || {}
+  // 部分接入方使用自己的容器 没有pageInfo属性 直接报错&return
+  if (!url) {
+    error(`get url error, initialization failed`)
+    return
+  }
   const { Storage, Memory } = __GLOBAL__
   let host = getPartUrlByParam(url, 'host')
   let port = getPartUrlByParam(url, 'port')
