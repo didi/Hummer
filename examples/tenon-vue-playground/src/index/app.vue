@@ -128,6 +128,10 @@ export default {
             dstPageName: "list.js",
           },
           {
+            title: "Popup",
+            dstPageName: "popup.js",
+          },
+          {
             title: "ViewPager",
             dstPageName: "view_pager.js",
           },
