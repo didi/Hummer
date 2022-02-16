@@ -320,6 +320,9 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     [context.rootView addSubview:view];
     context.rootView.isHmLayoutEnabled = YES;
     [context.rootView hm_markDirty];
+    if ([context.delegate respondsToSelector:@selector(context:didRenderPage:)]) {
+        [context.delegate context:context didRenderPage:page];
+    }
     if (context.renderCompletion) {
         context.renderCompletion();
     }

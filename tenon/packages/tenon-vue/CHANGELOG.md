@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.2](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.8.1...@hummer/tenon-vue@1.8.2) (2022-02-15)
+
+**Note:** Version bump only for package @hummer/tenon-vue
+
+
+
+
+
 ## [1.8.1](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.8.0...@hummer/tenon-vue@1.8.1) (2022-01-19)
 
 **Note:** Version bump only for package @hummer/tenon-vue
