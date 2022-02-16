@@ -1,28 +1,40 @@
 import { Hummer, View, KeyframeAnimation } from '@hummer/hummer-front'
 import { Style } from '../../../common/CommonStyle'
 import { Color } from '../../../common/CommonColor'
-
-class RootView extends View {
+import { ComponentPage } from '../../../common/CommonPage'
+class RootView extends ComponentPage {
     constructor() {
         super();
+        this.setPageTitle('Loading 效果');
         this.style = {
             ...Style.FullParentStyle,
-            ...Style.CenterStyle,
             backgroundColor: Color.white,
         }
-
-        this.showLoadingAnim();
     }
 
+    initDisplayView() {
+        // 复写父类方法，去除DisplayView
+    }
+
+    initContentView() {
+        this.showLoadingAnim();
+    }
     /**
      * Loading 动画
      */
     showLoadingAnim() {
         let layout = new View;
+        let container = new View;
         layout.style = {
             flexDirection: 'row',
             width: 80,
+            ...Style.CenterStyle,
             justifyContent: 'space-between',
+        }
+        container.style = {
+            width: '100%',
+            flexGrow:1,
+            ...Style.CenterStyle,
         }
 
         for (let i = 0; i < 3; i++) {
@@ -37,8 +49,8 @@ class RootView extends View {
             layout.appendChild(v);
             this.doLoadingAnimation(v, i * 300);
         }
-
-        this.appendChild(layout);
+        container.appendChild(layout);
+        this.appendChild(container);
     }
 
     doLoadingAnimation(view, delay) {

@@ -1,5 +1,5 @@
 import { Hummer, View, Text, Button, Toast, BasicAnimation, KeyframeAnimation } from '@hummer/hummer-front'
-
+import { ComponentPage } from '../../common/CommonPage'
 var board = new Array();
 var added = new Array();
 var score = 0;
@@ -537,20 +537,31 @@ function showMoveAnimation(fromx, fromy, tox, toy) {//实现移动格子的样�
  * hummer
  */
 
-class RootView extends View {
+class RootView extends ComponentPage {
     constructor() {
         super();
-
+        this.setPageTitle('2048');
         this.style = {
             width: '100%',
             height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
             backgroundColor: '#FFFFFF',
         }
+    }
+    initDisplayView() {
+        // 复写父类方法，去除DisplayView
+    }
 
+    initContentView() {
         this.addEventListener('swipe', swipeCallback);
 
+        let container = new View;
+        container.style = {
+            width: '100%',
+            flexGrow:1,
+            justifyContent: 'center',
+            alignItems: 'center',
+        }
+        
         let title = new Text();
         title.text = '2048';
         title.style = {
@@ -559,7 +570,7 @@ class RootView extends View {
             color: '#15D0B4',
         }
 
-        this.appendChild(title);
+        container.appendChild(title);
 
         let restartBtn = new Button();
         restartBtn.text = '重新开始';
@@ -575,7 +586,7 @@ class RootView extends View {
         restartBtn.addEventListener('tap', () => {
             newgame();
         })
-        this.appendChild(restartBtn);
+        container.appendChild(restartBtn);
 
         let scoreLayout = new View();
         scoreLayout.style = {
@@ -596,7 +607,7 @@ class RootView extends View {
         }
         scoreLayout.appendChild(scoreLabel);
         scoreLayout.appendChild(score);
-        this.appendChild(scoreLayout);
+        container.appendChild(scoreLayout);
         globalMap['score'] = score;
 
         let boxLayout = new View();
@@ -622,7 +633,9 @@ class RootView extends View {
                 boxLayout.appendChild(cell);
             }
         }
-        this.appendChild(boxLayout);
+        
+        container.appendChild(boxLayout);
+        this.appendChild(container);
     }
 }
 

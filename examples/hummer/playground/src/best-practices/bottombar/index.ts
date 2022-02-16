@@ -1,21 +1,25 @@
 import { Hummer, View, Text, Scroller } from '@hummer/hummer-front'
 import { Style } from '../../common/CommonStyle'
 import { Color } from '../../common/CommonColor'
-
-class RootView extends Scroller {
+import { ComponentPage } from '../../common/CommonPage'
+class RootView extends ComponentPage {
   contentView: View;
 
   constructor() {
     super();
+    this.setPageTitle('底部栏系列');
     this.style = {
       ...Style.FullParentStyle,
       backgroundColor: Color.white,
     }
-
+  }
+  initDisplayView() {
+    // 复写父类方法，去除DisplayView
+  }
+  initContentView() {
     this.showBottomBar1();
     this.showBottomBar2();
   }
-
   /**
    * 底部栏（通过 position: 'absolute' + bottom: 0 实现）
    */

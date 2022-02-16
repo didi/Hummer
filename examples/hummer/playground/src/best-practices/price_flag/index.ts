@@ -1,21 +1,26 @@
 import { Hummer, View, Text, Scroller } from '@hummer/hummer-front'
 import { Style } from '../../common/CommonStyle'
 import { Color } from '../../common/CommonColor'
-
-class RootView extends Scroller {
+import { ComponentPage } from '../../common/CommonPage'
+class RootView extends ComponentPage {
     contentView: View;
 
     constructor() {
         super();
+        this.setPageTitle('价格居中 + 标签');
         this.style = {
             ...Style.FullParentStyle,
-            ...Style.CenterStyle,
+            // ...Style.CenterStyle,
             backgroundColor: Color.white,
         }
-
-        this.showPriceFlag();
+    }
+    initDisplayView() {
+        // 复写父类方法，去除DisplayView
     }
 
+    initContentView() {
+        this.showPriceFlag();
+    }
     /**
      * 价格居中 + 小标签
      */
@@ -54,10 +59,17 @@ class RootView extends Scroller {
             color: '#FFFFFF',
         }
 
+        let container = new View;
+        container.style = {
+            width: '100%',
+            flexGrow:1,
+            ...Style.CenterStyle,
+        }
         flagLayout.appendChild(flagView);
         layout.appendChild(textView);
         layout.appendChild(flagLayout);
-        this.appendChild(layout);
+        container.appendChild(layout);
+        this.appendChild(container);
     }
 }
 

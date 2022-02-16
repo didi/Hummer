@@ -1,5 +1,5 @@
 import { Hummer, View, Button, Toast } from '@hummer/hummer-front'
-
+import { ComponentPage } from '../../common/CommonPage'
 //定义按键
 var KEY_LEFT = 2;
 var KEY_RIGHT = 1;
@@ -479,7 +479,7 @@ function initUI() {
         }
     }
 
-    rootView.appendChild(space);
+    container.appendChild(space);
 
 
     btn = new Button();
@@ -499,7 +499,7 @@ function initUI() {
             isGaming = true;
         } else {
             clearInterval(timer);
-            rootView.removeAll();
+            container.removeAll();
             initUI();
             initGame();
             btn.text = "重新开始";
@@ -507,7 +507,7 @@ function initUI() {
             isGaming = true;
         }
     });
-    rootView.appendChild(btn);
+    container.appendChild(btn);
 }
 
 var spaceMap = {};
@@ -515,19 +515,30 @@ var spaceMap = {};
 function $(id) {
     return spaceMap[id];
 }
-
-class RootView extends View {
+var container
+class RootView extends ComponentPage {
     constructor() {
         super();
-
+        this.setPageTitle('俄罗斯方块');
         this.style = {
             width: '100%',
             height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
             backgroundColor: '#FFFFFF',
         }
+    }
+    initDisplayView() {
+        // 复写父类方法，去除DisplayView
+    }
 
+    initContentView() {
+        container = new View;
+        container.style = {
+            width: '100%',
+            flexGrow:1,
+            justifyContent: 'center',
+            alignItems: 'center',
+        }
+        this.appendChild(container);
         this.addEventListener('swipe', swipeCallback);
     }
 }

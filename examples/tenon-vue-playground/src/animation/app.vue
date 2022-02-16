@@ -25,15 +25,15 @@ export default {
       list: [
         {
           title: "基础动画",
-          dstPageName: "animation-basic.js",
+          dstPageName: "animation_basic.js",
         },
         {
           title: "关键帧动画",
-          dstPageName: "animation-keyframe.js",
+          dstPageName: "animation_keyframe.js",
         },
         {
           title: "次序动画",
-          dstPageName: "animation-steps.js",
+          dstPageName: "animation_steps.js",
         },
         {
           title: "水波纹效果",
