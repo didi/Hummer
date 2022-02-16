@@ -2,27 +2,39 @@ import { Hummer, View, Button } from '@hummer/hummer-front'
 import { Style } from '../../common/CommonStyle'
 import { Color } from '../../common/CommonColor'
 import { GamePanel } from './GamePanel';
-
-class RootView extends View {
+import { ComponentPage } from '../../common/CommonPage'
+class RootView extends ComponentPage {
     isGaming = false;
 
     constructor() {
         super();
+        this.setPageTitle('贪吃蛇');
         this.style = {
             ...Style.FullParentStyle,
             ...Style.CenterStyle,
             backgroundColor: Color.white,
         }
-
-        this.initGame();
+    }
+    initDisplayView() {
+        // 复写父类方法，去除DisplayView
     }
 
+    initContentView() {
+        this.initGame();
+    }
     /**
      * 初始化游戏
      */
     initGame() {
         let panel = new GamePanel();
-        this.appendChild(panel);
+        let container = new View;
+        container.style = {
+            width: '100%',
+            flexGrow:1,
+            justifyContent: 'center',
+            alignItems: 'center',
+        }
+        container.appendChild(panel);
 
         this.addEventListener('swipe', (e: any) => {
             panel.changeDirection(e.direction);
@@ -47,7 +59,8 @@ class RootView extends View {
                 panel.restartGame();
             }
         });
-        this.appendChild(btn);
+        container.appendChild(btn);
+        this.appendChild(container);
     }
 }
 

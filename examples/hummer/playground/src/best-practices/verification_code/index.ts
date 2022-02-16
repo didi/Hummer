@@ -1,16 +1,20 @@
 import { Hummer, View, Text, Input, InputEvent } from '@hummer/hummer-front'
 import { Color } from '../../common/CommonColor'
-
-class RootView extends View {
+import { ComponentPage } from '../../common/CommonPage'
+class RootView extends ComponentPage {
     constructor() {
         super();
+        this.setPageTitle('验证码页面');
         this.style = {
             width: '100%',
             height: '100%',
-            marginTop: 40,
-            padding: 20,
         }
+    }
+    initDisplayView() {
+        // 复写父类方法，去除DisplayView
+    }
 
+    initContentView() {
         let titleView = new Text();
         titleView.text = "获取验证码"
         titleView.style = {
@@ -34,11 +38,18 @@ class RootView extends View {
         verifyCodeView.style = {
             marginTop: 32,
         }
-
-        this.appendChild(titleView);
-        this.appendChild(descView1);
-        this.appendChild(descView2);
-        this.appendChild(verifyCodeView);
+        let container = new View;
+        container.style = {
+            width: '100%',
+            flexGrow:1,
+            marginTop: 40,
+            padding: 20,
+        }
+        container.appendChild(titleView);
+        container.appendChild(descView1);
+        container.appendChild(descView2);
+        container.appendChild(verifyCodeView);
+        this.appendChild(container);
     }
 }
 
