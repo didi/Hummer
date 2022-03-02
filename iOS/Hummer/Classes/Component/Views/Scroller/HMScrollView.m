@@ -226,9 +226,8 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
         kHMScrollState: @(HMScrollEventBegan),
         kHMScrollDeltaX: @(0),
         kHMScrollDeltaY: @(0),
-        // TODO(ChasonTang): 这里的逻辑是错误的，应该是返回当前的 contentOffset
-        kHMScrollOffsetX: @(0),
-        kHMScrollOffsetY: @(0)
+        kHMScrollOffsetX: @(self.lastContentOffset.x),
+        kHMScrollOffsetY: @(self.lastContentOffset.y)
     }];
 }
 
