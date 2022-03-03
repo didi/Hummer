@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ScrollView;
 
 import com.didi.hummer.component.input.FocusUtil;
@@ -144,7 +145,9 @@ public class VScrollView extends ScrollView {
     private void hideKeyboardIfNeed(int d) {
         if (d > 20 && getContext() instanceof Activity) {
             Activity act = (Activity) getContext();
-            if (act.getCurrentFocus() != null && act.getCurrentFocus().getWindowToken() != null) {
+            if (act.getCurrentFocus() != null && act.getCurrentFocus().getWindowToken() != null
+                    && (act.getWindow().getAttributes().softInputMode & WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE) == 0) {
+                // 当 SoftInputMode==adjustResize 时，键盘弹起时会改变根视图的高度，从而会触发ScrollView的onScroll，所以需要过滤掉这种情况
                 KeyboardUtil.hideKeyboard(act.getCurrentFocus());
             }
         }
