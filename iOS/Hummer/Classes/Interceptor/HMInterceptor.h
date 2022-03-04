@@ -13,7 +13,7 @@
 #import "HMReporterProtocol.h"
 #import "HMRouterProtocol.h"
 #import "HMImageProtocol.h"
-#import "HMJSCallerIterceptor.h"
+#import "HMJSCallerProtocol.h"
 
 #import "HMEventTrackProtocol.h"
 

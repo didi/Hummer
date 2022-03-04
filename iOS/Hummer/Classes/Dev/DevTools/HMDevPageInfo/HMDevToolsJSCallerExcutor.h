@@ -9,13 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^HMDevToolsJSCallerNativeInfo)(id target, SEL selector);
-typedef void(^HMDevToolsJSCallerInfo)(NSString *className, NSString *funtionName);
+typedef void(^HMDevToolsJSCallerNativeInfo)(NSString *className, NSString *funtionName, NSString *objRef, NSString *args);
+typedef void(^HMDevToolsJSCallerJSInfo)(NSString *className, NSString *funtionName, NSString *objRef, NSString *args);
 
 @interface HMDevToolsJSCallerExcutor : NSObject
 
 @property (nonatomic, copy) HMDevToolsJSCallerNativeInfo callerNativeInfo;
-@property (nonatomic, copy) HMDevToolsJSCallerInfo callerInfo;
+@property (nonatomic, copy) HMDevToolsJSCallerJSInfo callerJSInfo;
 
 @end
 

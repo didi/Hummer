@@ -23,7 +23,7 @@
 #import <Hummer/HMConfigEntryManager.h>
 
 #import <Hummer/HMDebug.h>
-#if __has_include(<Hummer/HMDevTools.h>)
+#if defined(HMDEVTOOLS)
 #import <Hummer/HMDevTools.h>
 #endif
 

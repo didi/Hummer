@@ -104,6 +104,9 @@ Hummer is a dynamic solution for client.
   s.subspec "DevTools" do |ss|
     ss.dependency 'Hummer/Core'
     ss.source_files = 'iOS/Hummer/Classes/Dev/DevTools/**/*.{h,m}', 'iOS/Hummer/Classes/Dev/Performance/**/*.{h,m}'
+    ss.xcconfig = {
+      "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) HMDEVTOOLS=1'
+    }
   end
   
   # s.public_header_files = 'Pod/Classes/**/*.h'

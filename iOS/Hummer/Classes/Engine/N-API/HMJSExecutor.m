@@ -9,6 +9,8 @@
 #import <Hummer/HMJSStrongValue.h>
 #import <objc/runtime.h>
 #import <Hummer/HMDebugService.h>
+#import "HMConfigEntryManager.h"
+#import "NSObject+HMDescription.h"
 
 static NSString *const HANDLE_SCOPE_ERROR = @"napi_open_handle_scope() error";
 
@@ -170,6 +172,17 @@ NAPIValue hummerCall(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
     // 最后一个参数无效
     [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
+    
+#if POD_CONFIGURATION_DEBUG
+    NSString *objRefStr = objectRef ? [NSString stringWithFormat:@"%p", target] : nil;
+    NSMutableArray *argDesList = @[].mutableCopy;
+    int argStartIndex = objectRef ? 1:0;
+    for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argc) - argStartIndex; ++i) {
+        HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:argv[i + argStartIndex] executor:executor];
+        [argDesList addObject:[jsValue hm_devDescription]];
+    }
+    [HMJSCallerIterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argDesList namespace:@""];
+#endif
 
     return [executor hummerCallNativeWithArgumentCount:argc arguments:argv target:target selector:selector methodSignature:methodSignature];
 }
@@ -207,6 +220,10 @@ NAPIValue hummerCreate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
         return nil;
     }
+    
+#if POD_CONFIGURATION_DEBUG
+    [HMJSCallerIterceptor callNativeWithClassName:className functionName:@"constructor" objectRef:nil args:nil namespace:@""];
+#endif
 
     // 创建对象
     NSObject *opaquePointer = nil;
@@ -608,6 +625,19 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 //            }
 //        }
 //    }
+    
+    
+#if POD_CONFIGURATION_DEBUG
+    NSString *objRefStr = objectRef ? [NSString stringWithFormat:@"%p", target] : nil;
+    NSMutableArray *argDesList = @[].mutableCopy;
+    int argStartIndex = objectRef ? 1:0;
+    for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argumentCount) - argStartIndex; ++i) {
+        HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:self];
+        [argDesList addObject:[jsValue hm_devDescription]];
+    }
+    [HMJSCallerIterceptor callNativeWithClassName:className functionName:isSetter ? [@"set" stringByAppendingString:propertyName.capitalizedString] : propertyName objectRef:objRefStr args:argDesList namespace:@""];
+#endif
+    
 
     return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
 }

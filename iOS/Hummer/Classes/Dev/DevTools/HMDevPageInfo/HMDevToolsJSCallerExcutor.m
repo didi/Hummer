@@ -9,8 +9,7 @@
 #import "HMInterceptor.h"
 #import <Hummer/HMDebug.h>
 
-@interface HMDevToolsJSCallerExcutor ()<HMJSCallerIterceptor>
-
+@interface HMDevToolsJSCallerExcutor ()<HMJSCallerProtocol>
 @end
 
 @implementation HMDevToolsJSCallerExcutor
@@ -19,16 +18,20 @@
 HM_EXPORT_INTERCEPTOR(HMDevToolsJSCallerExcutor)
 #endif
 
-- (void)callWithTarget:(id)target selector:(SEL)selector {
-    if (self.callerNativeInfo) {
-        self.callerNativeInfo(target, selector);
-    }
+
+- (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objRef:(NSString *)objRef args:(NSArray *)args namespace:(NSString *)namespace {
+    NSString *argStr = args.count == 0 ? @"()":args.description;
+
+    !self.callerNativeInfo?:self.callerNativeInfo(className, functionName, objRef, argStr);
 }
 
-- (void)callWithJSClassName:(NSString *)className functionName:(NSString *)functionName {
-    if (self.callerInfo) {
-        self.callerInfo(className, functionName);
-    }
+- (void)callJSWithClassName:(NSString *)className functionName:(NSString *)functionName objRef:(NSString *)objRef args:(NSArray *)args namespace:(NSString *)namespace {
+
+    
+    functionName = functionName.length == 0 ? @"callWithArgs":functionName;
+    NSString *argStr = args.count == 0 ? @"()":args.description;
+
+    !self.callerJSInfo?:self.callerJSInfo(className, functionName, objRef, argStr);
 }
 
 @end
