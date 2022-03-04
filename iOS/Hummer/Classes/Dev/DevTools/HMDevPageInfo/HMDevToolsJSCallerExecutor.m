@@ -1,18 +1,18 @@
 //
-//  HMDevToolsJSCallerExcutor.m
+//  HMDevToolsJSCallerExecutor.m
 //  Hummer
 //
 //  Created by ryan on 2021/6/2.
 //
 
-#import "HMDevToolsJSCallerExcutor.h"
+#import "HMDevToolsJSCallerExecutor.h"
 #import "HMInterceptor.h"
 #import <Hummer/HMDebug.h>
 
-@interface HMDevToolsJSCallerExcutor ()<HMJSCallerProtocol>
+@interface HMDevToolsJSCallerExecutor ()<HMJSCallerProtocol>
 @end
 
-@implementation HMDevToolsJSCallerExcutor
+@implementation HMDevToolsJSCallerExecutor
 
 #ifdef HMDEBUG
 HM_EXPORT_INTERCEPTOR(HMDevToolsJSCallerExcutor)

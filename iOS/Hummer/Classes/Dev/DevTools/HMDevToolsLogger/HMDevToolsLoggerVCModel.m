@@ -10,7 +10,7 @@
 #import "HMExceptionModel.h"
 
 #import "HMInterceptor.h"
-#import "HMDevToolsJSCallerExcutor.h"
+#import "HMDevToolsJSCallerExecutor.h"
 
 
 static NSDateFormatter *formatter;
@@ -85,9 +85,9 @@ static NSDateFormatter *formatter;
         return;
     }
 
-    HMDevToolsJSCallerExcutor *callerExcutor;
+    HMDevToolsJSCallerExecutor *callerExcutor;
     for (NSObject *interceptor in inspectors) {
-        if ([interceptor isKindOfClass:HMDevToolsJSCallerExcutor.class]) {
+        if ([interceptor isKindOfClass:HMDevToolsJSCallerExecutor.class]) {
             callerExcutor = interceptor;
             break;
         }

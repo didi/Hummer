@@ -1,5 +1,5 @@
 //
-//  HMDevToolsJSCallerExcutor.h
+//  HMDevToolsJSCallerExecutor.h
 //  Hummer
 //
 //  Created by ryan on 2021/6/2.
@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void(^HMDevToolsJSCallerNativeInfo)(NSString *className, NSString *funtionName, NSString *objRef, NSString *args);
 typedef void(^HMDevToolsJSCallerJSInfo)(NSString *className, NSString *funtionName, NSString *objRef, NSString *args);
 
-@interface HMDevToolsJSCallerExcutor : NSObject
+@interface HMDevToolsJSCallerExecutor : NSObject
 
 @property (nonatomic, copy) HMDevToolsJSCallerNativeInfo callerNativeInfo;
 @property (nonatomic, copy) HMDevToolsJSCallerJSInfo callerJSInfo;
