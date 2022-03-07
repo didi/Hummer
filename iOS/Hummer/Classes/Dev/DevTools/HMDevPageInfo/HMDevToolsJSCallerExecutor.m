@@ -15,7 +15,7 @@
 @implementation HMDevToolsJSCallerExecutor
 
 #ifdef HMDEBUG
-HM_EXPORT_INTERCEPTOR(HMDevToolsJSCallerExcutor)
+HM_EXPORT_INTERCEPTOR(HMDevToolsJSCallerExecutor)
 #endif
 
 
