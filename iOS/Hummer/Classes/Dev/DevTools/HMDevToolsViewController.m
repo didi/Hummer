@@ -12,6 +12,7 @@
 #import "HMJSCExecutor.h"
 #import "HMLogger.h"
 #import "HMDevToolsLoggerViewController.h"
+#import "HMDevToolsLoggerVCModel.h"
 #import "HMDevPageInfoViewController.h"
 #import "HMDevToolsHierarchyViewController.h"
 
@@ -61,6 +62,7 @@
     NSArray<HMDevToolsMenuItem *> *menuItems = @[
         [HMDevToolsMenuItem menuItemWithTitle:@"日志" container:^UIViewController * _Nonnull(HMJSContext * _Nonnull context) {
             HMDevToolsLoggerViewController *loggerVC = HMDevToolsLoggerViewController.new;
+            loggerVC.vcModel = [[HMDevToolsLoggerVCModel alloc] initWithVC:loggerVC];
             loggerVC.context = context;
             return loggerVC;
         }],
@@ -81,7 +83,10 @@
             }];
         }],
         [HMDevToolsMenuItem menuItemWithTitle:@"函数树" container:^UIViewController * _Nonnull(HMJSContext * _Nonnull context) {
-            return UIViewController.new;
+            HMDevToolsLoggerViewController *loggerVC = HMDevToolsLoggerViewController.new;
+            loggerVC.vcModel = [[HMDevToolsCallTreeVCModel alloc] initWithVC:loggerVC];
+            loggerVC.context = context;
+            return loggerVC;
         }],
         [HMDevToolsMenuItem menuItemWithTitle:@"性能" container:^UIViewController * _Nonnull(HMJSContext * _Nonnull context) {
             return UIViewController.new;

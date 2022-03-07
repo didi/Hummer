@@ -10,7 +10,7 @@
 #import <Hummer/HMNamespaceScope.h>
 #import <Hummer/HMImageLoader.h>
 #import <Hummer/HMJSLoaderProtocol.h>
-#import <Hummer/HMJSCallerIterceptor.h>
+#import <Hummer/HMJSCallerProtocol.h>
 #import <Hummer/HMLoggerProtocol.h>
 #import <Hummer/HMReporterProtocol.h>
 #import <Hummer/HMEventTrackProtocol.h>
@@ -38,7 +38,7 @@ extern NSString * const HMDefaultNamespace;
 
 @property (nonatomic, strong) Class<HMJSLoader> jsLoaderInterceptor;
 
-@property (nonatomic, strong) id<HMJSCallerIterceptor> jsCallerInterceptor;
+@property (nonatomic, strong) id<HMJSCallerProtocol> jsCallerInterceptor;
 
 @property (nonatomic, strong) id<HMLoggerProtocol> loggerInterceptor;
 
@@ -105,8 +105,8 @@ extern NSString * const HMDefaultNamespace;
 
 @interface HMJSCallerIterceptor : NSObject
 
-+ (void)callWithTarget:(id)target selector:(SEL)selector namespace:(NSString *)namespace;
-+ (void)callWithJSClassName:(NSString *)className functionName:(NSString *)functionName namespace:(NSString *)namespace;
++ (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objectRef:(NSString *)objectRef args:(NSArray *)args namespace:(nonnull NSString *)namespace;
++ (void)callJSWithTarget:(HMBaseValue *)target functionName:(NSString *)functionName args:(NSArray *)args namespace:(NSString *)namespace;
 @end
 
 

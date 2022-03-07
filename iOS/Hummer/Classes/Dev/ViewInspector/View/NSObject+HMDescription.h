@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSNumber *hummerId;
 
 - (NSString *)hm_description;
+
+- (NSString *)hm_devDescription;
 @end
 
 NS_ASSUME_NONNULL_END

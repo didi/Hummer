@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addGlobalEnviroment:(NSDictionary<NSString *, NSObject *> *)params;
 
+- (NSDictionary<NSString *, NSObject *> *)getEnvironmentInfo;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -53,4 +53,28 @@
    NSString *desc = [NSString stringWithFormat:@"id:%@,\n objcClassName:%@,\n jsClassName:%@,\n",idDesc, objcNameDesc, jsNameDesc];
     return desc;
 }
+
+- (NSString *)hm_devDescription {
+    
+    NSObject *obj = self;
+    
+    if ([self isKindOfClass:HMBaseValue.class]) {
+        HMBaseValue *value = (HMBaseValue *)self;
+        if (value.isFunction) {
+            return @"匿名函数";
+        }
+        
+        obj = value.toObject;
+        
+        if (!value.isNativeObject) {
+            return obj.description;
+        }
+    }
+    
+//    if ([obj respondsToSelector:@selector(hm_content)]) {
+//        return [obj performSelector:@selector(hm_content)]?:@"";
+//    }
+    
+    return [NSString stringWithFormat:@"%@<%p>", [obj hm_jsClassName]?:@"unkownClass", obj?:@"unkownAddress"];
+}
 @end
