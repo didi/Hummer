@@ -7,8 +7,10 @@
 #import <Hummer/NSObject+Hummer.h>
 #import <Hummer/HMExceptionModel.h>
 #import <Hummer/HMJSStrongValue.h>
+#import <Hummer/HMJSGlobal.h>
 #import <objc/runtime.h>
 #import <Hummer/HMDebugService.h>
+#import <Hummer/HMDebug.h>
 #import "HMConfigEntryManager.h"
 #import "NSObject+HMDescription.h"
 
@@ -173,7 +175,7 @@ NAPIValue hummerCall(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     // 最后一个参数无效
     [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
     
-#if POD_CONFIGURATION_DEBUG
+#ifdef HMDEBUG
     NSString *objRefStr = objectRef ? [NSString stringWithFormat:@"%p", target] : nil;
     NSMutableArray *argDesList = @[].mutableCopy;
     int argStartIndex = objectRef ? 1:0;
@@ -181,7 +183,8 @@ NAPIValue hummerCall(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:argv[i + argStartIndex] executor:executor];
         [argDesList addObject:[jsValue hm_devDescription]];
     }
-    [HMJSCallerIterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argDesList namespace:@""];
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
+    [HMJSCallerInterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argDesList context:context];
 #endif
 
     return [executor hummerCallNativeWithArgumentCount:argc arguments:argv target:target selector:selector methodSignature:methodSignature];
@@ -221,8 +224,9 @@ NAPIValue hummerCreate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return nil;
     }
     
-#if POD_CONFIGURATION_DEBUG
-    [HMJSCallerIterceptor callNativeWithClassName:className functionName:@"constructor" objectRef:nil args:nil namespace:@""];
+#ifdef HMDEBUG
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
+    [HMJSCallerInterceptor callNativeWithClassName:className functionName:@"constructor" objectRef:nil args:nil context:context];
 #endif
 
     // 创建对象
@@ -626,8 +630,8 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 //        }
 //    }
     
-    
-#if POD_CONFIGURATION_DEBUG
+#ifdef HMDEBUG
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self];
     NSString *objRefStr = objectRef ? [NSString stringWithFormat:@"%p", target] : nil;
     NSMutableArray *argDesList = @[].mutableCopy;
     int argStartIndex = objectRef ? 1:0;
@@ -635,7 +639,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:self];
         [argDesList addObject:[jsValue hm_devDescription]];
     }
-    [HMJSCallerIterceptor callNativeWithClassName:className functionName:isSetter ? [@"set" stringByAppendingString:propertyName.capitalizedString] : propertyName objectRef:objRefStr args:argDesList namespace:@""];
+    [HMJSCallerInterceptor callNativeWithClassName:className functionName:isSetter ? [@"set" stringByAppendingString:propertyName.capitalizedString] : propertyName objectRef:objRefStr args:argDesList context:context];
 #endif
     
 
@@ -1323,6 +1327,16 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         free(valueRefArray);
     }
 
+#ifdef HMDEBUG
+    HMBaseValue *thisValue = [[HMJSStrongValue alloc] initWithValueRef:thisObjectRef executor:self];
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self];
+    NAPIValue namePropertyName = [self toValueRefWithString:@"name"];
+    NAPIValue functionNameValue = NULL;
+    napi_get_property(self.env, functionObjectRef, namePropertyName, &functionNameValue);
+    NSString *functionName = [self toStringWithValueRef:functionNameValue isForce:YES];
+    [HMJSCallerInterceptor callJSWithTarget:thisValue functionName:functionName args:argumentArray context:context];
+#endif
+    
     return returnValueRef;
 }
 

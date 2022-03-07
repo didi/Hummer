@@ -6,17 +6,12 @@
 //
 
 #import "HMDevToolsJSCallerExecutor.h"
-#import "HMInterceptor.h"
 #import <Hummer/HMDebug.h>
 
-@interface HMDevToolsJSCallerExecutor ()<HMJSCallerProtocol>
+@interface HMDevToolsJSCallerExecutor ()
 @end
 
 @implementation HMDevToolsJSCallerExecutor
-
-#ifdef HMDEBUG
-HM_EXPORT_INTERCEPTOR(HMDevToolsJSCallerExecutor)
-#endif
 
 
 - (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objRef:(NSString *)objRef args:(NSArray *)args namespace:(NSString *)namespace {

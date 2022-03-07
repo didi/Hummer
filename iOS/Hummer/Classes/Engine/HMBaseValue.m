@@ -176,17 +176,11 @@ NS_ASSUME_NONNULL_END
 }
 
 - (nullable HMBaseValue *)callWithArguments:(NSArray *)arguments {
-#if POD_CONFIGURATION_DEBUG
-    [HMJSCallerIterceptor callJSWithTarget:self functionName:@"" args:arguments namespace:@""];
-#endif
 
     return [self.context callWithValue:self arguments:arguments];
 }
 
 - (nullable HMBaseValue *)invokeMethod:(NSString *)method withArguments:(NSArray *)arguments {
-#if POD_CONFIGURATION_DEBUG
-    [HMJSCallerIterceptor callJSWithTarget:self functionName:method args:arguments namespace:@""];
-#endif
     
     return [self.context invokeMethodWithValue:self method:method withArguments:arguments];
 }

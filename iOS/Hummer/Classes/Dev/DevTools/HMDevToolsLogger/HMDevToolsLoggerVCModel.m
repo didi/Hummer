@@ -11,6 +11,7 @@
 
 #import "HMInterceptor.h"
 #import "HMDevToolsJSCallerExecutor.h"
+#import "HMJSContext+HMDevTools.h"
 
 
 static NSDateFormatter *formatter;
@@ -76,29 +77,17 @@ static NSDateFormatter *formatter;
 @interface HMDevToolsCallTreeVCModel ()
 @property (nonatomic, strong) dispatch_source_t timer;
 @property (nonatomic, assign) BOOL needRefresh;
+
+@property (nonatomic, strong) HMDevToolsJSCallerExecutor *callerExcutor;
 @end
 @implementation HMDevToolsCallTreeVCModel
 
 - (void)reset {
-    NSArray *inspectors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
-    if (inspectors.count < 1) {
-        return;
-    }
-
-    HMDevToolsJSCallerExecutor *callerExcutor;
-    for (NSObject *interceptor in inspectors) {
-        if ([interceptor isKindOfClass:HMDevToolsJSCallerExecutor.class]) {
-            callerExcutor = interceptor;
-            break;
-        }
-    }
-    
-    if (!callerExcutor) {
-        return;
-    }
+    self.callerExcutor = [HMDevToolsJSCallerExecutor new];
+    self.vc.context.hm_jsCallerInterceptor = self.callerExcutor;
     
     __weak typeof(self) weakself = self;
-    callerExcutor.callerNativeInfo = ^(NSString * _Nonnull className, NSString * _Nonnull funtionName, NSString * _Nonnull objRef, NSString * _Nonnull args) {
+    self.callerExcutor.callerNativeInfo = ^(NSString * _Nonnull className, NSString * _Nonnull funtionName, NSString * _Nonnull objRef, NSString * _Nonnull args) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             NSString *date = [formatter stringFromDate:NSDate.date];
             
@@ -108,13 +97,13 @@ static NSDateFormatter *formatter;
             }
             HMDevToolsLogger *logger = HMDevToolsLogger.new;
             logger.logString = content;
-            [self.dataArray addObject:logger];
-            self.needRefresh = YES;
+            [weakself.dataArray addObject:logger];
+            weakself.needRefresh = YES;
         });
 
     };
     
-    callerExcutor.callerJSInfo = ^(NSString * _Nonnull className, NSString * _Nonnull funtionName, NSString * _Nonnull objRef, NSString * _Nonnull args) {
+    self.callerExcutor.callerJSInfo = ^(NSString * _Nonnull className, NSString * _Nonnull funtionName, NSString * _Nonnull objRef, NSString * _Nonnull args) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             NSString *date = [formatter stringFromDate:NSDate.date];
             
@@ -122,8 +111,8 @@ static NSDateFormatter *formatter;
         
             HMDevToolsLogger *logger = HMDevToolsLogger.new;
             logger.logString = content;
-            [self.dataArray addObject:logger];
-            self.needRefresh = YES;
+            [weakself.dataArray addObject:logger];
+            weakself.needRefresh = YES;
         });
 
     };

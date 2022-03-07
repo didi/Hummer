@@ -103,10 +103,10 @@ extern NSString * const HMDefaultNamespace;
 @end
 
 
-@interface HMJSCallerIterceptor : NSObject
+@interface HMJSCallerInterceptor : NSObject
 
-+ (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objectRef:(NSString *)objectRef args:(NSArray *)args namespace:(nonnull NSString *)namespace;
-+ (void)callJSWithTarget:(HMBaseValue *)target functionName:(NSString *)functionName args:(NSArray *)args namespace:(NSString *)namespace;
++ (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objectRef:(NSString *)objectRef args:(NSArray *)args context:(HMJSContext *)context;
++ (void)callJSWithTarget:(HMBaseValue *)target functionName:(NSString *)functionName args:(NSArray *)args context:(HMJSContext *)context;
 @end
 
 

@@ -10,7 +10,11 @@
 #import <Hummer/HMFileManager.h>
 #import <Hummer/HMMemCache.h>
 #import "NSObject+HMDescription.h"
+#import <Hummer/HMJSContext.h>
 
+#if __has_include(<Hummer/HMDevTools.h>)
+#import <Hummer/HMJSContext+HMDevTools.h>
+#endif
 
 //默认适配器
 #import <Hummer/HMStorage.h>
@@ -238,32 +242,33 @@ NSString * const HMDefaultNamespace = @"namespace.hummer.default";
 
 
 
-@implementation HMJSCallerIterceptor
+@implementation HMJSCallerInterceptor
 
-+ (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objectRef:(NSString *)objectRef args:(NSArray *)args namespace:(nonnull NSString *)namespace {
-    NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
++ (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objectRef:(NSString *)objectRef args:(NSArray *)args context:(nonnull HMJSContext *)context {
     
-    if (interceptors.count <= 0) {
-        return;
+    id<HMJSCallerProtocol> interceptor = [HMCEMInstance.configMap objectForKey:context.nameSpace].jsCallerInterceptor;
+    if ([interceptor respondsToSelector:@selector(callNativeWithClassName:functionName:objRef:args:namespace:)]) {
+        [interceptor callNativeWithClassName:className functionName:functionName objRef:objectRef args:args namespace:context.nameSpace];
     }
-        
-    for (id <HMJSCallerProtocol> interceptor in interceptors) {
-        if (![interceptor respondsToSelector:@selector(callNativeWithClassName:functionName:objRef:args:namespace:)]) {
-            continue;
-        }
-        
-        [interceptor callNativeWithClassName:className functionName:functionName objRef:objectRef args:args namespace:namespace];
-    }
+
+    // devtool
+#if __has_include(<Hummer/HMDevTools.h>)
+    [context.hm_jsCallerInterceptor callNativeWithClassName:className functionName:functionName objRef:objectRef args:args namespace:context.nameSpace];
+#endif
 }
 
 
-+ (void)callJSWithTarget:(HMBaseValue *)target functionName:(NSString *)functionName args:(NSArray *)args namespace:(NSString *)namespace {
-    NSArray *interceptors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
++ (void)callJSWithTarget:(HMBaseValue *)target functionName:(NSString *)functionName args:(NSArray *)args context:(nonnull HMJSContext *)context {
+        
     
-    if (interceptors.count <= 0) {
+    id<HMJSCallerProtocol> interceptor = [HMCEMInstance.configMap objectForKey:context.nameSpace].jsCallerInterceptor;
+    BOOL hasDevTool = NO;
+#if __has_include(<Hummer/HMDevTools.h>)
+    hasDevTool = YES;
+#endif
+    if (!interceptor && !hasDevTool) {
         return;
     }
-    
     NSObject *nativeObj = target.toObject;;
     NSString *className = nativeObj.hm_objcClassName;
     NSString *objRefStr = @"";
@@ -271,20 +276,20 @@ NSString * const HMDefaultNamespace = @"namespace.hummer.default";
         objRefStr = [NSString stringWithFormat:@"%p", nativeObj];
     }
     
+        
     NSMutableArray *argsDecsList = @[].mutableCopy;
     for (NSObject *argValue in args) {
         [argsDecsList addObject:[argValue hm_devDescription]];
+    }    
+    if ([interceptor respondsToSelector:@selector(callJSWithClassName:functionName:objRef:args:namespace:)]) {
+                
+        [interceptor callJSWithClassName:className functionName:functionName objRef:objRefStr args:argsDecsList.copy namespace:context.nameSpace];
     }
-    
-    for (id <HMJSCallerProtocol> interceptor in interceptors) {
-        if (![interceptor respondsToSelector:@selector(callJSWithClassName:functionName:objRef:args:namespace:)]) {
-            continue;
-        }
-        
-        
-        [interceptor callJSWithClassName:className functionName:functionName objRef:objRefStr args:argsDecsList.copy namespace:namespace];
+
+    // devtool
+    if (hasDevTool) {
+        [context.hm_jsCallerInterceptor callJSWithClassName:className functionName:functionName objRef:objRefStr args:argsDecsList.copy namespace:context.nameSpace];
     }
-    
 }
 
 @end
