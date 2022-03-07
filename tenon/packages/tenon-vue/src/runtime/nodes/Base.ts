@@ -20,7 +20,7 @@ export class Base {
   protected _defaultStyle: Record<string, string> | null = {};
   protected _style: Record<string, string> | null = {};
   private _baseStyle: Record<string, string> | null = {};
-
+  public __vueParentComponent?: any = undefined;
   constructor() {
     this.__view_id = __view_id++
     setCacheNode(this)
@@ -49,6 +49,15 @@ export class Base {
     this.updateStyle();
   }
 
+  public updateChildrenStyle() {
+    // TODO: 读取配置 获取下钻深度
+    if(this.children.size) {
+      this.children.forEach(element => {
+        element.updateStyle()
+      })
+    }
+  }
+
   public updateStyle() {
     if (!this._scopedIds.size) {
       return
@@ -68,7 +77,6 @@ export class Base {
   }
 
   protected onMounted() {
-
   }
 
   // Destoryed 生命周期
@@ -189,7 +197,14 @@ export class Base {
         this.disabled = value !== false
         break;
       case 'class':
-        this.updateStyle()
+        if (this.__vueParentComponent?.isMounted) { // 组件已挂载 直接进行样式设置
+            this.updateStyle()
+            this.updateChildrenStyle() // class发生变化触发子元素更新样式 使后代选择器生效
+        } else { // 组件未挂载时 利用promise把样式设置操作加到本轮eventloop队尾 确保操作在组件挂载之后
+          Promise.resolve().then(() => {
+            this.updateStyle()
+          })
+        }
         break;
       default:
         // FIX: 修复Viewpager组件Data属性赋值问题
