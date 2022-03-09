@@ -149,9 +149,6 @@ static inline NSString * appendStrings(NSString *string, NSUInteger level) {
     }
     //case 2: external object
     if (self.isNativeObject) {
-        if (self.isFunction) {
-            return @"匿名函数";
-        }
         return [NSString stringWithFormat:@"%@<%p>", [ocObject hm_jsClassName], ocObject];
     }
     //case 3: standard container

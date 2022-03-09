@@ -22,7 +22,7 @@
 
 - (void)callJSWithClassName:(NSString *)className functionName:(NSString *)functionName objRef:(NSString *)objRef args:(NSArray *)args namespace:(NSString *)namespace {
 
-    className = className.length == 0 ? @"anonymous":functionName;
+    className = className.length == 0 ? @"anonymous":className;
     functionName = functionName.length == 0 ? @"":functionName;
     NSString *argStr = args.count == 0 ? @"()":[args hm_devDescription];
 
