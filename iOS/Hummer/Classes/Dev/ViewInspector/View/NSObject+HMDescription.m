@@ -106,22 +106,12 @@ static inline NSString * appendStrings(NSString *string, NSUInteger level) {
     NSMutableString *res = [NSMutableString stringWithString:@"{\n"];
     [self enumerateKeysAndObjectsUsingBlock:^(NSObject *key, NSObject *obj, BOOL * _Nonnull stop) {
         [res appendString:iSizeString];//indent
-        NSString *keySubDescriptionStr;
         //key
-        if ([key respondsToSelector:@selector(hm_descriptionWithIndent:)]) {
-            keySubDescriptionStr = [key hm_descriptionWithIndent:nextLevel];
-        }else{
-            keySubDescriptionStr = [key description];
-        }
+        NSString *keySubDescriptionStr = [key hm_descriptionWithIndent:nextLevel];
         [res appendString:keySubDescriptionStr];
         [res appendString:@" = "];
         //value
-        NSString *valSubDescriptionStr;
-        if ([obj respondsToSelector:@selector(hm_descriptionWithIndent:)]) {
-            valSubDescriptionStr = [obj hm_descriptionWithIndent:nextLevel];
-        }else{
-            valSubDescriptionStr = [obj description];
-        }
+        NSString *valSubDescriptionStr = [obj hm_descriptionWithIndent:nextLevel];
         [res appendString:valSubDescriptionStr];
         [res appendString:@";\n"];
     }];
@@ -150,21 +140,15 @@ static inline NSString * appendStrings(NSString *string, NSUInteger level) {
     
     NSMutableString *res = [NSMutableString stringWithString:@"(\n"];
     [self enumerateObjectsUsingBlock:^(NSObject  *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *subDescriptionStr;
         
         [res appendString:iSizeString];//indent
-        if ([obj respondsToSelector:@selector(hm_descriptionWithIndent:)]) {
-            subDescriptionStr = [obj hm_descriptionWithIndent:nextLevel];
-        }else{
-            subDescriptionStr = [obj description];
-        }
+        NSString *subDescriptionStr = [obj hm_descriptionWithIndent:nextLevel];
         [res appendString:subDescriptionStr];
         if (idx == last) {
             [res appendString:@"\n"];
         }else{
             [res appendString:@",\n"];
         }
-
     }];
     [res appendString:iBaseString];//indent
     [res appendString:@")"];
