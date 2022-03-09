@@ -59,25 +59,6 @@
     return [self hm_descriptionWithIndent:0];
 }
 
-- (NSString *)hm_perttyPrintStandardContainer {
-    if ([self isKindOfClass:NSDictionary.class] || [self isKindOfClass:NSArray.class]) {
-        NSJSONWritingOptions jsonOptions = NSJSONWritingPrettyPrinted;
-            if (@available(iOS 11.0, *)) {
-                jsonOptions = NSJSONWritingPrettyPrinted | NSJSONWritingSortedKeys ;
-            }
-        NSString *jsonStr = @"";
-        @try {
-            NSData *data = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:NULL];
-            jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
-        } @catch (NSException *exception) {
-            return self.description;
-        }
-        return jsonStr;
-    }
-    return [self description];
-}
-
 - (NSString *)hm_descriptionWithIndent:(NSUInteger)level {
     return [self description];
 }
