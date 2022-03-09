@@ -56,25 +56,140 @@
 
 - (NSString *)hm_devDescription {
     
-    NSObject *obj = self;
+    return [self hm_descriptionWithIndent:0];
+}
+
+- (NSString *)hm_perttyPrintStandardContainer {
+    if ([self isKindOfClass:NSDictionary.class] || [self isKindOfClass:NSArray.class]) {
+        NSJSONWritingOptions jsonOptions = NSJSONWritingPrettyPrinted;
+            if (@available(iOS 11.0, *)) {
+                jsonOptions = NSJSONWritingPrettyPrinted | NSJSONWritingSortedKeys ;
+            }
+        NSString *jsonStr = @"";
+        @try {
+            NSData *data = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:NULL];
+            jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+
+        } @catch (NSException *exception) {
+            return self.description;
+        }
+        return jsonStr;
+    }
+    return [self description];
+}
+
+- (NSString *)hm_descriptionWithIndent:(NSUInteger)level {
+    return [self description];
+}
+@end
+
+
+static NSString *indentUnit = @"    ";
+static inline NSString * appendStrings(NSString *string, NSUInteger level) {
+    for (int i = 0; i<level; i++) {
+        string = [string stringByAppendingString:indentUnit];
+    }
+    return string;
+}
+@implementation NSDictionary (HMDescription)
+
+// Specifies a level of indentation, to make the output more readable: the indentation is (4 spaces) * level.
+- (NSString *)hm_descriptionWithIndent:(NSUInteger)level {
+
+    NSUInteger  nextLevel = level;
+    NSString    *iBaseString = @"";
+    iBaseString = appendStrings(iBaseString, level);
+    NSString    *iSizeString = iBaseString;
+    nextLevel++;
+    iSizeString = [iSizeString stringByAppendingString:indentUnit];
     
-    if ([self isKindOfClass:HMBaseValue.class]) {
-        HMBaseValue *value = (HMBaseValue *)self;
-        if (value.isFunction) {
+    NSMutableString *res = [NSMutableString stringWithString:@"{\n"];
+    [self enumerateKeysAndObjectsUsingBlock:^(NSObject *key, NSObject *obj, BOOL * _Nonnull stop) {
+        [res appendString:iSizeString];//indent
+        NSString *keySubDescriptionStr;
+        //key
+        if ([key respondsToSelector:@selector(hm_descriptionWithIndent:)]) {
+            keySubDescriptionStr = [key hm_descriptionWithIndent:nextLevel];
+        }else{
+            keySubDescriptionStr = [key description];
+        }
+        [res appendString:keySubDescriptionStr];
+        [res appendString:@" = "];
+        //value
+        NSString *valSubDescriptionStr;
+        if ([obj respondsToSelector:@selector(hm_descriptionWithIndent:)]) {
+            valSubDescriptionStr = [obj hm_descriptionWithIndent:nextLevel];
+        }else{
+            valSubDescriptionStr = [obj description];
+        }
+        [res appendString:valSubDescriptionStr];
+        [res appendString:@";\n"];
+    }];
+    [res appendString:iBaseString];//indent
+    [res appendString:@"}"];
+
+    return res;
+}
+
+@end
+
+@implementation NSArray (HMDescription)
+
+- (NSString *)hm_descriptionWithIndent:(NSUInteger)level {
+    
+    NSUInteger count = [self count];
+    NSUInteger last = count - 1;
+    
+    NSUInteger  nextLevel = level;
+    NSString    *iBaseString = @"";
+    iBaseString = appendStrings(iBaseString, nextLevel);
+    NSString    *iSizeString = iBaseString;
+    nextLevel++;
+    iSizeString = [iSizeString stringByAppendingString:indentUnit];
+    
+    
+    NSMutableString *res = [NSMutableString stringWithString:@"(\n"];
+    [self enumerateObjectsUsingBlock:^(NSObject  *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *subDescriptionStr;
+        
+        [res appendString:iSizeString];//indent
+        if ([obj respondsToSelector:@selector(hm_descriptionWithIndent:)]) {
+            subDescriptionStr = [obj hm_descriptionWithIndent:nextLevel];
+        }else{
+            subDescriptionStr = [obj description];
+        }
+        [res appendString:subDescriptionStr];
+        if (idx == last) {
+            [res appendString:@"\n"];
+        }else{
+            [res appendString:@",\n"];
+        }
+
+    }];
+    [res appendString:iBaseString];//indent
+    [res appendString:@")"];
+
+    return res;
+}
+
+@end
+@implementation HMBaseValue (HMDescription)
+
+- (NSString *)hm_descriptionWithIndent:(NSUInteger)level {
+    NSObject *ocObject = [self toObject];
+    //case 1: js function
+
+    if (self.isFunction) {
+        return @"匿名函数";
+    }
+    //case 2: external object
+    if (self.isNativeObject) {
+        if (self.isFunction) {
             return @"匿名函数";
         }
-        
-        obj = value.toObject;
-        
-        if (!value.isNativeObject) {
-            return obj.description;
-        }
+        return [NSString stringWithFormat:@"%@<%p>", [ocObject hm_jsClassName], ocObject];
     }
-    
-//    if ([obj respondsToSelector:@selector(hm_content)]) {
-//        return [obj performSelector:@selector(hm_content)]?:@"";
-//    }
-    
-    return [NSString stringWithFormat:@"%@<%p>", [obj hm_jsClassName]?:@"unkownClass", obj?:@"unkownAddress"];
+    //case 3: standard container
+    return [ocObject hm_descriptionWithIndent:level];
 }
 @end

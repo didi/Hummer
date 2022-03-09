@@ -181,7 +181,7 @@ NAPIValue hummerCall(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     int argStartIndex = objectRef ? 1:0;
     for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argc) - argStartIndex; ++i) {
         HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:argv[i + argStartIndex] executor:executor];
-        [argDesList addObject:[jsValue hm_devDescription]];
+        [argDesList addObject:jsValue];
     }
     HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
     [HMJSCallerInterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argDesList context:context];
@@ -637,7 +637,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     int argStartIndex = objectRef ? 1:0;
     for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argumentCount) - argStartIndex; ++i) {
         HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:self];
-        [argDesList addObject:[jsValue hm_devDescription]];
+        [argDesList addObject:jsValue];
     }
     [HMJSCallerInterceptor callNativeWithClassName:className functionName:isSetter ? [@"set" stringByAppendingString:propertyName.capitalizedString] : propertyName objectRef:objRefStr args:argDesList context:context];
 #endif

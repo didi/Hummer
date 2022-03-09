@@ -17,6 +17,7 @@
 #import <Hummer/HMMemoryComponent.h>
 #import <Hummer/HMPluginManager.h>
 #import <Hummer/HMRouterProtocol.h>
+#import <Hummer/HMRequestComponent.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,6 +34,8 @@ extern NSString * const HMDefaultNamespace;
 
 //替换默认 storage 实现
 @property (nonatomic, strong) id<HMStorage> storage;
+
+@property (nonatomic, strong) Class<HMRequestComponent> request;
 
 @property (nonatomic, strong) id<HMImageLoader> imageLoaderInterceptor;
 
@@ -105,7 +108,7 @@ extern NSString * const HMDefaultNamespace;
 
 @interface HMJSCallerInterceptor : NSObject
 
-+ (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objectRef:(NSString *)objectRef args:(NSArray *)args context:(HMJSContext *)context;
++ (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objectRef:(NSString *)objectRef args:(NSArray<HMBaseValue *> *)args context:(HMJSContext *)context;
 + (void)callJSWithTarget:(HMBaseValue *)target functionName:(NSString *)functionName args:(NSArray *)args context:(HMJSContext *)context;
 @end
 
@@ -161,4 +164,10 @@ extern NSString * const HMDefaultNamespace;
 
 @end
 
+
+@interface HMRequestAdaptor : NSObject
+
++ (nullable id<HMRequestComponent>)createComponentWithNamespace:(NSString *)namespace;
+
+@end
 NS_ASSUME_NONNULL_END

@@ -9,6 +9,9 @@
 #if __has_include(<Hummer/HMJSExecutor.h>)
 #import <Hummer/HMJSExecutor.h>
 #endif
+#if __has_include(<Hummer/HMDevTools.h>)
+#import <Hummer/HMDevTools.h>
+#endif
 #import "HMJSCExecutor.h"
 #import "HMJSContext.h"
 #import "HMExportClass.h"
@@ -107,6 +110,10 @@ NS_ASSUME_NONNULL_END
         //把 pageInfo 和 context 绑定到一起。
         ctx.pageInfo = [[HMJSGlobal globalObject] pageInfo];
     }
+#if __has_include(<Hummer/HMDevTools.h>)
+    // 添加debug按钮
+    [HMDevTools showInContext:ctx];
+#endif
     return rootView.hm_context;
 }
 
