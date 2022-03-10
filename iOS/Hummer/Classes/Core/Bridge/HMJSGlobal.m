@@ -23,9 +23,6 @@
 #import <Hummer/HMConfigEntryManager.h>
 
 #import <Hummer/HMDebug.h>
-#if __has_include(<Hummer/HMDevTools.h>)
-#import <Hummer/HMDevTools.h>
-#endif
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -327,11 +324,6 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
         context.renderCompletion();
     }
     [UIView hm_reSortFixedView:context];
-
-#if __has_include(<Hummer/HMDevTools.h>)
-    // 添加debug按钮
-    [HMDevTools showInContext:context];
-#endif
 
     struct timespec renderTimespec;
     HMClockGetTime(&renderTimespec);

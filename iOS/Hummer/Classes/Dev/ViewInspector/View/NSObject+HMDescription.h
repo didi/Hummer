@@ -16,7 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)hm_description;
 
+/// 标准容器展开
 - (NSString *)hm_devDescription;
+
 @end
 
 NS_ASSUME_NONNULL_END

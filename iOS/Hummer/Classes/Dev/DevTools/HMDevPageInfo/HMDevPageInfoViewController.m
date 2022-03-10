@@ -47,9 +47,8 @@ const static NSString * FORMAT_STRING_NORMAL_V = @"｜";
     _context = context;
     self.textType = _textType;
 }
-
-- (void)setTextType:(HMDevToolsTextType)textType {
-    if (textType == HMDevToolsTextTypePageInfo) {
+- (void)refresh {
+    if (self.textType == HMDevToolsTextTypePageInfo) {
         NSString *pageInfoTitle = [self contentTextWithConten:@"页面参数" indent:0];
         NSString *pageInfoContent= [self contentTextWithConten:_context.pageInfo.description?:@"" indent:1];
         
@@ -59,6 +58,10 @@ const static NSString * FORMAT_STRING_NORMAL_V = @"｜";
         NSString *textContent = [NSString stringWithFormat:@"%@%@%@%@", pageInfoTitle, pageInfoContent, envTitle, envContent];
         self.textView.text = textContent;
     }
+}
+
+- (void)setTextType:(HMDevToolsTextType)textType {
+    [self refresh];
 }
 
 #pragma mark - Getter
