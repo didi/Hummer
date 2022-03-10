@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) HMJSContext *context;
 
+@optional
+- (void)refresh;
 @end
 
 NS_ASSUME_NONNULL_END
