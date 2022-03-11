@@ -281,9 +281,9 @@ NSString * const HMDefaultNamespace = @"namespace.hummer.default";
     }
 
     // devtool
-    if (hasDevTool) {
+#if __has_include(<Hummer/HMDevTools.h>)
         [context.hm_jsCallerInterceptor callJSWithClassName:className functionName:functionName objRef:objRefStr args:args namespace:context.nameSpace];
-    }
+#endif
 }
 
 @end
