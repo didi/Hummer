@@ -196,7 +196,18 @@ HM_EXPORT_METHOD(on, on:callback:)
     animation.fromValue = info.fromValue;
     animation.toValue = info.toValue;
     animation.duration = self.duration == 0 ? 0.0001 : self.duration;
-    animation.beginTime = CACurrentMediaTime() + self.delay;
+//  https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/AdvancedAnimationTricks/AdvancedAnimationTricks.html#//apple_ref/doc/uid/TP40004514-CH8-SW1
+    /**
+     * Core Animation Programming Guide
+     * When thinking about timing and animations, it is important to understand how layer objects work with time.
+     * Each layer has its own local time that it uses to manage animation timing. Normally,
+     * the local time of two different layers is close enough that you could specify the same time values for each
+     * and the user might not notice anything.
+     * However, the local time of a layer can be modified by its parent layers or by its own timing parameters.
+     * For example, changing the layer’s speed property causes the duration of animations on that layer (and its sublayers) to change proportionally.
+     */
+    // t = (tp + begin) * speed + offset
+    animation.beginTime = [info.animatedView.layer convertTime:CACurrentMediaTime() fromLayer:nil]  + self.delay;
     animation.timingFunction = info.timingFunction;
     animation.repeatCount = self.repeatCount < 0 ? MAXFLOAT : self.repeatCount;
     animation.removedOnCompletion = NO;

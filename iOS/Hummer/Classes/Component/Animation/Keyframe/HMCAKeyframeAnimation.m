@@ -288,7 +288,7 @@ HM_EXPORT_METHOD(on, on:callback:)
     animation.keyTimes = self.keyframes;
     animation.duration = self.duration == 0 ? 0.001 : self.duration;
     animation.repeatCount = self.repeatCount < 0 ? MAXFLOAT : self.repeatCount;
-    animation.beginTime = CACurrentMediaTime() + self.delay;
+    animation.beginTime = [info.animatedView.layer convertTime:CACurrentMediaTime() fromLayer:nil]  + self.delay;
     animation.timingFunction = info.timingFunction;
     animation.removedOnCompletion = NO;
     animation.fillMode = kCAFillModeForwards;
