@@ -30,9 +30,9 @@ export class RootViewComponent extends ViewComponent{
     this._onBack = onBack || noFunc
     this._canScroll = canScroll
     this.style = {
-      ...pageStyle,
       width: '100%',
-      height: '100%'
+      height: '100%',
+      ...pageStyle
     }
     if( this._canScroll){
       this._element = new ScrollViewComponent()
