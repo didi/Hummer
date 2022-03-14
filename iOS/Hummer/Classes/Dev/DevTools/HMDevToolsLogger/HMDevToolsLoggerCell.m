@@ -21,7 +21,6 @@
         self.backgroundView.backgroundColor = UIColor.clearColor;
         self.backgroundColor = UIColor.clearColor;
         self.contentView.backgroundColor = UIColor.clearColor;
-        self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
         
         _logTextLabel = UILabel.new;
         _logTextLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -36,18 +35,20 @@
             _arrowImage.image = [UIImage systemImageNamed:@"chevron.right" withConfiguration:config];
         }
         [self.contentView addSubview:_arrowImage];
-        
+
+        NSLayoutConstraint *arrowLeadingConstraint = [NSLayoutConstraint constraintWithItem:_arrowImage attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeading multiplier:1 constant:8];
+        arrowLeadingConstraint.priority = 800;
+
+        NSLayoutConstraint *logBottomConstraint = [NSLayoutConstraint constraintWithItem:_logTextLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1 constant:-5];
+        logBottomConstraint.priority = 800;
+
+        [self.contentView addConstraint:arrowLeadingConstraint];
+        [self.contentView addConstraint:logBottomConstraint];
+
         NSDictionary *viewsDict = NSDictionaryOfVariableBindings(_logTextLabel, _arrowImage);
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_arrowImage]-5-[_logTextLabel]-5-|" options:0 metrics:nil views:viewsDict]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[_logTextLabel]-5-|" options:0 metrics:nil views:viewsDict]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[_arrowImage(==20)]" options:0 metrics:nil views:viewsDict]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_arrowImage(==20)]-5-[_logTextLabel]-5-|" options:0 metrics:nil views:viewsDict]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[_logTextLabel]" options:0 metrics:nil views:viewsDict]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[_arrowImage(==20)]" options:0 metrics:nil views:viewsDict]];
-        [self addConstraints:@[
-            [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTrailing multiplier:1 constant:0],
-            [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1 constant:0],
-            [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0],
-            [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0],
-        ]];
     }
     return self;
 }
