@@ -47,6 +47,16 @@ public class EmptyTrackerAdapter implements ITrackerAdapter {
     }
 
     @Override
+    public void trackPageView(String pageUrl) {
+
+    }
+
+    @Override
+    public void trackPageSuccess(String pageUrl) {
+
+    }
+
+    @Override
     public void trackException(String pageUrl, Exception e) {
 
     }
