@@ -93,7 +93,7 @@ static inline NSString * appendStrings(NSString *string, NSUInteger level) {
         [res appendString:@" = "];
         //value
         NSString *valSubDescriptionStr = [obj hm_descriptionWithIndent:nextLevel];
-        [res appendString:valSubDescriptionStr];
+        [res appendString:valSubDescriptionStr ? : @"nil"];
         [res appendString:@";\n"];
     }];
     [res appendString:iBaseString];//indent
@@ -124,7 +124,7 @@ static inline NSString * appendStrings(NSString *string, NSUInteger level) {
         
         [res appendString:iSizeString];//indent
         NSString *subDescriptionStr = [obj hm_descriptionWithIndent:nextLevel];
-        [res appendString:subDescriptionStr];
+        [res appendString:subDescriptionStr ? : @"nil"];
         if (idx == last) {
             [res appendString:@"\n"];
         }else{

@@ -11,6 +11,8 @@
 #import "HMUtility.h"
 
 static const CGFloat HMDevToolsWindowEntryViewSize = 50.f;
+static const NSInteger HMDevToolsWindowEntryTag = 34649;
+
 
 @interface HMDevToolsEntryView ()
 
@@ -31,6 +33,7 @@ static const CGFloat HMDevToolsWindowEntryViewSize = 50.f;
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _showDebugView = NO;
+        self.tag = HMDevToolsWindowEntryTag;
         _toolsVC = HMDevToolsViewController.new;
         self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.entry];
@@ -39,21 +42,31 @@ static const CGFloat HMDevToolsWindowEntryViewSize = 50.f;
     }
     return self;
 }
++ (void)showWithContext:(HMJSContext *)context {
+    UIViewController *currentVC = HMCurrentViewController(context.rootView);
+    UIView *devToolView = [currentVC.view viewWithTag:HMDevToolsWindowEntryTag];
+    if (devToolView) {
+        [currentVC.view bringSubviewToFront:devToolView];
+        return;
+    }
+    HMDevToolsEntryView *window = HMDevToolsEntryView.entryWindow;
+    [window _showWithContext:context controller:currentVC];
+}
 
-- (void)showWithContext:(HMJSContext *)context {
+- (void)_showWithContext:(HMJSContext *)context controller:(UIViewController *)currentVC{
     self.currentContext = context;
     self.toolsVC.currentContext = context;
-    UIViewController *currentVC = HMCurrentViewController(context.rootView);
-    if (![currentVC.childViewControllers containsObject:self.toolsVC]) {
-        [currentVC addChildViewController:self.toolsVC];
-        [currentVC.view addSubview:self.toolsVC.view];
-        self.toolsVC.view.frame = currentVC.view.bounds;
-    }
-    if (![currentVC.view.subviews containsObject:self]) {
-        CGRect tagetFrame = currentVC.view.frame;
-        self.frame = CGRectMake(CGRectGetMaxX(tagetFrame) - HMDevToolsWindowEntryViewSize, CGRectGetHeight(tagetFrame) / 3, HMDevToolsWindowEntryViewSize, HMDevToolsWindowEntryViewSize);
-        [currentVC.view addSubview:self];
-    }
+   
+    // add controller
+    [currentVC addChildViewController:self.toolsVC];
+    [currentVC.view addSubview:self.toolsVC.view];
+    self.toolsVC.view.frame = currentVC.view.bounds;
+    
+    // add view
+    CGRect tagetFrame = currentVC.view.frame;
+    self.frame = CGRectMake(CGRectGetMaxX(tagetFrame) - HMDevToolsWindowEntryViewSize, CGRectGetHeight(tagetFrame) / 3, HMDevToolsWindowEntryViewSize, HMDevToolsWindowEntryViewSize);
+    [currentVC.view addSubview:self];
+    
     self.toolsVC.view.hidden = YES;
     self.hidden = NO;
 }
