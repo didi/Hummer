@@ -330,6 +330,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     struct timespec resultTimespec;
     HMDiffTime(&context->_createTimespec, &renderTimespec, &resultTimespec);
     if (context.nameSpace) {
+        [HMConfigEntryManager.manager.configMap[context.nameSpace].trackEventPlugin trackPageSuccessWithPageUrl:context.hummerUrl ?: @""];
         [HMConfigEntryManager.manager.configMap[context.nameSpace].trackEventPlugin trackPageRenderCompletionWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000) pageUrl:context.hummerUrl ?: @""];
     }
 }
