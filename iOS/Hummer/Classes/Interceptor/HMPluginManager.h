@@ -54,6 +54,10 @@ static inline void HMClockGetTime(struct timespec *timespec) {
 
 - (void)trackJavaScriptExceptionWithExceptionModel:(HMExceptionModel *)exceptionModel pageUrl:(NSString *)pageUrl;
 
+- (void)trackPVWithPageUrl:(NSString *)pageUrl;
+
+- (void)trackPageSuccessWithPageUrl:(NSString *)pageUrl;
+
 @end
 
 //typedef NS_ENUM(NSUInteger, HMPluginType) {

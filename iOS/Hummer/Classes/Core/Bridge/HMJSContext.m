@@ -241,6 +241,9 @@ NS_ASSUME_NONNULL_END
     
     if (!self.hummerUrl && hummerUrl.length > 0) {
         self.hummerUrl = hummerUrl;
+        if (self.nameSpace) {
+            [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPVWithPageUrl:hummerUrl ?: @""];
+        }
     }
     
     // context 和 WebSocket 对应
