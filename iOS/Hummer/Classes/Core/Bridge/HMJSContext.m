@@ -112,6 +112,7 @@ NS_ASSUME_NONNULL_END
     }
 #if __has_include(<Hummer/HMDevTools.h>)
     // 添加debug按钮
+    // 尽早初始化 devtool，保证日志抓取时间。
     [HMDevTools showInContext:ctx];
 #endif
     return rootView.hm_context;
@@ -241,7 +242,7 @@ NS_ASSUME_NONNULL_END
     
     if (!self.hummerUrl && hummerUrl.length > 0) {
         self.hummerUrl = hummerUrl;
-        if (self.nameSpace) {
+        if (self.namespace) {
             [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPVWithPageUrl:hummerUrl ?: @""];
         }
     }
