@@ -1,7 +1,8 @@
 package com.didi.hummer.delegate;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -30,8 +31,11 @@ public class HummerDelegateAdapter extends AbsHummerDelegate {
 
     protected HummerLayout hmContainer;
 
-    public HummerDelegateAdapter(Context context, NavPage page) {
-        super(context, page);
+    public HummerDelegateAdapter(FragmentActivity activity, NavPage page) {
+        super(activity, page);
+    }
+    public HummerDelegateAdapter(Fragment fragment, NavPage page) {
+        super(fragment, page);
     }
 
     @Override
