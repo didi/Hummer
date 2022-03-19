@@ -1,6 +1,5 @@
 package com.didi.hummer.delegate;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -32,7 +31,7 @@ public class HummerDelegateFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDelegate = createHummerDelegate(getContext(), getPageInfo());
+        mDelegate = createHummerDelegate(getPageInfo());
         if (mDelegate == null) {
             throw new RuntimeException("Delegate cannot be null");
         }
@@ -45,19 +44,14 @@ public class HummerDelegateFragment extends Fragment {
         return mDelegate.initViewAndRender();
     }
 
-    public boolean onBackPressed() {
-        return mDelegate.onBackPressed();
-    }
-
     /**
      * 创建Delegate
-     * @param context
      * @param page
      * @return
      */
-    protected IHummerDelegagte createHummerDelegate(Context context, NavPage page) {
+    protected IHummerDelegagte createHummerDelegate(NavPage page) {
         // 子类可重写
-        return new HummerDelegateAdapter(context, page);
+        return new HummerDelegateAdapter(this, page);
     }
 
     /**
@@ -68,5 +62,12 @@ public class HummerDelegateFragment extends Fragment {
             return null;
         }
         return (NavPage) getArguments().getSerializable(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL);
+    }
+
+    public boolean onBackPressed() {
+        if (mDelegate != null) {
+            return mDelegate.onBackPressed();
+        }
+        return false;
     }
 }

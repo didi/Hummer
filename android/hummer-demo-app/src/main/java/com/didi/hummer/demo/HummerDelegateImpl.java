@@ -1,8 +1,8 @@
 package com.didi.hummer.demo;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.didi.hummer.adapter.navigator.NavPage;
@@ -19,10 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 扩展代理类
+ */
 public class HummerDelegateImpl extends HummerDelegateAdapter {
 
-    public HummerDelegateImpl(Context context, NavPage page) {
-        super(context, page);
+    public HummerDelegateImpl(FragmentActivity activity, NavPage page) {
+        super(activity, page);
+    }
+    public HummerDelegateImpl(Fragment fragment, NavPage page) {
+        super(fragment, page);
     }
 
     @Override

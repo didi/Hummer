@@ -1,7 +1,6 @@
 package com.didi.hummer.delegate;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,7 +20,7 @@ public class HummerDelegateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDelegate = createHummerDelegate(this, getPageInfo());
+        mDelegate = createHummerDelegate(getPageInfo());
         if (mDelegate == null) {
             throw new RuntimeException("Delegate cannot be null");
         }
@@ -51,13 +50,12 @@ public class HummerDelegateActivity extends AppCompatActivity {
 
     /**
      * 创建Delegate
-     * @param context
      * @param page
      * @return
      */
-    protected IHummerDelegagte createHummerDelegate(Context context, NavPage page) {
+    protected IHummerDelegagte createHummerDelegate(NavPage page) {
         // 子类可重写
-        return new HummerDelegateAdapter(context, page);
+        return new HummerDelegateAdapter(this, page);
     }
 
     /**

@@ -1,12 +1,12 @@
 package com.didi.hummer.delegate;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -24,22 +24,33 @@ import com.didi.hummer.render.style.HummerLayout;
  *
  * Created by Xingjm on 2022-01-17.
  */
-public abstract class AbsHummerDelegate implements IHummerDelegagte, LifecycleObserver {
+public abstract class AbsHummerDelegate implements IHummerDelegagte {
     protected Context context;
     protected NavPage page;
 
     protected HummerRender hmRender;
 
-    public AbsHummerDelegate(Context context, NavPage data) {
+    public AbsHummerDelegate(FragmentActivity activity, NavPage data) {
+        if (activity == null) {
+            throw new RuntimeException("activity must not be null!");
+        }
+        activity.getLifecycle().addObserver(this);
+        init(activity, data);
+    }
+
+    public AbsHummerDelegate(Fragment fragment, NavPage data) {
+        if (fragment == null) {
+            throw new RuntimeException("fragment must not be null!");
+        }
+        fragment.getLifecycle().addObserver(this);
+        init(fragment.getContext(), data);
+    }
+
+    private void init(Context context, NavPage data) {
         if (context == null) {
             throw new RuntimeException("context must not be null!");
         }
         this.context = context;
-        if (this.context instanceof LifecycleOwner) {
-            ((LifecycleOwner) this.context).getLifecycle().addObserver(this);
-        } else {
-            throw new RuntimeException("context must be LifecycleOwner!");
-        }
         initData(data);
     }
 
@@ -155,34 +166,31 @@ public abstract class AbsHummerDelegate implements IHummerDelegagte, LifecycleOb
 
     /********************* 生命周期 *******************/
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    public void onActivityStart() {
+    public void onStart() {
         if (hmRender != null) {
             hmRender.onStart();
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void onActivityResume() {
+    public void onResume() {
         if (hmRender != null) {
             hmRender.onResume();
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    public void onActivityPause() {
+    public void onPause() {
         if (hmRender != null) {
             hmRender.onPause();
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    public void onActivityStop() {
+    public void onStop() {
         if (hmRender != null) {
             hmRender.onStop();
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    public void onActivityDestroy() {
-        if (this.context instanceof LifecycleOwner) {
-            ((LifecycleOwner) this.context).getLifecycle().removeObserver(this);
-        }
+    public void onDestroy() {
         if (hmRender != null) {
             hmRender.onDestroy();
         }
