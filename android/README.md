@@ -4,7 +4,7 @@
 ### 1. 添加 Hummer SDK 依赖
 ``` gradle
 dependencies {
-  implementation 'io.github.didi.hummer:hummer:0.4.2'
+  implementation 'io.github.didi.hummer:hummer:0.4.4'
 }
 ```
 
