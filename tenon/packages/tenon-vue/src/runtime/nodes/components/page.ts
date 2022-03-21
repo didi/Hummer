@@ -4,7 +4,8 @@ import {Base} from '../Base'
 
 const noFunc =  () => {}
 export interface PageOptions{
-  onLoad	?:Function,
+  onLoad?: Function,
+  onReady?: Function,
   onShow?: Function,
   onHide?: Function,
   onUnload?: Function,
@@ -14,6 +15,7 @@ export interface PageOptions{
 }
 export class RootViewComponent extends ViewComponent{
   public _onCreate: Function
+  public _onReady: Function
   public _onAppear: Function
   public _onDisappear: Function
   public _onDestroy: Function
@@ -22,8 +24,9 @@ export class RootViewComponent extends ViewComponent{
   private _canScroll: Boolean = true
   constructor(options:PageOptions = {}){
     super();
-    let {onLoad, onShow, onHide, onUnload, onBack, canScroll = true, pageStyle = {}} = options
+    let {onLoad, onReady, onShow, onHide, onUnload, onBack, canScroll = true, pageStyle = {}} = options
     this._onCreate = onLoad || noFunc
+    this._onReady = onReady || noFunc
     this._onAppear = onShow || noFunc
     this._onDisappear = onHide || noFunc
     this._onDestroy = onUnload || noFunc
@@ -49,6 +52,13 @@ export class RootViewComponent extends ViewComponent{
   onCreate(){
     // 页面创建
     this._onCreate()
+    // native 不提供onReady， 手动加一个onReady生命周期
+    this.onReady()
+  }
+
+  onReady() {
+    // 页面ready
+    this._onReady()
   }
 
   onAppear(){
@@ -87,6 +97,10 @@ export class Page extends Base{
 
   set onLoad(load:Function){
     this._rootView._onCreate = load
+  }
+
+  set onReady(ready:Function){
+    this._rootView._onReady = ready
   }
 
   set onShow(show:Function){
