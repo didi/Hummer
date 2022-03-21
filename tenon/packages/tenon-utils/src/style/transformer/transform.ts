@@ -35,7 +35,7 @@ function transTranslateUnit(str: string) {
       // translate(100非标准hummer单位, 100非标准hummer单位) => translate(100标准hummer单位, 100标准hummer单位)
       // translate(100非标准hummer单位) => translate(100标准hummer单位)
       // 获取数值
-      let temp = item.match(/[^(][a-zA-Z0-9,]+(?=\))/g)
+      let temp = item.match(/[^(][a-zA-Z0-9,-]+(?=\))/g)
       let key =  item.split('(')[0]
       let value = temp?temp[0]:'0'
       value = value.split(',').map(v => transformUnitValue(v)).join(',')
