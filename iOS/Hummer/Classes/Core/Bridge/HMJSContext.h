@@ -85,7 +85,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable HMBaseValue *)evaluateScript:(nullable NSString *)javaScriptString fileName:(nullable NSString *)fileName hummerUrl:(nullable NSString *)hummerUrl;
 
-
 NS_ASSUME_NONNULL_END
 
 @end

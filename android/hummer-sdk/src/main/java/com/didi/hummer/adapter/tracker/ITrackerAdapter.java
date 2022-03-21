@@ -107,6 +107,20 @@ public interface ITrackerAdapter {
     void trackPerfCustomInfo(String pageUrl, List<PerfCustomInfo> infoList);
 
     /**
+     * 页面PV统计（页面进入时埋点）
+     *
+     * @param pageUrl
+     */
+    void trackPageView(String pageUrl);
+
+    /**
+     * 页面渲染成功统计
+     *
+     * @param pageUrl
+     */
+    void trackPageSuccess(String pageUrl);
+
+    /**
      * JS异常上报
      *
      * @param pageUrl

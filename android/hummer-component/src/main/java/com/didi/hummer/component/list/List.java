@@ -589,7 +589,10 @@ public class List extends HMBase<SmartRefreshLayout> {
 
     @JsMethod("refresh")
     public void refresh(int count) {
-        refreshLayout.setNoMoreData(false);
+        if (!isLoadingMore) {
+            // 下拉刷新的情况下，重置加载更多状态
+            refreshLayout.resetNoMoreData();
+        }
         if (adapter != null) {
             adapter.refresh(count, isLoadingMore);
         }

@@ -7,7 +7,6 @@
 
 #import "HMBaseValue.h"
 #import "HMLogger.h"
-#import "HMConfigEntryManager.h"
 
 static NSString *const KeyIsNotString = @"HMBaseValue - setObject:forKeyedSubscript:/objectForKeyedSubscript: key is not string";
 NS_ASSUME_NONNULL_BEGIN
@@ -176,12 +175,10 @@ NS_ASSUME_NONNULL_END
 }
 
 - (nullable HMBaseValue *)callWithArguments:(NSArray *)arguments {
-
     return [self.context callWithValue:self arguments:arguments];
 }
 
 - (nullable HMBaseValue *)invokeMethod:(NSString *)method withArguments:(NSArray *)arguments {
-    
     return [self.context invokeMethodWithValue:self method:method withArguments:arguments];
 }
 

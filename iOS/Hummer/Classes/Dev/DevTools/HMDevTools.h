@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HMDevTools : NSObject
 
 + (void)showInContext:(HMJSContext *)context;
-
 @end
 
 NS_ASSUME_NONNULL_END
