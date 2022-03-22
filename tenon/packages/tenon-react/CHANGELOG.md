@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.8](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.3.7...@hummer/tenon-react@0.3.8) (2022-03-22)
+
+**Note:** Version bump only for package @hummer/tenon-react
+
+
+
+
+
 ## [0.3.7](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-react@0.3.6...@hummer/tenon-react@0.3.7) (2022-01-19)
 
 **Note:** Version bump only for package @hummer/tenon-react
