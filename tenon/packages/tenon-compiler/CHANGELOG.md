@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/didi/Hummer/compare/@hummer/tenon-compiler@1.3.0...@hummer/tenon-compiler@1.3.1) (2022-03-22)
+
+**Note:** Version bump only for package @hummer/tenon-compiler
+
+
+
+
+
 # [1.3.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-compiler@1.2.13...@hummer/tenon-compiler@1.3.0) (2021-09-14)
 
 
