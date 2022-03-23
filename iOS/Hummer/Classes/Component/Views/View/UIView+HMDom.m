@@ -1506,7 +1506,9 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
 }
 
 - (void)_removeJsValueLifeContainer {
-    [self.hm_jsValueLifeContainer removeAllObjects];
+    if ([self respondsToSelector:@selector(hm_jsValueLifeContainer)]) {
+        [self.hm_jsValueLifeContainer removeAllObjects];
+    }
     for (UIView *subView in self.subviews) {
         [subView _removeJsValueLifeContainer];
     }
