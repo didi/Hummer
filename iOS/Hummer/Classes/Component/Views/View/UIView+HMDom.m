@@ -1341,6 +1341,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         [view removeFromSuperview];
         [superView hm_markDirty];
         [superView.hm_jsValueLifeContainer removeObjectForKey:view];
+        
+        [view _removeJsValueLifeContainer];
     }
     /* a -> a0 -> a00(with height), remove a00, a0's height not change.
     UIView *superView = view.superview;
@@ -1365,6 +1367,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
             NSUInteger idx,
             BOOL *_Nonnull stop) {
         [obj removeFromSuperview];
+        [obj _removeJsValueLifeContainer];
     }];
     [self.hm_jsValueLifeContainer removeAllObjects];
     [self hm_markDirty];
@@ -1399,6 +1402,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         [parent hm_markDirty];
     }
     [oldView removeFromSuperview];
+    [oldView _removeJsValueLifeContainer];
 
     [self insertSubview:newView atIndex:index];
     //ref
@@ -1499,6 +1503,13 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     
     self.center = position;
     self.bounds = bounds;
+}
+
+- (void)_removeJsValueLifeContainer {
+    [self.hm_jsValueLifeContainer removeAllObjects];
+    for (UIView *subView in self.subviews) {
+        [subView _removeJsValueLifeContainer];
+    }
 }
 
 @end
