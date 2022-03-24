@@ -37,6 +37,7 @@ HM_EXPORT_METHOD(dbg_getDescription, dbg_getDescription:depth:)
  */
 
 // depth：递归深度，<1：全量，>=1：自身children 除 children.children部分
+// 返回视图树，会被 视图检查 持有。
 - (void)dbg_getDescription:(HMFunctionType)callBack depth:(NSInteger)depth {
     
     dispatch_async(dispatch_get_main_queue(), ^{
