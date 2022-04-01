@@ -66,9 +66,46 @@ Hummer 是一套高性能高可用的跨端开发框架，一套代码可以同�
 Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协议文件](LICENSE)。
 
 ## 团队成员
-- **负责人** [小枫](https://github.com/bbssyyuui)
-- **内部核心成员** [小枫](https://github.com/bbssyyuui), [ChasonTang](https://github.com/ChasonTang), [yFeii](https://github.com/yFeii), [duanlikang](https://github.com/duanlikang), [AdamCaoQAQ](https://github.com/AdamCaoQAQ), [fangyeqing123](https://github.com/fangyeqing123), [卡布达](https://github.com/kabda), [peakerWd](https://github.com/peakerWd), [maxiee](https://github.com/maxiee)
-- **贡献者榜单** [LinJZong](https://github.com/LinJZong), [viwii](https://github.com/lijie121210), [zhugeafanti](https://github.com/zhugeafanti), [tailang](https://github.com/tailang), [jsbsdbd1025](https://github.com/jsbsdbd1025), [MePride](https://github.com/MePride), [AbeDai](https://github.com/AbeDai), [ruosongyan](https://github.com/ruosongyan), [Yanliang](https://github.com/1015121455), [fxhfwf](https://github.com/fxhfwf), [lb2019s](https://github.com/lb2019s), [jianyuanzong](https://github.com/jianyuanzong), [conanmy](https://github.com/conanmy), [xikou1314](https://github.com/xikou1314), [未小林](https://dribbble.com/Yikewxlin), [jtsky](https://github.com/jtsky), [jayconscious](https://github.com/jayconscious), [宏宇](https://github.com/ringlong), [litianhao3615](https://github.com/litianhao3615), [Leo](https://github.com/firelion0725), [jueying-key](https://github.com/jueying-xiangfeng), [WorriesL](https://github.com/WorriesL), [QiYa](https://github.com/QIYA0130)
+- **负责人** 
+[小枫](https://github.com/bbssyyuui)
+
+- **内部核心成员** 
+[小枫](https://github.com/bbssyyuui), 
+[ChasonTang](https://github.com/ChasonTang), 
+[yFeii](https://github.com/yFeii), 
+[AdamCaoQAQ](https://github.com/AdamCaoQAQ), 
+[fangyeqing123](https://github.com/fangyeqing123), 
+[卡布达](https://github.com/kabda), 
+[peakerWd](https://github.com/peakerWd), 
+[maxiee](https://github.com/maxiee)
+
+- **贡献者榜单** 
+[duanlikang](https://github.com/duanlikang), 
+[LinJZong](https://github.com/LinJZong), 
+[viwii](https://github.com/lijie121210), 
+[zhugeafanti](https://github.com/zhugeafanti), 
+[tailang](https://github.com/tailang), 
+[jsbsdbd1025](https://github.com/jsbsdbd1025), 
+[MePride](https://github.com/MePride), 
+[AbeDai](https://github.com/AbeDai), 
+[ruosongyan](https://github.com/ruosongyan), 
+[Yanliang](https://github.com/1015121455), 
+[fxhfwf](https://github.com/fxhfwf), 
+[lb2019s](https://github.com/lb2019s), 
+[jianyuanzong](https://github.com/jianyuanzong), 
+[conanmy](https://github.com/conanmy), 
+[xikou1314](https://github.com/xikou1314), 
+[未小林](https://dribbble.com/Yikewxlin), 
+[jtsky](https://github.com/jtsky), 
+[jayconscious](https://github.com/jayconscious), 
+[宏宇](https://github.com/ringlong), 
+[litianhao3615](https://github.com/litianhao3615), 
+[Leo](https://github.com/firelion0725), 
+[jueying-key](https://github.com/jueying-xiangfeng), 
+[WorriesL](https://github.com/WorriesL), 
+[QiYa](https://github.com/QIYA0130), 
+[XingJimmy](https://github.com/XingJimmy),
+[符孙浪](https://github.com/fusunlang)
 
 ## 近期规划
 
