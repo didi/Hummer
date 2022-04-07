@@ -109,7 +109,7 @@ export class Scroller extends Base{
    * @param dy y偏移量
    */
   scrollBy(dx:number, dy:number){
-    this.element.scrolBy(dx, dy)
+    this.element.scrollBy(dx, dy)
   }
 
   /**
