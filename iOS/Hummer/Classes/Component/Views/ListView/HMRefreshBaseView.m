@@ -205,9 +205,11 @@
         inset.top = 0;
         self.scrollView.contentInset = inset;
     }];
-    self.state = HMRefreshTypeNormal;
-    if (self.stateChangedBlock) {
-        self.stateChangedBlock(HMRefreshTypeNormal);
+    if (self.state != HMRefreshTypeNormal) {
+        self.state = HMRefreshTypeNormal;
+        if (self.stateChangedBlock) {
+            self.stateChangedBlock(HMRefreshTypeNormal);
+        }
     }
     [self layoutContentView];
 }

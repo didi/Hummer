@@ -12,7 +12,12 @@ let isWebPlatform = __GLOBAL__.Hummer.pageInfo && JSON.stringify(__GLOBAL__.Humm
 export function run(container: any, type: string = 'tenon-vue') {
   let formatedNode = formatNode(container, type)
   log('Socket Initializing')
-  const { url } = __GLOBAL__.Hummer.pageInfo
+  const { url } = __GLOBAL__.Hummer.pageInfo || {}
+  // 部分接入方使用自己的容器 没有pageInfo属性 直接报错&return
+  if (!url) {
+    error(`get url error, initialization failed`)
+    return
+  }
   const { Storage, Memory } = __GLOBAL__
   let host = getPartUrlByParam(url, 'host')
   let port = getPartUrlByParam(url, 'port')
@@ -35,15 +40,31 @@ export function run(container: any, type: string = 'tenon-vue') {
     'getViewTree': function (ws: any, params: any) {
       let data = getViewData(formatedNode, type)
       viewMap = data.viewMap
-      sendMessage(ws, {
-        method: 'setViewTree',
-        params: {
-          ...params,
-          viewTree: [data.simpleRoot],
-          path:path,
-          baseInfo: __GLOBAL__.Hummer.env
-        }
-      })
+      if (formatedNode?.element?.dbg_getDescription) {
+        formatedNode.element.dbg_getDescription((node: any) => {
+          sendMessage(ws, {
+            method: 'setViewTree',
+            params: {
+              ...params,
+              viewTree: [data.simpleRoot],
+              path: path,
+              baseInfo: __GLOBAL__.Hummer.env,
+              devToolType: type
+            }
+          })
+        })
+      } else {
+        sendMessage(ws, {
+          method: 'setViewTree',
+          params: {
+            ...params,
+            viewTree: [data.simpleRoot],
+            path: path,
+            baseInfo: __GLOBAL__.Hummer.env,
+            devToolType: type
+          }
+        })
+      }
     },
     'getViewInfo': function (ws: any, params: any) {
       viewId = params.viewId

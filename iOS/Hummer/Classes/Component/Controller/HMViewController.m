@@ -137,17 +137,20 @@
         pData[@"url"]=self.URL;
     }
     pData[@"params"] = self.params ?: @{};
-    HMJSGlobal.globalObject.pageInfo = pData;
     
     //渲染脚本之前 注册bridge
     HMJSContext *context = [HMJSContext contextInRootView:self.hmRootView];
+    self.context = context;
+    context.pageInfo = pData;
+    context.delegate = self;
+    if ([self respondsToSelector:@selector(hm_namespace)]) {
+        context.nameSpace = [self hm_namespace];
+    }
     HM_SafeRunBlock(self.registerJSBridgeBlock,context);
     
     //执行脚本
     [context evaluateScript:script fileName:self.URL];
     self.pageView = self.hmRootView.subviews.firstObject;
-    self.context = [[HMJSGlobal globalObject] currentContext:self.pageView.hmContext];
-    self.context.delegate = self;
     [self.lifeCycle setJSValue:self.pageView.hmValue];
 }
 

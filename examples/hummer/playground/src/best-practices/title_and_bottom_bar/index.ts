@@ -1,21 +1,23 @@
 import { Hummer, View, Scroller } from '@hummer/hummer-front'
 import { MainListItem } from '../../common/CommonLayout'
+import { ComponentPage } from '../../common/CommonPage'
 import { Style } from '../../common/CommonStyle'
 import { Color } from '../../common/CommonColor'
 
-class RootView extends Scroller {
+class RootView extends ComponentPage {
   contentView: View;
 
   constructor() {
     super();
+    this.setPageTitle('标题栏 + 底部栏');
     this.style = {
       ...Style.FullParentStyle,
       backgroundColor: Color.white,
     }
-
-    this.initContentView();
   }
-
+  initDisplayView() {
+    // 复写父类方法，去除DisplayView
+  }
   initContentView() {
     this.contentView = new View();
     this.contentView.style = {

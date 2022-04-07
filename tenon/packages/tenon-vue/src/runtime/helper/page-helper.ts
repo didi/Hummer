@@ -5,6 +5,7 @@ export type PageConfig = {
 
 export interface PageComponent {
   onLoad: Function | null,
+  onReady: Function | null,
   onShow: Function | null,
   onHide: Function | null,
   onUnload: Function | null,

@@ -14,7 +14,7 @@ class RootView extends ComponentPage {
     super.initContentView();
 
     // 通用
-    this.initBackgroundSetting(4);
+    this.initBackgroundSetting(3);
     this.initCornerRadiusSetting(0);
     this.initBorderSetting(0);
     this.initShadowSetting(0);

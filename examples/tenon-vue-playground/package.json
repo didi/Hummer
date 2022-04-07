@@ -1,0 +1,19 @@
+{
+  "name": "tenon-vue-playground",
+  "version": "1.0.0",
+  "description": "Hummer Project",
+  "author": "fangyeqing <fangyeqing_v@didiglobal.com>",
+  "scripts": {
+    "build": "hummer build",
+    "dev": "hummer dev",
+    "debug": "npm run dev & hummer debug"
+  },
+  "dependencies": {
+    "@hummer/hummer-front": "^1.0.8",
+    "@hummer/tenon-store": "^1.0.0",
+    "@hummer/vue-plugin-canvas": "^0.5.0",
+    "@hummer/vue-plugin-list": "^0.5.0",
+    "@hummer/vue-plugin-popup": "^0.5.0",
+    "@hummer/vue-plugin-viewpager": "^0.5.0"
+  }
+}

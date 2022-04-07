@@ -7,12 +7,12 @@
 
 #import "HMDevTools.h"
 #import "HMDevToolsEntryView.h"
-
+#import "HMUtility.h"
+#import "HMJSContext.h"
 @implementation HMDevTools
 
 + (void)showInContext:(HMJSContext *)context {
-    HMDevToolsEntryView *window = HMDevToolsEntryView.entryWindow;
-    [window showWithContext:context];
+    [HMDevToolsEntryView showWithContext:context];
 }
 
 @end

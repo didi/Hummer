@@ -1,5 +1,16 @@
 # Release Nodes
 
+### 0.4.4
+- 修复base64图片加载没有传入callback时报异常的问题；
+- 修复placeholder和failedImage只在resize:'origin'模式下才生效的问题；
+- 修复加载更多状态有时被误重置的问题；
+- 修复SoftInputMode==adjustResize时，输入框获得焦点时键盘弹出又自动收起的问题；
+- 修复proguard-annotations库冲突问题；
+- 修复N-API-QJS版本JSContext销毁时偶现crash问题； 
+- 修复N-API-QJS版本GC过程中引发GC导致的crash问题；
+- 修复纯QuickJS版本原生侧返回值到JS侧后JSValue对象被自动回收的问题；
+- Image组件resize默认改成stretch；
+
 ### 0.4.2
 - 支持VSCode插件调试功能；
 - 支持Hummer项目的视图调试功能；

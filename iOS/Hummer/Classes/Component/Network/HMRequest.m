@@ -11,26 +11,29 @@
 #import "NSObject+Hummer.h"
 #import "HMExportManager.h"
 #import "HMInterceptor.h"
-#import "HMResponse.h"
 #import "HMBaseExecutorProtocol.h"
 #import <Hummer/HMBaseValue.h>
 #import <Hummer/HMURLUtility.h>
 #import <Hummer/HMLogger.h>
+#import <Hummer/HMRequestComponent.h>
+#import <Hummer/HMConfigEntryManager.h>
+#import <Hummer/HMJSGlobal.h>
 
-@interface HMRequest()
 
-@property (nonatomic, copy) NSString *url; 
-@property (nonatomic, copy) NSString *method;           // default POST
-@property (nonatomic, assign) NSTimeInterval timeout;
-@property (nonatomic, strong) NSDictionary *header;
-@property (nonatomic, strong) NSDictionary *param;
-
+@interface HMRequest()<HMRequestComponent>
 
 @property (nonatomic, strong) HMBaseValue *oriParamValue;
 
+@property (nonatomic, strong) id<HMRequestComponent> request_impl;
 @end
 
-@implementation HMRequest
+@implementation HMRequest{
+    NSString *_url;
+    NSString *_method;           // default POST
+    NSTimeInterval _timeout;
+    NSDictionary *_header;
+    NSDictionary *_param;
+}
 
 HM_EXPORT_CLASS(Request, HMRequest)
 
@@ -47,6 +50,7 @@ HM_EXPORT_METHOD(send, send:)
     if (self) {
         self.timeout = 20;
         self.method = @"POST";
+        self.request_impl = [HMRequestAdaptor createComponentWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
     }
     return self;
 }
@@ -167,6 +171,77 @@ typedef NSMutableDictionary HMPrimitiveResponse;
     return request;
 }
 
+#pragma mark - set && get
+
+- (void)setUrl:(NSString *)url {
+    _url = url;
+    if (self.request_impl) {
+        self.request_impl.url = url;
+    }
+}
+- (NSString *)url {
+    if (self.request_impl) {
+        return self.request_impl.url;
+    }
+    return _url;
+}
+
+- (void)setMethod:(NSString *)method {
+    _method = method;
+    if (self.request_impl) {
+        self.request_impl.method = method;
+    }
+}
+
+- (NSString *)method {
+    if (self.request_impl) {
+        return self.request_impl.method;
+    }
+    return _method;
+}
+
+- (void)setTimeout:(NSTimeInterval)timeout {
+    _timeout = timeout;
+    if (self.request_impl) {
+        self.request_impl.timeout = timeout;
+    }
+}
+- (NSTimeInterval)timeout {
+    if (self.request_impl) {
+        return self.request_impl.timeout;
+    }
+    return _timeout;
+}
+
+- (void)setParam:(NSDictionary *)param {
+    _param = param;
+    if (self.request_impl) {
+        self.request_impl.param = param;
+    }
+}
+
+- (NSDictionary *)param {
+    if (self.request_impl) {
+        return self.request_impl.param;
+    }
+    return _param;
+}
+
+- (void)setHeader:(NSDictionary *)header {
+    
+    _header = header;
+    if (self.request_impl) {
+        self.request_impl.header = header;
+    }
+}
+
+- (NSDictionary *)header {
+    if (self.request_impl) {
+        return self.request_impl.header;
+    }
+    return _header;
+}
+
 #pragma mark - Export Property
 
 - (HMBaseValue *)__url {
@@ -213,6 +288,10 @@ typedef NSMutableDictionary HMPrimitiveResponse;
 #pragma mark - Export Method
 
 - (void)send:(HMFuncCallback)callback {
+    if (self.request_impl) {
+        [self.request_impl send:callback];
+        return;
+    }
     NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:[self urlRequest]
                                                                      completionHandler:^(NSData * _Nullable data,
                                                                                          NSURLResponse * _Nullable response,
@@ -229,5 +308,16 @@ typedef NSMutableDictionary HMPrimitiveResponse;
     [dataTask resume];
 }
 
++ (nonnull id<HMRequestComponent>)create {
+    return nil;
+}
+
+
+
+@synthesize header = _header;
+@synthesize method = _method;
+@synthesize param = _param;
+@synthesize timeout = _timeout;
+@synthesize url = _url;
 
 @end

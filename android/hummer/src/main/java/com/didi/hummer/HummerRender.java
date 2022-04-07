@@ -170,6 +170,9 @@ public class HummerRender {
         if (perfInfo.pageRenderTimeCost == 0) {
             perfInfo.pageRenderTimeCost = System.currentTimeMillis() - this.startTime;
             if (trackerAdapter != null) {
+                if (isRenderSuccess) {
+                    trackerAdapter.trackPageSuccess(hmContext.getPageUrl());
+                }
                 trackerAdapter.trackPerfInfo(hmContext.getPageUrl(), perfInfo);
                 trackerAdapter.trackPerfCustomInfo(hmContext.getPageUrl(), new PerfCustomInfo("whiteScreenRate", "白屏率", "%", isRenderSuccess ? 0 : 100));
                 trackerAdapter.trackEvent(ITrackerAdapter.EventName.RENDER_FINISH, params);
@@ -322,6 +325,10 @@ public class HummerRender {
         hmContext.getJsContext().getJSValue("Hummer").set("pageInfo", page);
         hmContext.setPageUrl(page.url);
         hmContext.setJsSourcePath(page.sourcePath);
+
+        if (trackerAdapter != null) {
+            trackerAdapter.trackPageView(page.url);
+        }
     }
 
     /**

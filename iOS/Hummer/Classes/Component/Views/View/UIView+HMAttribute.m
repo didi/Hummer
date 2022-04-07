@@ -31,12 +31,23 @@
     objc_setAssociatedObject(self, @selector(hm_zIndex), @(hm_zIndex), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (BOOL)hm_visibility {
+    return [objc_getAssociatedObject(self, _cmd) boolValue];
+}
+
+- (void)setHm_visibility:(BOOL)hm_visibility {
+    objc_setAssociatedObject(self, @selector(hm_visibility), @(hm_visibility), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 #pragma mark - Export Attribute visible
 
 HM_EXPORT_ATTRIBUTE(opacity, alpha, HMNumberToCGFloat:)
 HM_EXPORT_ATTRIBUTE(overflow, clipsToBounds, HMStringToClipSubviews:)
-HM_EXPORT_ATTRIBUTE(visibility, hidden, HMStringToViewHidden:)
-
+HM_EXPORT_ATTRIBUTE(visibility, __visibility, HMStringToViewHidden:)
+- (void)set__visibility:(BOOL)isHidden {
+    self.hm_visibility = isHidden;
+    self.hidden = isHidden;//此处设计有问题
+}
 #pragma mark - Export Zindex
 
 HM_EXPORT_ATTRIBUTE(zIndex, __zIndex, HMNumberToNSInteger:)

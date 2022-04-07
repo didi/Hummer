@@ -78,7 +78,7 @@ Hummer is a dynamic solution for client.
 
   s.subspec "Core" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
-    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}'
+    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}', 'iOS/Hummer/Classes/Dev/DevTools/**/*',  'iOS/Hummer/Classes/Dev/Performance/**/*'
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
@@ -99,6 +99,14 @@ Hummer is a dynamic solution for client.
   s.subspec "WebP" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}'
     ss.dependency 'libwebp', '~> 1.2.0'
+  end
+  
+  s.subspec "DevTools" do |ss|
+    ss.dependency 'Hummer/Core'
+    ss.source_files = 'iOS/Hummer/Classes/Dev/DevTools/**/*.{h,m}', 'iOS/Hummer/Classes/Dev/Performance/**/*.{h,m}'
+    ss.xcconfig = {
+      "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) HMDEVTOOLS=1'
+    }
   end
   
   # s.public_header_files = 'Pod/Classes/**/*.h'

@@ -9,23 +9,17 @@
 #import "HMExportClass.h"
 
 #import "HMUtility.h"
-#import "UIView+HMRenderObject.h"
 #import "HMJSObject.h"
 #import "NSObject+Hummer.h"
 #import "HMConfig.h"
 #import "HMJSCExecutor.h"
 #import "HMBaseValue.h"
 #import "HMBaseWeakValueProtocol.h"
-#import "UIView+HMDom.h"
 #import "HMJavaScriptLoader.h"
 #import "HMJSGlobal+Private.h"
 #import "HMExceptionModel.h"
-#import <Hummer/HMConfigEntryManager.h>
-
+#import "HMJSContext+Private.h"
 #import <Hummer/HMDebug.h>
-#ifdef HMDEBUG
-#import "HMDevTools.h"
-#endif
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -175,11 +169,13 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 }
 
 + (NSDictionary<NSString *, NSObject *> *)pageInfo {
-    return HMJSGlobal.globalObject.pageInfo;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    return context.pageInfo;
 }
 
 + (void)setPageInfo:(HMBaseValue *)pageInfo {
-    HMJSGlobal.globalObject.pageInfo = pageInfo.toDictionary;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    context.pageInfo = pageInfo.toDictionary;
 }
 
 + (HMFunctionType)setTitle {
@@ -314,28 +310,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     }
     UIView *view = (UIView *) viewObject;
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:page.context];
-    context.componentView = page;
-    [context.rootView addSubview:view];
-    context.rootView.isHmLayoutEnabled = YES;
-    [context.rootView hm_markDirty];
-    if (context.renderCompletion) {
-        context.renderCompletion();
-    }
-    [UIView hm_reSortFixedView:context];
-
-
-#ifdef HMDEBUG
-    // 添加debug按钮
-//    [HMDevTools showInContext:context];
-#endif
-
-    struct timespec renderTimespec;
-    HMClockGetTime(&renderTimespec);
-    struct timespec resultTimespec;
-    HMDiffTime(&context->_createTimespec, &renderTimespec, &resultTimespec);
-    if (context.nameSpace) {
-        [HMConfigEntryManager.manager.configMap[context.nameSpace].trackEventPlugin trackPageRenderCompletionWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000) pageUrl:context.hummerUrl ?: @""];
-    }
+    [context didRenderPage:page nativeView:view];
 }
 
 - (void)setBasicWidth:(HMBaseValue *)basicWidth {

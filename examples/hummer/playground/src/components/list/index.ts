@@ -217,6 +217,8 @@ class RootView extends ComponentPage {
         pullRefreshCell.setHint("加载中...");
         page = 0;
         this.loadData(listView);
+      }  else if (state == 3) {
+        pullRefreshCell.setHint("释放刷新");
       } else {
         pullRefreshCell.setHint("加载完成");
       }

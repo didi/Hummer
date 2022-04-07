@@ -1,18 +1,29 @@
 import { Hummer, View, Text, KeyframeAnimation } from '@hummer/hummer-front'
 import { Style } from '../../common/CommonStyle'
 import { Color } from '../../common/CommonColor'
-
-class RootView extends View {
+import { ComponentPage } from '../../common/CommonPage'
+class RootView extends ComponentPage {
     constructor() {
         super();
+        this.setPageTitle('跑马灯文字效果');
         this.style = {
             ...Style.FullParentStyle,
-            ...Style.CenterStyle,
             backgroundColor: Color.white,
         }
-
+    }
+    initDisplayView() {
+        // 复写父类方法，去除DisplayView
+    }
+    initContentView() {
+        let container = new View;
+        container.style = {
+            width: '100%',
+            flexGrow: 1,
+            ...Style.CenterStyle,
+        }
         let v = new MargueeView(['Hummer', 'Tenon', 'DiDi']);
-        this.appendChild(v);
+        container.appendChild(v);
+        this.appendChild(container);
     }
 }
 
@@ -55,7 +66,7 @@ class MargueeView extends View {
             position: 'absolute',
             fontSize: 30,
             color: '#000000',
-            marginTop: 40,
+            // marginTop: 40,
             opacity: 0,
         };
 

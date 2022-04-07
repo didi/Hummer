@@ -9,7 +9,7 @@
 #import "HMBaseExecutorProtocol.h"
 #import "HMJSGlobal.h"
 #import "HMInterceptor.h"
-#import "HMDevToolsJSCallerExcutor.h"
+#import "HMDevToolsJSCallerExecutor.h"
 #import <objc/runtime.h>
 
 const static NSString * FORMAT_STRING_LEFT_TOP = @"┌─";
@@ -47,36 +47,21 @@ const static NSString * FORMAT_STRING_NORMAL_V = @"｜";
     _context = context;
     self.textType = _textType;
 }
+- (void)refresh {
+    if (self.textType == HMDevToolsTextTypePageInfo) {
+        NSString *pageInfoTitle = [self contentTextWithConten:@"页面参数" indent:0];
+        NSString *pageInfoContent= [self contentTextWithConten:_context.pageInfo.description?:@"" indent:1];
+        
+        NSString *envTitle = [self contentTextWithConten:@"环境" indent:0];
+        NSString *envContent = [self contentTextWithConten:HMJSGlobal.globalObject.getEnvironmentInfo.description?:@"" indent:1];
+        
+        NSString *textContent = [NSString stringWithFormat:@"%@%@%@%@", pageInfoTitle, pageInfoContent, envTitle, envContent];
+        self.textView.text = textContent;
+    }
+}
 
 - (void)setTextType:(HMDevToolsTextType)textType {
-    if (textType == HMDevToolsTextTypePageInfo) {
-        self.textView.text = HMJSGlobal.globalObject.pageInfo.description;
-    }
-    else if (textType == HMDevToolsTextTypeCallerTree) {
-        self.textView.text = [self headerTextWithTitle:@"函数调用树" subTitle:@"<<JSContext>>"];
-        NSArray *inspectors = [HMInterceptor interceptor:HMInterceptorTypeJSCaller];
-        if (inspectors.count < 1) {
-            return;
-        }
-        
-        static NSDateFormatter *formatter;
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-          formatter = NSDateFormatter.new;
-          formatter.dateFormat = @"HH:mm:ss.SSS";
-        });
-                
-        HMDevToolsJSCallerExcutor *jsCallerExcutor = (HMDevToolsJSCallerExcutor *)inspectors[0];
-        __weak typeof(self) weakself = self;
-        jsCallerExcutor.callerInfo = ^(NSString * _Nonnull className, NSString * _Nonnull funtionName) {
-            __strong typeof(self) strongself = weakself;
-            NSString *date = [formatter stringFromDate:NSDate.date];
-            NSString *showString = strongself.textView.text ?: @"";
-            NSString *content = [NSString stringWithFormat:@"[%@] %@.%@", date, className, funtionName];
-            NSString *current = [self contentTextWithConten:content indent:2];
-            strongself.textView.text = [showString stringByAppendingFormat:@"%@", current];
-        };
-    }
+    [self refresh];
 }
 
 #pragma mark - Getter

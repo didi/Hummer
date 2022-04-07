@@ -9,6 +9,12 @@
 #import "HMUtility.h"
 #import <Hummer/HMFileManager.h>
 #import <Hummer/HMMemCache.h>
+#import "NSObject+HMDescription.h"
+#import <Hummer/HMJSContext.h>
+
+#if __has_include(<Hummer/HMDevTools.h>)
+#import <Hummer/HMJSContext+HMDevTools.h>
+#endif
 
 //默认适配器
 #import <Hummer/HMStorage.h>
@@ -236,24 +242,48 @@ NSString * const HMDefaultNamespace = @"namespace.hummer.default";
 
 
 
-@implementation HMJSCallerIterceptor
-// 不需要兼容
-+ (void)callWithJSClassName:(nonnull NSString *)className functionName:(nonnull NSString *)functionName namespace:(nonnull NSString *)namespace{
+@implementation HMJSCallerInterceptor
+
++ (void)callNativeWithClassName:(NSString *)className functionName:(NSString *)functionName objectRef:(NSString *)objectRef args:(nonnull NSArray<HMBaseValue *> *)args context:(nonnull HMJSContext *)context {
     
-    id<HMJSCallerIterceptor> interceptor = [HMCEMInstance.configMap objectForKey:namespace].jsCallerInterceptor;
-    if ([interceptor respondsToSelector:@selector(callWithJSClassName:functionName:)]) {
-        [interceptor callWithJSClassName:className functionName:functionName];
+    id<HMJSCallerProtocol> interceptor = [HMCEMInstance.configMap objectForKey:context.nameSpace].jsCallerInterceptor;
+    if ([interceptor respondsToSelector:@selector(callNativeWithClassName:functionName:objRef:args:namespace:)]) {
+        [interceptor callNativeWithClassName:className functionName:functionName objRef:objectRef args:args namespace:context.nameSpace];
     }
-    //todo dev tool
+
+    // devtool
+#if __has_include(<Hummer/HMDevTools.h>)
+    [context.hm_jsCallerInterceptor callNativeWithClassName:className functionName:functionName objRef:objectRef args:args namespace:context.nameSpace];
+#endif
 }
 
-+ (void)callWithTarget:(nonnull id)target selector:(nonnull SEL)selector namespace:(nonnull NSString *)namespace{
+
++ (void)callJSWithTarget:(HMBaseValue *)target functionName:(NSString *)functionName args:(NSArray *)args context:(nonnull HMJSContext *)context {
     
-    id<HMJSCallerIterceptor> interceptor = [HMCEMInstance.configMap objectForKey:namespace].jsCallerInterceptor;
-    if ([interceptor respondsToSelector:@selector(callWithTarget:selector:)]) {
-        [interceptor callWithTarget:target selector:selector];
+    id<HMJSCallerProtocol> interceptor = [HMCEMInstance.configMap objectForKey:context.nameSpace].jsCallerInterceptor;
+    BOOL hasDevTool = NO;
+#if __has_include(<Hummer/HMDevTools.h>)
+    hasDevTool = YES;
+#endif
+    if (!interceptor && !hasDevTool) {
+        return;
     }
-    //todo dev tool
+    NSObject *nativeObj = target.toObject;;
+    NSString *className = nativeObj.hm_objcClassName;
+    NSString *objRefStr = @"";
+    if (nativeObj) {
+        objRefStr = [NSString stringWithFormat:@"%p", nativeObj];
+    }
+    
+    if ([interceptor respondsToSelector:@selector(callJSWithClassName:functionName:objRef:args:namespace:)]) {
+                
+        [interceptor callJSWithClassName:className functionName:functionName objRef:objRefStr args:args namespace:context.nameSpace];
+    }
+
+    // devtool
+#if __has_include(<Hummer/HMDevTools.h>)
+        [context.hm_jsCallerInterceptor callJSWithClassName:className functionName:functionName objRef:objRefStr args:args namespace:context.nameSpace];
+#endif
 }
 
 @end
@@ -454,4 +484,16 @@ static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor
     [__HMMemoryAdaptor_map setObject:_memory forKey:_namespace];
     return _memory;
 }
+@end
+
+@implementation HMRequestAdaptor
+
++ (nullable id<HMRequestComponent>)createComponentWithNamespace:(NSString *)namespace {
+    Class<HMRequestComponent> _com = [HMCEMInstance.configMap objectForKey:namespace].request;
+    if (_com) {
+        return [_com create];
+    }
+    return nil;
+}
+
 @end

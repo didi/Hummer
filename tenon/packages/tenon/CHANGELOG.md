@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.31](https://github.com/didi/Hummer/compare/@hummer/tenon@1.2.30...@hummer/tenon@1.2.31) (2022-02-15)
+
+**Note:** Version bump only for package @hummer/tenon
+
+
+
+
+
+## [1.2.30](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon@1.2.29...@hummer/tenon@1.2.30) (2022-01-19)
+
+**Note:** Version bump only for package @hummer/tenon
+
+
+
+
+
+## [1.2.29](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon@1.2.27...@hummer/tenon@1.2.29) (2022-01-17)
+
+**Note:** Version bump only for package @hummer/tenon
+
+
+
+
+
+## [1.2.28](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon@1.2.27...@hummer/tenon@1.2.28) (2022-01-17)
+
+**Note:** Version bump only for package @hummer/tenon
+
+
+
+
+
 ## [1.2.27](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon@1.2.26...@hummer/tenon@1.2.27) (2021-11-29)
 
 **Note:** Version bump only for package @hummer/tenon

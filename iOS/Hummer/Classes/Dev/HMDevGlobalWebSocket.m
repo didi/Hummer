@@ -8,6 +8,7 @@
 #import "HMDevGlobalWebSocket.h"
 #import <Hummer/HMDevService.h>
 #import <SocketRocket/SRWebSocket.h>
+#import <objc/message.h>
 #import "HMUtility.h"
 
 @interface HMDevLocalConnection ()
@@ -32,7 +33,16 @@
     //SR_CONNECTING = 0, SR_OPEN = 1,
     if (self.remote && self.remote.webSocket && self.remote.webSocket.readyState <= 1) {
         NSError *error = nil;
-        [self.remote.webSocket sendString:message error:&error];
+        //兼容 socket 版本。
+        SEL newer060API = NSSelectorFromString(@"sendString:error:");
+        SEL older060API = NSSelectorFromString(@"send:");
+        if ([self.remote.webSocket respondsToSelector:newer060API]) {
+
+            ((void(*)(id, SEL,NSString *, NSError **))objc_msgSend)(self.remote.webSocket, newer060API, message, &error);
+        }else if ([self.remote.webSocket respondsToSelector:older060API]){
+
+            ((void(*)(id, SEL,NSString *))objc_msgSend)(self.remote.webSocket, older060API, message);
+        }
         if (completionHandler) {
             completionHandler(error);
         }

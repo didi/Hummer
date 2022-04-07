@@ -1,19 +1,22 @@
 import { Hummer, View, KeyframeAnimation } from '@hummer/hummer-front'
 import { Style } from '../../../common/CommonStyle'
 import { Color } from '../../../common/CommonColor'
-
-class RootView extends View {
+import { ComponentPage } from '../../../common/CommonPage'
+class RootView extends ComponentPage {
     constructor() {
         super();
+        this.setPageTitle('水波纹效果');
         this.style = {
             ...Style.FullParentStyle,
-            ...Style.CenterStyle,
             backgroundColor: Color.white,
         }
-
+    }
+    initDisplayView() {
+        // 复写父类方法，去除DisplayView
+    }
+    initContentView() {
         this.showRippleAnim();
     }
-
     /**
      * 水波纹动画
      */
@@ -48,9 +51,16 @@ class RootView extends View {
             justifyContent: 'center',
             alignItems: 'center',
         }
+        let container = new View;
+        container.style = {
+            width: '100%',
+            flexGrow: 1,
+            ...Style.CenterStyle,
+        }
         layout.appendChild(innerView);
         layout.appendChild(outerView);
-        this.appendChild(layout);
+        container.appendChild(layout);
+        this.appendChild(container);
 
         let anim = new KeyframeAnimation("scale");
         anim.keyframes = [{

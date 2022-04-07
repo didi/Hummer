@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.3](https://github.com/didi/Hummer/compare/@hummer/tenon-dev-tool@0.2.2...@hummer/tenon-dev-tool@0.2.3) (2022-02-15)
+
+**Note:** Version bump only for package @hummer/tenon-dev-tool
+
+
+
+
+
+## [0.2.2](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-dev-tool@0.2.0...@hummer/tenon-dev-tool@0.2.2) (2022-01-17)
+
+**Note:** Version bump only for package @hummer/tenon-dev-tool
+
+
+
+
+
+## [0.2.1](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-dev-tool@0.2.0...@hummer/tenon-dev-tool@0.2.1) (2022-01-17)
+
+**Note:** Version bump only for package @hummer/tenon-dev-tool
+
+
+
+
+
 # [0.2.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-dev-tool@0.0.3...@hummer/tenon-dev-tool@0.2.0) (2021-11-14)
 
 

@@ -68,6 +68,8 @@ HMAssociatedPropertyGetterDeclaration(decoration, HMViewDecoration)
 
 - (CGFloat)hm_zIndex;
 
+// NO:visible
+- (BOOL)hm_visibility;
 @end
 
 NS_ASSUME_NONNULL_END

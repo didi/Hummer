@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.2](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.8.1...@hummer/tenon-vue@1.8.2) (2022-02-15)
+
+**Note:** Version bump only for package @hummer/tenon-vue
+
+
+
+
+
+## [1.8.1](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.8.0...@hummer/tenon-vue@1.8.1) (2022-01-19)
+
+**Note:** Version bump only for package @hummer/tenon-vue
+
+
+
+
+
+# [1.8.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.6.4...@hummer/tenon-vue@1.8.0) (2022-01-17)
+
+
+### Features
+
+* **tenon:** 支持Text嵌套Text ([#336](https://github.com.cnpmjs.org/didi/Hummer/issues/336)) ([9e61a2f](https://github.com.cnpmjs.org/didi/Hummer/commit/9e61a2ff85a029518af9a062eecf43245a1bd309))
+
+
+
+
+
+# [1.7.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.6.4...@hummer/tenon-vue@1.7.0) (2022-01-17)
+
+
+### Features
+
+* **tenon:** 支持Text嵌套Text ([#336](https://github.com.cnpmjs.org/didi/Hummer/issues/336)) ([9e61a2f](https://github.com.cnpmjs.org/didi/Hummer/commit/9e61a2ff85a029518af9a062eecf43245a1bd309))
+
+
+
+
+
 ## [1.6.4](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-vue@1.6.3...@hummer/tenon-vue@1.6.4) (2021-11-29)
 
 **Note:** Version bump only for package @hummer/tenon-vue

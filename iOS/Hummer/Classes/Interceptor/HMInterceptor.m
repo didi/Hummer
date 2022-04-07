@@ -29,7 +29,7 @@
             @(HMInterceptorTypeRouter)        : @protocol(HMRouterProtocol),
             @(HMInterceptorTypeImage)         : @protocol(HMImageProtocol),
             @(HMInterceptorTypeEventTrack)    : @protocol(HMEventTrackProtocol),
-            @(HMInterceptorTypeJSCaller)      : @protocol(HMJSCallerIterceptor),
+            @(HMInterceptorTypeJSCaller)      : @protocol(HMJSCallerProtocol),
         };
         self.interceptorMap = [self _initializeInterceptorMapWithType:_protocolMap.allKeys];
     }

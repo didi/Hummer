@@ -2,23 +2,27 @@ import { Hummer, View, Image, Text, Scroller, Navigator, Toast } from '@hummer/h
 import { Style } from '../../common/CommonStyle'
 import { Color } from '../../common/CommonColor'
 import { Img } from '../../common/CommonResource'
-
-class RootView extends Scroller {
+import { ComponentPage } from '../../common/CommonPage'
+class RootView extends ComponentPage {
   contentView: View;
 
   constructor() {
     super();
+    this.setPageTitle('标题栏系列');
     this.style = {
       ...Style.FullParentStyle,
       backgroundColor: Color.white,
     }
-
+  }
+  initDisplayView() {
+    // 复写父类方法，去除DisplayView
+  }
+  initContentView(){
     this.showNormalTitleBar();
     this.showTitleBarWithMargin();
     this.showTitleBarWithBackMenu();
     this.showTitleBarWithBackMenuBadge();
   }
-
   /**
    * 标题栏（仅文字，居中）
    */

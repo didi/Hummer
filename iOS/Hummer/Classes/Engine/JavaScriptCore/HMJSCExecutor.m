@@ -18,7 +18,9 @@
 #import "HMUtility.h"
 #import "HMInterceptor.h"
 #import "HMConfigEntryManager.h"
+#import "NSObject+HMDescription.h"
 #import <Hummer/HMJSGlobal.h>
+#import <Hummer/HMDebug.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -160,10 +162,22 @@ JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObject
     
     // jscall回调
     HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
-    [HMJSCallerIterceptor callWithJSClassName:className functionName:functionName namespace:context.nameSpace];
 
     // 最后一个参数无效
     [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
+    
+#ifdef HMDEBUG
+    {
+        NSString *objRefStr = objectRef ? [NSString stringWithFormat:@"%p", target] : nil;
+        NSMutableArray *argList = @[].mutableCopy;
+        int argStartIndex = objectRef ? 1:0;
+        for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argumentCount) - argStartIndex; ++i) {
+            HMJSCStrongValue *jsValue = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:executor];
+            [argList addObject:jsValue];
+        }
+        [HMJSCallerInterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argList context:context];
+    }
+#endif
 
     return [executor hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
 }
@@ -200,7 +214,6 @@ JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObje
 
     // jscall回调
     HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
-    [HMJSCallerIterceptor callWithJSClassName:className functionName:@"constructor" namespace:context.nameSpace];
     
     // 创建对象
     NSObject *opaquePointer = NULL;
@@ -214,7 +227,9 @@ JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObje
             [argumentArray addObject:value];
         }
     }
-
+#ifdef HMDEBUG
+    [HMJSCallerInterceptor callNativeWithClassName:className functionName:@"constructor" objectRef:nil args:argumentArray context:context];
+#endif
     HMCurrentExecutor = executor;
     // 支持 HMJSObject，如果不支持则回退 init
     // 不判断 argumentCount > 2，因为 UIView 必须调用 HMJSObject 初始化方法
@@ -525,13 +540,26 @@ void hummerFinalize(JSObjectRef object) {
 
     [self hummerExtractExportWithFunctionPropertyName:propertyName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:isSetter jsClassName:className];
 
-    if (isSetter) {
-        
-        // jscall回调
-        HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self];
-        [HMJSCallerIterceptor callWithJSClassName:className functionName:[@"set" stringByAppendingString:propertyName.capitalizedString] namespace:context.nameSpace];
-    }
 
+    
+#ifdef HMDEBUG
+    {
+        HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self];
+        NSString *functionName = propertyName;
+        if (isSetter) {
+            functionName = [@"set" stringByAppendingString:functionName.capitalizedString];
+        }
+        NSString *objRefStr = objectRef ? [NSString stringWithFormat:@"%p", target] : nil;
+        NSMutableArray *argList = @[].mutableCopy;
+        int argStartIndex = objectRef ? 1:0;
+        for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argumentCount) - argStartIndex; ++i) {
+            HMJSCStrongValue *jsValue = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:self];
+            [argList addObject:jsValue];
+        }
+        [HMJSCallerInterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argList context:context];
+    }
+#endif
+    
     return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
 }
 
@@ -1515,7 +1543,16 @@ void hummerFinalize(JSObjectRef object) {
     }
     // 业务代码需要抛出异常
     [self popExceptionWithErrorObject:&exception];
-
+#ifdef HMDEBUG
+    HMBaseValue *thisValue = [[HMJSCStrongValue alloc] initWithValueRef:thisObjectRef executor:self];
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self];
+    JSStringRef namePropertyName = JSStringCreateWithUTF8CString("name");
+    JSValueRef lengthValueRef = JSObjectGetProperty(self.contextRef, functionObjectRef, namePropertyName, NULL);
+    JSStringRelease(namePropertyName);
+    NSString *name = [self convertValueRefToString:lengthValueRef isForce:YES];
+    [HMJSCallerInterceptor callJSWithTarget:thisValue functionName:name args:argumentArray context:context];
+#endif
+    
     return returnValueRef;
 }
 

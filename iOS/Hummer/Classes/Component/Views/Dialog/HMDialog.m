@@ -45,7 +45,15 @@
     [super layoutSubviews];
     
     if (self.isJSContent) {
-        [self hm_applyLayoutPreservingOrigin:YES affectedShadowViews:nil];
+        NSHashTable<id<HMLayoutStyleProtocol>> *affectedShadowViews = NSHashTable.weakObjectsHashTable;
+        [self hm_applyLayoutPreservingOrigin:NO affectedShadowViews:affectedShadowViews];
+        if (affectedShadowViews.count > 0) {
+            NSEnumerator<id<HMLayoutStyleProtocol>> *enumerator = affectedShadowViews.objectEnumerator;
+            id<HMLayoutStyleProtocol> value = nil;
+            while ((value = enumerator.nextObject)) {
+                [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+            }
+        }
     }
 }
 

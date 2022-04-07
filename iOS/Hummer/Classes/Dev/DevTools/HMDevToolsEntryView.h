@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)entryWindow;
 
-- (void)showWithContext:(HMJSContext *)context;
++ (void)showWithContext:(HMJSContext *)context;
 
 - (void)hide;
 

@@ -21,6 +21,7 @@
 #import "UIView+HMDom.h"
 #import "HMYogaUtility.h"
 #import "UIView+HMAnimation.h"
+#import "UIView+HMAttribute.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -135,12 +136,10 @@ NS_ASSUME_NONNULL_END
             inlineView.hm_animationPropertyBounds = inlineView.bounds;
             inlineView.hm_animationPropertyCenter = inlineView.center;
             CGRect frame = layoutMetrics.frame;
-            // 兼容以前的双属性控制视图显示
-            if (!HMUseDoubleAttributeControlHidden) {
-                BOOL isHidden = layoutMetrics.displayType == HMDisplayTypeNone;
-                if (inlineView.isHidden != isHidden) {
-                    inlineView.hidden = isHidden;
-                }
+            // 只有在 HMDisplayTypeNone 或 visibility: hidden 情况下，隐藏视图
+            BOOL isHidden = layoutMetrics.displayType == HMDisplayTypeNone || inlineView.hm_visibility == YES;
+            if (inlineView.isHidden != isHidden) {
+                inlineView.hidden = isHidden;
             }
             if (view == inlineView) {
                 // 需要继承上次的 origin

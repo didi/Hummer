@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable HMBaseValue *)hm_jsObject;
 
+- (NSString *)hm_devDescription;
+
 @end
 
 /**

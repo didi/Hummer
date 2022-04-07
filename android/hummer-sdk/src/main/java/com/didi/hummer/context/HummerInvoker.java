@@ -4,7 +4,9 @@ import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.engine.jsc.JSCValue;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
+import com.didi.hummer.core.engine.jsc.jni.TypeConvertor;
 import com.didi.hummer.core.exception.JSException;
 import com.didi.hummer.core.util.HMJsonUtil;
 import com.didi.hummer.render.component.view.BaseInvoker;
@@ -41,6 +43,12 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                 break;
             case "getRootView":
                 jsRet = mHummerContext.getJsPage();
+
+                // QuickJS版本的引擎，在返回值从Native返回到JS侧时，引用计数会自动减1，这里需要提前加1（暂时没想到更好的办法，先这么临时修改下）
+                if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.QUICK_JS && jsRet instanceof JSCValue) {
+                    JSCValue jsValue = (JSCValue) jsRet;
+                    TypeConvertor.JSValueProtect(jsValue.context, jsValue.value);
+                }
                 break;
             case "loadScript":
                 /**

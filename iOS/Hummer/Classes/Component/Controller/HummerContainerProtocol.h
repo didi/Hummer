@@ -26,6 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
  * @brief 当 hm_didClickGoBack(js 侧 onBack) 返回 NO 时被调用，表示此时应该由 native 控制返回行为，如不实现，默认使用 pop 方式。
  */
 - (void)hm_triggerNativeGoBack;
+
+/**
+ * @brief 配置 context namespace，注意需要和 HMConfigEntryManager 保持一致。
+ */
+
+- (nonnull NSString *)hm_namespace;
 @end
 
 NS_ASSUME_NONNULL_END

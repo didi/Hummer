@@ -10,12 +10,10 @@
 #import "HMExceptionModel.h"
 #import "HMDevToolsLoggerCell.h"
 #import "HMDevToolsLogger.h"
+#import "HMDevToolsLoggerVCModel.h"
 
 @interface HMDevToolsLoggerViewController ()<UITableViewDelegate, UITableViewDataSource>
-
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, copy) NSMutableArray<HMDevToolsLogger *> *dataArray;
-
 @end
 
 @implementation HMDevToolsLoggerViewController
@@ -33,53 +31,31 @@
     ]];
 }
 
+- (void)reloadData {
+    // 可优化
+    
+    [_tableView reloadData];
+    
+    NSIndexPath *path = [NSIndexPath indexPathForRow:self.vcModel.dataArray.count - 1  inSection:0];
+    if (!path) {
+        return;
+    }
+    
+    [_tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+          
+}
+
 #pragma mark - Setter
 
 - (void)setContext:(HMJSContext *)context {
     if ([_context isEqual:context]) {
         return;
     }
+    
     _context = context;
-    [_dataArray removeAllObjects];
-    [_tableView reloadData];
     
-    static NSDateFormatter *formatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-      formatter = NSDateFormatter.new;
-      formatter.dateFormat = @"HH:mm:ss.SSS";
-    });
-    
-    __weak typeof(self) weakSelf = self;
-    [_context.context addConsoleHandler:^(NSString * _Nullable logString, HMLogLevel logLevel) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        HMDevToolsLogger *logger = HMDevToolsLogger.new;
-        
-
-        NSString *date = [formatter stringFromDate:NSDate.date];
-
-        logger.logString = [NSString stringWithFormat:@"[%@] %@", date, logString];
-        logger.logLevel = logLevel;
-        logger.expended = NO;
-        [strongSelf.dataArray addObject:logger];
-        [strongSelf.tableView reloadData];
-    } key:self];
-    
-    [_context.context addExceptionHandler:^(HMExceptionModel * _Nonnull exceptionModel) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-
-        HMDevToolsLogger *logger = HMDevToolsLogger.new;
-
-        NSString *date = [formatter stringFromDate:NSDate.date];
-        NSString *info = [NSString stringWithFormat:@"column:%@ line:%@, %@\nexception:%@\n\nstack:%@", exceptionModel.column?:@0, exceptionModel.line?:@0, exceptionModel.name?:@"", exceptionModel.message?:@"", exceptionModel.stack?:@""];
-
-        logger.logString = [NSString stringWithFormat:@"[%@] %@", date, info];
-        logger.logLevel = HMLogLevelError;
-        logger.expended = NO;
-        [strongSelf.dataArray addObject:logger];
-        [strongSelf.tableView reloadData];
-
-    } key:self];
+    [self.vcModel reset];
+    [self reloadData];
 }
 
 #pragma mark - UITableViewDataSource & UITableViewDelegate
@@ -89,18 +65,18 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataArray.count;
+    return self.vcModel.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     HMDevToolsLoggerCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Logger"];
-    HMDevToolsLogger *data = self.dataArray[indexPath.row];
+    HMDevToolsLogger *data = self.vcModel.dataArray[indexPath.row];
     [cell renderCellWithLogger:data];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    HMDevToolsLogger *logger = self.dataArray[indexPath.row];
+    HMDevToolsLogger *logger = self.vcModel.dataArray[indexPath.row];
     logger.expended = !logger.expended;
     [tableView reloadData];
 }
@@ -114,7 +90,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    HMDevToolsLogger *logger = self.dataArray[indexPath.row];
+    HMDevToolsLogger *logger = self.vcModel.dataArray[indexPath.row];
     NSString *content = logger.logString;
     if (content.length > 0) {
         UIPasteboard *pboard = UIPasteboard.generalPasteboard;
@@ -135,13 +111,6 @@
         [_tableView registerClass:HMDevToolsLoggerCell.class forCellReuseIdentifier:@"Logger"];
     }
     return _tableView;
-}
-
-- (NSMutableArray *)dataArray {
-    if (!_dataArray) {
-        _dataArray = NSMutableArray.array;
-    }
-    return _dataArray;
 }
 
 @end

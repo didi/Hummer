@@ -7,8 +7,12 @@
 #import <Hummer/NSObject+Hummer.h>
 #import <Hummer/HMExceptionModel.h>
 #import <Hummer/HMJSStrongValue.h>
+#import <Hummer/HMJSGlobal.h>
 #import <objc/runtime.h>
 #import <Hummer/HMDebugService.h>
+#import <Hummer/HMDebug.h>
+#import "HMConfigEntryManager.h"
+#import "NSObject+HMDescription.h"
 
 static NSString *const HANDLE_SCOPE_ERROR = @"napi_open_handle_scope() error";
 
@@ -170,6 +174,18 @@ NAPIValue hummerCall(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
     // 最后一个参数无效
     [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
+    
+#ifdef HMDEBUG
+    NSString *objRefStr = objectRef ? [NSString stringWithFormat:@"%p", target] : nil;
+    NSMutableArray *argDesList = @[].mutableCopy;
+    int argStartIndex = objectRef ? 1:0;
+    for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argc) - argStartIndex; ++i) {
+        HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:argv[i + argStartIndex] executor:executor];
+        [argDesList addObject:jsValue];
+    }
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
+    [HMJSCallerInterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argDesList context:context];
+#endif
 
     return [executor hummerCallNativeWithArgumentCount:argc arguments:argv target:target selector:selector methodSignature:methodSignature];
 }
@@ -207,6 +223,11 @@ NAPIValue hummerCreate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
         return nil;
     }
+    
+#ifdef HMDEBUG
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
+    [HMJSCallerInterceptor callNativeWithClassName:className functionName:@"constructor" objectRef:nil args:nil context:context];
+#endif
 
     // 创建对象
     NSObject *opaquePointer = nil;
@@ -608,6 +629,19 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 //            }
 //        }
 //    }
+    
+#ifdef HMDEBUG
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self];
+    NSString *objRefStr = objectRef ? [NSString stringWithFormat:@"%p", target] : nil;
+    NSMutableArray *argDesList = @[].mutableCopy;
+    int argStartIndex = objectRef ? 1:0;
+    for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argumentCount) - argStartIndex; ++i) {
+        HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:self];
+        [argDesList addObject:jsValue];
+    }
+    [HMJSCallerInterceptor callNativeWithClassName:className functionName:isSetter ? [@"set" stringByAppendingString:propertyName.capitalizedString] : propertyName objectRef:objRefStr args:argDesList context:context];
+#endif
+    
 
     return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
 }
@@ -1293,6 +1327,16 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         free(valueRefArray);
     }
 
+#ifdef HMDEBUG
+    HMBaseValue *thisValue = [[HMJSStrongValue alloc] initWithValueRef:thisObjectRef executor:self];
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self];
+    NAPIValue namePropertyName = [self toValueRefWithString:@"name"];
+    NAPIValue functionNameValue = NULL;
+    napi_get_property(self.env, functionObjectRef, namePropertyName, &functionNameValue);
+    NSString *functionName = [self toStringWithValueRef:functionNameValue isForce:YES];
+    [HMJSCallerInterceptor callJSWithTarget:thisValue functionName:functionName args:argumentArray context:context];
+#endif
+    
     return returnValueRef;
 }
 

@@ -1,5 +1,6 @@
 interface LifeCycleMixins {
   onLoad: Array<any>,
+  onReady: Array<any>,
   onShow: Array<any>,
   onHide: Array<any>,
   onUnload: Array<any>,
@@ -7,12 +8,13 @@ interface LifeCycleMixins {
 }
 enum LifeCycleEnum {
   ONLOAD = 'onLoad',
+  ONREADY = 'onReady',
   ONSHOW = 'onShow',
   ONHIDE = 'onHide',
   ONUNLOAD = 'onUnload',
   ONBACK = 'onBack'
 }
-const LIFECYCLE = [LifeCycleEnum.ONLOAD, LifeCycleEnum.ONSHOW, LifeCycleEnum.ONHIDE, LifeCycleEnum.ONUNLOAD, LifeCycleEnum.ONBACK]
+const LIFECYCLE = [LifeCycleEnum.ONLOAD, LifeCycleEnum.ONREADY, LifeCycleEnum.ONSHOW, LifeCycleEnum.ONHIDE, LifeCycleEnum.ONUNLOAD, LifeCycleEnum.ONBACK]
 
 /**
  * 初始化页面生命周期
@@ -25,6 +27,7 @@ export const initPageLifeCycle = (container: any, instance: any, config: any) =>
   let { mixins, extends: extendOptions } = config
   let lifeCycleMixins: any = {
     onLoad: [],
+    onReady: [],
     onShow: [],
     onHide: [],
     onUnload: [],
@@ -32,6 +35,7 @@ export const initPageLifeCycle = (container: any, instance: any, config: any) =>
   }
   let globalLifeCycleMixins: any = {
     onLoad: [],
+    onReady: [],
     onShow: [],
     onHide: [],
     onUnload: [],
@@ -88,6 +92,7 @@ export const initPageLifeCycle = (container: any, instance: any, config: any) =>
 function applyPageMixin(mixins: any): (LifeCycleMixins | null) {
   let lifeCycleMixins: LifeCycleMixins = {
     onLoad: [],
+    onReady: [],
     onShow: [],
     onHide: [],
     onUnload: [],
@@ -97,8 +102,9 @@ function applyPageMixin(mixins: any): (LifeCycleMixins | null) {
     return lifeCycleMixins
   }
   mixins.forEach((mixin: any) => {
-    let { onLoad, onShow, onHide, onUnload, onBack } = mixin
+    let { onLoad, onReady, onShow, onHide, onUnload, onBack } = mixin
     onLoad && lifeCycleMixins.onLoad.push(onLoad)
+    onReady && lifeCycleMixins.onReady.push(onReady)
     onShow && lifeCycleMixins.onShow.push(onShow)
     onHide && lifeCycleMixins.onHide.push(onHide)
     onUnload && lifeCycleMixins.onUnload.push(onUnload)
