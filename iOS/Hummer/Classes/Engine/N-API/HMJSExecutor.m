@@ -459,7 +459,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
         return;
     }
     HMExportClass *exportClass = HMExportManager.sharedInstance.jsClasses[jsClassName];
-    HMExportBaseClass *exportBaseClass = nil;
+    id<HMExportMethodBase> exportBaseClass = nil;
     if (!objectRef) {
         // class
         if (exportClass.className.length == 0) {

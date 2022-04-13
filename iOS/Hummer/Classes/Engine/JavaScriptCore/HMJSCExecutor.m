@@ -21,7 +21,7 @@
 #import "NSObject+HMDescription.h"
 #import <Hummer/HMJSGlobal.h>
 #import <Hummer/HMDebug.h>
-
+#import <Hummer/HMNativeInvoker.h>
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const EXCEPTION_HANDLER_ERROR = @"异常处理函数发生错误";
@@ -123,6 +123,10 @@ JSValueRef _Nullable nativeLoggingHook(JSContextRef ctx, JSObjectRef function, J
     
     return NULL;
 }
+NSArray <HMBaseValue *> *convertNativeArgumentsWithJSValues(const JSValueRef _Nonnull arguments[]){
+    
+    return @[];
+}
 
 JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception) {
     HMAssertMainQueue();
@@ -162,9 +166,20 @@ JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObject
     
     // jscall回调
     HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
+    HMExportClass *exportClass = HMExportManager.sharedInstance.jsClasses[className];
 
     // 最后一个参数无效
     [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
+
+    
+    
+    HMNativeCallInfo _info;
+    _info.target = target;
+    _info.functionName = functionName;
+    _info.exportCls = exportClass;
+    _info.args = convertNativeArgumentsWithJSValues(arguments);
+    [HMNativeInvoker invoke:_info];
+    
     
 #ifdef HMDEBUG
     {
@@ -181,6 +196,8 @@ JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObject
 
     return [executor hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
 }
+
+
 
 JSValueRef _Nullable hummerCreate(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef _Nonnull arguments[], JSValueRef *exception) {
     HMAssertMainQueue();
@@ -453,7 +470,7 @@ void hummerFinalize(JSObjectRef object) {
         return;
     }
     HMExportClass *exportClass = HMExportManager.sharedInstance.jsClasses[jsClassName];
-    HMExportBaseClass *exportBaseClass = nil;
+    id<HMExportMethodBase> exportBaseClass = nil;
     if (!objectRef) {
         // class
         if (exportClass.className.length == 0) {

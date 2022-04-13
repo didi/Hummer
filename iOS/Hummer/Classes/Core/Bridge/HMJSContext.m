@@ -145,14 +145,14 @@ NS_ASSUME_NONNULL_END
     // 可以使用模型替代字典，转 JSON，做缓存
     [HMExportManager.sharedInstance.jsClasses enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportClass *_Nonnull obj, BOOL *_Nonnull stop) {
         NSMutableArray *methodPropertyArray = [NSMutableArray arrayWithCapacity:obj.classMethodPropertyList.count + obj.instanceMethodPropertyList.count];
-        [obj.classMethodPropertyList enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportBaseClass *_Nonnull obj, BOOL *_Nonnull stop) {
+        [obj.classMethodPropertyList enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, id<HMExportMethodBase> obj, BOOL *_Nonnull stop) {
             [methodPropertyArray addObject:@{
                 @"nameString": obj.jsFieldName,
                 @"isClass": @YES,
                 @"isMethod": @([obj isKindOfClass:HMExportMethod.class])
             }];
         }];
-        [obj.instanceMethodPropertyList enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, HMExportBaseClass *_Nonnull obj, BOOL *_Nonnull stop) {
+        [obj.instanceMethodPropertyList enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, id<HMExportMethodBase> obj, BOOL *_Nonnull stop) {
             [methodPropertyArray addObject:@{
                 @"nameString": obj.jsFieldName,
                 @"isClass": @NO,

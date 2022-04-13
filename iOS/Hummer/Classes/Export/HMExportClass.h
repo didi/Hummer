@@ -7,7 +7,9 @@
 
 #import <Foundation/Foundation.h>
 
-@class HMExportBaseClass, HMExportMethod, HMExportProperty;
+@protocol HMExportMethodBase;
+
+@class  HMExportMethod, HMExportProperty;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,9 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable, weak) HMExportClass *superClassReference;
 
-@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, HMExportBaseClass *> *classMethodPropertyList;
+@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, id<HMExportMethodBase>> *classMethodPropertyList;
 
-@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, HMExportBaseClass *> *instanceMethodPropertyList;
+@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, id<HMExportMethodBase>> *instanceMethodPropertyList;
 
 - (nullable HMExportProperty *)propertyWithName:(nullable NSString *)name isClass:(BOOL)isClass;
 
@@ -35,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
 *   按照继承链查找方法，类似 msgSend中lookupIMPOrNil.
 */
-- (nullable HMExportBaseClass *)methodOrPropertyWithName:(NSString *)name isClass:(BOOL)isClass;
+- (nullable id<HMExportMethodBase> )methodOrPropertyWithName:(NSString *)name isClass:(BOOL)isClass;
 
 @end
 

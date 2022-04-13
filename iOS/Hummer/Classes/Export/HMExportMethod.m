@@ -13,4 +13,20 @@
     return self.selector;
 }
 
+
+
+
+- (void)setUnparseToken:(NSString *)unparseToken {
+    
+    _unparseToken = unparseToken;
+}
+
+
+- (void)parse {
+    
+}
+
+@synthesize jsFieldName;
+@synthesize unparseToken = _unparseToken;
+@synthesize userToken;
 @end

@@ -18,9 +18,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, nullable, copy) NSDictionary<NSString *, HMExportBaseClass *> *classMethodPropertyList;
+@property (nonatomic, nullable, copy) NSDictionary<NSString *, id<HMExportMethodBase>> *classMethodPropertyList;
 
-@property (nonatomic, nullable, copy) NSDictionary<NSString *, HMExportBaseClass *> *instanceMethodPropertyList;
+@property (nonatomic, nullable, copy) NSDictionary<NSString *, id<HMExportMethodBase>> *instanceMethodPropertyList;
 
 - (void)loadMethodOrProperty:(Class)clazz withSelector:(SEL)selector isClassMethodProperty:(BOOL)isClassMethodProperty;
 

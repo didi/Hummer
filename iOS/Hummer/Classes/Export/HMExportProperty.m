@@ -13,4 +13,14 @@
     return self.propertyGetterSelector;
 }
 
+@synthesize jsFieldName;
+
+@synthesize unparseToken;
+
+@synthesize userToken;
+
+- (void)parse {
+
+}
+
 @end

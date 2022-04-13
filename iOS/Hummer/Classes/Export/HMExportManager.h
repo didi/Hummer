@@ -58,6 +58,86 @@ static const HMExportStruct __hm_export_class_##jsClass##__ = {#jsClass, #objcCl
     return exportProperty; \
 }
 
+
+
+#pragma mark <----------------------- 导出组件优化 -------------------------->
+
+#pragma mark <----- export method ----->
+
+/**
+ * HM_DEFINE_HOST_FUNCTION(-(NSNumber *)textToNumber:(NSString *)text){
+ *    ...convert  string to number
+ *    return number
+ * }
+ */
+/// @param functionName 完整的函数名称。除了'{}'之外的部分
+#define HM_DEFINE_HOST_FUNCTION(functionName)
+
+
+#define HM_DEFINE_REMAP_HOST_FUNCTION(jsFuncName, functionName)
+
+
+
+#pragma mark 导出同名无返回值实例方法
+/**
+ * HM_EXPORT_METHOD_OPT(getText:(NSString *)text){
+ *    ... code
+ * }
+ */
+/// @param funcName ，js 方法名称，对应 OC 省略声明返回值和参数部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值实例方法
+/// 运行时自动解析 “getText:(NSString *)text”， 识别 js 方法为 getText()
+#define HM_EXPORT_METHOD_OPT(funcName)
+
+
+
+#pragma mark 导出重命名无返回值实例方法
+/**
+ * HM_EXPORT_METHOD_OPT(getName, getText:(NSString *)text){
+ *    ... code
+ * }
+ */
+/// @param jsFuncName ，js 方法名称，对应 OC 省略声明返回值和参数部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值实例方法
+/// @param funcName ，OC 方法名称，省略声明返回值和参数部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值实例方法
+#define HM_EXPORT_REMAP_METHOD_OPT(jsFuncName, funcName)
+
+
+
+
+/// @param jsFuncName 省略声明返回值部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值类方法
+#define HM_EXPORT_CLASS_METHOD_OPT(jsFuncName)
+
+
+//__HM_DEFINE_HOST_FUNCTION(jsProp, type, __remap__, setMethodBody, getMethodBody)
+
+#pragma mark <----- export property ----->
+
+/**
+ * HM_DEFINE_CUSTOM_PROPERTY(style, NSDictionrary *, {
+ *     set ...code
+ * }, {
+ *     return ...code
+ * })
+ */
+/// @param jsProp 属性名。
+/// @param type 返回值/参数类型。
+/// @param setterBody&getterBody setter&getter 方法体：‘{}’ 中的内容。
+#define HM_DEFINE_CUSTOM_PROPERTY(jsProp, type, setterBody, getterBody) \
+__HM_DEFINE_CUSTOM_PROPERTY(-, jsProp, type, setterBody, getterBody)
+
+#define HM_DEFINE_CUSTOM_CLASS_PROPERTY(jsProp, type, setterBody, getterBody) \
+__HM_DEFINE_CUSTOM_PROPERTY(+, jsProp, type, setterBody, getterBody)
+
+#define __HM_DEFINE_CUSTOM_PROPERTY(flag, jsProp, type, setterBody, getterBody)\
+flag (void)set##jsProp##:(##type##)jsProp  setterBody \
+flag (##type##)##jsProp getterBody 
+//+ (HMExportProperty *)__hm_export_property__##jsProp##__ { \
+//    HMExportProperty *exportProperty = [[HMExportProperty alloc] init]; \
+//    exportProperty.jsFieldName = @#jsProp; \
+//    return exportProperty; \
+//}
+
+
+
 @class HMExportClass;
 
 @interface HMExportManager : NSObject

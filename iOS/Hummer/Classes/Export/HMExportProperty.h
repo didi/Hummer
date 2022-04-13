@@ -5,11 +5,12 @@
 //  Copyright © 2019年 didi. All rights reserved.
 //
 
-#import <Hummer/HMExportBaseClass.h>
+#import <Foundation/Foundation.h>
+#import <Hummer/HMExportMethodProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HMExportProperty : HMExportBaseClass
+@interface HMExportProperty : NSObject <HMExportMethodParsable>
 
 @property (nonatomic, assign, nullable) SEL propertyGetterSelector;
 

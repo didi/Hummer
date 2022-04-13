@@ -70,6 +70,12 @@ NS_ASSUME_NONNULL_END
 
 HM_EXPORT_CLASS(Hummer, HMJSGlobal)
 
+HM_DEFINE_CUSTOM_CLASS_PROPERTY(pageInfo, NSDictionary *, {
+    
+}, {
+    
+})
+
 HM_EXPORT_CLASS_PROPERTY(setTitle, setTitle, setSetTitle:)
 
 HM_EXPORT_CLASS_PROPERTY(env, env, setEnv:)
@@ -168,10 +174,10 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     return context.componentView;
 }
 
-+ (NSDictionary<NSString *, NSObject *> *)pageInfo {
-    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-    return context.pageInfo;
-}
+//+ (NSDictionary<NSString *, NSObject *> *)pageInfo {
+//    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+//    return context.pageInfo;
+//}
 
 + (void)setPageInfo:(HMBaseValue *)pageInfo {
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
