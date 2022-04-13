@@ -6,7 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Hummer/HMRequestComponent.h>
 
-@interface HMRequest : NSObject
+@interface HMRequest : NSObject<HMRequestComponent>
 
 @end

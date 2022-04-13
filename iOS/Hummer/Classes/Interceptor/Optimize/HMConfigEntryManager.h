@@ -18,6 +18,7 @@
 #import <Hummer/HMPluginManager.h>
 #import <Hummer/HMRouterProtocol.h>
 #import <Hummer/HMRequestComponent.h>
+#import <Hummer/HMNetworkProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,6 +36,7 @@ extern NSString * const HMDefaultNamespace;
 //替换默认 storage 实现
 @property (nonatomic, strong) id<HMStorage> storage;
 
+//替换默认 request 实现
 @property (nonatomic, strong) Class<HMRequestComponent> request;
 
 @property (nonatomic, strong) id<HMImageLoader> imageLoaderInterceptor;
@@ -46,6 +48,8 @@ extern NSString * const HMDefaultNamespace;
 @property (nonatomic, strong) id<HMLoggerProtocol> loggerInterceptor;
 
 @property (nonatomic, strong) id<HMReporterProtocol> reporterInterceptor;
+
+@property (nonatomic, strong) id<HMRequestInterceptor> requestInterceptor;
 
 @property (nonatomic, strong, readwrite) id<HMEventTrackProtocol> eventTrackInterceptor;
 
@@ -94,6 +98,12 @@ extern NSString * const HMDefaultNamespace;
 + (id<HMImageLoader>)canLoad:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource namespace:(NSString *)namespace;
 @end
 
+@class HMRequest;
+@interface HMRequestInterceptor : NSObject
+
++ (void)willSendRequest:(HMRequest *)request inContext:(HMJSContext *)context;
++ (void)HMRequest:(HMRequest *)request didReceiveResponse:(NSDictionary *)response inContext:(HMJSContext *)context;
+@end
 
 @interface HMJSLoaderInterceptor : NSObject
 

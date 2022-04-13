@@ -15,12 +15,11 @@
 #import <Hummer/HMBaseValue.h>
 #import <Hummer/HMURLUtility.h>
 #import <Hummer/HMLogger.h>
-#import <Hummer/HMRequestComponent.h>
 #import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMJSGlobal.h>
 
 
-@interface HMRequest()<HMRequestComponent>
+@interface HMRequest()
 
 @property (nonatomic, strong) HMBaseValue *oriParamValue;
 
@@ -111,7 +110,13 @@ typedef NSMutableDictionary HMPrimitiveResponse;
     [respone setValue:[resp allHeaderFields] forKey:@"header"];
     [respone setValue:HMJSONDecode(string) forKey:@"data"];
     
+    __weak typeof(self) wSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (wSelf) {
+            __strong typeof(wSelf) sSelf = wSelf;
+            HMJSContext *context = [[HMJSGlobal globalObject] currentContext:wSelf.hmContext];
+            [HMRequestInterceptor HMRequest:sSelf didReceiveResponse:respone inContext:context];
+        }
         if(callback) {
             callback(@[respone]);
         }
@@ -288,6 +293,10 @@ typedef NSMutableDictionary HMPrimitiveResponse;
 #pragma mark - Export Method
 
 - (void)send:(HMFuncCallback)callback {
+    
+    HMJSContext *context = [[HMJSGlobal globalObject] currentContext:self.hmContext];
+    [HMRequestInterceptor willSendRequest:self inContext:context];
+    
     if (self.request_impl) {
         [self.request_impl send:callback];
         return;

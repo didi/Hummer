@@ -24,4 +24,12 @@ DEPRECATED_MSG_ATTRIBUTE("HMResponseProtocol is deprecated.")
 
 @end
 
+
+@class HMRequest, HMJSContext;
+@protocol HMRequestInterceptor <NSObject>
+- (void)willsendRequest:(HMRequest *)request inContext:(HMJSContext *)context;
+
+- (void)HMRequest:(HMRequest *)request didReceiveResponse:(NSDictionary *)response inContext:(HMJSContext *)context;
+@end
+
 NS_ASSUME_NONNULL_END
