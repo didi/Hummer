@@ -284,11 +284,14 @@ NS_ASSUME_NONNULL_END
     
     HMBaseValue *returnValue = [self.context evaluateScript:javaScriptString withSourceURL:url];
     
+    BOOL isRenderSuccess = YES;
     // check did render
     if (!self.didCallRender) {
+        isRenderSuccess = NO;
         NSError *err = [NSError errorWithDomain:HMJSContextErrorDomain code:HMJSContextErrorNotCallRender userInfo:@{NSLocalizedDescriptionKey : @"Hummer.render() function is not called"}];
         [self.delegate context:self didRenderFailed:err];
     }else if(!self.componentView){
+        isRenderSuccess = NO;
         NSError *err = [NSError errorWithDomain:HMJSContextErrorDomain code:HMJSContextErrorRenderWithInvalidArg userInfo:@{NSLocalizedDescriptionKey : @"Call Hummer.render() with invalid arg"}];
         [self.delegate context:self didRenderFailed:err];
     }
@@ -299,6 +302,7 @@ NS_ASSUME_NONNULL_END
     HMDiffTime(&beforeTimespec, &afterTimespec, &resultTimespec);
     if (self.nameSpace) {
         [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackEvaluationWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)  pageUrl:self.hummerUrl ?: @""];
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPerformanceWithLabel:@"whiteScreenRate" localizableLabel:@"白屏率" numberValue:@(isRenderSuccess ? 0 : 100) unit:@"%" pageUrl:self.hummerUrl ?: @""];
     }
     
     return returnValue;
