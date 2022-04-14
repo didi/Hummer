@@ -158,7 +158,7 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
         __weak typeof(self) weakSelf = self;
         
         [self hm_setImageWithURL:self.imageSrc placeholder:placeholder failedImage:failedImage inJSBundleSource:nil processBlock:nil context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
-            typeof(weakSelf) strongSelf = weakSelf;
+            __strong typeof(weakSelf) strongSelf = weakSelf;
             if (error || !image) {
                 if (completionBlock) {
                     completionBlock(HMImageLoaderSrcTypeUnknown, NO);

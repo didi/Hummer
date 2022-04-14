@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Hummer/HMBaseExecutorProtocol.h>
+#import <Hummer/HMJSContextDefines.h>
 
 @class HMBaseValue, HMNotifyCenter, HMExceptionModel;
 
@@ -25,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol HMJSContextDelegate <NSObject>
 @optional
+
+- (void)context:(HMJSContext *)context didRenderFailed:(NSError *)error;
 - (void)context:(HMJSContext *)context didRenderPage:(HMBaseValue *)page;
 - (void)context:(HMJSContext *)context reloadBundle:(NSDictionary *)bundleInfo;
 

@@ -301,15 +301,14 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 #pragma mark - HMGlobalExport
 
 - (void)render:(HMBaseValue *)page {
-    if (!page) {
-        return;
-    }
+    id<HMBaseExecutorProtocol> executor = page.context;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:executor ? executor : HMCurrentExecutor];
+    context.didCallRender = YES;
     NSObject *viewObject = page.toNativeObject;
-    if (![viewObject isKindOfClass:UIView.class]) {
+    if (!viewObject || ![viewObject isKindOfClass:UIView.class]) {
         return;
     }
     UIView *view = (UIView *) viewObject;
-    HMJSContext *context = [HMJSGlobal.globalObject currentContext:page.context];
     [context didRenderPage:page nativeView:view];
 }
 

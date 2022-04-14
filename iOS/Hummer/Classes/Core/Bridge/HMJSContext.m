@@ -27,7 +27,7 @@
 #import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMWebSocket.h>
 #import <Hummer/HMDevService.h>
-
+#import "HMJSContext+PrivateVariables.h"
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, HMCLILogLevel) {
@@ -191,7 +191,7 @@ NS_ASSUME_NONNULL_END
             // errorMsg -> stack / type + message + stack
             [HMConfigEntryManager.manager.configMap[weakSelf.nameSpace].trackEventPlugin trackJavaScriptExceptionWithExceptionModel:exception pageUrl:weakSelf.hummerUrl ?: @""];
         }
-        typeof(weakSelf) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         [HMReporterInterceptor handleJSException:exceptionInfo namespace:strongSelf.nameSpace];
         [HMReporterInterceptor handleJSException:exceptionInfo context:strongSelf namespace:strongSelf.nameSpace];
         if (strongSelf.exceptionHandler) {
@@ -202,7 +202,7 @@ NS_ASSUME_NONNULL_END
     
     [_context addConsoleHandler:^(NSString * _Nullable logString, HMLogLevel logLevel) {
         
-        typeof(weakSelf) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         [HMLoggerInterceptor handleJSLog:logString level:logLevel namespace:strongSelf.nameSpace];
         if (strongSelf.consoleHandler) {
             strongSelf.consoleHandler(logString, logLevel);
@@ -260,7 +260,7 @@ NS_ASSUME_NONNULL_END
     self.devConnection = [[HMDevService sharedService] getLocalConnection:fileName];
     __weak typeof(self) weakSelf = self;
     self.devConnection.receiveHandler = ^(NSDictionary * _Nonnull msg) {
-        typeof(weakSelf) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (msg && [(NSString *)msg[@"type"] isEqualToString:@"ReloadBundle"]) {
             if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(context:reloadBundle:)]) {
                 [strongSelf.delegate context:strongSelf reloadBundle:msg[@"params"]];
@@ -283,6 +283,15 @@ NS_ASSUME_NONNULL_END
     }
     
     HMBaseValue *returnValue = [self.context evaluateScript:javaScriptString withSourceURL:url];
+    
+    // check did render
+    if (!self.didCallRender) {
+        NSError *err = [NSError errorWithDomain:HMJSContextErrorDomain code:HMJSContextErrorNotCallRender userInfo:@{NSLocalizedDescriptionKey : @"Hummer.render() function is not called"}];
+        [self.delegate context:self didRenderFailed:err];
+    }else if(!self.componentView){
+        NSError *err = [NSError errorWithDomain:HMJSContextErrorDomain code:HMJSContextErrorRenderWithInvalidArg userInfo:@{NSLocalizedDescriptionKey : @"Call Hummer.render() with invalid arg"}];
+        [self.delegate context:self didRenderFailed:err];
+    }
     
     struct timespec afterTimespec;
     HMClockGetTime(&afterTimespec);
