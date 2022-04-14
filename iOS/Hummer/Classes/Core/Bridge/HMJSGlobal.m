@@ -73,7 +73,7 @@ HM_EXPORT_CLASS(Hummer, HMJSGlobal)
 HM_DEFINE_CUSTOM_CLASS_PROPERTY(pageInfo, NSDictionary *, {
     
 }, {
-    
+    return @{};
 })
 
 HM_EXPORT_CLASS_PROPERTY(setTitle, setTitle, setSetTitle:)

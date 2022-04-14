@@ -128,13 +128,15 @@ __HM_DEFINE_CUSTOM_PROPERTY(-, jsProp, type, setterBody, getterBody)
 __HM_DEFINE_CUSTOM_PROPERTY(+, jsProp, type, setterBody, getterBody)
 
 #define __HM_DEFINE_CUSTOM_PROPERTY(flag, jsProp, type, setterBody, getterBody)\
-flag (void)set##jsProp##:(##type##)jsProp  setterBody \
-flag (##type##)##jsProp getterBody 
-//+ (HMExportProperty *)__hm_export_property__##jsProp##__ { \
-//    HMExportProperty *exportProperty = [[HMExportProperty alloc] init]; \
-//    exportProperty.jsFieldName = @#jsProp; \
-//    return exportProperty; \
-//}
+flag (void)set##jsProp:(type)jsProp  setterBody \
+flag (type)jsProp getterBody \
++ (HMExportProperty *)__hm_export_property__##jsProp##__ { \
+    HMExportProperty *exportProperty = [[HMExportProperty alloc] init]; \
+    exportProperty.jsFieldName = @#jsProp; \
+    exportProperty.unparseToken = @#type; \
+    [exportProperty setFlag:@#flag]; \
+    return exportProperty; \
+}
 
 
 
