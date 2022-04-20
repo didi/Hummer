@@ -36,8 +36,6 @@
 
 @synthesize unparseToken = _unparseToken;
 
-@synthesize userToken;
-
 @synthesize flag;
 
 @end

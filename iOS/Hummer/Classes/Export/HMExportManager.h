@@ -74,11 +74,18 @@ static const HMExportStruct __hm_export_class_##jsClass##__ = {#jsClass, #objcCl
 #define HM_DEFINE_HOST_FUNCTION(functionName)
 
 
-#define HM_DEFINE_REMAP_HOST_FUNCTION(jsFuncName, functionName)
+#define HM_DEFINE_REMAP_HOST_FUNCTION(jsFuncName, functionName)\
++ (HMExportMethod *)__hm_export_method_##jsMethod##__ { \
+    HMExportMethod *exportMethod = [[HMExportMethod alloc] init]; \
+    exportMethod.jsFieldName = @#jsFuncName; \
+    exportMethod.unparseToken = @#functionName; \
+    return exportMethod; \
+}\
+functionName
 
 
 
-#pragma mark 导出同名无返回值实例方法
+#pragma mark 导出同名无返回值方法
 /**
  * HM_EXPORT_METHOD_OPT(getText:(NSString *)text){
  *    ... code
@@ -86,28 +93,54 @@ static const HMExportStruct __hm_export_class_##jsClass##__ = {#jsClass, #objcCl
  */
 /// @param funcName ，js 方法名称，对应 OC 省略声明返回值和参数部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值实例方法
 /// 运行时自动解析 “getText:(NSString *)text”， 识别 js 方法为 getText()
-#define HM_EXPORT_METHOD_OPT(funcName)
+#define HM_EXPORT_METHOD_OPT(funcName)\
+__HM_DEFINE_HOST_FUNCTION_NORET(- ,  , funcName)
 
 
-
-#pragma mark 导出重命名无返回值实例方法
 /**
- * HM_EXPORT_METHOD_OPT(getName, getText:(NSString *)text){
+ * HM_EXPORT_CLASS_METHOD_OPT(getText:(NSString *)text){
  *    ... code
  * }
  */
-/// @param jsFuncName ，js 方法名称，对应 OC 省略声明返回值和参数部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值实例方法
+/// @param funcName ，js 方法名称，对应 OC 省略声明返回值和参数部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回类方法
+/// 运行时自动解析 “getText:(NSString *)text”， 识别 js 方法为 getText()
+#define HM_EXPORT_CLASS_METHOD_OPT(funcName) \
+__HM_DEFINE_HOST_FUNCTION_NORET(+,  , funcName)
+
+
+#pragma mark 导出重命名无返回值方法
+/**
+ * HM_EXPORT_REMAP_METHOD_OPT(getName, getText:(NSString *)text){
+ *    ... code
+ * }
+ */
+/// @param jsFunctionName ，js 方法名
 /// @param funcName ，OC 方法名称，省略声明返回值和参数部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值实例方法
-#define HM_EXPORT_REMAP_METHOD_OPT(jsFuncName, funcName)
+#define HM_EXPORT_REMAP_METHOD_OPT(jsFunctionName, funcName)\
+__HM_DEFINE_HOST_FUNCTION_NORET(-, jsFunctionName, funcName)
 
+/**
+ * HM_EXPORT_REMAP_CLASS_METHOD_OPT(getName, getText:(NSString *)text){
+ *    ... code
+ * }
+ */
+/// @param jsFunctionName ，js 方法名称
+/// @param funcName ，OC 方法名称，省略声明返回值和参数部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值类方法
+#define HM_EXPORT_REMAP_CLASS_METHOD_OPT(jsFunctionName, funcName)\
+__HM_DEFINE_HOST_FUNCTION_NORET(+, jsFunctionName, funcName)
 
+#define __HM_STRINGIFY(s) @#s
 
+#define __HM_DEFINE_HOST_FUNCTION_NORET(flag, jsFunctionName, funcName)\
++ (HMExportMethod *)__hm_export_method_##jsMethod##__ { \
+    HMExportMethod *exportMethod = [[HMExportMethod alloc] init]; \
+    exportMethod.jsFieldName = @#jsFunctionName; \
+    [exportMethod setFlag:@#flag]; \
+    exportMethod.unparseToken = __HM_STRINGIFY(flag) __HM_STRINGIFY((void)) __HM_STRINGIFY(funcName); \
+    return exportMethod; \
+}\
+flag(void)funcName
 
-/// @param jsFuncName 省略声明返回值部分。除了'{}' 和 '‘-/+‘()'之外的部分，只能导出无返回值类方法
-#define HM_EXPORT_CLASS_METHOD_OPT(jsFuncName)
-
-
-//__HM_DEFINE_HOST_FUNCTION(jsProp, type, __remap__, setMethodBody, getMethodBody)
 
 #pragma mark <----- export property ----->
 

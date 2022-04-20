@@ -71,10 +71,26 @@ NS_ASSUME_NONNULL_END
 HM_EXPORT_CLASS(Hummer, HMJSGlobal)
 
 HM_DEFINE_CUSTOM_CLASS_PROPERTY(pageInfo, NSDictionary *, {
-    
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    context.pageInfo = pageInfo;
 }, {
-    return @{};
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    return context.pageInfo;
 })
+
+HM_EXPORT_METHOD_OPT(render:(HMBaseValue *)page){
+    if (!page) {
+        return;
+    }
+    NSObject *viewObject = page.toNativeObject;
+    if (![viewObject isKindOfClass:UIView.class]) {
+        return;
+    }
+    UIView *view = (UIView *) viewObject;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:page.context];
+    [context didRenderPage:page nativeView:view];
+}
+
 
 HM_EXPORT_CLASS_PROPERTY(setTitle, setTitle, setSetTitle:)
 
@@ -305,19 +321,6 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
 }
 
 #pragma mark - HMGlobalExport
-
-- (void)render:(HMBaseValue *)page {
-    if (!page) {
-        return;
-    }
-    NSObject *viewObject = page.toNativeObject;
-    if (![viewObject isKindOfClass:UIView.class]) {
-        return;
-    }
-    UIView *view = (UIView *) viewObject;
-    HMJSContext *context = [HMJSGlobal.globalObject currentContext:page.context];
-    [context didRenderPage:page nativeView:view];
-}
 
 - (void)setBasicWidth:(HMBaseValue *)basicWidth {
     NSString *widthString = basicWidth.toString;

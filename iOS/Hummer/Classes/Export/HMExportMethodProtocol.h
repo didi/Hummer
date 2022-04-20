@@ -28,15 +28,17 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  当该协议被 HMExportMethod 实现时，unparseToken 值如下
  *  1. - (NSString *)function:(NSString *)param;    完整格式。
- *  2. function:(NSString *)param;                  作为实例无返回值方法解析
  *
- *  当该协议被 HMExportProperty 实现时，unparseToken 值为属性参数类型。
+ *  当该协议被 HMExportProperty 实现时，unparseToken 值为属性参数类型，如 NSString *
  */
 @property (nonatomic, nullable, copy) NSString *unparseToken;
 
 /// flag '-'或'+'
 @property (nonatomic, nullable, copy) NSString *flag;
-@property (nonatomic, nullable, copy) NSString *userToken;
+
+
+/// @return YES：参数具体化，NO：原始方案(只有selector，无参数类型)
+- (BOOL)optimizable;
 
 
 - (void)parse;

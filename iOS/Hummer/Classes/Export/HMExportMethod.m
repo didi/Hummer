@@ -7,28 +7,38 @@
 
 #import "HMExportMethod.h"
 
+@interface HMExportMethod ()
+
+@property (nonatomic, assign) BOOL parsed;
+
+@end
+
 @implementation HMExportMethod
 
 - (SEL)getTestSelector {
     return self.selector;
 }
 
-
-
-
 - (void)setUnparseToken:(NSString *)unparseToken {
-    
+    _parsed = NO;
     _unparseToken = unparseToken;
 }
 
 
 - (void)parse {
     
+    if (![self optimizable] || self.parsed) {return;}
+    
 }
+
+- (BOOL)optimizable {
+
+    return self.unparseToken && self.unparseToken.length > 0;
+}
+
 
 @synthesize jsFieldName;
 @synthesize unparseToken = _unparseToken;
-@synthesize userToken;
 @synthesize flag;
 
 @end
