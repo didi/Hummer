@@ -469,39 +469,6 @@ BOOL hm_doubleEqual(double numberOne, double numberTwo) {
     return fabs(numberOne - numberTwo) <= 0.0001;
 }
 
-HMResourceModel *hm_resolveResource(NSString *path) {
-    HMResourceModel *resourceModel = [[HMResourceModel alloc] init];
-    NSArray<NSString *> *pathComponent = path.pathComponents;
-    [pathComponent enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
-        if ([obj.pathExtension.lowercaseString isEqualToString:@"bundle"] || [obj.pathExtension.lowercaseString isEqualToString:@"framework"] || [obj.pathExtension.lowercaseString isEqualToString:@"app"]) {
-            NSString *bundlePath = [resourceModel.filePath ?: @"" stringByAppendingPathComponent:obj];
-            if (!resourceModel.resourceBundle && [obj.pathExtension.lowercaseString isEqualToString:@"app"] && [bundlePath hasPrefix:@"/"] && [bundlePath isEqualToString:NSBundle.mainBundle.bundlePath]) {
-                // 目前没有 resourceBundle 并且路径为根目录和路径扩展名为 app 则需要判断是否为 mainBundle
-                // 如果是 mainBundle 则需要忽略并消费掉路径
-                resourceModel.filePath = nil;
-            } else {
-                // 如果为 / 则 url 为 nil，苹果 API 不做处理
-                NSURL *url = [resourceModel.resourceBundle ?: NSBundle.mainBundle URLForResource:bundlePath withExtension:nil];
-                if (url) {
-                    NSBundle *newBundle = [NSBundle bundleWithURL:url];
-                    if (newBundle) {
-                        // 消费路径，生产 bundle
-                        resourceModel.resourceBundle = newBundle;
-                        resourceModel.filePath = nil;
-                    }
-                }
-            }
-        } else {
-            // 添加路径
-            resourceModel.filePath = [resourceModel.filePath ?: @"" stringByAppendingPathComponent:obj];
-        }
-    }];
-
-    return resourceModel;
-}
-
-
-
 
 
 void hm_safe_main_thread(dispatch_block_t block) {

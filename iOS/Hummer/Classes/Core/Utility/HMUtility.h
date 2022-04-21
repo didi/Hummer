@@ -94,8 +94,6 @@ void hm_method_swizzling(Class _Nullable clazz, SEL originalSelector, SEL swizzl
 
 BOOL hm_doubleEqual(double numberOne, double numberTwo);
 
-HMResourceModel *hm_resolveResource(NSString *path);
-
 NSString *hm_availableFontName(NSString *names);
 
 typedef NS_OPTIONS(int, HMBlockFlags) {
