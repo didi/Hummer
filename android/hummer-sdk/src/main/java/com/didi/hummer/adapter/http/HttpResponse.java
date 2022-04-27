@@ -17,6 +17,14 @@ public class HttpResponse<T> implements Serializable {
             this.code = code;
             this.msg = msg;
         }
+
+        @Override
+        public String toString() {
+            return "Error{" +
+                    "code=" + code +
+                    ", msg='" + msg + '\'' +
+                    '}';
+        }
     }
 
     public int status;

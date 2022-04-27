@@ -18,6 +18,7 @@ import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
 import com.didi.hummer.devtools.manager.HummerLogManager;
+import com.didi.hummer.devtools.manager.HummerNetManager;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerLayout;
 import com.facebook.yoga.YogaEdge;
@@ -37,6 +38,7 @@ public class DevToolsEntrance {
     private HMBase mConsoleView;
     private HummerLogManager mLogManager;
     private HummerDevTools.IParameterInjector mParameterInjector;
+    private HummerNetManager mNetManager;
     private boolean mIsShown;
 
     public DevToolsEntrance(@NonNull HummerContext context) {
@@ -91,6 +93,10 @@ public class DevToolsEntrance {
 
     public void setLogManager(HummerLogManager manager) {
         this.mLogManager = manager;
+    }
+
+    public void setNetManager(HummerNetManager manager) {
+        this.mNetManager = manager;
     }
 
     @SuppressLint("SwitchIntDef")
@@ -148,6 +154,8 @@ public class DevToolsEntrance {
         view.bindHummerContext(mHummerContext);
         view.bindParameterInjector(mParameterInjector);
         view.bindLog(mLogManager);
+        view.bindNet(mNetManager);
+
         ViewCompat.setElevation(view, 9999);
 
         mConsoleView = new HMBase<ConsoleView>(mHummerContext, null, null) {
