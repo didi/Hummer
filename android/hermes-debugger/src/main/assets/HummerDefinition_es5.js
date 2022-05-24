@@ -100,9 +100,11 @@ var printLog = (funcName, ...msgs) => {
       let m = msgs[0];
 
       if (typeof m === 'undefined') {
-          msg = 'undefined';
+        msg = 'undefined';
       } else if (m == null) {
-          msg = 'null';
+        msg = 'null';
+      } else if (m instanceof Error) {
+        msg = m.toString() + '\n' + m.stack;
       } else if (m instanceof Function) {
         msg = m.toString();
       } else if (m instanceof Object) {
@@ -119,9 +121,11 @@ var printLog = (funcName, ...msgs) => {
         let m = msgs[i];
 
         if (typeof m === 'undefined') {
-            msg = msg.concat('undefined');
+          msg = msg.concat('undefined');
         } else if (m == null) {
-            msg = msg.concat('null');
+          msg = msg.concat('null');
+        } else if (m instanceof Error) {
+          msg = msg.concat(m.toString() + '\n' + m.stack);
         } else if (m instanceof Function) {
           msg = msg.concat(m.toString());
         } else if (m instanceof Object) {
