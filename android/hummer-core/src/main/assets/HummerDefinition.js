@@ -65,6 +65,8 @@ const printLog = (funcName, ...msgs) => {
                 msg = 'undefined';
             } else if (m == null) {
                 msg = 'null';
+            } else if (m instanceof Error) {
+                msg = m.toString() + '\n' + m.stack;
             } else if (m instanceof Function) {
                 msg = m.toString();
             } else if (m instanceof Object) {
@@ -82,6 +84,8 @@ const printLog = (funcName, ...msgs) => {
                     msg = msg.concat('undefined');
                 } else if (m == null) {
                     msg = msg.concat('null');
+                } else if (m instanceof Error) {
+                    msg = msg.concat(m.toString() + '\n' + m.stack);
                 } else if (m instanceof Function) {
                     msg = msg.concat(m.toString());
                 } else if (m instanceof Object) {
