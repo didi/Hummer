@@ -18,17 +18,6 @@ public class NAPICallback extends NAPIValue implements JSCallback {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof JSCallback)) {
-            return false;
-        }
-
-        JSCallback jsCallback = (JSCallback) obj;
-        return jsCallback.getJSContext().getIdentify() == this.getJSContext().getIdentify()
-                && jsCallback.getIdentify() == this.getIdentify();
-    }
-
-    @Override
     public Object call(Object... params) {
         if (!isValid()) {
             return null;
