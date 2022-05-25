@@ -234,6 +234,24 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_isJSValueValid(JNIEnv *env, j
 }
 
 extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_didi_hummer_core_engine_napi_jni_JSEngine_isJSValueEqual(JNIEnv *env, jclass clazz, jlong js_context, jlong js_value_l, jlong js_value_r) {
+    auto globalEnv = JSUtils::toJsContext(js_context);
+    if (globalEnv == nullptr) {
+        return false;
+    }
+    auto valueLeft = JSUtils::toJsValue(globalEnv, js_value_l);
+    auto valueRight = JSUtils::toJsValue(globalEnv, js_value_r);
+
+    bool ret;
+    auto status = napi_strict_equals(globalEnv, valueLeft, valueRight, &ret);
+    if (status != NAPIExceptionOK) {
+        return false;
+    }
+    return ret;
+}
+
+extern "C"
 JNIEXPORT void JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_protect(JNIEnv *env, jclass clazz, jlong js_context, jlong js_value) {
     auto globalEnv = JSUtils::toJsContext(js_context);
