@@ -492,11 +492,26 @@ public class HummerContext extends ContextWrapper {
     }
 
     private void initEnv(Map<String, Object> envs) {
-        mJsContext.evaluateJavaScript(String.format("Hummer.env = %s", HMGsonUtil.toJson(envs)));
+        mJsContext.evaluateJavaScript("Hummer.env = {}");
+        JSValue hv = mJsContext.getJSValue("Hummer");
+        if (hv != null) {
+            JSValue ev = hv.getJSValue("env");
+            if (ev != null) {
+                for (String k : envs.keySet()) {
+                    ev.set(k, envs.get(k));
+                }
+            }
+        }
     }
 
     public void updateEnv(String key, String value) {
-        mJsContext.evaluateJavaScript(String.format("Hummer.env.%s = %s", key, value));
+        JSValue hv = mJsContext.getJSValue("Hummer");
+        if (hv != null) {
+            JSValue ev = hv.getJSValue("env");
+            if (ev != null) {
+                ev.set(key, value);
+            }
+        }
     }
 
     private void initEnvironmentVariables() {
