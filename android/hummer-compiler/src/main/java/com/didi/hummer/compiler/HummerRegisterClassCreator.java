@@ -4,15 +4,20 @@ import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.annotation.JsProperty;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -36,6 +41,9 @@ public class HummerRegisterClassCreator {
     private String moduleName;
     private StringBuilder jsCode = new StringBuilder();
     private List<ClassName> invokerClassMap = new ArrayList<>();
+
+    private ClassName superInterface = ClassName.get("com.didi.hummer.meta", "ComponentInvokerIndex");
+    private ClassName jsCodeClassName = ClassName.get("com.didi.hummer.meta", "ComponentJsCodeInfo");
 
     public HummerRegisterClassCreator(ProcessingEnvironment processingEnv) {
         elementUtils = processingEnv.getElementUtils();
@@ -192,6 +200,15 @@ public class HummerRegisterClassCreator {
                 .addField(generateJsCodeField())
                 // 添加类的方法
                 .addMethod(generateInitMethod())
+
+                .addSuperinterface(superInterface)
+                .addField(generateInvokerField())
+                .addField(generateCodeField())
+                .addMethod(generateConstructor())
+                .addMethod(generateSetInvokerMethod())
+                .addMethod(generateSetCodeMethod())
+                .addMethod(generateGetInvokerMethod())
+                .addMethod(generateGetCodeMethod())
                 // 构建Java类
                 .build();
     }
@@ -247,5 +264,53 @@ public class HummerRegisterClassCreator {
             parent = TypeUtil.getSuperClass(parent);
         }
         return allMembers;
+    }
+
+    private FieldSpec generateInvokerField() {
+        FieldSpec.Builder field = FieldSpec.builder(Set.class, "INVOKER_INDEX", Modifier.PRIVATE);
+        return field.build();
+    }
+    private FieldSpec generateCodeField() {
+        FieldSpec.Builder field = FieldSpec.builder(jsCodeClassName, "CODE_INDEX", Modifier.PRIVATE);
+        return field.build();
+    }
+    private MethodSpec generateConstructor() {
+        MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
+                .addStatement("INVOKER_INDEX = new $T()", HashSet.class)
+                .addStatement("CODE_INDEX = new $T()", jsCodeClassName)
+                .addStatement("setInvokers()")
+                .addStatement("setCodes()");
+        return constructor.build();
+    }
+    private MethodSpec generateSetInvokerMethod() {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("setInvokers")
+                .addModifiers(Modifier.PRIVATE);
+        for (ClassName className : invokerClassMap) {
+            method.addStatement("INVOKER_INDEX.add(new $T())", className);
+        }
+        return method.build();
+    }
+    private MethodSpec generateSetCodeMethod() {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("setCodes")
+                .addModifiers(Modifier.PRIVATE);
+        method.addStatement("CODE_INDEX.set(JS_CODE, $S)", moduleName + ".js");
+        return method.build();
+    }
+    private MethodSpec generateGetInvokerMethod() {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("getInvokerSet")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
+                .addStatement("return INVOKER_INDEX")
+                .returns(Set.class);
+        return method.build();
+    }
+    private MethodSpec generateGetCodeMethod() {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("getJsCodeInfo")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
+                .addStatement("return CODE_INDEX")
+                .returns(jsCodeClassName);
+        return method.build();
     }
 }

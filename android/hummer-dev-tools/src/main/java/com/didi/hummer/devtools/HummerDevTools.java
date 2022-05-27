@@ -7,7 +7,9 @@ import android.view.View;
 
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.devtools.invoker.HummerInvokerWrapper;
+import com.didi.hummer.devtools.invoker.RequestInvokerWrapper;
 import com.didi.hummer.devtools.manager.HummerLogManager;
+import com.didi.hummer.devtools.manager.HummerNetManager;
 import com.didi.hummer.devtools.widget.DevToolsEntrance;
 import com.didi.hummer.devtools.widget.FloatLayout;
 import com.didi.hummer.devtools.ws.WebSocketManager;
@@ -40,6 +42,7 @@ public class HummerDevTools {
     private DevToolsEntrance entrance;
     private WebSocketManager wsManager;
     private HummerLogManager logManager;
+    private HummerNetManager netManager;
 
     @Deprecated
     public static void init(HummerContext context) {}
@@ -57,6 +60,9 @@ public class HummerDevTools {
         logManager = new HummerLogManager(wsManager);
         hmContext.registerInvoker(new HummerInvokerWrapper(logManager));
         entrance.setLogManager(logManager);
+        netManager = new HummerNetManager();
+        hmContext.registerInvoker(new RequestInvokerWrapper(netManager));
+        entrance.setNetManager(netManager);
 
         if (config != null && config.getInjector() != null) {
             entrance.setParameterInjector(config.getInjector());

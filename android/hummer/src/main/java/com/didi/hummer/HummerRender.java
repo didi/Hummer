@@ -192,7 +192,6 @@ public class HummerRender {
             // 热更新
             if (devTools != null) {
                 devTools.initConnection(hmContext, url, () -> {
-                    hmContext.onRefresh();
                     requestJsBundle(url, true);
                 });
             }
@@ -226,6 +225,12 @@ public class HummerRender {
             }
 
             perfInfo.jsFetchTimeCost = (System.currentTimeMillis() - startTime);
+
+            // 如果是刷新流程，那么在执行JS之前，需要先模拟走一遍生命周期，来做相关的清理工作
+            if (DebugUtil.isDebuggable() && isRefresh) {
+                hmContext.onRefresh();
+            }
+
             render(response.data, url);
 
             if (DebugUtil.isDebuggable() && isRefresh) {

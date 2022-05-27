@@ -269,6 +269,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     _lineSpacingMulti = lineSpacingMulti;
     
     self.paragraphStyle.lineHeightMultiple = lineSpacingMulti;
+    
     if (self.builder) {
         [self.builder updateParagraphStyle:self.paragraphStyle];
         return;
@@ -280,10 +281,6 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
                                                                  attributes:attributes];
 }
 
-- (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode {
-    [super setLineBreakMode:lineBreakMode];
-    self.paragraphStyle.lineBreakMode = lineBreakMode;
-}
 - (void)setFontFamily:(NSString *)fontFamily {
     NSString *filteredName = hm_availableFontName(fontFamily);
     _fontFamily = [filteredName copy];

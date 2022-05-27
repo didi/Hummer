@@ -91,6 +91,7 @@ public class JSEngine {
     public static native Object callFunction(long jsContext, long thisObj, long funcObj, Object... params);
     public static native boolean isJSContextValid(long jsContext);
     public static native boolean isJSValueValid(long jsContext, long jsValue);
+    public static native boolean isJSValueEqual(long jsContext, long jsValueLeft, long jsValueRight);
     public static native void protect(long jsContext, long jsValue);
     public static native void unprotect(long jsContext, long jsValue);
 }

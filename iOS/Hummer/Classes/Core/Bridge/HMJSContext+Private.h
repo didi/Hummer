@@ -7,6 +7,7 @@
 
 #import "HMJSContext.h"
 #import "HMBaseValue.h"
+#import "HMJSContext+PrivateVariables.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HMJSContext (Private)

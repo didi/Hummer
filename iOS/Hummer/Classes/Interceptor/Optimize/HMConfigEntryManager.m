@@ -11,6 +11,7 @@
 #import <Hummer/HMMemCache.h>
 #import "NSObject+HMDescription.h"
 #import <Hummer/HMJSContext.h>
+#import <Hummer/HMRequest.h>
 
 #if __has_include(<Hummer/HMDevTools.h>)
 #import <Hummer/HMJSContext+HMDevTools.h>
@@ -495,5 +496,33 @@ static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor
     }
     return nil;
 }
+@end
+
+@implementation HMRequestInterceptor
+
++ (void)willSendRequest:(HMRequest *)request inContext:(HMJSContext *)context {
+    
+    id<HMRequestInterceptor> interceptor = [HMCEMInstance.configMap objectForKey:context.nameSpace].requestInterceptor;
+    [interceptor willsendRequest:request inContext:context];
+    
+    // devtool
+#if __has_include(<Hummer/HMDevTools.h>)
+
+    
+#endif
+
+}
++ (void)HMRequest:(HMRequest *)request didReceiveResponse:(NSDictionary *)response inContext:(HMJSContext *)context {
+    
+    id<HMRequestInterceptor> interceptor = [HMCEMInstance.configMap objectForKey:context.nameSpace].requestInterceptor;
+    [interceptor HMRequest:request didReceiveResponse:response inContext:context];
+    
+    // devtool
+#if __has_include(<Hummer/HMDevTools.h>)
+
+    
+#endif
+}
+
 
 @end

@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -26,7 +27,9 @@ import com.didi.hummer.debug.PerformanceTracker;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
 import com.didi.hummer.devtools.bean.LogBean;
+import com.didi.hummer.devtools.bean.NetBean;
 import com.didi.hummer.devtools.manager.HummerLogManager;
+import com.didi.hummer.devtools.manager.HummerNetManager;
 import com.didi.hummer.devtools.utils.CallStackFormat;
 import com.didi.hummer.devtools.utils.ComponentTreeFormat;
 import com.didi.hummer.devtools.utils.JSONFormat;
@@ -57,9 +60,12 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     private View tabCompTree;
     private View tabCallStack;
     private View tabPerformance;
+    private View tabNet;
     private HummerContext hummerContext;
     private HummerDevTools.IParameterInjector mInjector;
     private int curTabIndex;
+
+    private List<NetBean> mNets = new ArrayList<>();
 
     public ConsoleView(@NonNull Context context) {
         super(context);
@@ -86,6 +92,9 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
                 break;
             case 4:
                 updatePerformance();
+                break;
+            case 5:
+                updateNet();
                 break;
             default:
                 break;
@@ -134,6 +143,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
             tabCompTree.setSelected(false);
             tabCallStack.setSelected(false);
             tabPerformance.setSelected(false);
+            tabNet.setSelected(false);
         });
 
         tabParams = findViewById(R.id.tab_params);
@@ -146,6 +156,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
             tabCompTree.setSelected(false);
             tabCallStack.setSelected(false);
             tabPerformance.setSelected(false);
+            tabNet.setSelected(false);
             updateParameters();
         });
 
@@ -159,6 +170,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
             tabCompTree.setSelected(true);
             tabCallStack.setSelected(false);
             tabPerformance.setSelected(false);
+            tabNet.setSelected(false);
             updateCompTree();
         });
 
@@ -172,6 +184,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
             tabCompTree.setSelected(false);
             tabCallStack.setSelected(true);
             tabPerformance.setSelected(false);
+            tabNet.setSelected(false);
             updateCallStack();
         });
 
@@ -185,7 +198,22 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
             tabCompTree.setSelected(false);
             tabCallStack.setSelected(false);
             tabPerformance.setSelected(true);
+            tabNet.setSelected(false);
             updatePerformance();
+        });
+
+        tabNet = findViewById(R.id.tab_net);
+        tabNet.setOnClickListener(v -> {
+            curTabIndex = 5;
+            layoutInfo.setVisibility(VISIBLE);
+            layoutConsole.setVisibility(GONE);
+            tabConsole.setSelected(false);
+            tabParams.setSelected(false);
+            tabCompTree.setSelected(false);
+            tabCallStack.setSelected(false);
+            tabPerformance.setSelected(false);
+            tabNet.setSelected(true);
+            updateNet();
         });
     }
 
@@ -332,5 +360,49 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
             }
             tvConsole.setText(bean.getMsg());
         }
+    }
+
+    public void bindNet(HummerNetManager netManager) {
+        mNets = netManager.getNets();
+        updateNet();
+    }
+
+    private void updateNet() {
+        StringBuilder builder = new StringBuilder();
+        if (mNets != null) {
+            int size = mNets.size();
+            NetBean net;
+            for (int i = 0; i < size; i++) {
+                net = mNets.get(i);
+                int index = (i + 1);
+                builder.append("┌──────────────");
+                builder.append(index);
+                builder.append("─────────────\n");
+                builder.append("\tUrl:\n");
+                builder.append("\t");
+                builder.append(net.getUrl());
+                builder.append("\n\n");
+                builder.append("\tData: \n");
+                builder.append("\t");
+                if (net.getData() == null) {
+                    builder.append("null");
+                } else {
+                    builder.append(JSONFormat.format(net.getData().toString()));
+                }
+                builder.append("\n\n");
+                builder.append("\tError: \n");
+                builder.append("\t");
+                if (net.getError() == null) {
+                    builder.append("null");
+                } else {
+                    builder.append(net.getError().toString());
+                }
+
+                builder.append("\n└──────────────");
+                builder.append(index);
+                builder.append("─────────────\n\n");
+            }
+        }
+        tvInfo.setText(builder.toString());
     }
 }

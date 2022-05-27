@@ -7,6 +7,8 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
+import com.didi.hummer.core.util.HMLog;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +77,7 @@ public class FontManager {
         if (fontsAssetsPath == null) {
             // 保留默认字体assets路径
             fontsAssetsPath = FONTS_ASSET_PATH;
-        } else if (!TextUtils.isEmpty(fontsAssetsPath)) {
+        } else if (!TextUtils.isEmpty(fontsAssetsPath) && !fontsAssetsPath.endsWith("/")) {
             // 如果设置了路径，则自动加上"/"，如果是空字符就不加了，空字符代表是在assets根目录下
             fontsAssetsPath += "/";
         }
@@ -85,7 +87,7 @@ public class FontManager {
             try {
                 return Typeface.createFromAsset(assetManager, fileName);
             } catch (Exception e) {
-                e.printStackTrace();
+                HMLog.w("HummerNative", e.getMessage());
             }
         }
 //        return Typeface.create(fontFamilyName, style);

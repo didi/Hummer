@@ -37,6 +37,6 @@ public class FileUtil {
     }
 
     public static String readFile(File file) {
-        return readFile(file.getAbsoluteFile());
+        return readFile(file.getAbsolutePath());
     }
 }

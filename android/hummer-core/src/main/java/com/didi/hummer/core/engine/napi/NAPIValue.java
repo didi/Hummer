@@ -234,6 +234,16 @@ public class NAPIValue implements JSValue {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof JSValue)) {
+            return false;
+        }
+
+        JSValue jsValue = (JSValue) obj;
+        return JSEngine.isJSValueEqual(jsValue.getJSContext().getIdentify(), jsValue.getIdentify(), this.getIdentify());
+    }
+
+    @Override
     public String toString() {
         return "NAPIValue{" +
                 "context=" + context +

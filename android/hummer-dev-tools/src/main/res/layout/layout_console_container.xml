@@ -82,7 +82,7 @@
             android:gravity="center"
             android:text="Log"
             android:textColor="@color/hummer_debug_tab_selector"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <View
             android:layout_width="0.5dp"
@@ -99,7 +99,7 @@
             android:gravity="center"
             android:text="页面参数"
             android:textColor="@color/hummer_debug_tab_selector"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <View
             android:layout_width="0.5dp"
@@ -116,7 +116,7 @@
             android:gravity="center"
             android:text="视图树"
             android:textColor="@color/hummer_debug_tab_selector"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <View
             android:layout_width="0.5dp"
@@ -133,7 +133,7 @@
             android:gravity="center"
             android:text="调用栈"
             android:textColor="@color/hummer_debug_tab_selector"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <View
             android:layout_width="0.5dp"
@@ -149,6 +149,23 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="性能"
+            android:textColor="@color/hummer_debug_tab_selector"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="#cccccc" />
+
+        <TextView
+            android:id="@+id/tab_net"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="网络"
             android:textColor="@color/hummer_debug_tab_selector"
             android:textSize="14sp" />
 
