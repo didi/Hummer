@@ -5,9 +5,11 @@ export const requestintercept = (ws: any):void => {
     const { Request, __requestInterceptFlag__ } = __GLOBAL__
     __GLOBAL__.__requestInterceptFlag__ = true
     !__requestInterceptFlag__ && (__GLOBAL__.__requestOriginSend__ = Request.prototype.send)
+    const interceptTime = __GLOBAL__.__devReloadTimestamp__
     Request.prototype.send = function () {
+        const canSendMessage = interceptTime === __GLOBAL__.__devReloadTimestamp__
         const requestId = guid()
-        sendMessage(ws, {
+        canSendMessage && sendMessage(ws, {
             type: 'netWork',
             method: 'updateNetWorkList',
             params: {
@@ -22,7 +24,7 @@ export const requestintercept = (ws: any):void => {
         })
         const callback = arguments[0]
         const mergeCallback = (res: any) => {
-            sendMessage(ws, {
+            canSendMessage && sendMessage(ws, {
                 type: 'netWork',
                 method: 'updateNetWorkList',
                 params: {
