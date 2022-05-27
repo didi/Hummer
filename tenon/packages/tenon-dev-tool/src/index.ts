@@ -11,7 +11,7 @@ let isWebPlatform = __GLOBAL__.Hummer.pageInfo && JSON.stringify(__GLOBAL__.Humm
 
 export function run(container: any, type: string = 'tenon-vue') {
   // 重置刷新时间
-  __GLOBAL__.__devReloadTimestamp__ = __GLOBAL__.__devReloadTimestamp__ || +new Date()
+  __GLOBAL__.__devReloadTimestamp__ = +new Date()
   let formatedNode = formatNode(container, type)
   log('Socket Initializing')
   const { url } = __GLOBAL__.Hummer.pageInfo || {}
