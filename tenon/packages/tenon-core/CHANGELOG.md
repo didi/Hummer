@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.5](https://github.com/didi/Hummer/compare/@hummer/tenon-core@0.3.4...@hummer/tenon-core@0.3.5) (2022-05-27)
+
+**Note:** Version bump only for package @hummer/tenon-core
+
+
+
+
+
 ## [0.3.4](https://github.com/didi/Hummer/compare/@hummer/tenon-core@0.3.3...@hummer/tenon-core@0.3.4) (2022-03-22)
 
 **Note:** Version bump only for package @hummer/tenon-core
