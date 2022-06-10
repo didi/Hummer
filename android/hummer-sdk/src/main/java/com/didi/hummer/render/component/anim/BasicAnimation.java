@@ -120,7 +120,7 @@ public class BasicAnimation {
      *
      * @return
      */
-    private int toRawRepeatCount(int repeatCount) {
+    protected int toRawRepeatCount(int repeatCount) {
         int rawRepeatCount = 0;
         if (repeatCount < 0) {
             rawRepeatCount = ValueAnimator.INFINITE;
@@ -135,7 +135,7 @@ public class BasicAnimation {
      *
      * @return
      */
-    private int toRawRepeatMode(String repeatMode) {
+    protected int toRawRepeatMode(String repeatMode) {
         int rawRepeatMode = ValueAnimator.RESTART;
         if (!TextUtils.isEmpty(repeatMode)) {
             repeatMode = repeatMode.toLowerCase();
