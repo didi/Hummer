@@ -90,7 +90,8 @@ public class KeyframeAnimation extends BasicAnimation {
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(view, frameXHolder, frameYHolder);
         animator = anim;
         anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
-        anim.setRepeatCount(repeatCount);
+        anim.setRepeatCount(toRawRepeatCount(repeatCount));
+        anim.setRepeatMode(toRawRepeatMode(repeatMode));
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
@@ -132,7 +133,8 @@ public class KeyframeAnimation extends BasicAnimation {
 
         animator = anim;
         anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
-        anim.setRepeatCount(repeatCount);
+        anim.setRepeatCount(toRawRepeatCount(repeatCount));
+        anim.setRepeatMode(toRawRepeatMode(repeatMode));
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
@@ -169,7 +171,8 @@ public class KeyframeAnimation extends BasicAnimation {
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(view, frameHolder);
         animator = anim;
         anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
-        anim.setRepeatCount(repeatCount);
+        anim.setRepeatCount(toRawRepeatCount(repeatCount));
+        anim.setRepeatMode(toRawRepeatMode(repeatMode));
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
@@ -193,7 +196,8 @@ public class KeyframeAnimation extends BasicAnimation {
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(view, frameHolder);
         animator = anim;
         anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
-        anim.setRepeatCount(repeatCount);
+        anim.setRepeatCount(toRawRepeatCount(repeatCount));
+        anim.setRepeatMode(toRawRepeatMode(repeatMode));
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
@@ -217,7 +221,8 @@ public class KeyframeAnimation extends BasicAnimation {
         animator = anim;
         anim.setEvaluator(new ArgbEvaluator());
         anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
-        anim.setRepeatCount(repeatCount);
+        anim.setRepeatCount(toRawRepeatCount(repeatCount));
+        anim.setRepeatMode(toRawRepeatMode(repeatMode));
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
@@ -240,7 +245,8 @@ public class KeyframeAnimation extends BasicAnimation {
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new AnimViewWrapper(base), frameHolder);
         animator = anim;
         anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
-        anim.setRepeatCount(repeatCount);
+        anim.setRepeatCount(toRawRepeatCount(repeatCount));
+        anim.setRepeatMode(toRawRepeatMode(repeatMode));
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
@@ -263,7 +269,8 @@ public class KeyframeAnimation extends BasicAnimation {
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new AnimViewWrapper(base), frameHolder);
         animator = anim;
         anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
-        anim.setRepeatCount(repeatCount);
+        anim.setRepeatCount(toRawRepeatCount(repeatCount));
+        anim.setRepeatMode(toRawRepeatMode(repeatMode));
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
@@ -291,7 +298,8 @@ public class KeyframeAnimation extends BasicAnimation {
         ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new AnimViewWrapper(base), holderX, holderY);
         animator = anim;
         anim.setDuration(HummerAnimationUtils.getAnimDuration(duration));
-        anim.setRepeatCount(repeatCount);
+        anim.setRepeatCount(toRawRepeatCount(repeatCount));
+        anim.setRepeatMode(toRawRepeatMode(repeatMode));
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
