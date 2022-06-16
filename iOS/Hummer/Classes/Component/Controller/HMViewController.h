@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_END
  - (void)renderWithScript:(NSString *)script;
 
  ///  通过context设置自定义bridge
- @property (nonatomic, weak, readonly) HMJSContext *context;
+ @property (nonatomic, strong, readonly) HMJSContext *context;
 
  #pragma mark - Call Hummer
 

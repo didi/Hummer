@@ -8,24 +8,23 @@
 #import "HMJSContext+Private.h"
 #import "UIView+HMDom.h"
 #import "UIView+HMRenderObject.h"
+#import "HMViewComponent.h"
 #import <Hummer/HMConfigEntryManager.h>
 #if __has_include(<Hummer/HMDevTools.h>)
 #import <Hummer/HMDevTools.h>
 #endif
 @implementation HMJSContext (Private)
-- (void)didRenderPage:(HMBaseValue *)page nativeView:(nonnull UIView *)view{
+- (void)didRenderPage:(HMBaseValue *)page nativeView:(nonnull HMViewComponent *)view{
     
     self.componentView = page;
     [self.rootView addSubview:view];
-    self.rootView.isHmLayoutEnabled = YES;
-    [self.rootView hm_markDirty];
+    [self.rootView markDirty];
     if ([self.delegate respondsToSelector:@selector(context:didRenderPage:)]) {
         [self.delegate context:self didRenderPage:page];
     }
     if (self.renderCompletion) {
         self.renderCompletion();
     }
-    [UIView hm_reSortFixedView:self];
 
     struct timespec renderTimespec;
     HMClockGetTime(&renderTimespec);

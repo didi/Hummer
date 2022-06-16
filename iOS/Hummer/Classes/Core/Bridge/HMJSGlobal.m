@@ -20,6 +20,7 @@
 #import "HMExceptionModel.h"
 #import "HMJSContext+Private.h"
 #import <Hummer/HMDebug.h>
+#import <Hummer/HMViewComponent.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -30,8 +31,6 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 
 - (NSDictionary<NSString *, NSObject *> *)getEnvironmentInfo;
 
-- (void)render:(nullable HMBaseValue *)page;
-
 - (void)setBasicWidth:(nullable HMBaseValue *)basicWidth;
 
 @property (nonatomic, strong) NSMapTable<NSObject *, NSObject *> *contextGraph;
@@ -41,7 +40,6 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 // 根据 namespace 获取不同的 envParams;
 @property (nonatomic, strong, nullable) NSMutableDictionary<NSString *, NSMutableDictionary *> *envParamsMap;
 
-
 + (nullable HMBaseValue *)env;
 
 + (void)setEnv:(nullable HMBaseValue *)value;
@@ -50,15 +48,9 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 
 + (void)setNotifyCenter:(nullable HMBaseValue *)notifyCenter;
 
-+ (nullable NSDictionary<NSString *, NSObject *> *)pageInfo;
-
-+ (void)setPageInfo:(HMBaseValue *)pageInfo;
-
 + (HMFunctionType)setTitle;
 
 + (void)setSetTitle:(HMFunctionType)setTitle;
-
-+ (void)render:(nullable HMBaseValue *)page;
 
 + (void)setBasicWidth:(nullable HMBaseValue *)basicWidth;
 
@@ -78,17 +70,16 @@ HM_DEFINE_CUSTOM_CLASS_PROPERTY(pageInfo, NSDictionary *, {
     return context.pageInfo;
 })
 
-HM_EXPORT_METHOD_OPT(render:(HMBaseValue *)page){
+HM_EXPORT_CLASS_METHOD_OPT(render:(HMBaseValue *)page){
     if (!page) {
         return;
     }
     NSObject *viewObject = page.toNativeObject;
-    if (![viewObject isKindOfClass:UIView.class]) {
+    if (![viewObject isKindOfClass:HMViewComponent.class]) {
         return;
     }
-    UIView *view = (UIView *) viewObject;
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:page.context];
-    [context didRenderPage:page nativeView:view];
+    [context didRenderPage:page nativeView:viewObject];
 }
 
 
@@ -97,10 +88,6 @@ HM_EXPORT_CLASS_PROPERTY(setTitle, setTitle, setSetTitle:)
 HM_EXPORT_CLASS_PROPERTY(env, env, setEnv:)
 
 HM_EXPORT_CLASS_PROPERTY(notifyCenter, notifyCenter, setNotifyCenter:)
-
-HM_EXPORT_CLASS_PROPERTY(pageInfo, pageInfo, setPageInfo:)
-
-HM_EXPORT_CLASS_METHOD(render, render:)
 
 HM_EXPORT_CLASS_METHOD(getRootView, getRootView)
 
@@ -190,26 +177,12 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     return context.componentView;
 }
 
-//+ (NSDictionary<NSString *, NSObject *> *)pageInfo {
-//    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-//    return context.pageInfo;
-//}
-
-+ (void)setPageInfo:(HMBaseValue *)pageInfo {
-    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-    context.pageInfo = pageInfo.toDictionary;
-}
-
 + (HMFunctionType)setTitle {
     return HMJSGlobal.globalObject.setTitle;
 }
 
 + (void)setSetTitle:(HMFunctionType)setTitle {
     HMJSGlobal.globalObject.setTitle = setTitle;
-}
-
-+ (void)render:(HMBaseValue *)page {
-    [HMJSGlobal.globalObject render:page];
 }
 
 + (void)setBasicWidth:(HMBaseValue *)basicWidth {

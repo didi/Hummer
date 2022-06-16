@@ -11,7 +11,7 @@
 #import <Hummer/HMLayoutStyleProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class HMViewComponent;
 @interface HMRenderObject : NSObject <HMLayoutStyleProtocol>
 
 #pragma mark - Computed Layout-Inferred Metrics
@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * YogaKit YGLayout 特有，为了能在计算时候获取视图，- sizeThatFits: 后返回给 measure 函数，因此加入，未来如果实现了抽象计算，则可以去掉这个功能
  */
-@property (nonatomic, weak, nullable) UIView *view;
+@property (nonatomic, weak, nullable) HMViewComponent *view;
 
 /**
  * Computed layout of the view.

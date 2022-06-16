@@ -16,7 +16,7 @@
 
 @implementation UIView(Hummer)
 
-HM_EXPORT_CLASS(View, UIView)
+//HM_EXPORT_CLASS(View, UIView)
 
 static long long __hummer_object_id = 0;
 - (instancetype)initWithHMValues:(NSArray *)values {

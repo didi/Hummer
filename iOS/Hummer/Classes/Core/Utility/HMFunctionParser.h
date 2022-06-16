@@ -6,46 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
-
-typedef NS_ENUM(NSUInteger, HMParserFunctionType) {
-    HMParserFunctionTypeUnknow,
-    HMParserFunctionTypeClass,
-    HMParserFunctionTypeInstance,
-};
-
-typedef NS_ENUM(NSUInteger, HMParserNullability) {
-    HMParserNullabilityUnspecified,
-    HMParserNullable,
-    HMParserNonnull,
-};
+#import <Hummer/HMMethodSignature.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface HMMethodArgument : NSObject
-
-@property (nonatomic, copy, readonly) NSString *type;
-@property (nonatomic, readonly) HMParserNullability nullability;
-@property (nonatomic, readonly) BOOL unused;
-
-- (BOOL)isVoid;
-- (instancetype)initWithType:(NSString *)type nullability:(HMParserNullability)nullability unused:(BOOL)unused;
-
-@end
-
-
-@interface HMMethodSignature : NSObject
-
-@property (nonatomic, assign) HMParserFunctionType flag;
-@property (nonatomic, strong) HMMethodArgument *retVal;
-@property (nonatomic, strong) NSArray<HMMethodArgument *> *arguments;
-
-@property (nonatomic, copy) NSString *selector;
-
-
-- (instancetype)initWithFlag:(HMParserFunctionType)flag returnValue:(nullable HMMethodArgument *)retVal arguments:(nullable NSArray<HMMethodArgument *> *)arguments selector:(nonnull NSString *)selector;
-
-@end
 
 
 /**
@@ -58,4 +22,5 @@ NS_ASSUME_NONNULL_BEGIN
  */
 HMMethodSignature * HMFunctionParse(const char *input);
 
+HMMethodArgument * HMArgumentParse(const char *input);
 NS_ASSUME_NONNULL_END

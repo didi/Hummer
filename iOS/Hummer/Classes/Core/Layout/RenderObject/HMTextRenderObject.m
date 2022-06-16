@@ -16,8 +16,8 @@ static YOGA_TYPE_WRAPPER(YGSize) HMCommonMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) no
 
     HMRenderObject *shadowView = (__bridge HMRenderObject *) YOGA_TYPE_WRAPPER(YGNodeGetContext)(node);
 
-    CGSize size = [shadowView.view sizeThatFits:maximumSize];
-
+//    CGSize size = [shadowView.view sizeThatFits:maximumSize];
+    CGSize size = CGSizeZero;
     // Adding epsilon value illuminates problems with converting values from
     // `double` to `float`, and then rounding them to pixel grid in Yoga.
     CGFloat epsilon = 0.001;

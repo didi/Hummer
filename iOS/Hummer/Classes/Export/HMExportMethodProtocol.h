@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Hummer/HMMethodSignature.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,11 +38,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable, copy) NSString *flag;
 
 
-/// @return YES：参数具体化，NO：原始方案(只有selector，无参数类型)
-- (BOOL)optimizable;
-
+@property (nonatomic, nullable, strong, readonly) HMMethodSignature *methodSignature;
 
 - (void)parse;
+
+/// 类方法还是实例方法
+- (HMMethodType)methodType;
 @end
 
 

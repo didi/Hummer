@@ -60,14 +60,14 @@ static BOOL HMIsIdentifierTail(const char c) {
     return isalnum(c) || c == '_';
 }
 
-static HMParserFunctionType HMParseMethodType(const char **start){
+static HMMethodType HMParseMethodType(const char **start){
     
     if (HMParserReadChar(start, '+')) {
-        return HMParserFunctionTypeClass;
+        return HMMethodTypeClass;
     }else if (HMParserReadChar(start, '-')) {
-        return HMParserFunctionTypeInstance;
+        return HMMethodTypeInstance;
     }
-    return HMParserFunctionTypeUnknow;
+    return HMMethodTypeUnknow;
 }
 
 static BOOL HMParserIsCollectionType(NSString *type)
@@ -88,24 +88,24 @@ static BOOL HMParseUnused(const char **input) {
     HMParserReadString(input, "__unused");
 }
 
-static HMParserNullability HMParseNullability(const char **input) {
+static HMArgumentNullability HMParseNullability(const char **input) {
     
     if (HMParserReadString(input, "nullable")) {
-        return HMParserNullable;
+        return HMArgumentNullable;
     } else if (HMParserReadString(input, "nonnull")) {
-        return HMParserNonnull;
+        return HMArgumentNonnull;
     }
-    return HMParserNullabilityUnspecified;
+    return HMArgumentNullabilityUnspecified;
 }
 
-static HMParserNullability HMParseNullabilityPostfix(const char **input) {
+static HMArgumentNullability HMParseNullabilityPostfix(const char **input) {
     
     if (HMParserReadString(input, "_Nullable") || HMParserReadString(input, "__nullable")) {
-        return HMParserNullable;
+        return HMArgumentNullable;
     } else if (HMParserReadString(input, "_Nonnull") || HMParserReadString(input, "__nonnull")) {
-        return HMParserNonnull;
+        return HMArgumentNonnull;
     }
-    return HMParserNullabilityUnspecified;
+    return HMArgumentNullabilityUnspecified;
 }
 
 
@@ -231,7 +231,7 @@ static HMMethodArgument * HMParseArgumentPart(const char **input){
     // 3: foo:(__unused id _Nullable)foo 4: foo:(id __unused _Nullable)foo
     // 5: foo:(id _Nullable __unused)foo
     
-    HMParserNullability nullability = HMParseNullability(input);
+    HMArgumentNullability nullability = HMParseNullability(input);
     HMParserSkipWhitespace(input);
     
     BOOL unused = HMParseUnused(input);
@@ -239,14 +239,14 @@ static HMMethodArgument * HMParseArgumentPart(const char **input){
     
     NSString *type = HMParseType(input, 1);
     HMParserSkipWhitespace(input);
-    if (nullability == HMParserNullabilityUnspecified) {
+    if (nullability == HMArgumentNullabilityUnspecified) {
         
         nullability = HMParseNullabilityPostfix(input);
         HMParserSkipWhitespace(input);
         if (!unused) {
             unused = HMParseUnused(input);
             HMParserSkipWhitespace(input);
-            if (unused && nullability == HMParserNullabilityUnspecified) {
+            if (unused && nullability == HMArgumentNullabilityUnspecified) {
                 nullability = HMParseNullabilityPostfix(input);
                 HMParserSkipWhitespace(input);
             }
@@ -284,7 +284,7 @@ HMMethodSignature * HMFunctionParse(const char *input) {
     
     //phase 1: 方法类型
     HMParserSkipWhitespace(&input);
-    HMParserFunctionType flag = HMParseMethodType(&input);
+    HMMethodType flag = HMParseMethodType(&input);
     
     
     //phase 2: 返回值
@@ -295,52 +295,30 @@ HMMethodSignature * HMFunctionParse(const char *input) {
     
     
     NSMutableString *selector = [NSMutableString new];
+    NSString *selectorPrefix = @"";
+    BOOL isFirstPass = YES;
     //phase 3: selector
     while (HMParseSelectorPart(&input, selector)) {
         
         HMMethodArgument *arg = HMParseArgumentPart(&input);
-        if (arg == nil) {
-         
+        if (isFirstPass) {
+            isFirstPass = NO;
+            selectorPrefix = [selector substringToIndex:selector.length-1];
         }
         [args addObject:arg];
         // 忽略参数名
         HMParseArgumentIdentifier(&input, NULL);
         HMParserSkipWhitespace(&input);
     }
-    
-    HMMethodSignature *ms = [[HMMethodSignature alloc] initWithFlag:flag returnValue:[ret isVoid]?nil:ret arguments:args.copy selector:selector.copy];
+    if (args.count == 0) {
+        selectorPrefix = selector.copy;
+    }
+    HMMethodSignature *ms = [[HMMethodSignature alloc] initWithFlag:flag returnValue:[ret isVoid]?nil:ret arguments:args.copy selector:selector.copy selectorPrefix:selectorPrefix];
     return ms;
 }
 
-
-@implementation HMMethodArgument
-
-- (instancetype)initWithType:(NSString *)type nullability:(HMParserNullability)nullability unused:(BOOL)unused {
-    if (self = [super init]) {
-        _type = [type copy];
-        _nullability = nullability;
-        _unused = unused;
-    }
-    return self;
+HMMethodArgument * HMArgumentParse(const char *input){
+    return HMParseArgumentPart(&input);
 }
 
-- (BOOL)isVoid {
-    
-    return [self.type isEqualToString:@"void"];
-}
-@end
 
-@implementation HMMethodSignature
-
-- (instancetype)initWithFlag:(HMParserFunctionType)flag returnValue:(nullable HMMethodArgument *)retVal arguments:(nullable NSArray<HMMethodArgument *> *)arguments selector:(nonnull NSString *)selector {
-
-    if (self = [super init]) {
-        _flag = flag;
-        _retVal = retVal;
-        _arguments = arguments;
-        _selector = selector;
-    }
-    return self;
-}
-
-@end

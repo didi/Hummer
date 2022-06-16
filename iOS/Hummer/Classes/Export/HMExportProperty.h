@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, nullable) SEL propertySetterSelector;
 
+
+@property (nonatomic, strong) HMMethodSignature *setterMethodSignature;
+
 @end
 
 NS_ASSUME_NONNULL_END

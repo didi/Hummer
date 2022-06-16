@@ -25,7 +25,7 @@ static const HMExportStruct __hm_export_class_##jsClass##__ = {#jsClass, #objcCl
     HMExportMethod *exportMethod = [[HMExportMethod alloc] init]; \
     exportMethod.jsFieldName = @#jsMethod; \
     exportMethod.selector = @selector(sel); \
-\
+    exportMethod.flag = @"-"; \
     return exportMethod; \
 }
 
@@ -35,7 +35,7 @@ static const HMExportStruct __hm_export_class_##jsClass##__ = {#jsClass, #objcCl
     exportProperty.jsFieldName = @#jsProp; \
     exportProperty.propertyGetterSelector = @selector(getter); \
     exportProperty.propertySetterSelector = @selector(setter); \
-\
+    exportProperty.flag = @"-"; \
     return exportProperty; \
 }
 
@@ -44,7 +44,7 @@ static const HMExportStruct __hm_export_class_##jsClass##__ = {#jsClass, #objcCl
     HMExportMethod *exportMethod = [[HMExportMethod alloc] init]; \
     exportMethod.jsFieldName = @#jsMethod; \
     exportMethod.selector = @selector(sel); \
-\
+    exportMethod.flag = @"+"; \
     return exportMethod; \
 }
 
@@ -54,13 +54,18 @@ static const HMExportStruct __hm_export_class_##jsClass##__ = {#jsClass, #objcCl
     exportProperty.jsFieldName = @#jsProp; \
     exportProperty.propertyGetterSelector = @selector(getter); \
     exportProperty.propertySetterSelector = @selector(setter); \
-\
+    exportProperty.flag = @"+"; \
     return exportProperty; \
 }
 
 
 
 #pragma mark <----------------------- 导出组件优化 -------------------------->
+#define HM_CONCAT2(a, b) a##b
+
+//## 的特性 ( 阻止另一个宏的展开 ),需要中间层
+#define HM_CONCAT(a, b) HM_CONCAT2(a, b)
+
 
 #pragma mark <----- export method ----->
 
@@ -132,7 +137,7 @@ __HM_DEFINE_HOST_FUNCTION_NORET(+, jsFunctionName, funcName)
 #define __HM_STRINGIFY(s) @#s
 
 #define __HM_DEFINE_HOST_FUNCTION_NORET(flag, jsFunctionName, funcName)\
-+ (HMExportMethod *)__hm_export_method_##jsMethod##__ { \
++ (HMExportMethod *)HM_CONCAT(__hm_export_method_##jsFunctionName, HM_CONCAT(__LINE__, __COUNTER__)) { \
     HMExportMethod *exportMethod = [[HMExportMethod alloc] init]; \
     exportMethod.jsFieldName = @#jsFunctionName; \
     [exportMethod setFlag:@#flag]; \
@@ -161,12 +166,16 @@ __HM_DEFINE_CUSTOM_PROPERTY(-, jsProp, type, setterBody, getterBody)
 __HM_DEFINE_CUSTOM_PROPERTY(+, jsProp, type, setterBody, getterBody)
 
 #define __HM_DEFINE_CUSTOM_PROPERTY(flag, jsProp, type, setterBody, getterBody)\
-flag (void)set##jsProp:(type)jsProp  setterBody \
-flag (type)jsProp getterBody \
+flag (void)hm_export_set_##jsProp:(type)jsProp  setterBody \
+flag (type)hm_export_##jsProp getterBody \
 + (HMExportProperty *)__hm_export_property__##jsProp##__ { \
     HMExportProperty *exportProperty = [[HMExportProperty alloc] init]; \
     exportProperty.jsFieldName = @#jsProp; \
     exportProperty.unparseToken = @#type; \
+    NSString *setterStr = __HM_STRINGIFY(hm_export_set_) __HM_STRINGIFY(jsProp) __HM_STRINGIFY(:); \
+    NSString *getterStr = __HM_STRINGIFY(hm_export_) __HM_STRINGIFY(jsProp); \
+    exportProperty.propertyGetterSelector = NSSelectorFromString(getterStr); \
+    exportProperty.propertySetterSelector = NSSelectorFromString(setterStr); \
     [exportProperty setFlag:@#flag]; \
     return exportProperty; \
 }

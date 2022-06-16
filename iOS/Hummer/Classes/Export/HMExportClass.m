@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable, copy) NSDictionary<NSString *, id<HMExportMethodBase>> *instanceMethodPropertyList;
 
-- (void)loadMethodOrProperty:(Class)clazz withSelector:(SEL)selector isClassMethodProperty:(BOOL)isClassMethodProperty;
+- (void)loadMethodOrProperty:(Class)clazz withSelector:(SEL)selector;
 
 NS_ASSUME_NONNULL_END
 
@@ -49,8 +49,7 @@ NS_ASSUME_NONNULL_END
         }
         
         if (strstr(charSelector, "__hm_export_method_") == charSelector || strstr(charSelector, "__hm_export_property_") == charSelector) {
-            BOOL isClass = (strstr(charSelector, "__hm_export_method_class_") == charSelector) || (strstr(charSelector, "__hm_export_property_class_") == charSelector);
-            [self loadMethodOrProperty:clazz withSelector:selector isClassMethodProperty:isClass];
+            [self loadMethodOrProperty:clazz withSelector:selector];
         }
     }
     // 需要 free
@@ -88,16 +87,24 @@ NS_ASSUME_NONNULL_END
     return (HMExportMethod *) exportMethod;
 }
 
-- (void)loadMethodOrProperty:(Class)clazz withSelector:(SEL)selector isClassMethodProperty:(BOOL)isClassMethodProperty {
-    id exportMethodObject = ((id (*)(id, SEL)) objc_msgSend)(clazz, selector);
-    if (![exportMethodObject isKindOfClass:HMExportBaseClass.class]) {
+- (void)loadMethodOrProperty:(Class)clazz withSelector:(SEL)selector {
+    id<HMExportMethodParsable> exportMethodObject = ((id (*)(id, SEL)) objc_msgSend)(clazz, selector);
+    if (![exportMethodObject conformsToProtocol:@protocol(HMExportMethodParsable)]) {
         HMLogError(@"export [%@] error", NSStringFromSelector(selector));
-        
         return;
     }
-    
-    HMExportBaseClass *exportBaseClass = exportMethodObject;
+    if ([NSStringFromClass(clazz) isEqualToString:@"HMViewComponent"]) {
+        NSLog(@"");
+    }
+    [exportMethodObject parse];
+    id<HMExportMethodParsable> exportBaseClass = exportMethodObject;
     SEL testSelector = [exportBaseClass getTestSelector];
+    HMMethodType methodType = [exportBaseClass methodType];
+    if (methodType == HMMethodTypeUnknow) {
+        HMLogError(@"Export Error : [%@] export unknow method type %@", clazz, exportBaseClass.jsFieldName);
+        return;
+    }
+    BOOL isClassMethodProperty = methodType == HMMethodTypeClass;
     if (!isClassMethodProperty) {
         // 兼容判断
         if (class_getClassMethod(clazz, testSelector) && class_getInstanceMethod(clazz, testSelector)) {
@@ -127,8 +134,8 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (nullable HMExportBaseClass *)methodOrPropertyWithName:(NSString *)name isClass:(BOOL)isClass {
-    HMExportBaseClass *exportMethod = nil;
+- (nullable id<HMExportMethodBase>)methodOrPropertyWithName:(NSString *)name isClass:(BOOL)isClass {
+    id<HMExportMethodBase> exportMethod = nil;
     if (isClass) {
         exportMethod = self.classMethodPropertyList[name];
     } else {

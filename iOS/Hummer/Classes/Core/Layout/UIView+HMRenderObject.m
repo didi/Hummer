@@ -18,38 +18,6 @@
 
 static const char SHADOW_VIEW_KEY;
 
-// 默认兼容模式
-static HMLayoutEngine layoutEngine = HMLayoutEngineRenderObjectCompatible;
-
-static HMSizeThatFitsMode sizeThatFitsMode = HMSizeThatFitsModePreferNative;
-
-HMSizeThatFitsMode HMGetSizeThatFitsMode() {
-    return sizeThatFitsMode;
-}
-
-HMLayoutEngine hm_get_layout_engine() {
-    return layoutEngine;
-}
-
-void HMChangeSizeThatFitsMode(HMSizeThatFitsMode newSizeThatFitsMode) {
-    sizeThatFitsMode = newSizeThatFitsMode;
-}
-
-void hm_change_layout_engine(HMLayoutEngine layoutEngine) {
-    layoutEngine = layoutEngine;
-}
-
-YOGA_TYPE_WRAPPER(YGValue) HMPointValueMake(CGFloat value) {
-    return (YOGA_TYPE_WRAPPER(YGValue)) {.value = value, .unit = YOGA_TYPE_WRAPPER(YGUnitPoint)};
-}
-
-YOGA_TYPE_WRAPPER(YGValue) HMPercentValueMake(CGFloat value) {
-    return (YOGA_TYPE_WRAPPER(YGValue)) {.value = value, .unit = YOGA_TYPE_WRAPPER(YGUnitPercent)};
-}
-YOGA_TYPE_WRAPPER(YGValue) HMAutoValueMake() {
-    return (YOGA_TYPE_WRAPPER(YGValue)) {.value = 0, .unit = YOGA_TYPE_WRAPPER(YGUnitAuto)};
-}
-
 
 @implementation UIView (HMShadowView)
 

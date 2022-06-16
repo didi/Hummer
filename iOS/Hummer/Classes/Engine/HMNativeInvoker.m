@@ -27,10 +27,6 @@
     id <HMBaseExecutorProtocol> executor = info.executor;
     id target = info.target;
     
-    // 主线程模式
-    return [self _invokeOnMainThread:info];
-    
-    
     
     return nil;
 }
@@ -54,6 +50,7 @@
 
     }];
     
+
     
     // call native
     
@@ -64,11 +61,25 @@
 
 + (nullable HMBaseValue *)_invokeOnMainThread:(HMNativeCallInfo)info {
     
-    HMExportClass *export = info.exportCls;
+    HMExportClass *exportClass = info.exportCls;
     NSString *funcName = info.functionName;
     NSArray *args = info.args;
+    id target = info.target;
     id <HMBaseExecutorProtocol> executor = info.executor;
+
+    BOOL isClass = object_isClass(target);
+
     
+    
+//    dispatch_block_t block = ^(){
+//        id<HMExportMethodBase> methodBase = [exportClass methodOrPropertyWithName:funcName isClass:isClass];
+//
+//        NSInvocation *invoke = [NSInvocation invocationWithMethodSignature:nil];
+//
+//
+//    };
+    
+//    dispatch_async(dispatch_get_main_queue(), block);
     
     return nil;
 }

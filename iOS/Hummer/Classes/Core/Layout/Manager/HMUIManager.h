@@ -11,13 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 FOUNDATION_EXTERN const BOOL HMUseDoubleAttributeControlHidden;
 
+
 typedef NS_OPTIONS(NSInteger, HummerDimensionFlexibility) {
     HummerDimensionFlexibilityWidth = 1 << 0,
     HummerDimensionFlexibilityHeight = 1 << 1,
 };
 
 @class HMRenderObject;
-
+@class HMViewComponent;
 @interface HMUIManager : NSObject
 
 + (instancetype)sharedInstance;
@@ -33,6 +34,10 @@ typedef NS_OPTIONS(NSInteger, HummerDimensionFlexibility) {
 - (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin dimensionFlexibility:(HummerDimensionFlexibility)dimensionFlexibility view:(UIView *)view affectedShadowViews:(nullable NSHashTable<HMRenderObject *> *)affectedShadowViews;
 
 - (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin view:(UIView *)view affectedShadowViews:(nullable NSHashTable<HMRenderObject *> *)affectedShadowViews;
+
+
+- (void)batchLayout:(HMViewComponent *)component;
+- (void)flushUIBlock:(dispatch_block_t)block;
 
 @end
 

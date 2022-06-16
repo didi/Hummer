@@ -63,7 +63,7 @@ NSString *const HUMMER_CREATE_CLASS_NOT_FOUND = @"%@ JS 类无法找到";
 NSString *const HUMMER_GET_SET_ERROR = @"hummerGet/SetProperty 函数必须 2/3 个参数，一个对象或者方法 this 指针，一个字符串，可选一个值";
 
 void HMAssertMainQueue(void) {
-    HMAssert(NSThread.isMainThread, @"This function must be called on the main queue");
+//    HMAssert(NSThread.isMainThread, @"This function must be called on the main queue");
 }
 
 void HMSafeMainThread(dispatch_block_t block) {

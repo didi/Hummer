@@ -9,7 +9,7 @@
 #import <Hummer/HMYogaUtility.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class HMViewComponent;
 /**
  * 对标 YGLayout RCTShadowView
  */
@@ -121,7 +121,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 未来会被干掉，因此不要依赖此功能
  */
-@property (nonatomic, weak, readonly) UIView *view;
+@property (nonatomic, weak, readonly) HMViewComponent *view;
 
 /**
  * @brief 只有叶子节点才能标记为脏并且向上冒泡

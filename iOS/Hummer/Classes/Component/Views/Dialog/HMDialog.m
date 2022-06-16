@@ -51,7 +51,7 @@
             NSEnumerator<id<HMLayoutStyleProtocol>> *enumerator = affectedShadowViews.objectEnumerator;
             id<HMLayoutStyleProtocol> value = nil;
             while ((value = enumerator.nextObject)) {
-                [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+//                [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
             }
         }
     }
@@ -357,7 +357,7 @@ HM_EXPORT_PROPERTY(lowLayer, isLowLayer, setIsLowLayer:)
             
             return;
         }
-        presenting = context.rootView.window.rootViewController;
+//        presenting = context.rootView.window.rootViewController;
         if (!presenting) {
             presenting = [HMDialog fix_getCurrentViewController];
         }

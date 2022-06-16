@@ -60,7 +60,7 @@ API_AVAILABLE(ios(13.0))
 #endif
 @interface HMJSContext () // <NSURLSessionWebSocketDelegate>
 
-@property (nonatomic, weak, nullable) UIView *rootView;
+@property (nonatomic, strong, nullable) HMViewComponent *rootView;
 
 @property (nonatomic, strong, readwrite) id <HMBaseExecutorProtocol>context;
 
@@ -101,10 +101,11 @@ NS_ASSUME_NONNULL_END
     }];
 }
 
-+ (instancetype)contextInRootView:(UIView *)rootView {
++ (instancetype)contextInRootView:(HMViewComponent *)rootView {
     HMJSContext *ctx = [[HMJSContext alloc] init];
-    rootView.hm_context = ctx;
-    rootView.hm_context.rootView = rootView;
+    ctx.rootView = rootView;
+//    rootView.hm_context = ctx;
+//    rootView.hm_context.rootView = rootView;
     if (ctx.pageInfo == nil) {
         //兼容写法，自定义容器会把 pageInfo 注入到 HMJSGlobal 中。这里复制给 context。
         //把 pageInfo 和 context 绑定到一起。
@@ -115,7 +116,7 @@ NS_ASSUME_NONNULL_END
     // 尽早初始化 devtool，保证日志抓取时间。
     [HMDevTools showInContext:ctx];
 #endif
-    return rootView.hm_context;
+    return ctx;
 }
 
 - (instancetype)init {

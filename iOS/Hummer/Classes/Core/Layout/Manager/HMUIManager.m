@@ -22,6 +22,9 @@
 #import "HMYogaUtility.h"
 #import "UIView+HMAnimation.h"
 #import "UIView+HMAttribute.h"
+#import "HMViewComponent.h"
+#import "HMThreadManager.h"
+#import "HMRootComponent.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,6 +34,9 @@ const BOOL HMUseDoubleAttributeControlHidden = YES;
 @interface HMUIManager ()
 
 @property (nonatomic, nullable, copy) NSDictionary<NSString *, Class> *renderObjectMap;
+@property (nonatomic, nonnull, strong) NSMutableArray <dispatch_block_t> *mainQueueTasks;
+@property (nonatomic, nonnull, strong) NSMutableSet <HMViewComponent *> *roots;
+@property (nonatomic, nullable, strong) NSMutableSet <HMViewComponent *> *layoutViews;
 
 - (nullable Class)renderObjectForView:(Class)viewCls;
 
@@ -51,6 +57,7 @@ NS_ASSUME_NONNULL_END
             [self registerRenderObject:HMMeasureRenderObject.class forView:HMImageView.class];
             [self registerRenderObject:HMMeasureRenderObject.class forView:HMSwitch.class];
         }
+        _mainQueueTasks = [NSMutableArray new];
     }
 
     return self;
@@ -198,4 +205,113 @@ NS_ASSUME_NONNULL_END
     }];
 }
 
+- (void)batchLayout:(HMViewComponent *)component {
+    
+    if (!self.layoutViews) {
+        self.layoutViews = [NSMutableSet new];
+        [HMThreadManager runOnJSThread:^{
+            [self _batchLayout];
+        }];
+    }
+    [self.layoutViews addObject:component];
+}
+
+
+
+- (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin dimensionFlexibility:(HummerDimensionFlexibility)dimensionFlexibility component:(HMViewComponent *)rootComponent availableSize:(CGSize)availableSize affectedShadowViews:(NSHashTable<HMRenderObject *> *)affectedShadowViews {
+
+    if (!affectedShadowViews) {
+        affectedShadowViews = [NSHashTable weakObjectsHashTable];
+    }
+    HMRenderObject *renderObject = (HMRenderObject *) rootComponent.layout;
+    HMRootRenderObject *rootRenderObject = [[HMRootRenderObject alloc] init];
+    rootRenderObject.renderObject = renderObject;
+    
+    // 最小大小直接忽略
+    CGSize oldMinimumSize = CGSizeMake(HMCoreGraphicsFloatFromYogaValue(YOGA_TYPE_WRAPPER(YGNodeStyleGetMinWidth)(renderObject.yogaNode), 0), HMCoreGraphicsFloatFromYogaValue(YOGA_TYPE_WRAPPER(YGNodeStyleGetMinHeight)(renderObject.yogaNode), 0));
+    if (!CGSizeEqualToSize(oldMinimumSize, rootRenderObject.minimumSize)) {
+        rootRenderObject.minimumSize = oldMinimumSize;
+    }
+    // 默认直接使用 rootView 大小
+    rootRenderObject.availableSize = availableSize;
+    if (dimensionFlexibility & HummerDimensionFlexibilityWidth) {
+        CGSize availableSize = rootRenderObject.availableSize;
+        availableSize.width = CGFLOAT_MAX;
+        rootRenderObject.availableSize = availableSize;
+    }
+    if (dimensionFlexibility & HummerDimensionFlexibilityWidth) {
+        CGSize availableSize = rootRenderObject.availableSize;
+        availableSize.height = CGFLOAT_MAX;
+        rootRenderObject.availableSize = availableSize;
+    }
+    [rootRenderObject layoutWithAffectedShadowViews:affectedShadowViews];
+
+    if (affectedShadowViews.count <= 0) {
+        // no frame change results in no UI update block
+        return;
+    }
+    for (HMRenderObject *shadowView in affectedShadowViews) {
+        HMLayoutMetrics layoutMetrics = shadowView.layoutMetrics;
+        HMViewComponent *inlineView = shadowView.view;
+        hm_safe_main_thread(^{
+//            inlineView.hm_animationPropertyBounds = inlineView.bounds;
+//            inlineView.hm_animationPropertyCenter = inlineView.center;
+            CGRect frame = layoutMetrics.frame;
+            // 只有在 HMDisplayTypeNone 或 visibility: hidden 情况下，隐藏视图
+//            BOOL isHidden = layoutMetrics.displayType == HMDisplayTypeNone || inlineView.hm_visibility == YES;
+//            if (inlineView.isHidden != isHidden) {
+//                inlineView.hidden = isHidden;
+//            }
+//            if (component == inlineView) {
+//                // 需要继承上次的 origin
+//                if (preserveOrigin) {
+//                    frame = (CGRect) {
+//                            .origin = {
+//                                    .x = (CGRectGetMinX(frame) + inlineView.frame.origin.x),
+//                                    .y = (CGRectGetMinY(frame) + inlineView.frame.origin.y),
+//                            },
+//                            .size = frame.size
+//                    };
+//                }
+//            }
+            
+//            [inlineView hummerSetFrame:frame];
+            [inlineView.view hummerSetFrame:frame];
+        });
+    }
+}
+
+
+
+- (void)_batchLayout {
+    
+    NSMutableSet *_roots = [NSMutableSet new];
+    [self.layoutViews enumerateObjectsUsingBlock:^(HMViewComponent * _Nonnull obj, BOOL * _Nonnull stop) {
+        HMViewComponent *root = [obj rootComponent];
+        [_roots addObject:root];
+    }];
+    self.layoutViews = nil;
+    [_roots enumerateObjectsUsingBlock:^(HMViewComponent * _Nonnull root, BOOL * _Nonnull stop) {
+        [[HMUIManager sharedInstance] applyLayoutPreservingOrigin:YES dimensionFlexibility:0 component:root availableSize:((HMRootComponent *)root).availableSize affectedShadowViews:nil];
+//        [root ]
+    }];
+}
+
+- (void)flushUIBlock:(dispatch_block_t)block {
+///todo: 性能优化
+    @synchronized (self) {
+        [self.mainQueueTasks addObject:block];
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @synchronized (self) {
+            if (self.mainQueueTasks.count == 0) {
+                return;
+            }
+            [self.mainQueueTasks enumerateObjectsUsingBlock:^(dispatch_block_t  _Nonnull task, NSUInteger idx, BOOL * _Nonnull stop) {
+                task();
+            }];
+            [self.mainQueueTasks removeAllObjects];
+        }
+    });
+}
 @end

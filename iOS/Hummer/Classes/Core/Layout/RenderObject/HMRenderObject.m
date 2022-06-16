@@ -10,6 +10,7 @@
 #import "HMUtility.h"
 #import "UIView+HMRenderObject.h"
 #import "HMUIManager.h"
+#import "HMViewComponent.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -584,15 +585,7 @@ HM_STYLE_PROPERTY(AspectRatio, aspectRatio, AspectRatio, float)
 
 - (BOOL)isLeaf {
     NSAssert([NSThread isMainThread], @"This method must be called on the main thread.");
-//    if (self.isEnabled) {
-    for (UIView *subview in self.view.subviews) {
-        if (subview.isHmLayoutEnabled) {
-            return NO;
-        }
-    }
-//    }
-
-    return YES;
+    return self.view.subcomponents.count == 0;
 }
 
 - (BOOL)isDirty {

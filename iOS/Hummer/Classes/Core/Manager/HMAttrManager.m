@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import <Hummer/HMViewComponent.h>
 
 @interface HMViewAttribute()
 
@@ -86,9 +87,10 @@ static HMAttrManager * __sharedInstance = nil;
     }
     return _classes;
 }
+//todo 优化 attribute 逻辑
 
 - (void)loadViewAttrForClass:(Class)clazz {
-    if (!clazz || ![clazz isSubclassOfClass:[UIView class]]) return;
+    if (!clazz || ![clazz isSubclassOfClass:[HMViewComponent class]]) return;
     
     if (![self.classes containsObject:clazz]) {
         [self.classes addObject:clazz];
@@ -97,7 +99,7 @@ static HMAttrManager * __sharedInstance = nil;
 }
 
 - (void)loadAllAttrWithClass:(Class)cls {
-    if (cls != [UIView class]) {
+    if (cls != [HMViewComponent class]) {
         Class superCls = class_getSuperclass(cls);
         [self loadAllAttrWithClass:superCls];
     }
@@ -105,7 +107,7 @@ static HMAttrManager * __sharedInstance = nil;
 }
 
 - (void)addViewAttrForClass:(Class)clazz {
-    if (!clazz || ![clazz isSubclassOfClass:[UIView class]]) return;
+    if (!clazz || ![clazz isSubclassOfClass:[HMViewComponent class]]) return;
     
     unsigned int outCount = 0;
     Method *methods = class_copyMethodList(object_getClass(clazz), &outCount);

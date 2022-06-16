@@ -8,10 +8,10 @@
 #import "HMJSContext.h"
 #import "HMBaseValue.h"
 NS_ASSUME_NONNULL_BEGIN
-
+@class HMViewComponent;
 @interface HMJSContext (Private)
 
-- (void)didRenderPage:(HMBaseValue *)page nativeView:(UIView *)view;
+- (void)didRenderPage:(HMBaseValue *)page nativeView:(HMViewComponent *)view;
 @end
 
 NS_ASSUME_NONNULL_END

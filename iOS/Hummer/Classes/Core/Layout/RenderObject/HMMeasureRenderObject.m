@@ -15,7 +15,8 @@ static YOGA_TYPE_WRAPPER(YGSize) HMCommonMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) no
 
     HMRenderObject *shadowView = (__bridge HMRenderObject *) YOGA_TYPE_WRAPPER(YGNodeGetContext)(node);
 
-    CGSize size = [shadowView.view sizeThatFits:maximumSize];
+//    CGSize size = [shadowView.view sizeThatFits:maximumSize];
+    CGSize size = CGSizeZero;
 
     return (YOGA_TYPE_WRAPPER(YGSize)) {
             HMYogaFloatFromCoreGraphicsFloat(size.width),

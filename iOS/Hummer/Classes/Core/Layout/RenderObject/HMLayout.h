@@ -8,10 +8,37 @@
 
 #import <UIKit/UIKit.h>
 #import <Hummer/HMYogaUtility.h>
+#import <Hummer/HMLayoutStyleProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class HMRenderObject;
+
+typedef void (^HMLayoutConfigurationBlock)(id<HMLayoutStyleProtocol> layout);
+
+typedef NS_ENUM(NSUInteger, HMLayoutEngine) {
+    HMLayoutEngineRenderObject = 0,
+    HMLayoutEngineRenderObjectCompatible
+};
+
+typedef NS_ENUM(NSUInteger, HMSizeThatFitsMode) {
+    HMSizeThatFitsModePreferNative = 0,
+    HMSizeThatFitsModePreferWeb
+};
+
+FOUNDATION_EXTERN YOGA_TYPE_WRAPPER(YGValue) HMPointValueMake(CGFloat value);
+FOUNDATION_EXTERN YOGA_TYPE_WRAPPER(YGValue) HMPercentValueMake(CGFloat value);
+FOUNDATION_EXTERN YOGA_TYPE_WRAPPER(YGValue) HMAutoValueMake(void);
+
+
+FOUNDATION_EXTERN HMLayoutEngine hm_get_layout_engine(void);
+
+FOUNDATION_EXTERN HMSizeThatFitsMode HMGetSizeThatFitsMode(void);
+
+FOUNDATION_EXTERN void HMChangeSizeThatFitsMode(HMSizeThatFitsMode newSizeThatFitsMode);
+
+FOUNDATION_EXTERN void hm_change_layout_engine(HMLayoutEngine layoutEngine);
+
 
 typedef NS_ENUM(NSUInteger, HMDisplayType) {
     HMDisplayTypeNone = 0,

@@ -603,7 +603,7 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
             NSEnumerator<id<HMLayoutStyleProtocol>> *enumerator = affectedShadowViews.objectEnumerator;
             id<HMLayoutStyleProtocol> value = nil;
             while ((value = enumerator.nextObject)) {
-                [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+//                [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
             }
         }
     }
@@ -1212,25 +1212,25 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
 // 注意 fixed 的场景下，需要 手动使用 removeChild 进行解引用(但不需要 superview 正确)
 
 - (void)hm_processFixedPositionWithContext:(HMJSContext *)context {
-    if (self.hm_isFixedPosition && self.superview) {
-        // superview -> rootView
-        self.hm_fixedPositionLastContainerView = self.superview;
-        [self removeFromSuperview];
-        [self.hm_fixedPositionLastContainerView hm_markDirty];
-        [context.rootView addSubview:self];
-        [context.rootView hm_markDirty];
-    } else if (!self.hm_isFixedPosition && self.hm_fixedPositionLastContainerView) {
-        // superview(rootView) -> superview
-        UIView *superView = self.superview;
-        [self removeFromSuperview];
-        [superView hm_markDirty];
-        [self.hm_fixedPositionLastContainerView addSubview:self];
-        [self.hm_fixedPositionLastContainerView hm_markDirty];
-        self.hm_fixedPositionLastContainerView = nil;
-    }
-    if (self.superview == context.rootView) {
-        [UIView hm_reSortFixedView:context];
-    }
+//    if (self.hm_isFixedPosition && self.superview) {
+//        // superview -> rootView
+//        self.hm_fixedPositionLastContainerView = self.superview;
+//        [self removeFromSuperview];
+//        [self.hm_fixedPositionLastContainerView hm_markDirty];
+//        [context.rootView addSubview:self];
+//        [context.rootView hm_markDirty];
+//    } else if (!self.hm_isFixedPosition && self.hm_fixedPositionLastContainerView) {
+//        // superview(rootView) -> superview
+//        UIView *superView = self.superview;
+//        [self removeFromSuperview];
+//        [superView hm_markDirty];
+//        [self.hm_fixedPositionLastContainerView addSubview:self];
+//        [self.hm_fixedPositionLastContainerView hm_markDirty];
+//        self.hm_fixedPositionLastContainerView = nil;
+//    }
+//    if (self.superview == context.rootView) {
+//        [UIView hm_reSortFixedView:context];
+//    }
 }
 /**
  * 所有 fixed 布局可能收到非自身的影响，因此无法(比较苦难)通过提前标记来判断是否需要重新 sort
@@ -1238,47 +1238,47 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
  */
 + (void)hm_reSortFixedView:(HMJSContext *)context{
     
-    NSArray *m_subviews = context.rootView.subviews;
-    NSMutableArray *rootSubViews = [NSMutableArray new];
-    BOOL hasFixed = NO;
-    for (UIView *subview in m_subviews) {
-        if (subview.hm_isFixedPosition) {
-            hasFixed = YES;
-        }
-        [rootSubViews addObject:subview];
-    }
-    if (hasFixed == NO) {return;}
-    
-    NSArray<UIView *> *sortedViews = [rootSubViews sortedArrayWithOptions:NSSortStable usingComparator:^NSComparisonResult(UIView *view1, UIView *view2) {
-        if (view1.hm_zIndex > view2.hm_zIndex) {
-            return NSOrderedDescending;
-        }else if (view1.hm_zIndex < view2.hm_zIndex) {
-            return NSOrderedAscending;
-        }
-        return NSOrderedSame;
-    }];
-    //o   : 非 fixed view
-    //f   : fixed view
-    //数组 : 添加时的顺序
-    //rootSubViews [o1,f1,o2,f2] 变为
-    //sortedViews  [o1,o2,f1,f2]
-    for (int i = 0; i<sortedViews.count; i++) {
-        //排序之前，目标位置的原始视图: f1
-        UIView *oriView = rootSubViews[i];
-        //排序之后，目标位置的目标视图: o2
-        UIView *sortedView = sortedViews[i];
-        if (oriView == sortedView) {
-            continue;
-        }
-        //交换 o2 到 目标位置。
-        //rootView 的层级不会很多，因为 js view(非 fixed) 都在 context.root.view(hummer.render) 中。
-        //因此涉及到排序的视图数量 = fixed views + 1(hummer.render)
-        //因此直接获取 index。后续或考虑维护index。
-        NSUInteger oIdx = [rootSubViews indexOfObject:sortedView];
-        [context.rootView exchangeSubviewAtIndex:i withSubviewAtIndex:oIdx];
-        //更新 原视图数组顺序
-        [rootSubViews exchangeObjectAtIndex:i withObjectAtIndex:oIdx];
-    }
+//    NSArray *m_subviews = context.rootView.subviews;
+//    NSMutableArray *rootSubViews = [NSMutableArray new];
+//    BOOL hasFixed = NO;
+//    for (UIView *subview in m_subviews) {
+//        if (subview.hm_isFixedPosition) {
+//            hasFixed = YES;
+//        }
+//        [rootSubViews addObject:subview];
+//    }
+//    if (hasFixed == NO) {return;}
+//    
+//    NSArray<UIView *> *sortedViews = [rootSubViews sortedArrayWithOptions:NSSortStable usingComparator:^NSComparisonResult(UIView *view1, UIView *view2) {
+//        if (view1.hm_zIndex > view2.hm_zIndex) {
+//            return NSOrderedDescending;
+//        }else if (view1.hm_zIndex < view2.hm_zIndex) {
+//            return NSOrderedAscending;
+//        }
+//        return NSOrderedSame;
+//    }];
+//    //o   : 非 fixed view
+//    //f   : fixed view
+//    //数组 : 添加时的顺序
+//    //rootSubViews [o1,f1,o2,f2] 变为
+//    //sortedViews  [o1,o2,f1,f2]
+//    for (int i = 0; i<sortedViews.count; i++) {
+//        //排序之前，目标位置的原始视图: f1
+//        UIView *oriView = rootSubViews[i];
+//        //排序之后，目标位置的目标视图: o2
+//        UIView *sortedView = sortedViews[i];
+//        if (oriView == sortedView) {
+//            continue;
+//        }
+//        //交换 o2 到 目标位置。
+//        //rootView 的层级不会很多，因为 js view(非 fixed) 都在 context.root.view(hummer.render) 中。
+//        //因此涉及到排序的视图数量 = fixed views + 1(hummer.render)
+//        //因此直接获取 index。后续或考虑维护index。
+//        NSUInteger oIdx = [rootSubViews indexOfObject:sortedView];
+//        [context.rootView exchangeSubviewAtIndex:i withSubviewAtIndex:oIdx];
+//        //更新 原视图数组顺序
+//        [rootSubViews exchangeObjectAtIndex:i withObjectAtIndex:oIdx];
+//    }
 }
 
 - (void)hm_markDirty {

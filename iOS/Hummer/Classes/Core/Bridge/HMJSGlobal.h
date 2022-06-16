@@ -12,7 +12,8 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface HMJSGlobal : NSObject
 
-@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSObject *> *pageInfo;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSObject *> *pageInfo DEPRECATED_MSG_ATTRIBUTE("HMJSGlobal 为单例，pageInfo 为单页面状态，因此请使用 HMJSContext.pageInfo 代替");
+;
 
 @property (nonatomic, copy, nullable) HMFunctionType setTitle;
 
@@ -26,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSDictionary<NSString *, NSObject *> *)getEnvironmentInfo;
 
+- (NSDictionary<NSString *, NSObject *> *)pageInfo;
 @end
 
 NS_ASSUME_NONNULL_END

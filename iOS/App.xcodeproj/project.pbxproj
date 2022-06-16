@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A4C9E68281106430059B029 /* OCArgumentTypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4C9E67281106430059B029 /* OCArgumentTypeTests.m */; };
+		0A4C9E6A281106950059B029 /* OCMethodParseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4C9E69281106950059B029 /* OCMethodParseTests.m */; };
 		0AEF33CA2806D3E900516CEE /* OCAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AEF33C92806D3E900516CEE /* OCAppTests.m */; };
 		18E3D7A026CBDDAA003C6C8D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E3D79F26CBDDAA003C6C8D /* AppDelegate.swift */; };
 		18E3D7A426CBDDAA003C6C8D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E3D7A326CBDDAA003C6C8D /* ViewController.swift */; };
@@ -35,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A4C9E67281106430059B029 /* OCArgumentTypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCArgumentTypeTests.m; sourceTree = "<group>"; };
+		0A4C9E69281106950059B029 /* OCMethodParseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCMethodParseTests.m; sourceTree = "<group>"; };
 		0AEF33C72806D3E900516CEE /* OCAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OCAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEF33C92806D3E900516CEE /* OCAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCAppTests.m; sourceTree = "<group>"; };
 		12452B7D72A8128918FB5A34 /* Pods-App-OCAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-OCAppTests.debug.xcconfig"; path = "Target Support Files/Pods-App-OCAppTests/Pods-App-OCAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -87,6 +91,8 @@
 			isa = PBXGroup;
 			children = (
 				0AEF33C92806D3E900516CEE /* OCAppTests.m */,
+				0A4C9E69281106950059B029 /* OCMethodParseTests.m */,
+				0A4C9E67281106430059B029 /* OCArgumentTypeTests.m */,
 			);
 			path = OCAppTests;
 			sourceTree = "<group>";
@@ -353,6 +359,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A4C9E6A281106950059B029 /* OCMethodParseTests.m in Sources */,
+				0A4C9E68281106430059B029 /* OCArgumentTypeTests.m in Sources */,
 				0AEF33CA2806D3E900516CEE /* OCAppTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

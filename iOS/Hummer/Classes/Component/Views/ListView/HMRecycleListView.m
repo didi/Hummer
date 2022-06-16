@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_END
         NSEnumerator<id<HMLayoutStyleProtocol>> *enumerator = affectedShadowViews.objectEnumerator;
         id<HMLayoutStyleProtocol> value = nil;
         while ((value = enumerator.nextObject)) {
-            [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+//            [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
         }
     }
 }

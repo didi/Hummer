@@ -6,6 +6,7 @@
 //
 
 #import <objc/runtime.h>
+#import <objc/message.h>
 #import "HMJSCExecutor+Private.h"
 #import "HMLogger.h"
 #import "HMExceptionModel.h"
@@ -22,6 +23,7 @@
 #import <Hummer/HMJSGlobal.h>
 #import <Hummer/HMDebug.h>
 #import <Hummer/HMNativeInvoker.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const EXCEPTION_HANDLER_ERROR = @"异常处理函数发生错误";
@@ -123,7 +125,7 @@ JSValueRef _Nullable nativeLoggingHook(JSContextRef ctx, JSObjectRef function, J
     
     return NULL;
 }
-NSArray <HMBaseValue *> *convertNativeArgumentsWithJSValues(const JSValueRef _Nonnull arguments[]){
+NSArray <HMBaseValue *> *convertNativeArgumentsWithJSValues(const JSValueRef _Nonnull arguments[], size_t argumentCount){
     
     return @[];
 }
@@ -170,16 +172,6 @@ JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObject
 
     // 最后一个参数无效
     [executor hummerExtractExportWithFunctionPropertyName:functionName objectRef:objectRef target:&target selector:&selector methodSignature:&methodSignature isSetter:YES jsClassName:className];
-
-    
-    
-    HMNativeCallInfo _info;
-    _info.target = target;
-    _info.functionName = functionName;
-    _info.exportCls = exportClass;
-    _info.args = convertNativeArgumentsWithJSValues(arguments);
-    [HMNativeInvoker invoke:_info];
-    
     
 #ifdef HMDEBUG
     {
@@ -464,7 +456,7 @@ void hummerFinalize(JSObjectRef object) {
     }
 }
 
-- (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable JSObjectRef)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(NSMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName {
+- (void)hummerExtractExportWithFunctionPropertyName:(nullable NSString *)functionPropertyName objectRef:(nullable JSObjectRef)objectRef target:(id _Nullable *)target selector:(SEL _Nullable *)selector methodSignature:(HMMethodSignature *_Nullable *)methodSignature isSetter:(BOOL)isSetter jsClassName:(nullable NSString *)jsClassName {
     HMAssertMainQueue();
     if (!target || !selector || !methodSignature || functionPropertyName.length == 0 || jsClassName.length == 0) {
         return;
@@ -495,13 +487,13 @@ void hummerFinalize(JSObjectRef object) {
         // 方法
         HMExportMethod *exportMethod = (HMExportMethod *) exportBaseClass;
         (*selector) = exportMethod.selector;
-        (*methodSignature) = !objectRef ? [*target methodSignatureForSelector:exportMethod.selector] : [[(*target) class] instanceMethodSignatureForSelector:exportMethod.selector];
+        (*methodSignature) = exportMethod.methodSignature;
     } else {
         // 属性
         // isSetter 只有属性才生效
         HMExportProperty *exportProperty = (HMExportProperty *) exportBaseClass;
         (*selector) = isSetter ? exportProperty.propertySetterSelector : exportProperty.propertyGetterSelector;
-        (*methodSignature) = !objectRef ? [*target methodSignatureForSelector:(*selector)] : [[(*target) class] instanceMethodSignatureForSelector:(*selector)];
+        (*methodSignature) = exportProperty.methodSignature;
     }
 }
 
@@ -651,7 +643,30 @@ void hummerFinalize(JSObjectRef object) {
     return [self valueRefIsArray:strongValue.valueRef];
 }
 
-- (JSValueRef)hummerCallNativeWithArgumentCount:(size_t)argumentCount arguments:(JSValueRef const[])arguments target:(id)target selector:(SEL)selector methodSignature:(NSMethodSignature *)methodSignature {
+- (NSString *)__convertToNSString:(JSValueRef)jsValue{
+    return [self convertValueRefToString:jsValue isForce:YES];
+}
+- (NSNumber *)__convertToNSNumber:(JSValueRef)jsValue{
+    return [self convertValueRefToNumber:jsValue isForce:YES];
+}
+- (NSDictionary *)__convertToNSDictionary:(JSValueRef)jsValue{
+    return [self convertValueRefToDictionary:jsValue isPortableConvert:NO];
+}
+- (NSMutableDictionary *)__convertToNSMutableDictionary:(JSValueRef)jsValue{
+    return [self convertValueRefToDictionary:jsValue isPortableConvert:NO].mutableCopy;
+}
+- (NSArray *)__convertToNSArray:(JSValueRef)jsValue{
+    return [self convertValueRefToArray:jsValue isPortableConvert:NO];
+}
+- (NSMutableArray *)__convertToNSMutableArray:(JSValueRef)jsValue{
+    return [self convertValueRefToArray:jsValue isPortableConvert:NO].mutableCopy;
+}
+
+- (HMBaseValue *)__convertToHMBaseValue:(JSValueRef)jsValue{
+    return [[HMJSCStrongValue alloc] initWithValueRef:jsValue executor:self];
+}
+
+- (JSValueRef)hummerCallNativeWithArgumentCount:(size_t)argumentCount arguments:(JSValueRef const[])arguments target:(id)target selector:(SEL)selector methodSignature:(HMMethodSignature *)methodSignature {
     HMAssertMainQueue();
     if (!target) {
         HMLogError(HUMMER_CALL_NATIVE_TARGET_ERROR);
@@ -663,12 +678,18 @@ void hummerFinalize(JSObjectRef object) {
 
         return NULL;
     }
-    if (!methodSignature) {
+    
+    //todo: 优化 methodSignature 逻辑：新版本使用 HMMethodSignature， 老版本使用 NSMethodSignature
+    BOOL isClass = object_isClass(target);
+    NSMethodSignature *ms = isClass ? [target methodSignatureForSelector:selector] : [[target class] instanceMethodSignatureForSelector:selector];;
+    if (!ms) {
         HMLogError(HUMMER_CALL_NATIVE_METHOD_SIGNATURE_ERROR);
-
         return NULL;
     }
-    BOOL isClass = object_isClass(target);
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:ms];
+    invocation.target = target;
+    invocation.selector = selector;
+    
     NSMutableArray<HMBaseValue *> *otherArguments = nil;
     HMCurrentExecutor = self;
     // 隐含着 numerOfArguments + 0/1 <= argumentCount
@@ -684,37 +705,67 @@ void hummerFinalize(JSObjectRef object) {
     }
     // 存储额外参数
     HMOtherArguments = otherArguments.copy;
-    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
-    invocation.target = target;
-    invocation.selector = selector;
     // 后续做循环，都是临时变量，如果不做 retain，会导致野指针
     [invocation retainArguments];
 
     // 参数
     // 本质为 MIN(methodSignature.numberOfArguments, argumentCount - (isClass : 0 : 1))，主要为了防止无符号数字溢出
-    for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + (isClass ? 0 : 1), argumentCount) - (isClass ? 0 : 1); ++i) {
-        const char *objCType = [methodSignature getArgumentTypeAtIndex:i];
-        HMEncodingType type = HMEncodingGetType(objCType);
-        id param = nil;
-        if (type == HMEncodingTypeBlock) {
-            // Block
-            param = [(HMJSCExecutor *) HMCurrentExecutor convertValueRefToFunction:arguments[i + (isClass ? 0 : 1)]];
-        } else if (type == HMEncodingTypeObject) {
-            // HMJSCValue
-            param = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i + (isClass ? 0 : 1)] executor:HMCurrentExecutor];
-        } else if (HMEncodingTypeIsCNumber(type)) {
-            // js 只存在 double 和 bool 类型，但原生需要区分具体类型。
-            param = [(HMJSCExecutor *) HMCurrentExecutor convertValueRefToNumber:arguments[i + (isClass ? 0 : 1)] isForce:NO];
-        } else {
-            HMLogError(HUMMER_UN_SUPPORT_TYPE_TEMPLATE, objCType);
+    NSMutableArray *retainedObjects = [NSMutableArray new];
+    for (NSUInteger i = 2; i < MIN(ms.numberOfArguments + (isClass ? 0 : 1), argumentCount) - (isClass ? 0 : 1); ++i) {
+        HMMethodArgument *argType = [methodSignature getArgumentTypeAtIndex:i];
+        const char * objCArgType = [ms getArgumentTypeAtIndex:i];
+        HMEncodingType type = HMEncodingGetType(objCArgType);
+        JSValueRef jsArg = arguments[i + (isClass ? 0 : 1)];
+        if (methodSignature) {
+            // block
+            if (strcmp(objCArgType, @encode(id)) == 0) {
+
+                NSString *convertor = [NSString stringWithFormat:@"__convertTo%@:", argType.type];
+                SEL ctor = NSSelectorFromString(convertor);
+                id convertedObjCArg = nil;
+                if ([self respondsToSelector:ctor]) {
+                    id (*convert)(id, SEL, id) = (__typeof__(convert))objc_msgSend;
+                    convertedObjCArg = convert(self, ctor, (__bridge id)(jsArg));
+                    if (convertedObjCArg) {
+                        [retainedObjects addObject:convertedObjCArg];
+                    }
+                }
+                [invocation setArgument:&convertedObjCArg atIndex:i];
+            }else if (strcmp(objCArgType, "@?") == 0) {
+                
+                id block = [self convertValueRefToFunction:jsArg];
+                [retainedObjects addObject:block];
+                [invocation setArgument:&block atIndex:i];
+            }else if (HMEncodingTypeIsCNumber(type)){
+                id param = [(HMJSCExecutor *) HMCurrentExecutor convertValueRefToNumber:jsArg isForce:NO];
+                [invocation hm_setArgument:param atIndex:i encodingType:type];
+            }
+        }else{
+            const char *objCType = [ms getArgumentTypeAtIndex:i];
+            HMEncodingType type = HMEncodingGetType(objCType);
+            id param = nil;
+            if (type == HMEncodingTypeBlock) {
+                // Block
+                param = [(HMJSCExecutor *) HMCurrentExecutor convertValueRefToFunction:jsArg];
+            } else if (type == HMEncodingTypeObject) {
+                // HMJSCValue
+                param = [[HMJSCStrongValue alloc] initWithValueRef:jsArg executor:HMCurrentExecutor];
+            } else if (HMEncodingTypeIsCNumber(type)) {
+                // js 只存在 double 和 bool 类型，但原生需要区分具体类型。
+                param = [(HMJSCExecutor *) HMCurrentExecutor convertValueRefToNumber:jsArg isForce:NO];
+            } else {
+                HMLogError(HUMMER_UN_SUPPORT_TYPE_TEMPLATE, objCType);
+            }
+            [invocation hm_setArgument:param atIndex:i encodingType:type];
         }
-        [invocation hm_setArgument:param atIndex:i encodingType:type];
+        
     }
+        
     [invocation invoke];
     HMOtherArguments = nil;
     // 返回值
     JSValueRef returnValueRef = NULL;
-    const char *objCReturnType = methodSignature.methodReturnType;
+    const char *objCReturnType = ms.methodReturnType;
     HMEncodingType returnType = HMEncodingGetType(objCReturnType);
     if (returnType != HMEncodingTypeVoid && returnType != HMEncodingTypeUnknown) {
         id returnObject = [invocation hm_getReturnValueObject];

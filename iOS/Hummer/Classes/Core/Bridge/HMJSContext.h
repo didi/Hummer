@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class HMJSContext;
 @class HMWebSocket;
-
+@class HMViewComponent;
 @interface UIView (HMJSContext)
 
 @property (nonatomic, nullable, strong) HMJSContext *hm_context;
@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) id <HMBaseExecutorProtocol>context;
 
-@property (nonatomic, weak, readonly, nullable) UIView *rootView;
+@property (nonatomic, strong, readonly, nullable) HMViewComponent *rootView;
 
 @property (nonatomic, nullable, strong) HMBaseValue *componentView;
 

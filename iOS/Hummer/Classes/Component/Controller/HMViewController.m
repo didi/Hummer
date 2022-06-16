@@ -11,7 +11,8 @@
 #import <Hummer/HMBaseExecutorProtocol.h>
 #import <Hummer/HMRootViewLifeCycle.h>
 #import "HMBaseValue.h"
-
+#import "HMThreadManager.h"
+#import "HMRootComponent.h"
 #if __has_include(<SocketRocket/SRWebSocket.h>)
 #import <SocketRocket/SRWebSocket.h>
 #endif
@@ -23,7 +24,7 @@
 
 @property (nonatomic, strong) HMRootViewLifeCycle *lifeCycle;
 
-@property (nonatomic, weak) HMJSContext  * context;
+@property (nonatomic, strong) HMJSContext  * context;
 @property (nonatomic, weak) UIView * pageView;
 
 @end
@@ -125,6 +126,7 @@
     [self.lifeCycle onDisappear];
 }
 #pragma mark -渲染脚本
+static struct timespec createTimespec;
 
 - (void)renderWithScript:(NSString *)script {
     if (script.length == 0) {
@@ -137,21 +139,27 @@
         pData[@"url"]=self.URL;
     }
     pData[@"params"] = self.params ?: @{};
+    CGSize viewSize = self.hmRootView.frame.size;
+    HMClockGetTime(&createTimespec);
+    [HMThreadManager setupJSThread:^{
+        //渲染脚本之前 注册bridge
+        HMRootComponent *root = [[HMRootComponent alloc] initWithNativeView:self.hmRootView];
+        root.availableSize = viewSize;
+        HMJSContext *context = [HMJSContext contextInRootView:root];
+        self.context = context;
+        context.pageInfo = pData;
+        context.delegate = self;
+        if ([self respondsToSelector:@selector(hm_namespace)]) {
+            context.nameSpace = [self hm_namespace];
+        }
+        HM_SafeRunBlock(self.registerJSBridgeBlock,context);
+        
+        //执行脚本
+        [context evaluateScript:script fileName:self.URL];
+//        self.pageView = self.hmRootView.subviews.firstObject;
+//        [self.lifeCycle setJSValue:self.pageView.hmValue];
+    }];
     
-    //渲染脚本之前 注册bridge
-    HMJSContext *context = [HMJSContext contextInRootView:self.hmRootView];
-    self.context = context;
-    context.pageInfo = pData;
-    context.delegate = self;
-    if ([self respondsToSelector:@selector(hm_namespace)]) {
-        context.nameSpace = [self hm_namespace];
-    }
-    HM_SafeRunBlock(self.registerJSBridgeBlock,context);
-    
-    //执行脚本
-    [context evaluateScript:script fileName:self.URL];
-    self.pageView = self.hmRootView.subviews.firstObject;
-    [self.lifeCycle setJSValue:self.pageView.hmValue];
 }
 
 #pragma mark - View 生命周期管理
@@ -238,6 +246,18 @@
                 });
             }
         }];
+    });
+}
+
+- (void)context:(HMJSContext *)context didRenderPage:(HMBaseValue *)page {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        static struct timespec createTimespec2;
+        HMClockGetTime(&createTimespec2);
+        static struct timespec resultTimespec;
+        HMDiffTime(&createTimespec, &createTimespec2, &resultTimespec);
+        NSNumber *duration = @(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000);
+        NSLog(@"duration = %lld", duration.longLongValue);
     });
 }
 @end
