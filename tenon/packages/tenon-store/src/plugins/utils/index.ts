@@ -70,11 +70,11 @@ export function getUUID(){
 }
 
 export function getNotifyEventKey(customKey?: string){
-  return `${customKey || NAMESPACE}_UPDATE_STORE`
+  return `${NAMESPACE || customKey}_UPDATE_STORE`
 }
 
 export function getMemoryKey(customKey?: string){
-  return `${customKey || NAMESPACE}_STORE_MEMORY`
+  return `${NAMESPACE || customKey}_STORE_MEMORY`
 }
 
 function randomString(length = 8, chars: string) {
