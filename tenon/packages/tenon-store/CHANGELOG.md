@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/didi/Hummer/compare/@hummer/tenon-store@1.4.0...@hummer/tenon-store@1.5.0) (2022-06-23)
+
+
+### Features
+
+* tenon-store key NAMESPACE优先级高于customKey ([c293ba0](https://github.com/didi/Hummer/commit/c293ba060598b0331b33e80b0f78ff0878b8f131))
+
+
+
+
+
 # [1.4.0](https://github.com.cnpmjs.org/didi/Hummer/compare/@hummer/tenon-store@1.3.0...@hummer/tenon-store@1.4.0) (2021-09-10)
 
 
