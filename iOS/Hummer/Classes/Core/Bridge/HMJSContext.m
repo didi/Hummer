@@ -289,11 +289,15 @@ NS_ASSUME_NONNULL_END
     if (!self.didCallRender) {
         isRenderSuccess = NO;
         NSError *err = [NSError errorWithDomain:HMJSContextErrorDomain code:HMJSContextErrorNotCallRender userInfo:@{NSLocalizedDescriptionKey : @"Hummer.render() function is not called"}];
-        [self.delegate context:self didRenderFailed:err];
+        if ([self.delegate respondsToSelector:@selector(context:didRenderFailed:)]) {
+            [self.delegate context:self didRenderFailed:err];
+        }
     }else if(!self.componentView){
         isRenderSuccess = NO;
         NSError *err = [NSError errorWithDomain:HMJSContextErrorDomain code:HMJSContextErrorRenderWithInvalidArg userInfo:@{NSLocalizedDescriptionKey : @"Call Hummer.render() with invalid arg"}];
-        [self.delegate context:self didRenderFailed:err];
+        if ([self.delegate respondsToSelector:@selector(context:didRenderFailed:)]) {
+            [self.delegate context:self didRenderFailed:err];
+        }
     }
     
     struct timespec afterTimespec;
