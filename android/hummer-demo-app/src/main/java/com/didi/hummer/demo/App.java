@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.didi.hummer.Hummer;
 import com.didi.hummer.HummerConfig;
-import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.http.impl.DefaultHttpAdapter;
 import com.didi.hummer.adapter.imageloader.impl.DefaultImageLoaderAdapter;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
@@ -45,8 +44,8 @@ public class App extends Application {
                 .setExceptionCallback(e -> {})
                 // RTL支持
                 .setSupportRTL(false)
-                // 字体文件Assets目录
-                .setFontsAssetsPath("fonts")
+                // 自定义字体库
+                .setFontAdapter(new TestFontAdapter())
                 // SDK内部埋点回调
                 .setEventTracer((event, params) -> {})
                 // 自定义路由（可在这里指定自定义Hummer容器）

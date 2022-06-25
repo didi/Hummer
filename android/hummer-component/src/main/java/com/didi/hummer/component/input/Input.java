@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsProperty;
+import com.didi.hummer.component.text.FontManager;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.render.component.view.HMBase;
@@ -45,6 +46,7 @@ public class Input extends HMBase<EditText> {
         orgTextColors = getView().getTextColors();
         orgHintColors = getView().getHintTextColors();
         orgTextSize = getView().getTextSize();
+        setFontFamily(FontManager.DEFAULT_FONT_FAMILY);
         orgTypeface = getView().getTypeface();
         getView().setBackgroundColor(Color.TRANSPARENT);
         getView().setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -222,6 +224,7 @@ public class Input extends HMBase<EditText> {
      */
     @JsProperty("focused")
     private boolean focused;
+
     public void setFocused(boolean focused) {
         if (getView().isFocused() && focused) {
             return;
@@ -283,6 +286,7 @@ public class Input extends HMBase<EditText> {
     public void setTextAlign(String align) {
         mProperty.setTextAlign(align);
     }
+
     /**
      * 设置字体
      *
