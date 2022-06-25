@@ -15,7 +15,6 @@ import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.widget.TextView;
 
-import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerStyleUtils;
@@ -28,7 +27,7 @@ import java.util.Map;
 
 /**
  * 富文本帮助类
- *
+ * <p>
  * Created by XiaoFeng on 2020-02-06.
  */
 public class RichTextHelper {
@@ -239,12 +238,11 @@ public class RichTextHelper {
             spanText.setSpan(new BackgroundColorSpan(richText.backgroundColor), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         if (!TextUtils.isEmpty(richText.fontFamily)) {
-            String fontsAssetsPath = HummerSDK.getFontsAssetsPath(((HummerContext) hmBase.getContext()).getNamespace());
             int style = Typeface.NORMAL;
             if (hmBase.getView() instanceof TextView && ((TextView) hmBase.getView()).getTypeface() != null) {
                 style = ((TextView) hmBase.getView()).getTypeface().getStyle();
             }
-            Typeface typeface = FontManager.getInstance().getTypeface(richText.fontFamily, fontsAssetsPath, style, hmBase.getContext().getAssets());
+            Typeface typeface = FontManager.getInstance().getTypeface((HummerContext) hmBase.getContext(), richText.fontFamily, style);
             spanText.setSpan(new TypefaceSpanEx(typeface), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         if (richText.fontSize > 0) {

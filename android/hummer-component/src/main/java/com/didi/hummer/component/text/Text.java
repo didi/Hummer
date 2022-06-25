@@ -15,7 +15,6 @@ import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.didi.hummer.HummerSDK;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsProperty;
@@ -53,6 +52,7 @@ public class Text extends HMBase<TextView> {
         super.onCreate();
         orgTextColors = getView().getTextColors();
         orgTextSize = getView().getTextSize();
+        setFontFamily(FontManager.DEFAULT_FONT_FAMILY);
         orgTypeface = getView().getTypeface();
         getView().setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         getView().setEllipsize(TextUtils.TruncateAt.END);
@@ -80,6 +80,7 @@ public class Text extends HMBase<TextView> {
 
     @JsProperty("text")
     private String text;
+
     public void setText(String text) {
         setRowText(text);
         getNode().setContent(text);
@@ -87,6 +88,7 @@ public class Text extends HMBase<TextView> {
 
     @JsProperty("richText")
     private Object richText;
+
     public void setRichText(Object richText) {
         if (richText instanceof String) {
             setText((String) richText);
@@ -99,6 +101,7 @@ public class Text extends HMBase<TextView> {
     @Deprecated
     @JsProperty("formattedText")
     private String formattedText;
+
     public void setFormattedText(String formattedText) {
         setRowText(fromHtml(formattedText));
         getNode().setContent(formattedText);
@@ -106,6 +109,7 @@ public class Text extends HMBase<TextView> {
 
     @JsProperty("textCopyEnable")
     private boolean textCopyEnable;
+
     public void setTextCopyEnable(boolean textCopyEnable) {
         if (textCopyEnable) {
             getView().setOnLongClickListener(v -> {
@@ -137,15 +141,13 @@ public class Text extends HMBase<TextView> {
             return;
         }
 
-        String fontsAssetsPath = HummerSDK.getFontsAssetsPath(((HummerContext) getContext()).getNamespace());
-
         int style = Typeface.NORMAL;
         if (getView().getTypeface() != null) {
             style = getView().getTypeface().getStyle();
         }
 
         for (String font : fontArray) {
-            Typeface typeface = FontManager.getInstance().getTypeface(font.trim(), fontsAssetsPath, style, getContext().getAssets());
+            Typeface typeface = FontManager.getInstance().getTypeface((HummerContext) getContext(), font.trim(), style);
             if (typeface != null) {
                 getView().setTypeface(typeface);
                 requestLayout();

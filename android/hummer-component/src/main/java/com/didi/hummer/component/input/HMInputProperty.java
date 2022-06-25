@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.didi.hummer.HummerSDK;
 import com.didi.hummer.component.text.FontManager;
 import com.didi.hummer.context.HummerContext;
 
@@ -191,9 +190,9 @@ public class HMInputProperty {
         switch (align) {
             case NJTextAlign.LEFT:
             default:
-                return isSingleLine? Gravity.START | Gravity.CENTER_VERTICAL  : Gravity.START;
+                return isSingleLine ? Gravity.START | Gravity.CENTER_VERTICAL : Gravity.START;
             case NJTextAlign.RIGHT:
-                return isSingleLine ? Gravity.END | Gravity.CENTER_VERTICAL  : Gravity.END;
+                return isSingleLine ? Gravity.END | Gravity.CENTER_VERTICAL : Gravity.END;
             case NJTextAlign.CENTER:
                 return isSingleLine ? Gravity.CENTER : Gravity.CENTER_HORIZONTAL;
         }
@@ -209,15 +208,13 @@ public class HMInputProperty {
             return;
         }
 
-        String fontsAssetsPath = HummerSDK.getFontsAssetsPath(((HummerContext) context).getNamespace());
-
         int style = Typeface.NORMAL;
         if (mView.getTypeface() != null) {
             style = mView.getTypeface().getStyle();
         }
 
         for (String font : fontArray) {
-            Typeface typeface = FontManager.getInstance().getTypeface(font.trim(), fontsAssetsPath, style, mView.getContext().getAssets());
+            Typeface typeface = FontManager.getInstance().getTypeface((HummerContext) context, font.trim(), style);
             if (typeface != null) {
                 mView.setTypeface(typeface);
                 break;
@@ -234,7 +231,7 @@ public class HMInputProperty {
     }
 
     public void setMaxLength(int maxLength) {
-        InputFilter [] currentFilters = mView.getFilters();
+        InputFilter[] currentFilters = mView.getFilters();
         InputFilter[] newFilters = EMPTY_FILTERS;
 
         if (maxLength == 0) {
