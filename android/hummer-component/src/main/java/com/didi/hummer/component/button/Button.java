@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 
-import com.didi.hummer.HummerSDK;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsProperty;
@@ -49,10 +48,11 @@ public class Button extends HMBase<android.widget.Button> {
         orgBackground = getView().getBackground();
         orgTextColors = getView().getTextColors();
         orgTextSize = getView().getTextSize();
-        orgTypeface = getView().getTypeface();
         getView().setBackground(null);
         getView().setAllCaps(false);
         getView().setTypeface(null, Typeface.NORMAL);
+        setFontFamily(FontManager.DEFAULT_FONT_FAMILY);
+        orgTypeface = getView().getTypeface();
         //fixed Button 总是在图层最上层的问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getView().setStateListAnimator(null);
@@ -99,6 +99,7 @@ public class Button extends HMBase<android.widget.Button> {
 
     @JsProperty("pressed")
     private Map<String, Object> pressed;
+
     public void setPressed(Map<String, Object> pressed) {
         this.pressed = pressed;
         mergePressedStyle();
@@ -107,6 +108,7 @@ public class Button extends HMBase<android.widget.Button> {
 
     @JsProperty("disabled")
     private Map<String, Object> disabled;
+
     public void setDisabled(Map<String, Object> disabled) {
         this.disabled = disabled;
         mergeDisabledStyle();
@@ -170,15 +172,13 @@ public class Button extends HMBase<android.widget.Button> {
             return;
         }
 
-        String fontsAssetsPath = HummerSDK.getFontsAssetsPath(((HummerContext) getContext()).getNamespace());
-
         int style = Typeface.NORMAL;
         if (getView().getTypeface() != null) {
             style = getView().getTypeface().getStyle();
         }
 
         for (String font : fontArray) {
-            Typeface typeface = FontManager.getInstance().getTypeface(font.trim(), fontsAssetsPath, style, getContext().getAssets());
+            Typeface typeface = FontManager.getInstance().getTypeface((HummerContext) getContext(), font.trim(), style);
             if (typeface != null) {
                 getView().setTypeface(typeface);
                 requestLayout();

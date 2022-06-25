@@ -7,6 +7,9 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
+import com.didi.hummer.HummerSDK;
+import com.didi.hummer.adapter.font.IFontAdapter;
+import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.util.HMLog;
 
 import java.util.HashMap;
@@ -25,6 +28,8 @@ public class FontManager {
 
     private static final String FONTS_ASSET_PATH = "fonts/";
 
+    public static final String DEFAULT_FONT_FAMILY = "DEFAULT_FONT_FAMILY";
+
     private static FontManager instance;
 
     private Map<String, FontFamily> mFontCache;
@@ -40,10 +45,31 @@ public class FontManager {
         return instance;
     }
 
+    public Typeface getTypeface(HummerContext context, String fontFamilyName, int style) {
+        FontFamily fontFamily = mFontCache.get(fontFamilyName);
+        if (fontFamily == null) {
+            fontFamily = new FontFamily();
+            mFontCache.put(fontFamilyName, fontFamily);
+        }
+
+        Typeface typeface = fontFamily.getTypeface(style);
+        if (typeface == null) {
+            final IFontAdapter fontAdapter = HummerSDK.getHummerConfig(context.getNamespace()).getFontAdapter();
+            typeface = fontAdapter.loadFont(context.getApplicationContext(), DEFAULT_FONT_FAMILY.equals(fontFamilyName) ? null : fontFamilyName, style);
+            if (typeface != null) {
+                fontFamily.setTypeface(style, typeface);
+            }
+        }
+
+        return typeface;
+    }
+
+    @Deprecated
     public Typeface getTypeface(String fontFamilyName, int style, AssetManager assetManager) {
         return getTypeface(fontFamilyName, FONTS_ASSET_PATH, style, assetManager);
     }
 
+    @Deprecated
     public Typeface getTypeface(String fontFamilyName, String fontsAssetsPath, int style, AssetManager assetManager) {
         FontFamily fontFamily = mFontCache.get(fontFamilyName);
         if (fontFamily == null) {
