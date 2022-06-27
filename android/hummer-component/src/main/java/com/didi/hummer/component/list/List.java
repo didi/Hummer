@@ -36,6 +36,7 @@ import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.YogaNodeUtil;
 import com.facebook.yoga.YogaNode;
+import com.facebook.yoga.android.YogaLayout;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.lang.reflect.InvocationTargetException;
@@ -74,6 +75,7 @@ public class List extends HMBase<SmartRefreshLayout> {
     private HummerHeader hummerHeader;
     private HummerFooter hummerFooter;
     private RecyclerView recyclerView;
+    private YogaNode recyclerViewNode;
     private HMListAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.ItemDecoration itemDecoration;
@@ -237,7 +239,8 @@ public class List extends HMBase<SmartRefreshLayout> {
         adapter = new HMListAdapter(getContext(), instanceManager);
         recyclerView.setAdapter(adapter);
 
-        YogaNode recyclerViewNode = YogaNodeUtil.createYogaNode();
+        recyclerViewNode = YogaNodeUtil.createYogaNode();
+        recyclerViewNode.setMeasureFunction(new YogaLayout.ViewMeasureFunction());
         recyclerViewNode.setData(recyclerView);
         recyclerViewNode.setFlexGrow(1);
         getYogaNode().setMeasureFunction(null);
@@ -592,6 +595,9 @@ public class List extends HMBase<SmartRefreshLayout> {
         if (!isLoadingMore) {
             // 下拉刷新的情况下，重置加载更多状态
             refreshLayout.resetNoMoreData();
+        }
+        if (recyclerViewNode != null) {
+            recyclerViewNode.dirty();
         }
         if (adapter != null) {
             adapter.refresh(count, isLoadingMore);
