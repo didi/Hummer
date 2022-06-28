@@ -1,7 +1,5 @@
 package com.didi.hummer.devtools.invoker;
 
-import android.util.Log;
-
 import com.didi.hummer.adapter.http.HttpResponse;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.napi.NAPIValue;
@@ -28,7 +26,7 @@ public class RequestInvokerWrapper extends Request$$Invoker {
             case "send":
                 JSCallback callback = params.length > 0 && params[0] != null ? (JSCallback)params[0] : null;
                 instance.send(new JSCallbackWrapper(instance.url, callback));
-                break;
+                return null;
         }
         return super.invoke(instance, methodName, params);
     }
