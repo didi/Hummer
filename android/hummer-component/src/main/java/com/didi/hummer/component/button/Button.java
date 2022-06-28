@@ -48,10 +48,11 @@ public class Button extends HMBase<android.widget.Button> {
         orgBackground = getView().getBackground();
         orgTextColors = getView().getTextColors();
         orgTextSize = getView().getTextSize();
-        setFontFamily(FontManager.DEFAULT_FONT_FAMILY);
-        orgTypeface = getView().getTypeface();
         getView().setBackground(null);
         getView().setAllCaps(false);
+        getView().setTypeface(null, Typeface.NORMAL);
+        setFontFamily(FontManager.DEFAULT_FONT_FAMILY);
+        orgTypeface = getView().getTypeface();
         //fixed Button 总是在图层最上层的问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getView().setStateListAnimator(null);
