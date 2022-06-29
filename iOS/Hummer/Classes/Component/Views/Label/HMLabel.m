@@ -335,7 +335,11 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     }
     if (_fontStyle) {
         UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | _fontStyle];
-        fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;
+        if (_fontDescriptor) {
+            fontDescriptor = _fontDescriptor;
+        } else if (_fontStyle & UIFontDescriptorTraitItalic) {
+            fontDescriptor = [fontDescriptor fontDescriptorWithMatrix:CGAffineTransformMake(1, 0, tan(M_PI_4 / 3), 1, 0, 0)];
+        }
     }
     UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:_fontSize];
     self.font = font;
