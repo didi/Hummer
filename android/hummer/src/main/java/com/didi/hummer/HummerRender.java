@@ -16,7 +16,9 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
+import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.engine.napi.jni.JSException;
+import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.core.util.HMLog;
@@ -68,12 +70,6 @@ public class HummerRender {
         startTime = System.currentTimeMillis();
         hmContext = Hummer.createContext(container, namespace);
 
-        JSException.addJSContextExceptionCallback(hmContext.getJsContext(), e -> {
-            if (trackerAdapter != null) {
-                trackerAdapter.trackException(hmContext.getPageUrl(), e);
-            }
-        });
-
         if (DebugUtil.isDebuggable()) {
             devTools = new HummerDevTools(hmContext, config);
         }
@@ -83,6 +79,18 @@ public class HummerRender {
             trackerAdapter.trackEvent(ITrackerAdapter.EventName.CONTEXT_CREATE, null);
         }
         perfInfo.ctxInitTimeCost = System.currentTimeMillis() - startTime;
+
+        ExceptionCallback cb = e -> {
+            if (trackerAdapter != null) {
+                trackerAdapter.trackException(hmContext.getPageUrl(), e);
+            }
+        };
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            JSException.addJSContextExceptionCallback(hmContext.getJsContext(), cb);
+        } else {
+            HummerException.addJSContextExceptionCallback(hmContext.getJsContext(), cb);
+        }
     }
 
     public HummerContext getHummerContext() {
