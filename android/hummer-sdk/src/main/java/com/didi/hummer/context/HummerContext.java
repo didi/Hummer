@@ -2,7 +2,6 @@ package com.didi.hummer.context;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -23,15 +22,10 @@ import com.didi.hummer.register.HummerRegister$$hummer_sdk;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
-import com.didi.hummer.render.utility.DPUtil;
-import com.didi.hummer.utils.AppUtils;
-import com.didi.hummer.utils.AssetsUtil;
-import com.didi.hummer.utils.BarUtils;
-import com.didi.hummer.utils.ScreenUtils;
+import com.didi.hummer.utils.EnvUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -39,24 +33,8 @@ import java.util.regex.Pattern;
 
 public class HummerContext extends ContextWrapper {
 
-    private static final String HUMMER_DEFINITION_FILE = "HummerDefinition.js";
-    private static final String HUMMER_DEFINITION_ES5_FILE = "HummerDefinition_es5.js";
-
     private static final String HUMMER_OBJECT_PREFIX = "-_-_-_hummer-object_-_-_-";
     private static final String HUMMER_ARRAY_PREFIX = "-_-_-_hummer-array_-_-_-";
-
-    private static final String ENV_KEY_PLATFORM = "platform";
-    private static final String ENV_KEY_OS_VERSION = "osVersion";
-    private static final String ENV_KEY_APP_VERSION = "appVersion";
-    private static final String ENV_KEY_APP_NAME = "appName";
-    private static final String ENV_KEY_STATUS_BAR_HEIGHT = "statusBarHeight";
-    private static final String ENV_KEY_SAFE_AREA_BOTTOM = "safeAreaBottom";
-    private static final String ENV_KEY_DEVICE_WIDTH = "deviceWidth";
-    private static final String ENV_KEY_DEVICE_HEIGHT = "deviceHeight";
-    private static final String ENV_KEY_AVAILABLE_WIDTH = "availableWidth";
-    private static final String ENV_KEY_AVAILABLE_HEIGHT = "availableHeight";
-    private static final String ENV_KEY_SCALE = "scale";
-    private static final String ENV_KEY_NAMESPACE = "namespace";
 
     /**
      * 命名空间（用于隔离不同业务线）
@@ -155,14 +133,18 @@ public class HummerContext extends ContextWrapper {
             }
             // 注入babel
             mJsContext.evaluateJavaScript("var Babel = {}");
-            mJsContext.evaluateJavaScript(AssetsUtil.readFile("babel.js"), "babel.js");
-            mJsContext.evaluateJavaScript(AssetsUtil.readFile(HUMMER_DEFINITION_ES5_FILE), "HummerDefinition_es5.js");
+            mJsContext.evaluateJavaScript(HummerDefinition.BABEL, "babel.js");
+            mJsContext.evaluateJavaScript(HummerDefinition.ES5_CORE, "HummerDefinition_es5.js");
         } else {
-            mJsContext.evaluateJavaScript(AssetsUtil.readFile(HUMMER_DEFINITION_FILE), "HummerDefinition.js");
+            if (HummerSDK.isSupportBytecode(namespace)) {
+                mJsContext.evaluateJavaScript(HummerDefinition.CORE, "HummerDefinition.js");
+            } else {
+                mJsContext.evaluateJavaScriptOnly(HummerDefinition.CORE, "HummerDefinition.js");
+            }
         }
-        mJsContext.evaluateJavaScript("__IS_DEBUG__ = " + DebugUtil.isDebuggable());
+        mJsContext.set("__IS_DEBUG__", DebugUtil.isDebuggable());
 
-        initEnvironmentVariables();
+        initEnv(EnvUtil.getHummerEnv(this, namespace));
 
         HummerRegister$$hummer_sdk.init(this);
     }
@@ -340,7 +322,23 @@ public class HummerContext extends ContextWrapper {
                 || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             script = babelTransformCode(script, scriptId);
         }
-        return mJsContext.evaluateJavaScript(script, scriptId);
+        if (HummerSDK.isSupportBytecode(namespace)) {
+            return mJsContext.evaluateJavaScript(script, scriptId);
+        } else {
+            return mJsContext.evaluateJavaScriptOnly(script, scriptId);
+        }
+    }
+
+    public void evaluateJavaScriptAsync(String script, String scriptId, JSContext.JSEvaluateCallback callback) {
+        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES
+                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+            script = babelTransformCode(script, scriptId);
+        }
+        mJsContext.evaluateJavaScriptAsync(script, scriptId, callback);
+    }
+
+    public Object evaluateBytecode(byte[] bytecode) {
+        return mJsContext.evaluateBytecode(bytecode);
     }
 
     private String babelTransformCode(String script, String scriptId) {
@@ -353,11 +351,11 @@ public class HummerContext extends ContextWrapper {
         }
 
         if ("hummer_sdk.js".equals(scriptId)) {
-            return AssetsUtil.readFile("hummer_sdk.js");
+            return HummerDefinition.ES5_SDK;
         }
 
         if ("hummer_component.js".equals(scriptId)) {
-            return AssetsUtil.readFile("hummer_component.js");
+            return HummerDefinition.ES5_COMP;
         }
 
         String orgScript = script;
@@ -512,37 +510,5 @@ public class HummerContext extends ContextWrapper {
                 ev.set(key, value);
             }
         }
-    }
-
-    private void initEnvironmentVariables() {
-        int statusBarHeight = BarUtils.getStatusBarHeight(this);
-        int deviceWidth = ScreenUtils.getAppScreenWidth(this);
-        int deviceHeight = ScreenUtils.getAppScreenHeight(this);
-        int availableWidth = deviceWidth;
-        int availableHeight = deviceHeight - statusBarHeight;
-        statusBarHeight = DPUtil.px2dp(this, statusBarHeight);
-        deviceWidth = DPUtil.px2dp(this, deviceWidth);
-        deviceHeight = DPUtil.px2dp(this, deviceHeight);
-        availableWidth = DPUtil.px2dp(this, availableWidth);
-        availableHeight = DPUtil.px2dp(this, availableHeight);
-
-        Map<String, Object> envs = new LinkedHashMap<>();
-        envs.put(ENV_KEY_PLATFORM, "Android");
-        envs.put(ENV_KEY_OS_VERSION, Build.VERSION.RELEASE);
-        envs.put(ENV_KEY_APP_NAME, AppUtils.getAppName(this));
-        envs.put(ENV_KEY_APP_VERSION, AppUtils.getAppVersionName(this));
-        envs.put(ENV_KEY_STATUS_BAR_HEIGHT, statusBarHeight);
-        envs.put(ENV_KEY_SAFE_AREA_BOTTOM, 0);
-        envs.put(ENV_KEY_DEVICE_WIDTH, deviceWidth);
-        envs.put(ENV_KEY_DEVICE_HEIGHT, deviceHeight);
-        envs.put(ENV_KEY_AVAILABLE_WIDTH, availableWidth);
-        envs.put(ENV_KEY_AVAILABLE_HEIGHT, availableHeight);
-        envs.put(ENV_KEY_SCALE, ScreenUtils.getScreenDensity(this));
-
-        if (!TextUtils.isEmpty(namespace) && !namespace.equals(HummerSDK.NAMESPACE_DEFAULT)) {
-            envs.put(ENV_KEY_NAMESPACE, namespace);
-        }
-
-        initEnv(envs);
     }
 }

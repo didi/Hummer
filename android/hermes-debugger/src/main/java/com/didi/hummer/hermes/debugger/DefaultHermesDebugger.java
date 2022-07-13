@@ -1,16 +1,19 @@
 package com.didi.hummer.hermes.debugger;
 
+import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
 import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.http.HttpResponse;
+import com.didi.hummer.context.HummerDefinition;
 import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.debug.plugin.IHermesDebugger;
 import com.didi.hummer.hermes.inspector.Inspector;
 import com.didi.hummer.hermes.inspector.InspectorPackagerConnection;
 import com.didi.hummer.hermes.queue.MessageQueueThreadImpl;
 import com.didi.hummer.hermes.queue.MessageQueueThreadSpec;
+import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.NetworkUtil;
 import com.google.gson.reflect.TypeToken;
 
@@ -46,13 +49,18 @@ public class DefaultHermesDebugger implements IHermesDebugger {
         void onResult(List<String> pageList);
     }
 
-    public DefaultHermesDebugger() {
-        this(DEFAULT_DEBUGGER_IP, DEFAULT_DEBUGGER_PORT);
+    public DefaultHermesDebugger(Context context) {
+        this(context, DEFAULT_DEBUGGER_IP, DEFAULT_DEBUGGER_PORT);
     }
 
-    public DefaultHermesDebugger(String ip, int port) {
+    public DefaultHermesDebugger(Context context, String ip, int port) {
         sIP = ip;
         sPort = port;
+
+        HummerDefinition.ES5_CORE = AssetsUtil.readFile(context, "HummerDefinition_es5.js");
+        HummerDefinition.ES5_SDK = AssetsUtil.readFile(context,"hummer_sdk.js");
+        HummerDefinition.ES5_COMP = AssetsUtil.readFile(context,"hummer_component.js");
+        HummerDefinition.BABEL = AssetsUtil.readFile(context,"babel.js");
     }
 
     public void release() {

@@ -58,3 +58,74 @@ Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_evaluateJavaScriptNat
 
     return QJS_VALUE_PTR(value);
 }
+
+extern "C"
+JNIEXPORT jbyteArray JNICALL
+Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_compileJavaScriptNative(JNIEnv *env, jclass clazz, jlong js_context, jstring script, jstring scriptId) {
+    auto jsContext = QJS_CONTEXT(js_context);
+    if (jsContext == nullptr) {
+        return nullptr;
+    }
+
+    const char* charScript = env->GetStringUTFChars(script, nullptr);
+    const char* charScriptId = env->GetStringUTFChars(scriptId, nullptr);
+
+    JSValue value = JS_Eval(
+            jsContext,
+            charScript, strlen(charScript),
+            charScriptId, JS_EVAL_FLAG_COMPILE_ONLY);
+
+    size_t out_buf_len;
+    uint8_t *out_buf = JS_WriteObject(jsContext, &out_buf_len, value, JS_WRITE_OBJ_BYTECODE);
+
+    env->ReleaseStringUTFChars(script, charScript);
+    env->ReleaseStringUTFChars(script, charScriptId);
+
+    reportExceptionIfNeed(jsContext);
+
+    if (!out_buf) {
+        return nullptr;
+    }
+
+    jbyteArray ret = env->NewByteArray((jsize) out_buf_len);
+    env->SetByteArrayRegion(ret, 0, (jsize) out_buf_len, reinterpret_cast<const jbyte*>(out_buf));
+
+    return ret;
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_evaluateBytecodeNative(JNIEnv *env, jclass clazz, jlong js_context, jbyteArray bytecode) {
+    auto jsContext = QJS_CONTEXT(js_context);
+    if (jsContext == nullptr) {
+        return -1;
+    }
+
+    jsize buf_len = env->GetArrayLength(bytecode);
+    auto *buf = (jbyte *) malloc(sizeof(jbyte) * buf_len);
+    memset(buf, 0, sizeof(jbyte) * buf_len);
+
+    env->GetByteArrayRegion(bytecode, 0, buf_len, buf);
+
+    JSValue jsValue = JS_ReadObject(jsContext, (uint8_t *) buf, buf_len, JS_READ_OBJ_BYTECODE);
+
+    free(buf);
+
+    JSValue ret = JS_EvalFunction(jsContext, jsValue);
+
+    // 处理Promise等异步任务的消息队列
+    processJsAsyncTasksLoop(jsContext);
+
+    reportExceptionIfNeed(jsContext);
+
+    return QJS_VALUE_PTR(ret);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_updateStackTopNative(JNIEnv *env, jclass clazz, jlong js_context) {
+    auto jsContext = QJS_CONTEXT(js_context);
+    if (jsContext != nullptr) {
+        JS_UpdateStackTop(JS_GetRuntime(jsContext));
+    }
+}
