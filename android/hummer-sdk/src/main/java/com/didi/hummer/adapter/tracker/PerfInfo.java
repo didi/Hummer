@@ -10,23 +10,34 @@ import java.io.Serializable;
 public class PerfInfo implements Serializable {
 
     /**
-     * 容器初始化耗时
+     * 容器初始化耗时（ms）
      */
     public long ctxInitTimeCost;
     /**
-     * js网络获取耗时
+     * js网络获取耗时（ms）
      */
     public long jsFetchTimeCost;
     /**
-     * js执行耗时
+     * js执行耗时（ms）
      */
     public long jsEvalTimeCost;
     /**
-     * 页面渲染耗时
+     * 页面渲染耗时（ms）
      */
     public long pageRenderTimeCost;
     /**
      * js包大小（KB）
      */
     public float jsBundleSize;
+
+    @Override
+    public String toString() {
+        return "PerfInfo{" +
+                "ctxInitTimeCost=" + ctxInitTimeCost + "ms" +
+                ", jsFetchTimeCost=" + jsFetchTimeCost + "ms" +
+                ", jsEvalTimeCost=" + jsEvalTimeCost + "ms" +
+                ", pageRenderTimeCost=" + pageRenderTimeCost + "ms" +
+                ", jsBundleSize=" + jsBundleSize + "KB" +
+                '}';
+    }
 }

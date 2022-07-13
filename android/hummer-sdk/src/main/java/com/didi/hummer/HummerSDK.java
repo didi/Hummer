@@ -19,6 +19,7 @@ import com.didi.hummer.debug.plugin.IHermesDebugger;
 import com.didi.hummer.debug.plugin.IV8Debugger;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
+import com.didi.hummer.utils.EnvUtil;
 import com.didi.hummer.utils.blankj.Utils;
 import com.facebook.soloader.SoLoader;
 import com.getkeepsafe.relinker.ReLinker;
@@ -95,6 +96,8 @@ public class HummerSDK {
             } else {
                 HummerException.init();
             }
+
+            EnvUtil.initHummerEnv(appContext);
             isInited = true;
 
             sdkInfo.jsEngine = jsEngine;
@@ -233,6 +236,10 @@ public class HummerSDK {
 
     public static boolean isSupportRTL(String namespace) {
         return getHummerConfig(namespace).isSupportRTL();
+    }
+
+    public static boolean isSupportBytecode(String namespace) {
+        return getHummerConfig(namespace).isSupportBytecode();
     }
 
     public static String getFontsAssetsPath(String namespace) {

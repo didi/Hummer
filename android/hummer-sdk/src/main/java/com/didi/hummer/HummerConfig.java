@@ -48,6 +48,10 @@ public class HummerConfig {
      */
     private boolean isSupportRTL;
     /**
+     * 是否支持字节码（默认不支持）
+     */
+    private boolean isSupportBytecode;
+    /**
      * 字体文件Assets目录
      */
     private String fontsAssetsPath;
@@ -88,6 +92,7 @@ public class HummerConfig {
         this.eventTracer = builder.eventTracer;
         this.exceptionCallback = builder.exceptionCallback;
         this.isSupportRTL = builder.isSupportRTL;
+        this.isSupportBytecode = builder.isSupportBytecode;
         this.fontsAssetsPath = builder.fontsAssetsPath;
         this.httpAdapter = builder.httpAdapter;
         this.fontAdapter = builder.fontAdapter;
@@ -129,6 +134,10 @@ public class HummerConfig {
 
     public boolean isSupportRTL() {
         return isSupportRTL;
+    }
+
+    public boolean isSupportBytecode() {
+        return isSupportBytecode;
     }
 
     /**
@@ -200,6 +209,7 @@ public class HummerConfig {
         private EventTracer.Trace eventTracer;
         private ExceptionCallback exceptionCallback;
         private boolean isSupportRTL;
+        private boolean isSupportBytecode;
         private String fontsAssetsPath;
         private IHttpAdapter httpAdapter;
         private IFontAdapter fontAdapter;
@@ -233,6 +243,11 @@ public class HummerConfig {
 
         public Builder setSupportRTL(boolean supportRTL) {
             isSupportRTL = supportRTL;
+            return this;
+        }
+
+        public Builder setSupportBytecode(boolean supportBytecode) {
+            isSupportBytecode = supportBytecode;
             return this;
         }
 

@@ -1,5 +1,6 @@
 package com.didi.hummer.utils;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,8 +19,12 @@ import java.io.UnsupportedEncodingException;
 public class AssetsUtil {
 
     public static String readFile(String path) {
+        return readFile(HummerSDK.appContext, path);
+    }
+
+    public static String readFile(Context context, String path) {
         try {
-            InputStream inputStream = HummerSDK.appContext.getAssets().open(path);
+            InputStream inputStream = context.getAssets().open(path);
             InputStreamReader inputStreamReader = null;
             try {
                 inputStreamReader = new InputStreamReader(inputStream, "UTF-8");

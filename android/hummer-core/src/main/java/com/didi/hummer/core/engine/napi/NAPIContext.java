@@ -40,6 +40,21 @@ public class NAPIContext extends NAPIValue implements JSContext {
     }
 
     @Override
+    public Object evaluateJavaScriptOnly(String script, String scriptId) {
+        return null;
+    }
+
+    @Override
+    public void evaluateJavaScriptAsync(String script, String scriptId, JSEvaluateCallback callback) {
+
+    }
+
+    @Override
+    public Object evaluateBytecode(byte[] bytecode) {
+        return null;
+    }
+
+    @Override
     public void setRecycler(IRecycler recycler) {
         JSEngine.registerJSRecycler(context, recycler);
     }

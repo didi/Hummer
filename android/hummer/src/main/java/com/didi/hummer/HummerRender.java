@@ -19,6 +19,7 @@ import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.engine.napi.jni.JSException;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
+import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.devtools.DevToolsConfig;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.render.style.HummerLayout;
@@ -26,6 +27,7 @@ import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.FileUtil;
 import com.didi.hummer.utils.JsSourceUtil;
 import com.didi.hummer.utils.NetworkUtil;
+import com.didi.hummer.utils.UIThreadUtil;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
@@ -139,8 +141,22 @@ public class HummerRender {
         }
 
         hmContext.setJsSourcePath(sourcePath);
-        hmContext.evaluateJavaScript(js, sourcePath);
 
+        if (HummerSDK.isSupportBytecode(hmContext.getNamespace())) {
+            hmContext.evaluateJavaScriptAsync(js, sourcePath, ret -> renderFinish(js, sourcePath, startTime));
+        } else {
+            hmContext.evaluateJavaScript(js, sourcePath);
+            renderFinish(js, sourcePath, startTime);
+        }
+    }
+
+    public void render(String js, String sourcePath, byte[] bytecode) {
+        long startTime = System.currentTimeMillis();
+        hmContext.evaluateBytecode(bytecode);
+        renderFinish(js, sourcePath, startTime);
+    }
+
+    private void renderFinish(String js, String sourcePath, long startTime) {
         if (trackerAdapter != null) {
             trackerAdapter.trackEvent(ITrackerAdapter.EventName.JS_EVAL_FINISH, null);
         }
@@ -178,6 +194,8 @@ public class HummerRender {
                 trackerAdapter.trackEvent(ITrackerAdapter.EventName.RENDER_FINISH, params);
             }
         }
+
+        HMLog.v("HummerNative", "页面加载耗时：" + perfInfo);
     }
 
     public void renderWithUrl(String url) {
@@ -258,7 +276,12 @@ public class HummerRender {
             assetsPath = assetsPath.substring(1);
         }
 
-        render(AssetsUtil.readFile(assetsPath), JsSourceUtil.JS_SOURCE_PREFIX_ASSETS + assetsPath);
+        String finalAssetsPath = assetsPath;
+        new Thread(() -> {
+            String js = AssetsUtil.readFile(finalAssetsPath);
+            String sourcePath = JsSourceUtil.JS_SOURCE_PREFIX_ASSETS + finalAssetsPath;
+            UIThreadUtil.runOnUiThread(() -> render(js, sourcePath));
+        }).start();
     }
 
     public void renderWithFile(String jsFilePath) {
@@ -280,17 +303,15 @@ public class HummerRender {
             jsFilePath = jsFilePath.substring(1);
         }
 
-        render(FileUtil.readFile(jsFilePath), JsSourceUtil.JS_SOURCE_PREFIX_FILE + jsFilePath);
+        String finalJsFilePath = jsFilePath;
+        new Thread(() -> {
+            String js = FileUtil.readFile(finalJsFilePath);
+            String sourcePath = JsSourceUtil.JS_SOURCE_PREFIX_FILE + finalJsFilePath;
+            UIThreadUtil.runOnUiThread(() -> render(js, sourcePath));
+        }).start();
     }
 
     public void renderWithFile(File jsFile) {
-        if (isDestroyed.get()) {
-            if (renderCallback != null) {
-                renderCallback.onFailed(new RuntimeException("Page is destroyed!"));
-            }
-            return;
-        }
-
         if (jsFile == null || !jsFile.exists()) {
             if (renderCallback != null) {
                 renderCallback.onFailed(new RuntimeException("js file is not exists!"));
@@ -298,7 +319,7 @@ public class HummerRender {
             return;
         }
 
-        render(FileUtil.readFile(jsFile), JsSourceUtil.JS_SOURCE_PREFIX_FILE + jsFile.getAbsolutePath());
+        renderWithFile(jsFile.getAbsolutePath());
     }
 
     public void setRenderCallback(HummerRenderCallback renderCallback) {
@@ -327,7 +348,10 @@ public class HummerRender {
         if (isDestroyed.get()) {
             return;
         }
-        hmContext.getJsContext().getJSValue("Hummer").set("pageInfo", page);
+        JSValue hv = hmContext.getJsContext().getJSValue("Hummer");
+        if (hv != null) {
+            hv.set("pageInfo", page);
+        }
         hmContext.setPageUrl(page.url);
         hmContext.setJsSourcePath(page.sourcePath);
 

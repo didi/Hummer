@@ -38,8 +38,16 @@ public class JSCValue implements JSValue {
     }
 
     public static JSCValue create(long context, Object object) {
-        long value = TypeConvertor.makeFromJsonString(context, HMGsonUtil.toJson(object));
-        return wrapper(context, value);
+        if (object instanceof Number) {
+            return create(context, (Number) object);
+        } else if (object instanceof Boolean) {
+            return create(context, (Boolean) object);
+        } else if (object instanceof String) {
+            return create(context, (String) object);
+        } else {
+            long value = TypeConvertor.makeFromJsonString(context, HMGsonUtil.toJson(object));
+            return wrapper(context, value);
+        }
     }
 
     public static JSCValue createEmptyObject(long context) {
