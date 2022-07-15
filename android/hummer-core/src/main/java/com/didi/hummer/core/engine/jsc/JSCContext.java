@@ -56,9 +56,13 @@ public class JSCContext extends JSCValue implements JSContext {
             byte[] bytecode = BytecodeCacheUtil.getBytecode(scriptId);
             if (bytecode == null || bytecode.length <= 0) {
                 bytecode = JavaScriptRuntime.compileJavaScript(context, script, scriptId);
-                BytecodeCacheUtil.putBytecode(scriptId, bytecode);
             }
-            jsValue = JavaScriptRuntime.evaluateBytecode(context, bytecode);
+            if (bytecode == null || bytecode.length <= 0) {
+                jsValue = JavaScriptRuntime.evaluateJavaScript(context, script, scriptId);
+            } else {
+                BytecodeCacheUtil.putBytecode(scriptId, bytecode);
+                jsValue = JavaScriptRuntime.evaluateBytecode(context, bytecode);
+            }
         }
 
         return JSCUtils.jsValueToObject(context, jsValue);
