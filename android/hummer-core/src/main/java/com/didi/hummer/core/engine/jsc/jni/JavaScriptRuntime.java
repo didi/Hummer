@@ -26,10 +26,6 @@ public final class JavaScriptRuntime {
         return evaluateBytecodeNative(jsContext, bytecode);
     }
 
-    public static void updateStackTop(long jsContext) {
-        updateStackTopNative(jsContext);
-    }
-
     private static native long createJSContextNative();
 
     private static native void destroyJSContextNative(long jsContext);
@@ -39,6 +35,4 @@ public final class JavaScriptRuntime {
     private static native byte[] compileJavaScriptNative(long jsContext, String script, String scriptId);
 
     private static native long evaluateBytecodeNative(long jsContext, byte[] bytecode);
-
-    private static native void updateStackTopNative(long jsContext);
 }

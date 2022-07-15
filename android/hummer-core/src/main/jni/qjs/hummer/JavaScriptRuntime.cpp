@@ -89,6 +89,7 @@ Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_compileJavaScriptNati
 
     jbyteArray ret = env->NewByteArray((jsize) out_buf_len);
     env->SetByteArrayRegion(ret, 0, (jsize) out_buf_len, reinterpret_cast<const jbyte*>(out_buf));
+    js_free(jsContext, out_buf);
 
     return ret;
 }
@@ -119,13 +120,4 @@ Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_evaluateBytecodeNativ
     reportExceptionIfNeed(jsContext);
 
     return QJS_VALUE_PTR(ret);
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_updateStackTopNative(JNIEnv *env, jclass clazz, jlong js_context) {
-    auto jsContext = QJS_CONTEXT(js_context);
-    if (jsContext != nullptr) {
-        JS_UpdateStackTop(JS_GetRuntime(jsContext));
-    }
 }
