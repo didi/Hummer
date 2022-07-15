@@ -254,7 +254,7 @@ public class HummerRender {
 
             // 如果是刷新流程，那么在执行JS之前，需要先模拟走一遍生命周期，来做相关的清理工作
             if (DebugUtil.isDebuggable() && isRefresh) {
-                hmContext.onRefresh();
+                hmContext.onRefresh(url);
             }
 
             render(response.data, url);

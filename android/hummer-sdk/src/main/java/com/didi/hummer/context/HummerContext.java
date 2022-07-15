@@ -10,6 +10,7 @@ import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
+import com.didi.hummer.core.util.BytecodeCacheUtil;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.core.util.HMLog;
@@ -191,12 +192,13 @@ public class HummerContext extends ContextWrapper {
      *
      * @return
      */
-    public void onRefresh() {
+    public void onRefresh(String url) {
         stop();
         pause();
         destroy();
         NotifyCenter.release(getContext());
         NotifyCenter.release(mJsContext);
+        BytecodeCacheUtil.removeBytecode(url);
     }
 
     protected void releaseJSContext() {
