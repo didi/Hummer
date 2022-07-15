@@ -62,3 +62,15 @@ Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_evaluateJavaScriptNat
     JSStringRelease(jsScriptId);
     return ret;
 }
+
+extern "C"
+JNIEXPORT jbyteArray JNICALL
+Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_compileJavaScriptNative(JNIEnv *env, jclass clazz, jlong js_context, jstring script, jstring scriptId) {
+    return nullptr;
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_evaluateBytecodeNative(JNIEnv *env, jclass clazz, jlong js_context, jbyteArray bytecode) {
+    return -1;
+}
