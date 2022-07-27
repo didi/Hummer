@@ -80,6 +80,7 @@ public class PerformanceTracker {
         for (StackTraceElement stackTraceElement : curStackTrace) {
             String strStack = stackTraceElement.toString();
             if (strStack.contains("evaluateJavaScript(Native Method)")
+                    || strStack.contains("evaluateBytecode(Native Method)")
                     || strStack.contains("callFunction(Native Method)")) {
                 if (index + 4 < curStackTrace.length) {
                     for (int i = 0; i <= 4; i++) {

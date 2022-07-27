@@ -188,6 +188,9 @@ var Hummer = {
   render: view => {
     invoke("Hummer", 0, "render", view.objID);
   },
+  onRenderFinished: isSucceed => {
+    invoke("Hummer", 0, "onRenderFinished", isSucceed);
+  },
   getRootView: () => {
     return invoke("Hummer", 0, "getRootView");
   },

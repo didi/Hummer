@@ -50,6 +50,15 @@ public class HummerContext extends ContextWrapper {
     protected JSValue mJsPage;
 
     /**
+     * JS主动调用的render结束回调，用于公共包抽离模式
+     */
+    public interface OnRenderListener {
+        void onRenderFinished(boolean isSucceed);
+    }
+
+    private OnRenderListener renderListener;
+
+    /**
      * invoke方法分析工具（用于调试阶段）
      */
     protected InvokerAnalyzer invokerAnalyzer;
@@ -220,6 +229,16 @@ public class HummerContext extends ContextWrapper {
 
             startIfNeed();
             resumeIfNeed();
+        }
+    }
+
+    public void setRenderListener(OnRenderListener listener) {
+        renderListener = listener;
+    }
+
+    public void onRenderFinished(boolean isSucceed) {
+        if (renderListener != null) {
+            renderListener.onRenderFinished(isSucceed);
         }
     }
 

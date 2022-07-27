@@ -39,6 +39,13 @@ public class BytecodeCacheUtil {
       return bytecodeCache.get(key);
    }
 
+   public static void removeBytecode(String key) {
+      if (TextUtils.isEmpty(key)) {
+         return;
+      }
+      bytecodeCache.remove(key);
+   }
+
    public static boolean contains(String key) {
       if (TextUtils.isEmpty(key)) {
          return false;

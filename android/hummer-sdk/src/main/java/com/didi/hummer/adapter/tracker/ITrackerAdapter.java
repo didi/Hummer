@@ -24,6 +24,10 @@ public interface ITrackerAdapter {
          */
         public static final String CONTEXT_DESTROY = "tech_hummer_context_destroy";
         /**
+         * RootView 页面渲染开始
+         */
+        public static final String RENDER_START = "tech_hummer_render_start";
+        /**
          * JS 代码执行开始
          */
         public static final String JS_EVAL_START = "tech_hummer_js_eval_start";

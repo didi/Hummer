@@ -41,6 +41,10 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                 HMBase v = mInstanceManager.get(objId);
                 mHummerContext.render(v);
                 break;
+            case "onRenderFinished":
+                boolean isSucceed = (boolean) params[0];
+                mHummerContext.onRenderFinished(isSucceed);
+                break;
             case "getRootView":
                 jsRet = mHummerContext.getJsPage();
 

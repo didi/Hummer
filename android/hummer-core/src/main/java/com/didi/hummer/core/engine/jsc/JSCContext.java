@@ -99,8 +99,10 @@ public class JSCContext extends JSCValue implements JSContext {
             jsExecutor = Executors.newSingleThreadExecutor();
         }
         jsExecutor.submit(() -> {
-            byte[] bytecode2 = JavaScriptRuntime.compileJavaScript(JSCContext.create().context, script, scriptId);
+            JSCContext ctx = JSCContext.create();
+            byte[] bytecode2 = JavaScriptRuntime.compileJavaScript(ctx.context, script, scriptId);
             BytecodeCacheUtil.putBytecode(scriptId, bytecode2);
+            ctx.release();
 
             if (mainHandler == null) {
                 mainHandler = new Handler(Looper.getMainLooper());

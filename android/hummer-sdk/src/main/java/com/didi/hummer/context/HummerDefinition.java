@@ -152,6 +152,9 @@ public class HummerDefinition {
             "    render: (view) => {\n" +
             "        invoke(\"Hummer\", 0, \"render\", view.objID);\n" +
             "    },\n" +
+            "    onRenderFinished: (isSucceed) => {\n" +
+            "        invoke(\"Hummer\", 0, \"onRenderFinished\", isSucceed);\n" +
+            "    },\n" +
             "    getRootView: () => {\n" +
             "        return invoke(\"Hummer\", 0, \"getRootView\");\n" +
             "    },\n" +
