@@ -37,11 +37,18 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
     return JSUtils::JavaObjectToJsValue(globalEnv, ret);
 }
 
+// 单线程共用
+thread_local NAPIRuntime runtime;
+thread_local int ctxCount = 0;
+
 extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_createJSContext(JNIEnv *env, jclass clazz) {
+    if (ctxCount == 0) {
+        NAPICreateRuntime(&runtime);
+    }
     NAPIEnv globalEnv;
-    NAPICreateEnv(&globalEnv);
+    NAPICreateEnv(&globalEnv, runtime);
 
     NAPIHandleScope handleScope;
     napi_open_handle_scope(globalEnv, &handleScope);
@@ -50,6 +57,8 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_createJSContext(JNIEnv *env, 
 
     int64_t ctxPtr = JSUtils::toJsContextPtr(globalEnv);
     JSUtils::addHandleScope(ctxPtr, handleScope);
+
+    ctxCount++;
     return ctxPtr;
 }
 
@@ -66,6 +75,13 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_destroyJSContext(JNIEnv *env,
     }
 
     NAPIFreeEnv(globalEnv);
+
+    if (ctxCount > 0) {
+        ctxCount--;
+        if (ctxCount == 0) {
+            NAPIFreeRuntime(runtime);
+        }
+    }
 }
 
 extern "C"
@@ -81,6 +97,61 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_evaluateJavaScript(JNIEnv *en
 
     env->ReleaseStringUTFChars(script, charScript);
     env->ReleaseStringUTFChars(script, charScriptId);
+
+    if (status == NAPIExceptionPendingException) {
+        reportExceptionIfNeed(globalEnv);
+        jstring msg = env->NewStringUTF("JavaScript evaluate exception");
+        jobject obj = env->NewObject(JSUtils::jsExceptionCls, JSUtils::jsExceptionInitMethodID, msg);
+        env->DeleteLocalRef(msg);
+        return obj;
+    }
+
+    return JSUtils::JsValueToJavaObject(globalEnv, result);
+}
+
+extern "C"
+JNIEXPORT jbyteArray JNICALL
+Java_com_didi_hummer_core_engine_napi_jni_JSEngine_compileJavaScript(JNIEnv *env, jclass clazz, jlong js_context, jstring script, jstring scriptId) {
+    auto globalEnv = JSUtils::toJsContext(js_context);
+    const char *charScript = env->GetStringUTFChars(script, nullptr);
+    const char *charScriptId = env->GetStringUTFChars(scriptId, nullptr);
+
+    const uint8_t *byteBuffer;
+    size_t bufferSize;
+    auto status = NAPICompileToByteBuffer(globalEnv, charScript, charScriptId, &byteBuffer, &bufferSize);
+    LOGD("compile bytecode status: %d", status);
+
+    env->ReleaseStringUTFChars(script, charScript);
+    env->ReleaseStringUTFChars(script, charScriptId);
+
+    if (status == NAPIExceptionPendingException) {
+        reportExceptionIfNeed(globalEnv);
+        return nullptr;
+    }
+
+    jbyteArray ret = env->NewByteArray((jsize) bufferSize);
+    env->SetByteArrayRegion(ret, 0, (jsize) bufferSize, reinterpret_cast<const jbyte*>(byteBuffer));
+    NAPIFreeByteBuffer(globalEnv, byteBuffer);
+
+    return ret;
+}
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_didi_hummer_core_engine_napi_jni_JSEngine_evaluateBytecode(JNIEnv *env, jclass clazz, jlong js_context, jbyteArray bytecode) {
+    auto globalEnv = JSUtils::toJsContext(js_context);
+
+    jsize bufferSize = env->GetArrayLength(bytecode);
+    auto *byteBuffer = (jbyte *) malloc(sizeof(jbyte) * bufferSize);
+    memset(byteBuffer, 0, sizeof(jbyte) * bufferSize);
+
+    env->GetByteArrayRegion(bytecode, 0, bufferSize, byteBuffer);
+
+    NAPIValue result;
+    auto status = NAPIRunByteBuffer(globalEnv, (uint8_t *) byteBuffer, bufferSize, &result);
+    LOGD("run bytecode status: %d", status);
+
+    free(byteBuffer);
 
     if (status == NAPIExceptionPendingException) {
         reportExceptionIfNeed(globalEnv);

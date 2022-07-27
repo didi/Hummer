@@ -84,6 +84,8 @@ public class JSEngine {
     public static native long createJSContext();
     public static native void destroyJSContext(long jsContext);
     public static native Object evaluateJavaScript(long jsContext, String script, String scriptId);
+    public static native byte[] compileJavaScript(long jsContext, String script, String scriptId);
+    public static native Object evaluateBytecode(long jsContext, byte[] bytecode);
     public static native void setProperty(long jsContext, long object, String key, Object value);
     public static native Object getProperty(long jsContext, long object, String key);
     public static native boolean delProperty(long jsContext, long object, String key);

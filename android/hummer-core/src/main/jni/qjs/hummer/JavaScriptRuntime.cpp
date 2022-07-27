@@ -10,13 +10,20 @@
 #include "JSException.h"
 #include "HummerClassRegister.h"
 
+// 单线程共用
+thread_local JSRuntime *runtime;
+thread_local int ctxCount = 0;
+
 extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_createJSContextNative(JNIEnv *env, jclass clazz) {
-    JSRuntime *rt = JS_NewRuntime();
-    JSContext *ctx = JS_NewContext(rt);
+    if (ctxCount == 0) {
+        runtime = JS_NewRuntime();
+    }
+    JSContext *ctx = JS_NewContext(runtime);
     // 在创建完JSRuntime后第一时间注册自定义Class，是为了使所有JSRuntime公用一个classId，不被相互覆盖
-    HummerClassRegister::init(rt, ctx);
+    HummerClassRegister::init(runtime, ctx);
+    ctxCount++;
     return QJS_CONTEXT_ID(ctx);
 }
 
@@ -26,9 +33,13 @@ Java_com_didi_hummer_core_engine_jsc_jni_JavaScriptRuntime_destroyJSContextNativ
     auto context = QJS_CONTEXT(js_context);
     QJS_CONTEXT_REMOVE(js_context);
     if (context != nullptr) {
-        JSRuntime *rt = JS_GetRuntime(context);
         JS_FreeContext(context);
-        JS_FreeRuntime(rt);
+    }
+    if (ctxCount > 0) {
+        ctxCount--;
+        if (ctxCount == 0) {
+            JS_FreeRuntime(runtime);
+        }
     }
 }
 

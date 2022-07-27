@@ -1,7 +1,7 @@
 def fetch_dir = new File(project.buildDir, 'libs')
 def fetch_url = project.hasProperty('Hermes_LIBS_URL') ?
         new URL(project.getProperty('Hermes_LIBS_URL').toString()) :
-        new URL('https://github.com/OrangeLab/N-API/releases/download/2.1.1/napi_hermes_android.tar.gz')
+        new URL('https://github.com/OrangeLab/Hummer-Virtual-JS-Engine/releases/download/2.1.5/napi_hermes_v2.1.5.tar.gz')
 
 def zip_file = new File(fetch_dir, fetch_url.path.split('/').last())
 

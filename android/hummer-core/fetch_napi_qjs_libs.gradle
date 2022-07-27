@@ -1,7 +1,7 @@
 def fetch_dir = new File(project.buildDir, 'libs')
 def fetch_url = project.hasProperty('QuickJS_LIBS_URL') ?
         new URL(project.getProperty('QuickJS_LIBS_URL').toString()) :
-        new URL('https://github.com/OrangeLab/N-API/releases/download/2.1.3/napi_qjs_android.tar.gz')
+        new URL('https://github.com/OrangeLab/Hummer-Virtual-JS-Engine/releases/download/2.1.5/napi_qjs_v2.1.5.tar.gz')
 
 def zip_file = new File(fetch_dir, fetch_url.path.split('/').last())
 
