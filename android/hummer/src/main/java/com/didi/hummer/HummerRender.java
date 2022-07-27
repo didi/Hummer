@@ -124,7 +124,7 @@ public class HummerRender {
         if (DebugUtil.isDebuggable()) {
             HummerDebugger.release(hmContext);
             if (devTools != null) {
-                devTools.release();
+                devTools.release(hmContext);
             }
         }
     }
@@ -215,7 +215,7 @@ public class HummerRender {
             // 调试插件
             HummerDebugger.init(hmContext, url);
 
-            // 热更新
+            // 热重载
             if (devTools != null) {
                 devTools.initConnection(hmContext, url, () -> {
                     requestJsBundle(url, true);
@@ -226,8 +226,7 @@ public class HummerRender {
         requestJsBundle(url, false);
     }
 
-    private void requestJsBundle(String url, boolean isRefresh) {
-        long startTime = System.currentTimeMillis();
+    private void requestJsBundle(String url, boolean isHotReload) {
         NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
             if (isDestroyed.get()) {
                 if (renderCallback != null) {
@@ -253,13 +252,13 @@ public class HummerRender {
             perfInfo.jsFetchTimeCost = (System.currentTimeMillis() - startTime);
 
             // 如果是刷新流程，那么在执行JS之前，需要先模拟走一遍生命周期，来做相关的清理工作
-            if (DebugUtil.isDebuggable() && isRefresh) {
-                hmContext.onRefresh(url);
+            if (DebugUtil.isDebuggable() && isHotReload) {
+                hmContext.onHotReload(url);
             }
 
             render(response.data, url);
 
-            if (DebugUtil.isDebuggable() && isRefresh) {
+            if (DebugUtil.isDebuggable() && isHotReload) {
                 Toast.makeText(hmContext, "页面已刷新", Toast.LENGTH_SHORT).show();
             }
         });

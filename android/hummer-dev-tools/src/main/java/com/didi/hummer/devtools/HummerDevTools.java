@@ -34,8 +34,8 @@ public class HummerDevTools {
         void injectParameter(StringBuilder builder);
     }
 
-    public interface IRefreshCallback {
-        void onRefresh();
+    public interface IHotReloadCallback {
+        void onHotReload();
     }
 
     private HummerContext hmContext;
@@ -56,8 +56,8 @@ public class HummerDevTools {
     public HummerDevTools(HummerContext context, DevToolsConfig config) {
         hmContext = context;
         entrance = new DevToolsEntrance(context);
-        wsManager = new WebSocketManager();
-        logManager = new HummerLogManager(wsManager);
+        wsManager = WebSocketManager.getInstance();
+        logManager = new HummerLogManager();
         hmContext.registerInvoker(new HummerInvokerWrapper(logManager));
         entrance.setLogManager(logManager);
         netManager = new HummerNetManager();
@@ -69,28 +69,28 @@ public class HummerDevTools {
         }
     }
 
-    public void release() {
-        wsManager.close();
+    public void release(HummerContext hmContext) {
+        wsManager.release(hmContext.getPageUrl());
     }
 
     /**
      * 初始化连接
      */
-    public void initConnection(HummerContext context, String url, IRefreshCallback callback) {
+    public void initConnection(HummerContext context, String url, IHotReloadCallback callback) {
         connectWebSocket(url, callback);
         initRefreshView(context, callback);
     }
 
     /**
-     * 与CLI建立WebSocket连接，用于热更新和日志输出
+     * 与CLI建立WebSocket连接，用于热重载和日志输出
      */
-    private void connectWebSocket(String url, IRefreshCallback callback) {
+    private void connectWebSocket(String url, IHotReloadCallback callback) {
         wsManager.connect(url, msg -> {
             msg = getUrlFromWS(msg);
             if (url != null && url.equalsIgnoreCase(msg)) {
-                // 热更新
+                // 热重载
                 if (callback != null) {
-                    callback.onRefresh();
+                    callback.onHotReload();
                 }
             }
         });
@@ -99,11 +99,11 @@ public class HummerDevTools {
     /**
      * 初始化刷新按钮
      */
-    private void initRefreshView(HummerContext context, IRefreshCallback callback) {
+    private void initRefreshView(HummerContext context, IHotReloadCallback callback) {
         FloatLayout floatLayout = new FloatLayout(context);
         floatLayout.setOnClickListener(v -> {
             if (callback != null) {
-                callback.onRefresh();
+                callback.onHotReload();
             }
         });
         ViewCompat.setElevation(floatLayout, 9000);

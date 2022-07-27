@@ -188,11 +188,11 @@ public class HummerContext extends ContextWrapper {
     }
 
     /**
-     * 用于调式的时候刷新用
+     * 用于调式时的热重载
      *
      * @return
      */
-    public void onRefresh(String url) {
+    public void onHotReload(String url) {
         stop();
         pause();
         destroy();

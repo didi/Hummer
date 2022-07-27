@@ -19,13 +19,8 @@ public class HummerLogManager {
         void onLogAdd(LogBean log);
     }
 
-    private WebSocketManager wsManager;
     private List<LogBean> logs = new ArrayList<>();
     private ILogListener mListener;
-
-    public HummerLogManager(WebSocketManager manager) {
-        wsManager = manager;
-    }
 
     public void registerListener(ILogListener listener) {
         mListener = listener;
@@ -57,6 +52,6 @@ public class HummerLogManager {
      */
     public void sendLog2Cli(LogBean bean) {
         WSMsg<LogBean> wsMsg = new WSMsg<>(WSMsg.TYPE_LOG, bean);
-        wsManager.sendMsg(HMGsonUtil.toJson(wsMsg));
+        WebSocketManager.getInstance().sendMsg(HMGsonUtil.toJson(wsMsg));
     }
 }
