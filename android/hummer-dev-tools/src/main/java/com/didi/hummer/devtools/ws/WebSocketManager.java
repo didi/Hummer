@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -24,14 +27,27 @@ public class WebSocketManager {
 
     private static final int RECONNECT_DELAY_MS = 2000;
 
+    private static volatile WebSocketManager instance = null;
     private static OkHttpClient client;
     private WebSocket webSocket;
     private String mWsUrl;
     private Handler mHandler;
     private boolean mClosed;
     private boolean mIsReconnectWaiting;
+    private Map<String, WSMsgListener> wsMsgListeners = new HashMap<>();
 
-    public WebSocketManager() {
+    public static WebSocketManager getInstance() {
+        if (instance == null) {
+            synchronized (WebSocketManager.class) {
+                if (instance == null) {
+                    instance = new WebSocketManager();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private WebSocketManager() {
         mHandler = new Handler(Looper.getMainLooper());
         if (client == null) {
             client = new OkHttpClient();
@@ -39,17 +55,25 @@ public class WebSocketManager {
     }
 
     public void connect(String url, WSMsgListener listener) {
+        if (!wsMsgListeners.containsKey(url)) {
+            wsMsgListeners.put(url, listener);
+        }
+
+        if (webSocket != null) {
+            return;
+        }
+
         mWsUrl = toWSUrl(url);
-        doConnect(mWsUrl, listener);
+        doConnect();
     }
 
-    private void doConnect(String url, WSMsgListener listener) {
-        if (TextUtils.isEmpty(url)) {
+    private void doConnect() {
+        if (TextUtils.isEmpty(mWsUrl)) {
             return;
         }
 
         okhttp3.Request request = new Request.Builder()
-                .url(url)
+                .url(mWsUrl)
                 .build();
 
         client.newWebSocket(request, new WebSocketListener() {
@@ -61,7 +85,7 @@ public class WebSocketManager {
             @Override
             public void onClosed(okhttp3.WebSocket webSocket, int code, String reason) {
                 if (!mClosed) {
-                    reconnect(listener);
+                    reconnect();
                 }
             }
 
@@ -69,29 +93,32 @@ public class WebSocketManager {
             public void onFailure(okhttp3.WebSocket webSocket, Throwable t, Response response) {
                 t.printStackTrace();
                 if (!mClosed) {
-                    reconnect(listener);
+                    reconnect();
                 }
             }
 
             @Override
             public void onMessage(okhttp3.WebSocket webSocket, String text) {
                 mHandler.post(() -> {
-                    if (listener != null) {
-                        listener.onMsgReceived(text);
+                    for (String url : wsMsgListeners.keySet()) {
+                        WSMsgListener l = wsMsgListeners.get(url);
+                        if (l != null) {
+                            l.onMsgReceived(text);
+                        }
                     }
                 });
             }
         });
     }
 
-    private void reconnect(WSMsgListener listener) {
+    private void reconnect() {
         if (mClosed || mIsReconnectWaiting) {
             return;
         }
         mIsReconnectWaiting = true;
         mHandler.postDelayed(() -> {
             if (!mClosed) {
-                doConnect(mWsUrl, listener);
+                doConnect();
             }
             mIsReconnectWaiting = false;
         }, RECONNECT_DELAY_MS);
@@ -103,7 +130,12 @@ public class WebSocketManager {
         }
     }
 
-    public void close() {
+    public void release(String url) {
+//        close();
+        wsMsgListeners.remove(url);
+    }
+
+    private void close() {
         mClosed = true;
         if (webSocket != null) {
             try {
