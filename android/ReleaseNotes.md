@@ -1,5 +1,19 @@
 # Release Nodes
 
+### 0.4.5
+- 新增HummerDelegate，可用于非集成式Hummer容器；
+- 新增FontAdapter，可自定义字体文件来源；
+- 新增DevTools网络拦截模块，可查看Hummer网络请求数据；
+- 新增异步字节码模式，可通过setSupportBytecode设置，默认为false；
+- JS引擎改用单Runtime多Context模式；
+- 修复某些情况下输入框获得焦点时键盘弹出又自动收起的问题；
+- 修复通过NotifyCenter.addEventListener添加callback后，无法通过removeEventListener移除掉指定callback的问题；
+- 修复List组件无法自适应高度的问题；
+- 修复KeyframeAnimation的repeatCount和repeatMode不准的问题；
+- 重写环境变量初始化逻辑，去序列化，提升性能；修复环境变量更新时的一个bug；
+- 修复Tenon项目中引发的Error信息无法打印的问题；
+- 修复多个页面同时打开时，只能有一个页面响应热重载的问题；
+
 ### 0.4.4
 - 修复base64图片加载没有传入callback时报异常的问题；
 - 修复placeholder和failedImage只在resize:'origin'模式下才生效的问题；
