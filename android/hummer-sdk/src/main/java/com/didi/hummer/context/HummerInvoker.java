@@ -82,10 +82,19 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                             callback.call(ret);
                         }
                     } else {
-                        Object ret = mHummerContext.evaluateJavaScript(script, url);
-                        ret = makeHummerError(ret);
-                        if (callback != null) {
-                            callback.call(ret);
+                        if (HummerSDK.isSupportBytecode(mHummerContext.getNamespace())) {
+                            mHummerContext.evaluateJavaScriptAsync(script, url, ret -> {
+                                ret = makeHummerError(ret);
+                                if (callback != null) {
+                                    callback.call(ret);
+                                }
+                            });
+                        } else {
+                            Object ret = mHummerContext.evaluateJavaScript(script, url);
+                            ret = makeHummerError(ret);
+                            if (callback != null) {
+                                callback.call(ret);
+                            }
                         }
                     }
                 });
