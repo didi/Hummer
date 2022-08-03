@@ -369,7 +369,7 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
         return;
     }
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-    BOOL isHandled = [HMRouterInterceptor handlePopWithViewController:nil animated:animated namespace:context.nameSpace];
+    BOOL isHandled = [HMRouterInterceptor handlePopWithViewController:viewController animated:animated namespace:context.nameSpace];
     if (isHandled) {
         return;
     }
