@@ -239,7 +239,10 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     @Override
     public void loadDrawable(int resId, DrawableCallback callback) {
         // 使用Glide加载resId图片时，.9图自动拉伸功能会失效，所以这里直接用原生加载方式
-        Drawable drawable = HummerSDK.appContext.getResources().getDrawable(resId);
+        Drawable drawable = null;
+        try {
+            drawable = HummerSDK.appContext.getResources().getDrawable(resId);
+        } catch (Exception ignored) {}
         if (callback != null) {
             callback.onDrawableLoaded(drawable);
         }
