@@ -8,7 +8,6 @@ import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
-import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.register.HummerRegister$$hummer_demo_app;
 
 import java.util.ArrayList;
