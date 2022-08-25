@@ -104,8 +104,8 @@ public class DefaultHttpAdapter implements IHttpAdapter {
         // build client & set timeout
         OkHttpClient client = httpClient.newBuilder()
                 .connectTimeout(timeout, TimeUnit.MILLISECONDS)
-                .readTimeout(timeout, TimeUnit.SECONDS)
-                .writeTimeout(timeout, TimeUnit.SECONDS)
+                .readTimeout(timeout, TimeUnit.MILLISECONDS)
+                .writeTimeout(timeout, TimeUnit.MILLISECONDS)
                 .build();
 
         // set url
@@ -148,8 +148,8 @@ public class DefaultHttpAdapter implements IHttpAdapter {
         // build client & set timeout
         OkHttpClient client = httpClient.newBuilder()
                 .connectTimeout(timeout, TimeUnit.MILLISECONDS)
-                .readTimeout(timeout, TimeUnit.SECONDS)
-                .writeTimeout(timeout, TimeUnit.SECONDS)
+                .readTimeout(timeout, TimeUnit.MILLISECONDS)
+                .writeTimeout(timeout, TimeUnit.MILLISECONDS)
                 .build();
 
         // set url
