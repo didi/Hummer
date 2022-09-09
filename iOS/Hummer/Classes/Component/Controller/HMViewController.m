@@ -211,7 +211,13 @@
 
 
 #pragma mark - HMJSContextDelegate
+- (void)context:(HMJSContext *)context didRenderFailed:(NSError *)error {
+    
+}
 
+- (void)context:(HMJSContext *)context didRenderPage:(HMBaseValue *)page {
+    
+}
 - (void)context:(HMJSContext *)context reloadBundle:(NSDictionary *)bundleInfo {
     
     __weak typeof(self)weakSelf = self;

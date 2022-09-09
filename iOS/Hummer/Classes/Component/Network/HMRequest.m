@@ -47,9 +47,9 @@ HM_EXPORT_METHOD(send, send:)
 - (instancetype)init {
     self = [super init];
     if (self) {
+        self.request_impl = [HMRequestAdaptor createComponentWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
         self.timeout = 20;
         self.method = @"POST";
-        self.request_impl = [HMRequestAdaptor createComponentWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
     }
     return self;
 }

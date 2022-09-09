@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable, copy) NSHashTable<HMJSCStrongValue *> *strongValueReleasePool;
 
+// only uesd for JSManangedValue
+- (JSContext *)internalCtx;
 @end
 
 NS_ASSUME_NONNULL_END

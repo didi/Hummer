@@ -288,7 +288,13 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
     }
     [self togglePlaceholder];
 }
-
+- (void)deleteBackward {
+    BOOL shouldDismiss = [self.text length] == 0;
+    [super deleteBackward];
+    if (shouldDismiss) {
+        [self textViewDidChange:self];
+    }
+}
 
 #pragma mark - <HMDescription>
 - (NSString *)hm_content {

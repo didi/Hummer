@@ -6,53 +6,92 @@
 //
 
 #import "HMFileManager.h"
-NSString * const HMCacheDirectoryKey = @"com_hummer_cache";
+NSString * const HMSandboxDirectoryKey = @"com_hummer_cache";
+NSString * const HMStorageDirectoryDefaultKey = @"hm_storage";
 
-NSString * const HMCacheDirectoryDefaultKey = @"hummer_default";
 
 
 @implementation HMFileManager
 
-static NSString * __cacheDirectory;
-static NSString * __cacheDirectoryOld;
-static NSString * __rootDirectory;
-
-+ (NSString *)rootDirectory {
-    if (!__rootDirectory) {
-        __rootDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    }
-    return __rootDirectory;
++ (instancetype)sharedManager {
+    static id _sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[self alloc] init];
+    });
+    return _sharedInstance;
 }
 
-+ (NSString *)cacheDirectoryOld {
-    if (!__cacheDirectoryOld) {
-        __cacheDirectoryOld = [[self rootDirectory] stringByAppendingPathComponent:@"HMCache"];
+- (NSString *)documentDirectory {
+    if (!_documentDirectory) {
+        _documentDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    }
+    return _documentDirectory;
+}
+
+- (NSString *)cacheDirectory {
+    if (!_cacheDirectory) {
+        _cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    }
+    return _cacheDirectory;
+}
+
+
+- (NSString *)hummerDocumentDirectoryRoot {
+    if (!_hummerDocumentDirectoryRoot) {
+        NSString *root = [self.documentDirectory stringByAppendingPathComponent:HMSandboxDirectoryKey];
         BOOL isDir = NO;
-        BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:__cacheDirectoryOld isDirectory:&isDir];
+        BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:root isDirectory:&isDir];
         if (!isExist || !isDir) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:__cacheDirectoryOld withIntermediateDirectories:YES attributes:nil error:nil];
+            [[NSFileManager defaultManager] createDirectoryAtPath:root withIntermediateDirectories:YES attributes:nil error:nil];
         }
+        _hummerDocumentDirectoryRoot = root;
     }
-    return __cacheDirectoryOld;
+    return _hummerDocumentDirectoryRoot;
 }
 
-+ (NSString *)cacheDirectory {
-    if (!__cacheDirectory) {
-        __cacheDirectory = [[self rootDirectory] stringByAppendingPathComponent:HMCacheDirectoryKey];
-        BOOL isDir = NO;
-        BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:__cacheDirectory isDirectory:&isDir];
-        if (!isExist || !isDir) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:__cacheDirectory withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-    }
-    return __cacheDirectory;
-}
-
-
-+ (NSString *)createDirectoryForKey:(NSString *)key {
-    NSAssert(key!=nil, @"hmStorage cache key can not be nil");
+- (NSString *)hummerCacheDirectoryRoot {
     
-    NSString * filePath = [[self cacheDirectory] stringByAppendingPathComponent:key];
+    if (!_hummerCacheDirectoryRoot) {
+        NSString *root = [self.cacheDirectory stringByAppendingPathComponent:HMSandboxDirectoryKey];
+        BOOL isDir = NO;
+        BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:root isDirectory:&isDir];
+        if (!isExist || !isDir) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:root withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+        _hummerCacheDirectoryRoot = root;
+    }
+    return _hummerCacheDirectoryRoot;
+}
+
+- (NSString *)cacheDirectoryOld {
+    if (!_cacheDirectoryOld) {
+        _cacheDirectoryOld = [[[HMFileManager sharedManager] documentDirectory] stringByAppendingPathComponent:@"HMCache"];
+        BOOL isDir = NO;
+        BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:_cacheDirectoryOld isDirectory:&isDir];
+        if (!isExist || !isDir) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:_cacheDirectoryOld withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+    }
+    return _cacheDirectoryOld;
+}
+
+
+- (NSString *)createDirectoryAtHMDocumentRoot:(NSString *)folderName {
+    NSAssert(folderName!=nil, @"hmStorage cache key can not be nil");
+    return [self __createDirectoryAtPath:self.hummerDocumentDirectoryRoot folderName:folderName];
+
+}
+
+- (NSString *)createDirectoryAtHMCacheRoot:(NSString *)folderName {
+    NSAssert(folderName!=nil, @"hmStorage cache key can not be nil");
+    return [self __createDirectoryAtPath:self.hummerCacheDirectoryRoot folderName:folderName];
+}
+
+
+- (NSString *)__createDirectoryAtPath:(NSString *)path folderName:(NSString *)folderName {
+    
+    NSString * filePath = [path stringByAppendingPathComponent:folderName];
     BOOL isDir = NO;
     BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDir];
     if (!isExist || !isDir) {
@@ -61,11 +100,17 @@ static NSString * __rootDirectory;
     return filePath;
 }
 
+- (BOOL)fileExistsAtPath:(NSString *)path isDirectory:(BOOL *)isDirectory {
+    BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:isDirectory];
+    return isExist;
+}
 
-+ (void)reset{
-    __cacheDirectory = nil;
-    __rootDirectory = nil;
-    __cacheDirectoryOld = nil;
+
+- (void)reset{
+    _documentDirectory = nil;
+    _cacheDirectory = nil;
+    _hummerDocumentDirectoryRoot = nil;
+    _cacheDirectoryOld = nil;
 }
 
 @end

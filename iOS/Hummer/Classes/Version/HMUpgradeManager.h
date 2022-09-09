@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMUpgradeManager : NSObject
 + (void)upgrageStorageForNamespace:(NSString *)namespace;
++ (void)upgrageStorageForDefaultNamespace;
 @end
 
 NS_ASSUME_NONNULL_END

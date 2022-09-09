@@ -173,7 +173,7 @@ JSValueRef _Nullable hummerCall(JSContextRef ctx, JSObjectRef function, JSObject
         int argStartIndex = objectRef ? 1:0;
         for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argumentCount) - argStartIndex; ++i) {
             HMJSCStrongValue *jsValue = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:executor];
-            [argList addObject:jsValue];
+            [argList addObject:jsValue ? : @"NullOrUndefined"];
         }
         [HMJSCallerInterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argList context:context];
     }
@@ -554,7 +554,7 @@ void hummerFinalize(JSObjectRef object) {
         int argStartIndex = objectRef ? 1:0;
         for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argumentCount) - argStartIndex; ++i) {
             HMJSCStrongValue *jsValue = [[HMJSCStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:self];
-            [argList addObject:jsValue];
+            [argList addObject:jsValue ? : @"NullOrUndefined"];
         }
         [HMJSCallerInterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argList context:context];
     }

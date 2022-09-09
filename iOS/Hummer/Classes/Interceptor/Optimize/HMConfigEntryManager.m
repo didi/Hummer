@@ -26,7 +26,7 @@
 #import <Hummer/HMUpgradeManager.h>
 
 NSString * const HMDefaultNamespace = @"namespace.hummer.default";
-
+NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
 
 @implementation HMConfigEntry
 
@@ -37,7 +37,6 @@ NSString * const HMDefaultNamespace = @"namespace.hummer.default";
 @property(nonatomic, strong)NSMutableDictionary<NSString *,HMConfigEntry *> *configMap;
 
 @property(nonatomic, strong)HMConfigEntry *defaultConfig;
-
 
 @end
 
@@ -61,8 +60,8 @@ NSString * const HMDefaultNamespace = @"namespace.hummer.default";
     HMConfigEntry *defaultConfig = [HMConfigEntry new];
     defaultConfig.jsLoaderInterceptor = HMJavaScriptLoader.class;
     defaultConfig.loggerInterceptor = [HMLogger new];
-
     self.defaultConfig = defaultConfig;
+    [HMUpgradeManager upgrageStorageForDefaultNamespace];
 }
 
 - (void)addConfig:(HMConfigEntry *)config {
@@ -454,7 +453,7 @@ static NSMutableDictionary<NSString *, id<HMStorage>> *__HMStorageAdaptor_map;
     }
     
     // 按业务线 分配实例。
-    NSString *_namespace = [NSString hm_isValidString:namespace] ? namespace : HMCacheDirectoryDefaultKey;
+    NSString *_namespace = [NSString hm_isValidString:namespace] ? namespace : HMDefaultNamespaceUnderline;
     _storage = [__HMStorageAdaptor_map objectForKey:_namespace];
     if (!_storage) {
         _storage = [[HMStorageImp alloc] initWithPath:_namespace];
@@ -477,7 +476,7 @@ static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor
 
 + (id<HMMemoryComponent>)memoryWithNamespace:(NSString *)namespace {
     // 按业务线 分配实例。
-    NSString *_namespace = [NSString hm_isValidString:namespace] ? namespace : HMCacheDirectoryDefaultKey;
+    NSString *_namespace = [NSString hm_isValidString:namespace] ? namespace : HMDefaultNamespaceUnderline;
     id<HMMemoryComponent> _memory = [__HMMemoryAdaptor_map objectForKey:_namespace];
     if (!_memory) {
         _memory = [[HMMemoryComponent alloc] initWithNamespace:_namespace];

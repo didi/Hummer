@@ -23,6 +23,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString * const HMDefaultNamespace;
+extern NSString * const HMDefaultNamespaceUnderline;
 
 /**
  * hummer sdk 初始化注入配置, 分为拦截器和插件。使用 namespace 区分

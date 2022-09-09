@@ -271,10 +271,20 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     if (@available(iOS 11.0, *)) {
         self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
-    
+    [self addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     _column = 2;
     _mode = @"list";
     _lastContentOffset = CGPointZero;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"contentSize"]) {
+        CGSize old = [[change objectForKey:NSKeyValueChangeOldKey] CGSizeValue];
+        CGSize new = [[change objectForKey:NSKeyValueChangeNewKey] CGSizeValue];
+        if (CGSizeEqualToSize(old, new) == false) {
+            [self hm_markDirty];
+        }
+    }
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
@@ -304,6 +314,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
 - (void)dealloc {
     [self.refreshView removeObserver];
     [self.loadView removeObserver];
+    [self removeObserver:self forKeyPath:@"contentSize"];
 }
 
 - (void)updateLayout {
@@ -321,6 +332,10 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     [self updateLineSpacing];
     [self updateItemSpacing];
     [self updateSectionInset];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    return self.contentSize;
 }
 
 - (void)updateDirection {

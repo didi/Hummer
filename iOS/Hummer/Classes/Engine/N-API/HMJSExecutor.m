@@ -181,7 +181,7 @@ NAPIValue hummerCall(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     int argStartIndex = objectRef ? 1:0;
     for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argc) - argStartIndex; ++i) {
         HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:argv[i + argStartIndex] executor:executor];
-        [argDesList addObject:jsValue];
+        [argDesList addObject:jsValue ? : @"NullOrUndefined"];
     }
     HMJSContext *context = [[HMJSGlobal globalObject] currentContext:executor];
     [HMJSCallerInterceptor callNativeWithClassName:className functionName:functionName objectRef:objRefStr args:argDesList context:context];
@@ -551,7 +551,6 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
             // js 只存在 double 和 bool 类型，但原生需要区分具体类型。
             param = [(HMJSExecutor *) HMCurrentExecutor toNumberWithValueRef:arguments[i + (isClass ? 0 : 1)] isForce:NO];
         }
-        HMAssert(param, HUMMER_UN_MATCH_ARGS_TYPE_TEMPLATE, objCType, [self typeStringOfWithValueRef:arguments[i + (isClass ? 0 : 1)]]);
         [invocation hm_setArgument:param atIndex:i encodingType:type];
     }
     [invocation invoke];
@@ -637,7 +636,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     int argStartIndex = objectRef ? 1:0;
     for (NSUInteger i = 2; i < MIN(methodSignature.numberOfArguments + argStartIndex, argumentCount) - argStartIndex; ++i) {
         HMJSStrongValue *jsValue = [[HMJSStrongValue alloc] initWithValueRef:arguments[i + argStartIndex] executor:self];
-        [argDesList addObject:jsValue];
+        [argDesList addObject:jsValue ? : @"NullOrUndefined"];
     }
     [HMJSCallerInterceptor callNativeWithClassName:className functionName:isSetter ? [@"set" stringByAppendingString:propertyName.capitalizedString] : propertyName objectRef:objRefStr args:argDesList context:context];
 #endif
@@ -835,6 +834,11 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
             NSAssert(NO, @"napi_coerce_to_number() error");
             goto exit;
         }
+        double doubleValue;
+        if (napi_get_value_double(self.env, valueRef, &doubleValue) != NAPIErrorOK) {
+            goto exit;
+        }
+        return @(doubleValue);
     }
     
     if (vType == NAPIBoolean) {

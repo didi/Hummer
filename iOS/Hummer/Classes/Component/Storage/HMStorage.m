@@ -119,7 +119,8 @@ HM_EXPORT_METHOD(removeAll,__removeAll)
     if (self) {
         
         _path = path;
-        _cachePath = [HMFileManager createDirectoryForKey:path];
+        //Document/namespace/hm_storage/key.xxx
+        _cachePath = [[HMFileManager sharedManager] createDirectoryAtHMDocumentRoot:[NSString stringWithFormat:@"%@/%@", path, HMStorageDirectoryDefaultKey]];
     }
     return self;;
 }

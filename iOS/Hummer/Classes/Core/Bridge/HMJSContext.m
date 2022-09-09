@@ -176,7 +176,7 @@ NS_ASSUME_NONNULL_END
 - (void)setupExecutorCallBack {
     __weak typeof(self) weakSelf = self;
     [_context addExceptionHandler:^(HMExceptionModel * _Nonnull exception) {
-        
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         NSDictionary<NSString *, NSObject *> *exceptionInfo = @{
             @"column": exception.column ?: @0,
             @"line": exception.line ?: @0,
@@ -184,6 +184,12 @@ NS_ASSUME_NONNULL_END
             @"name": exception.name ?: @"",
             @"stack": exception.stack ?: @""
         };
+#ifdef HMDEBUG
+        //出现异常执行一次 console.error，抛给 vscode/hummer dev server
+        HMBaseValue *console = strongSelf.context.globalObject[@"console"];
+        NSString *errorString = _HMJSONStringWithObject(exceptionInfo);
+        [console invokeMethod:@"error" withArguments:@[errorString?errorString:@"发生未知异常"]];
+#endif
         HMLogError(@"%@", exceptionInfo);
         if (weakSelf.nameSpace) {
             // errorName -> message
@@ -191,7 +197,6 @@ NS_ASSUME_NONNULL_END
             // errorMsg -> stack / type + message + stack
             [HMConfigEntryManager.manager.configMap[weakSelf.nameSpace].trackEventPlugin trackJavaScriptExceptionWithExceptionModel:exception pageUrl:weakSelf.hummerUrl ?: @""];
         }
-        __strong typeof(weakSelf) strongSelf = weakSelf;
         [HMReporterInterceptor handleJSException:exceptionInfo namespace:strongSelf.nameSpace];
         [HMReporterInterceptor handleJSException:exceptionInfo context:strongSelf namespace:strongSelf.nameSpace];
         if (strongSelf.exceptionHandler) {
@@ -212,21 +217,16 @@ NS_ASSUME_NONNULL_END
 #endif
 
     } key:self];
-    
-    
 }
+
 #ifdef HMDEBUG
 - (void)handleConsoleToWS:(NSString *)logString level:(HMLogLevel)logLevel {
     // 避免 "(null)" 情况
-    NSString *jsonStr = @"";
-    @try {
-        jsonStr = _HMJSONStringWithObject(@{@"type":@"log",
-                                            @"data":@{@"level":@(convertNativeLogLevel(logLevel)),
-                                                      @"message":logString.length > 0 ? logString : @""}});
-    } @catch (NSException *exception) {
-        HMLogError(@"native webSocket json 失败");
-    } @finally {
-        [self.devConnection sendMessage:jsonStr completionHandler:nil];       
+    NSString *jsonStr = _HMJSONStringWithObject(@{@"type":@"log",
+                                        @"data":@{@"level":@(convertNativeLogLevel(logLevel)),
+                                                  @"message":logString.length > 0 ? logString : @""}});
+    if (jsonStr) {
+        [self.devConnection sendMessage:jsonStr completionHandler:nil];
     }
 }
 #endif

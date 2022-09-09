@@ -137,7 +137,7 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
 }
 
 - (BOOL )__focused {
-    return !self.isFirstResponder;
+    return self.isFirstResponder;
 }
 
 - (void)__setFocused:(HMBaseValue *)focused {
@@ -245,6 +245,14 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
         }
         
         return NO;
+    }
+}
+
+- (void)deleteBackward {
+    BOOL shouldDismiss = [self.text length] == 0;
+    [super deleteBackward];
+    if (shouldDismiss) {
+        [self textFieldDidChange:self];
     }
 }
 

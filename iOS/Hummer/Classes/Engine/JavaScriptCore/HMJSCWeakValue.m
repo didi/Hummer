@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_END
     }
     HMJSCExecutor *jscExecutor = strongValue.context;
     self = [super init];
-    _managedValue = [JSManagedValue managedValueWithValue:[JSValue valueWithJSValueRef:strongValue.valueRef inContext:[JSContext contextWithJSGlobalContextRef:jscExecutor.contextRef]]];
+    _managedValue = [JSManagedValue managedValueWithValue:[JSValue valueWithJSValueRef:strongValue.valueRef inContext:jscExecutor.internalCtx]];
 
     return self;
 }
