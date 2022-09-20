@@ -12,6 +12,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerStyleUtils;
+import com.didi.hummer.render.utility.RTLUtil;
 
 @Component("Text")
 public class Text extends HMBase<TextView> {
@@ -57,6 +59,9 @@ public class Text extends HMBase<TextView> {
         getView().setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         getView().setEllipsize(TextUtils.TruncateAt.END);
 //        getView().setIncludeFontPadding(false);
+        if (RTLUtil.isNeedRTL(getContext())) {
+            getView().setTextDirection(View.TEXT_DIRECTION_RTL);
+        }
     }
 
     private void requestLayout() {

@@ -455,9 +455,7 @@ public class HummerStyleUtils {
      * @param key
      */
     static String toRTLStyleIfNeed(Context context, String key) {
-        boolean supportRTL = context instanceof HummerContext && HummerSDK.isSupportRTL(((HummerContext) context).getNamespace());
-        boolean needRTL = supportRTL && RTLUtil.isRTL(context);
-        if (needRTL) {
+        if (RTLUtil.isNeedRTL(context)) {
             if (key.equals(Yoga.LEFT)) {
                 key = Yoga.RIGHT;
             } else if (key.equals(Yoga.RIGHT)) {

@@ -27,9 +27,7 @@ public class BackgroundHelper {
 
     private BackgroundDrawable getBgDrawable() {
         if (backgroundDrawable == null) {
-            boolean supportRTL = context instanceof HummerContext && HummerSDK.isSupportRTL(((HummerContext) context).getNamespace());
-            boolean needRTL = supportRTL && RTLUtil.isRTL(context);
-            backgroundDrawable = new BackgroundDrawable(needRTL);
+            backgroundDrawable = new BackgroundDrawable(RTLUtil.isNeedRTL(context));
             if (view != null) {
                 view.setBackground(backgroundDrawable);
             }
