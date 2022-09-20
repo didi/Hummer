@@ -5,10 +5,18 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.View;
 
+import com.didi.hummer.HummerSDK;
+import com.didi.hummer.context.HummerContext;
+
 /**
  * Created by XiaoFeng on 2021/5/5.
  */
 public class RTLUtil {
+
+    public static boolean isNeedRTL(Context context) {
+        boolean supportRTL = context instanceof HummerContext && HummerSDK.isSupportRTL(((HummerContext) context).getNamespace());
+        return supportRTL && RTLUtil.isRTL(context);
+    }
 
     /**
      * 判断当前是否是RTL布局

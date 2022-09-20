@@ -24,6 +24,7 @@ import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.event.view.InputEvent;
 import com.didi.hummer.render.style.HummerNode;
 import com.didi.hummer.render.style.HummerStyleUtils;
+import com.didi.hummer.render.utility.RTLUtil;
 
 @Component("Input")
 public class Input extends HMBase<EditText> {
@@ -54,6 +55,10 @@ public class Input extends HMBase<EditText> {
         getView().setOnFocusChangeListener(mOnFocusChangeListener);
         getView().setOnEditorActionListener(mOnEditorActionListener);
         getView().setOnKeyListener(mOnKeyListener);
+        if (RTLUtil.isNeedRTL(getContext())) {
+            getView().setTextDirection(View.TEXT_DIRECTION_RTL);
+            getView().setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        }
     }
 
     @Override
