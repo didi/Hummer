@@ -29,6 +29,7 @@ public class Button extends HMBase<android.widget.Button> {
     private Drawable orgBackground;
     private ColorStateList orgTextColors;
     private float orgTextSize;
+    private String fontWeight;
     private Typeface orgTypeface;
     private Map<Integer, Integer> textColorMap = new HashMap<>();
     private Map<Integer, Drawable> bgDrawableMap = new HashMap<>();
@@ -196,6 +197,19 @@ public class Button extends HMBase<android.widget.Button> {
         requestLayout();
     }
 
+    /**
+     * 字体字重
+     */
+    @JsAttribute("fontWeight")
+    public void setFontWeight(String fontWeight) {
+        if (TextUtils.isEmpty(fontWeight)) {
+            return;
+        }
+        this.fontWeight = fontWeight.toLowerCase();
+        processTextTypeface(this.fontWeight, null);
+        requestLayout();
+    }
+
     @JsAttribute("color")
     public void setColor(int color) {
         getView().setTextColor(color);
@@ -212,6 +226,18 @@ public class Button extends HMBase<android.widget.Button> {
         mergePressedStyle();
         mergeDisabledStyle();
         updateBackground();
+    }
+
+    private void processTextTypeface(String fontWeight, String fontStyle) {
+        if ("bold".equals(fontWeight) && "italic".equals(fontStyle)) {
+            getView().setTypeface(getView().getTypeface(), Typeface.BOLD_ITALIC);
+        } else if ("bold".equals(fontWeight)) {
+            getView().setTypeface(getView().getTypeface(), Typeface.BOLD);
+        } else if ("italic".equals(fontStyle)) {
+            getView().setTypeface(getView().getTypeface(), Typeface.ITALIC);
+        } else { // normal or other
+            getView().setTypeface(null, Typeface.NORMAL);
+        }
     }
 
     private void updateBackground() {
@@ -268,6 +294,9 @@ public class Button extends HMBase<android.widget.Button> {
                 break;
             case HummerStyleUtils.Hummer.FONT_FAMILY:
                 setFontFamily(String.valueOf(value));
+                break;
+            case HummerStyleUtils.Hummer.FONT_WEIGHT:
+                setFontWeight(String.valueOf(value));
                 break;
             case HummerStyleUtils.Hummer.TEXT_ALIGN:
                 setTextAlign(String.valueOf(value));
