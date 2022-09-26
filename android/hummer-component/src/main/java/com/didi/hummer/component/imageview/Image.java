@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
@@ -104,6 +105,24 @@ public class Image extends HMBase<RoundedImageView> {
     }
 
     /**
+     * 处理图片宽高样式，可能需要重新调整图片控件的宽高，以自适应图片大小
+     */
+    private void processWidthAndHeightStyleIfNeed(Map<String, Object> style) {
+        if (!TextUtils.isEmpty(this.src)
+                && ((style.containsKey("width") && HummerStyleUtils.isAutoValue(style.get("width")))
+                || (style.containsKey("height") && HummerStyleUtils.isAutoValue(style.get("height"))))) {
+            String namespace = ((HummerContext) getContext()).getNamespace();
+            HummerAdapter.getImageLoaderAdapter(namespace).getImageSize(this.src, this::adjustWidthAndHeight);
+        }
+    }
+
+    @Override
+    public void setStyle(Map<String, Object> style) {
+        super.setStyle(style);
+        processWidthAndHeightStyleIfNeed(style);
+    }
+
+    /**
      * 普通图片
      */
     @Deprecated
@@ -164,15 +183,18 @@ public class Image extends HMBase<RoundedImageView> {
     public void load(Object src, @Nullable JSCallback completeCallback) {
         if (src instanceof String) {
             // 普通图片处理
+            this.src = (String) src;
             loadImage((String) src, completeCallback);
         } else if (src instanceof Map) {
             ImageStyle style = HMGsonUtil.fromJson(HMGsonUtil.toJson(src), ImageStyle.class);
             if (style != null) {
                 if (!TextUtils.isEmpty(style.gifSrc)) {
                     // gif图片处理
+                    this.gifSrc = style.gifSrc;
                     loadGif(style.gifSrc, style.placeholder, style.failedImage, style.gifRepeatCount, completeCallback);
                 } else if (!TextUtils.isEmpty(style.src)) {
                     // 普通图片处理
+                    this.src = style.src;
                     loadImage(style.src, style.placeholder, style.failedImage, completeCallback);
                 }
             }
