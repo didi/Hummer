@@ -19,6 +19,7 @@
 #import <Hummer/HMRouterProtocol.h>
 #import <Hummer/HMRequestComponent.h>
 #import <Hummer/HMNetworkProtocol.h>
+#import <Hummer/HMFontProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -58,7 +59,7 @@ extern NSString * const HMDefaultNamespaceUnderline;
 
 @property(nonatomic, nullable, strong) id <HMRouterProtocol> routerInterceptor;
 
-
+@property(nonatomic, nullable, strong) id <HMFontProtocol> fontAdapter;
 @end
 
 
@@ -179,6 +180,12 @@ extern NSString * const HMDefaultNamespaceUnderline;
 @interface HMRequestAdaptor : NSObject
 
 + (nullable id<HMRequestComponent>)createComponentWithNamespace:(NSString *)namespace;
+
+@end
+
+@interface HMFontAdaptor : NSObject
+
++ (nullable id<HMFontProtocol>)fontWithNamespace:(NSString *)namespace;
 
 @end
 NS_ASSUME_NONNULL_END

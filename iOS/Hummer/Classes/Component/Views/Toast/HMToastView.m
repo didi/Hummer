@@ -10,6 +10,8 @@
 #import "HMUtility.h"
 #import "UIView+HMDom.h"
 #import "UIView+HMRenderObject.h"
+#import "HMJSGlobal.h"
+#import "HMConfigEntryManager.h"
 
 @interface HMToastView ()
 
@@ -48,7 +50,8 @@
         _textLabel.backgroundColor = [UIColor clearColor];
         _textLabel.textAlignment = NSTextAlignmentCenter;
         _textLabel.textColor = [UIColor whiteColor];
-        _textLabel.font = [UIFont systemFontOfSize:14.0f];
+        NSString *fontFamily = [HMFontAdaptor fontWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace].defaultFontFamily;
+        _textLabel.font = fontFamily ? [UIFont fontWithName:fontFamily size:14] : [UIFont systemFontOfSize:14.0f];
         _textLabel.numberOfLines = 0;
         [self addSubview:_textLabel];
     }

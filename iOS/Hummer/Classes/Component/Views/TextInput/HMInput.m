@@ -16,6 +16,8 @@
 #import "UIView+HMEvent.h"
 #import "UIView+HMDom.h"
 #import "HMBaseValue.h"
+#import "HMConfigEntryManager.h"
+#import "HMJSGlobal.h"
 #import <Hummer/UIView+HMInspector.h>
 
 @interface HMInput() <UITextFieldDelegate, HMViewInspectorDescription>
@@ -90,6 +92,7 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
         _placeholderColor = [HMConverter HMStringToColor:@"#999999"];
         _placeholderAttributes = [[NSMutableDictionary alloc] init];
         _maxLength = NSUIntegerMax;
+        [self updateFont];
         [self addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.delegate = self;
     }
@@ -98,7 +101,8 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
 
 - (void)updateFont {
     UIFont *font;
-    if (self.fontFamily) {
+    NSString *fontFamily = _fontFamily ? _fontFamily : [HMFontAdaptor fontWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace].defaultFontFamily;
+    if (fontFamily) {
         font = [UIFont fontWithName:self.fontFamily size:self.fontSize];
     } else {
         font = [UIFont systemFontOfSize:self.fontSize];

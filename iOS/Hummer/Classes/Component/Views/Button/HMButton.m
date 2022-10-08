@@ -18,6 +18,8 @@
 #import "UIView+HMAttribute.h"
 #import "HMUtility.h"
 #import "HMBaseValue.h"
+#import "HMJSGlobal.h"
+#import "HMConfigEntryManager.h"
 
 #import <Hummer/UIView+HMInspector.h>
 
@@ -58,6 +60,7 @@ HM_EXPORT_ATTRIBUTE(fontWeight, fontWeight, HMStringToFontWeight:)
         self.normalBackgroundColor = [UIColor whiteColor];
         self.fontSize = 16.0;
         self.normalTitleColor = [UIColor blackColor];
+        [self updateFont];
         self.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     }
     return self;
@@ -153,7 +156,8 @@ HM_EXPORT_ATTRIBUTE(fontWeight, fontWeight, HMStringToFontWeight:)
 }
 
 - (void)updateFont {
-    UIFontDescriptor *fontDescriptor = _fontFamily ? [UIFontDescriptor fontDescriptorWithName:_fontFamily size:_fontSize] : [UIFont systemFontOfSize:_fontSize].fontDescriptor;
+    NSString *fontFamily = _fontFamily ? _fontFamily : [HMFontAdaptor fontWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace].defaultFontFamily;
+    UIFontDescriptor *fontDescriptor = fontFamily ? [UIFontDescriptor fontDescriptorWithName:fontFamily size:_fontSize] : [UIFont systemFontOfSize:_fontSize].fontDescriptor;
     if (_fontWeight) {
         UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | UIFontDescriptorTraitBold];
         fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;
@@ -182,11 +186,7 @@ HM_EXPORT_ATTRIBUTE(fontWeight, fontWeight, HMStringToFontWeight:)
 
 - (void)setFontFamily:(NSString *)fontFamily {
     NSString *filteredName = hm_availableFontName(fontFamily);
-
     _fontFamily = [filteredName copy] ?: @"";
-    UIFont *font = [UIFont fontWithName:_fontFamily size:_fontSize];
-    NSAssert(font, @"cannot find font with name %@", fontFamily);
-    font = font ?: [UIFont systemFontOfSize:_fontSize];
     [self updateFont];
 }
 

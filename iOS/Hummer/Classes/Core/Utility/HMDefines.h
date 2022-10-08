@@ -6,6 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#define HM_SafeRunBlock(block,...)       ((block)?(block(__VA_ARGS__)):nil)
+
 
 FOUNDATION_EXPORT NSErrorDomain const _Nonnull HMUrlSessionErrorDomain;
 

@@ -14,7 +14,7 @@
 #import "HMBaseExecutorProtocol.h"
 #import "HMConverter.h"
 #import <Hummer/HMJSGlobal.h>
-
+#import "HMConfigEntryManager.h"
 #import <Hummer/UIView+HMInspector.h>
 
 
@@ -319,7 +319,8 @@ HM_EXPORT_PROPERTY(lowLayer, isLowLayer, setIsLowLayer:)
     UILabel *titleLab = [UILabel new];
     titleLab.text = content;
     titleLab.textColor = [HMConverter HMStringToColor:@"#CCCCCC"];
-    titleLab.font = [UIFont systemFontOfSize:14];
+    NSString *fontFamily = [HMFontAdaptor fontWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace].defaultFontFamily;
+    titleLab.font = fontFamily ? [UIFont fontWithName:fontFamily size:14] : [UIFont systemFontOfSize:14];
     titleLab.lineBreakMode = NSLineBreakByTruncatingTail;
     [titleLab sizeToFit];
     

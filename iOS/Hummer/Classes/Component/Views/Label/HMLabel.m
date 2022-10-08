@@ -14,7 +14,8 @@
 #import "HMAttributesBuilder.h"
 #import "HMUtility.h"
 #import "HMAttributesItem.h"
-
+#import "HMConfigEntryManager.h"
+#import "HMJSGlobal.h"
 #import <Hummer/UIView+HMInspector.h>
 
 @interface HMLabel() <HMAttributesBuilderDelegate, HMViewInspectorDescription>
@@ -81,7 +82,7 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     self.userInteractionEnabled = YES;
     self.numberOfLines = 0;
     // 默认为 [UIFont systemFontSize:17];
-    self.font = [UIFont fontWithDescriptor:self.font.fontDescriptor size:16];
+    [self updateFont];
     // 默认 clearColor
 //    self.backgroundColor = UIColor.clearColor;
     _fontSize = 16;
@@ -328,7 +329,9 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
 }
 
 - (void)updateFont {
-    UIFontDescriptor *fontDescriptor = _fontFamily ? [UIFontDescriptor fontDescriptorWithName:_fontFamily size:_fontSize] : [UIFont systemFontOfSize:_fontSize].fontDescriptor;
+    NSString *fontFamily = _fontFamily ? _fontFamily : [HMFontAdaptor fontWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace].defaultFontFamily;
+    UIFontDescriptor *fontDescriptor = fontFamily ? [UIFontDescriptor fontDescriptorWithName:fontFamily size:_fontSize] : [UIFont systemFontOfSize:_fontSize].fontDescriptor;
+    
     if (_fontWeight) {
         UIFontDescriptor *_fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:fontDescriptor.symbolicTraits | UIFontDescriptorTraitBold];
         fontDescriptor = _fontDescriptor ? _fontDescriptor : fontDescriptor;

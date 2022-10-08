@@ -15,6 +15,10 @@
 #import "HMInputEvent.h"
 #import "UIView+HMEvent.h"
 #import "UIView+HMDom.h"
+#import "HMJSGlobal.h"
+#import "HMConfigEntryManager.h"
+#import "UIView+HMDom.h"
+
 #import <Hummer/UIView+HMInspector.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -80,10 +84,10 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
     if (self) {
         self.delegate = self;
         // 默认 16 字体大小
-        UIFont *font = [UIFont systemFontOfSize:16];
-        self.font = font;
+        _fontSize = 16.0;
         _placeholderColor = [HMConverter HMStringToColor:@"#757575"];
         _maxLength = NSUIntegerMax;
+        [self updateFont];
         self.textColor = UIColor.blackColor;
     }
     
@@ -137,21 +141,6 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
     return CGSizeMake(placeholderSize.width + caretFrame.origin.x * 2, placeholderSize.height + caretFrame.origin.y * 2);
 }
 
-- (void)setFontFamily:(NSString *)fontFamily {
-    NSString *filteredName = hm_availableFontName(fontFamily);
-    if (filteredName.length == 0) {
-        return;
-    }
-    CGFloat pointSize = self.font.pointSize;
-    UIFont *font = [UIFont fontWithName:fontFamily size:pointSize];
-    if (!font) {
-        font = [UIFont systemFontOfSize:pointSize];
-    }
-    self.font = font;
-    [self togglePlaceholder];
-    _fontFamily = fontFamily;
-}
-
 #pragma mark - Export Property
 
 - (HMBaseValue *)__text {
@@ -185,11 +174,31 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
         [self resignFirstResponder];
     }
 }
+- (void)setFontFamily:(NSString *)fontFamily {
+    NSString *filteredName = hm_availableFontName(fontFamily);
+    if (filteredName.length == 0) {
+        return;
+    }    
+    [self togglePlaceholder];
+    _fontFamily = fontFamily;
+    [self updateFont];
+}
 
 - (void)setFontSize:(CGFloat)fontSize {
-    self.font = [self.font fontWithSize:fontSize];
     [self togglePlaceholder];
     _fontSize = fontSize;
+    [self updateFont];
+}
+
+- (void)updateFont {
+    UIFont *font;
+    NSString *fontFamily = _fontFamily ? _fontFamily : [HMFontAdaptor fontWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace].defaultFontFamily;
+    if (fontFamily) {
+        font = [UIFont fontWithName:self.fontFamily size:self.fontSize];
+    } else {
+        font = [UIFont systemFontOfSize:self.fontSize];
+    }
+    self.font = font;
 }
 
 #pragma mark - Export Attribute

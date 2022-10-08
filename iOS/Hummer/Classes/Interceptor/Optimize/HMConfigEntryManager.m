@@ -523,5 +523,12 @@ static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor
 #endif
 }
 
+@end
 
+@implementation HMFontAdaptor
+
++ (nullable id<HMFontProtocol>)fontWithNamespace:(NSString *)namespace {
+    id<HMFontProtocol> font = [HMCEMInstance.configMap objectForKey:namespace].fontAdapter;
+    return font;
+}
 @end
