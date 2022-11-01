@@ -139,12 +139,22 @@ public class HummerContext extends ContextWrapper {
                 || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             // 仅用于纯Hermes调试版本
             if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES) {
-                mJsContext.evaluateJavaScript("function Recycler() {}");
+                if (HummerSDK.isSupportBytecode(namespace)) {
+                    mJsContext.evaluateJavaScript("function Recycler() {}");
+                } else {
+                    mJsContext.evaluateJavaScriptOnly("function Recycler() {}", "");
+                }
             }
             // 注入babel
-            mJsContext.evaluateJavaScript("var Babel = {}");
-            mJsContext.evaluateJavaScript(HummerDefinition.BABEL, "babel.js");
-            mJsContext.evaluateJavaScript(HummerDefinition.ES5_CORE, "HummerDefinition_es5.js");
+            if (HummerSDK.isSupportBytecode(namespace)) {
+                mJsContext.evaluateJavaScript("var Babel = {}");
+                mJsContext.evaluateJavaScript(HummerDefinition.BABEL, "babel.js");
+                mJsContext.evaluateJavaScript(HummerDefinition.ES5_CORE, "HummerDefinition_es5.js");
+            } else {
+                mJsContext.evaluateJavaScriptOnly("var Babel = {}", "");
+                mJsContext.evaluateJavaScriptOnly(HummerDefinition.BABEL, "babel.js");
+                mJsContext.evaluateJavaScriptOnly(HummerDefinition.ES5_CORE, "HummerDefinition_es5.js");
+            }
         } else {
             if (HummerSDK.isSupportBytecode(namespace)) {
                 mJsContext.evaluateJavaScript(HummerDefinition.CORE, "HummerDefinition.js");
