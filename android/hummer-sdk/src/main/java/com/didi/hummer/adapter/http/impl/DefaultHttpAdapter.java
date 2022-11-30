@@ -1,14 +1,22 @@
 package com.didi.hummer.adapter.http.impl;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.http.HttpResponse;
 import com.didi.hummer.adapter.http.IHttpAdapter;
 import com.didi.hummer.core.util.HMGsonUtil;
+import com.didi.hummer.utils.FileUtil;
 import com.didi.hummer.utils.UIThreadUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
@@ -186,6 +194,156 @@ public class DefaultHttpAdapter implements IHttpAdapter {
                 });
             }
         });
+    }
+
+    /**
+     * 下载文件
+     */
+    public <T> void download(String filePath, String url, int timeout, Map<String, Object> headers, Map<String, Object> params, HttpCallback<T> callback, Type type) {
+        String saveFilePathName = FileUtil.processFilePathName(filePath, url);
+        Log.d("Request_download", " filePath = " + filePath + " url = " + url
+                + " headers = " + headers + " params = " + params
+                + " saveFilePathName = " + saveFilePathName);
+
+        if (TextUtils.isEmpty(saveFilePathName)) {
+            Log.d("Request_download", " file system or your param maybe error.");
+            callback.onResult(processError(new Exception("file system or your param maybe error.")));
+            return;
+        }
+
+        String dir = getDownloadDir();
+        String fullAbsoluteFileName = FileUtil.getFullAbsoluteFileName(dir, saveFilePathName);
+        File fullAbsoluteFile = new File(fullAbsoluteFileName);
+        boolean exists = fullAbsoluteFile.exists();
+        Log.d("Request_download", "dir = " + dir + " fullFilePath = " + fullAbsoluteFileName + " exists = " + exists);
+        if (exists) {
+            //已经下载过
+            if (callback != null) {
+                HttpResponse resp = new HttpResponse();
+                if (headers != null && headers.size() > 0) {
+                    resp.header = new HashMap<>();
+                    resp.header.putAll(headers);
+                }
+                resp.status = 200;
+                resp.message = "this file has ever downloaded!";
+                resp.data = new DownloadData(fullAbsoluteFileName);
+                UIThreadUtil.runOnUiThread(() -> {
+                    callback.onResult(resp);
+                });
+            }
+        } else {
+            String tempFilePath = fullAbsoluteFileName + ".temp";
+            String fullDir = tempFilePath.substring(0, tempFilePath.lastIndexOf("/"));
+            File fullDirFile = new File(fullDir);
+            if (!fullDirFile.exists()) {
+                fullDirFile.mkdirs();
+            }
+            File tempFile = new File(tempFilePath);
+            Log.d("Request_download", "fullDirFile exits " + fullDirFile.exists() + " tempFile = " + tempFile.getAbsolutePath());
+
+            // build url
+            url = buildUrlWithParams(url, params);
+            // build client & set timeout
+            OkHttpClient client = httpClient.newBuilder()
+                    .connectTimeout(timeout, TimeUnit.MILLISECONDS)
+                    .readTimeout(timeout, TimeUnit.MILLISECONDS)
+                    .writeTimeout(timeout, TimeUnit.MILLISECONDS)
+                    .build();
+
+            // set url
+            Request.Builder builder = new Request.Builder().url(url);
+            // add headers
+            addHeaders(builder, headers);
+            // build request
+            Request request = builder.build();
+            // do request
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    InputStream is = null;
+                    byte[] buf = new byte[2048];
+                    int len = 0;
+                    FileOutputStream fos = null;
+                    try {
+                        is = response.body().byteStream();
+                        // long total = response.body().contentLength();
+                        fos = new FileOutputStream(tempFile);
+                        // long sum = 0;
+                        while ((len = is.read(buf)) != -1) {
+                            fos.write(buf, 0, len);
+                            // sum += len;
+                            // int progress = (int) (sum * 1.0f / total * 100); // 下载进度
+                        }
+                        fos.flush();
+                        if (fullAbsoluteFile.exists()) {
+                            Log.d("Request_download", "Dest File already exists, delete it.");
+                            fullAbsoluteFile.delete();
+                        }
+                        boolean renameTo = tempFile.renameTo(fullAbsoluteFile);
+                        Log.d("Request_download", "renameTo." + renameTo);
+                        if (renameTo) {
+                            // 下载完成
+                            HttpResponse resp = new HttpResponse();
+                            Headers headers = response.headers();
+                            if (headers != null && headers.size() > 0) {
+                                resp.header = new HashMap<>();
+                                for (String key : headers.names()) {
+                                    resp.header.put(key, headers.get(key));
+                                }
+                            }
+                            resp.status = response.code();
+                            resp.message = response.message();
+                            resp.data = new DownloadData(fullAbsoluteFileName);
+                            if (!response.isSuccessful()) {
+                                resp.error = new HttpResponse.Error(resp.status, resp.message);
+                            }
+                            UIThreadUtil.runOnUiThread(() -> {
+                                if (callback != null) {
+                                    callback.onResult(resp);
+                                }
+                            });
+                        } else {
+                            callback.onResult(processError(new Exception("rename tempFile failed")));
+                        }
+                    } catch (Exception e) {
+                        if (callback != null) {
+                            callback.onResult(processError(e));
+                        }
+                    } finally {
+                        try {
+                            if (is != null)
+                                is.close();
+                        } catch (IOException e) {
+                            if (callback != null) {
+                                callback.onResult(processError(e));
+                            }
+                        }
+                        try {
+                            if (fos != null)
+                                fos.close();
+                        } catch (IOException e) {
+                            if (callback != null) {
+                                callback.onResult(processError(e));
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    UIThreadUtil.runOnUiThread(() -> {
+                        if (callback != null) {
+                            callback.onResult(processError(e));
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    @Override
+    public String getDownloadDir() {
+        return FileUtil.getInternalCacheDirectory(HummerSDK.appContext, "Downloads").getAbsolutePath();
     }
 
     /**
@@ -410,5 +568,22 @@ public class DefaultHttpAdapter implements IHttpAdapter {
         resp.message = e.toString();
         resp.error = new HttpResponse.Error(-102, e.toString());
         return resp;
+    }
+
+    public static class DownloadData implements Serializable {
+        // 下载文件本地完整路径
+        public String filePath;
+
+        public DownloadData(String filePath) {
+            this.filePath = filePath;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return "{" +
+                    "filePath:" + filePath +
+                    '}';
+        }
     }
 }

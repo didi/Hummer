@@ -36,4 +36,23 @@ public interface IHttpAdapter {
      * @param callback  网络请求回调
      */
     <T> void request(String url, String method, int timeout, Map<String, Object> headers, Map<String, Object> params, HttpCallback<T> callback, Type type);
+
+    /**
+     * 下载文件
+     *
+     * @param filePath 相对路径文件名
+     * @param url      API请求路径
+     * @param timeout  超时时间
+     * @param headers  网络请求头部
+     * @param params   网络请求的参数
+     * @param callback 网络请求回调
+     */
+    <T> void download(String filePath, String url, int timeout, Map<String, Object> headers, Map<String, Object> params, HttpCallback<T> callback, Type type);
+
+    /**
+     * 获取本地下载根目录,可设置为外置SD卡或内部存储目录.
+     *
+     * @return 下载根目录
+     */
+    String getDownloadDir();
 }

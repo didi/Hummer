@@ -99,4 +99,27 @@ public class Request implements ILifeCycle {
                     jsValue.unprotect();
                 }, Object.class);
     }
+
+    /**
+     * 下载文件
+     *
+     * @param filePath 相对目录文件名, 例如: test/a.jpg
+     * @param func     回调
+     */
+    @JsMethod("download")
+    public void download(String filePath, JSCallback func){
+        jsValue.protect();
+        httpAdapter.download(url, filePath, timeout, header, param,
+                response -> {
+                    if (isDestroyed.get()) {
+                        return;
+                    }
+
+                    if (func != null) {
+                        func.call(response);
+                        func.release();
+                    }
+                    jsValue.unprotect();
+                }, Object.class);
+    }
 }
