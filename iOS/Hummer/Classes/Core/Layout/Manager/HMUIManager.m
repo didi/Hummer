@@ -118,7 +118,7 @@ NS_ASSUME_NONNULL_END
         availableSize.width = CGFLOAT_MAX;
         rootRenderObject.availableSize = availableSize;
     }
-    if (dimensionFlexibility & HummerDimensionFlexibilityWidth) {
+    if (dimensionFlexibility & HummerDimensionFlexibilityHeight) {
         CGSize availableSize = rootRenderObject.availableSize;
         availableSize.height = CGFLOAT_MAX;
         rootRenderObject.availableSize = availableSize;

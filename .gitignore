@@ -35,3 +35,11 @@ coverage
 explorations
 tenon/packages/*/dist/*
 package-lock.json
+
+# napi
+include/
+libhermes.a
+libjsc.a
+libquickjs.a
+napi_ios.tar.gz
+

@@ -12,7 +12,7 @@
 #import "HMUtility.h"
 #import "HMInterceptor.h"
 #import "UIView+HMDom.h"
-#import "HMResourceModel.h"
+#import "HMSourceParser.h"
 #import "HMJSGlobal.h"
 #import <Hummer/HMConverter.h>
 #import <Hummer/HMImageManager.h>

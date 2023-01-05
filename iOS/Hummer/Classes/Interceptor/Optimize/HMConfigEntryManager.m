@@ -13,8 +13,10 @@
 #import <Hummer/HMJSContext.h>
 #import <Hummer/HMRequest.h>
 
-#if __has_include(<Hummer/HMDevTools.h>)
-#import <Hummer/HMJSContext+HMDevTools.h>
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
+#import <HMDevTools/HMJSContext+HMDevTools.h>
+#endif
 #endif
 
 //默认适配器
@@ -252,8 +254,10 @@ NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
     }
 
     // devtool
-#if __has_include(<Hummer/HMDevTools.h>)
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
     [context.hm_jsCallerInterceptor callNativeWithClassName:className functionName:functionName objRef:objectRef args:args namespace:context.nameSpace];
+#endif
 #endif
 }
 
@@ -262,8 +266,10 @@ NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
     
     id<HMJSCallerProtocol> interceptor = [HMCEMInstance.configMap objectForKey:context.nameSpace].jsCallerInterceptor;
     BOOL hasDevTool = NO;
-#if __has_include(<Hummer/HMDevTools.h>)
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
     hasDevTool = YES;
+#endif
 #endif
     if (!interceptor && !hasDevTool) {
         return;
@@ -281,8 +287,10 @@ NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
     }
 
     // devtool
-#if __has_include(<Hummer/HMDevTools.h>)
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
         [context.hm_jsCallerInterceptor callJSWithClassName:className functionName:functionName objRef:objRefStr args:args namespace:context.nameSpace];
+#endif
 #endif
 }
 
@@ -505,10 +513,7 @@ static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor
     [interceptor willsendRequest:request inContext:context];
     
     // devtool
-#if __has_include(<Hummer/HMDevTools.h>)
 
-    
-#endif
 
 }
 + (void)HMRequest:(HMRequest *)request didReceiveResponse:(NSDictionary *)response inContext:(HMJSContext *)context {
@@ -517,10 +522,7 @@ static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor
     [interceptor HMRequest:request didReceiveResponse:response inContext:context];
     
     // devtool
-#if __has_include(<Hummer/HMDevTools.h>)
 
-    
-#endif
 }
 
 @end

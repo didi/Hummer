@@ -20,7 +20,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable NSURL *)hm_asFileUrl;
 
+/**
+ * @brief 转换为 string 对象。absolute string
+ */
 - (nullable NSString *)hm_asString;
+
+/**
+ * @brief 转换为 path 格式，会移除 url scheme, http 格式讲返回 nil
+ */
+- (nullable NSString *)hm_asFilePath;
 
 @end
 

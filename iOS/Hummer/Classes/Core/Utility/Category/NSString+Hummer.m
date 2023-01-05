@@ -8,6 +8,9 @@
 #import "NSString+Hummer.h"
 #import <CommonCrypto/CommonDigest.h>
 #include <arpa/inet.h>
+NSString * const HMParsePathKey_Path = @"path";
+NSString * const HMParsePathKey_Name = @"name";
+NSString * const HMParsePathKey_Extension = @"extension";
 
 @implementation NSString(Hummer)
 
@@ -68,6 +71,33 @@
     return success == 1;
 }
 
+- (nullable NSDictionary<NSString *, NSString *> *)hm_parsePath {
+    
+    NSMutableDictionary *result = [NSMutableDictionary new];
+    NSString *filePath = self;
+    // 提取扩展名
+    NSString *pathExtension = filePath.pathExtension;
+    NSString *fileName = nil;
+    if(pathExtension.length > 0){
+        // 提取文件名
+        [result setObject:pathExtension forKey:HMParsePathKey_Extension];
+        fileName = [filePath stringByDeletingPathExtension].lastPathComponent;
+    }
+    NSString *relativePath = [filePath stringByDeletingPathExtension];
+    if(fileName && fileName.length > 0){
+        [result setObject:fileName forKey:HMParsePathKey_Name];
+        // 提取相对路径，删除扩展名，删除文件名
+        relativePath = [relativePath stringByDeletingLastPathComponent];
+    }
+    if(relativePath){
+        [result setObject:relativePath forKey:HMParsePathKey_Path];
+    }
+    if(result.count > 0){
+        return result.copy;
+    }
+    return nil;
+}
+
 #pragma mark <HMURLConvertible>
 
 - (nullable NSURL *)hm_asUrl {
@@ -80,5 +110,25 @@
     }
     NSURL *fileUrl = [NSURL fileURLWithPath:self];
     return fileUrl;
+}
+
+- (NSString *)hm_asString {
+    return self;
+}
+
+- (NSString *)hm_asFilePath {
+    if ([self hasPrefix:@"http"]) {
+        return nil;
+    }
+    
+    if ([self hasPrefix:@"file:"] == NO) {
+        return self;
+    }
+    NSString *temp = [self substringFromIndex:5];
+    //stringByDeletingPathExtension stringByDeletingLastPathComponent 优势会导致 file:/// 变为 file:/
+    while([temp hasPrefix:@"//"]){
+        temp = [temp substringFromIndex:1];
+    }
+    return temp;
 }
 @end

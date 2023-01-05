@@ -18,6 +18,8 @@ typedef NS_ERROR_ENUM(HMWebImageErrorDomain, HMWebImageError) {
     HMWebImageErrorInvalidDownloadStatusCode = 2001, // The image download response a invalid status code. You can check the status code in error's userInfo under `HMWebImageErrorDownloadStatusCodeKey`
     HMWebImageErrorCancelled = 2002, // The image loading operation is cancelled before finished, during either async disk cache query, or waiting before actual network request. For actual network request error, check `NSURLErrorDomain` error domain and code.
     HMWebImageErrorInvalidDownloadResponse = 2003, // When using response modifier, the modified download response is nil and marked as failed.
+    HMWebImageErrorInvalidFormat = 2004, // When using response modifier, the modified download response is nil and marked as failed.
+
 };
 
 
@@ -66,6 +68,9 @@ typedef void(^HMImageCompletionBlock)(UIImage * _Nullable image, NSData * _Nulla
  */
 typedef void(^HMImageLoaderCompletionBlock)(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error);
 
+typedef void(^HMDataLoaderCompletionBlock)(NSData * _Nullable data, NSString *_Nullable filePath, NSError * _Nullable error);
+
+
 typedef NSString * HMImageLoaderContextOption NS_EXTENSIBLE_STRING_ENUM;
 typedef NSDictionary<HMImageLoaderContextOption, id> HMImageLoaderContext;
 
@@ -80,6 +85,20 @@ typedef NSDictionary<HMImageLoaderContextOption, id> HMImageLoaderContext;
 FOUNDATION_EXPORT NSErrorUserInfoKey const _Nonnull HMWebImageErrorDownloadStatusCodeKey;
 
 
+FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageContextImageDoNotDecode;
+
+/**
+ * HMImageCacheTypeAll,HMImageCacheTypeDisk,HNImageCacheTypeMemory,HMImageCacheTypeNone
+ * If not provide or the value is invalid, we will use `HMImageCacheTypeAll`(NSNumber)
+ */
+
+FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageContextQueryCacheType;
+
+/**
+ * HMImageCacheTypeAll,HMImageCacheTypeDisk,HNImageCacheTypeMemory,HMImageCacheTypeNone
+ * If not provide or the value is invalid, we will use `HMImageCacheTypeAll`(NSNumber)
+ */
+FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageContextStoreCacheType;
 
 FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageManagerContextAnimatedImageClass;
 FOUNDATION_EXPORT HMImageLoaderContextOption _Nonnull const HMImageManagerContextImageTransformer;

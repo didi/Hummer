@@ -17,6 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)resignLoader:(id<HMImageLoader>)loader;
 
 - (nullable id<HMImageLoaderOperation>)load:(nonnull id<HMURLConvertible>)source inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource context:(nullable HMImageLoaderContext *)context completion:(nonnull HMImageCompletionBlock)completionBlock;
+
+- (id<HMImageLoader>)webLoader;
+
+- (id<HMImageLoader>)localLoader;
+
 @end
 
 NS_ASSUME_NONNULL_END

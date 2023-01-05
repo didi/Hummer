@@ -95,4 +95,6 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+Podfile.lock
+
 .idea

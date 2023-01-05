@@ -78,7 +78,7 @@ Hummer is a dynamic solution for client.
 
   s.subspec "Core" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
-    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}', 'iOS/Hummer/Classes/Dev/DevTools/**/*',  'iOS/Hummer/Classes/Dev/Performance/**/*'
+    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}', 'iOS/Hummer/Classes/Component/Views/Lottie/**/*.{h,m,Swift}'
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
@@ -101,12 +101,18 @@ Hummer is a dynamic solution for client.
     ss.dependency 'libwebp', '~> 1.2.0'
   end
   
-  s.subspec "DevTools" do |ss|
+  s.subspec "Lottie" do |ss|
+    ss.source_files = 'iOS/Hummer/Classes/Component/Views/Lottie/**/*.{h,m}'
+    ss.exclude_files = 'iOS/Hummer/Classes/Component/Views/Lottie/Swift/*.{h,m,Swift}'
+    ss.dependency 'lottie-ios', '>=2.5.3'#指定2.5.3
     ss.dependency 'Hummer/Core'
-    ss.source_files = 'iOS/Hummer/Classes/Dev/DevTools/**/*.{h,m}', 'iOS/Hummer/Classes/Dev/Performance/**/*.{h,m}'
-    ss.xcconfig = {
-      "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) HMDEVTOOLS=1'
-    }
+    ss.dependency 'SSZipArchive'
+  end
+
+  s.subspec "LottieSwift" do |ss|
+    ss.source_files = 'iOS/Hummer/Classes/Component/Views/Lottie/Swift/*.{h,m,Swift}'
+    ss.dependency 'lottie-ios', '>=4.0.0'
+    ss.dependency 'Hummer/Lottie'
   end
   
   # s.public_header_files = 'Pod/Classes/**/*.h'

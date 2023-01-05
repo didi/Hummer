@@ -9,7 +9,7 @@
 #import "NSURL+Hummer.h"
 #import "NSString+Hummer.h"
 #import "HMUtility.h"
-#import "HMResourceModel.h"
+#import "HMSourceParser.h"
 #import "HMImageCoderManager.h"
 
 @implementation HMLocalImageLoader
@@ -21,7 +21,7 @@
 
 // 相对路径处理
 //
-- (id<HMURLConvertible>)fixLoadSource:(id<HMURLConvertible>)source withJSBundleSource:(id<HMURLConvertible>)bundleSource{
+- (id<HMURLConvertible>)fixLoadSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource{
 
     NSString *sourceString = [source hm_asString];
     if([sourceString hasPrefix:@"."]){
@@ -63,13 +63,13 @@
                                  completion:(nonnull HMImageLoaderCompletionBlock)completionBlock{
 
     HMImageLoaderOperation *operation = [HMImageLoaderOperation new];
-    id<HMURLConvertible> realSource = [self fixLoadSource:source withJSBundleSource:bundleSource];
+    id<HMURLConvertible> realSource = [self fixLoadSource:source inJSBundleSource:bundleSource];
     NSString *sourceString = [realSource hm_asString];
     UIImage *image = nil;
     NSData *imageData = nil;
     BOOL isGif = context[HMImageManagerContextAnimatedImageClass];
-    HMLocalResourceModel *model = [[HMLocalResourceModel alloc] initWithSource:sourceString];
-    if (model.sourceName == nil){
+    HMSourceParser *model = [[HMSourceParser alloc] initWithSource:sourceString];
+    if (model.extensionName == nil){
         completionBlock(nil, nil, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorInvalidURL userInfo:@{NSLocalizedDescriptionKey : @"Invalid URL"}]);
         return operation;
     }
@@ -77,15 +77,15 @@
     if (model.bundle) {
         //1.bundle 可能是自定义bundle或只包含图片名(mainBundle)
         if (isGif) {
-            NSString *path = [model.bundle pathForResource:model.sourceName ofType:@"gif"];
+            NSString *path = [model.bundle pathForResource:model.extensionName ofType:@"gif"];
             if (path) {
                 imageData = [NSData dataWithContentsOfFile:path];
             }else{
-                NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:model.sourceName bundle:model.bundle];
+                NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:model.extensionName bundle:model.bundle];
                 imageData = dataAsset.data;
             }
         }else{
-            image = [UIImage imageNamed:model.sourceName inBundle:model.bundle compatibleWithTraitCollection:nil];
+            image = [UIImage imageNamed:model.extensionName inBundle:model.bundle compatibleWithTraitCollection:nil];
         }
     }else if(model.filePath){
         //phase2: sandbox
@@ -95,12 +95,16 @@
             image = HMImageFromLocalAssetURL([realSource hm_asFileUrl]);
         }
     }
-
-    if (imageData) {
+    BOOL needDecoder = ![context[HMImageContextImageDoNotDecode] boolValue];
+    if(needDecoder == false){
+        HM_SafeRunBlockAtMainThread(completionBlock, image, imageData, nil);
+        return operation;
+    }
+    if (imageData && image == nil && needDecoder) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{           
             UIImage *image = HMImageLoaderDecodeImageData(imageData, [realSource hm_asUrl], context);
             hm_safe_main_thread(^{
-                completionBlock(image?image:nil, nil, image?nil:HM_IMG_DECODE_ERROR);
+                completionBlock(image, imageData, image?nil:HM_IMG_DECODE_ERROR);
             });
         });
         return operation;
@@ -115,9 +119,6 @@
     return operation;
 }
 
-- (id<HMURLConvertible>)cacheKeyForSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource {
-    return [self fixLoadSource:source withJSBundleSource:bundleSource];
-}
 @end
 
 

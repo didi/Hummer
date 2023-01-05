@@ -9,8 +9,10 @@
 #if __has_include(<Hummer/HMJSExecutor.h>)
 #import <Hummer/HMJSExecutor.h>
 #endif
-#if __has_include(<Hummer/HMDevTools.h>)
-#import <Hummer/HMDevTools.h>
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
+#import <HMDevTools/HMDevTools.h>
+#endif
 #endif
 #import "HMJSCExecutor.h"
 #import "HMJSContext.h"
@@ -110,10 +112,12 @@ NS_ASSUME_NONNULL_END
         //把 pageInfo 和 context 绑定到一起。
         ctx.pageInfo = [[HMJSGlobal globalObject] pageInfo];
     }
-#if __has_include(<Hummer/HMDevTools.h>)
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
     // 添加debug按钮
     // 尽早初始化 devtool，保证日志抓取时间。
     [HMDevTools showInContext:ctx];
+#endif
 #endif
     return rootView.hm_context;
 }

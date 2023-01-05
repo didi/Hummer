@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "HMLogger.h"
 
-@class HMResourceModel, HMContainerModel;
+@class HMSourceParser, HMContainerModel;
 
 #define OBJC_STRING(a)       @#a
 #define OBJC_JSClass(jsClass)   [NSString stringWithFormat:@"OBJC_%@", (jsClass)]
@@ -69,6 +69,13 @@ NSError * _Nullable HMError(NSInteger code, NSString *_Nullable fmt, ...);
 
 // Block
 #define HM_SafeRunBlock(block,...)       ((block)?(block(__VA_ARGS__)):nil)
+
+#define HM_SafeRunBlockAtMainThread(block,...)   \
+        if(block){  \
+            hm_safe_main_thread(^{ \
+                block(__VA_ARGS__); \
+            }); \
+        }
 
 // ViewController
 UIViewController * _Nullable HMRootViewController(void);

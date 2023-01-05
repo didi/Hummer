@@ -60,7 +60,7 @@
     self.URLOperations = [NSMutableDictionary new];
 }
 
-- (id<HMURLConvertible>)fixSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource{
+- (id<HMURLConvertible>)fixLoadSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource{
     
     NSURL *url = [source hm_asUrl];
     if (!url) {return nil;}
@@ -101,7 +101,7 @@
                                     context:(nullable HMImageLoaderContext *)context
                                  completion:(nonnull HMImageLoaderCompletionBlock)completionBlock{
     
-    NSURL *imageUrl = [[self fixSource:source inJSBundleSource:bundleSource] hm_asUrl];
+    NSURL *imageUrl = [[self fixLoadSource:source inJSBundleSource:bundleSource] hm_asUrl];
     if (!imageUrl) {return nil;}
     id cancelToken = nil;
     /**

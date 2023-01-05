@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
  The loader operation from the image loader (such as download operation)
  */
 @property (strong, nonatomic, nullable) id<HMImageLoaderOperation> loaderOperation;
+
+
+@property (strong, nonatomic, nullable) id<HMImageLoaderOperation> coderOperation;
+
 @end
 
 NS_ASSUME_NONNULL_END

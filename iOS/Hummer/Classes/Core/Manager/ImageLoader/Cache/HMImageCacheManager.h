@@ -9,6 +9,7 @@
 #import <Hummer/HMImageCache.h>
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface HMImageCacheManager : NSObject<HMImageCache>
 
 /**
@@ -23,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)clearMemoryCache;
 - (void)clearDiskCache;
 - (void)clearAll;
+
 // memory only
 - (UIImage *)imageFromMemoryCacheForKey:(id<HMURLConvertible>)key context:(HMImageLoaderContext *)context;
 - (NSData *)imageDataFromDiskCacheForKey:(id<HMURLConvertible>)key context:(HMImageLoaderContext *)context;
@@ -30,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeDiskCacheForKey:(id<HMURLConvertible>)key context:(HMImageLoaderContext *)context;
 - (void)removeMemoryCacheForKey:(id<HMURLConvertible>)key context:(HMImageLoaderContext *)context;
 - (void)removeCacheForKey:(id<HMURLConvertible>)key context:(HMImageLoaderContext *)context;
+
 @end
 
 NS_ASSUME_NONNULL_END

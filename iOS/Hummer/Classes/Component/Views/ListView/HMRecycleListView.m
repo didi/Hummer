@@ -36,7 +36,7 @@ typedef NS_ENUM(NSUInteger, HMScrollDirection) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface _InnerCollectionViewCell : UICollectionViewCell<HMViewInspectorDescription>
+@interface HMRecycleListInnerCell : UICollectionViewCell<HMViewInspectorDescription>
 
 @property (nonatomic, nullable, strong) HMBaseValue *contentViewValue;
 
@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-@implementation _InnerCollectionViewCell
+@implementation HMRecycleListInnerCell
 
 - (void)commonInit {
     self.clipsToBounds = YES;
@@ -267,7 +267,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
         
     _reuseIdentifiers = NSMutableSet.set;
     [_reuseIdentifiers addObject:HMRecycleListViewListCellDefaultIdentifier];
-    [self registerClass:_InnerCollectionViewCell.class forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
+    [self registerClass:HMRecycleListInnerCell.class forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
     if (@available(iOS 11.0, *)) {
         self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
@@ -731,7 +731,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
         if (isValueNumber) {
             NSString *cellIdentifier = [NSString stringWithFormat:@"%ld", (long)[identifierNumber integerValue]];
             if (![self.reuseIdentifiers containsObject:cellIdentifier]) {
-                [collectionView registerClass:[_InnerCollectionViewCell class]
+                [collectionView registerClass:[HMRecycleListInnerCell class]
                    forCellWithReuseIdentifier:cellIdentifier];
                 [self.reuseIdentifiers addObject:cellIdentifier];
             }
@@ -741,7 +741,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     }
     
     // 2. 获取在客户端环境创建的重用 cell
-    _InnerCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier
+    HMRecycleListInnerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier
                                                                                forIndexPath:indexPath];
     cell.indexPath = indexPath;
     // 3. 获取在 JS 环境中创建的实际展示的 view 对应的 jsValue
@@ -793,8 +793,8 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
         [res addObject:self.refreshView];
     }
 
-    NSArray <_InnerCollectionViewCell *>*children = self.visibleCells;
-    children = [children sortedArrayUsingComparator:^NSComparisonResult(_InnerCollectionViewCell  *obj1, _InnerCollectionViewCell  *obj2) {
+    NSArray <HMRecycleListInnerCell *>*children = self.visibleCells;
+    children = [children sortedArrayUsingComparator:^NSComparisonResult(HMRecycleListInnerCell  *obj1, HMRecycleListInnerCell  *obj2) {
      
         if (obj1.indexPath.row < obj2.indexPath.row) {
             return NSOrderedAscending;

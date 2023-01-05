@@ -57,6 +57,10 @@
         if (self.loaderOperation) {
             [self.loaderOperation cancel];
         }
+        
+        if(self.coderOperation){
+            [self.coderOperation cancel];
+        }
     }
 }
 

@@ -17,12 +17,19 @@
 #import <Hummer/HMLogger.h>
 #import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMJSGlobal.h>
-
+#import "HMFileManager.h"
+#import "HMJSContext+Private.h"
+#import "NSError+Hummer.h"
+#import "HMRequestCache.h"
+static NSString *__HMRequest_domain = @"com.HMRequest";
 
 @interface HMRequest()
 
 @property (nonatomic, strong) HMBaseValue *oriParamValue;
+@property (nonatomic, strong) NSURLSessionTask *task;
 
+@property (nonatomic, copy) NSString *absolutePath;
+@property (nonatomic, assign) BOOL hasSetHTTPMethod;
 @property (nonatomic, strong) id<HMRequestComponent> request_impl;
 @end
 
@@ -41,8 +48,14 @@ HM_EXPORT_PROPERTY(method, __method, __setMethod:)
 HM_EXPORT_PROPERTY(timeout, __timeout, __setTimeout:)
 HM_EXPORT_PROPERTY(header, __header, __setHeader:)
 HM_EXPORT_PROPERTY(param, __param, __setParam:)
+HM_EXPORT_PROPERTY(filePath, __filePath, __setFilePath:)
 
 HM_EXPORT_METHOD(send, send:)
+HM_EXPORT_METHOD(download, download:)
+
+- (void)dealloc {
+    [self.task cancel];
+}
 
 - (instancetype)init {
     self = [super init];
@@ -50,6 +63,7 @@ HM_EXPORT_METHOD(send, send:)
         self.request_impl = [HMRequestAdaptor createComponentWithNamespace:[HMJSGlobal.globalObject currentContext:HMCurrentExecutor].nameSpace];
         self.timeout = 20;
         self.method = @"POST";
+        self.hasSetHTTPMethod = NO;
     }
     return self;
 }
@@ -89,27 +103,23 @@ HM_EXPORT_METHOD(send, send:)
 
 typedef NSMutableDictionary HMPrimitiveResponse;
 - (void)handleResponse:(NSHTTPURLResponse *)resp
-              withData:(NSData *)data
+              withData:(NSDictionary *)data
              withError:(NSError *)error
               callback:(HMFuncCallback)callback {
-    
-    NSString *string = [[NSString alloc] initWithData:data
-                                             encoding:NSUTF8StringEncoding];
-    
+        
     HMPrimitiveResponse *respone = [HMPrimitiveResponse new];
     [respone setValue:@(resp.statusCode) forKey:@"status"];
     if (error) {
 
         NSMutableDictionary *errorDic = [NSMutableDictionary new];
         [errorDic setObject:@(error.code) forKey:@"code"];
-        if(error.userInfo){
-            [errorDic setValuesForKeysWithDictionary:error.userInfo];
-        }
+        [errorDic setObject:[error hm_descriptionOrReason] forKey:@"msg"];
         [respone setObject:errorDic forKey:@"error"];
     }
     [respone setValue:[resp allHeaderFields] forKey:@"header"];
-    [respone setValue:HMJSONDecode(string) forKey:@"data"];
-    
+    if(data){
+        [respone setValue:data forKey:@"data"];
+    }
     __weak typeof(self) wSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (wSelf) {
@@ -193,6 +203,7 @@ typedef NSMutableDictionary HMPrimitiveResponse;
 
 - (void)setMethod:(NSString *)method {
     _method = method;
+    self.hasSetHTTPMethod = YES;
     if (self.request_impl) {
         self.request_impl.method = method;
     }
@@ -247,6 +258,20 @@ typedef NSMutableDictionary HMPrimitiveResponse;
     return _header;
 }
 
+- (NSString *)filePath {
+    
+    if (self.request_impl) {
+        return self.request_impl.filePath;
+    }
+    return _filePath;
+}
+- (void)setFilePath:(NSString *)filePath {
+    
+    _filePath = filePath;
+    if (self.request_impl) {
+        self.request_impl.filePath = filePath;
+    }
+}
 #pragma mark - Export Property
 
 - (HMBaseValue *)__url {
@@ -290,7 +315,64 @@ typedef NSMutableDictionary HMPrimitiveResponse;
     self.param = [param toObject];
 }
 
+- (void)__setFilePath:(HMBaseValue *)filePath {
+    self.filePath = filePath.toString;
+}
+
+- (HMBaseValue *)__filePath {
+    
+    return [HMBaseValue valueWithObject:self.filePath inContext:self.hmContext];
+}
 #pragma mark - Export Method
+/**
+ * filepath:
+ * case 1: path/filename.ext
+ * case 2: path/path
+ * case 3: path
+ *
+ * 保存路径：
+ * case 1: sandbox/namespace/hm_request/path/filename.ext
+ * case 2: sandbox/namespace/path/path/urlmd5.suggestedfilename
+ * case 3: sandbox/namespace/path/urlmd5.suggestedfilename
+ */
+- (void)download:(HMFuncCallback)callback {
+    if(!self.hasSetHTTPMethod){
+        self.method = @"GET";
+    }
+    if([self.task state] != NSURLSessionTaskStateCompleted) {
+        [self.task cancel];
+    }
+    NSString *namespace = [HMJSContext getNamespace];
+    NSURLRequest *request = [self urlRequest];
+    NSString *filePath = self.filePath;
+    self.absolutePath = [HMRequestCache generateCachePath:self.url namespace:namespace filePath:filePath];
+    NSString *cacheHit = [[HMFileManager sharedManager] fileExistsAtPathIgnoreExtension:self.absolutePath isDirectory:nil];
+    if(cacheHit){
+        NSHTTPURLResponse *urlResp = [[NSHTTPURLResponse alloc] initWithURL:[self.url hm_asUrl] statusCode:200 HTTPVersion:@"1.1" headerFields:nil];
+        NSDictionary *resp = @{@"filePath":cacheHit};
+        [self handleResponse:urlResp withData:resp withError:nil callback:callback];
+        return;
+    }
+    //This property is ignored for requests used to construct NSURLSessionUploadTask and NSURLSessionDownloadTask objects, as caching is not supported by the URL Loading System for upload or download requests.
+    __weak typeof(self) wself = self;
+    self.task = [[NSURLSession sharedSession] downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        __strong typeof(wself) sSelf = wself;
+        if(sSelf == nil){return;}
+        NSDictionary *resp = nil;
+        if(error == nil && location){
+            NSString *toURLString = [HMRequestCache generatedPath:sSelf.absolutePath appendExtension:response.suggestedFilename.pathExtension];
+            BOOL res =  [HMRequestCache saveCache:location to:[toURLString hm_asFileUrl]];
+            if(res){
+                resp = @{@"filePath":toURLString};
+            }else{
+                error = [NSError hm_errorWithDomain:__HMRequest_domain code:1001000 description:@"写入文件失败"];
+            }
+        }
+        [sSelf handleResponse:(NSHTTPURLResponse *)response withData:resp withError:error callback:callback];
+    }];
+    [self.task resume];
+}
 
 - (void)send:(HMFuncCallback)callback {
     
@@ -301,7 +383,9 @@ typedef NSMutableDictionary HMPrimitiveResponse;
         [self.request_impl send:callback];
         return;
     }
-    NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:[self urlRequest]
+    __weak typeof(self) wself = self;
+    NSURLRequest *request = [self urlRequest];
+    self.task = [[NSURLSession sharedSession] dataTaskWithRequest:request
                                                                      completionHandler:^(NSData * _Nullable data,
                                                                                          NSURLResponse * _Nullable response,
                                                                                          NSError * _Nullable error) {
@@ -309,12 +393,20 @@ typedef NSMutableDictionary HMPrimitiveResponse;
             error = HMError(-100, @"not http response");
             data = nil; response = nil;
         }
-        [self handleResponse:(NSHTTPURLResponse *)response
-                        withData:data
+        id resp = nil;
+        if(data){
+            NSString *string = [[NSString alloc] initWithData:data
+                                                     encoding:NSUTF8StringEncoding];
+            id resp = HMJSONDecode(string);
+        }
+        __strong typeof(wself) sSelf = wself;
+        if(sSelf == nil){return;}
+        [sSelf handleResponse:(NSHTTPURLResponse *)response
+                        withData:resp
                        withError:error
                         callback:callback];
     }];
-    [dataTask resume];
+    [self.task resume];
 }
 
 + (nonnull id<HMRequestComponent>)create {
@@ -328,5 +420,6 @@ typedef NSMutableDictionary HMPrimitiveResponse;
 @synthesize param = _param;
 @synthesize timeout = _timeout;
 @synthesize url = _url;
+@synthesize filePath = _filePath;
 
 @end
