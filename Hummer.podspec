@@ -84,10 +84,11 @@ Hummer is a dynamic solution for client.
     }
     ss.framework = 'JavaScriptCore'
     ss.dependency 'SocketRocket', '~> 0.1'
+    ss.dependency "Yoga", "~> 1.14"
   end
 
   s.subspec "RN" do |ss|
-    ss.dependency "yoga"
+    ss.dependency "Yoga"
     ss.dependency 'Hummer/Core'
   end
 
