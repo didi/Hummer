@@ -93,7 +93,14 @@ public class BasicAnimation {
         anim.setStartDelay(HummerAnimationUtils.getAnimDelay(delay));
         anim.setInterpolator(HummerAnimationUtils.getInterpolator(easing));
         anim.addListener(animatorListener);
-        anim.start();
+
+        // 在开始"宽高"动画时，如果此时由于布局仍未完成导致宽高初始值为0，则动画延后执行，保证宽高初始值有效
+        if (("width".equalsIgnoreCase(animType) && base.getView().getWidth() == 0)
+                || ("height".equalsIgnoreCase(animType) && base.getView().getHeight() == 0)) {
+            base.getView().post(anim::start);
+        } else {
+            anim.start();
+        }
     }
 
     public void stop() {
