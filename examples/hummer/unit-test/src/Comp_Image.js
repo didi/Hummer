@@ -192,7 +192,7 @@ class RootView extends Scroller {
         };
 
         let img4 = new Image();
-        img4.src = 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg';
+        img4.src = 'https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg';
         img4.style = {
             width: 60,
             height: 60,
@@ -201,7 +201,7 @@ class RootView extends Scroller {
         };
 
         let img5 = new Image();
-        img5.src = 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg';
+        img5.src = 'https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg';
         img5.style = {
             width: 60,
             height: 60,
@@ -214,7 +214,7 @@ class RootView extends Scroller {
         };
 
         let img6 = new Image();
-        img6.src = 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg';
+        img6.src = 'https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg';
         img6.style = {
             width: 60,
             height: 60,
@@ -258,7 +258,7 @@ class RootView extends Scroller {
         };
 
         this.loadResImage(layout, 'njimage_demo', false);
-        this.loadRemoteImage(layout, 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg', false);
+        this.loadRemoteImage(layout, 'https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg', false);
 
         this.appendChild(titleView);
         this.appendChild(layout);
@@ -306,10 +306,11 @@ class RootView extends Scroller {
             width: 70,
             height: 50,
             backgroundColor: '#FF000022',
+            resize: 'origin',
         };
 
         let text1 = new Text();
-        text1.text = 'origin(默认)';
+        text1.text = 'origin';
         text1.style = {
             fontSize: 12,
             textAlign: 'center',
@@ -384,7 +385,7 @@ class RootView extends Scroller {
         };
 
         let text4 = new Text();
-        text4.text = 'stretch';
+        text4.text = 'stretch(默认)';
         text4.style = {
             fontSize: 12,
             textAlign: 'center',
@@ -420,10 +421,11 @@ class RootView extends Scroller {
             width: 70,
             height: 50,
             backgroundColor: '#FF000022',
+            resize: 'origin',
         };
 
         let text5 = new Text();
-        text5.text = 'origin(默认)';
+        text5.text = 'origin';
         text5.style = {
             fontSize: 12,
             textAlign: 'center',
@@ -501,7 +503,7 @@ class RootView extends Scroller {
         };
 
         let text8 = new Text();
-        text8.text = 'stretch';
+        text8.text = 'stretch(默认)';
         text8.style = {
             fontSize: 12,
             textAlign: 'center',
@@ -540,7 +542,7 @@ class RootView extends Scroller {
         };
 
         let img1 = new Image();
-        img1.load('http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg', (srcType, isSuccess) => {
+        img1.load('https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg', (srcType, isSuccess) => {
             if (isSuccess) {
                 console.log(`xxxx____RemoteLoad Success  srcType = ${srcType}`)
             } else {
@@ -567,7 +569,7 @@ class RootView extends Scroller {
         };
 
         let img3 = new Image();
-        img3.load('//b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg', (srcType, isSuccess) => {
+        img3.load('//pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg', (srcType, isSuccess) => {
             if (isSuccess) {
                 console.log(`xxxx____RemoteSimpleLoad Success  srcType = ${srcType}`)
             } else {
@@ -582,9 +584,9 @@ class RootView extends Scroller {
 
         let img4 = new Image();
         img4.load({
-            src: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg',
-            placeholder: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg',
-            failedImage: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg'
+            src: 'https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg',
+            placeholder: 'https://pt-starimg.didistatic.com/static/starimg/img/jEv0wHEGSj1607860825566.png',
+            failedImage: 'https://img-hxy021.didistatic.com/static/starimg/img/FOyJO2sivq1674975200497.png'
         }, (srcType, isSuccess) => {
             if (isSuccess) {
                 console.log(`xxxx____ObjectRemoteLoad Success  srcType = ${srcType}`)
@@ -601,8 +603,8 @@ class RootView extends Scroller {
         let img5 = new Image()
         img5.load({
             src: 'njimage_demo',
-            placeholder: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg',
-            failedImage: 'http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg'
+            placeholder: 'https://pt-starimg.didistatic.com/static/starimg/img/jEv0wHEGSj1607860825566.png',
+            failedImage: 'https://img-hxy021.didistatic.com/static/starimg/img/FOyJO2sivq1674975200497.png'
         }, (srcType, isSuccess) => {
             if (isSuccess) {
                 console.log(`xxxx____ObjectLocalLoad Success  srcType = ${srcType}`)

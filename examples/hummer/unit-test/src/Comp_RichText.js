@@ -37,7 +37,7 @@ class RootView extends View {
         text1.richText = {
             text: "xxxx",
             textColor: '#FF0000',
-            image: "http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg",
+            image: "https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg",
             imageWidth: 100,
             imageHeight: 100,
         }
@@ -80,7 +80,7 @@ class RootView extends View {
                 text: "2222",
                 // color: '#00FF00',
                 fontSize: '16',
-                image: "http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg",
+                image: "https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg",
                 imageWidth: 100,
                 imageHeight: 100,
                 //                imageAlign: 'top',
@@ -160,7 +160,7 @@ class RootView extends View {
                 text: "2222",
                 // color: '#00FF00',
                 fontSize: '16',
-                image: "http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg",
+                image: "https://pt-starimg.didistatic.com/static/starimg/img/WjRyAMkJbL1607860816543.jpg",
                 imageWidth: 100,
                 imageHeight: 100,
                 // imageAlign: 'top',
