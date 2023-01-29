@@ -26,6 +26,12 @@ import java.util.Map;
 @Component("Image")
 public class Image extends HMBase<RoundedImageView> {
 
+    /**
+     * 不用用YogaNode中的宽高unit来判断是否当前是auto状态，因为在调整完图片自适应宽高后会重新设置，所以这里需要单独维护auto状态
+     */
+    private boolean isWidthAuto = true;
+    private boolean isHeightAuto = true;
+
     private class ImageStyle implements Serializable {
         public String src;
         public String placeholder;
@@ -60,17 +66,17 @@ public class Image extends HMBase<RoundedImageView> {
      * 如果Image控件本身没有设置大小，这里重新根据图片大小调整Image控件的大小
      * <p>
      * 详细逻辑如下：
-     * 1. 如果Image控件的宽和搞都没有设置，那么以图片的实际宽高作为Image控件的宽高；
-     * 2. 如果Image控件的宽或高有一个设置了，那么按图片宽高比来计算Image控件的另一个未设置的宽过高；
+     * 1. 如果Image控件的宽和高都没有设置，那么以图片的实际宽高作为Image控件的宽高；
+     * 2. 如果Image控件的宽或高有一个设置了，那么按图片宽高比来计算Image控件的另一个未设置的宽或高；
      * 3. 如果Image控件的宽或高有一个是百分比值，那么需要转换成真实的宽高值再计算；
      *
      * @param imgWidth
      * @param imgHeight
      */
     private void adjustWidthAndHeight(int imgWidth, int imgHeight) {
-        if (getYogaNode().getWidth().unit == YogaUnit.AUTO && getYogaNode().getHeight().unit == YogaUnit.AUTO) {
+        if (isWidthAuto && isHeightAuto) {
             setWidthAndHeight(imgWidth, imgHeight);
-        } else if (getYogaNode().getWidth().unit != YogaUnit.AUTO && getYogaNode().getHeight().unit == YogaUnit.AUTO) {
+        } else if (!isWidthAuto && isHeightAuto) {
             if (getYogaNode().getWidth().unit == YogaUnit.PERCENT) {
                 getView().post(() -> {
                     float width = getView().getWidth();
@@ -82,7 +88,7 @@ public class Image extends HMBase<RoundedImageView> {
                 float height = width / imgWidth * imgHeight;
                 setWidthAndHeight(width, height);
             }
-        } else if (getYogaNode().getWidth().unit == YogaUnit.AUTO && getYogaNode().getHeight().unit != YogaUnit.AUTO) {
+        } else if (isWidthAuto && !isHeightAuto) {
             if (getYogaNode().getHeight().unit == YogaUnit.PERCENT) {
                 getView().post(() -> {
                     float height = getView().getHeight();
@@ -95,7 +101,6 @@ public class Image extends HMBase<RoundedImageView> {
                 setWidthAndHeight(width, height);
             }
         }
-
     }
 
     private void setWidthAndHeight(float width, float height) {
@@ -106,11 +111,20 @@ public class Image extends HMBase<RoundedImageView> {
 
     /**
      * 处理图片宽高样式，可能需要重新调整图片控件的宽高，以自适应图片大小
+     *
+     * 可能有如下情况：
+     * 1.宽/高：固定值 -> 'auto'
+     * 2.只设置了宽/高度，高/宽度从未设置过（Yoga宽高单位是AUTO）
      */
     private void processWidthAndHeightStyleIfNeed(Map<String, Object> style) {
-        if (!TextUtils.isEmpty(this.src)
-                && ((style.containsKey("width") && HummerStyleUtils.isAutoValue(style.get("width")))
-                || (style.containsKey("height") && HummerStyleUtils.isAutoValue(style.get("height"))))) {
+        if (style.containsKey("width") && !HummerStyleUtils.isAutoValue(style.get("width"))) {
+            isWidthAuto = false;
+        }
+        if (style.containsKey("height") && !HummerStyleUtils.isAutoValue(style.get("height"))) {
+            isHeightAuto = false;
+        }
+
+        if (!TextUtils.isEmpty(this.src) && (style.containsKey("width") || style.containsKey("height")) && (isWidthAuto || isHeightAuto)) {
             String namespace = ((HummerContext) getContext()).getNamespace();
             HummerAdapter.getImageLoaderAdapter(namespace).getImageSize(this.src, this::adjustWidthAndHeight);
         }
@@ -211,7 +225,7 @@ public class Image extends HMBase<RoundedImageView> {
 
     private void loadImage(String url, String placeholder, String failedImage, JSCallback completeCallback) {
         ImageSizeCallback callback = null;
-        if (getYogaNode().getWidth().unit == YogaUnit.AUTO || getYogaNode().getHeight().unit == YogaUnit.AUTO) {
+        if (isWidthAuto || isHeightAuto) {
             callback = this::adjustWidthAndHeight;
         }
         ImageRenderUtil.renderImage((HummerContext) getContext(), getView(), url, placeholder, failedImage, callback, completeCallback);
@@ -225,7 +239,7 @@ public class Image extends HMBase<RoundedImageView> {
 
     private void loadGif(String url, String placeholder, String failedImage, int repeatCount, JSCallback completeCallback) {
         ImageSizeCallback callback = null;
-        if (getYogaNode().getWidth().unit == YogaUnit.AUTO || getYogaNode().getHeight().unit == YogaUnit.AUTO) {
+        if (isWidthAuto || isHeightAuto) {
             callback = this::adjustWidthAndHeight;
         }
         ImageRenderUtil.renderGif((HummerContext) getContext(), getView(), url, placeholder, failedImage, repeatCount, callback, completeCallback);
