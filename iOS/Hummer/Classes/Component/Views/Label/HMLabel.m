@@ -82,10 +82,10 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     self.userInteractionEnabled = YES;
     self.numberOfLines = 0;
     // 默认为 [UIFont systemFontSize:17];
+    _fontSize = 16;
     [self updateFont];
     // 默认 clearColor
 //    self.backgroundColor = UIColor.clearColor;
-    _fontSize = 16;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

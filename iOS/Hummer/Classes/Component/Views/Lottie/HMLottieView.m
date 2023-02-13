@@ -57,6 +57,8 @@
 @property (nonatomic, strong) NSString *url;
 @property (nonatomic, strong) NSString *fileName;
 @property (nonatomic, assign) BOOL loopAnimation;
+@property (nonatomic, assign) BOOL autoPlay;
+@property (nonatomic, assign) BOOL isPlaying;
 @property (nonatomic,   copy) HMFuncCallback completionCallback;
 @property (nonatomic,   copy) HMFuncCallback failedCallback;
 @property (nonatomic,   copy) HMFuncCallback readyCallback;
@@ -71,6 +73,7 @@
  */
 HM_EXPORT_CLASS(LottieView,HMLottieView)
 
+HM_EXPORT_PROPERTY(autoPlay, __autoPlay, __setAutoPlay:)
 HM_EXPORT_PROPERTY(src, __src, __setSrc:)
 HM_EXPORT_METHOD(playAnimation, __playAnimation)
 HM_EXPORT_METHOD(cancelAnimation, __cancelAnimation)
@@ -78,6 +81,15 @@ HM_EXPORT_METHOD(setLoop, __setLoop:)
 HM_EXPORT_METHOD(setOnCompletionCallback, __setOnCompletionCallback:)
 HM_EXPORT_METHOD(onDataFailed, __setOnDataFailedCallback:)
 HM_EXPORT_METHOD(onDataReady, __setOnDataReadyCallback:)
+
+- (instancetype)init {
+    self = [super init];
+    if(self){
+        _autoPlay = YES;
+        _loopAnimation = NO;
+    }
+    return self;
+}
 
 - (NSString *)__src {
     return self.src;
@@ -125,7 +137,24 @@ HM_EXPORT_METHOD(onDataReady, __setOnDataReadyCallback:)
     CompatibleLOTAnimation *composition = [[CompatibleLOTAnimation alloc] initWithFilepath:filePath];
     self.animationView = [[CompatibleLOTAnimationView alloc] initWithCompatibleAnimation:composition];
 #endif
+    [self setupLoop];
     [self layoutAnimationView];
+    [self setupAutoPlay];
+}
+- (void)setupLoop{
+    if (self.animationView) {
+#if __has_include(<lottie-ios/Lottie/Lottie.h>)
+        self.animationView.loopAnimation = self.loopAnimation;
+#else
+        self.animationView.loopAnimationCount = self.loopAnimation ? -1 : 1;
+#endif
+    }
+}
+
+- (void)setupAutoPlay{
+    if (self.animationView && self.autoPlay && !self.isPlaying) {
+        [self __playAnimation];
+    }
 }
 
 - (void)layoutAnimationView {
@@ -135,24 +164,21 @@ HM_EXPORT_METHOD(onDataReady, __setOnDataReadyCallback:)
 
 - (void)__playAnimation {
     __weak typeof(self) wSelf = self;
+    self.isPlaying = YES;
     [self.animationView playWithCompletion:^(BOOL animationFinished) {
+        wSelf.isPlaying = NO;
         HM_SafeRunBlockAtMainThread(wSelf.completionCallback,@[])
     }];
 }
 
 - (void)__cancelAnimation {
     [self.animationView stop];
+    self.isPlaying = NO;
 }
 
 - (void)__setLoop:(HMBaseValue *)jsLoop {
     self.loopAnimation = jsLoop.toBool;
-    if (self.animationView) {
-#if __has_include(<lottie-ios/Lottie/Lottie.h>)
-        self.animationView.loopAnimation = self.loopAnimation;
-#else
-        self.animationView.loopAnimationCount = self.loopAnimation ? -1 : 1;
-#endif
-    }
+    [self setupLoop];
 }
 
 - (void)__setOnCompletionCallback:(HMFuncCallback)jsCallback {
@@ -165,11 +191,15 @@ HM_EXPORT_METHOD(onDataReady, __setOnDataReadyCallback:)
 
 - (void)__setOnDataReadyCallback:(HMFuncCallback)jsCallback {
     self.readyCallback = jsCallback;
-    if (self.animationView && self.readyCallback) {
-        HM_SafeRunBlockAtMainThread(self.readyCallback,@[])
-    }
 }
 
+- (BOOL)__autoPlay {
+    return self.autoPlay;
+}
+
+- (void)__setAutoPlay:(BOOL)autoPlay{
+    self.autoPlay = autoPlay;
+}
 
 - (void)hummerSetFrame:(CGRect)frame {
     [super hummerSetFrame:frame];

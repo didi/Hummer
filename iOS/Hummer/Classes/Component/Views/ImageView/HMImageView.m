@@ -34,14 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 //@property (nonatomic, strong, nullable) HMAnimatedImageView *internalImageView;
 
-- (nullable NSString *)src;
-
-- (void)setSrc:(nullable HMBaseValue *)src;
-
-- (NSInteger)gifRepeatCount;
-
-- (void)setGifRepeatCount:(nullable HMBaseValue *)src;
-
 @end
 
 NS_ASSUME_NONNULL_END
@@ -71,9 +63,9 @@ NS_ASSUME_NONNULL_END
 
 HM_EXPORT_CLASS(Image, HMImageView)
 
-HM_EXPORT_PROPERTY(src, src, setSrc:)
+HM_EXPORT_PROPERTY(src, src, setSrcValue:)
 
-HM_EXPORT_PROPERTY(gifSrc, src, setGifSrc:)
+HM_EXPORT_PROPERTY(gifSrc, src, setGifSrcValue:)
 
 HM_EXPORT_METHOD(load, __load:completion:)
 
@@ -135,16 +127,25 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
 }
 
 
-- (void)setGifSrc:(HMBaseValue *)src {
-    NSString *srcString = src.toString;
+- (void)setGifSrc:(NSString *)src {
+    NSString *srcString = src;
     HMImageLoaderContext *context = @{HMImageManagerContextAnimatedImageClass:@"HMAnimatedImage"};
     [self realSetSrc:srcString placeholder:nil failedImage:nil context:context completionBlock:nil];
 }
 
-- (void)setSrc:(HMBaseValue *)src {
+- (void)setGifSrcValue:(HMBaseValue *)src {
     NSString *srcString = src.toString;
+    [self setGifSrc:srcString];
+}
+
+- (void)setSrcValue:(HMBaseValue *)src {
+    NSString *srcString = src.toString;
+    [self setSrc:srcString];
+}
+
+- (void)setSrc:(NSString *)srcString {
     if ([srcString hasSuffix:@".gif"]) {
-        [self setGifSrc:src];
+        [self setGifSrc:srcString];
         return;
     }
     [self realSetSrc:srcString placeholder:nil failedImage:nil context:nil completionBlock:nil];

@@ -18,8 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setImageURL:(NSString *)url;
 
-- (void)setJSView:(UIView *)view;
-
 @end
 
 NS_ASSUME_NONNULL_END
