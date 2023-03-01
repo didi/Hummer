@@ -44,6 +44,8 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+
     compileOnly project(':hummer-sdk')
 
     // OkHttp

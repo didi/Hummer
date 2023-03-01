@@ -1,6 +1,7 @@
 package com.didi.hummer.component.refresh;
 
-import android.support.annotation.IntDef;
+
+import androidx.annotation.IntDef;
 
 /**
  * Created by XiaoFeng on 2020/10/10.

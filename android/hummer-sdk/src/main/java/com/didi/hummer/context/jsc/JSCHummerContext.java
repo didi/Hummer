@@ -1,9 +1,10 @@
 package com.didi.hummer.context.jsc;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;

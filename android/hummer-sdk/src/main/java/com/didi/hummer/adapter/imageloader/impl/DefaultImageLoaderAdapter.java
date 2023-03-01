@@ -2,8 +2,6 @@ package com.didi.hummer.adapter.imageloader.impl;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -13,7 +11,6 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.didi.hummer.HummerSDK;
@@ -23,6 +20,9 @@ import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
 import com.didi.hummer.core.engine.JSCallback;
 
 import static com.bumptech.glide.load.DataSource.REMOTE;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * 默认图片加载适配器

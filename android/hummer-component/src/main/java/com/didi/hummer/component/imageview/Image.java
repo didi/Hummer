@@ -2,9 +2,10 @@ package com.didi.hummer.component.imageview;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.imageloader.ImageSizeCallback;

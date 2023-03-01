@@ -2,8 +2,6 @@ package com.didi.hummer.context.napi;
 
 import android.content.Context;
 import android.os.Looper;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.didi.hummer.HummerSDK;
@@ -32,6 +30,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 /**
  * Created by XiaoFeng on 2021/7/5.

@@ -7,12 +7,13 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.v4.view.AccessibilityDelegateCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsMethod;

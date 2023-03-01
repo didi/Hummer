@@ -2,9 +2,10 @@ package com.didi.hummer;
 
 import android.content.Intent;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.navigator.NavPage;

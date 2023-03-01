@@ -2,8 +2,10 @@ package com.didi.hummer.delegate;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 

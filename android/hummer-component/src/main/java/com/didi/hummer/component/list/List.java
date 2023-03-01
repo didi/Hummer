@@ -1,14 +1,16 @@
 package com.didi.hummer.component.list;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;
@@ -274,6 +276,7 @@ public class List extends HMBase<SmartRefreshLayout> {
         needUpdateEdgeSpacing = false;
     }
 
+    @SuppressLint("WrongConstant")
     private void initLayoutManager() {
         switch (mode) {
             case MODE_LIST:

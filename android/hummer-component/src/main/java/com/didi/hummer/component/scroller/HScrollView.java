@@ -2,10 +2,11 @@ package com.didi.hummer.component.scroller;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
+
+import androidx.core.view.ViewCompat;
 
 import com.didi.hummer.component.input.FocusUtil;
 import com.didi.hummer.component.input.KeyboardUtil;

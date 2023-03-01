@@ -1,9 +1,10 @@
 package com.didi.hummer.component.refresh;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerLayout;

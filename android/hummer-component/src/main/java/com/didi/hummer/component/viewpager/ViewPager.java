@@ -88,7 +88,7 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
                 .setIndicatorVisibility(View.GONE)
                 // 先设一个空的ViewHolder，后面会重写掉整个ViewPager的PagerAdapter
                 .setHolderCreator(EmptyViewHolder::new)
-                .setOnPageChangeListener(new android.support.v4.view.ViewPager.OnPageChangeListener() {
+                .setOnPageChangeListener(new androidx.viewpager.widget.ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                         /**

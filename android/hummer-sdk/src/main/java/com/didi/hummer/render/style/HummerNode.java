@@ -1,9 +1,10 @@
 package com.didi.hummer.render.style;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
