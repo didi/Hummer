@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.didi.dokit'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.didi.hummer.demo"
         minSdkVersion 18
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
