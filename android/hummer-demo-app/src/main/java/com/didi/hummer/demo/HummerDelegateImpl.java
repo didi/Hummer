@@ -1,9 +1,10 @@
 package com.didi.hummer.demo;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.context.HummerContext;
@@ -11,7 +12,6 @@ import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.delegate.HummerDelegateAdapter;
-import com.didi.hummer.register.HummerRegister$$hummer_demo_app;
 
 import java.util.ArrayList;
 import java.util.Arrays;

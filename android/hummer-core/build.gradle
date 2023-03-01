@@ -49,7 +49,7 @@ android {
             abiFilters 'armeabi-v7a','x86','arm64-v8a','x86_64'
         }
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // 使打包后的aar带有该混淆规则的文件
         consumerProguardFiles 'proguard-rules.pro'
@@ -65,9 +65,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.so'])
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     api 'com.google.code.gson:gson:2.8.5'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.0.2'
+
+
 }

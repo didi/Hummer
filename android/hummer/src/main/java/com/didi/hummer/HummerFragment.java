@@ -2,14 +2,15 @@ package com.didi.hummer;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;

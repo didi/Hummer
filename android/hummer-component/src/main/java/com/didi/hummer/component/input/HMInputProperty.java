@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -18,6 +17,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.didi.hummer.component.text.FontManager;
 import com.didi.hummer.context.HummerContext;

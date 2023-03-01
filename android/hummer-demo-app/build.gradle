@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         buildConfigField "String", "MOCK_HOST", "\"${getLocalIPv4()}\""
 
         javaCompileOptions {
@@ -53,25 +53,22 @@ configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 
     // 解决和第三方库中的support库冲突
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '26.1.0'
-            }
-        }
-    }
+//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//        def requested = details.requested
+//        if (requested.group == 'com.android.support') {
+//            if (!requested.name.startsWith("multidex")) {
+//                details.useVersion '26.1.0'
+//            }
+//        }
+//    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:2.0.2'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    api  rootProject.ext.androidx["appcompat"]
+    api  rootProject.ext.androidx["recyclerview"]
+    api  rootProject.ext.androidx["constraintLayout"]
 
 //    implementation 'io.github.didi.hummer:hummer:0.3.22.4'
     implementation project(':hummer')
@@ -94,4 +91,9 @@ dependencies {
 //    debugImplementation 'com.didichuxing.doraemonkit:doraemonkit:3.0_beta2'
 //    debugImplementation 'com.didichuxing.doraemonkit:doraemonkit-leakcanary:3.0_beta2'
 //    releaseImplementation 'com.didichuxing.doraemonkit:doraemonkit-no-op:3.0_beta2'
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.0.2'
 }

@@ -1,6 +1,7 @@
 package com.didi.hummer.component.input;
 
-import android.support.annotation.StringDef;
+
+import androidx.annotation.StringDef;
 
 /**
  * @author: linjizong

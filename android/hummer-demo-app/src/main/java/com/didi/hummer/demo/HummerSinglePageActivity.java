@@ -1,7 +1,8 @@
 package com.didi.hummer.demo;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.didi.hummer.HummerActivity;
 import com.didi.hummer.adapter.navigator.NavPage;

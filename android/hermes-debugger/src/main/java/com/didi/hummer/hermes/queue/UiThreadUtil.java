@@ -9,7 +9,8 @@ package com.didi.hummer.hermes.queue;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 /** Utility for interacting with the UI thread. */
 public class UiThreadUtil {

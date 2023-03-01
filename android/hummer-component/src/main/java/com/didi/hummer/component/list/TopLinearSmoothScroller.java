@@ -1,7 +1,8 @@
 package com.didi.hummer.component.list;
 
 import android.content.Context;
-import android.support.v7.widget.LinearSmoothScroller;
+
+import androidx.recyclerview.widget.LinearSmoothScroller;
 
 /**
  * 在RecyclerView滚动到某一个item的时候，使其始终滚动item到屏幕的开始处（RecyclerView默认是滚动item到屏幕的可见范围，不一定在屏幕开始处）

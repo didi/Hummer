@@ -3,9 +3,10 @@ package com.didi.hummer;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.support.annotation.IntDef;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.annotation.IntDef;
 
 import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.navigator.impl.ActivityStackManager;

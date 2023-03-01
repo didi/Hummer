@@ -4,10 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+
+import androidx.annotation.NonNull;
 
 import com.didi.hummer.render.component.view.HMBase;
 import com.facebook.yoga.YogaConstants;

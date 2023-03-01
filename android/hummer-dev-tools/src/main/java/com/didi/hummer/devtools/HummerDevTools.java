@@ -1,9 +1,10 @@
 package com.didi.hummer.devtools;
 
 import android.content.Context;
-import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.view.View;
+
+import androidx.core.view.ViewCompat;
 
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.devtools.invoker.HummerInvokerWrapper;

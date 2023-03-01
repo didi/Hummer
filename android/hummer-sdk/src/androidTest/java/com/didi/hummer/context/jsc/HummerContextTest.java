@@ -2,8 +2,6 @@ package com.didi.hummer.context.jsc;
 
 import android.content.Context;
 import android.os.Looper;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
@@ -18,6 +16,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 /**
  * Created by XiaoFeng on 2021/7/5.
