@@ -32,6 +32,10 @@ public class HummerConfig {
      */
     private String namespace;
     /**
+     * debug 开关
+     */
+    private boolean debuggable;
+    /**
      * JS端的Logger
      */
     private JSLogger.Logger jsLogger;
@@ -88,6 +92,7 @@ public class HummerConfig {
 
     private HummerConfig(Builder builder) {
         this.namespace = builder.namespace;
+        this.debuggable = builder.debuggable;
         this.jsLogger = builder.jsLogger;
         this.eventTracer = builder.eventTracer;
         this.exceptionCallback = builder.exceptionCallback;
@@ -205,6 +210,7 @@ public class HummerConfig {
 
     public static class Builder {
         private String namespace = HummerSDK.NAMESPACE_DEFAULT;
+        private boolean debuggable = true;
         private JSLogger.Logger jsLogger;
         private EventTracer.Trace eventTracer;
         private ExceptionCallback exceptionCallback;
@@ -222,6 +228,11 @@ public class HummerConfig {
 
         public Builder setNamespace(String namespace) {
             this.namespace = namespace;
+            return this;
+        }
+
+        public Builder setDebuggable(boolean debuggable) {
+            this.debuggable = debuggable;
             return this;
         }
 
