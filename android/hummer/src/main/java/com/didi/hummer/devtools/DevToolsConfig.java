@@ -1,8 +1,16 @@
 package com.didi.hummer.devtools;
 
 /**
- * Created by XiaoFeng on 2020/4/30.
+ * didi Create on 2023/3/6 .
+ * <p>
+ * Copyright (c) 2023/3/6 by didiglobal.com.
+ *
+ * @author <a href="realonlyone@126.com">zhangjun</a>
+ * @version 1.0
+ * @Date 2023/3/6 3:11 下午
+ * @Description DevToolsConfig
  */
+
 public class DevToolsConfig {
 
     private HummerDevTools.IParameterInjector injector;

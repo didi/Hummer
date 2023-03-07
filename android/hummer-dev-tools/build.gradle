@@ -20,6 +20,7 @@ dependencies {
     api  rootProject.ext.androidx["recyclerview"]
 
     compileOnly project(':hummer-sdk')
+    compileOnly project(':hummer')
 }
 
 uploadArchives.dependsOn(':hummer-sdk:uploadArchives')

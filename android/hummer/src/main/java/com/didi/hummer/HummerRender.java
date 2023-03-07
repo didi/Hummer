@@ -19,6 +19,7 @@ import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.devtools.DevToolsConfig;
 import com.didi.hummer.devtools.HummerDevTools;
+import com.didi.hummer.devtools.HummerDevToolsFactory;
 import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.FileUtil;
@@ -65,7 +66,7 @@ public class HummerRender {
         tracker.trackContextInitEnd();
 
         if (DebugUtil.isDebuggable()) {
-            devTools = new HummerDevTools(hmContext, config);
+            devTools = HummerDevToolsFactory.create(hmContext, config);
         }
 
         ExceptionCallback cb = e -> {

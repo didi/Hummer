@@ -66,9 +66,11 @@ configurations.all {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    api  rootProject.ext.androidx["appcompat"]
-    api  rootProject.ext.androidx["recyclerview"]
-    api  rootProject.ext.androidx["constraintLayout"]
+    api rootProject.ext.androidx["appcompat"]
+    api rootProject.ext.androidx["recyclerview"]
+    api rootProject.ext.androidx["constraintLayout"]
+
+    api project(':hummer-dev-tools')
 
 //    implementation 'io.github.didi.hummer:hummer:0.3.22.4'
     implementation project(':hummer')
