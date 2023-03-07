@@ -23,21 +23,10 @@ import org.json.JSONObject;
 
 /**
  * 【开发工具】按钮功能入口
- *
+ * <p>
  * Created by XiaoFeng on 2021/4/22.
  */
-public class HummerDevTools {
-
-    /**
-     * 注入参数
-     */
-    public interface IParameterInjector {
-        void injectParameter(StringBuilder builder);
-    }
-
-    public interface IHotReloadCallback {
-        void onHotReload();
-    }
+public class DefaultHummerDevTools implements HummerDevTools {
 
     private HummerContext hmContext;
     private DevToolsEntrance entrance;
@@ -46,15 +35,18 @@ public class HummerDevTools {
     private HummerNetManager netManager;
 
     @Deprecated
-    public static void init(HummerContext context) {}
-    @Deprecated
-    public static void init(HummerContext context, IParameterInjector injector) {}
+    public static void init(HummerContext context) {
+    }
 
-    public HummerDevTools(HummerContext context) {
+    @Deprecated
+    public static void init(HummerContext context, HummerDevTools.IParameterInjector injector) {
+    }
+
+    public DefaultHummerDevTools(HummerContext context) {
         this(context, null);
     }
 
-    public HummerDevTools(HummerContext context, DevToolsConfig config) {
+    public DefaultHummerDevTools(HummerContext context, DevToolsConfig config) {
         hmContext = context;
         entrance = new DevToolsEntrance(context);
         wsManager = WebSocketManager.getInstance();
@@ -77,7 +69,7 @@ public class HummerDevTools {
     /**
      * 初始化连接
      */
-    public void initConnection(HummerContext context, String url, IHotReloadCallback callback) {
+    public void initConnection(HummerContext context, String url, HummerDevTools.IHotReloadCallback callback) {
         connectWebSocket(url, callback);
         initRefreshView(context, callback);
     }
@@ -85,7 +77,7 @@ public class HummerDevTools {
     /**
      * 与CLI建立WebSocket连接，用于热重载和日志输出
      */
-    private void connectWebSocket(String url, IHotReloadCallback callback) {
+    private void connectWebSocket(String url, HummerDevTools.IHotReloadCallback callback) {
         wsManager.connect(url, msg -> {
             msg = getUrlFromWS(msg);
             if (url != null && url.equalsIgnoreCase(msg)) {
@@ -100,7 +92,7 @@ public class HummerDevTools {
     /**
      * 初始化刷新按钮
      */
-    private void initRefreshView(HummerContext context, IHotReloadCallback callback) {
+    private void initRefreshView(HummerContext context, HummerDevTools.IHotReloadCallback callback) {
         FloatLayout floatLayout = new FloatLayout(context);
         floatLayout.setOnClickListener(v -> {
             if (callback != null) {
