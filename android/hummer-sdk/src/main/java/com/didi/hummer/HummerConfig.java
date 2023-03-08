@@ -113,6 +113,10 @@ public class HummerConfig {
         return namespace;
     }
 
+    public boolean isDebuggable() {
+        return debuggable;
+    }
+
     public JSLogger.Logger getJsLogger() {
         if (jsLogger == null) {
             jsLogger = (level, msg) -> {

@@ -40,6 +40,8 @@ public class App extends Application {
         HummerConfig config = new HummerConfig.Builder()
                 // 自定义namespace（用于业务线隔离，需和Hummer容器中的namespace配合使用，可选）
                 .setNamespace("test_namespace")
+                //开启debug模式（日志，开发工具）
+                .setDebuggable(true)
                 // JS日志回调（可选）
                 .setJSLogger((level, msg) -> {})
                 // JS异常回调（可选）
@@ -64,8 +66,18 @@ public class App extends Application {
                 .setScriptLoaderAdapter(new DefaultScriptLoaderAdapter())
                 // 构造HummerConfig
                 .builder();
-//        Hummer.init(this, config);
-        Hummer.init(this);
+        Hummer.init(this, config);
+//        Hummer.init(this);
+
+        // Hummer SDK
+        HummerConfig config2 = new HummerConfig.Builder()
+                // 自定义namespace（用于业务线隔离，需和Hummer容器中的namespace配合使用，可选）
+                .setNamespace("test_namespace_no_debug")
+                //开启debug模式（日志，开发工具）
+                .setDebuggable(false)
+                .builder();
+        Hummer.init(this, config2);
+
     }
 
     @Override

@@ -2,6 +2,10 @@ package com.didi.hummer.devtools;
 
 
 import com.didi.hummer.context.HummerContext;
+import com.didi.hummer.debug.HummerInvokerAnalyzer;
+import com.didi.hummer.debug.HummerInvokerAnalyzerFactory;
+import com.didi.hummer.debug.InvokerAnalyzer;
+import com.didi.hummer.debug.InvokerAnalyzerFactory;
 
 /**
  * didi Create on 2023/3/7 .
@@ -22,6 +26,13 @@ public class HummerDevToolsBindProvider extends NopContentProvider {
             @Override
             public HummerDevTools create(HummerContext context, DevToolsConfig config) {
                 return new DefaultHummerDevTools(context, config);
+            }
+        });
+
+        HummerInvokerAnalyzerFactory.setFactory(new InvokerAnalyzerFactory() {
+            @Override
+            public InvokerAnalyzer create() {
+                return new HummerInvokerAnalyzer();
             }
         });
         return true;

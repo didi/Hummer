@@ -327,7 +327,7 @@ public class ViewPager extends HMBase<BannerViewPager<Object, ViewHolder>> imple
     }
 
     private void refreshNodeTree() {
-        if (!DebugUtil.isDebuggable()) {
+        if (!DebugUtil.isDebuggable(getHummerContext().getNamespace())) {
             return;
         }
 
