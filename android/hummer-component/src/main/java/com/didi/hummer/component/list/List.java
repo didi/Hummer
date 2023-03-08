@@ -661,7 +661,7 @@ public class List extends HMBase<SmartRefreshLayout> {
     }
 
     private void refreshNodeTree() {
-        if (!DebugUtil.isDebuggable()) {
+        if (!DebugUtil.isDebuggable(getHummerContext().getNamespace())) {
             return;
         }
 

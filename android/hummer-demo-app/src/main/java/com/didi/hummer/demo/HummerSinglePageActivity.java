@@ -27,10 +27,10 @@ public class HummerSinglePageActivity extends HummerActivity {
     /**
      * 设置该页面对应的namespace，用于做业务隔离（可选）
      */
-//    @Override
-//    protected String getNamespace() {
-//        return "test_namespace";
-//    }
+    @Override
+    protected String getNamespace() {
+        return "test_namespace";
+    }
 
     /**
      * 初始化Hummer注册内容（原生侧向JS侧注册的类、全局变量和全局方法）

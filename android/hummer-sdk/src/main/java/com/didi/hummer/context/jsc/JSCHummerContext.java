@@ -15,7 +15,6 @@ import com.didi.hummer.core.engine.jsc.jni.HummerRecycler;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.core.util.HMLog;
-import com.didi.hummer.debug.InvokerAnalyzer;
 import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
@@ -33,7 +32,7 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
         // 异常回调注册
         HummerException.addJSContextExceptionCallback(mJsContext, e -> {
             HummerSDK.getException(namespace).onException(e);
-            if (DebugUtil.isDebuggable()) {
+            if (DebugUtil.isDebuggable(namespace)) {
                 mJsContext.evaluateJavaScript("console.error(`" + Log.getStackTraceString(e) + "`)");
             }
         });
@@ -54,7 +53,7 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
             ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Bundle>>", "", jsSourcePath, -1));
             HummerSDK.getException(namespace).onException(e);
 
-            if (DebugUtil.isDebuggable()) {
+            if (DebugUtil.isDebuggable(namespace)) {
                 mJsContext.evaluateJavaScript("console.error(`" + Log.getStackTraceString(e) + "`)");
                 Toast.makeText(HummerSDK.appContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -78,7 +77,7 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
     @Override
     public Object onInvoke(String className, long objectID, String methodName, Object... params) {
         // <for debug>
-        InvokerAnalyzer.startTrack(invokerAnalyzer, className, objectID, methodName, params);
+        startTrack(className, objectID, methodName, params);
 
         Invoker invoker = mRegistry.get(className);
         if (invoker == null) {
@@ -88,7 +87,7 @@ public class JSCHummerContext extends HummerContext implements HummerBridge.Invo
         Object ret = invoker.onInvoke(this, objectID, methodName, params);
 
         // <for debug>
-        InvokerAnalyzer.stopTrack(invokerAnalyzer);
+        stopTrack();
 
         return ret;
     }

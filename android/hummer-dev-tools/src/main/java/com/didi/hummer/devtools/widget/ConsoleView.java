@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
+import com.didi.hummer.debug.HummerInvokerAnalyzer;
 import com.didi.hummer.debug.InvokeTracker;
+import com.didi.hummer.debug.InvokerAnalyzer;
 import com.didi.hummer.debug.PerformanceTracker;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
@@ -258,15 +260,23 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     }
 
     private void updateCallStack() {
-        List<InvokeTracker> trackerList = hummerContext.getInvokerAnalyzer() != null ?
-                hummerContext.getInvokerAnalyzer().getInvokeTrackerList() : null;
+        InvokerAnalyzer invokerAnalyzer = hummerContext.getInvokerAnalyzer();
+        List<InvokeTracker> trackerList = null;
+        if (invokerAnalyzer instanceof HummerInvokerAnalyzer) {
+            trackerList = ((HummerInvokerAnalyzer) invokerAnalyzer).getInvokeTrackerList();
+        }
+
         tvInfo.setText(CallStackFormat.format(trackerList));
         scrollInfo.post(() -> scrollInfo.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updatePerformance() {
-        List<PerformanceTracker> perfTrackerList = hummerContext.getInvokerAnalyzer() != null ?
-                hummerContext.getInvokerAnalyzer().getPerfTrackerList() : null;
+        InvokerAnalyzer invokerAnalyzer = hummerContext.getInvokerAnalyzer();
+        List<PerformanceTracker> perfTrackerList = null;
+        if (invokerAnalyzer instanceof HummerInvokerAnalyzer) {
+            perfTrackerList = ((HummerInvokerAnalyzer) invokerAnalyzer).getPerfTrackerList();
+        }
+
         String info = PerformanceListFormat.format(perfTrackerList);
         tvInfo.setText(info);
     }
