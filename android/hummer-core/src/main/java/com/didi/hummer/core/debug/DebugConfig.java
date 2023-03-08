@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMLog;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DebugConfig {
 
-    private final Map<String, Debuggable> configs = new ConcurrentHashMap<>();
+    private final Map<String, Debuggable> configs = new HashMap<>();
 
     private DebugConfig() {
         // no op
