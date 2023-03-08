@@ -55,6 +55,10 @@ public class HummerNode implements Serializable {
     private List<HummerNode> children = new LinkedList<>();
 
 
+    public HummerNode(@NonNull HMBase linkView, @Nullable String nodeId) {
+        this(linkView, null, nodeId);
+    }
+
     public HummerNode(@NonNull HMBase linkView, @Nullable String namespace, @Nullable String nodeId) {
         this.linkView = linkView;
         this.id = TextUtils.isEmpty(nodeId) ? createNodeId() : nodeId;
