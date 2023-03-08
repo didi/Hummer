@@ -12,6 +12,7 @@ import com.didi.hummer.adapter.HummerAdapter;
 import com.didi.hummer.adapter.navigator.impl.ActivityStackManager;
 import com.didi.hummer.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer.adapter.tracker.SDKInfo;
+import com.didi.hummer.core.debug.DebugConfig;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
 import com.didi.hummer.core.engine.napi.jni.JSException;
 import com.didi.hummer.core.exception.ExceptionCallback;
@@ -154,6 +155,7 @@ public class HummerSDK {
             HummerConfig c = configs.get(namespace);
             if (c == null || TextUtils.isEmpty(c.getNamespace())) {
                 configs.put(namespace, config);
+                DebugConfig.getInstance().setDebuggable(namespace, config.isDebuggable());
             } else {
                 if (DebugUtil.isDebuggable()) {
                     Toast.makeText(appContext, "There is already a duplicate namespace: " + namespace, Toast.LENGTH_SHORT).show();
@@ -163,6 +165,7 @@ public class HummerSDK {
         if (!configs.containsKey(NAMESPACE_DEFAULT)) {
             // 如果没有默认namespace，就提供一个默认的config，并把namespace设置为null，用来标示这个是默认添加的，后面可以被覆盖掉
             configs.put(NAMESPACE_DEFAULT, new HummerConfig.Builder().setNamespace(null).builder());
+            DebugConfig.getInstance().setDebuggable(NAMESPACE_DEFAULT, true);
         }
     }
 

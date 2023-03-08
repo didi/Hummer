@@ -16,7 +16,6 @@ import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.core.util.HMLog;
-import com.didi.hummer.debug.InvokerAnalyzer;
 import com.didi.hummer.lifecycle.ILifeCycle;
 import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
@@ -35,7 +34,7 @@ public class NAPIHummerContext extends HummerContext {
         String methodName = String.valueOf(params[2]);
         Object[] realParams = Arrays.copyOfRange(params, 3, params.length);
 
-        if (DebugUtil.isDebuggable()) {
+        if (DebugUtil.isDebuggable(namespace)) {
             HMLog.d("HummerNative", String.format(
                     "[Java invoked][objectID=%d][className=%s][method=%s][params=%s]",
                     objectID, className, methodName, Arrays.toString(realParams)));
@@ -50,13 +49,13 @@ public class NAPIHummerContext extends HummerContext {
         Object ret = null;
         try {
             // <for debug>
-            InvokerAnalyzer.startTrack(invokerAnalyzer, className, objectID, methodName, params);
+            startTrack(className, objectID, methodName, params);
 
             // 执行具体的invoke方法，并得到Object类型的返回值
             ret = invoker.onInvoke(this, objectID, methodName, realParams);
 
             // <for debug>
-            InvokerAnalyzer.stopTrack(invokerAnalyzer);
+            stopTrack();
         } catch (Exception e) {
             String jsStack = ExceptionUtil.getJSErrorStack(mJsContext);
             ExceptionUtil.addStackTrace(e, new StackTraceElement("<<JS_Stack>>", "", "\n" + jsStack, -1));
@@ -77,7 +76,7 @@ public class NAPIHummerContext extends HummerContext {
         ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Bundle>>", "", jsSourcePath, -1));
         HummerSDK.getException(namespace).onException(e);
 
-        if (DebugUtil.isDebuggable()) {
+        if (DebugUtil.isDebuggable(namespace)) {
             mJsContext.evaluateJavaScript("console.error(`" + Log.getStackTraceString(e) + "`)");
             Toast.makeText(HummerSDK.appContext, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -88,7 +87,7 @@ public class NAPIHummerContext extends HummerContext {
         mJsContext = NAPIContext.create();
         JSException.addJSContextExceptionCallback(mJsContext, e -> {
             HummerSDK.getException(namespace).onException(e);
-            if (DebugUtil.isDebuggable()) {
+            if (DebugUtil.isDebuggable(namespace)) {
                 mJsContext.evaluateJavaScript("console.error(`" + Log.getStackTraceString(e) + "`)");
             }
         });
