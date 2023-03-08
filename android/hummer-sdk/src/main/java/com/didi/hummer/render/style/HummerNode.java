@@ -1,9 +1,10 @@
 package com.didi.hummer.render.style;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
@@ -53,12 +54,17 @@ public class HummerNode implements Serializable {
     @SerializedName("children")
     private List<HummerNode> children = new LinkedList<>();
 
+
     public HummerNode(@NonNull HMBase linkView, @Nullable String nodeId) {
+        this(linkView, null, nodeId);
+    }
+
+    public HummerNode(@NonNull HMBase linkView, @Nullable String namespace, @Nullable String nodeId) {
         this.linkView = linkView;
         this.id = TextUtils.isEmpty(nodeId) ? createNodeId() : nodeId;
         this.yogaNode = getYogaNode(linkView);
 
-        if (DebugUtil.isDebuggable() && linkView.getJSValue() != null) {
+        if (DebugUtil.isDebuggable(namespace) && linkView.getJSValue() != null) {
             name = linkView.getJSValue().getString("className");
             objId = linkView.getJSValue().getLong("objID");
         }

@@ -3,8 +3,9 @@ package com.didi.hummer.component.switchview;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.widget.CompoundButton;
+
+import androidx.annotation.Nullable;
 
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsAttribute;

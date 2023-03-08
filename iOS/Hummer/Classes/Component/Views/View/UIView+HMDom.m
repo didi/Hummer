@@ -15,7 +15,7 @@
 #import "NSObject+Hummer.h"
 #import "HMCornerRadiusModel.h"
 #import "HMBorderModelCollection.h"
-#import "HMResourceModel.h"
+#import "HMSourceParser.h"
 #import <Hummer/HMBorderModel.h>
 #import "HMJSGlobal.h"
 #import "HMImageManager.h"
@@ -554,7 +554,7 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
             topRightStartAngle += asin(topRightDeltaWidth / self.hm_cornerRadiusModel.topRight);
         }
         // 上左角
-        [bezierPath addArcWithCenter:CGPointMake(self.hm_cornerRadiusModel.topLeft, self.hm_cornerRadiusModel.topLeft) radius:self.hm_cornerRadiusModel.topLeft startAngle:topLeftStartAngle endAngle:topLeftEndAngle clockwise:YES];
+        [bezierPath addArcWithCenter:CGPointMake(self.hm_cornerRadiusModel.topLeft+self.bounds.origin.x, self.hm_cornerRadiusModel.topLeft+self.bounds.origin.y) radius:self.hm_cornerRadiusModel.topLeft startAngle:topLeftStartAngle endAngle:topLeftEndAngle clockwise:YES];
         // 右
         double deltaRight = self.bounds.size.height - self.hm_cornerRadiusModel.topRight - self.hm_cornerRadiusModel.bottomRight;
         if (deltaRight < 0) {
@@ -566,7 +566,7 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
             bottomRightStartAngle += asin(bottomRightDeltaHeight / self.hm_cornerRadiusModel.bottomRight);
         }
         // 上右角
-        [bezierPath addArcWithCenter:CGPointMake(self.bounds.size.width - self.hm_cornerRadiusModel.topRight, self.hm_cornerRadiusModel.topRight) radius:self.hm_cornerRadiusModel.topRight startAngle:topRightStartAngle endAngle:topRightEndAngle clockwise:YES];
+        [bezierPath addArcWithCenter:CGPointMake(self.bounds.size.width - self.hm_cornerRadiusModel.topRight+self.bounds.origin.x, self.hm_cornerRadiusModel.topRight+self.bounds.origin.y) radius:self.hm_cornerRadiusModel.topRight startAngle:topRightStartAngle endAngle:topRightEndAngle clockwise:YES];
         // 下
         double deltaBottom = self.bounds.size.width - self.hm_cornerRadiusModel.bottomLeft - self.hm_cornerRadiusModel.bottomRight;
         if (deltaBottom < 0) {
@@ -578,9 +578,9 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
             bottomLeftStartAngle += asin(bottomLeftDeltaWidth / self.hm_cornerRadiusModel.bottomLeft);
         }
         // 右下角
-        [bezierPath addArcWithCenter:CGPointMake(self.bounds.size.width - self.hm_cornerRadiusModel.bottomRight, self.bounds.size.height - self.hm_cornerRadiusModel.bottomRight) radius:self.hm_cornerRadiusModel.bottomRight startAngle:bottomRightStartAngle endAngle:bottomRightEndAngle clockwise:YES];
+        [bezierPath addArcWithCenter:CGPointMake(self.bounds.size.width - self.hm_cornerRadiusModel.bottomRight+self.bounds.origin.x, self.bounds.size.height - self.hm_cornerRadiusModel.bottomRight+self.bounds.origin.y) radius:self.hm_cornerRadiusModel.bottomRight startAngle:bottomRightStartAngle endAngle:bottomRightEndAngle clockwise:YES];
         // 左下角
-        [bezierPath addArcWithCenter:CGPointMake(self.hm_cornerRadiusModel.bottomLeft, self.bounds.size.height - self.hm_cornerRadiusModel.bottomLeft) radius:self.hm_cornerRadiusModel.bottomLeft startAngle:bottomLeftStartAngle endAngle:bottomLeftEndAngle clockwise:YES];
+        [bezierPath addArcWithCenter:CGPointMake(self.hm_cornerRadiusModel.bottomLeft+self.bounds.origin.x, self.bounds.size.height - self.hm_cornerRadiusModel.bottomLeft+self.bounds.origin.y) radius:self.hm_cornerRadiusModel.bottomLeft startAngle:bottomLeftStartAngle endAngle:bottomLeftEndAngle clockwise:YES];
 
         return bezierPath;
     }

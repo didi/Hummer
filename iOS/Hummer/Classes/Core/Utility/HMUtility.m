@@ -9,7 +9,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import "HMConfig.h"
 #import "HMConverter.h"
-#import "HMResourceModel.h"
+#import "HMSourceParser.h"
 #import "HMContainerModel.h"
 
 void _HMAssert(NSString *func, NSString *file, int lineNum, NSString *format, ...) {
@@ -90,6 +90,7 @@ id _HMObjectFromJSONData(NSData *json) {
 NSString *_HMJSONStringWithObject(id object) {
     if([NSJSONSerialization isValidJSONObject:object]){
         NSError *error = nil;
+        // no exception
         NSData *data = [NSJSONSerialization dataWithJSONObject:object options:0 error:&error];
         if(error || !data){
             HMLogError(@"json反序列化失败, %@", [error description]);
@@ -468,7 +469,6 @@ void hm_method_swizzling(Class clazz, SEL originalSelector, SEL swizzledSelector
 BOOL hm_doubleEqual(double numberOne, double numberTwo) {
     return fabs(numberOne - numberTwo) <= 0.0001;
 }
-
 
 
 void hm_safe_main_thread(dispatch_block_t block) {

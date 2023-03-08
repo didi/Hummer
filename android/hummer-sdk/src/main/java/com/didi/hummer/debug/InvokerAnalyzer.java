@@ -1,97 +1,23 @@
 package com.didi.hummer.debug;
 
-import android.os.Handler;
-
-import com.didi.hummer.core.util.DebugUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Invoke方法分析器
+ * didi Create on 2023/3/7 .
+ * <p>
+ * Copyright (c) 2023/3/7 by didiglobal.com.
  *
- * Created by XiaoFeng on 2020/11/6.
+ * @author <a href="realonlyone@126.com">zhangjun</a>
+ * @version 1.0
+ * @Date 2023/3/7 4:55 下午
+ * @Description 用一句话说明文件功能
  */
-public class InvokerAnalyzer {
 
-    private final Handler analyzeHandler;
-    private final List<InvokeTracker> invokeTrackerList;
-    private final List<PerformanceTracker> perfTrackerList;
-    private InvokeTracker curTracker;
-    private PerformanceTracker curPerfTracker;
-    private boolean isPerformanceTracking;
+public interface InvokerAnalyzer {
 
-    public static InvokerAnalyzer init() {
-        if (!DebugUtil.isDebuggable()) {
-            return null;
-        }
-        return new InvokerAnalyzer();
-    }
+    void startTrack(String className, long objectID, String methodName, Object[] params);
 
-    public static void release(InvokerAnalyzer analyzer) {
-        if (!DebugUtil.isDebuggable() || analyzer == null) {
-            return;
-        }
-        analyzer.release();
-    }
+    void stopTrack();
 
-    public static void startTrack(InvokerAnalyzer analyzer, String className, long objectID, String methodName, Object[] params) {
-        if (!DebugUtil.isDebuggable() || analyzer == null) {
-            return;
-        }
-        analyzer.startTrack(className, objectID, methodName, params);
-    }
+    void release();
 
-    public static void stopTrack(InvokerAnalyzer analyzer) {
-        if (!DebugUtil.isDebuggable() || analyzer == null) {
-            return;
-        }
-        analyzer.stopTrack();
-    }
-
-    private InvokerAnalyzer() {
-        analyzeHandler = new Handler();
-        invokeTrackerList = new ArrayList<>();
-        perfTrackerList = new ArrayList<>();
-    }
-
-    private void release() {
-        analyzeHandler.removeCallbacksAndMessages(null);
-    }
-
-    private void startTrack(String className, long objectID, String methodName, Object[] params) {
-        postAnalyzePerformance();
-        curTracker = new InvokeTracker().start(className, objectID, methodName, params);
-        invokeTrackerList.add(curTracker);
-    }
-
-    private void stopTrack() {
-        if (curTracker != null) {
-            curTracker.stop();
-            if (curPerfTracker != null) {
-                curPerfTracker.track(curTracker);
-            }
-            curTracker = null;
-        }
-    }
-
-    private void postAnalyzePerformance() {
-        if (isPerformanceTracking) {
-            return;
-        }
-        isPerformanceTracking = true;
-        curPerfTracker = new PerformanceTracker().start();
-        analyzeHandler.post(() -> {
-            perfTrackerList.add(curPerfTracker.stop());
-            isPerformanceTracking = false;
-        });
-    }
-
-    public List<InvokeTracker> getInvokeTrackerList() {
-        return invokeTrackerList;
-    }
-
-    public List<PerformanceTracker> getPerfTrackerList() {
-        return perfTrackerList;
-    }
 }

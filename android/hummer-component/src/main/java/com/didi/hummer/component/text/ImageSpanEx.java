@@ -4,8 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.text.style.ImageSpan;
+
+import androidx.annotation.NonNull;
 
 import java.lang.ref.WeakReference;
 
@@ -16,8 +17,12 @@ import java.lang.ref.WeakReference;
  */
 public class ImageSpanEx extends ImageSpan {
 
-    public static final int ALIGN_TOP = 2;
-    public static final int ALIGN_CENTER = 3;
+    // 基于文字内容顶部的对齐，是自定义对齐方式。
+    public static final int ALIGN_TEXT_TOP = 3;
+
+    // 基于文字内容居中对齐，是自定义对齐方式。
+    // DynamicDrawableSpan中的ALIGN_CENTER是基于文本控件整行高度的居中对齐，并不是基于文字内容本身的居中对齐。且它是API 29之后才加入的，API 29之前的系统并不支持。
+    public static final int ALIGN_TEXT_CENTER = 4;
 
     public ImageSpanEx(@NonNull Drawable d) {
         super(d, ALIGN_BASELINE);
@@ -38,21 +43,16 @@ public class ImageSpanEx extends ImageSpan {
 
         if (fm != null) {
             Paint.FontMetricsInt fmPaint = paint.getFontMetricsInt();
-            int fontHeight = fmPaint.bottom - fmPaint.top;
             int drHeight = rect.height();
 
-            if (mVerticalAlignment == ALIGN_TOP) {
-                fm.top = -drHeight;
-                fm.ascent = fm.top;
-                fm.descent = fontHeight - drHeight;
-                fm.bottom = fm.descent;
+            if (mVerticalAlignment == ALIGN_TEXT_TOP) {
+                float textCenter = (float) (fmPaint.descent + fmPaint.ascent) / 2;
+                fm.ascent = fm.top = rect.top;
+                fm.descent = fm.bottom = (int) (drHeight / 2 - textCenter);
             } else {
-                int top = drHeight / 2 - fontHeight / 2;
-                int bottom = drHeight / 2 + fontHeight / 2;
-                fm.top = -bottom;
-                fm.ascent = -bottom;
-                fm.descent = top;
-                fm.bottom = top;
+                float textCenter = (float) (fmPaint.descent + fmPaint.ascent) / 2;
+                fm.ascent = fm.top = (int) (textCenter - drHeight / 2);
+                fm.descent = fm.bottom = (int) (drHeight + fm.ascent);
             }
         }
 
@@ -69,11 +69,12 @@ public class ImageSpanEx extends ImageSpan {
         Drawable b = getCachedDrawable();
         canvas.save();
 
-        int transY = 0;
-        if (mVerticalAlignment == ALIGN_TOP) {
-            transY = top;
-        } else if (mVerticalAlignment == ALIGN_CENTER) {
-            transY = ((bottom - top) - b.getBounds().height()) / 2 + top;
+        int transY;
+        Paint.FontMetricsInt fm = paint.getFontMetricsInt();
+        if (mVerticalAlignment == ALIGN_TEXT_TOP) {
+            transY = y + fm.descent + fm.ascent;
+        } else {
+            transY = y + (fm.descent + fm.ascent) / 2 - b.getBounds().height() / 2;
         }
 
         canvas.translate(x, transY);

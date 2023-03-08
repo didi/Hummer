@@ -1,7 +1,8 @@
 package com.didi.hummer.context;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.jsc.JSCHummerContext;

@@ -1,9 +1,9 @@
 package com.didi.hummer.delegate;
 
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.view.View;
+
+import androidx.lifecycle.LifecycleObserver;
 
 import com.didi.hummer.HummerDebugger;
 import com.didi.hummer.adapter.tracker.ITrackerAdapter;

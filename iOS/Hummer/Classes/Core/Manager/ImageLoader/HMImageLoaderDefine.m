@@ -11,6 +11,14 @@ NSErrorDomain const _Nonnull HMWebImageErrorDomain = @"HMWebImageErrorDomain";
 NSErrorUserInfoKey const _Nonnull HMWebImageErrorDownloadStatusCodeKey = @"HMWebImageErrorDownloadStatusCodeKey";
 
 
+HMImageLoaderContextOption const HMImageContextImageDoNotDecode = @"doNotDecode";
+
+HMImageLoaderContextOption const HMImageContextImageCoder = @"ImageCoder";
+
+HMImageLoaderContextOption const HMImageContextQueryCacheType = @"queryCacheType";
+
+HMImageLoaderContextOption const HMImageContextStoreCacheType = @"storeCacheType";
+
 HMImageLoaderContextOption const HMImageManagerContextNamespace = @"HMImageNamespaceKey";
 HMImageLoaderContextOption const HMImageManagerContextAnimatedImageClass = @"animatedImageClass";
 HMImageLoaderContextOption const HMImageManagerContextImageTransformer = @"imageTransformer";

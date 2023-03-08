@@ -16,10 +16,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    api  rootProject.ext.androidx["appcompat"]
+    api  rootProject.ext.androidx["recyclerview"]
 
     compileOnly project(':hummer-sdk')
+    compileOnly project(':hummer')
 }
 
 uploadArchives.dependsOn(':hummer-sdk:uploadArchives')

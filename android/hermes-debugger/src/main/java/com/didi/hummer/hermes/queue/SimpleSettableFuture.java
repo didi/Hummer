@@ -7,7 +7,8 @@
 
 package com.didi.hummer.hermes.queue;
 
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;

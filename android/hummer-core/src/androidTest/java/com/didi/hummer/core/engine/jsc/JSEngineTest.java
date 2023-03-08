@@ -1,6 +1,5 @@
 package com.didi.hummer.core.engine.jsc;
 
-import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.didi.hummer.core.engine.JSCallback;
@@ -21,6 +20,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 /**
  * Created by XiaoFeng on 2021/7/5.

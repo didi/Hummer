@@ -31,7 +31,7 @@
 
 - (void)sendMessage:(NSString *)message completionHandler:(nullable void (^)(NSError * _Nullable error))completionHandler {
     //SR_CONNECTING = 0, SR_OPEN = 1,
-    if (self.remote && self.remote.webSocket && self.remote.webSocket.readyState <= 1) {
+    if (self.remote && [self.remote canSend]) {
         NSError *error = nil;
         //兼容 socket 版本。
         SEL newer060API = NSSelectorFromString(@"sendString:error:");
@@ -81,6 +81,9 @@
     return self;
 }
 
+- (BOOL)canSend {
+    return self.webSocket && self.webSocket.readyState == SR_OPEN;
+}
 - (HMDevLocalConnection *)getLocalConnection:(id<HMURLConvertible>)pageUrl {
     
     HMDevLocalConnection *localConnection = [[HMDevLocalConnection alloc] initWithPage:pageUrl remoteConnection:self];

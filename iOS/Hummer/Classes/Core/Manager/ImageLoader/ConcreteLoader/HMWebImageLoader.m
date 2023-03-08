@@ -44,7 +44,7 @@
     NSMutableDictionary<NSString *, NSString *> *headerDictionary = [NSMutableDictionary dictionary];
     NSString *userAgent = nil;
     // User-Agent Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43
-    userAgent = [NSString stringWithFormat:@"%@/%@ (%@; iOS %@; Scale/%0.2f)", [[NSBundle mainBundle] infoDictionary][(__bridge NSString *)kCFBundleExecutableKey] ?: [[NSBundle mainBundle] infoDictionary][(__bridge NSString *)kCFBundleIdentifierKey], [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] ?: [[NSBundle mainBundle] infoDictionary][(__bridge NSString *)kCFBundleVersionKey], [[UIDevice currentDevice] model], [[UIDevice currentDevice] systemVersion], [[UIScreen mainScreen] scale]];
+    userAgent = [NSString stringWithFormat:@"%@/%@ (iPhone; iOS %@; Scale/%0.2f)", [[NSBundle mainBundle] infoDictionary][(__bridge NSString *)kCFBundleExecutableKey] ?: [[NSBundle mainBundle] infoDictionary][(__bridge NSString *)kCFBundleIdentifierKey], [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] ?: [[NSBundle mainBundle] infoDictionary][(__bridge NSString *)kCFBundleVersionKey], [[UIDevice currentDevice] systemVersion], [[UIScreen mainScreen] scale]];
     
     if (userAgent) {
         if (![userAgent canBeConvertedToEncoding:NSASCIIStringEncoding]) {
@@ -60,7 +60,7 @@
     self.URLOperations = [NSMutableDictionary new];
 }
 
-- (id<HMURLConvertible>)fixSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource{
+- (id<HMURLConvertible>)fixLoadSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource{
     
     NSURL *url = [source hm_asUrl];
     if (!url) {return nil;}
@@ -101,7 +101,7 @@
                                     context:(nullable HMImageLoaderContext *)context
                                  completion:(nonnull HMImageLoaderCompletionBlock)completionBlock{
     
-    NSURL *imageUrl = [[self fixSource:source inJSBundleSource:bundleSource] hm_asUrl];
+    NSURL *imageUrl = [[self fixLoadSource:source inJSBundleSource:bundleSource] hm_asUrl];
     if (!imageUrl) {return nil;}
     id cancelToken = nil;
     /**

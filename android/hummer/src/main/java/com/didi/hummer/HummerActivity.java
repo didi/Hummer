@@ -2,10 +2,11 @@ package com.didi.hummer;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MotionEvent;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;

@@ -1,7 +1,8 @@
 package com.didi.hummer.module.notifycenter;
 
 import android.content.Context;
-import android.support.v4.util.LongSparseArray;
+
+import androidx.collection.LongSparseArray;
 
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.context.HummerContext;

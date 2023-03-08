@@ -46,7 +46,7 @@ public class EventTracer {
             if (trace != null) {
                 trace.onEvent(eventName, params);
 
-                if (DebugUtil.isDebuggable()) {
+                if (DebugUtil.isDebuggable(namespace)) {
                     HMLog.i("HummerEvent", "event: " + eventName + ", params: " + params);
                 }
             }

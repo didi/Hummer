@@ -2,19 +2,16 @@ package com.didi.hummer.devtools.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
+
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSContext;
-import com.didi.hummer.core.engine.jsc.jni.HummerException;
-import com.didi.hummer.core.engine.napi.jni.JSException;
-import com.didi.hummer.core.exception.ExceptionCallback;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
 import com.didi.hummer.devtools.manager.HummerLogManager;

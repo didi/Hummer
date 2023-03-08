@@ -6,8 +6,13 @@
 //
 
 #import "NSURL+Hummer.h"
-
+#import "NSString+Hummer.h"
 @implementation NSURL (Hummer)
+
+- (NSString *)hm_asFilePath {
+ 
+    return [[self hm_asString] hm_asFilePath];
+}
 
 - (nullable NSURL *)hm_asFileUrl {
     if (self.isFileURL) {

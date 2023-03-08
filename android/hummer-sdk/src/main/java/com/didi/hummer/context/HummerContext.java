@@ -2,8 +2,9 @@ package com.didi.hummer.context;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import com.didi.hummer.HummerSDK;
 import com.didi.hummer.core.engine.JSCallback;
@@ -14,6 +15,7 @@ import com.didi.hummer.core.util.BytecodeCacheUtil;
 import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.core.util.HMLog;
+import com.didi.hummer.debug.HummerInvokerAnalyzerFactory;
 import com.didi.hummer.debug.InvokerAnalyzer;
 import com.didi.hummer.module.notifycenter.NotifyCenter;
 import com.didi.hummer.module.notifycenter.NotifyCenterInvoker;
@@ -61,7 +63,7 @@ public class HummerContext extends ContextWrapper {
     /**
      * invoke方法分析工具（用于调试阶段）
      */
-    protected InvokerAnalyzer invokerAnalyzer;
+    private InvokerAnalyzer invokerAnalyzer;
 
     /**
      * js文件源路径
@@ -122,7 +124,9 @@ public class HummerContext extends ContextWrapper {
         mContent.getYogaNode().setWidthPercent(100);
         mContent.getYogaNode().setHeightPercent(100);
         mContainer.addView(mContent);
-        invokerAnalyzer = InvokerAnalyzer.init();
+        if (DebugUtil.isDebuggable(namespace)) {
+            invokerAnalyzer = HummerInvokerAnalyzerFactory.create();
+        }
     }
 
     public String getNamespace() {
@@ -139,12 +143,22 @@ public class HummerContext extends ContextWrapper {
                 || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
             // 仅用于纯Hermes调试版本
             if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.HERMES) {
-                mJsContext.evaluateJavaScript("function Recycler() {}");
+                if (HummerSDK.isSupportBytecode(namespace)) {
+                    mJsContext.evaluateJavaScript("function Recycler() {}");
+                } else {
+                    mJsContext.evaluateJavaScriptOnly("function Recycler() {}", "");
+                }
             }
             // 注入babel
-            mJsContext.evaluateJavaScript("var Babel = {}");
-            mJsContext.evaluateJavaScript(HummerDefinition.BABEL, "babel.js");
-            mJsContext.evaluateJavaScript(HummerDefinition.ES5_CORE, "HummerDefinition_es5.js");
+            if (HummerSDK.isSupportBytecode(namespace)) {
+                mJsContext.evaluateJavaScript("var Babel = {}");
+                mJsContext.evaluateJavaScript(HummerDefinition.BABEL, "babel.js");
+                mJsContext.evaluateJavaScript(HummerDefinition.ES5_CORE, "HummerDefinition_es5.js");
+            } else {
+                mJsContext.evaluateJavaScriptOnly("var Babel = {}", "");
+                mJsContext.evaluateJavaScriptOnly(HummerDefinition.BABEL, "babel.js");
+                mJsContext.evaluateJavaScriptOnly(HummerDefinition.ES5_CORE, "HummerDefinition_es5.js");
+            }
         } else {
             if (HummerSDK.isSupportBytecode(namespace)) {
                 mJsContext.evaluateJavaScript(HummerDefinition.CORE, "HummerDefinition.js");
@@ -152,7 +166,7 @@ public class HummerContext extends ContextWrapper {
                 mJsContext.evaluateJavaScriptOnly(HummerDefinition.CORE, "HummerDefinition.js");
             }
         }
-        mJsContext.set("__IS_DEBUG__", DebugUtil.isDebuggable());
+        mJsContext.set("__IS_DEBUG__", DebugUtil.isDebuggable(namespace));
 
         initEnv(EnvUtil.getHummerEnv(this, namespace));
 
@@ -185,11 +199,29 @@ public class HummerContext extends ContextWrapper {
 
     public void onDestroy() {
         HMLog.d("HummerNative", "HummerContext.onDestroy");
-        InvokerAnalyzer.release(invokerAnalyzer);
+        releaseInvokerAnalyzer();
         destroy();
         NotifyCenter.release(getContext());
         NotifyCenter.release(mJsContext);
         releaseJSContext();
+    }
+
+    private void releaseInvokerAnalyzer(){
+        if (invokerAnalyzer !=null){
+            invokerAnalyzer.release();
+        }
+    }
+
+    protected void startTrack(String className, long objectID, String methodName, Object[] params) {
+        if (invokerAnalyzer != null) {
+            invokerAnalyzer.startTrack(className, objectID, methodName, params);
+        }
+    }
+
+    protected void stopTrack() {
+        if (invokerAnalyzer != null) {
+            invokerAnalyzer.stopTrack();
+        }
     }
 
     public boolean onBack() {

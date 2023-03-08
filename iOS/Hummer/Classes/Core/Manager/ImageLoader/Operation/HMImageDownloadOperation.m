@@ -163,9 +163,12 @@ didReceiveResponse:(NSURLResponse *)response
 
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             NSData *data = [self.imageData copy];
-            self.image = HMImageLoaderDecodeImageData(data, self.request.URL ,self.context);
+            BOOL needDecoder = ![self.context[HMImageContextImageDoNotDecode] boolValue];
+            if(needDecoder){
+                self.image = HMImageLoaderDecodeImageData(data, self.request.URL ,self.context);
+            }
             self.responseError = self.image?nil:HM_IMG_DECODE_ERROR;
-            if (self.image) {
+            if (self.image || data) {
                 UIImage *image = [self.image copy];
                 [self notifyComplete:data UIImage:image error:nil];
             }else{

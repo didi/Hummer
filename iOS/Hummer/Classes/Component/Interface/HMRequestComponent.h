@@ -18,8 +18,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSDictionary *header;
 @property (nonatomic, strong) NSDictionary *param;
 
+// 下载参数
+@property (nonatomic, copy) NSString *filePath;
+
 + (id<HMRequestComponent>)create;
 - (void)send:(HMFuncCallback)callback;
+
+@optional
+// 注意保存路径
+- (void)download:(HMFuncCallback)callback;
 @end
 
 NS_ASSUME_NONNULL_END

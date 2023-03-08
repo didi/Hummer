@@ -107,20 +107,6 @@ Hummer 基于 Apache-2.0 协议进行分发和使用，更多信息参见 [协�
 [XingJimmy](https://github.com/XingJimmy),
 [符孙浪](https://github.com/fusunlang)
 
-## 近期规划
-
-### 里程碑
-- 5月份
-    - 支持线程分离
-    - 移动版 DevTools 增强
-    - Hummer for Web 发布
-- 6月份
-    - VSCode 插件能力增强
-    - Playground Examples 丰富
-    - 开发文档补齐优化
-- 8月份
-    - Hummer Nest 平台初版发布
-    - mand-mobild for Hummer 版组件库初版发布
 
 ## QQ 交流群
 欢迎加入我们的 QQ 交流群【Hummer&Tenon跨端交流群】(851327307)，有任何 Hummer 使用上的问题和建议，都可以在群里直接反馈，我们会第一时间跟进。

@@ -7,12 +7,13 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.v4.view.AccessibilityDelegateCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 
 import com.didi.hummer.annotation.JsAttribute;
 import com.didi.hummer.annotation.JsMethod;
@@ -51,7 +52,7 @@ import java.util.Map;
  * @desc:
  */
 public abstract class HMBase<T extends View> implements ILifeCycle {
-    private HummerContext context;
+    private HummerContext hummerContext;
     private T mTargetView;
     protected HummerNode hummerNode;
     private Map<String, BasicAnimation> animMap = new HashMap<>();
@@ -75,10 +76,10 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     private static final String BOX_SIZING_CONTENT_BOX = "content-box";
 
     public HMBase(HummerContext context, JSValue jsValue, String viewID) {
-        this.context = context;
+        hummerContext = context;
         mJSValue = jsValue;
         mTargetView = createView(context.getContext());
-        hummerNode = new HummerNode(this, viewID);
+        hummerNode = new HummerNode(this, context.getNamespace(), viewID);
         backgroundHelper = new BackgroundHelper(context, mTargetView);
         animViewWrapper = new AnimViewWrapper(this);
 
@@ -378,16 +379,16 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
             int[] floats = ScreenUtils.getViewLocationOnScreen(getView());
             getView().getHitRect(rect);
             Map<String, Object> values = new HashMap<>();
-            values.put("width", DPUtil.px2dpF(context, getView().getWidth()));
-            values.put("height", DPUtil.px2dpF(context, getView().getHeight()));
-            values.put("left", DPUtil.px2dpF(context, rect.left));
-            values.put("right", DPUtil.px2dpF(context, rect.right));
-            values.put("top", DPUtil.px2dpF(context, rect.top));
-            values.put("bottom", DPUtil.px2dpF(context, rect.bottom));
-            values.put("windowLeft", DPUtil.px2dpF(context, floats[0]));
-            values.put("windowRight", DPUtil.px2dpF(context, floats[0] + getView().getWidth()));
-            values.put("windowTop", DPUtil.px2dpF(context, floats[1]));
-            values.put("windowBottom", DPUtil.px2dpF(context, floats[1] + getView().getHeight()));
+            values.put("width", DPUtil.px2dpF(hummerContext, getView().getWidth()));
+            values.put("height", DPUtil.px2dpF(hummerContext, getView().getHeight()));
+            values.put("left", DPUtil.px2dpF(hummerContext, rect.left));
+            values.put("right", DPUtil.px2dpF(hummerContext, rect.right));
+            values.put("top", DPUtil.px2dpF(hummerContext, rect.top));
+            values.put("bottom", DPUtil.px2dpF(hummerContext, rect.bottom));
+            values.put("windowLeft", DPUtil.px2dpF(hummerContext, floats[0]));
+            values.put("windowRight", DPUtil.px2dpF(hummerContext, floats[0] + getView().getWidth()));
+            values.put("windowTop", DPUtil.px2dpF(hummerContext, floats[1]));
+            values.put("windowBottom", DPUtil.px2dpF(hummerContext, floats[1] + getView().getHeight()));
             callback.call(values);
         });
     }
@@ -435,7 +436,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
      */
     @JsMethod("dbg_getDescription")
     public void dbg_getDescription(JSCallback callback, int depth) {
-        if (!DebugUtil.isDebuggable() || callback == null) {
+        if (!DebugUtil.isDebuggable(getHummerContext().getNamespace()) || callback == null) {
             return;
         }
 
@@ -653,8 +654,13 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         displayChangedListener = listener;
     }
 
+
     public Context getContext() {
-        return context;
+        return hummerContext;
+    }
+
+    public HummerContext getHummerContext() {
+        return hummerContext;
     }
 
     /**

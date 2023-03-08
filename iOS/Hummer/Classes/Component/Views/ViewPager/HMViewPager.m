@@ -359,7 +359,6 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
         return;
     }
     if (self.itemChangedCallback) {
-        NSLog(@"##### hummer Debug itemChangedCallback");
         self.itemChangedCallback(@[@(self.currentIndex % dc), @(dc)]);
     }
 }
@@ -367,7 +366,6 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
 - (void)triggerItemScrollStateChangeCallback:(NSNumber *)state
 {
     if (self.itemScrollStateChangeCallback) {
-        NSLog(@"##### hummer Debug itemChangedCallback %@",state);
         self.itemScrollStateChangeCallback(@[state]);
     }
 }
@@ -485,7 +483,6 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     if (self.itemScrollCallback) {
         self.itemScrollCallback(@[@(index % self.dataList.count), @(progress)]);
     }
-    NSLog(@"HMMMMM itemScrollCallback %@", @(progress));
     
 }
 
@@ -588,7 +585,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
     
     // append new view
     cellJSValue = self.itemUpdatedCallback(@[@(index)]);
-    UIView *jsView = cellJSValue.hm_toObjCObject;
+    UIView *jsView = cellJSValue.toNativeObject;
     if (jsView && [jsView isKindOfClass:UIView.class]) {
         if (jsView.superview) {
             NSLog(@"Bad case occured.");
@@ -606,9 +603,7 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
                 [((UIView *) contentViewObject) removeFromSuperview];
             }
         }
-        cell.contentViewValue = cellJSValue;
-        [cell setJSView:jsView];
-        
+        cell.contentViewValue = cellJSValue;        
         return cell;
     }
     

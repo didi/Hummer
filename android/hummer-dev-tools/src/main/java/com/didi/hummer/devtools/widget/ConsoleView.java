@@ -4,25 +4,26 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
+import com.didi.hummer.debug.HummerInvokerAnalyzer;
 import com.didi.hummer.debug.InvokeTracker;
+import com.didi.hummer.debug.InvokerAnalyzer;
 import com.didi.hummer.debug.PerformanceTracker;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
@@ -119,7 +120,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
         });
 
         rvConsole = findViewById(R.id.rv_console);
-        rvConsole.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false));
+        rvConsole.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         rvConsole.setAdapter(mAdapter);
 
         layoutInfo = findViewById(R.id.layout_info);
@@ -259,15 +260,23 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     }
 
     private void updateCallStack() {
-        List<InvokeTracker> trackerList = hummerContext.getInvokerAnalyzer() != null ?
-                hummerContext.getInvokerAnalyzer().getInvokeTrackerList() : null;
+        InvokerAnalyzer invokerAnalyzer = hummerContext.getInvokerAnalyzer();
+        List<InvokeTracker> trackerList = null;
+        if (invokerAnalyzer instanceof HummerInvokerAnalyzer) {
+            trackerList = ((HummerInvokerAnalyzer) invokerAnalyzer).getInvokeTrackerList();
+        }
+
         tvInfo.setText(CallStackFormat.format(trackerList));
         scrollInfo.post(() -> scrollInfo.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updatePerformance() {
-        List<PerformanceTracker> perfTrackerList = hummerContext.getInvokerAnalyzer() != null ?
-                hummerContext.getInvokerAnalyzer().getPerfTrackerList() : null;
+        InvokerAnalyzer invokerAnalyzer = hummerContext.getInvokerAnalyzer();
+        List<PerformanceTracker> perfTrackerList = null;
+        if (invokerAnalyzer instanceof HummerInvokerAnalyzer) {
+            perfTrackerList = ((HummerInvokerAnalyzer) invokerAnalyzer).getPerfTrackerList();
+        }
+
         String info = PerformanceListFormat.format(perfTrackerList);
         tvInfo.setText(info);
     }

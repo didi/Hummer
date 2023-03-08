@@ -8,10 +8,14 @@
 #import "HMJSContext+Private.h"
 #import "UIView+HMDom.h"
 #import "UIView+HMRenderObject.h"
+#import "HMJSGlobal.h"
 #import <Hummer/HMConfigEntryManager.h>
-#if __has_include(<Hummer/HMDevTools.h>)
-#import <Hummer/HMDevTools.h>
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
+#import <HMDevTools/HMDevTools.h>
 #endif
+#endif
+
 @implementation HMJSContext (Private)
 - (void)didRenderPage:(HMBaseValue *)page nativeView:(nonnull UIView *)view{
     
@@ -35,10 +39,18 @@
         [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPageSuccessWithPageUrl:self.hummerUrl ?: @""];
         [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPageRenderCompletionWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000) pageUrl:self.hummerUrl ?: @""];
     }
-#if __has_include(<Hummer/HMDevTools.h>)
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
     // 兼容部分以 controller.view 作为 rootView 的逻辑。如果后续存在 fixed，则不再考虑。
     // 推荐继承 HMViewConroller
     [HMDevTools showInContext:self];
 #endif
+#endif
+}
+
++ (NSString *)getNamespace {
+    NSString *namespace = [[HMJSGlobal globalObject] currentContext:HMCurrentExecutor].nameSpace;
+    namespace = namespace ? namespace : HMDefaultNamespaceUnderline;
+    return namespace;
 }
 @end

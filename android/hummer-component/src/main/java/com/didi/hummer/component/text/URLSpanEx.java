@@ -1,9 +1,10 @@
 package com.didi.hummer.component.text;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
+
+import androidx.annotation.NonNull;
 
 /**
  * URLSpan扩展类，支持修改url文字颜色和去掉下划线

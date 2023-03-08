@@ -2,9 +2,10 @@ package com.didi.hummer;
 
 import android.content.Intent;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.navigator.NavPage;
@@ -18,6 +19,7 @@ import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.HMGsonUtil;
 import com.didi.hummer.devtools.DevToolsConfig;
 import com.didi.hummer.devtools.HummerDevTools;
+import com.didi.hummer.devtools.HummerDevToolsFactory;
 import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer.utils.AssetsUtil;
 import com.didi.hummer.utils.FileUtil;
@@ -43,6 +45,7 @@ public class HummerRender {
     private HummerRenderCallback renderCallback;
     private HummerDevTools devTools;
     private HummerPageTracker tracker;
+    private String namespace;
 
     public interface HummerRenderCallback {
         void onSucceed(HummerContext hmContext, JSValue jsPage);
@@ -62,9 +65,10 @@ public class HummerRender {
         tracker.trackContextInitStart();
         hmContext = Hummer.createContext(container, namespace);
         tracker.trackContextInitEnd();
+        this.namespace = namespace;
 
-        if (DebugUtil.isDebuggable()) {
-            devTools = new HummerDevTools(hmContext, config);
+        if (DebugUtil.isDebuggable(namespace)) {
+            devTools = HummerDevToolsFactory.create(hmContext, config);
         }
 
         ExceptionCallback cb = e -> {
@@ -112,7 +116,7 @@ public class HummerRender {
         hmContext.onDestroy();
         tracker.trackContextDestroy();
 
-        if (DebugUtil.isDebuggable()) {
+        if (DebugUtil.isDebuggable(namespace)) {
             HummerDebugger.release(hmContext);
             if (devTools != null) {
                 devTools.release(hmContext);
@@ -192,7 +196,7 @@ public class HummerRender {
             return;
         }
 
-        if (DebugUtil.isDebuggable()) {
+        if (DebugUtil.isDebuggable(namespace)) {
             // 调试插件
             HummerDebugger.init(hmContext, url);
 
@@ -236,13 +240,13 @@ public class HummerRender {
             }
 
             // 如果是刷新流程，那么在执行JS之前，需要先模拟走一遍生命周期，来做相关的清理工作
-            if (DebugUtil.isDebuggable() && isHotReload) {
+            if (DebugUtil.isDebuggable(namespace) && isHotReload) {
                 hmContext.onHotReload(url);
             }
 
             render(response.data, url);
 
-            if (DebugUtil.isDebuggable() && isHotReload) {
+            if (DebugUtil.isDebuggable(namespace) && isHotReload) {
                 Toast.makeText(hmContext, "页面已刷新", Toast.LENGTH_SHORT).show();
             }
         });

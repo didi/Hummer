@@ -126,54 +126,87 @@ static NSString *HMCacheKeyForImage(NSString *imageTag, CGSize size, CGFloat sca
 }
 
 #pragma mark - public
-- (id<HMImageLoaderOperation>)queryImageWithSource:(id<HMURLConvertible>)source context:(HMImageLoaderContext *)context result:(HMImageCompletionBlock)result {
+
+- (id<HMImageLoaderOperation>)queryImageWithSource:(id<HMURLConvertible>)source context:(HMImageLoaderContext *)context result:(HMImageCacheCompletionBlock)result {
         
     //内存缓存需要根据scale mode 等作为key
-    UIImage *image = [self _imageForUrl:[source hm_asString] context:context];
-    if (image) {
-        result(image, nil, nil,HMImageCacheTypeMemory);
+    HMImageCacheType queryCacheType = HMImageCacheTypeAll;
+    if (context[HMImageContextQueryCacheType]) {
+        queryCacheType = [context[HMImageContextQueryCacheType] integerValue];
+    }
+    if(queryCacheType == HMImageCacheTypeNone){
+        result(nil, nil, nil,HMImageCacheTypeNone, nil);
         return nil;
     }
+    BOOL shouldQueryMemory = (queryCacheType ==  HMImageCacheTypeMemory || queryCacheType == HMImageCacheTypeAll);
+    BOOL shouldQueryDisk = (queryCacheType ==  HMImageCacheTypeDisk || queryCacheType == HMImageCacheTypeAll);
+    
+    UIImage *image = [self _imageForUrl:[source hm_asString] context:context];
+    if (image && shouldQueryMemory) {
+        result(image, nil, nil, HMImageCacheTypeMemory, nil);
+        return nil;
+    }
+    
     HMImageLoaderOperation *operation = [HMImageLoaderOperation new];
-
+    HMImageCacheType storeCacheType = HMImageCacheTypeAll;
+    if (context[HMImageContextStoreCacheType]) {
+        storeCacheType = [context[HMImageContextStoreCacheType] integerValue];
+    }
+    BOOL shouldStoreMemory = (storeCacheType ==  HMImageCacheTypeMemory || storeCacheType == HMImageCacheTypeAll);
+    
     //disk
-    dispatch_async(self.ioQueue, ^{
-        NSData *data = [self.diskCache dataForKey:[source hm_asString]];
-        if (!data) {
+    if(shouldQueryDisk){
+        dispatch_async(self.ioQueue, ^{
+            NSString *filePath = nil;
+            NSData *data = [self.diskCache dataForKey:[source hm_asString] filePath:&filePath];
+            if (!data) {
+                hm_safe_main_thread(^{
+                    result(nil, nil, nil, HMImageCacheTypeNone, nil);
+                });
+                return;
+            }
+            BOOL needDecode = ![context[HMImageContextImageDoNotDecode] boolValue];
+            UIImage *image = nil;
+            if(data && needDecode){
+                image = HMImageLoaderDecodeImageData(data, [source hm_asUrl], context);
+            }
             hm_safe_main_thread(^{
-                result(nil, nil, nil, HMImageCacheTypeNone);
+                if(image && shouldStoreMemory){
+                    [self addImageToCache:image url:[source hm_asString] context:context];
+                }
+                result(image, data, filePath, HMImageCacheTypeDisk, nil);
             });
-            return;
-        }
-        UIImage *image = HMImageLoaderDecodeImageData(data, [source hm_asUrl], context);
-        if (image) {
-            // store to memory
-            hm_safe_main_thread(^{
-                [self addImageToCache:image url:[source hm_asString] context:context];
-                result(image, data, nil, HMImageCacheTypeDisk);
-            });
-        }else{
-            //delete disk cache
-            [self.diskCache removeCacheForKey:[source hm_asString]];
-            hm_safe_main_thread(^{
-                result(nil, nil, HM_IMG_DECODE_ERROR, HMImageCacheTypeNone);
-            });
-        }
-    });
+        });
+    }    
     return operation;
 }
 
 
-- (void)storeImage:(nullable UIImage *)image data:(nullable NSData *)data source:(nonnull id<HMURLConvertible>)source context:(nonnull HMImageLoaderContext *)context {
+- (void)storeImage:(nullable UIImage *)image data:(nullable NSData *)data source:(nonnull id<HMURLConvertible>)source context:(nonnull HMImageLoaderContext *)context result:(nullable void (^)(NSString * _Nullable))result{
     
-    if(image){
+    HMImageCacheType queryCacheType = HMImageCacheTypeAll;
+    if (context[HMImageContextStoreCacheType]) {
+        queryCacheType = [context[HMImageContextStoreCacheType] integerValue];
+    }
+    if(queryCacheType == HMImageCacheTypeNone){
+        return;
+    }
+    BOOL shouldStoreMemory = (queryCacheType ==  HMImageCacheTypeMemory || queryCacheType == HMImageCacheTypeAll);
+    BOOL shouldStoreDisk = (queryCacheType ==  HMImageCacheTypeDisk || queryCacheType == HMImageCacheTypeAll);
+    if(image && shouldStoreMemory){
         [self addImageToCache:image url:[source hm_asString] context:context];
     }
-    if (data) {
+    if (data && shouldStoreDisk) {
         dispatch_async(self.ioQueue, ^{
-            [self.diskCache storeData:(id<HMDataConvertible>)data forKey:[source hm_asString]];
+            NSString *path = [self.diskCache storeData:(id<HMDataConvertible>)data forKey:[source hm_asString]];
+            if(result){
+                HMSafeMainThread(^{
+                    result(path);
+                });
+            }
         });
     }
+    return;
 }
 
 
@@ -182,7 +215,7 @@ static NSString *HMCacheKeyForImage(NSString *imageTag, CGSize size, CGFloat sca
 - (NSData *)imageDataFromDiskCacheForKey:(id<HMURLConvertible>)key context:(HMImageLoaderContext *)context {
     __block NSData *data = nil;
     dispatch_sync(self.ioQueue, ^{
-        data = [self.diskCache dataForKey:[key hm_asString]];
+        data = [self.diskCache dataForKey:[key hm_asString] filePath:nil];
     });
     return data;
 }

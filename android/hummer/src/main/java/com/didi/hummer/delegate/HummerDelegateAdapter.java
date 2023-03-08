@@ -1,10 +1,11 @@
 package com.didi.hummer.delegate;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.didi.hummer.HummerConfig;
 import com.didi.hummer.HummerSDK;

@@ -319,9 +319,9 @@ public class RichTextHelper {
             default:
                 return ImageSpanEx.ALIGN_BASELINE;
             case IMAGE_ALIGN_TOP:
-                return ImageSpanEx.ALIGN_TOP;
+                return ImageSpanEx.ALIGN_TEXT_TOP;
             case IMAGE_ALIGN_CENTER:
-                return ImageSpanEx.ALIGN_CENTER;
+                return ImageSpanEx.ALIGN_TEXT_CENTER;
             case IMAGE_ALIGN_BOTTOM:
                 return ImageSpanEx.ALIGN_BOTTOM;
         }

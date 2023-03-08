@@ -142,14 +142,14 @@ static NSString *const HMImageDiskCacheBasePath = @"com_hummer_image_cache";
 
 }
 
-- (void)storeData:(id<HMDataConvertible>)data forKey:(NSString *)key {
-    [self storeData:data expiration:self.config.expiration forKey:key];
+- (nullable NSString *)storeData:(id<HMDataConvertible>)data forKey:(NSString *)key {
+   return [self storeData:data expiration:self.config.expiration forKey:key];
 }
 
-- (void)storeData:(id<HMDataConvertible>)data expiration:(HMStorageExpiration *)expiration forKey:(NSString *)key {
+- (nullable NSString *)storeData:(id<HMDataConvertible>)data expiration:(HMStorageExpiration *)expiration forKey:(NSString *)key {
     NSData *_data = data.hm_asData;
     if (!key || !_data) {
-        return;
+        return nil;
     }
     
     NSString *fileName = HMDiskCacheFileNameForKey(key);
@@ -158,7 +158,7 @@ static NSString *const HMImageDiskCacheBasePath = @"com_hummer_image_cache";
     res = [_data writeToURL:writeUrl atomically:YES];
     if (!res) {
         HMLogError(@"HMImageDiskCache writeToFile error, path = %@", writeUrl);
-        return;
+        return nil;
     }
     NSError *error = nil;
     NSDate *date = [NSDate new];
@@ -167,15 +167,15 @@ static NSString *const HMImageDiskCacheBasePath = @"com_hummer_image_cache";
                                                  NSFileModificationDate : [[expiration estimatedExpirationSinceNow] fileAttributeDate]} ofItemAtPath:writeUrl.path error:&error];
     if (!res || error) {
         HMLogError(@"HMImageDiskCache writeToFile setAttributes error, path = %@", writeUrl.path);
-        return;
+        return nil;
     }
     dispatch_async(self.cacheQueue, ^{
         [self.filesCache addObject:fileName];
     });
-    
+    return [writeUrl hm_asString];
 }
 
-- (nullable NSData *)dataForKey:(NSString *)key {
+- (nullable NSData *)dataForKey:(NSString *)key filePath:(NSString *__autoreleasing *)outFilePath{
     
     if (!key) {
         return nil;
@@ -200,6 +200,9 @@ static NSString *const HMImageDiskCacheBasePath = @"com_hummer_image_cache";
         return nil;
     }
     NSData *res = [fileMeta accessDataWithFileManager:self.fileManager date:now];
+    if(outFilePath){
+        *outFilePath = [writeUrl hm_asString];
+    }
     return res;
 }
 

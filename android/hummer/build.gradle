@@ -15,7 +15,6 @@ android {
 dependencies {
 
     api project(':hummer-component')
-    api project(':hummer-dev-tools')
 }
 
 uploadArchives.dependsOn(':hummer-component:uploadArchives')

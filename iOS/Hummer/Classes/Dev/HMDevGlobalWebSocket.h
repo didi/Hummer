@@ -34,6 +34,7 @@ typedef void(^LocalConnectionReceiveHandler)(NSDictionary *msgDic);
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithURL:(NSURL *)url;
 
+- (BOOL)canSend;
 - (nullable HMDevLocalConnection *)getLocalConnection:(id<HMURLConvertible>)pageUrl;
 - (void)closeLocalConnection:(HMDevLocalConnection *)localConnection;
 @end

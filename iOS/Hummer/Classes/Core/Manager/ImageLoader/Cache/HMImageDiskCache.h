@@ -8,9 +8,8 @@
 #import <Foundation/Foundation.h>
 #import "HMConvertibleProtocol.h"
 #import "HMImageCache.h"
+
 NS_ASSUME_NONNULL_BEGIN
-
-
 
 @interface HMImageFileMeta : NSObject
 
@@ -47,9 +46,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (HMImageDiskCache *)initWithConfig:(HMImageDiskCacheConfig *)config;
 
-- (void)storeData:(id<HMDataConvertible>)data forKey:(NSString *)key;
 
-- (nullable NSData *)dataForKey:(NSString *)key;
+/// @param key 文件名
+/// @return 存储路径
+- (nullable NSString *)storeData:(id<HMDataConvertible>)data forKey:(NSString *)key;
+
+/// @param key 文件名
+/// @param outFilePath 存储路径
+/// @return 缓存data
+- (nullable NSData *)dataForKey:(NSString *)key filePath:(NSString **)outFilePath;
 
 - (void)removeCacheForKey:(NSString *)key;
 

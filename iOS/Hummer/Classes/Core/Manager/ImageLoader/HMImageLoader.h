@@ -24,14 +24,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable id<HMImageLoaderOperation>)load:(id<HMURLConvertible>)source
                            inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource
-                                    context:(nullable HMImageLoaderContext *)context                                    
+                                    context:(nullable HMImageLoaderContext *)context
                                  completion:(HMImageLoaderCompletionBlock)completionBlock;
 
 
 @optional
 /*麦田相对路径冲突*/
-- (id<HMURLConvertible>)cacheKeyForSource:(id<HMURLConvertible>)source
-                         inJSBundleSource:(id<HMURLConvertible>)bundleSource;
+- (id<HMURLConvertible>)fixLoadSource:(id<HMURLConvertible>)source
+                     inJSBundleSource:(id<HMURLConvertible>)bundleSource;
+
+
 @end
+
 
 NS_ASSUME_NONNULL_END
