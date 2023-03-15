@@ -1,5 +1,19 @@
 # Release Nodes
 
+### 0.4.6
+- 适配AndroidX框架；
+- compileSdkVersion和targetSdkVersion升级至31；
+- 解耦hummer-dev-tools模块，使用时需单独依赖；
+- debug模式支持按namespace配置（默认开启：同全局配置）；
+- 修复DefaultHttpAdapter中timeout字段单位不一致的问题；
+- 修复RTL模式下Text和Input组件文字方向问题；
+- 修复Text组件富文本文字和图片不能完全居中的问题；
+- 修复Image组件宽高为auto时图片自适应问题；
+- 修复本地图片资源找不到导致的crash问题；
+- 修复宽高动画执行时初始值为0的问题；
+- 修复Hermes调试版本字节码异常问题；
+- Button组件新增fontWeight样式；
+
 ### 0.4.5
 - 新增HummerDelegate，可用于非集成式Hummer容器；
 - 新增FontAdapter，可自定义字体文件来源；
