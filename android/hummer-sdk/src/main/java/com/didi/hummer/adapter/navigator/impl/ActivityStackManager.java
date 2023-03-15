@@ -18,6 +18,7 @@ import java.util.Stack;
 public class ActivityStackManager implements Application.ActivityLifecycleCallbacks {
 
     private Stack<Activity> stack;
+    private volatile int resumeCounter = 0;
 
     private static class Instance {
         public static ActivityStackManager INSTANCE = new ActivityStackManager();
@@ -177,6 +178,13 @@ public class ActivityStackManager implements Application.ActivityLifecycleCallba
         }
     }
 
+    /**
+     * 判断应用是否在后台
+     */
+    public boolean isBackgroundRunning() {
+        return resumeCounter == 0;
+    }
+
     private String getPageIdFromActivity(Activity activity) {
         if (activity == null) {
             return null;
@@ -221,12 +229,12 @@ public class ActivityStackManager implements Application.ActivityLifecycleCallba
 
     @Override
     public void onActivityResumed(Activity activity) {
-
+        resumeCounter++;
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-
+        resumeCounter--;
     }
 
     @Override
