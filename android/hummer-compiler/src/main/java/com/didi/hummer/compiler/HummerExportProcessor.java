@@ -40,6 +40,7 @@ public class HummerExportProcessor extends AbstractProcessor {
                 }
             }
             classDefinitionRegisterClassCreator.create();
+            classDefinitionRegisterClassCreator.createModuleConfigFile();
         }
         return false;
     }

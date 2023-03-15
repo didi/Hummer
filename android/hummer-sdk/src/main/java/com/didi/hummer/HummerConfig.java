@@ -14,8 +14,9 @@ import com.didi.hummer.adapter.scriptloader.impl.DefaultScriptLoaderAdapter;
 import com.didi.hummer.adapter.storage.IStorageAdapter;
 import com.didi.hummer.adapter.storage.impl.DefaultStorageAdapter;
 import com.didi.hummer.adapter.tracker.impl.EmptyTrackerAdapter;
+import com.didi.hummer.context.AutoBindHummerRegister;
 import com.didi.hummer.core.exception.ExceptionCallback;
-import com.didi.hummer.meta.ComponentInvokerIndex;
+import com.didi.hummer.context.HummerRegister;
 import com.didi.hummer.tools.EventTracer;
 import com.didi.hummer.tools.JSLogger;
 
@@ -87,8 +88,10 @@ public class HummerConfig {
      * 数据统计适配器
      */
     private ITrackerAdapter trackerAdapter;
-
-    private List<ComponentInvokerIndex> componentInvokerIndexes;
+    /**
+     * 组件注册器
+     */
+    private List<HummerRegister> hummerRegisters;
 
     private HummerConfig(Builder builder) {
         this.namespace = builder.namespace;
@@ -106,7 +109,7 @@ public class HummerConfig {
         this.navAdapter = builder.navAdapter;
         this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
         this.trackerAdapter = builder.trackerAdapter;
-        this.componentInvokerIndexes = builder.componentInvokerIndexes;
+        this.hummerRegisters = builder.hummerRegisters;
     }
 
     public String getNamespace() {
@@ -208,8 +211,8 @@ public class HummerConfig {
         return trackerAdapter;
     }
 
-    public List<ComponentInvokerIndex> getComponentInvokerIndexes() {
-        return componentInvokerIndexes;
+    public List<HummerRegister> getComponentRegisters() {
+        return hummerRegisters;
     }
 
     public static class Builder {
@@ -228,7 +231,8 @@ public class HummerConfig {
         private INavigatorAdapter navAdapter;
         private IScriptLoaderAdapter scriptLoaderAdapter;
         private ITrackerAdapter trackerAdapter;
-        private List<ComponentInvokerIndex> componentInvokerIndexes;
+        private List<HummerRegister> hummerRegisters = new ArrayList<>();
+        private boolean autoRegisterHummerModule = false;
 
         public Builder setNamespace(String namespace) {
             this.namespace = namespace;
@@ -311,15 +315,25 @@ public class HummerConfig {
             return this;
         }
 
-        public Builder addIndex(ComponentInvokerIndex index) {
-            if (componentInvokerIndexes == null) {
-                componentInvokerIndexes = new ArrayList<>();
-            }
-            componentInvokerIndexes.add(index);
+        public Builder addHummerRegister(HummerRegister register) {
+            hummerRegisters.add(register);
+            return this;
+        }
+
+        /**
+         * 自动注册Hummer组件
+         *
+         * @param autoHummerRegister
+         */
+        public Builder setAutoHummerRegister(boolean autoHummerRegister) {
+            autoRegisterHummerModule = autoHummerRegister;
             return this;
         }
 
         public HummerConfig builder() {
+            if (autoRegisterHummerModule) {
+                hummerRegisters.add(0, AutoBindHummerRegister.instance());
+            }
             return new HummerConfig(this);
         }
     }

@@ -6,6 +6,7 @@ import java.util.Set;
  * Created by Xingjm on 2022-01-19.
  * Interface for generated indexes.
  */
+@Deprecated
 public interface ComponentInvokerIndex {
     Set getInvokerSet();
     ComponentJsCodeInfo getJsCodeInfo();

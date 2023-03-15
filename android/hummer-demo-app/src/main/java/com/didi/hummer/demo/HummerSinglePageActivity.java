@@ -9,7 +9,6 @@ import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
-import com.didi.hummer.register.HummerRegister$$hummer_demo_app;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 /**
  * Hummer单页面示例
- *
+ * <p>
  * Created by XiaoFeng on 2020-01-02.
  */
 public class HummerSinglePageActivity extends HummerActivity {
@@ -38,7 +37,6 @@ public class HummerSinglePageActivity extends HummerActivity {
     @Override
     protected void initHummerRegister(HummerContext context) {
         super.initHummerRegister(context);
-        HummerRegister$$hummer_demo_app.init(context);
 
         Map<String, Object> data = new HashMap<>();
         data.put("dddd", 11111);
