@@ -64,6 +64,9 @@ public class App extends Application {
                 .setStorageAdapter(new DefaultStorageAdapter())
                 // 自定义Hummer.loadScriptWithUrl()时加载脚本的方式（可选）
                 .setScriptLoaderAdapter(new DefaultScriptLoaderAdapter())
+//                .addHummerRegister(HummerRegister$$hummer_demo_app::init)
+//                .addHummerRegister(AutoBindHummerRegister.instance())
+                .setAutoHummerRegister(true)
                 // 构造HummerConfig
                 .builder();
         Hummer.init(this, config);
@@ -75,6 +78,12 @@ public class App extends Application {
                 .setNamespace("test_namespace_no_debug")
                 //开启debug模式（日志，开发工具）
                 .setDebuggable(false)
+//                .addHummerRegister(hummerContext -> {
+//                    //HummerRegister$$hummer_sdk.init(hummerContext);
+//                    HummerRegister$$hummer_demo_app.init(hummerContext);
+//                })
+//                .addHummerRegister(AutoBindHummerRegister.instance())
+                .setAutoHummerRegister(true)
                 .builder();
         Hummer.init(this, config2);
 

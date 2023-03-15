@@ -8,6 +8,7 @@ java {
 
 dependencies {
     implementation 'com.squareup:javapoet:1.11.1'
+    implementation 'com.google.guava:guava:30.1.1-jre'
 
     if (project.publishArchivesType == '3') {
         implementation 'io.github.didi.hummer:hummer-annotation:0.2.3'

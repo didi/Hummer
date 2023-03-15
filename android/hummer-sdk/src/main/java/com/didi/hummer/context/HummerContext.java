@@ -21,7 +21,6 @@ import com.didi.hummer.module.notifycenter.NotifyCenter;
 import com.didi.hummer.module.notifycenter.NotifyCenterInvoker;
 import com.didi.hummer.pool.ComponentPool;
 import com.didi.hummer.pool.ObjectPool;
-import com.didi.hummer.register.HummerRegister$$hummer_sdk;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.component.view.Invoker;
 import com.didi.hummer.render.style.HummerLayout;
@@ -170,7 +169,6 @@ public class HummerContext extends ContextWrapper {
 
         initEnv(EnvUtil.getHummerEnv(this, namespace));
 
-        HummerRegister$$hummer_sdk.init(this);
     }
 
     public void onStart() {

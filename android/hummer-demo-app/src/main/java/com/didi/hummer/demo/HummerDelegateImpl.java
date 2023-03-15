@@ -34,7 +34,6 @@ public class HummerDelegateImpl extends HummerDelegateAdapter {
     @Override
     protected void initHummerRegister(HummerContext context) {
         super.initHummerRegister(context);
-//        HummerRegister$$hummer_demo_app.init(context);
 
         Map<String, Object> data = new HashMap<>();
         data.put("dddd", 11111);

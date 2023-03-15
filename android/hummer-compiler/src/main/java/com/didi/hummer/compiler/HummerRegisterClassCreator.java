@@ -3,21 +3,20 @@ package com.didi.hummer.compiler;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.annotation.JsProperty;
+import com.google.common.collect.Sets;
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -29,6 +28,8 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
 
 /**
  * Created by XiaoFeng on 2019-09-18.
@@ -42,8 +43,7 @@ public class HummerRegisterClassCreator {
     private StringBuilder jsCode = new StringBuilder();
     private List<ClassName> invokerClassMap = new ArrayList<>();
 
-    private ClassName superInterface = ClassName.get("com.didi.hummer.meta", "ComponentInvokerIndex");
-    private ClassName jsCodeClassName = ClassName.get("com.didi.hummer.meta", "ComponentJsCodeInfo");
+    private ClassName superInterface = ClassName.get("com.didi.hummer.context", "HummerModuleRegister");
 
     public HummerRegisterClassCreator(ProcessingEnvironment processingEnv) {
         elementUtils = processingEnv.getElementUtils();
@@ -192,23 +192,48 @@ public class HummerRegisterClassCreator {
         }
     }
 
+    public void createModuleConfigFile() {
+        String value = Constant.PACKAGE_NAME + "." + Constant.PREFIX_OF_REGISTER_FILE + moduleName;
+        String resourceFile = "META-INF/services/com.didi.hummer.context.HummerModuleRegister";
+        SortedSet<String> newServices = Sets.newTreeSet();
+        newServices.add(value);
+        try {
+            SortedSet<String> allServices = Sets.newTreeSet();
+            try {
+                FileObject existingFile = filer.getResource(StandardLocation.CLASS_OUTPUT, "", resourceFile);
+                logger.info("Looking for existing resource file at " + existingFile.toUri());
+                Set<String> oldServices = ServiceFiles.readServiceFile(existingFile.openInputStream());
+                logger.info("Existing service entries: " + oldServices);
+                allServices.addAll(oldServices);
+            } catch (IOException e) {
+                logger.info("Resource file did not already exist.");
+            }
+
+            allServices.addAll(newServices);
+            logger.info("New service file contents: " + allServices);
+            FileObject fileObject = filer.createResource(StandardLocation.CLASS_OUTPUT, "", resourceFile);
+            try (OutputStream out = fileObject.openOutputStream()) {
+                ServiceFiles.writeServiceFile(allServices, out);
+            }
+            logger.info("Wrote to: " + fileObject.toUri());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        logger.info("createModuleConfigFile");
+    }
+
     private TypeSpec generateJavaClass() {
         return TypeSpec.classBuilder(Constant.PREFIX_OF_REGISTER_FILE + moduleName)
                 // public 修饰类
                 .addModifiers(Modifier.PUBLIC)
+                //指定实现接口
+                .addSuperinterface(superInterface)
                 // 添加类的变量
                 .addField(generateJsCodeField())
                 // 添加类的方法
                 .addMethod(generateInitMethod())
-
-                .addSuperinterface(superInterface)
-                .addField(generateInvokerField())
-                .addField(generateCodeField())
-                .addMethod(generateConstructor())
-                .addMethod(generateSetInvokerMethod())
-                .addMethod(generateSetCodeMethod())
-                .addMethod(generateGetInvokerMethod())
-                .addMethod(generateGetCodeMethod())
+                .addMethod(generateGetModuleNameMethod())
+                .addMethod(generateRegisterMethod())
                 // 构建Java类
                 .build();
     }
@@ -222,6 +247,18 @@ public class HummerRegisterClassCreator {
     private MethodSpec generateInitMethod() {
         MethodSpec.Builder method = MethodSpec.methodBuilder("init")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addParameter(TypeUtil.hummerContext, "hummerContext");
+        for (ClassName className : invokerClassMap) {
+            method.addStatement("hummerContext.registerInvoker(new $T())", className);
+        }
+        method.addStatement("hummerContext.evaluateJavaScript(JS_CODE, $S)", moduleName + ".js");
+        return method.build();
+    }
+
+    private MethodSpec generateRegisterMethod() {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("register")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
                 .addParameter(TypeUtil.hummerContext, "hummerContext");
         for (ClassName className : invokerClassMap) {
             method.addStatement("hummerContext.registerInvoker(new $T())", className);
@@ -266,51 +303,13 @@ public class HummerRegisterClassCreator {
         return allMembers;
     }
 
-    private FieldSpec generateInvokerField() {
-        FieldSpec.Builder field = FieldSpec.builder(Set.class, "INVOKER_INDEX", Modifier.PRIVATE);
-        return field.build();
-    }
-    private FieldSpec generateCodeField() {
-        FieldSpec.Builder field = FieldSpec.builder(jsCodeClassName, "CODE_INDEX", Modifier.PRIVATE);
-        return field.build();
-    }
-    private MethodSpec generateConstructor() {
-        MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("INVOKER_INDEX = new $T()", HashSet.class)
-                .addStatement("CODE_INDEX = new $T()", jsCodeClassName)
-                .addStatement("setInvokers()")
-                .addStatement("setCodes()");
-        return constructor.build();
-    }
-    private MethodSpec generateSetInvokerMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("setInvokers")
-                .addModifiers(Modifier.PRIVATE);
-        for (ClassName className : invokerClassMap) {
-            method.addStatement("INVOKER_INDEX.add(new $T())", className);
-        }
-        return method.build();
-    }
-    private MethodSpec generateSetCodeMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("setCodes")
-                .addModifiers(Modifier.PRIVATE);
-        method.addStatement("CODE_INDEX.set(JS_CODE, $S)", moduleName + ".js");
-        return method.build();
-    }
-    private MethodSpec generateGetInvokerMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("getInvokerSet")
+    private MethodSpec generateGetModuleNameMethod() {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("getModuleName")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
-                .addStatement("return INVOKER_INDEX")
-                .returns(Set.class);
+                .addStatement("return $S", Constant.PACKAGE_NAME + "." + Constant.PREFIX_OF_REGISTER_FILE + moduleName)
+                .returns(String.class);
         return method.build();
     }
-    private MethodSpec generateGetCodeMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("getJsCodeInfo")
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Override.class)
-                .addStatement("return CODE_INDEX")
-                .returns(jsCodeClassName);
-        return method.build();
-    }
+
 }

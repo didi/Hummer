@@ -8,7 +8,11 @@ import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.debug.plugin.IHermesDebugger;
 import com.didi.hummer.debug.plugin.IV8Debugger;
 import com.didi.hummer.register.HummerRegister$$hummer_component;
+import com.didi.hummer.register.HummerRegister$$hummer_sdk;
+import com.didi.hummer.context.HummerRegister;
 import com.didi.hummer.render.style.HummerLayout;
+
+import java.util.List;
 
 /**
  * Created by XiaoFeng on 2019-11-05.
@@ -62,7 +66,15 @@ public class Hummer {
     public static HummerContext createContext(HummerLayout container, String namespace) {
         HMLog.d("HummerNative", "HummerContext.createContext");
         HummerContext context = HummerContextFactory.createContext(container, namespace);
+        HummerRegister$$hummer_sdk.init(context);
         HummerRegister$$hummer_component.init(context);
+        HummerConfig hummerConfig = HummerSDK.getHummerConfig(namespace);
+        if (hummerConfig != null) {
+            List<HummerRegister> registers = hummerConfig.getComponentRegisters();
+            for (HummerRegister register : registers) {
+                register.register(context);
+            }
+        }
         return context;
     }
 }

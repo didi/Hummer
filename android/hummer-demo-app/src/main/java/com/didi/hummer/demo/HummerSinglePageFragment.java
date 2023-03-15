@@ -12,7 +12,6 @@ import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
-import com.didi.hummer.register.HummerRegister$$hummer_demo_app;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +42,6 @@ public class HummerSinglePageFragment extends HummerFragment {
     @Override
     protected void initHummerRegister(HummerContext context) {
         super.initHummerRegister(context);
-        HummerRegister$$hummer_demo_app.init(context);
 
         Map<String, Object> data = new HashMap<>();
         data.put("dddd", 11111);
