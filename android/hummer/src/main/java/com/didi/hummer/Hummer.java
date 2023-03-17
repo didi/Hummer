@@ -70,7 +70,7 @@ public class Hummer {
         HummerRegister$$hummer_component.init(context);
         HummerConfig hummerConfig = HummerSDK.getHummerConfig(namespace);
         if (hummerConfig != null) {
-            List<HummerRegister> registers = hummerConfig.getComponentRegisters();
+            List<HummerRegister> registers = hummerConfig.getHummerRegisters();
             for (HummerRegister register : registers) {
                 register.register(context);
             }
