@@ -211,7 +211,7 @@ public class HummerConfig {
         return trackerAdapter;
     }
 
-    public List<HummerRegister> getComponentRegisters() {
+    public List<HummerRegister> getHummerRegisters() {
         return hummerRegisters;
     }
 

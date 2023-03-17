@@ -31,22 +31,24 @@ public class AutoBindHummerRegister implements HummerRegister {
         //load();
     }
 
-    private void load() {
-        long start = System.nanoTime();
-        ServiceLoader<HummerModuleRegister> loader = ServiceLoader.load(HummerModuleRegister.class, getClass().getClassLoader());
-        Iterator<HummerModuleRegister> iterator = loader.iterator();
+    private synchronized void load() {
+        if (!isLoad) {
+            long start = System.nanoTime();
+            ServiceLoader<HummerModuleRegister> loader = ServiceLoader.load(HummerModuleRegister.class, getClass().getClassLoader());
+            Iterator<HummerModuleRegister> iterator = loader.iterator();
 
-        while (iterator.hasNext()) {
-            HummerModuleRegister register = iterator.next();
-            if (TextUtils.equals(register.getModuleName(), "com.didi.hummer.register.HummerRegister$$hummer_sdk")
-                    || TextUtils.equals(register.getModuleName(), "com.didi.hummer.register.HummerRegister$$hummer_component")) {
-                continue;
+            while (iterator.hasNext()) {
+                HummerModuleRegister register = iterator.next();
+                if (TextUtils.equals(register.getModuleName(), "com.didi.hummer.register.HummerRegister$$hummer_sdk")
+                        || TextUtils.equals(register.getModuleName(), "com.didi.hummer.register.HummerRegister$$hummer_component")) {
+                    continue;
+                }
+                hummerRegisterMap.put(register.getModuleName(), register);
             }
-            hummerRegisterMap.put(register.getModuleName(), register);
-        }
-        isLoad = true;
-        if (DebugUtil.isDebuggable()) {
-            HMLog.i("Hummer-Native", "AutoBindHummerRegister.load() use time is " + (System.nanoTime() - start));
+            isLoad = true;
+            if (DebugUtil.isDebuggable()) {
+                HMLog.i("HummerNative", "AutoBindHummerRegister.load() use time is " + (System.nanoTime() - start));
+            }
         }
     }
 

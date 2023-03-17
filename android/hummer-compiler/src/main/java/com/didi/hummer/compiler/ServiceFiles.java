@@ -28,10 +28,6 @@ package com.didi.hummer.compiler;
  */
 
 
-import static com.google.common.base.Charsets.UTF_8;
-
-import com.google.common.io.Closer;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -39,6 +35,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -72,12 +69,11 @@ final class ServiceFiles {
      */
     static Set<String> readServiceFile(InputStream input) throws IOException {
         HashSet<String> serviceClasses = new HashSet<String>();
-        Closer closer = Closer.create();
+        BufferedReader reader = null;
         try {
-            // TODO(gak): use CharStreams
-            BufferedReader r = closer.register(new BufferedReader(new InputStreamReader(input, UTF_8)));
+            reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
             String line;
-            while ((line = r.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 int commentStart = line.indexOf('#');
                 if (commentStart >= 0) {
                     line = line.substring(0, commentStart);
@@ -89,10 +85,13 @@ final class ServiceFiles {
             }
             return serviceClasses;
         } catch (Throwable t) {
-            throw closer.rethrow(t);
+            throw new IOException("readServiceFile error.", t);
         } finally {
-            closer.close();
+            if (reader != null) {
+                reader.close();
+            }
         }
+
     }
 
     /**
@@ -102,9 +101,8 @@ final class ServiceFiles {
      * @param services a not {@code null Collection} of service class names.
      * @throws IOException
      */
-    static void writeServiceFile(Collection<String> services, OutputStream output)
-            throws IOException {
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
+    static void writeServiceFile(Collection<String> services, OutputStream output) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, StandardCharsets.UTF_8));
         for (String service : services) {
             writer.write(service);
             writer.newLine();
