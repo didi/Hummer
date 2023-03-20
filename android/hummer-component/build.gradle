@@ -35,6 +35,9 @@ dependencies {
 
     // 轮播控件
     implementation 'com.zhpan.library:bannerview:2.7.4'
+
+    // Lottie
+    implementation 'com.airbnb.android:lottie:3.4.0'
 }
 
 uploadArchives.dependsOn(':hummer-sdk:uploadArchives')
