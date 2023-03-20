@@ -1,10 +1,13 @@
 package com.didi.hummer.core.engine.napi;
 
+import androidx.annotation.MainThread;
+
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.engine.napi.jni.JSEngine;
+import com.didi.hummer.utils.UIThreadUtil;
 
 import java.lang.reflect.Type;
 
@@ -31,13 +34,17 @@ public class NAPIValue implements JSValue {
         return NAPIContext.wrapper(context);
     }
 
+    @MainThread
     @Override
     public boolean isValid() {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.isValid");
         return JSEngine.isJSValueValid(context, value);
     }
 
+    @MainThread
     @Override
     public int getInt(String key) {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.isValid");
         Object obj = JSEngine.getProperty(this.context, this.value, key);
         if (!(obj instanceof Number)) {
             return 0;
@@ -45,8 +52,10 @@ public class NAPIValue implements JSValue {
         return ((Number) obj).intValue();
     }
 
+    @MainThread
     @Override
     public long getLong(String key) {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.isValid");
         Object obj = JSEngine.getProperty(this.context, this.value, key);
         if (!(obj instanceof Number)) {
             return 0;
@@ -54,8 +63,10 @@ public class NAPIValue implements JSValue {
         return ((Number) obj).longValue();
     }
 
+    @MainThread
     @Override
     public double getDouble(String key) {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.isValid");
         Object obj = JSEngine.getProperty(this.context, this.value, key);
         if (!(obj instanceof Number)) {
             return 0;
@@ -63,8 +74,10 @@ public class NAPIValue implements JSValue {
         return ((Number) obj).doubleValue();
     }
 
+    @MainThread
     @Override
     public boolean getBoolean(String key) {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.isValid");
         Object obj = JSEngine.getProperty(this.context, this.value, key);
         if (!(obj instanceof Boolean)) {
             return false;
@@ -72,8 +85,10 @@ public class NAPIValue implements JSValue {
         return (boolean) obj;
     }
 
+    @MainThread
     @Override
     public String getString(String key) {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.isValid");
         Object obj = JSEngine.getProperty(this.context, this.value, key);
         if (!(obj instanceof String)) {
             return null;
@@ -81,8 +96,10 @@ public class NAPIValue implements JSValue {
         return (String) obj;
     }
 
+    @MainThread
     @Override
     public JSValue getJSValue(String key) {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.isValid");
         Object obj = JSEngine.getProperty(this.context, this.value, key);
         if (obj instanceof JSCallback) {
             return (JSCallback) obj;
@@ -92,23 +109,31 @@ public class NAPIValue implements JSValue {
         return null;
     }
 
+    @MainThread
     @Override
     public void set(String key, Number value) {
+        UIThreadUtil.assetOnMainThread("call method NAPIValue.set(Number) is not on main thread.");
         JSEngine.setProperty(this.context, this.value, key, value);
     }
 
+    @MainThread
     @Override
     public void set(String key, boolean value) {
+        UIThreadUtil.assetOnMainThread("call method NAPIValue.set(boolean) is not on main thread.");
         JSEngine.setProperty(this.context, this.value, key, value);
     }
 
+    @MainThread
     @Override
     public void set(String key, String value) {
+        UIThreadUtil.assetOnMainThread("call method NAPIValue.set(String) is not on main thread.");
         JSEngine.setProperty(this.context, this.value, key, value);
     }
 
+    @MainThread
     @Override
     public void set(String key, Object value) {
+        UIThreadUtil.assetOnMainThread("call method NAPIValue.set(Object) is not on main thread.");
         if (value instanceof ICallback) {
             JSEngine.registerJSCallback(this.context, this.value, key, (ICallback) value);
         } else {
@@ -116,18 +141,24 @@ public class NAPIValue implements JSValue {
         }
     }
 
+    @MainThread
     @Override
     public void set(String key, JSValue value) {
+        UIThreadUtil.assetOnMainThread("call method NAPIValue.set(JSValue) is not on main thread.");
         JSEngine.setProperty(this.context, this.value, key, value);
     }
 
+    @MainThread
     @Override
     public void set(String key, JSCallback value) {
+        UIThreadUtil.assetOnMainThread("call method NAPIValue.set(JSCallback) is not on main thread.");
         JSEngine.setProperty(this.context, this.value, key, value);
     }
 
+    @MainThread
     @Override
     public Object callFunction(String funcName, Object... params) {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.callFunction");
         Object obj = JSEngine.getProperty(this.context, this.value, funcName);
         if (!(obj instanceof JSCallback)) {
             return null;
@@ -207,16 +238,20 @@ public class NAPIValue implements JSValue {
         return false;
     }
 
+    @MainThread
     @Override
     public void protect() {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.protect");
         if (isUnprotected) {
             isUnprotected = false;
             JSEngine.protect(context, value);
         }
     }
 
+    @MainThread
     @Override
     public void unprotect() {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.unprotect");
         if (!isUnprotected) {
             isUnprotected = true;
             JSEngine.unprotect(context, value);
@@ -228,13 +263,17 @@ public class NAPIValue implements JSValue {
         return value;
     }
 
+    @MainThread
     @Override
     public void release() {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.release");
         unprotect();
     }
 
+    @MainThread
     @Override
     public boolean equals(Object obj) {
+        UIThreadUtil.assetOnMainThreadCall("NAPIValue.equals");
         if (!(obj instanceof JSValue)) {
             return false;
         }

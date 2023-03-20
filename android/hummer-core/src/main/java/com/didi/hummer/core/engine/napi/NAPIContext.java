@@ -4,10 +4,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import androidx.annotation.MainThread;
+
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.base.IRecycler;
 import com.didi.hummer.core.engine.napi.jni.JSEngine;
 import com.didi.hummer.core.util.BytecodeCacheUtil;
+import com.didi.hummer.utils.UIThreadUtil;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,13 +35,17 @@ public class NAPIContext extends NAPIValue implements JSContext {
         super(context, -1);
     }
 
+    @MainThread
     @Override
     public Object evaluateJavaScript(String script) {
+        UIThreadUtil.assetOnMainThreadCall("evaluateJavaScript");
         return evaluateJavaScript(script, "");
     }
 
+    @MainThread
     @Override
     public Object evaluateJavaScript(String script, String scriptId) {
+        UIThreadUtil.assetOnMainThreadCall("evaluateJavaScript");
         if (TextUtils.isEmpty(script)) {
             return null;
         }
@@ -63,8 +70,10 @@ public class NAPIContext extends NAPIValue implements JSContext {
         return ret;
     }
 
+    @MainThread
     @Override
     public Object evaluateJavaScriptOnly(String script, String scriptId) {
+        UIThreadUtil.assetOnMainThreadCall("evaluateJavaScriptOnly");
         if (TextUtils.isEmpty(script)) {
             return null;
         }
@@ -109,16 +118,20 @@ public class NAPIContext extends NAPIValue implements JSContext {
         });
     }
 
+    @MainThread
     @Override
     public Object evaluateBytecode(byte[] bytecode) {
+        UIThreadUtil.assetOnMainThreadCall("evaluateBytecode");
         if (bytecode == null || bytecode.length <= 0) {
             return null;
         }
         return JSEngine.evaluateBytecode(context, bytecode);
     }
 
+    @MainThread
     @Override
     public void setRecycler(IRecycler recycler) {
+        UIThreadUtil.assetOnMainThreadCall("setRecycler");
         JSEngine.registerJSRecycler(context, recycler);
     }
 
@@ -140,8 +153,10 @@ public class NAPIContext extends NAPIValue implements JSContext {
         JSEngine.destroyJSContext(context);
     }
 
+    @MainThread
     @Override
     public boolean isValid() {
+        UIThreadUtil.assetOnMainThreadCall("isValid");
         return JSEngine.isJSContextValid(context);
     }
 }

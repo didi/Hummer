@@ -3,7 +3,6 @@ package com.didi.hummer.compiler;
 import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.annotation.JsProperty;
-import com.google.common.collect.Sets;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -195,10 +195,10 @@ public class HummerRegisterClassCreator {
     public void createModuleConfigFile() {
         String value = Constant.PACKAGE_NAME + "." + Constant.PREFIX_OF_REGISTER_FILE + moduleName;
         String resourceFile = "META-INF/services/com.didi.hummer.context.HummerModuleRegister";
-        SortedSet<String> newServices = Sets.newTreeSet();
+        SortedSet<String> newServices = new TreeSet<>();
         newServices.add(value);
         try {
-            SortedSet<String> allServices = Sets.newTreeSet();
+            SortedSet<String> allServices = new TreeSet<>();
             try {
                 FileObject existingFile = filer.getResource(StandardLocation.CLASS_OUTPUT, "", resourceFile);
                 logger.info("Looking for existing resource file at " + existingFile.toUri());
