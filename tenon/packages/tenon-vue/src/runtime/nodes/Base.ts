@@ -1,5 +1,5 @@
 import { styleDynamicTransformer } from '@hummer/tenon-utils'
-import { setCacheNode, handleFixedNodeByStyle, removeChildWithFixed } from '../helper/fixed-helper'
+import { handleFixedNodeByStyle, removeChildWithFixed } from '../helper/fixed-helper'
 import { handleAnimation, Animation } from '../helper/animation-helper'
 import { getClassStyle } from '../../utils/style'
 
@@ -23,7 +23,6 @@ export class Base {
 
   constructor() {
     this.__view_id = __view_id++
-    setCacheNode(this)
   }
   // 是否响应交互
   // Hummer组件Enabled true可响应交互
