@@ -66,6 +66,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.so'])
 
+    api  rootProject.ext.androidx["annotation"]
     api 'com.google.code.gson:gson:2.8.5'
 
     testImplementation 'junit:junit:4.13.2'
