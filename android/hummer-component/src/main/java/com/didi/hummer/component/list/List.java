@@ -90,6 +90,9 @@ public class List extends HMBase<SmartRefreshLayout> {
     private ScrollEvent scrollEvent = new ScrollEvent();
 
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        int offsetX = 0;
+        int offsetY = 0;
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             if (!mEventManager.contains(ScrollEvent.HM_EVENT_TYPE_SCROLL)) {
@@ -100,8 +103,13 @@ public class List extends HMBase<SmartRefreshLayout> {
                 return;
             }
 
-            int offsetX = recyclerView.computeHorizontalScrollOffset();
-            int offsetY = recyclerView.computeVerticalScrollOffset();
+            // 当RecyclerView的每个item高度都相同时，computeXXX方法能正确获取到滚动的距离，
+            // 但是当每个item高度不一致时，获取到的值是不正确的，是基于item的平均高度，因此先改成dy累加方式。
+            // 但是当RecyclerView的item有变多或变少时，可能产生误差。
+//            int offsetX = recyclerView.computeHorizontalScrollOffset();
+//            int offsetY = recyclerView.computeVerticalScrollOffset();
+            offsetX += dx;
+            offsetY += dy;
 
             scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
             scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_SCROLL);
@@ -127,10 +135,6 @@ public class List extends HMBase<SmartRefreshLayout> {
                     isScrollStarted = false;
                     scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
                     scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_ENDED);
-                    scrollEvent.setOffsetX(0);
-                    scrollEvent.setOffsetY(0);
-                    scrollEvent.setDx(0);
-                    scrollEvent.setDy(0);
                     scrollEvent.setTimestamp(System.currentTimeMillis());
                     mEventManager.dispatchEvent(ScrollEvent.HM_EVENT_TYPE_SCROLL, scrollEvent);
                     refreshNodeTree();
