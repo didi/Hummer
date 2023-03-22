@@ -34,7 +34,14 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
     env->DeleteLocalRef(params);
     JNI_DetachEnv();
 
-    return JSUtils::JavaObjectToJsValue(globalEnv, ret);
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(globalEnv, &handleScope);
+
+    NAPIValue r = JSUtils::JavaObjectToJsValue(globalEnv, ret);
+
+    napi_close_handle_scope(globalEnv, handleScope);
+
+    return r;
 }
 
 // 单线程共用
@@ -168,6 +175,10 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_setProperty(JNIEnv *env, jclass clazz, jlong js_context, jlong js_object, jstring key, jobject value) {
     auto globalEnv = JSUtils::toJsContext(js_context);
+
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(globalEnv, &handleScope);
+
     auto object = JSUtils::toJsValue(globalEnv, js_object);
     // 如果object为空，说明是全局Context下的属性
     if (object == nullptr) {
@@ -180,12 +191,17 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_setProperty(JNIEnv *env, jcla
     napi_set_named_property(globalEnv, object, cKey, JSUtils::JavaObjectToJsValue(globalEnv, value));
 
     env->ReleaseStringUTFChars(key, cKey);
+    napi_close_handle_scope(globalEnv, handleScope);
 }
 
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_getProperty(JNIEnv *env, jclass clazz, jlong js_context, jlong js_object, jstring key) {
     auto globalEnv = JSUtils::toJsContext(js_context);
+
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(globalEnv, &handleScope);
+
     auto object = JSUtils::toJsValue(globalEnv, js_object);
     // 如果object为空，说明是全局Context下的属性
     if (object == nullptr) {
@@ -198,17 +214,25 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_getProperty(JNIEnv *env, jcla
     NAPIValue ret;
     auto status = napi_get_named_property(globalEnv, object, cKey, &ret);
     if (status != NAPIExceptionOK) {
+        napi_close_handle_scope(globalEnv, handleScope);
         return nullptr;
     }
 
     env->ReleaseStringUTFChars(key, cKey);
-    return JSUtils::JsValueToJavaObject(globalEnv, ret);
+    jobject r = JSUtils::JsValueToJavaObject(globalEnv, ret);
+
+    napi_close_handle_scope(globalEnv, handleScope);
+    return r;
 }
 
 extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_delProperty(JNIEnv *env, jclass clazz, jlong js_context, jlong js_object, jstring key) {
     auto globalEnv = JSUtils::toJsContext(js_context);
+
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(globalEnv, &handleScope);
+
     auto object = JSUtils::toJsValue(globalEnv, js_object);
     // 如果object为空，说明是全局Context下的属性
     if (object == nullptr) {
@@ -220,6 +244,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_delProperty(JNIEnv *env, jcla
     auto status = napi_create_string_utf8(globalEnv, cKey, &jsKey);
     if (status != NAPIExceptionOK) {
         env->ReleaseStringUTFChars(key, cKey);
+        napi_close_handle_scope(globalEnv, handleScope);
         return false;
     }
 
@@ -227,6 +252,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_delProperty(JNIEnv *env, jcla
     napi_delete_property(globalEnv, object, jsKey, &ret);
 
     env->ReleaseStringUTFChars(key, cKey);
+    napi_close_handle_scope(globalEnv, handleScope);
     return ret;
 }
 
@@ -234,6 +260,10 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_registerFunction(JNIEnv *env, jclass clazz, jlong js_context, jlong js_object, jstring func_name, jint func_id) {
     auto globalEnv = JSUtils::toJsContext(js_context);
+
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(globalEnv, &handleScope);
+
     auto object = JSUtils::toJsValue(globalEnv, js_object);
     // 如果object为空，说明是全局Context下的属性
     if (object == nullptr) {
@@ -245,12 +275,17 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_registerFunction(JNIEnv *env,
     napi_create_function(globalEnv, funcName, invoke, (void *) func_id, &func);
     napi_set_named_property(globalEnv, object, funcName, func);
     env->ReleaseStringUTFChars(func_name, funcName);
+    napi_close_handle_scope(globalEnv, handleScope);
 }
 
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_callFunction(JNIEnv *env, jclass clazz, jlong js_context, jlong thisObj, jlong funcObj, jobjectArray params) {
     auto globalEnv = JSUtils::toJsContext(js_context);
+
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(globalEnv, &handleScope);
+
     NAPIValue jsThisObj = JSUtils::toJsValue(globalEnv, thisObj);
     NAPIValue jsFuncObj = JSUtils::toJsValue(globalEnv, funcObj);
     auto paramsCount = static_cast<int>(env->GetArrayLength(params));
@@ -275,10 +310,13 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_callFunction(JNIEnv *env, jcl
     auto status = napi_call_function(globalEnv, jsThisObj, jsFuncObj, paramsCount, values, &result);
     if (status == NAPIExceptionPendingException) {
         reportExceptionIfNeed(globalEnv);
+        napi_close_handle_scope(globalEnv, handleScope);
         return nullptr;
     }
 
-    return JSUtils::JsValueToJavaObject(globalEnv, result);
+    jobject r = JSUtils::JsValueToJavaObject(globalEnv, result);
+    napi_close_handle_scope(globalEnv, handleScope);
+    return r;
 }
 
 extern "C"
@@ -295,9 +333,16 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_isJSValueValid(JNIEnv *env, j
     if (globalEnv == nullptr) {
         return false;
     }
+
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(globalEnv, &handleScope);
+
     auto value = JSUtils::toJsValue(globalEnv, js_value);
     NAPIValueType type;
     auto status = napi_typeof(globalEnv, value, &type);
+
+    napi_close_handle_scope(globalEnv, handleScope);
+
     if (status != NAPICommonOK) {
         return false;
     }
@@ -311,11 +356,18 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_isJSValueEqual(JNIEnv *env, j
     if (globalEnv == nullptr) {
         return false;
     }
+
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(globalEnv, &handleScope);
+
     auto valueLeft = JSUtils::toJsValue(globalEnv, js_value_l);
     auto valueRight = JSUtils::toJsValue(globalEnv, js_value_r);
 
     bool ret;
     auto status = napi_strict_equals(globalEnv, valueLeft, valueRight, &ret);
+
+    napi_close_handle_scope(globalEnv, handleScope);
+
     if (status != NAPIExceptionOK) {
         return false;
     }
