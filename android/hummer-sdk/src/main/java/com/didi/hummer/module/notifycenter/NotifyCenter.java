@@ -128,16 +128,15 @@ public class NotifyCenter {
                     cbList.clear();
                 } else {
                     // clear one
-                    ICallback cbToRemove = null;
-                    for (ICallback cb : cbList) {
-                        if (cb != null && cb.equals(callback)) {
-                            cbToRemove = cb;
-                            break;
-                        }
+                    int index = cbList.indexOf(callback);
+                    if (callback instanceof JSCallback) {
+                        ((JSCallback) callback).release();
                     }
-                    if (cbToRemove instanceof JSCallback) {
-                        ((JSCallback) cbToRemove).release();
-                        cbList.remove(cbToRemove);
+                    if (index >= 0) {
+                        ICallback cb = cbList.get(index);
+                        if (cb instanceof JSCallback) {
+                            ((JSCallback) cb).release();
+                        }
                     }
                 }
             }

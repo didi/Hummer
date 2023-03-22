@@ -1,19 +1,20 @@
 package com.didi.hummer.render.event;
 
 import com.didi.hummer.core.engine.JSCallback;
-import com.didi.hummer.render.event.base.Event;
 import com.didi.hummer.lifecycle.ILifeCycle;
+import com.didi.hummer.render.event.base.Event;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventManager implements ILifeCycle, IEventListener {
-    public HashMap<String, List<JSCallback>> mEventListeners;
+    public Map<String, List<JSCallback>> mEventListeners;
 
     @Override
     public void onCreate() {
-        mEventListeners = new HashMap<>();
+        mEventListeners = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -37,17 +38,15 @@ public class EventManager implements ILifeCycle, IEventListener {
     public void addEventListener(String eventName, JSCallback callback) {
         if (mEventListeners.containsKey(eventName)) {
             List<JSCallback> callbacks = mEventListeners.get(eventName);
-
-            if (callbacks.contains(callback)) {
-                return;
+            if (callbacks == null) {
+                callbacks = new CopyOnWriteArrayList<>();
+                callbacks.add(callback);
+            } else if (!callbacks.contains(callback)) {
+                callbacks.add(callback);
             }
-
-            callbacks.add(callback);
         } else {
-            List<JSCallback> callbacks = new ArrayList<>();
-
+            List<JSCallback> callbacks = new CopyOnWriteArrayList<>();
             callbacks.add(callback);
-
             mEventListeners.put(eventName, callbacks);
         }
     }
@@ -59,19 +58,17 @@ public class EventManager implements ILifeCycle, IEventListener {
         }
 
         List<JSCallback> callbacks = mEventListeners.get(eventName);
-
-        JSCallback cbToRemove = null;
-        for (JSCallback cb : callbacks) {
-            if (cb != null && cb.equals(callback)) {
-                cb.release();
-                callback.release();
-                cbToRemove = callback;
-                break;
-            }
+        if (callbacks == null) {
+            return;
         }
 
-        if (cbToRemove != null) {
-            callbacks.remove(cbToRemove);
+        int index = callbacks.indexOf(callback);
+        callback.release();
+        if (index >= 0) {
+            JSCallback cb = callbacks.get(index);
+            if (cb != null) {
+                cb.release();
+            }
         }
     }
 
@@ -82,6 +79,10 @@ public class EventManager implements ILifeCycle, IEventListener {
         }
 
         List<JSCallback> callbacks = mEventListeners.get(eventName);
+        if (callbacks == null) {
+            return;
+        }
+
         for (JSCallback cb : callbacks) {
             if (cb != null) {
                 cb.release();
@@ -96,6 +97,9 @@ public class EventManager implements ILifeCycle, IEventListener {
         }
 
         List<JSCallback> callbacks = mEventListeners.get(eventName);
+        if (callbacks == null) {
+            return;
+        }
 
         for (JSCallback callback : callbacks) {
             callback.call(event);
