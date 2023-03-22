@@ -63,13 +63,14 @@ public class EventManager implements ILifeCycle, IEventListener {
         JSCallback cbToRemove = null;
         for (JSCallback cb : callbacks) {
             if (cb != null && cb.equals(callback)) {
-                cbToRemove = cb;
+                cb.release();
+                callback.release();
+                cbToRemove = callback;
                 break;
             }
         }
 
         if (cbToRemove != null) {
-            cbToRemove.release();
             callbacks.remove(cbToRemove);
         }
     }
