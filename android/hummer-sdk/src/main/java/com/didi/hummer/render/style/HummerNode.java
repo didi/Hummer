@@ -184,6 +184,10 @@ public class HummerNode implements Serializable {
 
         JSContext jsContext = linkView.getJSValue().getJSContext();
         JSValue jsNode = (JSValue) jsContext.evaluateJavaScript("new Object();");
+        if (jsNode == null) {
+            return null;
+        }
+
         jsNode.set("id", objId);
         jsNode.set("tagName", name);
         jsNode.set("alias", alias);
