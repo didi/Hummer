@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -67,6 +68,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
     private HummerLayoutExtendUtils.Position position = HummerLayoutExtendUtils.Position.YOGA;
     private HummerLayoutExtendUtils.Display display = HummerLayoutExtendUtils.Display.YOGA;
     private AnimViewWrapper animViewWrapper;
+    protected Handler handler;
 
     // 原生盒
     private static final String BOX_SIZING_NONE = "none";
@@ -82,6 +84,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
         hummerNode = new HummerNode(this, context.getNamespace(), viewID);
         backgroundHelper = new BackgroundHelper(context, mTargetView);
         animViewWrapper = new AnimViewWrapper(this);
+        handler = new Handler();
 
         ViewCompat.setAccessibilityDelegate(mTargetView, new AccessibilityDelegateCompat() {
             @Override
@@ -163,7 +166,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
              * });
              * layout.appendChild(view);
              */
-            getView().post(() -> mEventManager.onDestroy());
+            handler.post(() -> mEventManager.onDestroy());
         }
     }
 
