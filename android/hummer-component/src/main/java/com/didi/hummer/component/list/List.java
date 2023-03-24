@@ -89,10 +89,10 @@ public class List extends HMBase<SmartRefreshLayout> {
     private boolean isScrollStarted = false;
     private ScrollEvent scrollEvent = new ScrollEvent();
 
-    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
-        int offsetX = 0;
-        int offsetY = 0;
+    private int scrollOffsetX = 0;
+    private int scrollOffsetY = 0;
 
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             if (!mEventManager.contains(ScrollEvent.HM_EVENT_TYPE_SCROLL)) {
@@ -108,13 +108,13 @@ public class List extends HMBase<SmartRefreshLayout> {
             // 但是当RecyclerView的item有变多或变少时，可能产生误差。
 //            int offsetX = recyclerView.computeHorizontalScrollOffset();
 //            int offsetY = recyclerView.computeVerticalScrollOffset();
-            offsetX += dx;
-            offsetY += dy;
+            scrollOffsetX += dx;
+            scrollOffsetY += dy;
 
             scrollEvent.setType(ScrollEvent.HM_EVENT_TYPE_SCROLL);
             scrollEvent.setState(ScrollEvent.HM_SCROLL_STATE_SCROLL);
-            scrollEvent.setOffsetX(DPUtil.px2dpF(getContext(), offsetX));
-            scrollEvent.setOffsetY(DPUtil.px2dpF(getContext(), offsetY));
+            scrollEvent.setOffsetX(DPUtil.px2dpF(getContext(), scrollOffsetX));
+            scrollEvent.setOffsetY(DPUtil.px2dpF(getContext(), scrollOffsetY));
             scrollEvent.setDx(DPUtil.px2dpF(getContext(), dx));
             scrollEvent.setDy(DPUtil.px2dpF(getContext(), dy));
             scrollEvent.setTimestamp(System.currentTimeMillis());
@@ -415,6 +415,11 @@ public class List extends HMBase<SmartRefreshLayout> {
         }
     }
 
+    private void resetScrollOffset() {
+        scrollOffsetX = 0;
+        scrollOffsetY = 0;
+    }
+
     @JsAttribute("mode")
     public void setMode(String strMode) {
         int curMode;
@@ -611,6 +616,7 @@ public class List extends HMBase<SmartRefreshLayout> {
         }
         isLoadingMore = false;
 
+        resetScrollOffset();
         refreshNodeTree();
     }
 
