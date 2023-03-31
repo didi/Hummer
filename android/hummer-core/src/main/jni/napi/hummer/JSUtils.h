@@ -49,9 +49,10 @@ public:
     static NAPIRef toJsValueRef(int64_t valuePtr);
     static int64_t toJsValuePtr(NAPIRef valueRef);
     static int64_t toJsValuePtr(NAPIEnv env, NAPIValue value);
+    static int64_t toJsValuePtr(NAPIEnv env, NAPIValue value, bool isStrongRef);
     static NAPIValue toJsValue(NAPIEnv env, int64_t valuePtr);
     static NAPIValue getJsValueFromRef(NAPIEnv env, NAPIRef valueRef);
-    static NAPIRef createJsValueRef(NAPIEnv env, NAPIValue value);
+    static NAPIRef createJsValueRef(NAPIEnv env, NAPIValue value, bool isStrongRef);
 
     static const char *toCString(NAPIEnv env, NAPIValue value);
     static void freeCString(NAPIEnv env, const char *cString);
@@ -62,7 +63,13 @@ public:
     static NAPIValue createJsUndefined(NAPIEnv env);
 
     static jobject JsValueToJavaObject(NAPIEnv env, NAPIValue value);
+    static jobject JsValueToJavaObject(NAPIEnv env, NAPIValue value, bool isStrongRef);
     static NAPIValue JavaObjectToJsValue(NAPIEnv globalEnv, jobject value);
+
+    static bool isJSValueValid(NAPIEnv env, NAPIValue value);
+    static bool isJSValueValid(NAPIEnv env, NAPIRef valueRef);
+    static bool isJSValueEqual(NAPIEnv env, NAPIValue valueLeft, NAPIValue valueRight);
+    static bool isJSValueEqual(NAPIEnv env, NAPIRef valueRefLeft, NAPIRef valueRight);
 
     static void printDumpReferenceTables(JNIEnv *env);
 

@@ -18,7 +18,6 @@ public class NAPIValue implements JSValue {
 
     public long context;
     public long value;
-    private volatile boolean isUnprotected = true;
 
     public static NAPIValue wrapper(long context, long value) {
         return new NAPIValue(context, value);
@@ -242,20 +241,14 @@ public class NAPIValue implements JSValue {
     @Override
     public void protect() {
         UIThreadUtil.assetOnMainThreadCall("NAPIValue.protect");
-        if (isUnprotected) {
-            isUnprotected = false;
-            JSEngine.protect(context, value);
-        }
+        JSEngine.protect(context, value);
     }
 
     @MainThread
     @Override
     public void unprotect() {
         UIThreadUtil.assetOnMainThreadCall("NAPIValue.unprotect");
-        if (!isUnprotected) {
-            isUnprotected = true;
-            JSEngine.unprotect(context, value);
-        }
+        JSEngine.unprotect(context, value);
     }
 
     @Override
@@ -287,7 +280,6 @@ public class NAPIValue implements JSValue {
         return "NAPIValue{" +
                 "context=" + context +
                 ", value=" + value +
-                ", isUnprotected=" + isUnprotected +
                 '}';
     }
 }

@@ -58,7 +58,6 @@ public class Request implements ILifeCycle {
     @Override
     public void onDestroy() {
         isDestroyed.set(true);
-        jsValue.unprotect();
     }
 
     public void setUrl(String api) {

@@ -34,12 +34,12 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
     env->DeleteLocalRef(params);
     JNI_DetachEnv();
 
-    NAPIHandleScope handleScope;
-    napi_open_handle_scope(globalEnv, &handleScope);
+//    NAPIHandleScope handleScope;
+//    napi_open_handle_scope(globalEnv, &handleScope);
 
     NAPIValue r = JSUtils::JavaObjectToJsValue(globalEnv, ret);
 
-    napi_close_handle_scope(globalEnv, handleScope);
+//    napi_close_handle_scope(globalEnv, handleScope);
 
     return r;
 }
@@ -113,7 +113,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_evaluateJavaScript(JNIEnv *en
         return obj;
     }
 
-    return JSUtils::JsValueToJavaObject(globalEnv, result);
+    return JSUtils::JsValueToJavaObject(globalEnv, result, true);
 }
 
 extern "C"
@@ -168,7 +168,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_evaluateBytecode(JNIEnv *env,
         return obj;
     }
 
-    return JSUtils::JsValueToJavaObject(globalEnv, result);
+    return JSUtils::JsValueToJavaObject(globalEnv, result, true);
 }
 
 extern "C"
@@ -219,7 +219,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_getProperty(JNIEnv *env, jcla
     }
 
     env->ReleaseStringUTFChars(key, cKey);
-    jobject r = JSUtils::JsValueToJavaObject(globalEnv, ret);
+    jobject r = JSUtils::JsValueToJavaObject(globalEnv, ret, true);
 
     napi_close_handle_scope(globalEnv, handleScope);
     return r;
@@ -314,7 +314,7 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_callFunction(JNIEnv *env, jcl
         return nullptr;
     }
 
-    jobject r = JSUtils::JsValueToJavaObject(globalEnv, result);
+    jobject r = JSUtils::JsValueToJavaObject(globalEnv, result, true);
     napi_close_handle_scope(globalEnv, handleScope);
     return r;
 }
@@ -333,20 +333,8 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_isJSValueValid(JNIEnv *env, j
     if (globalEnv == nullptr) {
         return false;
     }
-
-    NAPIHandleScope handleScope;
-    napi_open_handle_scope(globalEnv, &handleScope);
-
-    auto value = JSUtils::toJsValue(globalEnv, js_value);
-    NAPIValueType type;
-    auto status = napi_typeof(globalEnv, value, &type);
-
-    napi_close_handle_scope(globalEnv, handleScope);
-
-    if (status != NAPICommonOK) {
-        return false;
-    }
-    return type != NAPIUndefined && type != NAPINull;
+    auto valueRef = JSUtils::toJsValueRef(js_value);
+    return JSUtils::isJSValueValid(globalEnv, valueRef);
 }
 
 extern "C"
@@ -356,28 +344,18 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_isJSValueEqual(JNIEnv *env, j
     if (globalEnv == nullptr) {
         return false;
     }
-
-    NAPIHandleScope handleScope;
-    napi_open_handle_scope(globalEnv, &handleScope);
-
-    auto valueLeft = JSUtils::toJsValue(globalEnv, js_value_l);
-    auto valueRight = JSUtils::toJsValue(globalEnv, js_value_r);
-
-    bool ret;
-    auto status = napi_strict_equals(globalEnv, valueLeft, valueRight, &ret);
-
-    napi_close_handle_scope(globalEnv, handleScope);
-
-    if (status != NAPIExceptionOK) {
-        return false;
-    }
-    return ret;
+    auto valueRefLeft = JSUtils::toJsValueRef(js_value_l);
+    auto valueRefRight = JSUtils::toJsValueRef(js_value_r);
+    return JSUtils::isJSValueEqual(globalEnv, valueRefLeft, valueRefRight);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_didi_hummer_core_engine_napi_jni_JSEngine_protect(JNIEnv *env, jclass clazz, jlong js_context, jlong js_value) {
     auto globalEnv = JSUtils::toJsContext(js_context);
+    if (globalEnv == nullptr) {
+        return;
+    }
     auto valueRef = JSUtils::toJsValueRef(js_value);
     napi_reference_ref(globalEnv, valueRef, nullptr);
 }

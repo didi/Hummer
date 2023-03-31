@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Component("Timer")
 public class Timer implements ILifeCycle {
 
-    private static Handler timerHandler = new Handler(Looper.getMainLooper());
+    private Handler timerHandler = new Handler(Looper.getMainLooper());
 
     private JSValue jsValue;
     private Runnable intervalRunnable;
@@ -43,8 +43,12 @@ public class Timer implements ILifeCycle {
     @Override
     public void onDestroy() {
         isDestroyed.set(true);
-        clearInterval();
-        clearTimeout();
+        if (intervalRunnable != null) {
+            timerHandler.removeCallbacks(intervalRunnable);
+        }
+        if (timeoutRunnable != null) {
+            timerHandler.removeCallbacks(timeoutRunnable);
+        }
     }
 
     /**

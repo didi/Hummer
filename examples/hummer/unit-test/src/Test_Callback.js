@@ -74,13 +74,13 @@ class RootView extends View {
         });
         let info = "Test.nativeFunc: " + ret + "\n";
 
-        new Timer().setTimeout(() => {
-            // JS -> Native
-            ret = this.nativeFunc(111, 222.22);
-            info += "this.nativeFunc: " + ret;
+        // new Timer().setTimeout(() => {
+        //     // JS -> Native
+        //     ret = this.nativeFunc(111, 222.22);
+        //     info += "this.nativeFunc: " + ret;
 
-            infoText.text = info;
-        }, 1000);
+        //     infoText.text = info;
+        // }, 1000);
 
         infoText.text = info;
 
@@ -89,31 +89,31 @@ class RootView extends View {
         this.appendChild(layout);
     }
 
-    // Native -> JS
-    onTestBase(p1, p2, p3, p4) {
-        infoText.text += "this.onTestBase: p1 = " + p1 + ", p2 = " + p2 + ", p3 = " + p3 + ", p4 = " + p4 + "\n";
-        return "111"
-    }
+    // // Native -> JS
+    // onTestBase(p1, p2, p3, p4) {
+    //     infoText.text += "this.onTestBase: p1 = " + p1 + ", p2 = " + p2 + ", p3 = " + p3 + ", p4 = " + p4 + "\n";
+    //     return "111"
+    // }
 
-    // Native -> JS
-    onTestCollection(p1, p2) {
-        infoText.text += "this.onTestCollection: p1 = " + JSON.stringify(p1) + ", p2 = " + JSON.stringify(p2);
-        return "222"
-    }
+    // // Native -> JS
+    // onTestCollection(p1, p2) {
+    //     infoText.text += "this.onTestCollection: p1 = " + JSON.stringify(p1) + ", p2 = " + JSON.stringify(p2);
+    //     return "222"
+    // }
 }
 
 var infoText;
 
-// Native -> JS
-globalThis.onTestBase = (p1, p2, p3, p4) => {
-    infoText.text += "Global.onTestBase: p1 = " + p1 + ", p2 = " + p2 + ", p3 = " + p3 + ", p4 = " + p4 + "\n";
-    return "333"
-}
+// // Native -> JS
+// globalThis.onTestBase = (p1, p2, p3, p4) => {
+//     infoText.text += "Global.onTestBase: p1 = " + p1 + ", p2 = " + p2 + ", p3 = " + p3 + ", p4 = " + p4 + "\n";
+//     return "333"
+// }
 
-// Native -> JS
-globalThis.onTestCollection = (p1, p2) => {
-    infoText.text += "Global.onTestCollection: p1 = " + JSON.stringify(p1) + ", p2 = " + JSON.stringify(p2) + "\n";
-    return "444"
-}
+// // Native -> JS
+// globalThis.onTestCollection = (p1, p2) => {
+//     infoText.text += "Global.onTestCollection: p1 = " + JSON.stringify(p1) + ", p2 = " + JSON.stringify(p2) + "\n";
+//     return "444"
+// }
 
 Hummer.render(new RootView());

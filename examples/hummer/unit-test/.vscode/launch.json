@@ -7,5 +7,6 @@
         "type": "hummerdirect",
         "workspaceRoot": "${workspaceFolder}",
         "request": "attach",
+        "port": 8000
     }]
 }

@@ -121,7 +121,11 @@ int64_t JSUtils::toJsValuePtr(NAPIRef valueRef) {
 }
 
 int64_t JSUtils::toJsValuePtr(NAPIEnv env, NAPIValue value) {
-    return toJsValuePtr(createJsValueRef(env, value));
+    return JSUtils::toJsValuePtr(env, value, false);
+}
+
+int64_t JSUtils::toJsValuePtr(NAPIEnv env, NAPIValue value, bool isStrongRef) {
+    return toJsValuePtr(createJsValueRef(env, value, isStrongRef));
 }
 
 NAPIValue JSUtils::toJsValue(NAPIEnv env, int64_t valuePtr) {
@@ -146,13 +150,13 @@ NAPIValue JSUtils::getJsValueFromRef(NAPIEnv env, NAPIRef valueRef) {
     return value;
 }
 
-NAPIRef JSUtils::createJsValueRef(NAPIEnv env, NAPIValue value) {
+NAPIRef JSUtils::createJsValueRef(NAPIEnv env, NAPIValue value, bool isStrongRef) {
     if (value == nullptr) {
         return nullptr;
     }
 
     NAPIRef valueRef;
-    auto status = napi_create_reference(env, value, 0, &valueRef);
+    auto status = napi_create_reference(env, value, isStrongRef ? 1 : 0, &valueRef);
     if (status != NAPIExceptionOK) {
         return nullptr;
     }
@@ -213,6 +217,10 @@ NAPIValue JSUtils::createJsUndefined(NAPIEnv env) {
 }
 
 jobject JSUtils::JsValueToJavaObject(NAPIEnv globalEnv, NAPIValue value) {
+    return JSUtils::JsValueToJavaObject(globalEnv, value, false);
+}
+
+jobject JSUtils::JsValueToJavaObject(NAPIEnv globalEnv, NAPIValue value, bool isStrongRef) {
     JNIEnv* env = JNI_GetEnv();
     NAPIValueType type;
     auto status = napi_typeof(globalEnv, value, &type);
@@ -234,11 +242,11 @@ jobject JSUtils::JsValueToJavaObject(NAPIEnv globalEnv, NAPIValue value) {
         obj = JSUtils::toJavaString(globalEnv, value);
     } else if (type == NAPIFunction) {
         jlong ctxPtr = JSUtils::toJsContextPtr(globalEnv);
-        jlong valuePtr = JSUtils::toJsValuePtr(globalEnv, value);
+        jlong valuePtr = JSUtils::toJsValuePtr(globalEnv, value, true);
         obj = env->CallStaticObjectMethod(jsCallbackCls, jsCallbackInitMethodID, ctxPtr, valuePtr);
     } else {
         jlong ctxPtr = JSUtils::toJsContextPtr(globalEnv);
-        jlong valuePtr = JSUtils::toJsValuePtr(globalEnv, value);
+        jlong valuePtr = JSUtils::toJsValuePtr(globalEnv, value, isStrongRef);
         obj = env->CallStaticObjectMethod(jsValueCls, jsValueInitMethodID, ctxPtr, valuePtr);
     }
 
@@ -274,6 +282,47 @@ NAPIValue JSUtils::JavaObjectToJsValue(NAPIEnv globalEnv, jobject value) {
 
     JNI_DetachEnv();
     return val;
+}
+
+bool JSUtils::isJSValueValid(NAPIEnv env, NAPIValue value) {
+    NAPIValueType type;
+    auto status = napi_typeof(env, value, &type);
+    if (status != NAPICommonOK) {
+        return false;
+    }
+    return type != NAPIUndefined && type != NAPINull;
+}
+
+bool JSUtils::isJSValueValid(NAPIEnv env, NAPIRef valueRef) {
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(env, &handleScope);
+
+    auto ret = isJSValueValid(env, getJsValueFromRef(env, valueRef));
+
+    napi_close_handle_scope(env, handleScope);
+    return ret;
+}
+
+bool JSUtils::isJSValueEqual(NAPIEnv env, NAPIValue valueLeft, NAPIValue valueRight) {
+    bool ret;
+    auto status = napi_strict_equals(env, valueLeft, valueRight, &ret);
+
+    if (status != NAPIExceptionOK) {
+        return false;
+    }
+    return ret;
+}
+
+bool JSUtils::isJSValueEqual(NAPIEnv env, NAPIRef valueRefLeft, NAPIRef valueRefRight) {
+    NAPIHandleScope handleScope;
+    napi_open_handle_scope(env, &handleScope);
+
+    auto valueLeft = getJsValueFromRef(env, valueRefLeft);
+    auto valueRight = getJsValueFromRef(env, valueRefRight);
+    bool ret = isJSValueEqual(env, valueLeft, valueRight);
+
+    napi_close_handle_scope(env, handleScope);
+    return ret;
 }
 
 void JSUtils::printDumpReferenceTables(JNIEnv *env) {

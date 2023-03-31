@@ -17,7 +17,6 @@ public class NAPICallback extends NAPIValue implements JSCallback {
 
     private NAPICallback(long context, long value) {
         super(context, value);
-        protect();
     }
 
     @MainThread
