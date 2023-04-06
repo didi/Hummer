@@ -33,15 +33,7 @@ static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
 
     env->DeleteLocalRef(params);
     JNI_DetachEnv();
-
-//    NAPIHandleScope handleScope;
-//    napi_open_handle_scope(globalEnv, &handleScope);
-
-    NAPIValue r = JSUtils::JavaObjectToJsValue(globalEnv, ret);
-
-//    napi_close_handle_scope(globalEnv, handleScope);
-
-    return r;
+    return JSUtils::JavaObjectToJsValue(globalEnv, ret);
 }
 
 // 单线程共用
