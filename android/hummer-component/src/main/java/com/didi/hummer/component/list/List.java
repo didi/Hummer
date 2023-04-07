@@ -52,6 +52,8 @@ import java.util.Map;
  */
 @Component("List")
 public class List extends HMBase<SmartRefreshLayout> {
+    private final static int DEFAULT_MAX_RECYCLE_SIZE = 20;
+
     private static final int MODE_LIST = 1;
     private static final int MODE_GRID = 2;
     private static final int MODE_WATERFALL = 3;
@@ -171,6 +173,9 @@ public class List extends HMBase<SmartRefreshLayout> {
     protected SmartRefreshLayout createViewInstance(Context context) {
         // 这里不用代码new一个RecyclerView，而是通过xml，是为了解决设置scrollerbar显示无效的问题
         recyclerView = (RecyclerView) LayoutInflater.from(context).inflate(R.layout.recycler_view, null, false);
+        //设置默认type的pool大小
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(0, DEFAULT_MAX_RECYCLE_SIZE);
+
         recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         recyclerView.setClipChildren(false);
         recyclerView.setOnTouchListener((v, event) -> {
@@ -668,6 +673,16 @@ public class List extends HMBase<SmartRefreshLayout> {
     public void dbg_getDescription(JSCallback callback, int depth) {
         refreshNodeTree();
         super.dbg_getDescription(callback, depth);
+    }
+
+    @JsMethod("setMaxRecycledByType")
+    public void setMaxRecycledByType(int type, int size){
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(type, size);
+    }
+
+    @JsMethod("setMaxRecycled")
+    public void setMaxRecycled(int size){
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(0, size);
     }
 
     private void refreshNodeTree() {
