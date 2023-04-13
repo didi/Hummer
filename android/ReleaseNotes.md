@@ -1,5 +1,16 @@
 # Release Nodes
 
+### 0.4.7
+- 支持js异常堆栈提供代码列号（压缩代码堆栈信息反解到源码）；
+- 支持 Hummer 组件自动注册；
+- 新增Lottie动画组件；
+- 新增JS调用线程检查；
+- 修复debug模式下快速退出页面可能引发crash问题；
+- 修复ConcurrentModificationException问题；
+- 修复当父视图节点被移除时，不能释放子视图的问题；
+- 修复JSCallback内存释放问题；
+- 修复List组件在item高度不同时，滚动高度计算错误的问题；
+
 ### 0.4.6
 - 适配AndroidX框架；
 - compileSdkVersion和targetSdkVersion升级至31；
