@@ -1,5 +1,6 @@
 package com.didi.hummer.devtools.widget;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -19,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.didi.hummer.HummerSDK;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.BuildConfig;
 import com.didi.hummer.debug.HummerInvokerAnalyzer;
@@ -81,7 +83,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        switch(curTabIndex) {
+        switch (curTabIndex) {
             case 1:
                 updateParameters();
                 break;
@@ -222,6 +224,9 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
         StringBuilder builder = new StringBuilder();
         builder.append("Hummer SDK Version: ");
         builder.append(BuildConfig.VERSION_NAME);
+        builder.append("【");
+        builder.append(getJsEngineString());
+        builder.append("】");
         builder.append("\n\n\n");
 
         Object env = hummerContext.getJsContext().evaluateJavaScript("JSON.stringify(Hummer.env)");
@@ -250,6 +255,40 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
         }
 
         tvInfo.setText(builder.toString());
+    }
+
+    public String getJsEngineString() {
+        String className = hummerContext.getClass().getSimpleName();
+        switch (className) {
+            case "JSCHummerContext": {
+                int engine = HummerSDK.getJsEngine();
+                switch (engine) {
+                    case HummerSDK.JsEngine.JSC:
+                        return "JSC";
+                    case HummerSDK.JsEngine.HERMES:
+                        return "Hermes";
+                    case HummerSDK.JsEngine.QUICK_JS:
+                        return "QuickJS";
+                    default:
+                        return "Unknown";
+                }
+            }
+            case "NAPIHummerContext": {
+                int engine = HummerSDK.getJsEngine();
+                switch (engine) {
+                    case HummerSDK.JsEngine.NAPI_QJS:
+                        return "NAPI - QuickJS";
+                    case HummerSDK.JsEngine.NAPI_HERMES:
+                        return "NAPI - Hermes";
+                    default:
+                        return "Unknown";
+                }
+            }
+            case "V8HummerContext":
+                return "V8";
+            default:
+                return "Unknown";
+        }
     }
 
     private void updateCompTree() {

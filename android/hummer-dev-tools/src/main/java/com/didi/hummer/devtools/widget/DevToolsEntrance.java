@@ -1,29 +1,34 @@
 package com.didi.hummer.devtools.widget;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 
 import com.didi.hummer.HummerSDK;
+import com.didi.hummer.adapter.navigator.NavCallback;
+import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.devtools.HummerDevTools;
 import com.didi.hummer.devtools.R;
 import com.didi.hummer.devtools.manager.HummerLogManager;
 import com.didi.hummer.devtools.manager.HummerNetManager;
+import com.didi.hummer.devtools.qrcode.QrcodeHistoriesManager;
+import com.didi.hummer.devtools.qrcode.QrcodeMainActivity;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.style.HummerLayout;
 import com.facebook.yoga.YogaEdge;
 import com.facebook.yoga.YogaPositionType;
 
+import java.util.Map;
+
 /**
  * DevTools按钮入口视图管理类
- *
+ * <p>
  * Created by XiaoFeng on 2021/5/25.
  */
 public class DevToolsEntrance {
@@ -57,6 +62,21 @@ public class DevToolsEntrance {
             }
         });
 
+        floatLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (!mIsShown) {
+                    QrcodeHistoriesManager.getInstance().setQrcodeCallback(qrcodeCallback);
+
+                    Intent intent = new Intent(mHummerContext.getContext(), QrcodeMainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mHummerContext.startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         mLayoutDevtools = View.inflate(context, R.layout.layout_devtools_btn, floatLayout);
         mLayoutDevtools.setFocusableInTouchMode(true);
         mLayoutDevtools.setOnKeyListener((v, keyCode, event) -> {
@@ -68,9 +88,6 @@ public class DevToolsEntrance {
             }
             return false;
         });
-
-        TextView tvJsEngine = mLayoutDevtools.findViewById(R.id.tv_js_engine);
-        tvJsEngine.setText(getJsEngineString());
 
         HMBase<FloatLayout> base = new HMBase<FloatLayout>(mHummerContext, null, null) {
             @Override
@@ -94,41 +111,6 @@ public class DevToolsEntrance {
 
     public void setNetManager(HummerNetManager manager) {
         this.mNetManager = manager;
-    }
-
-    @SuppressLint("SwitchIntDef")
-    public String getJsEngineString() {
-        String className = mHummerContext.getClass().getSimpleName();
-        switch (className) {
-            case "JSCHummerContext": {
-                int engine = HummerSDK.getJsEngine();
-                switch (engine) {
-                    case HummerSDK.JsEngine.JSC:
-                        return "JSC";
-                    case HummerSDK.JsEngine.HERMES:
-                        return "Hermes";
-                    case HummerSDK.JsEngine.QUICK_JS:
-                        return "QuickJS";
-                    default:
-                        return "Unknown";
-                }
-            }
-            case "NAPIHummerContext": {
-                int engine = HummerSDK.getJsEngine();
-                switch (engine) {
-                    case HummerSDK.JsEngine.NAPI_QJS:
-                        return "NAPI - QuickJS";
-                    case HummerSDK.JsEngine.NAPI_HERMES:
-                        return "NAPI - Hermes";
-                    default:
-                        return "Unknown";
-                }
-            }
-            case "V8HummerContext":
-                return "V8";
-            default:
-                return "Unknown";
-        }
     }
 
     private void openConsoleView() {
@@ -165,4 +147,17 @@ public class DevToolsEntrance {
         mConsoleView.getYogaNode().setWidthPercent(100);
         mConsoleView.getYogaNode().setHeightPercent(100);
     }
+
+    private QrcodeHistoriesManager.QrcodeCallback qrcodeCallback = new QrcodeHistoriesManager.QrcodeCallback() {
+        @Override
+        public void onQrcodeReceive(String url) {
+            QrcodeHistoriesManager.getInstance().removeQrcodeCallback();
+            HummerSDK.getHummerConfig(mHummerContext.getNamespace()).getNavAdapter().openPage(mHummerContext, new NavPage(url), new NavCallback() {
+                @Override
+                public void onResult(Map<String, Object> data) {
+
+                }
+            });
+        }
+    };
 }
