@@ -23,5 +23,3 @@ dependencies {
     compileOnly project(':hummer-sdk')
     compileOnly project(':hummer')
 }
-
-uploadArchives.dependsOn(':hummer-sdk:uploadArchives')
