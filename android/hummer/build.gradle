@@ -18,4 +18,3 @@ dependencies {
 }
 
 uploadArchives.dependsOn(':hummer-component:uploadArchives')
-uploadArchives.dependsOn(':hummer-dev-tools:uploadArchives')
