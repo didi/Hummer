@@ -5,7 +5,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <TextView
+    <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginLeft="12dp"
@@ -14,9 +14,8 @@
         android:background="@drawable/btn_dev_tools_entrance_bg"
         android:elevation="4dp"
         android:gravity="center"
-        android:text="开发\n工具"
-        android:textColor="@android:color/white"
-        android:textSize="10dp" />
+        android:padding="4dp"
+        android:src="@drawable/hummer_logo" />
 
     <TextView
         android:id="@+id/tv_js_engine"
@@ -29,6 +28,7 @@
         android:paddingTop="1dp"
         android:paddingRight="3dp"
         android:paddingBottom="1dp"
+        android:text="长按扫码"
         android:textColor="@android:color/white"
         android:textSize="7dp" />
 

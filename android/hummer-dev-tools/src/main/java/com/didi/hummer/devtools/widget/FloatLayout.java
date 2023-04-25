@@ -24,7 +24,10 @@ public class FloatLayout extends FrameLayout {
     private int viewHeight;
     private float lastX;
     private float lastY;
+    private float lastX0;
+    private float lastY0;
     private long touchDownTimestamp;
+    private boolean moved = false;
 
     public FloatLayout(Context context) {
         this(context, null);
@@ -50,6 +53,8 @@ public class FloatLayout extends FrameLayout {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 clearAnimation();
+                lastX0 = event.getRawX();
+                lastY0 = event.getRawY();
                 lastX = event.getRawX();
                 lastY = event.getRawY();
                 viewWidth = getWidth();
@@ -59,6 +64,7 @@ public class FloatLayout extends FrameLayout {
                     maxHeight = ((View) getParent()).getHeight();
                 }
                 touchDownTimestamp = System.currentTimeMillis();
+                moved = false;
                 break;
             case MotionEvent.ACTION_MOVE:
                 float moveX = event.getRawX() - lastX;
@@ -71,6 +77,16 @@ public class FloatLayout extends FrameLayout {
                 setY(viewY);
                 lastX = event.getRawX();
                 lastY = event.getRawY();
+
+                if (Math.abs(lastY - lastY0) > 20 || Math.abs(lastX - lastX0) > 20) {
+                    moved = true;
+                }
+
+                if (!moved && System.currentTimeMillis() - touchDownTimestamp > 400) {
+                    moved = true;
+                    performLongClick();
+                }
+
                 break;
             case MotionEvent.ACTION_UP:
                 float centerX = getX() + viewWidth / 2f;

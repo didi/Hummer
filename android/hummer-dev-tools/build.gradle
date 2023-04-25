@@ -18,6 +18,7 @@ dependencies {
 
     api  rootProject.ext.androidx["appcompat"]
     api  rootProject.ext.androidx["recyclerview"]
+    api  'com.google.zxing:core:3.3.0'
 
     compileOnly project(':hummer-sdk')
     compileOnly project(':hummer')

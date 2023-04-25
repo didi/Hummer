@@ -95,7 +95,7 @@
             android:id="@+id/tab_params"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.2"
             android:gravity="center"
             android:text="页面参数"
             android:textColor="@color/hummer_debug_tab_selector"
