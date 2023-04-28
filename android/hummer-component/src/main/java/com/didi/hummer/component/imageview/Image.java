@@ -120,9 +120,13 @@ public class Image extends HMBase<RoundedImageView> {
     private void processWidthAndHeightStyleIfNeed(Map<String, Object> style) {
         if (style.containsKey("width") && !HummerStyleUtils.isAutoValue(style.get("width"))) {
             isWidthAuto = false;
+        } else {
+            isWidthAuto = true;
         }
         if (style.containsKey("height") && !HummerStyleUtils.isAutoValue(style.get("height"))) {
             isHeightAuto = false;
+        } else {
+            isHeightAuto = true;
         }
 
         if (!TextUtils.isEmpty(this.src) && (style.containsKey("width") || style.containsKey("height")) && (isWidthAuto || isHeightAuto)) {
