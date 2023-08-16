@@ -29,6 +29,9 @@ Temporary Items
 # Log
 *.log
 
+# Node version
+.node-version
+
 # Web
 node_modules
 coverage
