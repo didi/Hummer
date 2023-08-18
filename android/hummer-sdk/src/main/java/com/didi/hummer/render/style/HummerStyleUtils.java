@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.didi.hummer.HummerSDK;
-import com.didi.hummer.context.HummerContext;
 import com.didi.hummer.core.engine.jsc.jni.HummerException;
+import com.didi.hummer.core.engine.napi.jni.JSException;
 import com.didi.hummer.core.util.ExceptionUtil;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.DPUtil;
@@ -350,7 +350,12 @@ public class HummerStyleUtils {
                 String jsStack = ExceptionUtil.getJSErrorStack(view.getJSValue().getJSContext());
                 ExceptionUtil.addStackTrace(e, new StackTraceElement("<<JS_Stack>>", "", "\n" + jsStack, -1));
                 ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Style>>", "", String.format("%s: %s", key, value), -1));
-                HummerException.nativeException(view.getJSValue().getJSContext(), e);
+                if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                        || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+                    JSException.nativeException(view.getJSValue().getJSContext(), e);
+                } else {
+                    HummerException.nativeException(view.getJSValue().getJSContext(), e);
+                }
             }
         }
         view.getView().requestLayout();

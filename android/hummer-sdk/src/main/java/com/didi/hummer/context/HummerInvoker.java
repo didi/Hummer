@@ -102,7 +102,12 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
             case "postException":
                 Map<String, Object> errMap = HMJsonUtil.toMap(String.valueOf(params[0]));
                 String strErr = errMap.get("name") + ": " + errMap.get("message") + "\n" + errMap.get("stack");
-                HummerException.nativeException(mHummerContext.mJsContext, new JSException(strErr));
+                if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
+                        || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
+                    com.didi.hummer.core.engine.napi.jni.JSException.nativeException(mHummerContext.mJsContext, new JSException(strErr));
+                } else {
+                    HummerException.nativeException(mHummerContext.mJsContext, new JSException(strErr));
+                }
                 break;
             case "console.log":
                 JSLogger.log(mHummerContext.getNamespace(), String.valueOf(params[0]));
