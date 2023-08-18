@@ -298,8 +298,10 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_callFunction(JNIEnv *env, jcl
         jsThisObj = JSUtils::createJsUndefined(globalEnv);
     }
 
+    LOGD("JSFunctionCall, >> before call function");
     NAPIValue result;
     auto status = napi_call_function(globalEnv, jsThisObj, jsFuncObj, paramsCount, values, &result);
+    LOGD("JSFunctionCall, << after call function");
     if (status == NAPIExceptionPendingException) {
         reportExceptionIfNeed(globalEnv);
         napi_close_handle_scope(globalEnv, handleScope);
