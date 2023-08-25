@@ -91,24 +91,6 @@ public class LottieView extends HMBase<LottieAnimationView> {
         return imageSrc != null && (imageSrc.startsWith("//") || imageSrc.toLowerCase().startsWith("http"));
     }
 
-    /**
-     * 展示本地动画资源
-     * @param imageAssetsFile: 须是存在的有效的apk assets的相对路径下的文件,例如:lottie/loop_anim/images
-     * @param jsonAssetsFile : 须是存在的有效的apk assets路径的相对路径下的文件,例如:lottie/loop_anim/data.json
-     */
-    @JsMethod("setNativeSrc")
-    public void setNativeSrc(String imageAssetsFile, String jsonAssetsFile) {
-        HMLog.d(TAG, "imageAssetsFile: " + imageAssetsFile + " jsonAssetsFile: " + jsonAssetsFile);
-        if (!TextUtils.isEmpty(imageAssetsFile)) {
-            getView().setImageAssetsFolder(imageAssetsFile);
-        }
-
-        if (!TextUtils.isEmpty(jsonAssetsFile)) {
-            getView().setAnimation(jsonAssetsFile);
-            getView().setRepeatCount(LottieDrawable.INFINITE);
-        }
-    }
-
     @JsMethod("playAnimation")
     public void playAnimation() {
         getView().playAnimation();

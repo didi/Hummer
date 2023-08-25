@@ -7,6 +7,7 @@ import com.didi.hummer.annotation.Component;
 import com.didi.hummer.annotation.JsMethod;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSValue;
+import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.lifecycle.ILifeCycle;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -74,7 +75,9 @@ public class Timer implements ILifeCycle {
             timerHandler.postDelayed(intervalRunnable, interval);
 
             if (callback != null) {
+                HMLog.d("HummerNative", ">> before [setInterval] call");
                 callback.call();
+                HMLog.d("HummerNative", "<< after [setInterval] call");
 
                 if (isIntervalCleared) {
                     callback.release();
@@ -129,7 +132,9 @@ public class Timer implements ILifeCycle {
             isTimeoutRunning = true;
 
             if (callback != null) {
+                HMLog.d("HummerNative", ">> before [setTimeout] call");
                 callback.call();
+                HMLog.d("HummerNative", "<< after [setTimeout] call");
                 callback.release();
             }
             jsValue.unprotect();

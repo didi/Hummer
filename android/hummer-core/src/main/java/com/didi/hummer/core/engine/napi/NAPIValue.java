@@ -7,9 +7,11 @@ import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
 import com.didi.hummer.core.engine.base.ICallback;
 import com.didi.hummer.core.engine.napi.jni.JSEngine;
+import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.utils.UIThreadUtil;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 /**
  * Created by XiaoFeng on 2021/6/29.
@@ -162,6 +164,7 @@ public class NAPIValue implements JSValue {
         if (!(obj instanceof JSCallback)) {
             return null;
         }
+        HMLog.v("HummerNative", "NAPIValue.callFunction, " + funcName + ": " + Arrays.toString(params));
         return JSEngine.callFunction(this.context, this.value, ((JSCallback) obj).getIdentify(), params);
     }
 

@@ -614,9 +614,12 @@ public class List extends HMBase<SmartRefreshLayout> {
         if (adapter != null) {
             adapter.refresh(count, isLoadingMore);
         }
+        if (!isLoadingMore) {
+            resetScrollOffset();
+        }
+
         isLoadingMore = false;
 
-        resetScrollOffset();
         refreshNodeTree();
     }
 

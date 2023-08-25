@@ -1014,7 +1014,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
             propertyValuesHolderList.addAll(HummerAnimationUtils.parser(key, value));
         }
 
-        ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(new AnimViewWrapper(this),
+        ObjectAnimator anim = ObjectAnimator.ofPropertyValuesHolder(animViewWrapper,
                 propertyValuesHolderList.toArray(new PropertyValuesHolder[propertyValuesHolderList.size()]));
 
         getTransition(key).warpAnim(anim);
