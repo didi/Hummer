@@ -42,13 +42,21 @@ export function run(container: any, type: string = 'tenon-vue') {
     'getViewTree': function (ws: any, params: any) {
       let data = getViewData(formatedNode, type)
       viewMap = data.viewMap
-      if (formatedNode?.element?.dbg_getDescription) {
-        formatedNode.element.dbg_getDescription((node: any) => {
+      if (params.refresh) {
+        formatedNode?.element?.dbg_getDescription((node: any) => {
+          // tenon 特殊处理，外层包裹一个 template，和组件对齐
+          if(type === 'tenon-vue'){
+            node.tagName = 'template'
+          }
+          let refreshFormatedNode = formatNode(node, type, true)
+          let refreshData = getViewData(refreshFormatedNode, type)
+          viewMap = refreshData.viewMap;
           sendMessage(ws, {
             method: 'setViewTree',
             params: {
               ...params,
-              viewTree: [data.simpleRoot],
+              refresh: true,
+              viewTree: [refreshData.simpleRoot],
               path: path,
               baseInfo: __GLOBAL__.Hummer.env,
               devToolType: type
@@ -60,6 +68,7 @@ export function run(container: any, type: string = 'tenon-vue') {
           method: 'setViewTree',
           params: {
             ...params,
+            refresh: false,
             viewTree: [data.simpleRoot],
             path: path,
             baseInfo: __GLOBAL__.Hummer.env,
