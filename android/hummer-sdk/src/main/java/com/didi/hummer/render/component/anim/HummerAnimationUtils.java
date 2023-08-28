@@ -27,11 +27,11 @@ public class HummerAnimationUtils {
     public static final int DIRECTION_XY = 13;
 
     public static long getAnimDuration(float duration) {
-        return (long) (duration * 1000);
+        return (long) (Math.max(0, duration) * 1000);
     }
 
     public static int getAnimDelay(float delay) {
-        return (int) (delay * 1000);
+        return (int) (Math.max(0, delay) * 1000);
     }
 
     public static TimeInterpolator getInterpolator(String easing) {
