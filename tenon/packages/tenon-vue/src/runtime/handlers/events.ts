@@ -35,12 +35,12 @@ export function patchEvents(
   }
 }
 
-function patchInvokerHandler(initialValue: any, instance: ComponentInternalInstance | null) {
+function patchInvokerHandler(initialValue: any, instance: ComponentInternalInstance | null, args: any) {
   // TODO: Array.isArray兼容性测试
   if (Array.isArray(initialValue)) {
-    return initialValue.map(func => () => func && func.apply(instance))
+    return initialValue.map(func => () => func && func.apply(instance, args))
   } else {
-    return () => initialValue.apply(instance)
+    return () => initialValue.apply(instance, args)
   }
 }
 
@@ -51,7 +51,7 @@ function createInvoker(
   const invoker:Invoker = (...args) => {
     // 搜集 Error
     callWithAsyncErrorHandling(
-      patchInvokerHandler(initialValue, instance),
+      patchInvokerHandler(initialValue, instance, [...args]),
       instance,
       5,
       [...args]
