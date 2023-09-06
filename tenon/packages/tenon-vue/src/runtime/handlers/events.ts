@@ -35,16 +35,12 @@ export function patchEvents(
   }
 }
 
-function patchStopImmediatePropagation(e: any, value: EventValue) {
-  if (Array.isArray(value)) {
-    const originalStop = e.stopImmediatePropagation;
-    e.stopImmediatePropagation = () => {
-      originalStop.call(e);
-      e._stopped = true;
-    };
-    return value.map((fn) => (e2: any) => !e2._stopped && fn && fn(e2));
+function patchInvokerHandler(initialValue: any, instance: ComponentInternalInstance | null) {
+  // TODO: Array.isArray兼容性测试
+  if (Array.isArray(initialValue)) {
+    return initialValue.map(func => () => func && func.apply(instance))
   } else {
-    return value;
+    return () => initialValue.apply(instance)
   }
 }
 
@@ -52,24 +48,14 @@ function createInvoker(
   initialValue: EventValue,
   instance: ComponentInternalInstance | null
 ){
-  // TODO: Array.isArray兼容性测试
   const invoker:Invoker = (...args) => {
-
     // 搜集 Error
     callWithAsyncErrorHandling(
-      patchStopImmediatePropagation([...args], invoker.value),
+      patchInvokerHandler(initialValue, instance),
       instance,
       5,
       [...args]
     );
-
-    if(Array.isArray(initialValue)){
-      initialValue.forEach((func:Function) => {
-        func.apply(instance, [...args])
-      })
-    }else {
-      initialValue.apply(instance, [...args])
-    }
   }
   invoker.value = initialValue
   initialValue.invoker = invoker

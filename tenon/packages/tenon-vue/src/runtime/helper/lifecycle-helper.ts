@@ -1,4 +1,4 @@
-import { callWithAsyncErrorHandling } from "@vue/runtime-core"
+import { ComponentInternalInstance, callWithAsyncErrorHandling } from "@vue/runtime-core"
 interface LifeCycleMixins {
   onLoad: Array<any>,
   onReady: Array<any>,
@@ -79,14 +79,15 @@ export const initPageLifeCycle = (container: any, instance: any, config: any) =>
 
     container[lifecycle] = () => {
       globalLifeCycleMixins[lifecycle].forEach((func: Function) => {
-        applyLifeCycle(instance, func)
-      })
-      extendOptions && applyLifeCycle(instance, extendOptions[lifecycle])
+          lifecycleAsyncErrorTracker(instance, func);
+      });
+      extendOptions && lifecycleAsyncErrorTracker(instance, extendOptions[lifecycle]);
+      
       lifeCycleMixins[lifecycle].forEach((func: Function) => {
-        applyLifeCycle(instance, func)
-      })
-      applyLifeCycle(instance, config[lifecycle])
-    }
+          lifecycleAsyncErrorTracker(instance, func);
+      });
+      lifecycleAsyncErrorTracker(instance, config[lifecycle]);
+  };
   })
 }
 
@@ -115,39 +116,10 @@ function applyPageMixin(mixins: any): (LifeCycleMixins | null) {
 }
 
 function applyLifeCycle(instance: any, func: Function) {
-  // callWithAsyncErrorHandling 第三个参数，type 的取值
-  // const ErrorTypeStrings = {
-  //   ["sp"]: "serverPrefetch hook",
-  //   ["bc"]: "beforeCreate hook",
-  //   ["c"]: "created hook",
-  //   ["bm"]: "beforeMount hook",
-  //   ["m"]: "mounted hook",
-  //   ["bu"]: "beforeUpdate hook",
-  //   ["u"]: "updated",
-  //   ["bum"]: "beforeUnmount hook",
-  //   ["um"]: "unmounted hook",
-  //   ["a"]: "activated hook",
-  //   ["da"]: "deactivated hook",
-  //   ["ec"]: "errorCaptured hook",
-  //   ["rtc"]: "renderTracked hook",
-  //   ["rtg"]: "renderTriggered hook",
-  //   [0]: "setup function",
-  //   [1]: "render function",
-  //   [2]: "watcher getter",
-  //   [3]: "watcher callback",
-  //   [4]: "watcher cleanup function",
-  //   [5]: "native event handler",
-  //   [6]: "component event handler",
-  //   [7]: "vnode hook",
-  //   [8]: "directive hook",
-  //   [9]: "transition hook",
-  //   [10]: "app errorHandler",
-  //   [11]: "app warnHandler",
-  //   [12]: "ref function",
-  //   [13]: "async component loader",
-  //   [14]: "scheduler flush. This is likely a Vue internals bug. Please open an issue at https://new-issue.vuejs.org/?repo=vuejs/core"
-  // };
-  const errInstance = instance._
-  func && callWithAsyncErrorHandling(func, errInstance, 10)
   return func && func.apply(instance);
+}
+function lifecycleAsyncErrorTracker(instance: any, func: Function){
+  // instance 是编译主入口的 proxy 格式数据，而 instance._ 是 createComponentInstance 实例
+  const errorInternalInstance: ComponentInternalInstance = instance._
+  func && callWithAsyncErrorHandling(() => applyLifeCycle(instance, func), errorInternalInstance, 10)
 }
