@@ -75,7 +75,7 @@ public class Timer implements ILifeCycle {
             timerHandler.postDelayed(intervalRunnable, interval);
 
             if (callback != null) {
-                HMLog.d("HummerNative", ">> before [setInterval] call");
+                HMLog.d("HummerNative", ">> before [setInterval] call, " + interval + "ms");
                 callback.call();
                 HMLog.d("HummerNative", "<< after [setInterval] call");
 
@@ -132,7 +132,7 @@ public class Timer implements ILifeCycle {
             isTimeoutRunning = true;
 
             if (callback != null) {
-                HMLog.d("HummerNative", ">> before [setTimeout] call");
+                HMLog.d("HummerNative", ">> before [setTimeout] call, " + timeout + "ms");
                 callback.call();
                 HMLog.d("HummerNative", "<< after [setTimeout] call");
                 callback.release();
