@@ -11,7 +11,7 @@
 #import "HMUtility.h"
 #import "HMSourceParser.h"
 #import "HMImageCoderManager.h"
-
+#import "HMImageCoderHelper.h"
 @implementation HMLocalImageLoader
 
 - (BOOL)canLoad:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource{
@@ -69,7 +69,8 @@
     NSData *imageData = nil;
     BOOL isGif = context[HMImageManagerContextAnimatedImageClass];
     HMSourceParser *model = [[HMSourceParser alloc] initWithSource:sourceString];
-    if (model.extensionName == nil){
+    BOOL isImageNamed = NO;// imageNamed 读取的图片，不做解码
+    if (model.fileName == nil){
         completionBlock(nil, nil, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorInvalidURL userInfo:@{NSLocalizedDescriptionKey : @"Invalid URL"}]);
         return operation;
     }
@@ -77,45 +78,47 @@
     if (model.bundle) {
         //1.bundle 可能是自定义bundle或只包含图片名(mainBundle)
         if (isGif) {
-            NSString *path = [model.bundle pathForResource:model.extensionName ofType:@"gif"];
+            NSString *path = [model.bundle pathForResource:model.fileName ofType:@"gif"];
             if (path) {
                 imageData = [NSData dataWithContentsOfFile:path];
             }else{
-                NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:model.extensionName bundle:model.bundle];
+                NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:model.fileName bundle:model.bundle];
                 imageData = dataAsset.data;
             }
         }else{
-            image = [UIImage imageNamed:model.extensionName inBundle:model.bundle compatibleWithTraitCollection:nil];
+            image = [UIImage imageNamed:model.fileName inBundle:model.bundle compatibleWithTraitCollection:nil];
+            isImageNamed = image != nil;
         }
     }else if(model.filePath){
         //phase2: sandbox
         if (isGif) {
             imageData = [NSData dataWithContentsOfURL:[realSource hm_asFileUrl]];
         }else{
-            image = HMImageFromLocalAssetURL([realSource hm_asFileUrl]);
+            image = HMImageFromLocalAssetURLAndOutNamed([realSource hm_asFileUrl], &isImageNamed);
         }
+    }
+    if(image == nil && imageData == nil){
+        
+        NSError *error = [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorBadImageData userInfo:@{NSLocalizedDescriptionKey : @"can not fetch image data from local asset"}];
+        completionBlock(nil, nil, error);
+        return operation;
     }
     BOOL needDecoder = ![context[HMImageContextImageDoNotDecode] boolValue];
     if(needDecoder == false){
         HM_SafeRunBlockAtMainThread(completionBlock, image, imageData, nil);
         return operation;
     }
-    if (imageData && image == nil && needDecoder) {
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{           
-            UIImage *image = HMImageLoaderDecodeImageData(imageData, [realSource hm_asUrl], context);
-            hm_safe_main_thread(^{
-                completionBlock(image, imageData, image?nil:HM_IMG_DECODE_ERROR);
-            });
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        UIImage *decodeImage = image;
+        if(decodeImage && !isImageNamed){
+            decodeImage = [HMImageCoderHelper decodedImageWithImage:image];
+        }else if (imageData){
+            decodeImage = HMImageLoaderDecodeImageData(imageData, [realSource hm_asUrl], context);
+        }
+        hm_safe_main_thread(^{
+            completionBlock(decodeImage, imageData, decodeImage?nil:HM_IMG_DECODE_ERROR);
         });
-        return operation;
-    }
-    
-    if (image) {
-        completionBlock(image, nil, nil);
-        return operation;
-    }
-    NSError *error = [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorBadImageData userInfo:@{NSLocalizedDescriptionKey : @"can not fetch image data from local asset"}];
-    completionBlock(nil, nil, error);
+    });
     return operation;
 }
 

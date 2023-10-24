@@ -7,43 +7,37 @@
 
 #import "HMAnimationManager.h"
 #import "UIView+HMAnimation.h"
+#import "NSObject+Hummer.h"
 
 @implementation HMAnimationManager
-static NSMutableArray *_HMAnimationManager_animations = nil;
+static NSMutableArray <id<HMAnimator>> *_HMAnimationManager_toBePlayedAnimations = nil;
 
 + (void)initialize {
-    _HMAnimationManager_animations = [NSMutableArray new];
+    _HMAnimationManager_toBePlayedAnimations = [NSMutableArray new];
 }
-+ (void)addAnimation:(id<HMAnimator>)animation forView:(UIView *)view key:(nullable NSString *)animationKey{
++ (void)addAnimation:(id<HMAnimator>)animation {
     
-    [_HMAnimationManager_animations addObject:animation];
-    if (animationKey) {
-        [view.hm_animationMap setObject:animation forKey:animationKey];
-    }
-    [animation setAnimationView:view forKey:animationKey];
+    [_HMAnimationManager_toBePlayedAnimations addObject:animation];
     [self startAnimation];
 }
 
 + (void)startAnimation {
     
-    if (_HMAnimationManager_animations.count == 0) {return;}
+    if (_HMAnimationManager_toBePlayedAnimations.count == 0) {return;}
     NSMutableArray *finshes = [[NSMutableArray alloc] init];
-    for (id<HMAnimator> anim in _HMAnimationManager_animations) {
+    for (id<HMAnimator> anim in _HMAnimationManager_toBePlayedAnimations) {
         
         if ([anim canStartAnimation]) {
             [anim startAnimation];
             [finshes addObject:anim];
         }
     }
-    [_HMAnimationManager_animations removeObjectsInArray:finshes];
+    [_HMAnimationManager_toBePlayedAnimations removeObjectsInArray:finshes];
 }
 
-+ (void)removeAnimationForView:(UIView *)view key:(NSString *)animationKey {
-    if (animationKey) {
-        id<HMAnimator> animator = [view.hm_animationMap objectForKey:animationKey];
-        [view.hm_animationMap removeObjectForKey:animationKey];
-        [animator stopAnimation];
-    }
++ (void)removeAnimation:(id<HMAnimator>)animation {
+    
+    [_HMAnimationManager_toBePlayedAnimations removeObject:animation];
 }
 
 //render 函数执行完毕

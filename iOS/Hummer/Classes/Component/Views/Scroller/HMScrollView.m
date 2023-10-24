@@ -10,8 +10,8 @@
 #import <Hummer/HMBaseExecutorProtocol.h>
 #import "HMUtility.h"
 #import "NSObject+Hummer.h"
-#import "HMScrollEvent.h"
 #import "UIView+HMEvent.h"
+#import "HMEventDefines.h"
 #import "HMJSGlobal.h"
 #import "UIView+HMDom.h"
 #import "UIView+HMRenderObject.h"
@@ -222,7 +222,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
 
 - (void)scrollViewWillBeginDragging:(__unused UIScrollView *)scrollView {
     self.lastContentOffset = scrollView.contentOffset;
-    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+    [self hm_notifyWithEventName:HMScrollEventName params:@{
         kHMScrollState: @(HMScrollEventBegan),
         kHMScrollDeltaX: @(0),
         kHMScrollDeltaY: @(0),
@@ -237,7 +237,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+    [self hm_notifyWithEventName:HMScrollEventName params:@{
         kHMScrollState: @(HMScrollEventScroll),
         kHMScrollDeltaX: @(deltaX),
         kHMScrollDeltaY: @(deltaY),
@@ -253,7 +253,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     self.lastContentOffset = contentOffset;
     if (!decelerate) {
         // 结束
-        [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        [self hm_notifyWithEventName:HMScrollEventName params:@{
             kHMScrollState: @(HMScrollEventEndedDecelerating),
             kHMScrollDeltaX: @(deltaX),
             kHMScrollDeltaY: @(deltaY),
@@ -263,7 +263,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
         [self checkIFTopOrBottom];
     } else {
         // 手指抬起继续滚动
-        [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        [self hm_notifyWithEventName:HMScrollEventName params:@{
             kHMScrollState: @(HMScrollEventEndedDragging),
             kHMScrollDeltaX: @(deltaX),
             kHMScrollDeltaY: @(deltaY),
@@ -278,7 +278,7 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+    [self hm_notifyWithEventName:HMScrollEventName params:@{
         kHMScrollState: @(HMScrollEventEndedDecelerating),
         kHMScrollDeltaX: @(deltaX),
         kHMScrollDeltaY: @(deltaY),
@@ -331,39 +331,22 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
 - (CGSize)getNewContentSize {
     CGSize newContentSize = CGSizeZero;
     if (self.scrollDirection == HMScrollDirectionHorizontal) {
-        YOGA_TYPE_WRAPPER(YGValue) minWidth = self.hm_renderObject.minWidth;
-        YOGA_TYPE_WRAPPER(YGValue) width = self.hm_renderObject.width;
-        YOGA_TYPE_WRAPPER(YGValue) maxWidth = self.hm_renderObject.maxWidth;
         
-        [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
+        newContentSize = [self hm_sizeThatFitsWithConfigureLayout:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
             layout.minWidth = YOGA_TYPE_WRAPPER(YGValueUndefined);
             layout.width = YOGA_TYPE_WRAPPER(YGValueAuto);
             layout.maxWidth = YOGA_TYPE_WRAPPER(YGValueUndefined);
-        }];
-        newContentSize = [self hm_sizeThatFits:CGSizeMake(CGFLOAT_MAX, self.bounds.size.height)];
+        } minimumSize:CGSizeZero maximumSize:CGSizeMake(CGFLOAT_MAX, self.bounds.size.height)];
         newContentSize.height = MAX(self.bounds.size.height, newContentSize.height);
-        [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.minWidth = minWidth;
-            layout.width = width;
-            layout.maxWidth = maxWidth;
-        }];
+ 
     } else {
-        YOGA_TYPE_WRAPPER(YGValue) minHeight = self.hm_renderObject.minHeight;
-        YOGA_TYPE_WRAPPER(YGValue) height = self.hm_renderObject.height;
-        YOGA_TYPE_WRAPPER(YGValue) maxHeight = self.hm_renderObject.maxHeight;
         
-        [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
+        newContentSize = [self hm_sizeThatFitsWithConfigureLayout:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
             layout.minHeight = YOGA_TYPE_WRAPPER(YGValueUndefined);
             layout.height = YOGA_TYPE_WRAPPER(YGValueAuto);
             layout.maxHeight = YOGA_TYPE_WRAPPER(YGValueUndefined);
-        }];
-        newContentSize = [self hm_sizeThatFits:CGSizeMake(self.bounds.size.width, CGFLOAT_MAX)];
+        } minimumSize:CGSizeZero maximumSize:CGSizeMake(self.bounds.size.width, CGFLOAT_MAX)];
         newContentSize.width = MAX(self.bounds.size.width, newContentSize.width);
-        [self hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.minHeight = minHeight;
-            layout.height = height;
-            layout.maxHeight = maxHeight;
-        }];
     }
     return newContentSize;
 }

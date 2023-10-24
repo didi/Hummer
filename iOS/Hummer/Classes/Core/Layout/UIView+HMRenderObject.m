@@ -15,6 +15,7 @@
 #import "HMUIManager.h"
 #import "HMJSGlobal.h"
 #import "HMRenderObject.h"
+#import "HMRootView.h"
 
 static const char SHADOW_VIEW_KEY;
 
@@ -109,20 +110,32 @@ UIView *hm_yoga_get_root_view(UIView *currentView) {
 
 #pragma mark - interface compatible
 
+- (CGSize)hm_sizeThatFitsWithConfigureLayout:(HMLayoutConfigurationBlock)layoutBlock minimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize {
+    [HMUIManager.sharedInstance attachRenderObjectFromViewHierarchyForRootView:self];
+    
+    return [((HMRenderObject *) self.hm_renderObject) sizeThatFitsWithConfigureLayout:layoutBlock minimumSize:minimumSize maximumSize:maximumSize];
+}
+
 - (CGSize)hm_sizeThatFitsMinimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize {
     [HMUIManager.sharedInstance attachRenderObjectFromViewHierarchyForRootView:self];
     
-    return [((HMRenderObject *) self.hm_renderObject) sizeThatFitsMinimumSize:minimumSize maximumSize:maximumSize];
+    return [self hm_sizeThatFitsWithConfigureLayout:nil minimumSize:minimumSize maximumSize:maximumSize];
 }
 
 - (CGSize)hm_sizeThatFits:(CGSize)size {
     [HMUIManager.sharedInstance attachRenderObjectFromViewHierarchyForRootView:self];
     
-    return [((HMRenderObject *) self.hm_renderObject) sizeThatFitsMaximumSize:size];
+    return [self hm_sizeThatFitsWithConfigureLayout:nil minimumSize:CGSizeZero maximumSize:size];
 }
 
+// TODO: 把 hm_layoutBackgroundColorImageBorderShadowCornerRadius & HMAnimationManager 包含在 下面接口
 - (void)hm_applyLayoutPreservingOrigin:(BOOL)preserveOrigin affectedShadowViews:(nullable NSHashTable<id<HMLayoutStyleProtocol>> *)affectedShadowViews {
-    [HMUIManager.sharedInstance applyLayout:self preservingOrigin:preserveOrigin size:self.bounds.size affectedShadowViews:(NSHashTable<HMRenderObject *> *) affectedShadowViews];
+    if([self isKindOfClass:HMRootView.class]){
+        
+        [[HMUIManager sharedInstance] applyLayoutPreservingOrigin:preserveOrigin view:(HMRootView *)self affectedShadowViews:affectedShadowViews];
+    }else{
+        [[HMUIManager sharedInstance] applyLayoutPreservingOrigin:preserveOrigin dimensionFlexibility:0 view:self affectedShadowViews:affectedShadowViews];
+    }
 }
 
 @end

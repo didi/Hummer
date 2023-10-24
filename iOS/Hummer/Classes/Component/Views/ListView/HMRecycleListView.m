@@ -18,12 +18,13 @@
 #import "HMRecycleListViewListLayout.h"
 #import "HMRecycleListViewWaterfallLayout.h"
 #import "HMRecycleListViewGridLayout.h"
-#import "HMScrollEvent.h"
+#import "HMEventDefines.h"
 #import "HMExportClass.h"
 #import "HMUtility.h"
 #import "HMListLayoutAttributes.h"
 #import "HMWaterfallLayoutAttributes.h"
 #import "UIView+HMRenderObject.h"
+#import "HMEventDefines.h"
 
 #import <Hummer/UIView+HMInspector.h>
 
@@ -98,8 +99,8 @@ NS_ASSUME_NONNULL_END
     
     UIView *jsContentView = self.contentView.subviews.lastObject;
     CGSize jsContentViewSize =[jsContentView hm_sizeThatFits:CGSizeMake(containerSize.width, CGFLOAT_MAX)];
-//    jsContentViewSize.height = ceilf(((int)(jsContentViewSize.height*10))/10.0);
-//    jsContentViewSize.width = ceilf(((int)(jsContentViewSize.width*10))/10.0);
+    jsContentViewSize.height = ceilf(((int)(jsContentViewSize.height*10))/10.0);
+    jsContentViewSize.width = ceilf(((int)(jsContentViewSize.width*10))/10.0);
     
     if ([attributes isKindOfClass:[HMListLayoutAttributes class]]) {
         HMListLayoutAttributes *listAttributes = (HMListLayoutAttributes *)attributes;
@@ -264,7 +265,6 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     
     self.showsHorizontalScrollIndicator = NO;
     self.showsVerticalScrollIndicator = NO;
-        
     _reuseIdentifiers = NSMutableSet.set;
     [_reuseIdentifiers addObject:HMRecycleListViewListCellDefaultIdentifier];
     [self registerClass:HMRecycleListInnerCell.class forCellWithReuseIdentifier:HMRecycleListViewListCellDefaultIdentifier];
@@ -355,11 +355,14 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     
     // 在水平滚动的情况下，去除 refreshView 和 loadMoreView
     if (direction == UICollectionViewScrollDirectionHorizontal) {
+        self.alwaysBounceHorizontal = YES;
         UIView *refreshView = self.refreshView.subviews.firstObject;
         if (refreshView) { [refreshView removeFromSuperview]; }
         
         UIView *loadMoreView = self.loadView.subviews.firstObject;
         if (loadMoreView) { [loadMoreView removeFromSuperview]; }
+    }else{
+        self.alwaysBounceVertical = YES;
     }
 }
 
@@ -640,7 +643,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
 
 - (void)scrollViewWillBeginDragging:(__unused UIScrollView *)scrollView {
     self.lastContentOffset = scrollView.contentOffset;
-    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+    [self hm_notifyWithEventName:HMScrollEventName params:@{
         kHMScrollState: @(HMScrollEventBegan),
         kHMScrollDeltaX: @(0),
         kHMScrollDeltaY: @(0),
@@ -655,7 +658,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+    [self hm_notifyWithEventName:HMScrollEventName params:@{
         kHMScrollState: @(HMScrollEventScroll),
         kHMScrollDeltaX: @(deltaX),
         kHMScrollDeltaY: @(deltaY),
@@ -671,7 +674,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     self.lastContentOffset = contentOffset;
     if (!decelerate) {
         // 结束
-        [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        [self hm_notifyWithEventName:HMScrollEventName params:@{
             kHMScrollState: @(HMScrollEventEndedDecelerating),
             kHMScrollDeltaX: @(deltaX),
             kHMScrollDeltaY: @(deltaY),
@@ -680,7 +683,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
         }];
     } else {
         // 手指抬起继续滚动
-        [self hm_notifyWithEventName:HMScrollEventName argument:@{
+        [self hm_notifyWithEventName:HMScrollEventName params:@{
             kHMScrollState: @(HMScrollEventEndedDragging),
             kHMScrollDeltaX: @(deltaX),
             kHMScrollDeltaY: @(deltaY),
@@ -695,7 +698,7 @@ HMBaseValue *(^__executeBlock)(HMFuncCallback, NSArray *) = ^(HMFuncCallback cal
     CGFloat deltaX = contentOffset.x - self.lastContentOffset.x;
     CGFloat deltaY = contentOffset.y - self.lastContentOffset.y;
     self.lastContentOffset = contentOffset;
-    [self hm_notifyWithEventName:HMScrollEventName argument:@{
+    [self hm_notifyWithEventName:HMScrollEventName params:@{
         kHMScrollState: @(HMScrollEventEndedDecelerating),
         kHMScrollDeltaX: @(deltaX),
         kHMScrollDeltaY: @(deltaY),

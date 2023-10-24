@@ -51,6 +51,8 @@ FOUNDATION_EXTERN UIView *_Nullable hm_yoga_get_root_view(UIView *_Nullable curr
 
 - (CGSize)hm_sizeThatFitsMinimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize;
 
+- (CGSize)hm_sizeThatFitsWithConfigureLayout:(nullable HMLayoutConfigurationBlock)layoutBlock minimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize;
+
 - (void)hm_applyLayoutPreservingOrigin:(BOOL)preserveOrigin affectedShadowViews:(nullable NSHashTable<id<HMLayoutStyleProtocol>> *)affectedShadowViews;
 /**
  *  兼容 YogaKit 的布局判断问题 仅在 HMLayoutEngineYogaKit 时生效

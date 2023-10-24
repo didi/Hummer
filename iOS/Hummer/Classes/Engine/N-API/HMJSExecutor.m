@@ -112,6 +112,8 @@ static NAPIValue _Nullable setImmediate(NAPIEnv _Nullable env, NAPICallbackInfo 
 
 NS_ASSUME_NONNULL_END
 
+static NAPIRuntime __HMJSExecutor_sharedVM = NULL;
+
 void hummerFinalize(void *finalizeData, void *finalizeHint) {
   
     void(^finalizeWork)(void) = ^(){
@@ -642,7 +644,7 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 #endif
     
 
-    return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
+     return [self hummerCallNativeWithArgumentCount:argumentCount arguments:arguments target:target selector:selector methodSignature:methodSignature];
 }
 
 - (BOOL)isArrayWithValueRef:(nullable NAPIValue)valueRef {
@@ -710,6 +712,8 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
             return @"number";
         case NAPIString:
             return @"string";
+        case NAPISymbol:
+            return @"symbol";
         case NAPIObject:
             return @"object";
         case NAPIFunction:
@@ -1544,8 +1548,10 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
             }
         }
         if (isUniqueExecutor) {
+            CHECK_COMMON(NAPIFreeRuntime(__HMJSExecutor_sharedVM));
             HMExecutorMap = nil;
             [[HMDebugService sharedService] stopDebugConnection];
+            __HMJSExecutor_sharedVM = NULL;
         }
     });
 }
@@ -1560,7 +1566,14 @@ NAPIValue setImmediate(NAPIEnv env, NAPICallbackInfo callbackInfo) {
     HMAssertMainQueue();
     self = [super init];
     _heremsHelper = [HMNAPIDebuggerHelper new];
-    if (NAPICreateEnv(&self->_env) != NAPIErrorOK) {
+    
+    if(__HMJSExecutor_sharedVM == NULL){
+        if(NAPICreateRuntime(&__HMJSExecutor_sharedVM) != NAPIErrorOK){
+            NSAssert(NO, @"NAPICreateRuntime() error");
+            return nil;
+        }
+    }
+    if (NAPICreateEnv(&self->_env, __HMJSExecutor_sharedVM) != NAPIErrorOK) {
         NSAssert(NO, @"NAPICreateEnv() error");
         goto executorMapError;
     }

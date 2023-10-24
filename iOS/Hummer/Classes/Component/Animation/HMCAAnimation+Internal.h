@@ -19,7 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong)NSMutableArray <id<HMCAAnimationInfo>> *infos;
 @property (nonatomic, strong)NSMutableArray <CAAnimation *> *animations;
 
+/// 是否完整播完，在被打断是：isStop = YES, isFinish = NO;
 @property (nonatomic, assign)BOOL isFinish;
+
+/// 是否停止
+@property (nonatomic, assign)BOOL isStop;
+
 @end
 
 NS_ASSUME_NONNULL_END

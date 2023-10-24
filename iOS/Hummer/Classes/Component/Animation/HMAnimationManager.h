@@ -11,19 +11,22 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *      HMAnimationManager
- *      /         |        \
- *     /          |         \
- *  HMAnimator  HMAnimator  ...
- *  
+ *                         view.animationMap
+ *                        /         |        \
+ *                       /          |         \
+ *                   HMAnimator  HMAnimator  ...
+ *                      /           |         \
+ *   HMCAAnimation(keyframe/basic)  ...
+ *                   /
+ *      @[info:CAAnimation]
  */
 
 
 @interface HMAnimationManager : NSObject
 
-+ (void)addAnimation:(id<HMAnimator>)animation forView:(UIView *)view key:(nullable NSString *)animationKey;
++ (void)addAnimation:(id<HMAnimator>)animation;
 
-+ (void)removeAnimationForView:(UIView *)view key:(nonnull NSString *)animationKey;
++ (void)removeAnimation:(id<HMAnimator>)animation;
 
 + (void)notifyStartAnimation;
 

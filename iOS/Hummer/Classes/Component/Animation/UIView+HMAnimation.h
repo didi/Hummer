@@ -6,11 +6,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <HMTransform.h>
-
+#import "HMTransform.h"
+#import "HMAnimator.h"
+@class HMBaseValue;
 @interface UIView (HMAnimation)
-
-@property (nonatomic, strong) NSMutableDictionary *hm_animationMap;
 
 @property (nonatomic, strong) HMTransform *hm_transform;
 
@@ -18,4 +17,7 @@
 @property (nonatomic, assign) CGPoint hm_animationPropertyCenter;
 @property (nonatomic, assign) CGRect hm_animationPropertyBounds;
 
+- (void)hm_addAnimationValue:(HMBaseValue *)animation forKeyValue:(HMBaseValue *)keyPath;
+- (void)hm_addAnimation:(id<HMAnimator>)animation forKey:(NSString *)key;
+- (void)hm_removeAnimationForKey:(NSString *)key;
 @end

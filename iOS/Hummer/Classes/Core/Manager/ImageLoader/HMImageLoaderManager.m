@@ -57,7 +57,12 @@
     
     HMImageCombinedOperation *operation = [HMImageCombinedOperation new];
     id<HMImageLoader> loader = [self getLoaderWithSource:source inJSBundleSource:bundleSource context:context];
-    NSString *cacheUrlString = [source hm_asString];
+    NSString *sourceString = [source hm_asString];
+    if(sourceString == nil || sourceString.length<=0){
+        completionBlock(nil, nil, [NSError errorWithDomain:HMWebImageErrorDomain code:HMWebImageErrorInvalidURL userInfo:@{NSLocalizedDescriptionKey : @"Invalid URL"}], HMImageCacheTypeNone);
+        return nil;
+    }
+    NSString *cacheUrlString = sourceString;
     if ([loader respondsToSelector:@selector(fixLoadSource:inJSBundleSource:)]) {
         cacheUrlString = [[loader fixLoadSource:source inJSBundleSource:bundleSource] hm_asString];
     }

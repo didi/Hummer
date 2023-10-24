@@ -153,8 +153,7 @@ static NSBundle *bundleForPath(NSString *key) {
     
     return bundleCache[key];
 }
-
-UIImage *HMImageFromLocalAssetURL(NSURL *imageURL) {
+UIImage *HMImageFromLocalAssetURLAndOutNamed(NSURL *imageURL, BOOL *isNamed) {
     //获取bundle部分。
     NSString *imageName = HMBundlePathForURL(imageURL);
     NSBundle *bundle = nil;
@@ -169,6 +168,7 @@ UIImage *HMImageFromLocalAssetURL(NSURL *imageURL) {
     }
     
     UIImage *image = nil;
+    BOOL isImageNamed = NO;
     if (bundle) {
         //读取对应bundle的图片
         image = [UIImage imageNamed:imageName
@@ -178,7 +178,8 @@ UIImage *HMImageFromLocalAssetURL(NSURL *imageURL) {
         //直接读取：mainBundle.  .app等
         image = [UIImage imageNamed:imageName];
     }
-    
+    isImageNamed = image != nil;
+
     if (!image) {
         // 本地file sys加载
         NSData *fileData;
@@ -200,12 +201,20 @@ UIImage *HMImageFromLocalAssetURL(NSURL *imageURL) {
             bundle = [NSBundle bundleWithURL:frameworkURL];
             image = [UIImage imageNamed:imageName inBundle:bundle compatibleWithTraitCollection:nil];
             if (image) {
+                isImageNamed = YES;
                 HMLogWarning(@"Image %@ not found in mainBundle, but found in %@", imageName, bundle);
                 break;
             }
         }
     }
+    if(isNamed){
+        *isNamed = isImageNamed;
+    }
     return image;
+}
+
+UIImage *HMImageFromLocalAssetURL(NSURL *imageURL) {
+    return HMImageFromLocalAssetURLAndOutNamed(imageURL, NULL);
 }
 
 UIImage *HMImageFromLocalAssetName(NSString *imageName) {
@@ -303,6 +312,15 @@ CGFloat HMPointWithString(NSString *string) {
 
 BOOL HMValidPoint(CGPoint point) {
     return !(isnan(point.x)) && !(isnan(point.y));
+}
+
+double HMZeroIfNaN(double value)
+{
+  return isnan(value) || isinf(value) ? 0 : value;
+}
+
+BOOL hm_doubleEqual(double numberOne, double numberTwo) {
+    return fabs(numberOne - numberTwo) <= 0.0001;
 }
 
 #pragma mark - View Controller
@@ -466,10 +484,6 @@ void hm_method_swizzling(Class clazz, SEL originalSelector, SEL swizzledSelector
     }
 }
 
-BOOL hm_doubleEqual(double numberOne, double numberTwo) {
-    return fabs(numberOne - numberTwo) <= 0.0001;
-}
-
 
 void hm_safe_main_thread(dispatch_block_t block) {
     if (NSThread.isMainThread) {
@@ -525,4 +539,9 @@ NSMethodSignature *HMExtractMethodSignatureFromBlock(id block) {
     }
 
     return [NSMethodSignature signatureWithObjCTypes:signature];
+}
+
+double HMTimestampMilliSeconds(void){
+    NSTimeInterval timestamp = floor(NSDate.date.timeIntervalSince1970) * 1000;
+    return timestamp;
 }

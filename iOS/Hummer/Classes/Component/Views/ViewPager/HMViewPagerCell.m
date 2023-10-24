@@ -45,8 +45,8 @@
             layout.alignItems = YOGA_TYPE_WRAPPER(YGAlignStretch);
             layout.alignContent = YOGA_TYPE_WRAPPER(YGAlignStretch);
                         
-            layout.width = YOGA_TYPE_WRAPPER(HMPointValueMake(self.bounds.size.width));
-            layout.height = YOGA_TYPE_WRAPPER(HMPointValueMake(self.bounds.size.height));
+            layout.width = HMPointValueMake(self.bounds.size.width);
+            layout.height = HMPointValueMake(self.bounds.size.height);
         }];
     }
     return self;
@@ -87,8 +87,8 @@
     
     //固定和 contentView 大小相同
     [self.jsContentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-        layout.width = YOGA_TYPE_WRAPPER(HMPointValueMake(self.contentView.bounds.size.width));
-        layout.height = YOGA_TYPE_WRAPPER(HMPointValueMake(self.contentView.bounds.size.height));
+        layout.width = HMPointValueMake(self.contentView.bounds.size.width);
+        layout.height = HMPointValueMake(self.contentView.bounds.size.height);
     }];
 
 

@@ -27,10 +27,6 @@ typedef NS_ENUM(NSUInteger, HMLogLevel) {
   HMLogLevelFatal
 };
 
-HMEngineType HMGetEngineType(void);
-
-HMEngineType HMSetEngineType(HMEngineType newEngineType);
-
 typedef void (^HMExceptionHandler)(HMExceptionModel *exceptionModel);
 
 typedef void (^HMLogHandler)(NSString *_Nullable logString, HMLogLevel logLevel);

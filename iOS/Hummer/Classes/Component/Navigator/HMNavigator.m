@@ -164,7 +164,7 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     info.params = parameterDictioniary;
     info.animated = animated;
     info.callback = ^(id  _Nullable userInfo) {
-        HM_SafeRunBlock(callback, @[userInfo ?: @{}]);
+        HM_SafeRunBlock(callback, userInfo ? @[userInfo] : @[]);
     };
     dispatch_async(dispatch_get_main_queue(), ^{
         [self pushPageWithInfo:info];
@@ -278,7 +278,7 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     info.params = params;
     info.animated = animated;
     info.callback = ^(id  _Nullable userInfo) {
-        HM_SafeRunBlock(callback, @[userInfo ?: @{}]);
+        HM_SafeRunBlock(callback, userInfo ? @[userInfo] : @[]);
     };
     dispatch_async(dispatch_get_main_queue(), ^{
         [self pushPageWithInfo:info];

@@ -7,6 +7,7 @@
 
 #import "HMJSWeakValue.h"
 #import <Hummer/HMJSStrongValue.h>
+#import <Hummer/HMBatchMainQueue.h>
 
 static NSString *const CREATE_WEAK_REFERENCE_ERROR = @"napi_create_reference() initialRefCount: 0 error";
 
@@ -25,15 +26,16 @@ NS_ASSUME_NONNULL_END
 @implementation HMJSWeakValue
 
 - (void)dealloc {
-    __weak HMJSExecutor *executor = self.executor;
+    HMJSExecutor *tryStrongExecutor = self.executor;
     NAPIRef ref = self.reference;
-    HMSafeMainThread(^{
-        if (executor) {
-            if (napi_delete_reference(executor.env, ref) != NAPIExceptionOK) {
-                NAPIClearLastException(executor.env);
-            }
+    if(tryStrongExecutor == nil){
+        return;
+    }
+    [HMBatchMainQueue run:^{
+        if (napi_delete_reference(tryStrongExecutor.env, ref) != NAPIExceptionOK) {
+            NAPIClearLastException(tryStrongExecutor.env);
         }
-    });
+    }];
 }
 
 - (instancetype)initWithValueRef:(NAPIValue)valueRef executor:(nullable HMJSExecutor *)executor {
@@ -66,14 +68,18 @@ NS_ASSUME_NONNULL_END
 
 - (HMBaseValue *)value {
     HMAssertMainQueue();
+    HMJSExecutor *tryStrongExecutor = self.executor;
+    if(tryStrongExecutor == nil){
+        return nil;
+    }
     NAPIHandleScope handleScope;
-    if (napi_open_handle_scope(self.executor.env, &handleScope) != NAPIErrorOK) {
+    if (napi_open_handle_scope(tryStrongExecutor.env, &handleScope) != NAPIErrorOK) {
         NSAssert(NO, @"napi_open_handle_scope() error");
 
         return nil;
     }
-    HMJSStrongValue *strongValue = [[HMJSStrongValue alloc] initWithValueRef:self.valueRef executor:self.executor];
-    napi_close_handle_scope(self.executor.env, handleScope);
+    HMJSStrongValue *strongValue = [[HMJSStrongValue alloc] initWithValueRef:self.valueRef executor:tryStrongExecutor];
+    napi_close_handle_scope(tryStrongExecutor.env, handleScope);
 
     return strongValue;
 }

@@ -17,9 +17,9 @@
 
 HM_EXPORT_CLASS(Toast, HMToast)
 
-HM_EXPORT_METHOD(show, __showWithText:duration:)
+HM_EXPORT_CLASS_METHOD(show, __showWithText:duration:)
 
-HM_EXPORT_METHOD(custom, __showWithView:duration:)
+HM_EXPORT_CLASS_METHOD(custom, __showWithView:duration:)
 
 + (void)__showWithText:(HMBaseValue *)jsText duration:(HMBaseValue *)jsTime
 {
@@ -31,7 +31,7 @@ HM_EXPORT_METHOD(custom, __showWithView:duration:)
 
 + (void)__showWithView:(HMBaseValue *)jsView duration:(HMBaseValue *)jsTime
 {
-    UIView *view = jsView.hm_toObjCObject;
+    UIView *view = (UIView *)jsView.toNativeObject;
     if (!view) {
         return;
     }

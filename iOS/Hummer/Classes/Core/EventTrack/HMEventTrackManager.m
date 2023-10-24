@@ -11,6 +11,7 @@
 #import "UIView+HMDom.h"
 #import "UIView+HMEvent.h"
 #import <Hummer/HMConfigEntryManager.h>
+#import "HMEventDefines.h"
 
 
 @implementation HMEventTrackManager
@@ -23,17 +24,16 @@ static dispatch_queue_t trackHandleQueue;
         trackHandleQueue = dispatch_queue_create("hummer.track.thread", DISPATCH_QUEUE_SERIAL);
     }
 }
-+ (void)trackWithGesture:(UIGestureRecognizer *)gesture namespace:(NSString *)namespace {
-
-    id<HMEventTrackViewProperty> view = (id<HMEventTrackViewProperty>)gesture.view;
-    if (view && gesture.hm_eventName) {
++ (void)trackWithEventName:(NSString *)eventName view:(UIView *)view params:(NSDictionary *)params namespace:(NSString *)namespace {
+    id<HMEventTrackViewProperty> _view = (id<HMEventTrackViewProperty>)view;
+    if (_view && eventName) {
         @try {
             NSArray *trackList = @[HMTapEventName,HMLongPressEventName];
                 
-            if ([trackList containsObject:gesture.hm_eventName]) {
+            if ([trackList containsObject:eventName]) {
                 
-                NSMutableDictionary *dic = [HMEventTrackUtils propertiesWithTrackObject:view];
-                [dic setValue:gesture.hm_eventName forKey:HM_EVENT_PROPERTY_TYPE];
+                NSMutableDictionary *dic = [HMEventTrackUtils propertiesWithTrackObject:_view];
+                [dic setValue:eventName forKey:HM_EVENT_PROPERTY_TYPE];
                 [dic setValue:[NSNumber numberWithLongLong:[HMEventTrackUtils getCurrentTime]] forKey:HM_EVENT_PROPERTY_TIMESTAMP];
                 dispatch_async(trackHandleQueue, ^{
                     [HMEventTrackInterceptor asyncHandleTrackEvent:dic namespace:namespace];
@@ -43,6 +43,6 @@ static dispatch_queue_t trackHandleQueue;
             
         }
     }
+    
 }
-
 @end

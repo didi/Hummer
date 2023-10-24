@@ -11,7 +11,6 @@
 #import "HMConverter.h"
 #import "NSObject+Hummer.h"
 #import "UIView+HMEvent.h"
-#import "HMTapEvent.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "UIView+HMDom.h"

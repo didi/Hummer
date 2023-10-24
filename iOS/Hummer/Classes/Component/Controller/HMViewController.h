@@ -9,11 +9,11 @@
 #import "HMJSGlobal.h"
 #import <Hummer/HummerContainerProtocol.h>
 
-typedef NSString *(^HMLoadBundleJS)(NSString *URL);
+NS_ASSUME_NONNULL_BEGIN
+
+typedef NSString *_Nullable(^HMLoadBundleJS)(NSString *URL);
 
 typedef void(^HMRegisterJSBridge)(HMJSContext *context);
-
-NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^HMVoidIDBlock)(id _Nullable userInfo);
 
@@ -37,7 +37,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable) HMVoidIDBlock hm_dismissBlock;
 
-NS_ASSUME_NONNULL_END
+///  加载Bundle脚本
+@property(nonatomic,copy) HMLoadBundleJS loadBundleJSBlock;
+
+///  渲染脚本之前注册bridge
+@property(nonatomic,copy) HMRegisterJSBridge registerJSBridgeBlock;
+
+///  通过context设置自定义bridge
+@property (nonatomic, strong, readonly) HMJSContext *context;
+
 
 /// 初始化Hummer页面
 /// @param URL Hummer包地址
@@ -51,28 +59,20 @@ NS_ASSUME_NONNULL_END
 - (instancetype)initWithURL:(NSString *)URL
                      params:(NSDictionary *)params;
 
-///  添加自定义顶部导航view，默认没有导航
-/// @param customNaviView 外部自定义的导航view
-- (void)addCustomNavigationView:(UIView *)customNaviView;
-
- ///  加载Bundle脚本
- @property(nonatomic,copy) HMLoadBundleJS loadBundleJSBlock;
-
- ///  渲染脚本之前注册bridge
- @property(nonatomic,copy) HMRegisterJSBridge registerJSBridgeBlock;
-
  /// 渲染脚本
  /// @param script 脚本内容
  - (void)renderWithScript:(NSString *)script;
 
- ///  通过context设置自定义bridge
- @property (nonatomic, weak, readonly) HMJSContext *context;
+///  添加自定义顶部导航view，默认没有导航
+/// @param customNaviView 外部自定义的导航view
+- (void)addCustomNavigationView:(UIView *)customNaviView;
 
  #pragma mark - Call Hummer
 
  ///  调用JS方法
  - (HMBaseValue *)callJSWithFunc:(NSString *)func arguments:(NSArray *)arguments;
 
+NS_ASSUME_NONNULL_END
 
 
 @end

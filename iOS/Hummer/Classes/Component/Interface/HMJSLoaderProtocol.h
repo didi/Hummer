@@ -19,7 +19,7 @@ typedef void (^HMJSLoaderCompleteBlock)(NSError * _Nullable error, NSString *_Nu
  * 目前很多组件(拦截器)的方法参数没有传递 namespace。要兼容老代码，需要借助 HMNamespaceScope 。
  */
 
-+ (BOOL)loadWithSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource  completion:(HMJSLoaderCompleteBlock)completion;
++ (BOOL)loadWithSource:(id<HMURLConvertible>)source inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource  completion:(HMJSLoaderCompleteBlock)completion;
 
 @end
 

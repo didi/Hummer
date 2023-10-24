@@ -534,3 +534,21 @@ static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor
     return font;
 }
 @end
+
+
+@implementation HMApplicationRouterInterceptor
+
++ (BOOL)handleOpenUrl:(NSURL *)url namespace:(nonnull NSString *)namespace{
+
+    HMAssert(url, @"HMApplicationRouterInterceptor handleOpenUrl, url must not be nil");
+    // 新拦截器
+    id<HMApplicationRouterProtocol> interceptor = [HMCEMInstance.configMap objectForKey:namespace].appRouter;
+    if ([interceptor respondsToSelector:@selector(handleOpenUrl:)]) {
+        
+        if([interceptor handleOpenUrl:url]){
+            return YES;
+        }
+    }
+    return [[UIApplication sharedApplication] openURL:url];
+}
+@end

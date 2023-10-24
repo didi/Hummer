@@ -79,8 +79,8 @@ HM_EXPORT_METHOD(playAnimation, __playAnimation)
 HM_EXPORT_METHOD(cancelAnimation, __cancelAnimation)
 HM_EXPORT_METHOD(setLoop, __setLoop:)
 HM_EXPORT_METHOD(setOnCompletionCallback, __setOnCompletionCallback:)
-HM_EXPORT_METHOD(onDataFailed, __setOnDataFailedCallback:)
-HM_EXPORT_METHOD(onDataReady, __setOnDataReadyCallback:)
+HM_EXPORT_METHOD(setOnDataFailedCallback, __setOnDataFailedCallback:)
+HM_EXPORT_METHOD(setOnDataReadyCallback, __setOnDataReadyCallback:)
 
 - (instancetype)init {
     self = [super init];

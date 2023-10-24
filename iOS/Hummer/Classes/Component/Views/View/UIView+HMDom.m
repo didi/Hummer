@@ -162,7 +162,6 @@ HM_EXPORT_METHOD(getElementById, hm_getSubViewByID:)
 
 HM_EXPORT_METHOD(layout, hm_layoutRootView)
 
-
 - (NSMapTable<UIView * , HMBaseValue *> *)hm_jsValueLifeContainer {
     
     NSMapTable<UIView * , HMBaseValue *> *store = objc_getAssociatedObject(self, _cmd);
@@ -209,9 +208,13 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
 
     return isMasksToBoundsOptimization.boolValue;
 }
+- (BOOL)hm_clipsToBounds {
+    NSNumber *hm_clipsToBounds = objc_getAssociatedObject(self, _cmd);
+    return hm_clipsToBounds.boolValue;
 
-- (void)setHm_isMasksToBoundsOptimization:(BOOL)hm_isMasksToBoundsOptimization {
-    objc_setAssociatedObject(self, @selector(hm_isMasksToBoundsOptimization), hm_isMasksToBoundsOptimization ? @YES : nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (void)setHm_clipsToBounds:(BOOL)hm_clipsToBounds {
+    objc_setAssociatedObject(self, @selector(hm_clipsToBounds), hm_clipsToBounds ? @YES : nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)hm_isFixedPosition {
@@ -433,10 +436,7 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
         self.hm_cornerRadiusModel = cornerRadiusModel;
     }
     // 不使用 setNeedsLayout
-    [self hm_updateMasksToBounds];
-    [self hm_updateBackgroundColor];
-    [self hm_updateShadow];
-    [self hm_updateBorder];
+    [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
 }
 
 - (void)hm_performBackgroundColorWithBackgroundColor:(nullable UIColor *)backgroundColor {
@@ -457,6 +457,9 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
         // 1. 移除 layer
         [self.hm_backgroundColorShapeLayer removeFromSuperlayer];
         self.hm_backgroundColorShapeLayer = nil;
+        [self.hm_gradientLayer removeFromSuperlayer];
+        self.hm_gradientLayer = nil;
+
         // 2. 设置 nil 背景色
         self.backgroundColor = nil;
     }
@@ -516,74 +519,87 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
     return borderModelCollection;
 }
 
-- (UIBezierPath *)hm_createCornerRadiusPath {
-    if (!self.hm_cornerRadiusModel) {
-        return [UIBezierPath bezierPathWithRoundedRect:self.layer.bounds cornerRadius:self.layer.cornerRadius];
-    } else {
-        // 多角路径
-        // 需要考虑高度是否够，宽度是否够
-        // startAngle 是 PI + asin(delta_h / r)
-        // endAngle 是 1.5 PI - asin(delta_w / r)
-        UIBezierPath *bezierPath = UIBezierPath.bezierPath;
-        double topLeftStartAngle = M_PI;
-        double topLeftEndAngle = M_PI_2 * 3;
-        double topRightStartAngle = M_PI_2 * 3;
-        double topRightEndAngle = M_PI * 2;
-        double bottomRightStartAngle = 0;
-        double bottomRightEndAngle = M_PI_2;
-        double bottomLeftStartAngle = M_PI_2;
-        double bottomLeftEndAngle = M_PI;
-        // 左
-        double deltaLeft = self.bounds.size.height - self.hm_cornerRadiusModel.topLeft - self.hm_cornerRadiusModel.bottomLeft;
-        if (deltaLeft < 0) {
-            double topLeftRate = self.hm_cornerRadiusModel.topLeft / (self.hm_cornerRadiusModel.topLeft + self.hm_cornerRadiusModel.bottomLeft);
-            double bottomLeftRate = self.hm_cornerRadiusModel.bottomLeft / (self.hm_cornerRadiusModel.topLeft + self.hm_cornerRadiusModel.bottomLeft);
-            double topLeftDeltaHeight = topLeftRate * -deltaLeft;
-            double bottomLeftDeltaHeight = bottomLeftRate * -deltaLeft;
-            topLeftStartAngle += asin(topLeftDeltaHeight / self.hm_cornerRadiusModel.topLeft);
-            bottomLeftEndAngle -= asin(bottomLeftDeltaHeight / self.hm_cornerRadiusModel.bottomLeft);
-        }
-        // 上
-        double deltaTop = self.bounds.size.width - self.hm_cornerRadiusModel.topLeft - self.hm_cornerRadiusModel.topRight;
-        if (deltaTop < 0) {
-            double topLeftRate = self.hm_cornerRadiusModel.topLeft / (self.hm_cornerRadiusModel.topLeft + self.hm_cornerRadiusModel.topRight);
-            double topRightRate = self.hm_cornerRadiusModel.topRight / (self.hm_cornerRadiusModel.topLeft + self.hm_cornerRadiusModel.topRight);
-            double topLeftDeltaWidth = -deltaTop * topLeftRate;
-            double topRightDeltaWidth = -deltaTop * topRightRate;
-            topLeftEndAngle -= asin(topLeftDeltaWidth / self.hm_cornerRadiusModel.topLeft);
-            topRightStartAngle += asin(topRightDeltaWidth / self.hm_cornerRadiusModel.topRight);
-        }
-        // 上左角
-        [bezierPath addArcWithCenter:CGPointMake(self.hm_cornerRadiusModel.topLeft+self.bounds.origin.x, self.hm_cornerRadiusModel.topLeft+self.bounds.origin.y) radius:self.hm_cornerRadiusModel.topLeft startAngle:topLeftStartAngle endAngle:topLeftEndAngle clockwise:YES];
-        // 右
-        double deltaRight = self.bounds.size.height - self.hm_cornerRadiusModel.topRight - self.hm_cornerRadiusModel.bottomRight;
-        if (deltaRight < 0) {
-            double bottomRightRate = self.hm_cornerRadiusModel.bottomRight / (self.hm_cornerRadiusModel.topRight + self.hm_cornerRadiusModel.bottomRight);
-            double topRightRate = self.hm_cornerRadiusModel.topRight / (self.hm_cornerRadiusModel.topRight + self.hm_cornerRadiusModel.bottomRight);
-            double topRightDeltaHeight = topRightRate * -deltaRight;
-            double bottomRightDeltaHeight = bottomRightRate * -deltaRight;
-            topRightEndAngle -= asin(topRightDeltaHeight / self.hm_cornerRadiusModel.topRight);
-            bottomRightStartAngle += asin(bottomRightDeltaHeight / self.hm_cornerRadiusModel.bottomRight);
-        }
-        // 上右角
-        [bezierPath addArcWithCenter:CGPointMake(self.bounds.size.width - self.hm_cornerRadiusModel.topRight+self.bounds.origin.x, self.hm_cornerRadiusModel.topRight+self.bounds.origin.y) radius:self.hm_cornerRadiusModel.topRight startAngle:topRightStartAngle endAngle:topRightEndAngle clockwise:YES];
-        // 下
-        double deltaBottom = self.bounds.size.width - self.hm_cornerRadiusModel.bottomLeft - self.hm_cornerRadiusModel.bottomRight;
-        if (deltaBottom < 0) {
-            double bottomRightRate = self.hm_cornerRadiusModel.bottomRight / (self.hm_cornerRadiusModel.bottomLeft + self.hm_cornerRadiusModel.bottomRight);
-            double bottomLeftRate = self.hm_cornerRadiusModel.bottomLeft / (self.hm_cornerRadiusModel.bottomLeft + self.hm_cornerRadiusModel.bottomRight);
-            double bottomLeftDeltaWidth = bottomLeftRate * -deltaBottom;
-            double bottomRightDeltaWidth = bottomRightRate * -deltaBottom;
-            bottomRightEndAngle -= asin(bottomRightDeltaWidth / self.hm_cornerRadiusModel.bottomRight);
-            bottomLeftStartAngle += asin(bottomLeftDeltaWidth / self.hm_cornerRadiusModel.bottomLeft);
-        }
-        // 右下角
-        [bezierPath addArcWithCenter:CGPointMake(self.bounds.size.width - self.hm_cornerRadiusModel.bottomRight+self.bounds.origin.x, self.bounds.size.height - self.hm_cornerRadiusModel.bottomRight+self.bounds.origin.y) radius:self.hm_cornerRadiusModel.bottomRight startAngle:bottomRightStartAngle endAngle:bottomRightEndAngle clockwise:YES];
-        // 左下角
-        [bezierPath addArcWithCenter:CGPointMake(self.hm_cornerRadiusModel.bottomLeft+self.bounds.origin.x, self.bounds.size.height - self.hm_cornerRadiusModel.bottomLeft+self.bounds.origin.y) radius:self.hm_cornerRadiusModel.bottomLeft startAngle:bottomLeftStartAngle endAngle:bottomLeftEndAngle clockwise:YES];
-
-        return bezierPath;
+- (BOOL)hm_isVisiable {
+    //hiden 和 alpha=0 时 仍然绘制
+    if(CGRectIsEmpty(self.frame) || CGRectIsEmpty(self.bounds)){
+        return NO;
     }
+    return YES;
+}
+
+- (UIBezierPath *)hm_createCornerRadiusPathWithBounds:(CGRect)bounds {
+    if (!self.hm_cornerRadiusModel) {
+        return [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:self.layer.cornerRadius];
+    }
+    // 多角路径
+    // 需要考虑高度是否够，宽度是否够
+    // startAngle 是 PI + asin(delta_h / r)
+    // endAngle 是 1.5 PI - asin(delta_w / r)
+    UIBezierPath *bezierPath = UIBezierPath.bezierPath;
+    double topLeftStartAngle = M_PI;
+    double topLeftEndAngle = M_PI_2 * 3;
+    double topRightStartAngle = M_PI_2 * 3;
+    double topRightEndAngle = M_PI * 2;
+    double bottomRightStartAngle = 0;
+    double bottomRightEndAngle = M_PI_2;
+    double bottomLeftStartAngle = M_PI_2;
+    double bottomLeftEndAngle = M_PI;
+    // 左
+    double deltaLeft = bounds.size.height - self.hm_cornerRadiusModel.topLeft - self.hm_cornerRadiusModel.bottomLeft;
+    if (deltaLeft < 0) {
+        double topLeftRate = HMZeroIfNaN(self.hm_cornerRadiusModel.topLeft / (self.hm_cornerRadiusModel.topLeft + self.hm_cornerRadiusModel.bottomLeft));
+        double bottomLeftRate = HMZeroIfNaN(self.hm_cornerRadiusModel.bottomLeft / (self.hm_cornerRadiusModel.topLeft + self.hm_cornerRadiusModel.bottomLeft));
+        double topLeftDeltaHeight = topLeftRate * -deltaLeft;
+        double bottomLeftDeltaHeight = bottomLeftRate * -deltaLeft;
+        topLeftStartAngle += asin(HMZeroIfNaN(topLeftDeltaHeight / self.hm_cornerRadiusModel.topLeft));
+        bottomLeftEndAngle -= asin(HMZeroIfNaN(bottomLeftDeltaHeight / self.hm_cornerRadiusModel.bottomLeft));
+    }
+    // 上
+    double deltaTop = bounds.size.width - self.hm_cornerRadiusModel.topLeft - self.hm_cornerRadiusModel.topRight;
+    if (deltaTop < 0) {
+        double topLeftRate = HMZeroIfNaN(self.hm_cornerRadiusModel.topLeft / (self.hm_cornerRadiusModel.topLeft + self.hm_cornerRadiusModel.topRight));
+        double topRightRate = HMZeroIfNaN(self.hm_cornerRadiusModel.topRight / (self.hm_cornerRadiusModel.topLeft + self.hm_cornerRadiusModel.topRight));
+        double topLeftDeltaWidth = -deltaTop * topLeftRate;
+        double topRightDeltaWidth = -deltaTop * topRightRate;
+        topLeftEndAngle -= asin(HMZeroIfNaN(topLeftDeltaWidth / self.hm_cornerRadiusModel.topLeft));
+        topRightStartAngle += asin(HMZeroIfNaN(topRightDeltaWidth / self.hm_cornerRadiusModel.topRight));
+    }
+    // 上左角
+    [bezierPath addArcWithCenter:CGPointMake(self.hm_cornerRadiusModel.topLeft+bounds.origin.x, self.hm_cornerRadiusModel.topLeft+bounds.origin.y) radius:self.hm_cornerRadiusModel.topLeft startAngle:topLeftStartAngle endAngle:topLeftEndAngle clockwise:YES];
+    // 右
+    double deltaRight = bounds.size.height - self.hm_cornerRadiusModel.topRight - self.hm_cornerRadiusModel.bottomRight;
+    if (deltaRight < 0) {
+        double bottomRightRate = HMZeroIfNaN(self.hm_cornerRadiusModel.bottomRight / (self.hm_cornerRadiusModel.topRight + self.hm_cornerRadiusModel.bottomRight));
+        double topRightRate = HMZeroIfNaN(self.hm_cornerRadiusModel.topRight / (self.hm_cornerRadiusModel.topRight + self.hm_cornerRadiusModel.bottomRight));
+        double topRightDeltaHeight = topRightRate * -deltaRight;
+        double bottomRightDeltaHeight = bottomRightRate * -deltaRight;
+        topRightEndAngle -= asin(HMZeroIfNaN(topRightDeltaHeight / self.hm_cornerRadiusModel.topRight));
+        bottomRightStartAngle += asin(HMZeroIfNaN(bottomRightDeltaHeight / self.hm_cornerRadiusModel.bottomRight));
+    }
+    // 上右角
+    [bezierPath addArcWithCenter:CGPointMake(bounds.size.width - self.hm_cornerRadiusModel.topRight+bounds.origin.x, self.hm_cornerRadiusModel.topRight+bounds.origin.y) radius:self.hm_cornerRadiusModel.topRight startAngle:topRightStartAngle endAngle:topRightEndAngle clockwise:YES];
+    // 下
+    double deltaBottom = bounds.size.width - self.hm_cornerRadiusModel.bottomLeft - self.hm_cornerRadiusModel.bottomRight;
+    if (deltaBottom < 0) {
+        double bottomRightRate = HMZeroIfNaN(self.hm_cornerRadiusModel.bottomRight / (self.hm_cornerRadiusModel.bottomLeft + self.hm_cornerRadiusModel.bottomRight));
+        double bottomLeftRate = HMZeroIfNaN(self.hm_cornerRadiusModel.bottomLeft / (self.hm_cornerRadiusModel.bottomLeft + self.hm_cornerRadiusModel.bottomRight));
+        double bottomLeftDeltaWidth = bottomLeftRate * -deltaBottom;
+        double bottomRightDeltaWidth = bottomRightRate * -deltaBottom;
+        bottomRightEndAngle -= asin(HMZeroIfNaN(bottomRightDeltaWidth / self.hm_cornerRadiusModel.bottomRight));
+        bottomLeftStartAngle += asin(HMZeroIfNaN(bottomLeftDeltaWidth / self.hm_cornerRadiusModel.bottomLeft));
+    }
+    // 右下角
+    [bezierPath addArcWithCenter:CGPointMake(bounds.size.width - self.hm_cornerRadiusModel.bottomRight+bounds.origin.x, bounds.size.height - self.hm_cornerRadiusModel.bottomRight+bounds.origin.y) radius:self.hm_cornerRadiusModel.bottomRight startAngle:bottomRightStartAngle endAngle:bottomRightEndAngle clockwise:YES];
+    // 左下角
+    [bezierPath addArcWithCenter:CGPointMake(self.hm_cornerRadiusModel.bottomLeft+bounds.origin.x, bounds.size.height - self.hm_cornerRadiusModel.bottomLeft+bounds.origin.y) radius:self.hm_cornerRadiusModel.bottomLeft startAngle:bottomLeftStartAngle endAngle:bottomLeftEndAngle clockwise:YES];
+    [bezierPath closePath];
+    return bezierPath;
+}
+
+- (UIBezierPath *)hm_createCornerRadiusPath {
+
+    if(![self hm_isVisiable]){return nil;}
+    return [self hm_createCornerRadiusPathWithBounds:self.bounds];
 }
 
 #pragma clang diagnostic push
@@ -612,16 +628,18 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
 - (void)hm_updateMasksToBounds {
     // 针对 Hummer overflow attribute 的优化支持
     // TODO(唐佳诚): 缺少 remove 机制，后续优化，不确定是否 clipsToBounds 是否会触发 layoutSubviews，但是实际上不碍事，猜测应当是不会触发的
-    if (self.clipsToBounds && !self.layer.mask) {
+    if (self.hm_clipsToBounds && !self.hm_maskLayer) {
         self.hm_maskLayer = CAShapeLayer.layer;
         self.layer.mask = self.hm_maskLayer;
-        self.clipsToBounds = NO;
-        self.hm_isMasksToBoundsOptimization = YES;
+    }else if(!self.hm_clipsToBounds && self.hm_maskLayer){
+        [self.hm_maskLayer removeFromSuperlayer];
+        self.hm_maskLayer = nil;
     }
     [self hm_layoutMaskView];
 }
 
 - (void)hm_updateBorder {
+    if(![self hm_isVisiable]){return;}
     // 1. 多角情况，一个边框 -> 多个边框
     if (self.hm_cornerRadiusModel && self.layer.borderWidth > 0 && self.layer.borderColor) {
         self.hm_borderModelCollection = [self hm_createBorderModelCollection];
@@ -780,7 +798,7 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
     }
     if (self.hm_borderModelCollection) {
         CGFloat topLeftRadius = self.hm_cornerRadiusModel ? self.hm_cornerRadiusModel.topLeft : self.layer.cornerRadius;
-        CGFloat topRightRadius = self.hm_cornerRadiusModel ? self.hm_cornerRadiusModel.topLeft : self.layer.cornerRadius;
+        CGFloat topRightRadius = self.hm_cornerRadiusModel ? self.hm_cornerRadiusModel.topRight : self.layer.cornerRadius;
         CGFloat bottomRightRadius = self.hm_cornerRadiusModel ? self.hm_cornerRadiusModel.bottomRight : self.layer.cornerRadius;
         CGFloat bottomLeftRadius = self.hm_cornerRadiusModel ? self.hm_cornerRadiusModel.bottomLeft : self.layer.cornerRadius;
         if (self.hm_borderTopLayer) {
@@ -838,10 +856,11 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
 }
 
 - (void)hm_layoutBackgroundColorImageBorderShadowCornerRadius {
+    if(![self hm_isVisiable]){return;}
     [self hm_updateMasksToBounds];
-    [self hm_layoutBackgroundColor];
+    [self hm_updateBackgroundColor];
     [self hm_updateShadow];
-    [self hm_layoutBorder];
+    [self hm_updateBorder];
 }
 
 - (void)hm_layoutBackgroundColor {
@@ -866,6 +885,7 @@ HM_EXPORT_METHOD(layout, hm_layoutRootView)
 }
 
 - (void)hm_updateBackgroundColor {
+    if(![self hm_isVisiable]){return;}
     // 没有渐变色的时候移除渐变色背景的 hm_maskLayer
     if (!self.hm_gradientLayer && self.hm_backgroundColorMaskLayer) {
         [self.hm_backgroundColorMaskLayer removeFromSuperlayer];
@@ -990,22 +1010,16 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     if (viewSet.count == 0) {
         return;
     }
-    NSHashTable<__kindof UIView *> *rootViewSet = nil;
-    NSEnumerator<__kindof UIView *> *enumerator = viewSet.objectEnumerator;
-    UIView *value = nil;
-    // 根视图搜索
-    while ((value = enumerator.nextObject)) {
-        UIView *rootView = hm_yoga_get_root_view(value);
-        if (!rootViewSet) {
-            rootViewSet = NSHashTable.weakObjectsHashTable;
-        }
-        [rootViewSet addObject:rootView];
-    }
+    NSMutableSet<UIView *> *roots = [NSMutableSet set];
+    NSArray <UIView *> *leaves = [viewSet allObjects];
+    [leaves enumerateObjectsUsingBlock:^(UIView * _Nonnull leaf, NSUInteger idx, BOOL * _Nonnull stop) {
+        UIView *rootView = hm_yoga_get_root_view(leaf);
+        [roots addObject:rootView];
+    }];
     viewSet = nil;
-    enumerator = rootViewSet.objectEnumerator;
-    while ((value = enumerator.nextObject)) {
-        [value hm_layoutYogaRootView];
-    }
+    [roots enumerateObjectsUsingBlock:^(UIView * _Nonnull root, BOOL * _Nonnull stop) {
+        [root hm_layoutYogaRootView];
+    }];
 }
 
 #pragma mark - Export Property
@@ -1215,6 +1229,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     if (self.hm_isFixedPosition && self.superview) {
         // superview -> rootView
         self.hm_fixedPositionLastContainerView = self.superview;
+        [self.superview.hm_jsValueLifeContainer removeObjectForKey:self];
         [self removeFromSuperview];
         [self.hm_fixedPositionLastContainerView hm_markDirty];
         [context.rootView addSubview:self];
@@ -1250,10 +1265,14 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     if (hasFixed == NO) {return;}
     
     NSArray<UIView *> *sortedViews = [rootSubViews sortedArrayWithOptions:NSSortStable usingComparator:^NSComparisonResult(UIView *view1, UIView *view2) {
-        if (view1.hm_zIndex > view2.hm_zIndex) {
-            return NSOrderedDescending;
-        }else if (view1.hm_zIndex < view2.hm_zIndex) {
-            return NSOrderedAscending;
+        if(view1.hm_isFixedPosition && view2.hm_isFixedPosition){
+            if (view1.hm_zIndex > view2.hm_zIndex) {
+                return NSOrderedDescending;
+            }else if (view1.hm_zIndex < view2.hm_zIndex) {
+                return NSOrderedAscending;
+            }
+        }else if(view1.hm_isFixedPosition || view2.hm_isFixedPosition){
+            return view1.hm_isFixedPosition ? NSOrderedDescending : NSOrderedAscending;
         }
         return NSOrderedSame;
     }];
@@ -1371,8 +1390,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
 }
 
 - (void)hm_replaceSubview:(HMBaseValue *)newChild withNode:(HMBaseValue *)oldChild {
-    id newViewObject = newChild.hm_toObjCObject;
-    id oldViewObject = oldChild.hm_toObjCObject;
+    id newViewObject = newChild.toNativeObject;
+    id oldViewObject = oldChild.toNativeObject;
     UIView *newView = nil;
     UIView *oldView = nil;
     if ([newViewObject isKindOfClass:UIView.class]) {
@@ -1399,10 +1418,11 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         [parent hm_markDirty];
     }
     [oldView removeFromSuperview];
+    [self.hm_jsValueLifeContainer removeObjectForKey:oldView];
 
     [self insertSubview:newView atIndex:index];
     //ref
-    [self.hm_jsValueLifeContainer setObject:newView.hmValue forKey:newView];
+    [self.hm_jsValueLifeContainer setObject:newChild forKey:newView];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:newChild.context];
     [newView hm_processFixedPositionWithContext:context];
     [self hm_markDirty];
@@ -1416,8 +1436,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
  */
 - (void)_hm_insertNode:(HMBaseValue *)newChild beforeNode:(nullable HMBaseValue *)oldChild {
 
-    id newViewObject = newChild.hm_toObjCObject;
-    id oldViewObject = oldChild.hm_toObjCObject;
+    id newViewObject = newChild.toNativeObject;
+    id oldViewObject = oldChild.toNativeObject;
     UIView *newView = nil;
     UIView *oldView = nil;
     if ([newViewObject isKindOfClass:UIView.class]) {
@@ -1444,7 +1464,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         [self addSubview:newView];
     }
     //ref
-    [self.hm_jsValueLifeContainer setObject:newView.hmValue forKey:newView];
+    [self.hm_jsValueLifeContainer setObject:newChild forKey:newView];
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:newChild.context];
     [newView hm_processFixedPositionWithContext:context];
     [self hm_markDirty];
@@ -1452,8 +1472,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
 
 // 保持该方法行为与之前一致。
 - (void)hm_insertBefore:(HMBaseValue *)newChild withNode:(HMBaseValue *)oldChild {
-    id newViewObject = newChild.hm_toObjCObject;
-    id oldViewObject = oldChild.hm_toObjCObject;
+    id newViewObject = newChild.toNativeObject;
+    id oldViewObject = oldChild.toNativeObject;
     UIView *newView = nil;
     UIView *oldView = nil;
     if ([newViewObject isKindOfClass:UIView.class]) {
@@ -1479,6 +1499,10 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     return nil;
 }
 
+- (BOOL)hm_addPathAnimationWhenInAnimated {
+    return self.hm_maskLayer || self.hm_backgroundColorMaskLayer || self.hm_backgroundColorShapeLayer;
+}
+
 - (void)hummerSetFrame:(CGRect)frame {
     // These frames are in terms of anchorPoint = topLeft, but internally the
     // views are anchorPoint = center for easier scale and rotation animations.
@@ -1499,6 +1523,8 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     
     self.center = position;
     self.bounds = bounds;
+//    [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+    
 }
 
 @end

@@ -9,18 +9,6 @@
 #import "HMUtility.h"
 #import "HMExceptionModel.h"
 
-static HMEngineType engineType = HMEngineTypeJSC;
-
-HMEngineType HMGetEngineType(void) {
-    return engineType;
-}
-
-HMEngineType HMSetEngineType(HMEngineType newEngineType) {
-    HMEngineType oldEngineType = engineType;
-    engineType = newEngineType;
-    
-    return oldEngineType;
-}
 
 NSArray<HMBaseValue *> *_Nullable HMOtherArguments = nil;
 

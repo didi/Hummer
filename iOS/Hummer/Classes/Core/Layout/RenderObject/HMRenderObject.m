@@ -229,12 +229,22 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
 }
 
 - (CGSize)sizeThatFitsMaximumSize:(CGSize)maximumSize {
-    return [self sizeThatFitsMinimumSize:CGSizeZero maximumSize:maximumSize];
+    return [self sizeThatFitsWithConfigureLayout:nil minimumSize:CGSizeZero maximumSize:maximumSize];
 }
 
 - (CGSize)sizeThatFitsMinimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize {
+ 
+    return [self sizeThatFitsWithConfigureLayout:nil minimumSize:minimumSize maximumSize:maximumSize];
+}
+
+- (CGSize)sizeThatFitsWithConfigureLayout:(HMLayoutConfigurationBlock)layoutBlock minimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize {
+
+    YOGA_TYPE_WRAPPER(YGNodeRef) originYogaNode = self.yogaNode;
     YOGA_TYPE_WRAPPER(YGNodeRef) clonedYogaNode = YOGA_TYPE_WRAPPER(YGNodeClone)(self.yogaNode);
     
+    //直接使用当前 _yogaNode 会导致因为计算设置的属性把自身和super 进行标脏 markDirtyAndPropogate
+    //因此先交换 clonedYogaNode <--> originYogaNode, 计算完成结束后，再次交换
+    _yogaNode = clonedYogaNode;
     if (HMGetSizeThatFitsMode() == HMSizeThatFitsModePreferNative) {
         YOGA_TYPE_WRAPPER(YGValue) width = YOGA_TYPE_WRAPPER(YGNodeStyleGetWidth(clonedYogaNode));
         if (width.unit == YOGA_TYPE_WRAPPER(YGUnitPercent)) {
@@ -271,11 +281,15 @@ static void HMPrint(YOGA_TYPE_WRAPPER(YGNodeRef) node) {
     
     YOGA_TYPE_WRAPPER(YGNodeInsertChild)(constraintYogaNode, clonedYogaNode, 0);
     
+    //set yoga property will markDirtyAndPropogate
+    HM_SafeRunBlock(layoutBlock, self);
+    _yogaNode = originYogaNode;
+
     YOGA_TYPE_WRAPPER(YGNodeStyleSetMinWidth)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(minimumSize.width));
     YOGA_TYPE_WRAPPER(YGNodeStyleSetMinHeight)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(minimumSize.height));
     YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxWidth)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(maximumSize.width));
     YOGA_TYPE_WRAPPER(YGNodeStyleSetMaxHeight)(constraintYogaNode, HMYogaFloatFromCoreGraphicsFloat(maximumSize.height));
-    
+    // node->cloneChildrenIfNeeded
     YOGA_TYPE_WRAPPER(YGNodeCalculateLayout)(constraintYogaNode, YOGA_TYPE_WRAPPER(YGUndefined), YOGA_TYPE_WRAPPER(YGUndefined), HMYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection));
     
     CGSize measuredSize = (CGSize){

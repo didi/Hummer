@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
                   inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource
                            context:(nullable HMImageLoaderContext *)context
                         completion:(nullable HMImageCompletionBlock)completionBlock;
+
+- (void)hm_cancelImageRequest;
 @end
 
 NS_ASSUME_NONNULL_END

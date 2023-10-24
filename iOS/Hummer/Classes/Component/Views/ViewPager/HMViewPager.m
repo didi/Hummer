@@ -38,7 +38,10 @@
 @property (nonatomic, strong) HMViewPagerLayoutCardAnimator *animator;
 @property (nonatomic, strong) HMViewPagerLayout *layout;
 @property (nonatomic, strong) UICollectionView *pageView;
+
 @property (nonatomic, strong) NSMutableArray *dataList;
+@property (nonatomic, strong) HMBaseValue *dataValue;
+
 @property (nonatomic) NSUInteger count;
 @property (nonatomic) NSInteger currentIndex;
 @property (nonatomic) NSUInteger expandCount;
@@ -254,16 +257,17 @@ HM_EXPORT_METHOD(onPageScrollStateChange, setOnItemScrollStateChangeCallback:)
 
 - (HMBaseValue *)data
 {
-    return [HMBaseValue valueWithObject:self.dataList inContext:self.hmValue.context];
+    return self.dataValue;
 }
 
 - (void)setData:(HMBaseValue *)value
 {
+    self.dataValue = value;
     if (!value) {
         NSLog(@"%s Invalid value type.", __func__);
         return;
     }
-    id ary = value.hm_toObjCObject;
+    id ary = value.toArray;
     if (!ary) {
         NSLog(@"%s Can't parse value.", __func__);
         return;

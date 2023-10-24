@@ -42,6 +42,63 @@ static NSString * kHMCGImageDestinationRequestedFileSize = @"kCGImageDestination
     }
 }
 
+#pragma mark - Bitmap PDF representation
++ (UIImage *)createBitmapPDFWithData:(nonnull NSData *)data pageNumber:(NSUInteger)pageNumber targetSize:(CGSize)targetSize preserveAspectRatio:(BOOL)preserveAspectRatio {
+    NSParameterAssert(data);
+    UIImage *image;
+    
+    CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+    if (!provider) {
+        return nil;
+    }
+    CGPDFDocumentRef document = CGPDFDocumentCreateWithProvider(provider);
+    CGDataProviderRelease(provider);
+    if (!document) {
+        return nil;
+    }
+    
+    // `CGPDFDocumentGetPage` page number is 1-indexed.
+    CGPDFPageRef page = CGPDFDocumentGetPage(document, pageNumber + 1);
+    if (!page) {
+        CGPDFDocumentRelease(document);
+        return nil;
+    }
+    
+    CGPDFBox box = kCGPDFMediaBox;
+    CGRect rect = CGPDFPageGetBoxRect(page, box);
+    CGRect targetRect = rect;
+    if (!CGSizeEqualToSize(targetSize, CGSizeZero)) {
+        targetRect = CGRectMake(0, 0, targetSize.width, targetSize.height);
+    }
+    
+    CGFloat xRatio = targetRect.size.width / rect.size.width;
+    CGFloat yRatio = targetRect.size.height / rect.size.height;
+    CGFloat xScale = preserveAspectRatio ? MIN(xRatio, yRatio) : xRatio;
+    CGFloat yScale = preserveAspectRatio ? MIN(xRatio, yRatio) : yRatio;
+    
+    // `CGPDFPageGetDrawingTransform` will only scale down, but not scale up, so we need calculate the actual scale again
+    CGRect drawRect = CGRectMake( 0, 0, targetRect.size.width / xScale, targetRect.size.height / yScale);
+    CGAffineTransform scaleTransform = CGAffineTransformMakeScale(xScale, yScale);
+    CGAffineTransform transform = CGPDFPageGetDrawingTransform(page, box, drawRect, 0, preserveAspectRatio);
+    
+    UIGraphicsBeginImageContextWithOptions(targetRect.size, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    
+    CGContextConcatCTM(context, scaleTransform);
+    CGContextConcatCTM(context, transform);
+    
+    CGContextDrawPDFPage(context, page);
+    
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    CGPDFDocumentRelease(document);
+    
+    return image;
+}
+
+
 #pragma mark - Decode
 - (BOOL)canDecodeFromData:(nullable NSData *)data {
     return YES;
@@ -70,7 +127,16 @@ static NSString * kHMCGImageDestinationRequestedFileSize = @"kCGImageDestination
     if (preserveAspectRatioValue != nil) {
         preserveAspectRatio = preserveAspectRatioValue.boolValue;
     }
-    
+    // Check vector format
+    if ([NSData hm_imageFormatForImageData:data] == HMImageFormatPDF) {
+        // History before iOS 16, ImageIO can decode PDF with rasterization size, but can't ever :(
+        // So, use CoreGraphics to decode PDF
+        UIImage *image;
+        NSUInteger pageNumber = 0; // Still use first page, may added options is user want
+        image = [self.class createBitmapPDFWithData:data pageNumber:pageNumber targetSize:thumbnailSize preserveAspectRatio:preserveAspectRatio];
+        image.hm_imageFormat = HMImageFormatPDF;
+        return image;
+    }
     CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
     if (!source) {
         return nil;

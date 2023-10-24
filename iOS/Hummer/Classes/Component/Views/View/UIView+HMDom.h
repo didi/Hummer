@@ -39,20 +39,36 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * @brief 如果是 masksToBounds 优化，则加一个标记位，用于 revert
  */
-@property (nonatomic, assign) BOOL hm_isMasksToBoundsOptimization;
+@property (nonatomic, assign) BOOL hm_clipsToBounds;
 
 @property (nonatomic, weak, nullable) UIView *hm_fixedPositionLastContainerView;
 
 @property (nonatomic, assign) BOOL hm_isFixedPosition;
 
+/**
+ * @brief  纯色背景+圆角的mask，CAShapeLayer可以设置path 控制 mask
+ */
 @property (nonatomic, strong, nullable) CAShapeLayer *hm_backgroundColorShapeLayer;
 
+/**
+ * @brief  渐变背景+圆角的mask，CAGradientLayer 无法设置 path，因此通过 mask
+ */
 @property (nonatomic, strong, nullable) CAShapeLayer *hm_backgroundColorMaskLayer;
 
+/**
+ * @brief  masksToBounds（不规则圆角） 优化，
+ */
 @property (nonatomic, strong, nullable) CAShapeLayer *hm_maskLayer;
 
+/**
+ * @brief  渐变背景
+ */
 @property (nonatomic, strong, nullable) CAGradientLayer *hm_gradientLayer;
 
+
+/**
+ * @brief  保存圆角信息，全圆角时不保存，回退到 layer.cornerRadius
+ */
 @property (nonatomic, copy, nullable) HMCornerRadiusModel *hm_cornerRadiusModel;
 
 @property (nonatomic, copy, nullable) HMBorderModelCollection *hm_borderModelCollection;
@@ -62,6 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSObject *> *hm_styleStore;
 
 @property (nonatomic, strong, nullable) HMTransitionAnimation *hm_transitionAnimation;
+
 
 - (void)hm_markDirty;
 
@@ -135,6 +152,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)hm_reSortFixedView:(HMJSContext *)context;
 
+- (UIBezierPath *)hm_createCornerRadiusPathWithBounds:(CGRect)bounds;
+
+/**
+ * 
+ */
+- (BOOL)hm_addPathAnimationWhenInAnimated;
 
 /**
  * @brief 重要的设置 frame 的方法，避免直接设置 frame 影响动画等

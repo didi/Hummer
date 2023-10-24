@@ -13,7 +13,7 @@
 #import "HMAnimationManager.h"
 #import "HMAnimationConverter.h"
 #import "HMCABasicAnimation.h"
-
+#import "UIView+HMAnimation.h"
 @implementation HMTransitionAnimation
 
 - (instancetype)initWithTransitions:(NSDictionary <NSString *, NSObject *> *)transitions view:(UIView *)view
@@ -46,7 +46,7 @@
         basicAnimation.easing = self.animationType;
         basicAnimation.animatedView = self.animatedView;
         basicAnimation.animationKey = [keyPath stringByAppendingString:@"-transition"];
-        [HMAnimationManager addAnimation:basicAnimation forView:self.animatedView key:keyPath];
+        [self.animatedView hm_addAnimation:basicAnimation forKey:keyPath];
     }];
 }
 

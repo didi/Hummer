@@ -39,6 +39,16 @@
     objc_setAssociatedObject(self, @selector(hm_webImageOperationError), hmWebImageOperationError, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (void)hm_cancelImageRequest {
+    
+    [[self hm_webImageOperation] cancel];
+    [[self hm_webImageOperationPlaceholder] cancel];
+    [[self hm_webImageOperationError] cancel];
+
+    self.hm_webImageOperationPlaceholder = nil;
+    self.hm_webImageOperationError = nil;
+    self.hm_webImageOperation = nil;
+}
 
 - (void)hm_internalSetImageWithURL:(id<HMURLConvertible>)source
                        placeholder:(nullable id<HMURLConvertible>)placeholderSource
@@ -65,23 +75,26 @@
 
     self.hm_webImageOperationPlaceholder = nil;
     self.hm_webImageOperationError = nil;
-
+    __weak typeof(self) wSelf = self;
     if (placeholderSource) {
        self.hm_webImageOperationPlaceholder = [[HMImageManager sharedManager] load:placeholderSource inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
-            if ([self isKindOfClass:UIImageView.class]) {
-                UIImageView *imageView = (UIImageView *)self;
+           if (!wSelf) return;
+           __strong typeof(wSelf) sself = wSelf;
+            if ([sself isKindOfClass:UIImageView.class]) {
+                UIImageView *imageView = (UIImageView *)sself;
                 if (imageView.image) { return;}
                 imageView.image = image;
             }
         }];
     }
 
-    __weak typeof(self) wSelf = self;
     self.hm_webImageOperation = [[HMImageManager sharedManager] load:source inJSBundleSource:bundle context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
         if (error && failedImageSource) {
             wSelf.hm_webImageOperationError =  [[HMImageManager sharedManager] load:failedImageSource inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
-                if ([self isKindOfClass:UIImageView.class]) {
-                    UIImageView *imageView = (UIImageView *)self;
+                if (!wSelf) return;
+                __strong typeof(wSelf) sself = wSelf;
+                if ([sself isKindOfClass:UIImageView.class]) {
+                    UIImageView *imageView = (UIImageView *)sself;
                     imageView.image = image;
                 }
             }];

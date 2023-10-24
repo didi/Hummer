@@ -23,11 +23,14 @@
 #import "HMBaseValue.h"
 #import "HMExceptionModel.h"
 #import "HMJSGlobal.h"
-#import <Hummer/HMConfigEntryManager.h>
-#import <Hummer/HMPluginManager.h>
+#import "HMConfigEntryManager.h"
+#import "HMPluginManager.h"
+#import "HMWebSocket.h"
+#import "UIView+HMRenderObject.h"
+#import "UIView+HMDom.h"
+
 #import <Hummer/HMDebug.h>
 #import <Hummer/HMConfigEntryManager.h>
-#import <Hummer/HMWebSocket.h>
 #import <Hummer/HMDevService.h>
 #import "HMJSContext+PrivateVariables.h"
 NS_ASSUME_NONNULL_BEGIN
@@ -60,9 +63,17 @@ static inline HMCLILogLevel convertNativeLogLevel(HMLogLevel logLevel) {
 #ifdef HMDEBUG
 API_AVAILABLE(ios(13.0))
 #endif
-@interface HMJSContext () // <NSURLSessionWebSocketDelegate>
+@interface HMJSContext () 
 
-@property (nonatomic, weak, nullable) UIView *rootView;
+@property (nonatomic, assign, readwrite) HMEngineType engineType;
+
+@property (nonatomic, nullable, copy, readwrite) NSURL *url;
+
+@property (nonatomic, nullable, strong, readwrite) HMBaseValue *componentView;
+@property (nonatomic, nullable, weak, readwrite) UIView *nativeComponentView;
+
+@property (nonatomic, strong, readwrite) HMBaseValue *notifyCenter;
+@property (nonatomic, weak, readwrite) HMNotifyCenter *nativeNotifyCenter;
 
 @property (nonatomic, strong, readwrite) id <HMBaseExecutorProtocol>context;
 
@@ -87,13 +98,12 @@ NS_ASSUME_NONNULL_END
 
 @end
 
-@implementation HMJSContext
+@implementation HMJSContext{
+    struct timespec _createTimespec;
+}
 
 - (void)dealloc {
-    NSObject *componentViewObject = self.componentView.toNativeObject;
-    if ([componentViewObject isKindOfClass:UIView.class]) {
-        [((UIView *) componentViewObject) removeFromSuperview];
-    }
+    [self.nativeComponentView removeFromSuperview];
     HMLogDebug(@"HMJSContext 销毁");
 #ifdef HMDEBUG
     [self.devConnection close];
@@ -102,31 +112,66 @@ NS_ASSUME_NONNULL_END
         [obj close];
     }];
 }
-
-+ (instancetype)contextInRootView:(UIView *)rootView {
-    HMJSContext *ctx = [[HMJSContext alloc] init];
-    rootView.hm_context = ctx;
-    rootView.hm_context.rootView = rootView;
-    if (ctx.pageInfo == nil) {
-        //兼容写法，自定义容器会把 pageInfo 注入到 HMJSGlobal 中。这里复制给 context。
-        //把 pageInfo 和 context 绑定到一起。
-        ctx.pageInfo = [[HMJSGlobal globalObject] pageInfo];
-    }
-#ifdef DEBUG
-#if __has_include(<HMDevTools/HMDevTools.h>)
-    // 添加debug按钮
-    // 尽早初始化 devtool，保证日志抓取时间。
-    [HMDevTools showInContext:ctx];
-#endif
-#endif
-    return rootView.hm_context;
+- (instancetype)initWithNamespace:(NSString *)namespace {
+    return [self initWithEngineType:HMEngineTypeJSC namespace:namespace];
 }
-
-- (instancetype)init {
+- (instancetype)initWithEngineType:(HMEngineType)engineType namespace:(NSString *)namespace {
     struct timespec createTimespec;
     HMClockGetTime(&createTimespec);
     self = [super init];
-    _createTimespec = createTimespec;
+    if(self){
+        _createTimespec = createTimespec;
+        _engineType = engineType;
+        _nameSpace = namespace;
+        if (_pageInfo == nil) {
+            //兼容写法，自定义容器会把 pageInfo 注入到 HMJSGlobal 中。这里复制给 context。
+            //把 pageInfo 和 context 绑定到一起。
+            self.pageInfo = [[HMJSGlobal globalObject] pageInfo];
+        }
+        [self setup];
+    }
+    return self;
+}
+
++ (instancetype)contextInRootView:(UIView *)rootView {
+    HMJSContext *ctx = [[HMJSContext alloc] initWithEngineType:HMEngineTypeJSC namespace:nil];
+    ctx.rootView = rootView;
+    return ctx;
+}
+
+- (instancetype)init {
+    return [[HMJSContext alloc] initWithEngineType:HMEngineTypeJSC namespace:nil];
+}
+
+#pragma mark <setup>
+- (void)setup {
+    [self setupExecutor];
+    [[HMJSGlobal globalObject] weakReference:self];
+    [self setupExecutorCallBack];
+    [self injectBuiltInJS];
+}
+- (void)setupExecutor {
+    if(self.engineType == HMEngineTypeNAPI){
+        [self trySetupNAPIExecutor];
+    }else{
+        [self setupJSCExecutor];
+    }
+}
+- (void)trySetupNAPIExecutor{
+#if __has_include(<Hummer/HMJSExecutor.h>)
+    _context = [[HMJSExecutor alloc] init];
+#else
+    [self setupJSCExecutor];
+    HMLogDebug(@"启动 napi 引擎失败，请检查 pod 是否引入 napi subspec");
+#endif
+}
+
+- (void)setupJSCExecutor{
+    self.engineType = HMEngineTypeJSC;
+    _context = [[HMJSCExecutor alloc] init];
+}
+
+- (void)injectBuiltInJS {
     NSBundle *frameworkBundle = [NSBundle bundleForClass:self.class];
     NSString *resourceBundlePath = [frameworkBundle pathForResource:@"Hummer" ofType:@"bundle"];
     NSAssert(resourceBundlePath.length > 0, @"Hummer.bundle 不存在");
@@ -136,13 +181,6 @@ NS_ASSUME_NONNULL_END
     NSDataAsset *dataAsset = [[NSDataAsset alloc] initWithName:@"builtin" bundle:resourceBundle];
     NSAssert(dataAsset, @"builtin dataset 无法在 xcassets 中搜索到");
     NSString *jsString = [[NSString alloc] initWithData:dataAsset.data encoding:NSUTF8StringEncoding];
-#if __has_include(<Hummer/HMJSExecutor.h>)
-    _context = HMGetEngineType() == HMEngineTypeNAPI ? [[HMJSExecutor alloc] init] : [[HMJSCExecutor alloc] init];
-#else
-    _context = [[HMJSCExecutor alloc] init];
-#endif
-    [self setupExecutorCallBack];
-    [[HMJSGlobal globalObject] weakReference:self];
     [_context evaluateScript:jsString withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/builtin.js"]];
     
     NSMutableDictionary *classes = [NSMutableDictionary new];
@@ -172,10 +210,7 @@ NS_ASSUME_NONNULL_END
     NSData *data = [NSJSONSerialization dataWithJSONObject:classes options:0 error:nil];
     NSString *classesStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [_context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
-    
-    return self;
 }
-
 
 - (void)setupExecutorCallBack {
     __weak typeof(self) weakSelf = self;
@@ -235,6 +270,7 @@ NS_ASSUME_NONNULL_END
 }
 #endif
 
+#pragma mark <public>
 
 - (HMBaseValue *)evaluateScript:(NSString *)javaScriptString fileName:(NSString *)fileName {
     return [self evaluateScript:javaScriptString fileName:fileName hummerUrl:fileName];
@@ -316,4 +352,76 @@ NS_ASSUME_NONNULL_END
     return returnValue;
 }
 
+
+#pragma mark <set>
+- (void)setRootView:(UIView *)rootView {
+    _rootView = rootView;
+    rootView.hm_context = self;
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
+    // 添加debug按钮
+    // 尽早初始化 devtool，保证日志抓取时间。
+    [HMDevTools showInContext:self];
+#endif
+#endif
+}
+- (void)setNameSpace:(NSString *)nameSpace {
+    _nameSpace = nameSpace;
+    [((HMNotifyCenter *)self.notifyCenter.toNativeObject) setNamespace:nameSpace];
+}
+
+#pragma mark <private>
+- (void)_didRenderPage:(HMBaseValue *)page nativeView:(nonnull UIView *)view{
+    
+    self.componentView = page;
+    [self.rootView addSubview:view];
+    self.nativeComponentView = view;
+    self.rootView.isHmLayoutEnabled = YES;
+    [self.rootView hm_markDirty];
+    if ([self.delegate respondsToSelector:@selector(context:didRenderPage:)]) {
+        [self.delegate context:self didRenderPage:page];
+    }
+    if (self.renderCompletion) {
+        self.renderCompletion();
+    }
+    [UIView hm_reSortFixedView:self];
+
+    struct timespec renderTimespec;
+    HMClockGetTime(&renderTimespec);
+    struct timespec resultTimespec;
+    HMDiffTime(&self->_createTimespec, &renderTimespec, &resultTimespec);
+    if (self.nameSpace) {
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPageSuccessWithPageUrl:self.hummerUrl ?: @""];
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPageRenderCompletionWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000) pageUrl:self.hummerUrl ?: @""];
+    }
+#ifdef DEBUG
+#if __has_include(<HMDevTools/HMDevTools.h>)
+    // 兼容部分以 controller.view 作为 rootView 的逻辑。如果后续存在 fixed，则不再考虑。
+    // 推荐继承 HMViewConroller
+    [HMDevTools showInContext:self];
+#endif
+#endif
+}
+
++ (nullable NSString *)getCurrentNamespace {
+    NSString *namespace = [[HMJSGlobal globalObject] currentContext:HMCurrentExecutor].nameSpace;
+    return namespace;
+
+}
+
+/// 根据 上下文 获取当前namespace，如果 当前不在 JS 执行上下文，则返回默认 namespace
++ (NSString *)getCurrentNamespaceWithDefault {
+    NSString *namespace = [self getCurrentNamespace];
+    namespace = namespace ? namespace : HMDefaultNamespaceUnderline;
+    return namespace;
+
+}
+
+
+- (void)_setNotifyCenter:(HMBaseValue *)notifyCenter nativeValue:(nonnull HMNotifyCenter *)nativeNotifyCenter{
+    if(!self.notifyCenter){
+        self.notifyCenter = notifyCenter;
+        self.nativeNotifyCenter = nativeNotifyCenter;
+    }
+}
 @end

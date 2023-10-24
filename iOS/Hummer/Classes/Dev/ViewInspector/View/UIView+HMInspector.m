@@ -13,12 +13,20 @@
 #import <Hummer/UIView+HMDescription.h>
 #import <Hummer/NSObject+Hummer.h>
 #import <Hummer/HMUtility.h>
+#import "UIView+HMDom.h"
 
 @implementation UIView (HMInspector)
 
 HM_EXPORT_METHOD(dbg_highlight, dbg_highlight:)
 
 HM_EXPORT_METHOD(dbg_getDescription, dbg_getDescription:depth:)
+
+HM_EXPORT_METHOD(dbg_getStyle, dbg_getStyle)
+
+
+- (NSDictionary *)dbg_getStyle {
+    return self.hm_styleStore;
+}
 
 - (void)dbg_highlight:(BOOL)isHighlight{
     

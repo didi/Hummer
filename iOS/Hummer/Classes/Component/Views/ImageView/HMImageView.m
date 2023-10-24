@@ -150,16 +150,30 @@ HM_EXPORT_ATTRIBUTE(resize, contentMode, HMStringToContentMode:)
     }
     [self realSetSrc:srcString placeholder:nil failedImage:nil context:nil completionBlock:nil];
 }
+/**
+ *
+ * src 为 undefine 或nil 或空字符串 则清空内容
+ * src 加载失败，除非设置了 failedImage，否则不会更改当前 imageView 展示的内容。
+ * 只有当 src 加载成功时，才会修改 展示内容
+ * 要保证 最终展示 图片和 设置 src 的一致，不会出现错乱的问题，如:
+ * 1. setSrc("http://test.image")
+ * 2. setSrc(nil)
+ * 最终应当展示 空白（保证时序）
+ */
 
 - (void)realSetSrc:(NSString *)src placeholder:(NSString *)placeholder failedImage:(NSString *)failedImage context:(nullable HMImageLoaderContext *)context completionBlock:(HMImageLoadCompletionBlock)completionBlock {
 
     self.imageSrc = src;
     if (self.imageSrc) {
-        self.image = nil;
         __weak typeof(self) weakSelf = self;
         
         [self hm_setImageWithURL:self.imageSrc placeholder:placeholder failedImage:failedImage inJSBundleSource:nil processBlock:nil context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
+            if(src == nil || src.length<=0){
+                strongSelf.image = nil;
+                strongSelf.animationImages = nil;
+                [strongSelf stopAnimating];
+            }
             if (error || !image) {
                 if (completionBlock) {
                     completionBlock(HMImageLoaderSrcTypeUnknown, NO);

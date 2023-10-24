@@ -61,11 +61,7 @@ UIImage * _Nullable HMImageLoaderDecodeImageData(NSData * _Nonnull imageData, NS
             if ([animatedImageClass isKindOfClass:HMAnimatedImage.class]) {
                 // `HMAnimatedImage` do not decode
                 shouldDecode = NO;
-            } else if (image.hm_isAnimated) {
-                // animated image do not decode
-                shouldDecode = NO;
             }
-            
             if (shouldDecode) {
                 image = [HMImageCoderHelper decodedImageWithImage:image];
             }

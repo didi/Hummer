@@ -8,14 +8,19 @@
 #import "HMNotifyCenter.h"
 #import "HMExportManager.h"
 #import "NSObject+Hummer.h"
-#import <Hummer/HMBaseValue.h>
+#import "HMBaseValue.h"
+#import "HMConfigEntryManager.h"
+#import "HMJSContext.h"
+
 #import "HMUtility.h"
+#import "HMNotificationCenter.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
 @interface HMNotifyCenter()
 
-@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerMap;
+@property (nonatomic, copy, nullable) NSMutableDictionary<NSString *, NSMutableArray<HMBaseValue *> *> *eventHandlerMap;
+
+@property (nonatomic, strong, nullable) HMNotificationCenter *notificationCenter;
 
 - (void)removeEvent:(nullable HMBaseValue *)value callback:(nullable HMBaseValue *)callback;
 
@@ -38,11 +43,27 @@ HM_EXPORT_METHOD(addEventListener, addEvent:callback:)
 HM_EXPORT_METHOD(removeEventListener, removeEvent:callback:)
 
 HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
-
+//TODO: 目前由于 业务线 初始化时namepsace传入相对较晚，因此提供set方式，后续namespace作为context初始化参数后可以去掉
+- (void)setNamespace:(NSString *)namespace {
+    if(_notificationCenter){
+        return;
+    }
+    _notificationCenter = [HMNotificationCenter namespaceCenter:namespace];
+}
 - (void)dealloc {
-    [NSNotificationCenter.defaultCenter removeObserver:self];
+    [_notificationCenter removeObserver:self];
 }
 
+- (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values{
+    if(self = [super initWithHMValues:values]) {
+        NSString *namespace = [HMJSContext getCurrentNamespace];
+        if(namespace){
+            _notificationCenter = [HMNotificationCenter namespaceCenter:namespace];
+        }
+        _eventHandlerMap = [NSMutableDictionary new];
+    }
+    return self;
+}
 #pragma mark - Export Method
 
 - (void)removeEvent:(HMBaseValue *)value callback:(HMBaseValue *)callback {
@@ -50,33 +71,30 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
     if (name.length == 0) {
         return;
     }
-    NSMutableDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerDictionary = self.eventHandlerMap.mutableCopy;
-    NSMutableArray<HMBaseValue *> *callbackArray = eventHandlerDictionary[name].mutableCopy;
+    NSMutableArray<HMBaseValue *> *callbackArray = self.eventHandlerMap[name];
     if (callback && !callback.isUndefined && !callback.isNull) {
         // try to remove a specific listener
         [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             HMAssert(obj.context, @"obj.context == nil");
             if ([obj isEqualToObject:callback]) {
+                *stop = YES;
                 [callbackArray removeObjectAtIndex:idx];
             }
         }];
         if (callbackArray.count == 0) {
-            callbackArray = nil;
-            [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                            name:name
-                                                          object:nil];
+            // remove all
+            [self.eventHandlerMap removeObjectForKey:name];
+            [_notificationCenter removeObserver:self
+                                           name:name
+                                         object:nil];
         }
-        eventHandlerDictionary[name] = callbackArray.copy;
     } else {
-        [eventHandlerDictionary removeObjectForKey:name];
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:name
-                                                      object:nil];
+        // remove all
+        [self.eventHandlerMap removeObjectForKey:name];
+        [_notificationCenter removeObserver:self
+                                       name:name
+                                     object:nil];
     }
-    if (eventHandlerDictionary.count == 0) {
-        eventHandlerDictionary = nil;
-    }
-    self.eventHandlerMap = eventHandlerDictionary;
 }
 
 - (void)addEvent:(HMBaseValue *)value callback:(HMBaseValue *)callback {
@@ -84,22 +102,25 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
     if (name.length == 0 || !callback) {
         return;
     }
-    NSMutableDictionary<NSString *, NSArray<HMBaseValue *> *> *eventHandlerDictionary = self.eventHandlerMap.mutableCopy;
-    if (!eventHandlerDictionary) {
-        eventHandlerDictionary = NSMutableDictionary.dictionary;
-    }
-    NSMutableArray<HMBaseValue *> *callbackArray = eventHandlerDictionary[name].mutableCopy;
-    
+    NSMutableArray<HMBaseValue *> *callbackArray = self.eventHandlerMap[name];
     if (!callbackArray) {
         callbackArray = [NSMutableArray array];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(notify:)
-                                                     name:name
-                                                   object:nil];
+        [_notificationCenter addObserver:self
+                                selector:@selector(notify:)
+                                    name:name
+                                  object:nil];
+        [self.eventHandlerMap setObject:callbackArray forKey:name];
     }
-    [callbackArray addObject:callback];
-    eventHandlerDictionary[name] = callbackArray.copy;
-    self.eventHandlerMap = eventHandlerDictionary;
+    __block BOOL canAdd = YES;
+    [callbackArray enumerateObjectsUsingBlock:^(HMBaseValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if([obj isEqualToObject:callback]){
+            canAdd = NO;
+            *stop = YES;
+        }
+    }];
+    if(canAdd){
+        [callbackArray addObject:callback];
+    }
 }
 
 - (void)postEvent:(HMBaseValue *)value object:(HMBaseValue *)valueObjc {
@@ -107,9 +128,9 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
     if (name.length == 0) {
         return;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:name
-                                                        object:valueObjc
-                                                      userInfo:nil];
+    [_notificationCenter postNotificationName:name
+                                       object:valueObjc
+                                     userInfo:nil];
 }
 
 - (void)notify:(NSNotification *)center {
@@ -137,3 +158,5 @@ HM_EXPORT_METHOD(triggerEvent, postEvent:object:)
 }
 
 @end
+
+

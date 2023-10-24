@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HMEventTrackManager : NSObject
 
-+ (void)trackWithGesture:(UIGestureRecognizer *)gesture namespace:(NSString *)namespace;
++ (void)trackWithEventName:(NSString *)eventName view:(UIView *)view params:(NSDictionary *)params namespace:(NSString *)namespace;
 
 @end
 

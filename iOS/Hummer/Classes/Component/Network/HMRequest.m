@@ -18,9 +18,9 @@
 #import <Hummer/HMConfigEntryManager.h>
 #import <Hummer/HMJSGlobal.h>
 #import "HMFileManager.h"
-#import "HMJSContext+Private.h"
 #import "NSError+Hummer.h"
 #import "HMRequestCache.h"
+
 static NSString *__HMRequest_domain = @"com.HMRequest";
 
 @interface HMRequest()
@@ -342,7 +342,7 @@ typedef NSMutableDictionary HMPrimitiveResponse;
     if([self.task state] != NSURLSessionTaskStateCompleted) {
         [self.task cancel];
     }
-    NSString *namespace = [HMJSContext getNamespace];
+    NSString *namespace = [HMJSContext getCurrentNamespaceWithDefault];
     NSURLRequest *request = [self urlRequest];
     NSString *filePath = self.filePath;
     self.absolutePath = [HMRequestCache generateCachePath:self.url namespace:namespace filePath:filePath];
@@ -354,14 +354,12 @@ typedef NSMutableDictionary HMPrimitiveResponse;
         return;
     }
     //This property is ignored for requests used to construct NSURLSessionUploadTask and NSURLSessionDownloadTask objects, as caching is not supported by the URL Loading System for upload or download requests.
-    __weak typeof(self) wself = self;
     self.task = [[NSURLSession sharedSession] downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
-        __strong typeof(wself) sSelf = wself;
-        if(sSelf == nil){return;}
         NSDictionary *resp = nil;
         if(error == nil && location){
-            NSString *toURLString = [HMRequestCache generatedPath:sSelf.absolutePath appendExtension:response.suggestedFilename.pathExtension];
+            // keep strong
+            NSString *toURLString = [HMRequestCache generatedPath:self.absolutePath appendExtension:response.suggestedFilename.pathExtension];
             BOOL res =  [HMRequestCache saveCache:location to:[toURLString hm_asFileUrl]];
             if(res){
                 resp = @{@"filePath":toURLString};
@@ -369,7 +367,8 @@ typedef NSMutableDictionary HMPrimitiveResponse;
                 error = [NSError hm_errorWithDomain:__HMRequest_domain code:1001000 description:@"写入文件失败"];
             }
         }
-        [sSelf handleResponse:(NSHTTPURLResponse *)response withData:resp withError:error callback:callback];
+        // keep strong
+        [self handleResponse:(NSHTTPURLResponse *)response withData:resp withError:error callback:callback];
     }];
     [self.task resume];
 }
@@ -383,7 +382,6 @@ typedef NSMutableDictionary HMPrimitiveResponse;
         [self.request_impl send:callback];
         return;
     }
-    __weak typeof(self) wself = self;
     NSURLRequest *request = [self urlRequest];
     self.task = [[NSURLSession sharedSession] dataTaskWithRequest:request
                                                                      completionHandler:^(NSData * _Nullable data,
@@ -397,11 +395,10 @@ typedef NSMutableDictionary HMPrimitiveResponse;
         if(data){
             NSString *string = [[NSString alloc] initWithData:data
                                                      encoding:NSUTF8StringEncoding];
-            id resp = HMJSONDecode(string);
+            resp = HMJSONDecode(string);
         }
-        __strong typeof(wself) sSelf = wself;
-        if(sSelf == nil){return;}
-        [sSelf handleResponse:(NSHTTPURLResponse *)response
+        // keep strong
+        [self handleResponse:(NSHTTPURLResponse *)response
                         withData:resp
                        withError:error
                         callback:callback];

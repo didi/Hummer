@@ -18,14 +18,24 @@
 #import "HMBorderModelCollection.h"
 #import "HMBorderModel.h"
 #import "HMTransformResolver.h"
+#import "UIView+HMAnimation.h"
 #import <UIView+HMImageLoader.h>
 
+#import "HMTransitionAnimationConverter.h"
 @implementation UIView(HMAttribute)
 
 - (CGFloat)hm_zIndex {
     return [objc_getAssociatedObject(self, _cmd) floatValue];
 }
 
+- (BOOL)hm_isLoadingBackgroundImage{
+    return [objc_getAssociatedObject(self, _cmd) boolValue];
+}
+
+- (void)setHm_isLoadingBackgroundImage:(BOOL)isLoadingBackgroundImage {
+    
+    objc_setAssociatedObject(self, @selector(hm_isLoadingBackgroundImage), @(isLoadingBackgroundImage), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 - (void)setHm_zIndex:(CGFloat)hm_zIndex {
     objc_setAssociatedObject(self, @selector(hm_zIndex), @(hm_zIndex), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -42,7 +52,12 @@
 #pragma mark - Export Attribute visible
 
 HM_EXPORT_ATTRIBUTE(opacity, alpha, HMNumberToCGFloat:)
-HM_EXPORT_ATTRIBUTE(overflow, clipsToBounds, HMStringToClipSubviews:)
+HM_EXPORT_ATTRIBUTE(overflow, __clipsToBounds, HMStringToClipSubviews:)
+- (void)set__clipsToBounds:(BOOL)isClipped {
+    self.hm_clipsToBounds = isClipped;
+    [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+}
+
 HM_EXPORT_ATTRIBUTE(visibility, __visibility, HMStringToViewHidden:)
 - (void)set__visibility:(BOOL)isHidden {
     self.hm_visibility = isHidden;
@@ -267,14 +282,46 @@ HM_EXPORT_ATTRIBUTE(backgroundImage, __backgroundImage, HMStringOrigin:)
     } else {
         [self hm_performBackgroundColorWithBackgroundColor:backgroundColor];
     }
+    [self hm_cancelBackgoundImageRequest];
+    [self hm_resetBackgroundImage];
+}
+
+- (void)hm_cancelBackgoundImageRequest {
+    if(self.hm_isLoadingBackgroundImage){
+        [self hm_cancelImageRequest];
+        self.hm_isLoadingBackgroundImage = NO;
+    }
+}
+
+- (void)hm_resetBackgroundColor {
+    self.backgroundColor = nil;
+    [self.hm_backgroundColorShapeLayer removeFromSuperlayer];
+    self.hm_backgroundColorShapeLayer = nil;
+    [self.hm_gradientLayer removeFromSuperlayer];
+    self.hm_gradientLayer = nil;
+}
+
+- (void)hm_resetBackgroundImage {
+    if(self.layer.contents){
+        self.layer.contents = nil;
+        [self.layer setNeedsDisplay];
+    }
 }
 
 - (void)set__backgroundImage:(NSString *)imageString {
-    if (imageString.length == 0) {
+    if (imageString == nil || imageString.length == 0) {
         HMLogWarning(@"URL 无效");
+        [self hm_cancelBackgoundImageRequest];
+        [self hm_resetBackgroundColor];
+        self.layer.contents = nil;
+        [self.layer setNeedsDisplay];
+        return;
     }
+    self.hm_isLoadingBackgroundImage = YES;
     [self hm_internalSetImageWithURL:imageString inJSBundleSource:nil context:nil completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
+        self.hm_isLoadingBackgroundImage = NO;
         if (image) {
+            [self hm_resetBackgroundColor];
             self.layer.contents = (__bridge id _Nullable)(image.CGImage);
         }
     }];
@@ -284,7 +331,10 @@ HM_EXPORT_ATTRIBUTE(backgroundImage, __backgroundImage, HMStringOrigin:)
 HM_EXPORT_ATTRIBUTE(transform, __transform, HMValueOrigin:)
 - (void)set__transform:(id)transform
 {
-    self.layer.transform = [HMTransformResolver resolverTransformValue:transform view:self];
+    NSDictionary <NSString *, NSObject *> *transformValues = [HMTransitionAnimationConverter convertStyleToAnimations:@{@"transform": transform}];
+    HMTransform *newTransform = [HMTransformResolver applyTransformValues:transformValues defaultValue:self.hm_transform];
+    self.hm_transform = newTransform;
+    self.layer.transform = [newTransform getCATransform3D];
 }
 
 #pragma mark - Associatied Properties

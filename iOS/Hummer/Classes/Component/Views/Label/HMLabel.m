@@ -17,6 +17,7 @@
 #import "HMConfigEntryManager.h"
 #import "HMJSGlobal.h"
 #import <Hummer/UIView+HMInspector.h>
+#import "HMConfigEntryManager.h"
 
 @interface HMLabel() <HMAttributesBuilderDelegate, HMViewInspectorDescription>
 
@@ -419,7 +420,8 @@ HM_EXPORT_ATTRIBUTE(textVerticalAlign, textVerticalAlign, HMStringToTextVertical
     if (href) {
         NSURL *url = [[NSURL alloc] initWithString:href];
         if (url) {
-            [UIApplication.sharedApplication openURL:url];
+            NSString *namespace = [HMJSGlobal.globalObject currentContext:self.hmContext].nameSpace;
+            [HMApplicationRouterInterceptor handleOpenUrl:url namespace:namespace];
         }
     }
     

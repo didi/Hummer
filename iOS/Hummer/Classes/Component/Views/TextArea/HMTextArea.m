@@ -12,7 +12,7 @@
 #import "HMConverter.h"
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
-#import "HMInputEvent.h"
+#import "HMEventDefines.h"
 #import "UIView+HMEvent.h"
 #import "UIView+HMDom.h"
 #import "HMJSGlobal.h"
@@ -179,15 +179,15 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
     if (filteredName.length == 0) {
         return;
     }    
-    [self togglePlaceholder];
     _fontFamily = fontFamily;
     [self updateFont];
+    [self togglePlaceholder];
 }
 
 - (void)setFontSize:(CGFloat)fontSize {
-    [self togglePlaceholder];
     _fontSize = fontSize;
     [self updateFont];
+    [self togglePlaceholder];
 }
 
 - (void)updateFont {
@@ -240,15 +240,13 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
 #pragma mark - UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(__unused UITextView *)textView {
-    HMInputEvent *inputEvent = [[HMInputEvent alloc] init];
     NSDictionary *dict = @{kHMInputType:@"input",kHMInputState:@(HMInputEventBegan), kHMInputText:self.text?:@""};
-    [self hm_notifyEvent:HMInputEventName withValue:inputEvent withArgument:dict];
+    [self hm_notifyWithEventName:HMInputEventName params:dict];
 }
 
 - (void)textViewDidEndEditing:(__unused UITextView *)textView {
-    HMInputEvent *inputEvent = [[HMInputEvent alloc] init];
     NSDictionary *dict = @{kHMInputType:@"input",kHMInputState:@(HMInputEventEnded), kHMInputText:self.text?:@""};
-    [self hm_notifyEvent:HMInputEventName withValue:inputEvent withArgument:dict];
+    [self hm_notifyWithEventName:HMInputEventName params:dict];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
@@ -268,7 +266,7 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
                 kHMInputType: @"input",
                 kHMInputState: @(HMInputEventChanged),
                 kHMInputText: self.text ?: @""};
-            [self hm_notifyWithEventName:HMInputEventName argument:dict];
+            [self hm_notifyWithEventName:HMInputEventName params:dict];
         }
         
         return NO;
@@ -285,14 +283,14 @@ HM_EXPORT_ATTRIBUTE(textLineClamp, numberOfLines, HMNumberToNSInteger:)
                 kHMInputType: @"input",
                 kHMInputState: @(HMInputEventChanged),
                 kHMInputText: text ? : @""};
-            [self hm_notifyWithEventName:HMInputEventName argument:dict];
+            [self hm_notifyWithEventName:HMInputEventName params:dict];
         } else {
             // 其他正常情况
             NSDictionary *dict = @{
                 kHMInputType: @"input",
                 kHMInputState: @(HMInputEventChanged),
                 kHMInputText: self.text ?: @""};
-            [self hm_notifyWithEventName:HMInputEventName argument:dict];
+            [self hm_notifyWithEventName:HMInputEventName params:dict];
         }
     }
     [self togglePlaceholder];

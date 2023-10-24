@@ -150,6 +150,10 @@ static NSMutableDictionary *  __HMConfigMap ;
 }
 
 - (void)setValue:(nonnull id)value forKey:(nonnull NSString *)key {
+    if(value == nil){
+        [self removeForKey:key];
+        return;
+    }
     [self.cache setObject:value forKey:key];
 }
 

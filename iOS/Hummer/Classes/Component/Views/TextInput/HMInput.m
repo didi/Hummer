@@ -12,8 +12,8 @@
 #import "HMConverter.h"
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
-#import "HMInputEvent.h"
 #import "UIView+HMEvent.h"
+#import "HMEventDefines.h"
 #import "UIView+HMDom.h"
 #import "HMBaseValue.h"
 #import "HMConfigEntryManager.h"
@@ -72,14 +72,14 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
                 kHMInputType: @"input",
                 kHMInputState: @(HMInputEventChanged),
                 kHMInputText: text ? : @""};
-            [self hm_notifyWithEventName:HMInputEventName argument:dict];
+            [self hm_notifyWithEventName:HMInputEventName params:dict];
         } else {
             // 其他正常情况
             NSDictionary *dict = @{
                 kHMInputType: @"input",
                 kHMInputState: @(HMInputEventChanged),
                 kHMInputText: self.text ?: @""};
-            [self hm_notifyWithEventName:HMInputEventName argument:dict];
+            [self hm_notifyWithEventName:HMInputEventName params:dict];
         }
     }
 }
@@ -215,7 +215,7 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
     NSDictionary *dict = @{kHMInputType:HMInputEventName,
                            kHMInputState:@(HMInputEventBegan),
                            kHMInputText:self.text?:@"",};
-    [self hm_notifyWithEventName:HMInputEventName argument:dict];
+    [self hm_notifyWithEventName:HMInputEventName params:dict];
 }
 
 - (void)textFieldDidEndEditing:(__unused UITextField *)textField {
@@ -223,7 +223,7 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
     NSDictionary *dict = @{kHMInputType:HMInputEventName,
                            kHMInputState:@(HMInputEventEnded),
                            kHMInputText:self.text?:@""};
-    [self hm_notifyWithEventName:HMInputEventName argument:dict];
+    [self hm_notifyWithEventName:HMInputEventName params:dict];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -245,7 +245,7 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
                 kHMInputType: @"input",
                 kHMInputState: @(HMInputEventChanged),
                 kHMInputText: self.text ?: @""};
-            [self hm_notifyWithEventName:HMInputEventName argument:dict];
+            [self hm_notifyWithEventName:HMInputEventName params:dict];
         }
         
         return NO;
@@ -265,7 +265,7 @@ HM_EXPORT_ATTRIBUTE(returnKeyType, returnKeyType, HMStringToReturnKeyType:)
     NSDictionary *dict = @{kHMInputType:@"input",
                            kHMInputState:@(HMInputEventConfirmed),
                            kHMInputText:self.text?:@""};
-    [self hm_notifyWithEventName:HMInputEventName argument:dict];
+    [self hm_notifyWithEventName:HMInputEventName params:dict];
     return YES;
 }
 

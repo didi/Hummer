@@ -8,6 +8,7 @@
 #import "HMTransformResolver.h"
 #import "HMTransitionAnimationConverter.h"
 #import "HMAnimationConverter.h"
+#import "HMTransform.h"
 
 @implementation HMTransformResolver
 
@@ -21,6 +22,18 @@
         originT3d = CATransform3DConcat(originT3d, t3d);
     }];
     return originT3d;
+}
+
++ (HMTransform *)applyTransformValues:(NSDictionary<NSString *,NSObject *> *)transformValues defaultValue:(HMTransform *)defaultTransform {
+    
+    CATransform3D trans = CATransform3DMakeScale(defaultTransform.scaleX, defaultTransform.scaleY, 1);
+    __block HMTransform *newTrans = defaultTransform;
+    [transformValues enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSObject * _Nonnull obj, BOOL * _Nonnull stop) {
+        id transformFuncValue = [HMAnimationConverter convertAnimationValue:obj keyPath:key];
+        HMTransform *transform = [[HMTransform alloc] initWithKey:key propertyValue:transformFuncValue];
+        newTrans = [newTrans mergeTransform:transform withKey:key];
+    }];
+    return newTrans;
 }
 
 + (CATransform3D)convertFuncValueTo3DwithValue:(id)value key:(NSString *)key

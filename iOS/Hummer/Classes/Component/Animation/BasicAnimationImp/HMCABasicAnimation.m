@@ -60,6 +60,7 @@ HM_EXPORT_METHOD(on, on:callback:)
 
 - (void)startAnimation {
     
+    [super startAnimation];
     HMTransform *oldTransform = self.animatedView.hm_transform;
     //目前 前端没有直接对 transform 进行赋值的接口，因此不能直接覆盖 oldTransform。需要进行合并。
     HMTransform *newTransform = [[HMTransform alloc] initWithKey:self.keyPath propertyValue:self.property];
@@ -150,6 +151,18 @@ HM_EXPORT_METHOD(on, on:callback:)
             [self.infos addObject:newInfo];
         } else if ([self.keyPath isEqualToString:@"width"] || [self.keyPath isEqualToString:@"height"]) {
             
+            UIView *root = hm_yoga_get_root_view(self.animatedView);
+            {
+                //fix：新创建节点无确定宽高，从而导致动画出现一些视觉效果缺陷 
+                NSHashTable<id<HMLayoutStyleProtocol>> *affectedShadowViews = NSHashTable.weakObjectsHashTable;
+                [root hm_applyLayoutPreservingOrigin:NO affectedShadowViews:affectedShadowViews];
+                NSEnumerator<id<HMLayoutStyleProtocol>> *enumerator = affectedShadowViews.objectEnumerator;
+                id<HMLayoutStyleProtocol> value = nil;
+                while ((value = enumerator.nextObject)) {
+                    UIView *affectedView = value.view;
+                    [affectedView hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+                }
+            }
             __weak typeof(self) __weakSelf = self;
             [self.animatedView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
                 __strong typeof(__weakSelf) __strongSelf = __weakSelf;
@@ -157,7 +170,6 @@ HM_EXPORT_METHOD(on, on:callback:)
                 if ([__strongSelf.keyPath isEqualToString:@"width"])  layout.width = HMPointValueMake(numVal.floatValue);
                 if ([__strongSelf.keyPath isEqualToString:@"height"])  layout.height = HMPointValueMake(numVal.floatValue);
             }];
-            UIView *root = hm_yoga_get_root_view(self.animatedView);
             NSHashTable<id<HMLayoutStyleProtocol>> *affectedShadowViews = NSHashTable.weakObjectsHashTable;
             
             [root hm_applyLayoutPreservingOrigin:NO affectedShadowViews:affectedShadowViews];
@@ -180,6 +192,14 @@ HM_EXPORT_METHOD(on, on:callback:)
                 newInfo2.toValue = [NSValue valueWithCGPoint:affectedView.center];
                 [self.infos addObject:newInfo2];
                 
+                if([affectedView hm_addPathAnimationWhenInAnimated]){
+                    HMCABasicAnimationInfo *newInfo3 = [info copy];
+                    newInfo3.propertyName = @"path";
+                    newInfo3.animatedView = affectedView;
+                    newInfo3.fromValue = (__bridge id _Nonnull)([affectedView hm_createCornerRadiusPathWithBounds:affectedView.hm_animationPropertyBounds].CGPath);
+                    newInfo3.toValue = (__bridge id _Nonnull)([affectedView hm_createCornerRadiusPathWithBounds:affectedView.bounds].CGPath);
+                    [self.infos addObject:newInfo3];
+                }
                 [affectedView hm_layoutBackgroundColorImageBorderShadowCornerRadius];
             }
         }
@@ -213,8 +233,15 @@ HM_EXPORT_METHOD(on, on:callback:)
     animation.removedOnCompletion = NO;
     animation.fillMode = kCAFillModeForwards;
     animation.delegate = self;
-    [info.animatedView.layer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+    if([info.propertyName isEqualToString:@"path"]){
+        [info.animatedView.hm_maskLayer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+        [info.animatedView.hm_backgroundColorMaskLayer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+        [info.animatedView.hm_backgroundColorShapeLayer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+    }else{
+        [info.animatedView.layer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+    }
 }
+
 
 
 

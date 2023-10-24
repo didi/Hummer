@@ -13,6 +13,8 @@
 #define OBJC_STRING(a)       @#a
 #define OBJC_JSClass(jsClass)   [NSString stringWithFormat:@"OBJC_%@", (jsClass)]
 
+NSError * _Nullable HMError(NSInteger code, NSString *_Nullable fmt, ...);
+
 void _HMAssert(NSString * _Nonnull func,
                NSString * _Nonnull file,
                int lineNum,
@@ -33,6 +35,10 @@ NSString * _Nullable _HMMD5String(NSString * _Nonnull input);
 
 NSString * _Nullable _HMMD5Data(NSData * _Nonnull input);
 
+CGFloat HMPointWithString(NSString * _Nonnull string);
+
+BOOL HMValidPoint(CGPoint point);
+
 #define HMMD5Encode(input)  ([input isKindOfClass:[NSString class]] ? _HMMD5String((NSString *)input) : _HMMD5Data((NSData *)input))
 
 id _Nullable _HMObjectFromJSONString(NSString * _Nonnull json);
@@ -47,27 +53,22 @@ NSString * _Nullable _HMJSONStringWithObject(id _Nonnull object);
 
 #define HMNullIfNil(value) (value ?: (id)kCFNull)
 
+#pragma mark <image asset>
+
 UIImage * _Nullable HMImageFromLocalAssetName(NSString * _Nonnull imageName);
 UIImage * _Nullable HMImageFromLocalAssetURL(NSURL * _Nonnull imageURL);
+UIImage * _Nullable HMImageFromLocalAssetURLAndOutNamed(NSURL *_Nonnull imageURL, BOOL * _Nullable isNamed);
 UIImage * _Nullable HMImageFromBase64String(NSString * _Nonnull base64String);
 
 void HMNetImageFromImageURL(NSString * _Nullable imageURL,void(^ _Nullable completeBlock)(UIImage * _Nullable image,NSError * _Nullable error));
 
+#pragma mark <main queue>
 BOOL HMIsMainQueue(void);
 
 void HMExecOnMainQueue(dispatch_block_t _Nonnull block);
 
-NS_ASSUME_NONNULL_BEGIN
+void hm_safe_main_thread(dispatch_block_t _Nullable block);
 
-CGFloat HMPointWithString(NSString *string);
-
-NS_ASSUME_NONNULL_END
-
-BOOL HMValidPoint(CGPoint point);
-
-NSError * _Nullable HMError(NSInteger code, NSString *_Nullable fmt, ...);
-
-// Block
 #define HM_SafeRunBlock(block,...)       ((block)?(block(__VA_ARGS__)):nil)
 
 #define HM_SafeRunBlockAtMainThread(block,...)   \
@@ -77,7 +78,8 @@ NSError * _Nullable HMError(NSInteger code, NSString *_Nullable fmt, ...);
             }); \
         }
 
-// ViewController
+
+#pragma mark <ViewController>
 UIViewController * _Nullable HMRootViewController(void);
 UIViewController * _Nullable HMCurrentViewController(UIView * _Nullable view);
 
@@ -95,13 +97,20 @@ HMContainerModel *_Nullable hm_strip_single_child_navigation(HMContainerModel *_
 
 UIWindow *_Nullable hm_key_window(void);
 
-void hm_safe_main_thread(dispatch_block_t _Nullable block);
+double HMTimestampMilliSeconds(void);
 
 void hm_method_swizzling(Class _Nullable clazz, SEL originalSelector, SEL swizzledSelector);
 
 BOOL hm_doubleEqual(double numberOne, double numberTwo);
 
+double HMZeroIfNaN(double value);
+
 NSString *hm_availableFontName(NSString *names);
+
+NSString *hm_availableFontName(NSString *names);
+
+
+#pragma mark <Block>
 
 typedef NS_OPTIONS(int, HMBlockFlags) {
     HMBlockFlagsHasCopyDisposeHelpers = (1 << 25),

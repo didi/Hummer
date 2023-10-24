@@ -12,7 +12,7 @@
 #import "NSObject+Hummer.h"
 #import "HMUtility.h"
 #import "UIView+HMEvent.h"
-#import "HMSwitchEvent.h"
+#import "HMEventDefines.h"
 #import "HMBaseValue.h"
 #import <Hummer/UIView+HMInspector.h>
 
@@ -44,7 +44,7 @@ HM_EXPORT_ATTRIBUTE(thumbColor, thumbTintColor, HMStringToColor:)
 - (void)switchDidChanged {
 
     NSDictionary *dict = @{kHMSwitchType:@"switch",kHMSwitchState:@(self.isOn),@"timestamp":@(floor(NSDate.date.timeIntervalSince1970) * 1000)};
-    [self hm_notifyWithEventName:HMSwitchEventName argument:dict];
+    [self hm_notifyWithEventName:HMSwitchEventName params:dict];
 }
 
 #pragma mark - Export Property

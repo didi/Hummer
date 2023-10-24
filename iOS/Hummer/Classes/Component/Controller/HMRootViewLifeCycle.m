@@ -142,9 +142,7 @@ static NSString * const _Nonnull __HMLifeCycleStateMap[] = {
     
 }
 - (void)callJSWithFunc:(NSString *)func arguments:(NSArray *)arguments {
-    if ([self.jsValue hasProperty:func]) {
-        [self.jsValue invokeMethod:func withArguments:arguments];
-    }
+    [self.jsValue invokeMethod:func withArguments:arguments];
 }
 
 @end

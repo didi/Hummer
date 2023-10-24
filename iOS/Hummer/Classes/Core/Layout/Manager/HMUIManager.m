@@ -22,7 +22,7 @@
 #import "HMYogaUtility.h"
 #import "UIView+HMAnimation.h"
 #import "UIView+HMAttribute.h"
-
+#import "HMRootView.h"
 NS_ASSUME_NONNULL_BEGIN
 
 // 使用双属性控制显示，只对非 YogaKit 模式生效
@@ -92,10 +92,6 @@ NS_ASSUME_NONNULL_END
     return render;
 }
 
-- (void)applyLayout:(UIView *)rootView preservingOrigin:(BOOL)preserveOrigin size:(CGSize)size affectedShadowViews:(nullable NSHashTable<HMRenderObject *> *)affectedShadowViews {
-    [self applyLayoutPreservingOrigin:preserveOrigin view:rootView affectedShadowViews:affectedShadowViews];
-}
-
 - (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin dimensionFlexibility:(HummerDimensionFlexibility)dimensionFlexibility view:(UIView *)view affectedShadowViews:(NSHashTable<HMRenderObject *> *)affectedShadowViews {
     [self attachRenderObjectFromViewHierarchyForRootView:view];
 
@@ -158,8 +154,8 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin view:(UIView *)view affectedShadowViews:(NSHashTable<HMRenderObject *> *)affectedShadowViews {
-    [self applyLayoutPreservingOrigin:preserveOrigin dimensionFlexibility:0 view:view affectedShadowViews:affectedShadowViews];
+- (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin view:(HMRootView *)view affectedShadowViews:(NSHashTable<HMRenderObject *> *)affectedShadowViews {
+    [self applyLayoutPreservingOrigin:preserveOrigin dimensionFlexibility:view.sizeFlexibility view:view affectedShadowViews:affectedShadowViews];
 }
 
 - (void)attachRenderObjectFromViewHierarchyForRootView:(UIView *)rootView {
@@ -167,7 +163,11 @@ NS_ASSUME_NONNULL_END
         return;
     }
     HMRenderObject *const yoga = rootView.hm_renderObject;
-
+    // tryRetain. if object was deallocating, this will return nil;
+    rootView = yoga.view;
+    if (!rootView) {
+        return;
+    }
     if (hm_get_layout_engine() == HMLayoutEngineRenderObjectCompatible) {
         // Only leaf nodes should have a measure function
         const YOGA_TYPE_WRAPPER(YGNodeRef) node = yoga.yogaNode;

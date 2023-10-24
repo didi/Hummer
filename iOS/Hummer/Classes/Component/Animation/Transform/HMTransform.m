@@ -125,4 +125,13 @@
     transform.skew = self.skew;
     return transform;
 }
+
+- (CATransform3D)getCATransform3D {
+    CATransform3D trans = CATransform3DMakeScale(self.scaleX, self.scaleY, 1);
+    trans = CATransform3DTranslate(trans, self.translateX, self.translateY, 0);
+    trans = CATransform3DRotate(trans, self.rotationX, 1, 0, 0);
+    trans = CATransform3DRotate(trans, self.rotationY, 0, 1, 0);
+    trans = CATransform3DRotate(trans, self.rotationZ, 0, 0, 1);
+    return trans;
+}
 @end

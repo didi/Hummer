@@ -36,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 同属性覆盖。
 - (HMTransform *)mergeTransform:(HMTransform *)transform withKey:(NSString *)key;
+
+
+- (CATransform3D)getCATransform3D;
 @end
 
 NS_ASSUME_NONNULL_END

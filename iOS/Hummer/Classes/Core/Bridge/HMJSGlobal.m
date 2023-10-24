@@ -8,6 +8,7 @@
 #import "HMJSGlobal.h"
 #import "HMExportClass.h"
 
+#import "HMJSContext+PrivateVariables.h"
 #import "HMUtility.h"
 #import "HMJSObject.h"
 #import "NSObject+Hummer.h"
@@ -18,7 +19,6 @@
 #import "HMJavaScriptLoader.h"
 #import "HMJSGlobal+Private.h"
 #import "HMExceptionModel.h"
-#import "HMJSContext+Private.h"
 #import <Hummer/HMDebug.h>
 
 
@@ -45,10 +45,6 @@ static HMJSGlobal *_Nullable _sharedInstance = nil;
 + (nullable HMBaseValue *)env;
 
 + (void)setEnv:(nullable HMBaseValue *)value;
-
-+ (nullable HMBaseValue *)notifyCenter;
-
-+ (void)setNotifyCenter:(nullable HMBaseValue *)notifyCenter;
 
 + (nullable NSDictionary<NSString *, NSObject *> *)pageInfo;
 
@@ -148,7 +144,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     }];
 }
 
-+ (HMNotifyCenter *)notifyCenter {
++ (HMBaseValue *)notifyCenter {
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
 
     return context.notifyCenter;
@@ -158,7 +154,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     id notifyCenterObject = notifyCenter.toNativeObject;
     if ([notifyCenterObject isKindOfClass:HMNotifyCenter.class]) {
         HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
-        context.notifyCenter = notifyCenterObject;
+        [context _setNotifyCenter:notifyCenter nativeValue:notifyCenterObject];
     }
 }
 
@@ -254,31 +250,29 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
 
-    CGFloat deviceWidth = MIN(screenWidth, screenHeight);
-    NSString *widthString = [NSString stringWithFormat:@"%.0f", deviceWidth];
-    CGFloat deviceHeight = MAX(screenWidth, screenHeight);
-    NSString *heightString = [NSString stringWithFormat:@"%.0f", deviceHeight];
+    CGFloat deviceWidth = round(MIN(screenWidth, screenHeight));
+    CGFloat deviceHeight = round(MAX(screenWidth, screenHeight));
+    
     // TODO(唐佳诚): iOS 13 适配
-    CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-    NSString *statusBarHeightString = [NSString stringWithFormat:@"%.0f", statusBarHeight];
-    NSString *availableHeightString = [NSString stringWithFormat:@"%.0f", deviceHeight - statusBarHeight];
-    CGFloat safeAreaBottom = 0.0;
+    CGFloat statusBarHeight = round([UIApplication sharedApplication].statusBarFrame.size.height);
+    
+    CGFloat availableHeight = round(deviceHeight - statusBarHeight);
+    CGFloat safeAreaBottom = 0;
     if (@available(iOS 11.0, *)) {
-        safeAreaBottom = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.bottom > 0.0 ? 34.0 : 0.0;
+        safeAreaBottom = round([[[UIApplication sharedApplication] delegate] window].safeAreaInsets.bottom > 0.0 ? 34.0 : 0.0);
     }
-    NSString *safeAreaBottomString = [NSString stringWithFormat:@"%.0f", safeAreaBottom];
     CGFloat scale = [[UIScreen mainScreen] scale];
 
     return @{@"platform": platform,
             @"osVersion": sysVersion,
             @"appName": appName,
             @"appVersion": appVersion,
-            @"deviceWidth": widthString,
-            @"deviceHeight": heightString,
-            @"availableWidth": widthString,
-            @"availableHeight": availableHeightString,
-            @"statusBarHeight": statusBarHeightString,
-            @"safeAreaBottom": safeAreaBottomString,
+            @"deviceWidth": @(deviceWidth),
+            @"deviceHeight": @(deviceHeight),
+            @"availableWidth": @(deviceWidth),
+            @"availableHeight": @(availableHeight),
+            @"statusBarHeight": @(statusBarHeight),
+            @"safeAreaBottom": @(safeAreaBottom),
             @"scale": @(scale)};
 }
 
@@ -309,7 +303,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
         return;
     }
     UIView *view = (UIView *) viewObject;
-    [context didRenderPage:page nativeView:view];
+    [context _didRenderPage:page nativeView:view];
 }
 
 - (void)setBasicWidth:(HMBaseValue *)basicWidth {

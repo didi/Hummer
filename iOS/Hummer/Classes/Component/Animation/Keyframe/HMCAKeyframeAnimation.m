@@ -71,6 +71,7 @@ HM_EXPORT_PROPERTY(delay, __delay, __setDelay:)
 HM_EXPORT_METHOD(on, on:callback:)
 
 - (void)startAnimation {
+    [super startAnimation];
     HMTransform *oldTransform = self.animatedView.hm_transform;
     //目前 前端没有直接对 transform 进行赋值的接口，因此不能直接覆盖 oldTransform。需要进行合并。
     HMTransform *newTransform = [[HMTransform alloc] initWithKey:self.keyPath propertyValues:self.values];
@@ -265,6 +266,19 @@ HM_EXPORT_METHOD(on, on:callback:)
                 newInfo2.values = affectedViewKeyframeData[@"positions"];
                 newInfo2.animatedView = view;
                 [self.infos addObject:newInfo2];
+                
+                if([view hm_addPathAnimationWhenInAnimated]){
+                    HMCAKeyframeAnimationInfo *newInfo3 = [info copy];
+                    newInfo3.propertyName = @"path";
+                    newInfo3.animatedView = view;
+                    NSMutableArray *paths = [NSMutableArray new];
+                    [bounds enumerateObjectsUsingBlock:^(NSValue *boundsValue, NSUInteger idx, BOOL * _Nonnull stop) {
+                        UIBezierPath *path = [view hm_createCornerRadiusPathWithBounds:[boundsValue CGRectValue]];
+                        [paths addObject:(__bridge id _Nonnull)path.CGPath];
+                    }];
+                    newInfo3.values = paths;
+                    [self.infos addObject:newInfo3];
+                }
                 [view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
             }
         }
@@ -293,7 +307,14 @@ HM_EXPORT_METHOD(on, on:callback:)
     animation.removedOnCompletion = NO;
     animation.fillMode = kCAFillModeForwards;
     animation.delegate = self;
-    [info.animatedView.layer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+    
+    if([info.propertyName isEqualToString:@"path"]){
+        [info.animatedView.hm_maskLayer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+        [info.animatedView.hm_backgroundColorMaskLayer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+        [info.animatedView.hm_backgroundColorShapeLayer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+    }else{
+        [info.animatedView.layer addAnimation:animation forKey:[self uniqueAnimationKeyWithInfo:info]];
+    }
 }
 
 

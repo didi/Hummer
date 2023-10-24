@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Hummer/HMLayout.h>
 #import <Hummer/HMLayoutStyleProtocol.h>
-
+#import "UIView+HMRenderObject.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HMRenderObject : NSObject <HMLayoutStyleProtocol>
@@ -72,6 +72,10 @@ NS_ASSUME_NONNULL_BEGIN
  * Calculates (if needed) and applies layout to subviews.
  */
 - (nullable NSArray <HMRenderObject *>*)layoutSubviewsWithContext:(HMLayoutContext)layoutContext;
+
+/// 修改自身某些布局属性后，在进行自适应大小计算，
+/// @param layoutBlock 需要设置的自身属性，将不会对自身及父节点进行标脏
+- (CGSize)sizeThatFitsWithConfigureLayout:(nullable HMLayoutConfigurationBlock)layoutBlock minimumSize:(CGSize)minimumSize maximumSize:(CGSize)maximumSize;
 
 /**
  * Measures shadow view without side-effects.

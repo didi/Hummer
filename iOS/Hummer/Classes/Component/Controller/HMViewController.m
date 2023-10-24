@@ -21,10 +21,11 @@
 @property (nonatomic, strong) UIView *naviView;
 @property (nonatomic, strong) UIView *hmRootView;
 
+
+@property (nonatomic, strong) HMJSContext  *context;
+@property (nonatomic, strong) HMBaseValue *renderPage;
 @property (nonatomic, strong) HMRootViewLifeCycle *lifeCycle;
 
-@property (nonatomic, weak) HMJSContext  * context;
-@property (nonatomic, weak) UIView * pageView;
 
 @end
 
@@ -139,19 +140,19 @@
     pData[@"params"] = self.params ?: @{};
     
     //渲染脚本之前 注册bridge
-    HMJSContext *context = [HMJSContext contextInRootView:self.hmRootView];
+    NSString *namespace = nil;
+    if ([self respondsToSelector:@selector(hm_namespace)]) {
+        namespace = [self hm_namespace];
+    }
+    HMJSContext *context = [[HMJSContext alloc] initWithNamespace:namespace];
     self.context = context;
+    context.rootView = self.hmRootView;
     context.pageInfo = pData;
     context.delegate = self;
-    if ([self respondsToSelector:@selector(hm_namespace)]) {
-        context.nameSpace = [self hm_namespace];
-    }
     HM_SafeRunBlock(self.registerJSBridgeBlock,context);
     
     //执行脚本
     [context evaluateScript:script fileName:self.URL];
-    self.pageView = self.hmRootView.subviews.firstObject;
-    [self.lifeCycle setJSValue:self.pageView.hmValue];
 }
 
 #pragma mark - View 生命周期管理
@@ -178,18 +179,8 @@
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
     if (!parent) {
-        id pageResult = nil;
-        HMBaseValue * jsPageResult = self.pageView.hmContext[@"Hummer"][@"pageResult"];
-        if (!jsPageResult.isNull || !jsPageResult.isUndefined) {
-            if (jsPageResult.isObject) {
-                pageResult = jsPageResult.toObject;
-            }else if (jsPageResult.isNumber){
-                pageResult = jsPageResult.toNumber;
-            }else if (jsPageResult.isBoolean){
-                pageResult = @(jsPageResult.toBool);
-            }
-        }
-        HM_SafeRunBlock(self.hm_dismissBlock,pageResult);
+        HMBaseValue * jsPageResult = self.renderPage.context[@"Hummer"][@"pageResult"];
+        HM_SafeRunBlock(self.hm_dismissBlock,jsPageResult);
     }
 }
 
@@ -202,11 +193,8 @@
 #pragma mark - Call Hummer
 
 - (HMBaseValue *)callJSWithFunc:(NSString *)func arguments:(NSArray *)arguments {
-    HMBaseValue * page = self.pageView.hmValue;
-    if ([page hasProperty:func]) {
-        return [page invokeMethod:func withArguments:arguments];
-    }
-    return nil;
+
+    return [self.renderPage invokeMethod:func withArguments:arguments];
 }
 
 
@@ -216,8 +204,10 @@
 }
 
 - (void)context:(HMJSContext *)context didRenderPage:(HMBaseValue *)page {
-    
+    self.renderPage = page;
+    [self.lifeCycle setJSValue:page];
 }
+
 - (void)context:(HMJSContext *)context reloadBundle:(NSDictionary *)bundleInfo {
     
     __weak typeof(self)weakSelf = self;
@@ -234,12 +224,10 @@
         if (!URL) {
             return;
         }
-        [HMJavaScriptLoader loadBundleWithURL:URL onProgress:^(HMLoaderProgress *progressData) {
-        } onComplete:^(NSError *error, HMDataSource *source) {
+        [HMJavaScriptLoader loadWithSource:URL inJSBundleSource:nil completion:^(NSError * _Nullable error, NSString * _Nullable script) {
             __strong typeof(self) self = weakSelf;
             if (!error) {
                 HMExecOnMainQueue(^{
-                    NSString *script = [[NSString alloc] initWithData:source.data encoding:NSUTF8StringEncoding];
                     [self renderWithScript:script];
                 });
             }
