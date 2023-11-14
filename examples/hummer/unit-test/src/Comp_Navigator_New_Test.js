@@ -285,15 +285,15 @@ class RootView extends View {
         // 显示提示对话框
             let dialog = new Dialog();
             let content = array[idx] + '不满足期望' + expectArray[idx];
-            dialog.alert("Case3未通过", content, () => {
+            dialog.alert("Case4未通过", content, () => {
             });
         }else{
-            Toast.show('Case3 Passed!!');
+            Toast.show('Case4 Passed!!');
         }
     }
     checkCase5(){
         let array = UnitTest.getResult();
-        console.log("checkCase4 array",array);
+        console.log("checkCase5 array",array);
         let expectArray = [
         'pageA onLoad',
         'pageA onAppear',
@@ -321,10 +321,10 @@ class RootView extends View {
         // 显示提示对话框
             let dialog = new Dialog();
             let content = array[idx] + '不满足期望' + expectArray[idx];
-            dialog.alert("Case3未通过", content, () => {
+            dialog.alert("Case5未通过", content, () => {
             });
         }else{
-            Toast.show('Case3 Passed!!');
+            Toast.show('Case5 Passed!!');
         }
     }
 }
