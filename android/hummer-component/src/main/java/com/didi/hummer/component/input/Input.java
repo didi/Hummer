@@ -34,6 +34,8 @@ public class Input extends HMBase<EditText> {
     private ColorStateList orgHintColors;
     private float orgTextSize;
     private Typeface orgTypeface;
+    private String fontWeight;
+    private String fontStyle;
     protected int maxLines = 0;
 
     public Input(HummerContext context, JSValue jsValue, String viewID) {
@@ -326,6 +328,38 @@ public class Input extends HMBase<EditText> {
         requestLayout();
     }
 
+    @JsAttribute("fontWeight")
+    public void setFontWeight(String fontWeight) {
+        if (TextUtils.isEmpty(fontWeight)) {
+            return;
+        }
+        this.fontWeight = fontWeight.toLowerCase();
+        processTextTypeface(this.fontWeight, this.fontStyle);
+        requestLayout();
+    }
+
+    @JsAttribute("fontStyle")
+    public void setFontStyle(String fontStyle) {
+        if (TextUtils.isEmpty(fontStyle)) {
+            return;
+        }
+        this.fontStyle = fontStyle.toLowerCase();
+        processTextTypeface(this.fontWeight, this.fontStyle);
+        requestLayout();
+    }
+
+    private void processTextTypeface(String fontWeight, String fontStyle) {
+        if ("bold".equals(fontWeight) && "italic".equals(fontStyle)) {
+            getView().setTypeface(getView().getTypeface(), Typeface.BOLD_ITALIC);
+        } else if ("bold".equals(fontWeight)) {
+            getView().setTypeface(getView().getTypeface(), Typeface.BOLD);
+        } else if ("italic".equals(fontStyle)) {
+            getView().setTypeface(getView().getTypeface(), Typeface.ITALIC);
+        } else { // normal or other
+            getView().setTypeface(null, Typeface.NORMAL);
+        }
+    }
+
     /**
      * 设置最大字数
      *
@@ -387,6 +421,12 @@ public class Input extends HMBase<EditText> {
                 break;
             case HummerStyleUtils.Hummer.PLACEHOLDER_FONT_SIZE:
                 setPlaceholderFontSize((float) value);
+                break;
+            case HummerStyleUtils.Hummer.FONT_WEIGHT:
+                setFontWeight(String.valueOf(value));
+                break;
+            case HummerStyleUtils.Hummer.FONT_STYLE:
+                setFontStyle(String.valueOf(value));
                 break;
             case HummerStyleUtils.Hummer.TEXT_ALIGN:
                 setTextAlign(String.valueOf(value));
