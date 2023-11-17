@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">hummer-debug</string>
     <string name="dk_error_tips_permissions_less">请进行授权才可以使用该功能</string>
 </resources>
