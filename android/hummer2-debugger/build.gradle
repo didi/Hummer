@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply from: '../module.gradle'
+apply from: 'upload.gradle'
+
+android {
+
+    defaultConfig {
+
+        ndk {
+            abiFilters 'armeabi-v7a','x86','arm64-v8a','x86_64'
+        }
+
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_shared'
+                cppFlags '-std=c++14'
+                cppFlags '-DWITH_INSPECTOR'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['../hummer-core/src/main/jni/napi/napi/libs/hermes']
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/native/napi/CMakeLists.txt"
+        }
+    }
+
+    packagingOptions {
+        exclude "**/libc++_shared.so"
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+
+    compileOnly project(':hummer-sdk')
+
+    // OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
+    // facebook - fbjni
+    implementation 'com.facebook.fbjni:fbjni:0.0.2'
+}
