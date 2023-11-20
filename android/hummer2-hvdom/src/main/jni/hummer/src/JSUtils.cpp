@@ -3,8 +3,8 @@
 //
 
 #include <mutex>
-#include "JSUtils.h"
-#include "HummerJNI.h"
+#include "../include/JSUtils.h"
+#include "../include/HummerJNI.h"
 
 std::mutex mtx1;
 std::mutex mtx2;

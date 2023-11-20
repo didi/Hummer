@@ -36,8 +36,8 @@ if (project.COMPILE_JS_ENGINE == 'All') {
     apply from: 'build_napi.gradle'
 }
 
-preBuild.dependsOn pickLibs
-clean.dependsOn cleanPickLibs
+//preBuild.dependsOn pickLibs
+//clean.dependsOn cleanPickLibs
 
 android {
 

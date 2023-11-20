@@ -2,8 +2,8 @@
 // Created by XiaoFeng on 2021/6/22.
 //
 
-#include "HummerJNI.h"
-#include "JSUtils.h"
+#include "../include/HummerJNI.h"
+#include "../include/JSUtils.h"
 
 JavaVM *javaVM = NULL;
 

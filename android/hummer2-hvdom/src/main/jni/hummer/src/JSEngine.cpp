@@ -3,11 +3,11 @@
 //
 
 #include <jni.h>
-#include <js_native_api.h>
-#include "HummerJNI.h"
-#include "JSUtils.h"
-#include "JSException.h"
-#include "JSRecycler.h"
+#include <napi/js_native_api.h>
+#include "../include/HummerJNI.h"
+#include "../include/JSUtils.h"
+#include "../include/JSException.h"
+#include "../include/JSRecycler.h"
 
 static NAPIValue invoke(NAPIEnv globalEnv, NAPICallbackInfo info) {
     size_t argc;

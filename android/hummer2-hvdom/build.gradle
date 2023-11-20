@@ -33,7 +33,7 @@ apply from: '../upload.gradle'
 //    } else if (project.NAPI_ENGINE == 'Hermes') {
 //        apply from: 'fetch_napi_hermes_libs.gradle'
     }
-    apply from: 'build_napi.gradle'
+    apply from: 'build_hvdom.gradle'
 //}
 
 //preBuild.dependsOn pickLibs

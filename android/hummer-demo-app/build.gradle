@@ -47,7 +47,7 @@ task startRemoteSrv(type: Exec) {
     commandLine 'sh', '../openTerminal.sh'
 }
 //assemble.dependsOn(startRemoteSrv)
-preBuild.dependsOn(startRemoteSrv)
+//preBuild.dependsOn(startRemoteSrv)
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'

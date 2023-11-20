@@ -6,9 +6,9 @@
 // Created by XiaoFeng on 2021/6/29.
 //
 
-#include "HummerJNI.h"
-#include "JSRecycler.h"
-#include "JSUtils.h"
+#include "../include/HummerJNI.h"
+#include "../include/JSRecycler.h"
+#include "../include/JSUtils.h"
 
 namespace Recycler {
     typedef struct {
