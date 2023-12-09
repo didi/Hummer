@@ -2,11 +2,12 @@ package com.didi.hummer.render.style;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.didi.hummer.HummerSDK;
-import com.didi.hummer.core.engine.jsc.jni.HummerException;
-import com.didi.hummer.core.engine.napi.jni.JSException;
+import com.didi.hummer.core.util.DebugUtil;
 import com.didi.hummer.core.util.ExceptionUtil;
+import com.didi.hummer.core.util.HMLog;
 import com.didi.hummer.render.component.view.HMBase;
 import com.didi.hummer.render.utility.DPUtil;
 import com.didi.hummer.render.utility.RTLUtil;
@@ -346,15 +347,13 @@ public class HummerStyleUtils {
                     applyHummerStyle(view, key, value); // 耗时1ms
                 }
             } catch (Exception e) {
-                // 处理异常信息显示不全的问题，补充异常是在哪个key和value下产生
-                String jsStack = ExceptionUtil.getJSErrorStack(view.getJSValue().getJSContext());
-                ExceptionUtil.addStackTrace(e, new StackTraceElement("<<JS_Stack>>", "", "\n" + jsStack, -1));
-                ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Style>>", "", String.format("%s: %s", key, value), -1));
-                if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
-                        || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
-                    JSException.nativeException(view.getJSValue().getJSContext(), e);
-                } else {
-                    HummerException.nativeException(view.getJSValue().getJSContext(), e);
+                if (DebugUtil.isDebuggable()) {
+                    // 处理异常信息显示不全的问题，补充异常是在哪个key和value下产生
+                    // 由于实际编写业务代码时，样式的异常会特别多，但某个样式的异常并不会影响程序的正常运行，因此不外抛JS异常，只在开发阶段打印错误日志
+                    String jsStack = ExceptionUtil.getJSErrorStack(view.getJSValue().getJSContext());
+                    ExceptionUtil.addStackTrace(e, new StackTraceElement("<<JS_Stack>>", "", "\n" + jsStack, -1));
+                    ExceptionUtil.addStackTrace(e, new StackTraceElement("<<Style>>", "", String.format("%s: %s", key, value), -1));
+                    HMLog.e("HummerNative", "applyStyle: " + Log.getStackTraceString(e));
                 }
             }
         }
