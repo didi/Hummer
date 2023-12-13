@@ -70,11 +70,13 @@ export function getUUID(){
 }
 
 export function getNotifyEventKey(customKey?: string){
-  return `${NAMESPACE || customKey}_UPDATE_STORE`
+  const key = customKey ? (NAMESPACE+'_'+customKey) : NAMESPACE
+  return `${key}_UPDATE_STORE`
 }
 
 export function getMemoryKey(customKey?: string){
-  return `${NAMESPACE || customKey}_STORE_MEMORY`
+  const key = customKey ? (NAMESPACE+'_'+customKey) : NAMESPACE
+  return `${key}_STORE_MEMORY`
 }
 
 function randomString(length = 8, chars: string) {
