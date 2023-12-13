@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/didi/Hummer/compare/@hummer/tenon-compiler@1.3.2...@hummer/tenon-compiler@1.4.0) (2023-12-13)
+
+
+### Features
+
+* 更新vue相关依赖至3.3.9 ([31621f9](https://github.com/didi/Hummer/commit/31621f986ac6d5e5c6f514871974708d8df2a364))
+
+
+
+
+
 ## [1.3.2](https://github.com/didi/Hummer/compare/@hummer/tenon-compiler@1.3.0...@hummer/tenon-compiler@1.3.2) (2022-10-08)
 
 **Note:** Version bump only for package @hummer/tenon-compiler

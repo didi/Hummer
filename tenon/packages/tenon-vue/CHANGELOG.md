@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.8.7...@hummer/tenon-vue@1.9.0) (2023-12-13)
+
+
+### Features
+
+* 更新vue相关依赖至3.3.9 ([31621f9](https://github.com/didi/Hummer/commit/31621f986ac6d5e5c6f514871974708d8df2a364))
+
+
+
+
+
 ## [1.8.7](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.8.6...@hummer/tenon-vue@1.8.7) (2023-12-12)
 
 **Note:** Version bump only for package @hummer/tenon-vue
