@@ -144,7 +144,7 @@ NAPIValue JSUtils::getJsValueFromRef(NAPIEnv env, NAPIRef valueRef) {
 
     NAPIValue value;
     auto status = napi_get_reference_value(env, valueRef, &value);
-    if (status != NAPICommonOK) {
+    if (status != NAPIErrorOK) {
         return nullptr;
     }
     return value;

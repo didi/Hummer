@@ -18,6 +18,9 @@ android {
                     arguments '-DCMAKE_BUILD_TYPE=MinSizeRel'
                     cFlags '-g0', '-Os', '-fomit-frame-pointer', '-DNDEBUG', '-fvisibility=hidden'
                     cppFlags '-g0', '-Os', '-fomit-frame-pointer', '-DNDEBUG', '-fvisibility=hidden'
+
+                    cFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
+                    cppFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
                 }
             }
         }
@@ -32,7 +35,7 @@ android {
             }
         }
     }
-//
+
     sourceSets {
         main {
             if (project.NAPI_ENGINE == 'QuickJS') {

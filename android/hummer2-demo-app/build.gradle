@@ -1,0 +1,115 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'com.didi.dokit'
+
+android {
+    compileSdkVersion 31
+    defaultConfig {
+        applicationId "com.didi.hummer.demo"
+        minSdkVersion 18
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField "String", "MOCK_HOST", "\"${getLocalIPv4()}\""
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [HUMMER_MODULE_NAME: project.getName()]
+            }
+        }
+
+        ndk {
+            abiFilters 'armeabi-v7a','x86','arm64-v8a','x86_64'
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        pickFirst 'lib/*/libqjs.so'
+        pickFirst 'lib/*/libhummer-napi.so'
+        pickFirst 'lib/*/libc++_shared.so'
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+//编译前执行启动JS文件服务器脚本，用于下载js文件
+task startRemoteSrv(type: Exec) {
+    workingDir "$projectDir"
+    commandLine 'sh', '../openTerminal.sh'
+}
+//assemble.dependsOn(startRemoteSrv)
+//preBuild.dependsOn(startRemoteSrv)
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+
+    // 解决和第三方库中的support库冲突
+//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//        def requested = details.requested
+//        if (requested.group == 'com.android.support') {
+//            if (!requested.name.startsWith("multidex")) {
+//                details.useVersion '26.1.0'
+//            }
+//        }
+//    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+
+    api rootProject.ext.androidx["appcompat"]
+    api rootProject.ext.androidx["recyclerview"]
+    api rootProject.ext.androidx["constraintLayout"]
+
+    api project(':hummer-dev-tools')
+
+    implementation project(':hummer')
+    implementation project(':hummer2-hvdom')
+    implementation project(':hummer2-component')
+
+    annotationProcessor project(":hummer-compiler")
+
+
+
+    implementation 'com.facebook.soloader:soloader:0.10.1'
+
+    // relinker
+    implementation 'com.getkeepsafe.relinker:relinker:1.4.1'
+
+
+//    annotationProcessor 'io.github.didi.hummer:hummer-compiler:0.2.17'
+
+//    debugImplementation project(':v8-debugger')
+//    debugImplementation 'com.didi.hummer:v8-debugger:0.0.1-SNAPSHOT'
+
+//    debugImplementation project(':hermes-debugger')
+//    debugImplementation 'io.github.didi.hummer:hermes-debugger:0.0.4'
+
+    // native crash 堆栈捕获
+//    implementation 'com.iqiyi.xcrash:xcrash-android-lib:2.4.8'
+
+    // leakcanary
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.0.2'
+}

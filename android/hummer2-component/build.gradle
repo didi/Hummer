@@ -27,7 +27,10 @@ dependencies {
     api  rootProject.ext.androidx["appcompat"]
     api  rootProject.ext.androidx["recyclerview"]
 
-    api project(':hummer-sdk')
+    api project(':hummer')
+    api project(':hummer2-hvdom')
+
+
     annotationProcessor project(":hummer-compiler")
 
     // 下拉刷新和加载更多

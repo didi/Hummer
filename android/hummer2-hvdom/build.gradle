@@ -28,12 +28,12 @@ apply from: '../upload.gradle'
 //    apply from: 'fetch_napi_hermes_libs.gradle'
 //    apply from: 'build_hermes.gradle'
 //} else if (project.COMPILE_JS_ENGINE == 'NAPI') {
-    if (project.NAPI_ENGINE == 'QuickJS') {
+if (project.NAPI_ENGINE == 'QuickJS') {
 //        apply from: 'fetch_napi_qjs_libs.gradle'
 //    } else if (project.NAPI_ENGINE == 'Hermes') {
 //        apply from: 'fetch_napi_hermes_libs.gradle'
-    }
-    apply from: 'build_hvdom.gradle'
+}
+apply from: 'build_hvdom.gradle'
 //}
 
 //preBuild.dependsOn pickLibs
@@ -46,7 +46,7 @@ android {
     defaultConfig {
 
         ndk {
-            abiFilters 'armeabi-v7a','x86','arm64-v8a','x86_64'
+            abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a', 'x86_64'
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -66,12 +66,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.so'])
 
-    api  rootProject.ext.androidx["annotation"]
+    api rootProject.ext.androidx["annotation"]
     api 'com.google.code.gson:gson:2.8.5'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.0.2'
 
 
 }

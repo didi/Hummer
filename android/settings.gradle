@@ -11,6 +11,7 @@ include ':hummer-demo-app',
 include ':hermes-debugger'
 
 include ':hummer2',
+        ':hummer2-demo-app',
         ':hummer2-compiler',
         ':hummer2-annotation',
         ':hummer2-hvdom',

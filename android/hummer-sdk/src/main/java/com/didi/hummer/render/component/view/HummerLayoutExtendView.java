@@ -68,7 +68,7 @@ public abstract class HummerLayoutExtendView extends HMBase<HummerLayout>
             return;
         }
 
-        child.getJSValue().protect();
+//        child.getJSValue().protect();
         child.setPositionChangedListener(this);
         child.setDisplayChangedListener(this);
         children.add(child);

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-project(hvdom VERSION 1.0 )
+project(hvdom VERSION 1.0)
+
 
 if (NAPI_ENGINE STREQUAL QuickJS)
     set(LIBS_JSE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../napi/libs)
@@ -8,7 +9,9 @@ if (NAPI_ENGINE STREQUAL QuickJS)
 elseif (NAPI_ENGINE STREQUAL Hermes)
     set(LIBS_JSE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../napi/libs)
     set(LIBS_JSE_FILE libhermes.so)
-endif()
+endif ()
+
+set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(
         src
@@ -32,6 +35,12 @@ aux_source_directory( # Define variable for directory of dependency libraries
         # Set variable name of dependency libraries directory
         DIR_LIBS
         )
+
+#aux_source_directory( # Define variable for directory of dependency libraries
+#        test
+#        # Set variable name of dependency libraries directory
+#        DIR_TEST
+#        )
 
 add_library( # Sets the name of the library.
         hvdom

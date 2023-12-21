@@ -5,11 +5,11 @@
 #include "HummerJNI.h"
 #include "JSUtils.h"
 
-JavaVM *javaVM = NULL;
+JavaVM *HMUtil_JavaVM = NULL;
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env;
-    javaVM = vm;
+    HMUtil_JavaVM = vm;
     if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
         return -1;
     }
@@ -19,9 +19,9 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 
 JNIEnv *JNI_GetEnv() {
     JNIEnv *env;
-    int status = (*javaVM).GetEnv((void **) &env, JNI_VERSION_1_6);
+    int status = (*HMUtil_JavaVM).GetEnv((void **) &env, JNI_VERSION_1_6);
     if (status == JNI_EDETACHED) {
-        status = (*javaVM).AttachCurrentThread(&env, NULL);
+        status = (*HMUtil_JavaVM).AttachCurrentThread(&env, NULL);
         if (status != 0) {
             LOGE("Failed to attach");
         }
@@ -31,8 +31,8 @@ JNIEnv *JNI_GetEnv() {
 
 void JNI_DetachEnv() {
     JNIEnv *env;
-    int status = (*javaVM).GetEnv((void **) &env, JNI_VERSION_1_6);
+    int status = (*HMUtil_JavaVM).GetEnv((void **) &env, JNI_VERSION_1_6);
     if (status == JNI_EDETACHED) {
-        (*javaVM).DetachCurrentThread();
+        (*HMUtil_JavaVM).DetachCurrentThread();
     }
 }
