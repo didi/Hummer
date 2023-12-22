@@ -234,12 +234,12 @@ public class ActivityStackManager implements Application.ActivityLifecycleCallba
 
     @Override
     public void onActivityPaused(Activity activity) {
-        resumeCounter--;
+
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-
+        resumeCounter--;
     }
 
     @Override
