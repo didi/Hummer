@@ -129,9 +129,15 @@ public class Image extends HMBase<RoundedImageView> {
             isHeightAuto = true;
         }
 
-        if (!TextUtils.isEmpty(this.src) && (style.containsKey("width") || style.containsKey("height")) && (isWidthAuto || isHeightAuto)) {
+        if ((!TextUtils.isEmpty(this.src) || !TextUtils.isEmpty(this.gifSrc))
+                && (style.containsKey("width") || style.containsKey("height"))
+                && (isWidthAuto || isHeightAuto)) {
             String namespace = ((HummerContext) getContext()).getNamespace();
-            HummerAdapter.getImageLoaderAdapter(namespace).getImageSize(this.src, this::adjustWidthAndHeight);
+            if (!TextUtils.isEmpty(this.src)) {
+                HummerAdapter.getImageLoaderAdapter(namespace).getImageSize(this.src, this::adjustWidthAndHeight);
+            } else if (!TextUtils.isEmpty(this.gifSrc)) {
+                HummerAdapter.getImageLoaderAdapter(namespace).getImageSize(this.gifSrc, this::adjustWidthAndHeight);
+            }
         }
     }
 
