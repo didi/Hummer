@@ -96,9 +96,25 @@ public class LottieView extends HMBase<LottieAnimationView> {
         getView().playAnimation();
     }
 
+    @JsMethod("resumeAnimation")
+    public void resumeAnimation() {
+        getView().resumeAnimation();
+    }
+
+    @JsMethod("pauseAnimation")
+    public void pauseAnimation() {
+        getView().pauseAnimation();
+    }
+
     @JsMethod("cancelAnimation")
     public void cancelAnimation() {
         getView().cancelAnimation();
+    }
+
+    @JsMethod("playToProgress")
+    public void playToProgress(float progress) {
+        getView().setMaxProgress(progress);
+        getView().playAnimation();
     }
 
     @JsMethod("setLoop")
