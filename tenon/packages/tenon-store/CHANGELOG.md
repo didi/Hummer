@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.1](https://github.com/didi/Hummer/compare/@hummer/tenon-store@1.7.0...@hummer/tenon-store@1.7.1) (2024-01-17)
+
+
+### Bug Fixes
+
+* fix tenon store多实例时出现store中state被清空的bug ([#443](https://github.com/didi/Hummer/issues/443)) ([83e62ee](https://github.com/didi/Hummer/commit/83e62ee846ff5153a51f26549509a25602be0675))
+
+
+
+
+
 # [1.7.0](https://github.com/didi/Hummer/compare/@hummer/tenon-store@1.6.0...@hummer/tenon-store@1.7.0) (2023-12-13)
 
 
