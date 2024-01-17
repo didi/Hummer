@@ -1,7 +1,6 @@
 import {diff, cloneObject, getUUID, getNotifyEventKey, getMemoryKey,stringify, parseJson, getMemoryByKey, setMemoryByKey} from './utils/index'
 import {Operation, OperationType} from './utils/types'
 const id = getUUID();
-let cacheData:Record<string, any> = {}; 
 
 /**
  * Hummer Store 插件配置项
@@ -21,9 +20,19 @@ interface HummerPluginOptions {
 export function createHummerPlugin ({
   store_key
 }: HummerPluginOptions = {}) {
+  let cacheData:Record<string, any> = {};
   const MemoryStoreKey = getMemoryKey(store_key);
   const NotifyEvent = getNotifyEventKey(store_key);
-
+  
+  function initState(store: any, MemoryStoreKey: string){
+    let newData = getMemoryByKey(MemoryStoreKey);
+    if(newData){
+      newData = parseJson(newData);
+      cacheData = cloneObject(newData);
+      store.replaceState(newData);
+    }
+  }
+  
   return (store:any) => {
     // 初始化数据
     initState(store, MemoryStoreKey)
@@ -55,15 +64,6 @@ export function createHummerPlugin ({
       });
       cacheData = cloneObject(state);
     })
-  }
-}
-
-function initState(store: any, MemoryStoreKey: string){
-  let newData = getMemoryByKey(MemoryStoreKey);
-  if(newData){
-    newData = parseJson(newData);
-    cacheData = cloneObject(newData);
-    store.replaceState(newData);
   }
 }
 
