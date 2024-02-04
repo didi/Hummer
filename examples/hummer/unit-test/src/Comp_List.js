@@ -3,7 +3,6 @@ const TYPE_ITEM = 2;
 
 const ITEM_COUNT = 20;
 
-let stextView = new Text();
 class RootView extends View {
     constructor() {
         super();
@@ -15,7 +14,7 @@ class RootView extends View {
         this.listView = new List();
         this.listView.style = {
             width: '100%',
-            height: '50%',
+            height: '100%',
             mode: "list",
             // mode: "grid",
             // mode: "waterfall",
@@ -100,16 +99,6 @@ class RootView extends View {
 
         this.appendChild(this.listView);
 
-
-        stextView.text = "~ Hello Hummer ~";
-        stextView.style = {
-            width: 100,
-            height: 100,
-            fontSize: 20,
-            color: '#000000',
-        }
-        this.appendChild(stextView);
-
         this.loadData();
     }
 
@@ -158,7 +147,7 @@ class ItemCell extends View {
 
         this.textView = new Text();
         this.textView.style = {
-            height: 80,
+            height: 30,
             textAlign: "center",
         };
 
@@ -171,39 +160,10 @@ class ItemCell extends View {
 
         this.appendChild(this.textView);
         // this.appendChild(lineView);
-
-
-        // let isIntercepted = false;
-        // this.addEventListener('pan', event => {
-        //     if (event.state == 1) {
-        //         console.log("event: start");
-        //         isIntercepted = false;
-        //     } else if (event.state == 2) {
-        //         console.log("event: ", event);
-        //         console.log("偏移量: ", event.translation.deltaX);
-
-        //         if (Math.abs(event.translation.deltaX) > 3 && !isIntercepted) {
-        //             isIntercepted = true;
-        //             requestDisallowInterceptTouchEvent(this, true);
-        //         }
-        //     } else if (event.state == 3) {
-        //         console.log("event: end");
-        //         isIntercepted = false;
-        //     }
-        // })
-
-        stextView.text = 's';
-        // stextView.style = {
-        //     width: 111,
-        // }
     }
 
     refresh(position) {
         this.textView.text = position.toString();
-
-        // this.feeInput.text = ''
-
-        // stextView.text = 's';
     }
 }
 

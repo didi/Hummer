@@ -105,7 +105,7 @@ class RootView extends View {
 
         let infoText = new Text();
 
-        subLayout1.appendChild(this.feeInput);
+        subLayout1.appendChild(input);
         subLayout1.appendChild(btn1);
         subLayout2.appendChild(textArea);
         subLayout2.appendChild(btn2);
