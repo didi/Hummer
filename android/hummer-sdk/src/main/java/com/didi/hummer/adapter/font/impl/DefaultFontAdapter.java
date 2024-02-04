@@ -33,8 +33,14 @@ public class DefaultFontAdapter implements IFontAdapter {
 
     private final String fontsAssetsPath;
 
+    public DefaultFontAdapter() {
+        this(null);
+    }
+
     public DefaultFontAdapter(String fontsAssetsPath) {
-        if (TextUtils.isEmpty(fontsAssetsPath)) {
+        // 如果fontsAssetsPath为空字符串（""），则具有实际意义，代表assets根目录
+        // 只有当fontsAssetsPath为null时，才认为是SDK默认路径：fonts/
+        if (fontsAssetsPath == null) {
             this.fontsAssetsPath = FONTS_ASSET_PATH;
             return;
         }
