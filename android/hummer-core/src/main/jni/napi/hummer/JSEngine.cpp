@@ -67,6 +67,10 @@ Java_com_didi_hummer_core_engine_napi_jni_JSEngine_destroyJSContext(JNIEnv *env,
     auto globalEnv = JSUtils::toJsContext(js_context);
     JSUtils::removeJSContext(js_context);
 
+    if (!globalEnv) {
+        return;
+    }
+
     NAPIHandleScope handleScope = JSUtils::getHandleScope(js_context);
     if (handleScope != nullptr) {
         napi_close_handle_scope(globalEnv, handleScope);
