@@ -1,0 +1,31 @@
+{
+  "name": "@didi/hummer-api",
+  "version": "0.0.1",
+  "description": "hummer api",
+  "keywords": [
+    "hummer","api","hummer api"
+  ],
+  "author": "realonezhang <realonezhang@didiglobal.com>",
+  "homepage": "https://hummer.didi.cn/doc/",
+  "license": "ISC",
+  "main": "dist/hummer-api.cjs.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "http://npm.intra.xiaojukeji.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.xiaojukeji.com:Hummer/hummerx.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/js-sdk.test.js"
+  },
+  "gitHead": ""
+}

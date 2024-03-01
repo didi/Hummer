@@ -1,0 +1,20 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "Hummer Project",
+  "author": "realonezhang <realonezhang@didiglobal.com>",
+  "scripts": {
+    "build": "hummer build",
+    "dev": "hummer dev",
+    "debug": "npm run dev & hummer debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.xiaojukeji.com:tenon/tenon-demo.git"
+  },
+  "dependencies": {
+    "@hummer/hummer-front": "^1.0.7",
+    "@hummer/tenon-dev-tool": "^0.2.1"
+  },
+  "devDependencies": {}
+}
