@@ -1,5 +1,5 @@
 export * from "./HMObject";
-export * from "./Document";
+export * from "./Hummer";
 export * from "./EventTarget";
 export * from "./Node";
 export * from "./Element";

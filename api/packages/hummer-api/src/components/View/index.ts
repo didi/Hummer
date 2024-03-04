@@ -1,4 +1,4 @@
-const { Document: _Document } = __hummer__
+const { document: _Document } = __Hummer__
 
 import { HummerElement } from "../../HummerElement"
 
@@ -13,7 +13,7 @@ export class View extends HummerElement {
      * @param name 
      * @param props 
      */
-    public constructor(id: string, name: string = "", props: any) {
+    public constructor(id: string="", name: string = "", props: any) {
         super("View", name, { ...props, viewId: id });
     }
 

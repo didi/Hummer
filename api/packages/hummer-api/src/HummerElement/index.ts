@@ -1,4 +1,4 @@
-const { Document: _Document } = __hummer__
+const { document: _Document, proxy: _Proxy } = __Hummer__
 
 import { Element } from "../Element"
 import { HummerGlobalProxy } from "./HummerGlobalProxy"
@@ -28,13 +28,16 @@ export class HummerElement extends Element {
 
 
     private _enabled: any = null; //属性扩展
-    private globalProxy: HummerGlobalProxy;//代理处理
+    private globalProxy: HummerGlobalProxy | undefined = undefined;//代理处理
 
-   public constructor(tag: string, name: string = tag, props: any) {
+    public constructor(tag: string, name: string = tag, props: any) {
         super(tag, name, props);
         this.bindEventTarget();
         this.__view_id = __view_id;
-        this.globalProxy = _Document.tenon.globalProxy;
+        if (_Proxy && _Proxy.globalProxy) {
+            this.globalProxy = _Proxy.globalProxy;
+        }
+
     }
 
     //扩展支持disabled,与enabled相反
@@ -194,11 +197,11 @@ export class HummerElement extends Element {
     }
 
 
-    protected onHandleRecieveEvent(event: any): any {
+    protected onHandleRecieveEvent(eventName: string, event: any): any {
         if (this.globalProxy) {
             return this.globalProxy.onHandleRecieveEvent(this, event);
         }
-        return super.onHandleRecieveEvent(event);
+        return super.onHandleRecieveEvent(eventName, event);
     }
 
 

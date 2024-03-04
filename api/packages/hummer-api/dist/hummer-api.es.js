@@ -1,7 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
 const { document: _Document$2 } = __Hummer__;
 __GLOBAL__;
 class Hummer {
@@ -683,19 +679,5 @@ __GLOBAL__.Hummer = {
     }
 };
 
-exports.BasicAnimation = BasicAnimation;
-exports.Element = Element;
-exports.EventTarget = EventTarget;
-exports.HMObject = HMObject;
-exports.Hummer = Hummer;
-exports.HummerComponent = HummerComponent;
-exports.HummerElement = HummerElement;
-exports.Image = Image;
-exports.KeyframeAnimation = KeyframeAnimation;
-exports.Memory = Memory;
-exports.Navigator = Navigator;
-exports.Node = Node;
-exports.Storage = Storage;
-exports.Text = Text;
-exports.View = View;
-//# sourceMappingURL=hummer-api.cjs.js.map
+export { BasicAnimation, Element, EventTarget, HMObject, Hummer, HummerComponent, HummerElement, Image, KeyframeAnimation, Memory, Navigator, Node, Storage, Text, View };
+//# sourceMappingURL=hummer-api.es.js.map

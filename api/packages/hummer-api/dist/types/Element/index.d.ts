@@ -24,4 +24,5 @@ export declare class Element extends Node {
     getRect(callback: Function): void;
     hide(): void;
     show(): void;
+    dbg_getDescription(callback: Function, id: Number): void;
 }

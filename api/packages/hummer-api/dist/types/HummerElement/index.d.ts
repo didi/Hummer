@@ -27,5 +27,5 @@ export declare class HummerElement extends Element {
     getAttribute(key: string): any;
     setAttribute(key: string, value: any): void;
     private setCacheProp;
-    protected onHandleRecieveEvent(event: any): any;
+    protected onHandleRecieveEvent(eventName: string, event: any): any;
 }

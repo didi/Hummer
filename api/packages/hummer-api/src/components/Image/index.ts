@@ -1,10 +1,10 @@
-const { Document: _Document } = __hummer__
+const { document: _Document } = __Hummer__
 
 import { HummerElement } from "../../HummerElement"
 import { ImageStyle } from "./ImageStyle"
 
 
-export class Iamge extends HummerElement {
+export class Image extends HummerElement {
 
 
     protected _src: string = "";
@@ -19,7 +19,7 @@ export class Iamge extends HummerElement {
     * @param name 
     * @param props 
     */
-    public constructor(id: string, name: string = "", props: any) {
+    public constructor(id: string= "", name: string = "", props: any) {
         super("Image", name, { ...props, viewId: id });
     }
 

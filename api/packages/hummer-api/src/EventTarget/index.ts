@@ -1,7 +1,7 @@
 
 import { HMObject } from "src/HMObject"
 
-const { Document: _Document } = __hummer__
+const { document: _Document } = __Hummer__
 
 //***********************************************/
 // 引擎操作接口挂载点全局上的 ”__hummer__“上
@@ -13,7 +13,7 @@ export interface EventLisener {
 
 export class EventTarget extends HMObject {
 
-    protected envents: Map<string, Array<EventLisener>>
+    protected envents: Map<string, Array<EventLisener | Function>>;
 
 
     public constructor(tag: string, isApi: boolean = true, props: any) {
@@ -22,14 +22,14 @@ export class EventTarget extends HMObject {
     }
 
     //消息事件回调入口
-    public onRecieveEvent(event: any) {
-        event = this.onHandleRecieveEvent(event);
-        this.dispatchEvent(event.eventName, event)
+    public onRecieveEvent(eventName: string, event: any) {
+        event = this.onHandleRecieveEvent(eventName, event);
+        this.dispatchEvent(eventName, event)
     }
 
 
     //事件处理增强/扩展
-    protected onHandleRecieveEvent(event: any): any {
+    protected onHandleRecieveEvent(eventName: string, event: any): any {
         return event;
     }
 
@@ -37,7 +37,9 @@ export class EventTarget extends HMObject {
      * 绑定 EventTatget
      */
     public bindEventTarget() {
-        this.obj.setEventTarget(this.onRecieveEvent)
+        this.obj.setEventTarget((eventName: string, event: any) => {
+            this.onRecieveEvent(eventName, event);
+        })
     }
 
 
@@ -45,7 +47,9 @@ export class EventTarget extends HMObject {
         var listeners = this.envents.get(eventName)
         if (listeners != undefined) {
             listeners.forEach((lisener => {
-                if (lisener != undefined) {
+                if (lisener instanceof Function) {
+                    lisener.call(event);
+                } else {
                     lisener.onEvent(event);
                 }
             }))
@@ -56,18 +60,24 @@ export class EventTarget extends HMObject {
     }
 
 
-    public addEventListener(eventName: string, eventLisener: EventLisener, useCapture: boolean) {
+    public addEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture: boolean) {
         var listeners = this.envents.get(eventName)
         if (listeners == undefined) {
             listeners = new Array()
-            this.envents.set(eventName, listeners)
+            this.envents.set(eventName, listeners);
         }
 
-        listeners.push(eventLisener)
+        listeners.push(eventLisener);
+        this._addEventListener(eventName);
     }
 
 
-    public removeEventListener(eventName: string, eventLisener: EventLisener, useCapture: boolean) {
+    private _addEventListener(eventName: string) {
+        this.obj.addEventListener(eventName);
+    }
+
+
+    public removeEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture: boolean) {
         var listeners = this.envents.get(eventName)
         if (listeners != undefined) {
             if (eventLisener == undefined) {
@@ -81,7 +91,14 @@ export class EventTarget extends HMObject {
                     console.log("未找到指定对象");
                 }
             }
+            this._removeEventListener(eventName);
         }
 
     }
+
+    private _removeEventListener(eventName: string) {
+        this.obj.removeEventListener(eventName);
+    }
+
+
 }

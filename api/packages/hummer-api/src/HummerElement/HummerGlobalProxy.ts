@@ -1,4 +1,4 @@
-const { Document: _Document } = __hummer__
+const { document: _Document } = __Hummer__
 
 import { Element } from "../Element"
 import { BasicAnimation } from "../anim/BasicAnimation"
@@ -10,6 +10,16 @@ export interface HummerGlobalProxy {
 
 
     //设置样式
+    /**
+     * 设置样式
+     * 
+     * 说明：在给Element/组件设置样式的时候，在这里能拦截到设置的样式，如果被拦截转发到这里，原设置样式将不执行，需要调用
+     * element.setStyle(value,flag);将最终目标样式更新到视图上。
+     * 
+     * @param element 组件实例
+     * @param style  样式
+     * @param flag  标记
+     */
     setStyle(element: Element, style: object, flag: boolean): undefined;
 
     //       /**
@@ -30,7 +40,14 @@ export interface HummerGlobalProxy {
     //   }
 
 
-    //根据class更新样式
+    /**
+     * 根据class更新样式
+     * 
+     * 说明：当class改变级scopeid 更新后会被调用
+     * 
+     * @param element 组件实例
+     * @param className  class名称
+     */
     updateClassStyle(element: Element, className: string): undefined;
 
     // setAttribute(element: Element, key: string, value: any): undefined;
@@ -38,6 +55,8 @@ export interface HummerGlobalProxy {
     /**
      *  处理动画
      * 将tenon传递的动画转化为hummer可以处理的动画
+     * 
+     * 说明：设置动画时将在这里被拦截，如果设置的动画类型不是hummer动画需要在这里转化为Hummer动画。
      * 
      * @param element
      * @param animation 
@@ -58,6 +77,8 @@ export interface HummerGlobalProxy {
 
     /**
      * 处理接收到的事件消息
+     *
+     * 说明：需要重新对事件内容做处理时，在这里修改或者追加Event数据。
      * 
      * @param element 响应目标元素
      * @param event  事件对象

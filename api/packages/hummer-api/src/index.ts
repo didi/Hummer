@@ -1,8 +1,10 @@
 //Hummer api
 
+import { Hummer } from "./Hummer"
+
 export * from "./HMObject"
 
-export * from "./Document"
+export * from "./Hummer"
 
 export * from "./EventTarget"
 
@@ -31,6 +33,15 @@ export * from "./api/Memory"
 export * from "./api/Navigator"
 
 export * from "./api/Storage"
+
+
+__GLOBAL__.Hummer = {
+
+    getRootView() {
+        return Hummer.getRootView();
+    }
+
+}
 
 
 

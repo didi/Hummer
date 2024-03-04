@@ -1,4 +1,4 @@
-const { Document: _Document } = __hummer__
+const { document: _Document } = __Hummer__
 
 import { Node } from "../Node"
 import { BasicAnimation } from "../anim/BasicAnimation"
@@ -47,8 +47,8 @@ export class Element extends Node {
 
 
     protected _setAttribute(key: string, value: any) {
-        this._attributes.set(key, value);
-        this.obj.setAttributes({ key: value });
+        this._attributes[key] = value;
+        this.obj.setAttributes({ [key]: value });
     }
 
     /**
@@ -71,6 +71,7 @@ export class Element extends Node {
     }
 
     protected _getAttribute(key: string) {
+        return this._attributes[key];
         return this._attributes.get(key);
     }
 
@@ -90,7 +91,7 @@ export class Element extends Node {
      * @param style 样式对象
      * @param flag 标记
      */
-    protected setStyle(style: object, flag: boolean= false) {
+    protected setStyle(style: object, flag: boolean = false) {
         this._setStyles(style);
     }
 
@@ -160,6 +161,17 @@ export class Element extends Node {
     public show() {
         // TODO 展示当前元素
         // TODO 不实现
+    }
+
+
+    /**
+     * 获取节点调试信息
+     * 
+     * @param callback 
+     * @param id 
+     */
+    public dbg_getDescription(callback: Function, id: Number) {
+        console.log("dbg_getDescription()");
     }
 
 }

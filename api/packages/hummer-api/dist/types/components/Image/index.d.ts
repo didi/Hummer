@@ -1,10 +1,10 @@
 import { HummerElement } from "../../HummerElement";
 import { ImageStyle } from "./ImageStyle";
-export declare class Iamge extends HummerElement {
+export declare class Image extends HummerElement {
     protected _src: string;
     protected _gifSrc: string;
     protected _gifRepeatCount: number;
-    constructor(id: string, name: string | undefined, props: any);
+    constructor(id: string | undefined, name: string | undefined, props: any);
     get src(): string;
     set src(value: string);
     get gifSrc(): string;

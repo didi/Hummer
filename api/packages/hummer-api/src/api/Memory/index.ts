@@ -1,4 +1,3 @@
-const { Document: _Document } = __hummer__
 
 import { HummerComponent } from "../../HummerComponent"
 

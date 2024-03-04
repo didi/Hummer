@@ -1,4 +1,4 @@
-const { Document: _Document } = __hummer__
+const { document: _Document } = __Hummer__
 
 //***********************************************/
 //
@@ -25,6 +25,10 @@ export class HMObject {
         } else {
             this.obj = _Document.createElement(tag, props)
         }
+    }
+
+    public getThis() {
+        return this.obj;
     }
 
 

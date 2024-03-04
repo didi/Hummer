@@ -1,7 +1,7 @@
 // import { View, Text, Navigator } from '../../../packages/hummer-api/dist/hummer-api.cjs.js'
 
 // const { View, Text } = require('../../../packages/hummer-api/dist/hummer-api.cjs.js')
-import{View, Image, Hummer} from './../../../packages/hummer-api/dist/hummer-api.es'
+// import{View, Text, Document as Hummer} from './../../../packages/hummer-api/dist/hummer-api.es'
 
 // const { Document: Hummer } = require('../../../packages/hummer-api/dist/hummer-api.cjs.js')
 
@@ -17,23 +17,23 @@ export class RootView extends View {
             paddingTop: 10,
         };
 
-        let text1 = new Image();
+        let text1 = new Text();
         this.text1 = text1;
-        text1.src = "https://img-hxy021.didistatic.com/static/starimg/img/jcYlCi9q771709538836363.jpeg";
+        text1.text = "HelloWord";
 
         text1.style = {
-            height: 90,
+            height: 56,
             backgroundColor: "#F2f2f2",
             textColor: "#2e2e22"
         }
 
-        let text2 = new Image();
+        let text2 = new Text();
         this.text2 = text2;
-        text2.src = "https://img-hxy021.didistatic.com/static/starimg/img/zQH87n4QmS1709538875705.png";
+        text2.text = "点击我修改文案";
 
         text2.style = {
-            height: 46,
-            width: 180,
+            height: 48,
+            width: 183,
             marginTop: 45,
             padding: 30,
             backgroundColor: "#F2f2ff",
@@ -49,19 +49,11 @@ export class RootView extends View {
 
         this.appendChild(text1);
         this.appendChild(text2);
-        this.count = 1;
     }
 
-    
 
     changeTextNew() {
-        this.count++;
-        if (this.count%2==0){
-            this.text1.src = "https://img-hxy021.didistatic.com/static/starimg/img/zQH87n4QmS1709538875705.png";
-        } else{
-            this.text1.src = "https://img-hxy021.didistatic.com/static/starimg/img/jcYlCi9q771709538836363.jpeg";
-        }  
-       
+        this.text1.text = this.text1.text + "X";
     }
 }
 

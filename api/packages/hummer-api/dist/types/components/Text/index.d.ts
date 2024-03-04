@@ -3,7 +3,7 @@ export declare class Text extends HummerElement {
     protected _text: string;
     protected _richText: string;
     protected _textCopyEnable: boolean;
-    constructor(id: string, name: string | undefined, props: any);
+    constructor(id: string | undefined, name: string | undefined, props: any);
     get text(): string;
     set text(value: string);
     get richText(): string;

@@ -14,10 +14,10 @@ const resolve = p => path.resolve(packageDir, p)
 const isProduction = process.env.NODE_ENV === 'production'
 
 const outputConfig = {
-  // es: {
-  //   file: resolve(`dist/${name}.es.js`),
-  //   format: `es`
-  // },
+  es: {
+    file: resolve(`dist/${name}.es.js`),
+    format: `es`
+  },
   // global: {
   //   file: resolve(`dist/${name}.js`),
   //   format: `iife`
