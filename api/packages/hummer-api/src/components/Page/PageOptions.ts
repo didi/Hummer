@@ -3,7 +3,7 @@
 // // import { View } from "../../components/View"
 
 
-export interface PageOptions{
+export interface PageOptions {
     onLoad?: Function,
     onReady?: Function,
     onShow?: Function,
@@ -12,5 +12,5 @@ export interface PageOptions{
     onBack?: Function,
     canScroll?: Boolean,  // 是否可滚动
     pageStyle?: Record<string, string> // 页面样式
-  }
+}
 
