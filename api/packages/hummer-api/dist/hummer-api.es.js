@@ -437,7 +437,7 @@ class KeyframeAnimation {
 
 __Hummer__;
 class View extends HummerElement {
-    constructor(id = "", name = "", props) {
+    constructor(id = "", name = "", props = {}) {
         super("View", name, Object.assign(Object.assign({}, props), { viewId: id }));
         this._overflow = "visible";
     }
