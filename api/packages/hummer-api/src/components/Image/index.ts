@@ -19,7 +19,7 @@ export class Image extends HummerElement {
     * @param name 
     * @param props 
     */
-    public constructor(id: string= "", name: string = "", props: any) {
+    public constructor(id: string = "", name: string = "", props: any = {}) {
         super("Image", name, { ...props, viewId: id });
     }
 

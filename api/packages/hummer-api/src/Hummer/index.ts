@@ -1,7 +1,10 @@
 const { document: _Document } = __Hummer__
-const { Hummer: __Hummer } = __GLOBAL__
+// const { Hummer: _Hummer } = __GLOBAL__
 
 import { Element } from "../Element"
+import { View } from "../components/View"
+import { Text } from "../components/Text"
+import { Image } from "../components/Image"
 
 export class Hummer {
 
@@ -21,6 +24,19 @@ export class Hummer {
         Hummer.initGlobal();
         Hummer.rootElement = element;
         _Document.render(element.getThis());
+    }
+
+
+    public static createElement(tag: string): Element | undefined {
+        switch (tag) {
+            case "view":
+                return new View();
+            case "text":
+                return new Text();
+            case "image":
+                return new Image();
+        }
+        return undefined;
     }
 
 

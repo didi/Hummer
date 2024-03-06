@@ -15,9 +15,9 @@ export class Anchor extends View {
      * @param name 
      * @param props 
      */
-    public constructor(id: string = "", name: string = "", props: any) {
+    public constructor(id: string = "", name: string = "", props: any= {}) {
         super(id, name, props);
-
+        
         this.setStyle({
             display: "none"
         });

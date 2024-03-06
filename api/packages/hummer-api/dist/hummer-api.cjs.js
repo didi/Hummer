@@ -3,22 +3,6 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const { document: _Document$2 } = __Hummer__;
-__GLOBAL__;
-class Hummer {
-    static initGlobal() {
-    }
-    static render(element) {
-        Hummer.initGlobal();
-        Hummer.rootElement = element;
-        _Document$2.render(element.getThis());
-    }
-    static getRootView() {
-        return Hummer.rootElement;
-    }
-}
-Hummer.rootElement = undefined;
-
-const { document: _Document$1 } = __Hummer__;
 class HMObject {
     constructor(tag, isApi = true, props) {
         this.tag = tag;
@@ -26,10 +10,10 @@ class HMObject {
         this.isApi = isApi;
         this.props = props;
         if (isApi) {
-            this.obj = _Document$1.createComponent(tag, props);
+            this.obj = _Document$2.createComponent(tag, props);
         }
         else {
-            this.obj = _Document$1.createElement(tag, props);
+            this.obj = _Document$2.createElement(tag, props);
         }
     }
     getThis() {
@@ -246,7 +230,7 @@ class Node extends EventTarget {
 
 __Hummer__;
 class Element extends Node {
-    constructor(tag, name = tag, props) {
+    constructor(tag, name = tag, props = undefined) {
         super(tag, name, props);
         this._attributes = {};
         this._style = {};
@@ -315,7 +299,7 @@ class Element extends Node {
     }
 }
 
-const { document: _Document, proxy: _Proxy } = __Hummer__;
+const { document: _Document$1, proxy: _Proxy } = __Hummer__;
 let __view_id = 0;
 class HummerElement extends Element {
     constructor(tag, name = tag, props) {
@@ -432,14 +416,6 @@ class HummerElement extends Element {
 }
 
 __Hummer__;
-class BasicAnimation {
-}
-
-__Hummer__;
-class KeyframeAnimation {
-}
-
-__Hummer__;
 class View extends HummerElement {
     constructor(id = "", name = "", props = {}) {
         super("View", name, Object.assign(Object.assign({}, props), { viewId: id }));
@@ -456,7 +432,7 @@ class View extends HummerElement {
 
 __Hummer__;
 class Text extends HummerElement {
-    constructor(id = "", name = "", props) {
+    constructor(id = "", name = "", props = {}) {
         super("Text", name, Object.assign(Object.assign({}, props), { viewId: id }));
         this._text = "";
         this._richText = "";
@@ -487,7 +463,7 @@ class Text extends HummerElement {
 
 __Hummer__;
 class Image extends HummerElement {
-    constructor(id = "", name = "", props) {
+    constructor(id = "", name = "", props = {}) {
         super("Image", name, Object.assign(Object.assign({}, props), { viewId: id }));
         this._src = "";
         this._gifSrc = "";
@@ -517,6 +493,40 @@ class Image extends HummerElement {
     load(src, listener) {
         this.call("load", src, listener);
     }
+}
+
+const { document: _Document } = __Hummer__;
+class Hummer {
+    static initGlobal() {
+    }
+    static render(element) {
+        Hummer.initGlobal();
+        Hummer.rootElement = element;
+        _Document.render(element.getThis());
+    }
+    static createElement(tag) {
+        switch (tag) {
+            case "view":
+                return new View();
+            case "text":
+                return new Text();
+            case "image":
+                return new Image();
+        }
+        return undefined;
+    }
+    static getRootView() {
+        return Hummer.rootElement;
+    }
+}
+Hummer.rootElement = undefined;
+
+__Hummer__;
+class BasicAnimation {
+}
+
+__Hummer__;
+class KeyframeAnimation {
 }
 
 __Hummer__;

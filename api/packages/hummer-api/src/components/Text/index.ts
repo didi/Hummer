@@ -17,7 +17,7 @@ export class Text extends HummerElement {
      * @param name 
      * @param props 
      */
-    public constructor(id: string="", name: string = "", props: any) {
+    public constructor(id: string = "", name: string = "", props: any = {}) {
         super("Text", name, { ...props, viewId: id });
     }
 

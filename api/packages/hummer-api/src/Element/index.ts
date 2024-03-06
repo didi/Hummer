@@ -31,7 +31,7 @@ export class Element extends Node {
      * @param name 节点名称
      * @param props  构造参数
      */
-    constructor(tag: string, name: string = tag, props: any) {
+    constructor(tag: string, name: string = tag, props: any=undefined) {
         super(tag, name, props)
     }
 

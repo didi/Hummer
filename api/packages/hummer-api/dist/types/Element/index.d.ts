@@ -4,7 +4,7 @@ import { KeyframeAnimation } from "../anim/KeyframeAnimation";
 export declare class Element extends Node {
     private _attributes;
     private _style;
-    constructor(tag: string, name: string | undefined, props: any);
+    constructor(tag: string, name?: string, props?: any);
     setAttribute(key: string, value: any): void;
     protected _setAttribute(key: string, value: any): void;
     protected _setAttributes(attribute: object): void;

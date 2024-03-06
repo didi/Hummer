@@ -13,7 +13,7 @@ export class View extends HummerElement {
      * @param name 
      * @param props 
      */
-    public constructor(id: string="", name: string = "", props: any = {}) {
+    public constructor(id: string = "", name: string = "", props: any = {}) {
         super("View", name, { ...props, viewId: id });
     }
 
