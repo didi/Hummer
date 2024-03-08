@@ -1,6 +1,6 @@
-const { document: _Document } = __Hummer__
+// const { document: _Document } = __Hummer__
 
-import { Element } from "../Element"
+import { HummerElement } from "../HummerElement"
 import { BasicAnimation } from "../anim/BasicAnimation"
 import { KeyframeAnimation } from "../anim/KeyframeAnimation"
 
@@ -20,7 +20,7 @@ export interface HummerGlobalProxy {
      * @param style  样式
      * @param flag  标记
      */
-    setStyle(element: Element, style: object, flag: boolean): undefined;
+    setStyle(element: HummerElement, style: object, flag: boolean): undefined;
 
     //       /**
     //    * 设定元素样式，进行聚合
@@ -48,7 +48,7 @@ export interface HummerGlobalProxy {
      * @param element 组件实例
      * @param className  class名称
      */
-    updateClassStyle(element: Element, className: string): undefined;
+    updateClassStyle(element: HummerElement, className: string): undefined;
 
     // setAttribute(element: Element, key: string, value: any): undefined;
 
@@ -61,13 +61,13 @@ export interface HummerGlobalProxy {
      * @param element
      * @param animation 
      */
-    handleAnimation(element: Element, animation: BasicAnimation | KeyframeAnimation): undefined;
+    handleAnimation(element: HummerElement, animation: BasicAnimation | KeyframeAnimation): undefined;
 
     //挂载
-    onMounted(element: Element,): undefined;
+    onMounted(element: HummerElement,): undefined;
 
     //销毁
-    onDestoryed(element: Element,): undefined;
+    onDestoryed(element: HummerElement,): undefined;
 
     //  // Destoryed 生命周期
     //     private _onDestoryed() {
@@ -83,7 +83,7 @@ export interface HummerGlobalProxy {
      * @param element 响应目标元素
      * @param event  事件对象
      */
-    onHandleRecieveEvent(element: Element, event: any): any;
+    onHandleRecieveEvent(element: HummerElement, event: any): any;
 
     // this.element.addEventListener(event, (e: any) => {
     //     // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝

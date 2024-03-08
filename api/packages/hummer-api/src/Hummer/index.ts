@@ -2,6 +2,7 @@ const { document: _Document } = __Hummer__
 // const { Hummer: _Hummer } = __GLOBAL__
 
 import { Element } from "../Element"
+import { HummerElement } from "../HummerElement"
 import { View } from "../components/View"
 import { Text } from "../components/Text"
 import { Image } from "../components/Image"
@@ -27,7 +28,7 @@ export class Hummer {
     }
 
 
-    public static createElement(tag: string): Element | undefined {
+    public static createElement(tag: string): HummerElement | undefined {
         switch (tag) {
             case "view":
                 return new View();
