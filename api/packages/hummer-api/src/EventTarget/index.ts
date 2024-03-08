@@ -1,5 +1,5 @@
 
-import { HMObject } from "src/HMObject"
+import { HMObject } from "../HMObject"
 
 const { document: _Document } = __Hummer__
 
@@ -60,7 +60,7 @@ export class EventTarget extends HMObject {
     }
 
 
-    public addEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture: boolean) {
+    public addEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture?: boolean) {
         var listeners = this.envents.get(eventName)
         if (listeners == undefined) {
             listeners = new Array()
@@ -77,7 +77,7 @@ export class EventTarget extends HMObject {
     }
 
 
-    public removeEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture: boolean) {
+    public removeEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture?: boolean) {
         var listeners = this.envents.get(eventName)
         if (listeners != undefined) {
             if (eventLisener == undefined) {

@@ -1,0 +1,13 @@
+diff --git a/node_modules/@hummer/tenon-loader/dist/templateLoader.js b/node_modules/@hummer/tenon-loader/dist/templateLoader.js
+index 9a59a3e..ad79149 100644
+--- a/node_modules/@hummer/tenon-loader/dist/templateLoader.js
++++ b/node_modules/@hummer/tenon-loader/dist/templateLoader.js
+@@ -65,7 +65,7 @@ const TemplateLoader = function (source, inMap) {
+         scoped: !!query.scoped,
+         slotted: descriptor.slotted,
+         compiler: TenonCompiler,
+-        compilerOptions: Object.assign(Object.assign(Object.assign({}, options.compilerOptions), { scopeId: `data-v-${scopeId}`, runtimeModuleName: '@hummer/tenon-vue', bindingMetadata: script ? script.bindings : undefined }), (0, util_1.resolveTemplateTSOptions)(descriptor, options)),
++        compilerOptions: Object.assign(Object.assign(Object.assign({}, options.compilerOptions), { scopeId: `data-v-${scopeId}`, runtimeModuleName: '@vue/runtime-core', bindingMetadata: script ? script.bindings : undefined }), (0, util_1.resolveTemplateTSOptions)(descriptor, options)),
+         transformAssetUrls: options.transformAssetUrls || true,
+     });
+     // tips

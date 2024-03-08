@@ -1,0 +1,21 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "Hummer Project",
+  "author": "AdamCaoQAQ <1209600784@qq.com>",
+  "scripts": {
+    "build": "npx npm-run-all postinstall hummer build",
+    "dev": "npx npm-run-all postinstall  hummer dev",
+    "debug": "npm run dev & hummer debug",
+    "postinstall": "patch-package"
+  },
+  "dependencies": {
+    "@hummer/cli": "0.14.0",
+    "@hummer/tenon-utils": "^1.2.15",
+    "@hummer/tenon-vue": "^1.9.0",
+    "@vue/reactivity": "3.3.9",
+    "@vue/runtime-core": "3.3.9",
+    "npm-run-all": "^4.1.5",
+    "patch-package": "^8.0.0"
+  }
+}

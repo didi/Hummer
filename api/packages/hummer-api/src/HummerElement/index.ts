@@ -193,7 +193,8 @@ export class HummerElement extends Element {
                 this.dataset[dataKey] = value
             }
         }
-        this.props.set(key, value)
+        // TODO:  这数据结构不对 会报错
+        // this.props.set(key, value)
     }
 
 
