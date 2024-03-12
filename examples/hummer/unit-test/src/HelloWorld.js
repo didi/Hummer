@@ -11,23 +11,13 @@ class RootView extends View {
         }
 
         let textView = new Text();
-        textView.text = "~ Hello Hummer123 ~";
+        textView.text = "~ Hello Hummer ~";
         textView.style = {
             fontSize: 20,
             color: '#000000',
         }
 
         this.appendChild(textView);
-
-        let textView2 = new Text();
-        textView2.text = "~ Hello Hummer123 ~";
-        textView2.style = {
-            fontSize: 20,
-            color: '#000000',
-            fontFamily: 'BarlowSemiCondensedMedium',
-        }
-
-        this.appendChild(textView2);
     }
 }
 
