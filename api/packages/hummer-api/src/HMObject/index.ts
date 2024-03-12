@@ -33,7 +33,7 @@ export class HMObject {
 
 
     protected call(methodName: string, ...args: any): any {
-        this.obj.invoke(methodName, args)
+        return this.obj.invoke(methodName, args)
     }
 
 
