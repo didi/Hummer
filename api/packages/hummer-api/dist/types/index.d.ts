@@ -9,6 +9,8 @@ export * from "./anim/BasicAnimation";
 export * from "./anim/KeyframeAnimation";
 export * from "./components/View";
 export * from "./components/Text";
+export * from "./components/Input";
+export * from "./components/TextArea";
 export * from "./components/Image";
 export * from "./HummerComponent";
 export * from "./api/Memory";

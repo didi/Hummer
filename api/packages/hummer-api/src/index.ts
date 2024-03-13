@@ -24,6 +24,10 @@ export * from "./components/View"
 
 export * from "./components/Text"
 
+export * from "./components/Input"
+
+export * from "./components/TextArea"
+
 export * from "./components/Image"
 
 export * from "./HummerComponent"

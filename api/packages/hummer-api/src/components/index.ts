@@ -10,3 +10,10 @@ export * from "./Text"
 
 //Image
 export * from "./Image"
+
+
+//Input
+export * from "./Input"
+
+//TextArea
+export * from "./TextArea"

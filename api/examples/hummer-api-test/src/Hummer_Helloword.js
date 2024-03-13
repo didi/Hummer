@@ -17,6 +17,7 @@ export class RootView extends View {
             paddingTop: 10,
         };
 
+
         let text1 = new Image();
         this.text1 = text1;
         text1.src = "https://img-hxy021.didistatic.com/static/starimg/img/jcYlCi9q771709538836363.jpeg";

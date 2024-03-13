@@ -6,6 +6,8 @@ import { HummerElement } from "../HummerElement"
 import { View } from "../components/View"
 import { Text } from "../components/Text"
 import { Image } from "../components/Image"
+import { Input } from "../components/Input"
+import { TextArea } from "../components/TextArea"
 
 export class Hummer {
 
@@ -36,6 +38,10 @@ export class Hummer {
                 return new Text();
             case "image":
                 return new Image();
+            case "input":
+                return new Input();
+            case "textArea":
+                return new TextArea();
         }
         return undefined;
     }

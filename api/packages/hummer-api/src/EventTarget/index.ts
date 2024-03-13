@@ -23,7 +23,7 @@ export class EventTarget extends HMObject {
 
     //消息事件回调入口
     public onRecieveEvent(eventName: string, event: any) {
-        event = this.onHandleRecieveEvent(eventName, event);
+        // event = this.onHandleRecieveEvent(eventName, event);
         this.dispatchEvent(eventName, event)
     }
 
@@ -44,11 +44,11 @@ export class EventTarget extends HMObject {
 
 
     public dispatchEvent(eventName: string, event: any) {
-        var listeners = this.envents.get(eventName)
+        var listeners = this.envents.get(eventName);
         if (listeners != undefined) {
             listeners.forEach((lisener => {
                 if (lisener instanceof Function) {
-                    lisener.call(event);
+                    lisener.call(this, event);
                 } else {
                     lisener.onEvent(event);
                 }

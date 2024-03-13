@@ -20,7 +20,7 @@ class HMObject {
         return this.obj;
     }
     call(methodName, ...args) {
-        this.obj.invoke(methodName, args);
+        return this.obj.invoke(methodName, args);
     }
 }
 
@@ -31,7 +31,6 @@ class EventTarget extends HMObject {
         this.envents = new Map();
     }
     onRecieveEvent(eventName, event) {
-        event = this.onHandleRecieveEvent(eventName, event);
         this.dispatchEvent(eventName, event);
     }
     onHandleRecieveEvent(eventName, event) {
@@ -47,12 +46,15 @@ class EventTarget extends HMObject {
         if (listeners != undefined) {
             listeners.forEach((lisener => {
                 if (lisener instanceof Function) {
-                    lisener.call(event);
+                    lisener.call(this, event);
                 }
                 else {
                     lisener.onEvent(event);
                 }
             }));
+        }
+        else {
+            console.log("未找到事件处理器");
         }
     }
     addEventListener(eventName, eventLisener, useCapture) {
@@ -78,6 +80,9 @@ class EventTarget extends HMObject {
                 const index = listeners.indexOf(eventLisener);
                 if (index > -1) {
                     listeners.splice(index, 1);
+                }
+                else {
+                    console.log("未找到指定对象");
                 }
             }
             this._removeEventListener(eventName);
@@ -296,6 +301,7 @@ class Element extends Node {
     show() {
     }
     dbg_getDescription(callback, id) {
+        console.log("dbg_getDescription()");
     }
 }
 
@@ -375,6 +381,7 @@ class HummerElement extends Element {
         }
     }
     setElementText(text) {
+        console.warn('非text元素不支持');
     }
     getAttribute(key) {
         switch (key) {
@@ -405,7 +412,6 @@ class HummerElement extends Element {
                 this.dataset[dataKey] = value;
             }
         }
-        this.props.set(key, value);
     }
     onHandleRecieveEvent(eventName, event) {
         if (this.globalProxy) {
@@ -495,6 +501,68 @@ class Image extends HummerElement {
     }
 }
 
+__Hummer__;
+class Input extends HummerElement {
+    constructor(id = "", name = "", props = {}) {
+        super("Input", name, Object.assign(Object.assign({}, props), { viewId: id }));
+        this._text = "";
+        this._placeholder = "";
+        this._focused = false;
+    }
+    get text() {
+        return this._text;
+    }
+    set text(value) {
+        this._text = value;
+        this._setAttribute("text", value);
+    }
+    get placeholder() {
+        return this._placeholder;
+    }
+    set placeholder(value) {
+        this._placeholder = value;
+        this._setAttribute("placeholder", value);
+    }
+    get focused() {
+        return this._focused;
+    }
+    set focused(value) {
+        this._focused = value;
+        this._setAttribute("focused", value);
+    }
+}
+
+__Hummer__;
+class TextArea extends HummerElement {
+    constructor(id = "", name = "", props = {}) {
+        super("TextArea", name, Object.assign(Object.assign({}, props), { viewId: id }));
+        this._text = "";
+        this._placeholder = "";
+        this._focused = false;
+    }
+    get text() {
+        return this._text;
+    }
+    set text(value) {
+        this._text = value;
+        this._setAttribute("text", value);
+    }
+    get placeholder() {
+        return this._placeholder;
+    }
+    set placeholder(value) {
+        this._placeholder = value;
+        this._setAttribute("placeholder", value);
+    }
+    get focused() {
+        return this._focused;
+    }
+    set focused(value) {
+        this._focused = value;
+        this._setAttribute("focused", value);
+    }
+}
+
 const { document: _Document } = __Hummer__;
 class Hummer {
     static initGlobal() {
@@ -512,6 +580,10 @@ class Hummer {
                 return new Text();
             case "image":
                 return new Image();
+            case "input":
+                return new Input();
+            case "textArea":
+                return new TextArea();
         }
         return undefined;
     }
@@ -701,11 +773,13 @@ exports.Hummer = Hummer;
 exports.HummerComponent = HummerComponent;
 exports.HummerElement = HummerElement;
 exports.Image = Image;
+exports.Input = Input;
 exports.KeyframeAnimation = KeyframeAnimation;
 exports.Memory = Memory;
 exports.Navigator = Navigator;
 exports.Node = Node;
 exports.Storage = Storage;
 exports.Text = Text;
+exports.TextArea = TextArea;
 exports.View = View;
 //# sourceMappingURL=hummer-api.cjs.js.map

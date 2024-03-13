@@ -1,8 +1,8 @@
 import { HummerComponent } from "../../HummerComponent";
-export declare class Storage extends HummerComponent {
+export declare class Memory extends HummerComponent {
     private static instance;
     constructor(props?: any);
-    protected static newInstance(): Storage;
+    protected static newInstance(): Memory;
     protected static checkInstance(): void;
     static set(key: string, value: Object): void;
     static get(key: string): any;
