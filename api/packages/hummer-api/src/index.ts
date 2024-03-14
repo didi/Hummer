@@ -38,6 +38,9 @@ export * from "./api/Navigator"
 
 export * from "./api/Storage"
 
+export * from "./api/NotifyCenter"
+
+
 
 __GLOBAL__.Hummer = {
 

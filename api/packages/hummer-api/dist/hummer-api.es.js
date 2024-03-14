@@ -559,9 +559,40 @@ class TextArea extends HummerElement {
     }
 }
 
+__Hummer__;
+class HummerComponent extends EventTarget {
+    constructor(tag, props) {
+        super(tag, true, props);
+    }
+}
+
+class HummerApi extends HummerComponent {
+    constructor(props = {}) {
+        super("Hummer", props);
+    }
+    static newInstance() {
+        return new HummerApi();
+    }
+    static checkInstance() {
+        if (!HummerApi.instance) {
+            HummerApi.instance = HummerApi.newInstance();
+        }
+    }
+    static getEnv() {
+        HummerApi.checkInstance();
+        return HummerApi.instance.getEnv();
+    }
+    getEnv() {
+        return this.call("getEnv");
+    }
+}
+
 const { document: _Document } = __Hummer__;
 class Hummer {
     static initGlobal() {
+    }
+    static env() {
+        return HummerApi.getEnv();
     }
     static render(element) {
         Hummer.initGlobal();
@@ -595,13 +626,6 @@ class BasicAnimation {
 
 __Hummer__;
 class KeyframeAnimation {
-}
-
-__Hummer__;
-class HummerComponent extends EventTarget {
-    constructor(tag, props) {
-        super(tag, true, props);
-    }
 }
 
 class Memory extends HummerComponent {
@@ -753,11 +777,46 @@ class Storage extends HummerComponent {
     }
 }
 
+class NotifyCenter extends HummerComponent {
+    constructor(props = {}) {
+        super("NotifyCenter", props);
+    }
+    static newInstance() {
+        return new NotifyCenter();
+    }
+    static checkInstance() {
+        if (!NotifyCenter.instance) {
+            NotifyCenter.instance = NotifyCenter.newInstance();
+        }
+    }
+    addEventListener(event, callback) {
+        NotifyCenter.checkInstance();
+        NotifyCenter.instance.__addEventListener(event, callback);
+    }
+    removeEventListener(event, callback) {
+        NotifyCenter.checkInstance();
+        return NotifyCenter.instance.__removeEventListener(event, callback);
+    }
+    triggerEvent(event, value) {
+        NotifyCenter.checkInstance();
+        NotifyCenter.instance.__triggerEvent(event, value);
+    }
+    __addEventListener(event, callback) {
+        this.call("addEventListener", event, callback);
+    }
+    __removeEventListener(event, callback) {
+        return this.call("removeEventListener", event, callback);
+    }
+    __triggerEvent(event, value) {
+        this.call("triggerEvent", event, value);
+    }
+}
+
 __GLOBAL__.Hummer = {
     getRootView() {
         return Hummer.getRootView();
     }
 };
 
-export { BasicAnimation, Element, EventTarget, HMObject, Hummer, HummerComponent, HummerElement, Image, Input, KeyframeAnimation, Memory, Navigator, Node, Storage, Text, TextArea, View };
+export { BasicAnimation, Element, EventTarget, HMObject, Hummer, HummerComponent, HummerElement, Image, Input, KeyframeAnimation, Memory, Navigator, Node, NotifyCenter, Storage, Text, TextArea, View };
 //# sourceMappingURL=hummer-api.es.js.map

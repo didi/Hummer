@@ -16,3 +16,4 @@ export * from "./HummerComponent";
 export * from "./api/Memory";
 export * from "./api/Navigator";
 export * from "./api/Storage";
+export * from "./api/NotifyCenter";

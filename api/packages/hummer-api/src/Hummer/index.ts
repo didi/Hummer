@@ -8,14 +8,20 @@ import { Text } from "../components/Text"
 import { Image } from "../components/Image"
 import { Input } from "../components/Input"
 import { TextArea } from "../components/TextArea"
+import { HummerApi, Env } from "../api/HummerApi"
 
 export class Hummer {
 
 
     private static rootElement: Element | undefined = undefined
+  
 
     public static initGlobal() {
 
+    }
+
+    public static get Env(): Env {
+        return HummerApi.getEnv()
     }
 
     /**

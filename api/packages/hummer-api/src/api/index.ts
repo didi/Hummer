@@ -11,3 +11,9 @@ export * from "./Navigator"
 
 //Storage
 export * from "./Storage"
+
+//NotifyCenter
+export * from "./NotifyCenter"
+
+//Hummer
+export * from "./HummerApi"

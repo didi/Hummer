@@ -23,6 +23,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Memory: () => (/* binding */ Memory),
 /* harmony export */   Navigator: () => (/* binding */ Navigator),
 /* harmony export */   Node: () => (/* binding */ Node),
+/* harmony export */   NotifyCenter: () => (/* binding */ NotifyCenter),
 /* harmony export */   Storage: () => (/* binding */ Storage),
 /* harmony export */   Text: () => (/* binding */ Text),
 /* harmony export */   TextArea: () => (/* binding */ TextArea),
@@ -597,11 +598,40 @@ class TextArea extends HummerElement {
     this._setAttribute("focused", value);
   }
 }
+__Hummer__;
+class HummerComponent extends EventTarget {
+  constructor(tag, props) {
+    super(tag, true, props);
+  }
+}
+class HummerApi extends HummerComponent {
+  constructor(props = {}) {
+    super("Hummer", props);
+  }
+  static newInstance() {
+    return new HummerApi();
+  }
+  static checkInstance() {
+    if (!HummerApi.instance) {
+      HummerApi.instance = HummerApi.newInstance();
+    }
+  }
+  static getEnv() {
+    HummerApi.checkInstance();
+    return HummerApi.instance.getEnv();
+  }
+  getEnv() {
+    return this.call("getEnv");
+  }
+}
 const {
   document: _Document
 } = __Hummer__;
 class Hummer {
   static initGlobal() {}
+  static env() {
+    return HummerApi.getEnv();
+  }
   static render(element) {
     Hummer.initGlobal();
     Hummer.rootElement = element;
@@ -631,12 +661,6 @@ __Hummer__;
 class BasicAnimation {}
 __Hummer__;
 class KeyframeAnimation {}
-__Hummer__;
-class HummerComponent extends EventTarget {
-  constructor(tag, props) {
-    super(tag, true, props);
-  }
-}
 class Memory extends HummerComponent {
   constructor(props = {}) {
     super("Memory", props);
@@ -781,6 +805,40 @@ class Storage extends HummerComponent {
   }
   exist(key, cb) {
     this.call("exist", key, cb);
+  }
+}
+class NotifyCenter extends HummerComponent {
+  constructor(props = {}) {
+    super("NotifyCenter", props);
+  }
+  static newInstance() {
+    return new NotifyCenter();
+  }
+  static checkInstance() {
+    if (!NotifyCenter.instance) {
+      NotifyCenter.instance = NotifyCenter.newInstance();
+    }
+  }
+  addEventListener(event, callback) {
+    NotifyCenter.checkInstance();
+    NotifyCenter.instance.__addEventListener(event, callback);
+  }
+  removeEventListener(event, callback) {
+    NotifyCenter.checkInstance();
+    return NotifyCenter.instance.__removeEventListener(event, callback);
+  }
+  triggerEvent(event, value) {
+    NotifyCenter.checkInstance();
+    NotifyCenter.instance.__triggerEvent(event, value);
+  }
+  __addEventListener(event, callback) {
+    this.call("addEventListener", event, callback);
+  }
+  __removeEventListener(event, callback) {
+    return this.call("removeEventListener", event, callback);
+  }
+  __triggerEvent(event, value) {
+    this.call("triggerEvent", event, value);
   }
 }
 __GLOBAL__.Hummer = {
@@ -6260,25 +6318,42 @@ var RootView = /*#__PURE__*/function (_View) {
       paddingRight: 0,
       paddingTop: 10
     };
-    var memory = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Memory();
-    memory.set('daijia', 'daijiaValue', function (res) {
-      console.log("----是否设置成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
-    });
-    memory.get('daijia', function (res) {
-      console.log("----查询成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
-    });
+
+    // let memory = new Memory()
+    // memory.set('daijia', 'daijiaValue', (res) => {
+    //     console.log("----是否设置成功", JSON.stringify(res))
+    // })
+
+    // memory.get('daijia', (res) => {
+    //     console.log("----查询成功", JSON.stringify(res))
+    // })
+
     var storage = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Storage();
     storage.exist('daijiaStorage', function (res) {
       console.log("----storage查询成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
     });
-
-    // storage.set('daijiaStorage', JSON.stringify({name:'hummer', other:'hummer_api'}), (res) => {
-    //     console.log("----storage是否设置成功", JSON.stringify(res))
-    //     storage.get('daijiaStorage', (res) => {
-    //         console.log("----storage查询成功", JSON.stringify(res))
-    //     })
-
-    // })
+    storage.set('daijiaStorage', _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()({
+      name: 'hummer',
+      other: 'hummer_api'
+    }), function (res) {
+      console.log("----storage是否设置成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
+      storage.get('daijiaStorage', function (res) {
+        console.log("----storage查询成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
+      });
+    });
+    var notifyCenter = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.NotifyCenter();
+    notifyCenter.addEventListener("myHummer", function (e) {
+      console.log("myHummer被执行内容：", e);
+    });
+    var testFunction = function test(e) {
+      console.log("myHummer被执行内容111111：", e);
+    };
+    notifyCenter.addEventListener("myHummer", testFunction);
+    notifyCenter.removeEventListener("myHummer");
+    var notifyCenter1 = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.NotifyCenter();
+    notifyCenter1.triggerEvent("myHummer", "内容xxxxxxxx");
+    var env = _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Hummer.env();
+    console.log("---------hummer全局环境变量", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(env));
     return _this;
   }
   return (0,_Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__["default"])(RootView);
