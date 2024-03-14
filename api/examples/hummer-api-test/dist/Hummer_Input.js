@@ -1,3 +1,4 @@
+export function renderFunc(__Hummer__, __GLOBAL__) {
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -23,6 +24,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Memory: () => (/* binding */ Memory),
 /* harmony export */   Navigator: () => (/* binding */ Navigator),
 /* harmony export */   Node: () => (/* binding */ Node),
+/* harmony export */   NotifyCenter: () => (/* binding */ NotifyCenter),
 /* harmony export */   Storage: () => (/* binding */ Storage),
 /* harmony export */   Text: () => (/* binding */ Text),
 /* harmony export */   TextArea: () => (/* binding */ TextArea),
@@ -59,7 +61,7 @@ class HMObject {
     return this.obj;
   }
   call(methodName, ...args) {
-    return this.obj.invoke(methodName, args);
+    return this.obj.invoke(methodName, ...args);
   }
 }
 __Hummer__;
@@ -597,11 +599,40 @@ class TextArea extends HummerElement {
     this._setAttribute("focused", value);
   }
 }
+__Hummer__;
+class HummerComponent extends EventTarget {
+  constructor(tag, props) {
+    super(tag, true, props);
+  }
+}
+class HummerApi extends HummerComponent {
+  constructor(props = {}) {
+    super("Hummer", props);
+  }
+  static newInstance() {
+    return new HummerApi();
+  }
+  static checkInstance() {
+    if (!HummerApi.instance) {
+      HummerApi.instance = HummerApi.newInstance();
+    }
+  }
+  static getEnv() {
+    HummerApi.checkInstance();
+    return HummerApi.instance.getEnv();
+  }
+  getEnv() {
+    return this.call("getEnv");
+  }
+}
 const {
   document: _Document
 } = __Hummer__;
 class Hummer {
   static initGlobal() {}
+  static get Env() {
+    return HummerApi.getEnv();
+  }
   static render(element) {
     Hummer.initGlobal();
     Hummer.rootElement = element;
@@ -631,12 +662,6 @@ __Hummer__;
 class BasicAnimation {}
 __Hummer__;
 class KeyframeAnimation {}
-__Hummer__;
-class HummerComponent extends EventTarget {
-  constructor(tag, props) {
-    super(tag, true, props);
-  }
-}
 class Memory extends HummerComponent {
   constructor(props = {}) {
     super("Memory", props);
@@ -657,17 +682,17 @@ class Memory extends HummerComponent {
     Memory.checkInstance();
     return Memory.instance.get(key, cb);
   }
-  static remove(key) {
+  static remove(key, cb) {
     Memory.checkInstance();
-    Memory.instance.remove(key);
+    Memory.instance.remove(key, cb);
   }
-  static removeAll() {
+  static removeAll(cb) {
     Memory.checkInstance();
-    Memory.instance.removeAll();
+    Memory.instance.removeAll(cb);
   }
-  static exist(key) {
+  static exist(key, cb) {
     Memory.checkInstance();
-    return Memory.instance.exist(key);
+    Memory.instance.exist(key, cb);
   }
   set(key, value, cb) {
     this.call("set", key, value, cb);
@@ -675,15 +700,14 @@ class Memory extends HummerComponent {
   get(key, cb) {
     return this.call("get", key, cb);
   }
-  remove(key) {
-    this.call("remove", key);
+  remove(key, cb) {
+    this.call("remove", key, cb);
   }
-  removeAll() {
-    this.call("removeAll");
+  removeAll(cb) {
+    this.call("removeAll", cb);
   }
-  exist(key) {
-    let value = this.call("exist", key);
-    return value;
+  exist(key, cb) {
+    this.call("exist", key, cb);
   }
 }
 __Hummer__;
@@ -748,41 +772,74 @@ class Storage extends HummerComponent {
       Storage.instance = Storage.newInstance();
     }
   }
-  static set(key, value) {
+  static set(key, value, cb) {
     Storage.checkInstance();
-    Storage.instance.set(key, value);
+    Storage.instance.set(key, value, cb);
   }
-  static get(key) {
+  static get(key, cb) {
     Storage.checkInstance();
-    return Storage.instance.get(key);
+    return Storage.instance.get(key, cb);
   }
-  static remove(key) {
+  static remove(key, cb) {
     Storage.checkInstance();
-    Storage.instance.remove(key);
+    Storage.instance.remove(key, cb);
   }
-  static removeAll() {
+  static removeAll(cb) {
     Storage.checkInstance();
-    Storage.instance.removeAll();
+    Storage.instance.removeAll(cb);
   }
-  static exist(key) {
+  static exist(key, cb) {
     Storage.checkInstance();
-    return Storage.instance.exist(key);
+    Storage.instance.exist(key, cb);
   }
-  set(key, value) {
-    this.call("set", key, value);
+  set(key, value, cb) {
+    this.call("set", key, value, cb);
   }
-  get(key) {
-    return this.call("get", key);
+  get(key, cb) {
+    return this.call("get", key, cb);
   }
-  remove(key) {
-    this.call("remove", key);
+  remove(key, cb) {
+    this.call("remove", key, cb);
   }
-  removeAll() {
-    this.call("removeAll");
+  removeAll(cb) {
+    this.call("removeAll", cb);
   }
-  exist(key) {
-    let value = this.call("exist", key);
-    return value;
+  exist(key, cb) {
+    this.call("exist", key, cb);
+  }
+}
+class NotifyCenter extends HummerComponent {
+  constructor(props = {}) {
+    super("NotifyCenter", props);
+  }
+  static newInstance() {
+    return new NotifyCenter();
+  }
+  static checkInstance() {
+    if (!NotifyCenter.instance) {
+      NotifyCenter.instance = NotifyCenter.newInstance();
+    }
+  }
+  addEventListener(event, callback) {
+    NotifyCenter.checkInstance();
+    NotifyCenter.instance.__addEventListener(event, callback);
+  }
+  removeEventListener(event, callback) {
+    NotifyCenter.checkInstance();
+    return NotifyCenter.instance.__removeEventListener(event, callback);
+  }
+  triggerEvent(event, value) {
+    NotifyCenter.checkInstance();
+    NotifyCenter.instance.__triggerEvent(event, value);
+  }
+  __addEventListener(event, callback) {
+    this.call("addEventListener", event, callback);
+  }
+  __removeEventListener(event, callback) {
+    return this.call("removeEventListener", event, callback);
+  }
+  __triggerEvent(event, value) {
+    this.call("triggerEvent", event, value);
   }
 }
 __GLOBAL__.Hummer = {
@@ -6312,7 +6369,6 @@ var RootView = /*#__PURE__*/function (_View) {
     textArea.addEventListener('input', function (event) {
       console.log("hummer textArea state222222:" + _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(event));
     });
-    Storage().get('key', function (value) {});
     _this.appendChild(input);
     _this.appendChild(input2);
     _this.appendChild(textArea);
@@ -6334,4 +6390,5 @@ setTimeout(function () {
 
 /******/ })()
 ;
-//# sourceMappingURL=http://172.23.165.115:8000/Hummer_Input.js.map
+//# sourceMappingURL=http://172.23.165.91:8000/Hummer_Input.js.map
+}

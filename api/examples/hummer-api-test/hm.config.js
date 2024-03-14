@@ -1,4 +1,5 @@
 const path = require('path')
+const WrapFunctionPlugin = require('./generateFunction')
 module.exports = {
   type: 'hummer',
   webpack: {
@@ -8,6 +9,10 @@ module.exports = {
       path: path.resolve(__dirname, './dist'),
       filename: "[name].js"
     },
-    plugins: []
+    plugins: [
+      new WrapFunctionPlugin({
+        wrapFunction: 'renderFunc'
+      })
+    ]
   }
 }

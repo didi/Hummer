@@ -2,13 +2,13 @@ const { document: _Document } = __Hummer__
 
 import { HummerElement } from "../../HummerElement"
 
-export class Input extends HummerElement {
+export class Button extends HummerElement {
 
     protected _text: string = "";
 
-    protected _placeholder: string = "";
+    protected _pressed: object = {};
 
-    protected _focused: boolean = false;
+    protected _disabled: object = {};
 
     /**
      * 
@@ -17,12 +17,12 @@ export class Input extends HummerElement {
      * @param props 
      */
     public constructor(id: string = "", name: string = "", props: any = {}) {
-        super("Input", name, { ...props, viewId: id });
+        super("Button", name, { ...props, viewId: id });
     }
 
 
     /**
-     * 默认输入内容
+     * 按钮文案
      */
     get text() {
         return this._text;
@@ -34,29 +34,31 @@ export class Input extends HummerElement {
     }
 
     /**
-     * placeholder内容
+     * 按压状态下的样式
      */
-    get placeholder() {
-        return this._placeholder;
+    get pressed() {
+        return this._pressed;
     }
 
-    set placeholder(value: string) {
-        this._placeholder = value;
+    set pressed(value: object) {
+        this._pressed = value;
         this._setAttribute("placeholder", value);
     }
 
 
     /**
-     * 是否处于激活状态
+     * 禁用状态下的样式
      */
     get focused() {
-        return this._focused;
+        return this._disabled;
     }
 
-    set focused(value: boolean) {
-        this._focused = value;
-        this._setAttribute("focused", value);
+    set focused(value: object) {
+        this._disabled = value;
+        this._setAttribute("disabled", value);
     }
+
+
 
 
 }

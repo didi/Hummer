@@ -52,7 +52,7 @@ export class RootView extends View {
         notifyCenter1.triggerEvent("myHummer", "内容xxxxxxxx")
 
 
-        let env = Hummer.env()
+       let env =  Hummer.Env
         console.log("---------hummer全局环境变量", JSON.stringify(env))
 
     }

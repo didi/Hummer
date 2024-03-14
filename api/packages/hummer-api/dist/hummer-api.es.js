@@ -591,7 +591,7 @@ const { document: _Document } = __Hummer__;
 class Hummer {
     static initGlobal() {
     }
-    static env() {
+    static get Env() {
         return HummerApi.getEnv();
     }
     static render(element) {
