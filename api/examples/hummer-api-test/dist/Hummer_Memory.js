@@ -59,7 +59,7 @@ class HMObject {
     return this.obj;
   }
   call(methodName, ...args) {
-    return this.obj.invoke(methodName, args);
+    return this.obj.invoke(methodName, ...args);
   }
 }
 __Hummer__;
@@ -657,17 +657,17 @@ class Memory extends HummerComponent {
     Memory.checkInstance();
     return Memory.instance.get(key, cb);
   }
-  static remove(key) {
+  static remove(key, cb) {
     Memory.checkInstance();
-    Memory.instance.remove(key);
+    Memory.instance.remove(key, cb);
   }
-  static removeAll() {
+  static removeAll(cb) {
     Memory.checkInstance();
-    Memory.instance.removeAll();
+    Memory.instance.removeAll(cb);
   }
-  static exist(key) {
+  static exist(key, cb) {
     Memory.checkInstance();
-    return Memory.instance.exist(key);
+    Memory.instance.exist(key, cb);
   }
   set(key, value, cb) {
     this.call("set", key, value, cb);
@@ -675,15 +675,14 @@ class Memory extends HummerComponent {
   get(key, cb) {
     return this.call("get", key, cb);
   }
-  remove(key) {
-    this.call("remove", key);
+  remove(key, cb) {
+    this.call("remove", key, cb);
   }
-  removeAll() {
-    this.call("removeAll");
+  removeAll(cb) {
+    this.call("removeAll", cb);
   }
-  exist(key) {
-    let value = this.call("exist", key);
-    return value;
+  exist(key, cb) {
+    this.call("exist", key, cb);
   }
 }
 __Hummer__;
@@ -748,41 +747,40 @@ class Storage extends HummerComponent {
       Storage.instance = Storage.newInstance();
     }
   }
-  static set(key, value) {
+  static set(key, value, cb) {
     Storage.checkInstance();
-    Storage.instance.set(key, value);
+    Storage.instance.set(key, value, cb);
   }
-  static get(key) {
+  static get(key, cb) {
     Storage.checkInstance();
-    return Storage.instance.get(key);
+    return Storage.instance.get(key, cb);
   }
-  static remove(key) {
+  static remove(key, cb) {
     Storage.checkInstance();
-    Storage.instance.remove(key);
+    Storage.instance.remove(key, cb);
   }
-  static removeAll() {
+  static removeAll(cb) {
     Storage.checkInstance();
-    Storage.instance.removeAll();
+    Storage.instance.removeAll(cb);
   }
-  static exist(key) {
+  static exist(key, cb) {
     Storage.checkInstance();
-    return Storage.instance.exist(key);
+    Storage.instance.exist(key, cb);
   }
-  set(key, value) {
-    this.call("set", key, value);
+  set(key, value, cb) {
+    this.call("set", key, value, cb);
   }
-  get(key) {
-    return this.call("get", key);
+  get(key, cb) {
+    return this.call("get", key, cb);
   }
-  remove(key) {
-    this.call("remove", key);
+  remove(key, cb) {
+    this.call("remove", key, cb);
   }
-  removeAll() {
-    this.call("removeAll");
+  removeAll(cb) {
+    this.call("removeAll", cb);
   }
-  exist(key) {
-    let value = this.call("exist", key);
-    return value;
+  exist(key, cb) {
+    this.call("exist", key, cb);
   }
 }
 __GLOBAL__.Hummer = {
@@ -6227,9 +6225,9 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!*****************************!*\
-  !*** ./src/Hummer_Input.js ***!
-  \*****************************/
+/*!******************************!*\
+  !*** ./src/Hummer_Memory.js ***!
+  \******************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   RootView: () => (/* binding */ RootView)
@@ -6241,7 +6239,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/stable/json/stringify.js */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/stable/json/stringify.js");
 /* harmony import */ var _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _hummer_tenon_dev_tool_dist_tenon_dev_tool_es__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @hummer/tenon-dev-tool/dist/tenon-dev-tool.es */ "./node_modules/@hummer/tenon-dev-tool/dist/tenon-dev-tool.es.js");
-/* harmony import */ var _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../../packages/hummer-api/dist/hummer-api.es */ "../../packages/hummer-api/dist/hummer-api.es.js");
+/* harmony import */ var _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../packages/hummer-api/dist/hummer-api.es */ "../../packages/hummer-api/dist/hummer-api.es.js");
 
 
 
@@ -6262,60 +6260,25 @@ var RootView = /*#__PURE__*/function (_View) {
       paddingRight: 0,
       paddingTop: 10
     };
-    var input = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Input();
-    input.text = 'hummer api text';
-    input.placeholder = '11122hummer api placeholder';
-    input.focused = true;
-    input.maxLength = 5;
-    input.style = {
-      width: 120,
-      height: 300,
-      type: 'number',
-      color: '#ffffff',
-      placeholderColor: '#00ff00',
-      cursorColor: '#0000ff',
-      textAlign: 'center',
-      maxLength: 5,
-      returnKeyType: 'done'
-    };
-    input.addEventListener('input', function (event) {
-      console.log("hummer input state11111:" + _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(event));
+    var memory = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Memory();
+    memory.set('daijia', 'daijiaValue', function (res) {
+      console.log("----是否设置成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
     });
-    input.addEventListener('input', function (event) {
-      console.log("hummer input state222222:" + _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(event));
+    memory.get('daijia', function (res) {
+      console.log("----查询成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
     });
-    var input2 = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Input();
-    input2.placeholder = 'input2input2input2input2哈哈';
-    input2.style = {
-      width: 200,
-      height: 60,
-      type: 'number',
-      color: '#ffffff'
-    };
-    var textArea = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.TextArea();
-    textArea.text = 'hummer api text';
-    textArea.placeholder = '11122hummer api placeholder';
-    textArea.focused = true;
-    textArea.maxLength = 5;
-    textArea.style = {
-      width: 150,
-      height: 600,
-      color: '#ffffff',
-      placeholderColor: '#00ff00',
-      cursorColor: '#0000ff',
-      textAlign: 'center',
-      returnKeyType: 'done'
-    };
-    textArea.addEventListener('input', function (event) {
-      console.log("hummer textArea state11111:" + _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(event));
+    var storage = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Storage();
+    storage.exist('daijiaStorage', function (res) {
+      console.log("----storage查询成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
     });
-    textArea.addEventListener('input', function (event) {
-      console.log("hummer textArea state222222:" + _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(event));
-    });
-    Storage().get('key', function (value) {});
-    _this.appendChild(input);
-    _this.appendChild(input2);
-    _this.appendChild(textArea);
+
+    // storage.set('daijiaStorage', JSON.stringify({name:'hummer', other:'hummer_api'}), (res) => {
+    //     console.log("----storage是否设置成功", JSON.stringify(res))
+    //     storage.get('daijiaStorage', (res) => {
+    //         console.log("----storage查询成功", JSON.stringify(res))
+    //     })
+
+    // })
     return _this;
   }
   return (0,_Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__["default"])(RootView);
@@ -6334,4 +6297,4 @@ setTimeout(function () {
 
 /******/ })()
 ;
-//# sourceMappingURL=http://172.23.165.115:8000/Hummer_Input.js.map
+//# sourceMappingURL=http://172.23.165.115:8000/Hummer_Memory.js.map

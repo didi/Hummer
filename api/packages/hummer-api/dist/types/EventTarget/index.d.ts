@@ -11,6 +11,6 @@ export declare class EventTarget extends HMObject {
     dispatchEvent(eventName: string, event: any): void;
     addEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture?: boolean): void;
     private _addEventListener;
-    removeEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture?: boolean): void;
+    removeEventListener(eventName: string, eventLisener?: EventLisener | Function, useCapture?: boolean): void;
     private _removeEventListener;
 }

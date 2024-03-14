@@ -16,7 +16,7 @@ class HMObject {
         return this.obj;
     }
     call(methodName, ...args) {
-        return this.obj.invoke(methodName, args);
+        return this.obj.invoke(methodName, ...args);
     }
 }
 
@@ -578,7 +578,7 @@ class Hummer {
                 return new Image();
             case "input":
                 return new Input();
-            case "textArea":
+            case "textarea":
                 return new TextArea();
         }
         return undefined;
@@ -616,41 +616,40 @@ class Memory extends HummerComponent {
             Memory.instance = Memory.newInstance();
         }
     }
-    static set(key, value) {
+    static set(key, value, cb) {
         Memory.checkInstance();
-        Memory.instance.set(key, value);
+        Memory.instance.set(key, value, cb);
     }
-    static get(key) {
+    static get(key, cb) {
         Memory.checkInstance();
-        return Memory.instance.get(key);
+        return Memory.instance.get(key, cb);
     }
-    static remove(key) {
+    static remove(key, cb) {
         Memory.checkInstance();
-        Memory.instance.remove(key);
+        Memory.instance.remove(key, cb);
     }
-    static removeAll() {
+    static removeAll(cb) {
         Memory.checkInstance();
-        Memory.instance.removeAll();
+        Memory.instance.removeAll(cb);
     }
-    static exist(key) {
+    static exist(key, cb) {
         Memory.checkInstance();
-        return Memory.instance.exist(key);
+        Memory.instance.exist(key, cb);
     }
-    set(key, value) {
-        this.call("set", key, value);
+    set(key, value, cb) {
+        this.call("set", key, value, cb);
     }
-    get(key) {
-        return this.call("get", key);
+    get(key, cb) {
+        return this.call("get", key, cb);
     }
-    remove(key) {
-        this.call("remove", key);
+    remove(key, cb) {
+        this.call("remove", key, cb);
     }
-    removeAll() {
-        this.call("removeAll");
+    removeAll(cb) {
+        this.call("removeAll", cb);
     }
-    exist(key) {
-        let value = this.call("exist", key);
-        return value;
+    exist(key, cb) {
+        this.call("exist", key, cb);
     }
 }
 
@@ -717,41 +716,40 @@ class Storage extends HummerComponent {
             Storage.instance = Storage.newInstance();
         }
     }
-    static set(key, value) {
+    static set(key, value, cb) {
         Storage.checkInstance();
-        Storage.instance.set(key, value);
+        Storage.instance.set(key, value, cb);
     }
-    static get(key) {
+    static get(key, cb) {
         Storage.checkInstance();
-        return Storage.instance.get(key);
+        return Storage.instance.get(key, cb);
     }
-    static remove(key) {
+    static remove(key, cb) {
         Storage.checkInstance();
-        Storage.instance.remove(key);
+        Storage.instance.remove(key, cb);
     }
-    static removeAll() {
+    static removeAll(cb) {
         Storage.checkInstance();
-        Storage.instance.removeAll();
+        Storage.instance.removeAll(cb);
     }
-    static exist(key) {
+    static exist(key, cb) {
         Storage.checkInstance();
-        return Storage.instance.exist(key);
+        Storage.instance.exist(key, cb);
     }
-    set(key, value) {
-        this.call("set", key, value);
+    set(key, value, cb) {
+        this.call("set", key, value, cb);
     }
-    get(key) {
-        return this.call("get", key);
+    get(key, cb) {
+        return this.call("get", key, cb);
     }
-    remove(key) {
-        this.call("remove", key);
+    remove(key, cb) {
+        this.call("remove", key, cb);
     }
-    removeAll() {
-        this.call("removeAll");
+    removeAll(cb) {
+        this.call("removeAll", cb);
     }
-    exist(key) {
-        let value = this.call("exist", key);
-        return value;
+    exist(key, cb) {
+        this.call("exist", key, cb);
     }
 }
 

@@ -25,9 +25,9 @@ export class Memory extends HummerComponent {
      * @param key 名称
      * @param value 值
      */
-    static set(key: string, value: Object) {
+    static set(key: string, value: Object, cb?: Function) {
         Memory.checkInstance();
-        Memory.instance.set(key, value);
+        Memory.instance.set(key, value, cb);
     }
 
     /**
@@ -36,9 +36,9 @@ export class Memory extends HummerComponent {
     * @param key 名称
     * @return value 值
     */
-    static get(key: string): any {
+    static get(key: string, cb: Function): any {
         Memory.checkInstance();
-        return Memory.instance.get(key);
+        return Memory.instance.get(key, cb);
     }
 
 
@@ -48,18 +48,18 @@ export class Memory extends HummerComponent {
      *
      * @param key 名称
      */
-    static remove(key: string) {
+    static remove(key: string, cb?: Function) {
         Memory.checkInstance();
-        Memory.instance.remove(key);
+        Memory.instance.remove(key, cb);
     }
 
 
     /**
     * 删除所有数据
     */
-    public static removeAll() {
+    public static removeAll(cb?: Function) {
         Memory.checkInstance();
-        Memory.instance.removeAll();
+        Memory.instance.removeAll(cb);
     }
 
     /**
@@ -67,32 +67,31 @@ export class Memory extends HummerComponent {
      *
      * @param key 名称
      */
-    public static exist(key: string): boolean {
+    public static exist(key: string, cb: Function) {
         Memory.checkInstance();
-        return Memory.instance.exist(key);
+        Memory.instance.exist(key, cb);
     }
 
 
-    protected set(key: string, value: Object) {
-        this.call("set", key, value);
+    protected set(key: string, value: Object, cb?: Function) {
+        this.call("set", key, value, cb);
     }
 
 
-    protected get(key: string): any {
-        return this.call("get", key);
+    protected get(key: string, cb: Function): any {
+        return this.call("get", key, cb);
     }
 
-    protected remove(key: string) {
-        this.call("remove", key);
+    protected remove(key: string, cb?: Function) {
+        this.call("remove", key, cb);
     }
 
-    protected removeAll() {
-        this.call("removeAll");
+    protected removeAll(cb?: Function) {
+        this.call("removeAll", cb);
     }
 
-    protected exist(key: string): boolean {
-        let value: boolean = this.call("exist", key);
-        return value;
+    protected exist(key: string, cb?: Function) {
+        this.call("exist", key, cb);
     }
 
 }

@@ -4,14 +4,14 @@ export declare class Storage extends HummerComponent {
     constructor(props?: any);
     protected static newInstance(): Storage;
     protected static checkInstance(): void;
-    static set(key: string, value: Object): void;
-    static get(key: string): any;
-    static remove(key: string): void;
-    static removeAll(): void;
-    static exist(key: string): boolean;
-    protected set(key: string, value: Object): void;
-    protected get(key: string): any;
-    protected remove(key: string): void;
-    protected removeAll(): void;
-    protected exist(key: string): boolean;
+    static set(key: string, value: Object, cb?: Function): void;
+    static get(key: string, cb: Function): any;
+    static remove(key: string, cb?: Function): void;
+    static removeAll(cb?: Function): void;
+    static exist(key: string, cb: Function): void;
+    protected set(key: string, value: Object, cb?: Function): void;
+    protected get(key: string, cb: Function): any;
+    protected remove(key: string, cb?: Function): void;
+    protected removeAll(cb?: Function): void;
+    protected exist(key: string, cb: Function): void;
 }

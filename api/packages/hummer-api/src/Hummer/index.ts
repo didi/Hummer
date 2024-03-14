@@ -40,7 +40,7 @@ export class Hummer {
                 return new Image();
             case "input":
                 return new Input();
-            case "textArea":
+            case "textarea":
                 return new TextArea();
         }
         return undefined;

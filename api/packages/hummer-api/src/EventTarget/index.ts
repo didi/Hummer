@@ -77,7 +77,7 @@ export class EventTarget extends HMObject {
     }
 
 
-    public removeEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture?: boolean) {
+    public removeEventListener(eventName: string, eventLisener?: EventLisener | Function, useCapture?: boolean) {
         var listeners = this.envents.get(eventName)
         if (listeners != undefined) {
             if (eventLisener == undefined) {
