@@ -7,36 +7,35 @@ export class RootView extends View {
         this.style = {
             width: '100%',
             height: '100%',
-            paddingLeft: 0,
-            paddingRight: 0,
+            paddingLeft: 10,
+            paddingRight: 10,
             paddingTop: 10,
         };
 
         let input = new Input();
-        input.text = 'hummer api text';
-        input.placeholder = '11122hummer api placeholder';
+        input.text = '';
+        input.placeholder = '请输入';
         input.focused = true;
-        input.maxLength = 5;
         input.style = {
-            width: 120,
-            height: 300,
-            type: 'number',
-            color: '#ffffff',
+            width: 80,
+            height: 60,
+            type: 'default',
+            color: '#000000',
             placeholderColor: '#00ff00',
             cursorColor: '#0000ff',
-            textAlign: 'center',
-            maxLength: 5,
+            textAlign: 'left',
+            maxLength: 20,
             returnKeyType: 'done'
         };
 
    
 
         input.addEventListener('input', (event) => {
-            console.log("hummer input state11111:" + JSON.stringify(event));
+            console.log("事件1:" + JSON.stringify(event));
         });
 
         input.addEventListener('input', (event) => {
-            console.log("hummer input state222222:" + JSON.stringify(event));
+            console.log("事件2:" + JSON.stringify(event));
         });
         
         let input2 = new Input();

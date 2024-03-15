@@ -28,6 +28,12 @@ export * from "./components/Input"
 
 export * from "./components/TextArea"
 
+export * from "./components/Button"
+
+export * from "./components/Scroller"
+
+export * from "./components/Canvas"
+
 export * from "./components/Image"
 
 export * from "./HummerComponent"
@@ -39,6 +45,7 @@ export * from "./api/Navigator"
 export * from "./api/Storage"
 
 export * from "./api/NotifyCenter"
+
 
 
 

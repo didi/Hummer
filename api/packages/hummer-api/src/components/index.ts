@@ -17,3 +17,12 @@ export * from "./Input"
 
 //TextArea
 export * from "./TextArea"
+
+//Button
+export * from "./Button"
+
+//Canvas
+export * from "./Canvas"
+
+//Scroller
+export * from "./Scroller"

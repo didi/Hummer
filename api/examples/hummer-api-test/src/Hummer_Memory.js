@@ -23,37 +23,37 @@ export class RootView extends View {
    
 
 
-        let storage = new Storage()
-        storage.exist('daijiaStorage', (res) => {
-            console.log("----storage查询成功", JSON.stringify(res))
-        })
+    //     let storage = new Storage()
+    //     storage.exist('daijiaStorage', (res) => {
+    //         console.log("----storage查询成功", JSON.stringify(res))
+    //     })
    
-        storage.set('daijiaStorage', JSON.stringify({name:'hummer', other:'hummer_api'}), (res) => {
-            console.log("----storage是否设置成功", JSON.stringify(res))
-            storage.get('daijiaStorage', (res) => {
-                console.log("----storage查询成功", JSON.stringify(res))
-            })
+    //     storage.set('daijiaStorage', JSON.stringify({name:'hummer', other:'hummer_api'}), (res) => {
+    //         console.log("----storage是否设置成功", JSON.stringify(res))
+    //         storage.get('daijiaStorage', (res) => {
+    //             console.log("----storage查询成功", JSON.stringify(res))
+    //         })
        
-        })
+    //     })
 
-        let notifyCenter = new NotifyCenter()
-        notifyCenter.addEventListener("myHummer", (e) => {
-            console.log("myHummer被执行内容：", e)
-        })
-        let testFunction = function test(e) {
-            console.log("myHummer被执行内容111111：", e)
-        }
-        notifyCenter.addEventListener("myHummer", testFunction)
+    //     let notifyCenter = new NotifyCenter()
+    //     notifyCenter.addEventListener("myHummer", (e) => {
+    //         console.log("myHummer被执行内容：", e)
+    //     })
+    //     let testFunction = function test(e) {
+    //         console.log("myHummer被执行内容111111：", e)
+    //     }
+    //     notifyCenter.addEventListener("myHummer", testFunction)
 
-        notifyCenter.removeEventListener("myHummer")
+    //     notifyCenter.removeEventListener("myHummer")
         
         
-        let notifyCenter1 = new NotifyCenter()
-        notifyCenter1.triggerEvent("myHummer", "内容xxxxxxxx")
+    //     let notifyCenter1 = new NotifyCenter()
+    //     notifyCenter1.triggerEvent("myHummer", "内容xxxxxxxx")
 
 
-       let env =  Hummer.Env
-        console.log("---------hummer全局环境变量", JSON.stringify(env))
+    //    let env =  Hummer.Env
+    //     console.log("---------hummer全局环境变量", JSON.stringify(env))
 
     }
 

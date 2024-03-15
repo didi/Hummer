@@ -12,6 +12,8 @@ export function renderFunc(__Hummer__, __GLOBAL__) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   BasicAnimation: () => (/* binding */ BasicAnimation),
+/* harmony export */   Button: () => (/* binding */ Button),
+/* harmony export */   Canvas: () => (/* binding */ Canvas),
 /* harmony export */   Element: () => (/* binding */ Element),
 /* harmony export */   EventTarget: () => (/* binding */ EventTarget),
 /* harmony export */   HMObject: () => (/* binding */ HMObject),
@@ -25,6 +27,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Navigator: () => (/* binding */ Navigator),
 /* harmony export */   Node: () => (/* binding */ Node),
 /* harmony export */   NotifyCenter: () => (/* binding */ NotifyCenter),
+/* harmony export */   Scroller: () => (/* binding */ Scroller),
 /* harmony export */   Storage: () => (/* binding */ Storage),
 /* harmony export */   Text: () => (/* binding */ Text),
 /* harmony export */   TextArea: () => (/* binding */ TextArea),
@@ -662,6 +665,192 @@ __Hummer__;
 class BasicAnimation {}
 __Hummer__;
 class KeyframeAnimation {}
+__Hummer__;
+class Button extends HummerElement {
+  constructor(id = "", name = "", props = {}) {
+    super("Button", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    }));
+    this._text = "";
+    this._pressed = {};
+    this._disabled = {};
+  }
+  get text() {
+    return this._text;
+  }
+  set text(value) {
+    this._text = value;
+    this._setAttribute("text", value);
+  }
+  get pressed() {
+    return this._pressed;
+  }
+  set pressed(value) {
+    this._pressed = value;
+    this._setAttribute("placeholder", value);
+  }
+  get focused() {
+    return this._disabled;
+  }
+  set focused(value) {
+    this._disabled = value;
+    this._setAttribute("disabled", value);
+  }
+}
+__Hummer__;
+class Scroller extends HummerElement {
+  constructor(id = "", name = "", props = {}) {
+    super("Scroller", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    }));
+    this._bounces = true;
+    this._showScrollBar = false;
+    this._onLoadMore = () => {};
+    this._onRefresh = () => {};
+    this._refreshView = new View();
+    this._loadMoreView = new View();
+  }
+  get refreshView() {
+    return this._refreshView;
+  }
+  set refreshView(value) {
+    this._refreshView = value;
+    this._setAttribute("refreshView", value);
+  }
+  get loadMoreView() {
+    return this._loadMoreView;
+  }
+  set loadMoreView(value) {
+    this._loadMoreView = value;
+    this._setAttribute("loadMoreView", value);
+  }
+  get onLoadMore() {
+    return this._onLoadMore;
+  }
+  set onLoadMore(value) {
+    this._onLoadMore = value;
+    this._setAttribute("onLoadMore", value);
+  }
+  get onRefresh() {
+    return this._onRefresh;
+  }
+  set onRefresh(value) {
+    this._onRefresh = value;
+    this._setAttribute("onRefresh", value);
+  }
+  get bounces() {
+    return this._bounces;
+  }
+  set bounces(value) {
+    this._bounces = value;
+    this._setAttribute("bounces", value);
+  }
+  get showScrollBar() {
+    return this._showScrollBar;
+  }
+  set showScrollBar(value) {
+    this._showScrollBar = value;
+    this._setAttribute("showScrollBar", value);
+  }
+  appendChild(child) {
+    this.call("appendChild", child);
+  }
+  removeChild(child) {
+    this.call("removeChild", child);
+  }
+  removeAll() {
+    this.call("removeAll");
+  }
+  insertBefore(child, existingChild) {
+    this.call("insertBefore", child, existingChild);
+  }
+  replaceChild(newChild, oldChild) {
+    this.call("replaceChild", newChild, oldChild);
+  }
+  scrollTo(x, y) {
+    this.call("scrollTo", x, y);
+  }
+  scrollBy(dx, dy) {
+    this.call("scrollBy", dx, dy);
+  }
+  scrollToTop() {
+    this.call("scrollToTop");
+  }
+  scrollToBottom() {
+    this.call("scrollToBottom");
+  }
+  setOnScrollToTopListener(callback) {
+    this.call("setOnScrollToTopListener", callback);
+  }
+  setOnScrollToBottomListener(callback) {
+    this.call("setOnScrollToBottomListener", callback);
+  }
+  stopPullRefresh() {
+    this.call("stopPullRefresh");
+  }
+  stopLoadMore(enable) {
+    this.call("stopLoadMore", enable);
+  }
+}
+__Hummer__;
+class Canvas extends HummerElement {
+  constructor(id = "", name = "", props = {}) {
+    super("Canvas", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    }));
+  }
+  lineWidth(widthValue) {
+    this.call("lineWidth", widthValue);
+  }
+  lineColor(colorHex) {
+    this.call("lineColor", colorHex);
+  }
+  lineCap(value) {
+    this.call("lineCap", value);
+  }
+  lineJoin(value) {
+    this.call("lineJoin", value);
+  }
+  drawLine(fraomX, fromY, toX, toY) {
+    this.call("drawLine", fraomX, fromY, toX, toY);
+  }
+  strokeRect(x, y, w, h) {
+    this.call("strokeRect", x, y, w, h);
+  }
+  strokeEllipse(x, y, trailX, trailY) {
+    this.call("strokeEllipse", x, y, trailX, trailY);
+  }
+  strokeCircle(x, y, radius) {
+    this.call("strokeCircle", x, y, radius);
+  }
+  arc(x, y, radius, startAngle, endAngle, clockwise) {
+    this.call("arc", x, y, radius, startAngle, endAngle, clockwise);
+  }
+  fillColor(colorHex) {
+    this.call("fillColor", colorHex);
+  }
+  fillRect(x, y, w, h) {
+    this.call("fillRect", x, y, w, h);
+  }
+  fillEllipse(x, y, trailX, trailY) {
+    this.call("fillEllipse", x, y, trailX, trailY);
+  }
+  fillCircle(x, y, radius) {
+    this.call("fillCircle", x, y, radius);
+  }
+  fontSize(size) {
+    this.call("fontSize", size);
+  }
+  textColor(colorHex) {
+    this.call("textColor", colorHex);
+  }
+  fillText(text, x, y, maxWidth) {
+    this.call("fillText", x, y, maxWidth);
+  }
+  drawImage(src, x, y, width, height) {
+    this.call("drawImage", x, y, width, height);
+  }
+}
 class Memory extends HummerComponent {
   constructor(props = {}) {
     super("Memory", props);
@@ -1414,30 +1603,6 @@ var ArrayPrototype = Array.prototype;
 module.exports = function (it) {
   var own = it.splice;
   return it === ArrayPrototype || (isPrototypeOf(ArrayPrototype, it) && own === ArrayPrototype.splice) ? method : own;
-};
-
-
-/***/ }),
-
-/***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/es/json/stringify.js":
-/*!*****************************************************************************************************************************!*\
-  !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/es/json/stringify.js ***!
-  \*****************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-__webpack_require__(/*! ../../modules/es.date.to-json */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/modules/es.date.to-json.js");
-__webpack_require__(/*! ../../modules/es.json.stringify */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/modules/es.json.stringify.js");
-var path = __webpack_require__(/*! ../../internals/path */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/path.js");
-var apply = __webpack_require__(/*! ../../internals/function-apply */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/function-apply.js");
-
-// eslint-disable-next-line es/no-json -- safe
-if (!path.JSON) path.JSON = { stringify: JSON.stringify };
-
-// eslint-disable-next-line no-unused-vars -- required for `.length`
-module.exports = function stringify(it, replacer, space) {
-  return apply(path.JSON.stringify, null, arguments);
 };
 
 
@@ -2353,58 +2518,6 @@ module.exports = function (object, key, value) {
 
 /***/ }),
 
-/***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/date-to-iso-string.js":
-/*!****************************************************************************************************************************************!*\
-  !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/date-to-iso-string.js ***!
-  \****************************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/function-uncurry-this.js");
-var fails = __webpack_require__(/*! ../internals/fails */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/fails.js");
-var padStart = (__webpack_require__(/*! ../internals/string-pad */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/string-pad.js").start);
-
-var $RangeError = RangeError;
-var $isFinite = isFinite;
-var abs = Math.abs;
-var DatePrototype = Date.prototype;
-var nativeDateToISOString = DatePrototype.toISOString;
-var thisTimeValue = uncurryThis(DatePrototype.getTime);
-var getUTCDate = uncurryThis(DatePrototype.getUTCDate);
-var getUTCFullYear = uncurryThis(DatePrototype.getUTCFullYear);
-var getUTCHours = uncurryThis(DatePrototype.getUTCHours);
-var getUTCMilliseconds = uncurryThis(DatePrototype.getUTCMilliseconds);
-var getUTCMinutes = uncurryThis(DatePrototype.getUTCMinutes);
-var getUTCMonth = uncurryThis(DatePrototype.getUTCMonth);
-var getUTCSeconds = uncurryThis(DatePrototype.getUTCSeconds);
-
-// `Date.prototype.toISOString` method implementation
-// https://tc39.es/ecma262/#sec-date.prototype.toisostring
-// PhantomJS / old WebKit fails here:
-module.exports = (fails(function () {
-  return nativeDateToISOString.call(new Date(-5e13 - 1)) !== '0385-07-25T07:06:39.999Z';
-}) || !fails(function () {
-  nativeDateToISOString.call(new Date(NaN));
-})) ? function toISOString() {
-  if (!$isFinite(thisTimeValue(this))) throw new $RangeError('Invalid time value');
-  var date = this;
-  var year = getUTCFullYear(date);
-  var milliseconds = getUTCMilliseconds(date);
-  var sign = year < 0 ? '-' : year > 9999 ? '+' : '';
-  return sign + padStart(abs(year), sign ? 6 : 4, 0) +
-    '-' + padStart(getUTCMonth(date) + 1, 2, 0) +
-    '-' + padStart(getUTCDate(date), 2, 0) +
-    'T' + padStart(getUTCHours(date), 2, 0) +
-    ':' + padStart(getUTCMinutes(date), 2, 0) +
-    ':' + padStart(getUTCSeconds(date), 2, 0) +
-    '.' + padStart(milliseconds, 3, 0) +
-    'Z';
-} : nativeDateToISOString;
-
-
-/***/ }),
-
 /***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/define-built-in-accessor.js":
 /*!**********************************************************************************************************************************************!*\
   !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/define-built-in-accessor.js ***!
@@ -3109,47 +3222,6 @@ module.exports = function (argument, usingIterator) {
   var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
   if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
   throw new $TypeError(tryToString(argument) + ' is not iterable');
-};
-
-
-/***/ }),
-
-/***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/get-json-replacer-function.js":
-/*!************************************************************************************************************************************************!*\
-  !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/get-json-replacer-function.js ***!
-  \************************************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/function-uncurry-this.js");
-var isArray = __webpack_require__(/*! ../internals/is-array */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/is-array.js");
-var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/is-callable.js");
-var classof = __webpack_require__(/*! ../internals/classof-raw */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/classof-raw.js");
-var toString = __webpack_require__(/*! ../internals/to-string */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/to-string.js");
-
-var push = uncurryThis([].push);
-
-module.exports = function (replacer) {
-  if (isCallable(replacer)) return replacer;
-  if (!isArray(replacer)) return;
-  var rawLength = replacer.length;
-  var keys = [];
-  for (var i = 0; i < rawLength; i++) {
-    var element = replacer[i];
-    if (typeof element == 'string') push(keys, element);
-    else if (typeof element == 'number' || classof(element) === 'Number' || classof(element) === 'String') push(keys, toString(element));
-  }
-  var keysLength = keys.length;
-  var root = true;
-  return function (key, value) {
-    if (root) {
-      root = false;
-      return value;
-    }
-    if (isArray(this)) return value;
-    for (var j = 0; j < keysLength; j++) if (keys[j] === key) return value;
-  };
 };
 
 
@@ -4878,81 +4950,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/string-pad.js":
-/*!********************************************************************************************************************************!*\
-  !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/string-pad.js ***!
-  \********************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-// https://github.com/tc39/proposal-string-pad-start-end
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/function-uncurry-this.js");
-var toLength = __webpack_require__(/*! ../internals/to-length */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/to-length.js");
-var toString = __webpack_require__(/*! ../internals/to-string */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/to-string.js");
-var $repeat = __webpack_require__(/*! ../internals/string-repeat */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/string-repeat.js");
-var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/require-object-coercible.js");
-
-var repeat = uncurryThis($repeat);
-var stringSlice = uncurryThis(''.slice);
-var ceil = Math.ceil;
-
-// `String.prototype.{ padStart, padEnd }` methods implementation
-var createMethod = function (IS_END) {
-  return function ($this, maxLength, fillString) {
-    var S = toString(requireObjectCoercible($this));
-    var intMaxLength = toLength(maxLength);
-    var stringLength = S.length;
-    var fillStr = fillString === undefined ? ' ' : toString(fillString);
-    var fillLen, stringFiller;
-    if (intMaxLength <= stringLength || fillStr === '') return S;
-    fillLen = intMaxLength - stringLength;
-    stringFiller = repeat(fillStr, ceil(fillLen / fillStr.length));
-    if (stringFiller.length > fillLen) stringFiller = stringSlice(stringFiller, 0, fillLen);
-    return IS_END ? S + stringFiller : stringFiller + S;
-  };
-};
-
-module.exports = {
-  // `String.prototype.padStart` method
-  // https://tc39.es/ecma262/#sec-string.prototype.padstart
-  start: createMethod(false),
-  // `String.prototype.padEnd` method
-  // https://tc39.es/ecma262/#sec-string.prototype.padend
-  end: createMethod(true)
-};
-
-
-/***/ }),
-
-/***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/string-repeat.js":
-/*!***********************************************************************************************************************************!*\
-  !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/string-repeat.js ***!
-  \***********************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var toIntegerOrInfinity = __webpack_require__(/*! ../internals/to-integer-or-infinity */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/to-integer-or-infinity.js");
-var toString = __webpack_require__(/*! ../internals/to-string */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/to-string.js");
-var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/require-object-coercible.js");
-
-var $RangeError = RangeError;
-
-// `String.prototype.repeat` method implementation
-// https://tc39.es/ecma262/#sec-string.prototype.repeat
-module.exports = function repeat(count) {
-  var str = toString(requireObjectCoercible(this));
-  var result = '';
-  var n = toIntegerOrInfinity(count);
-  if (n < 0 || n === Infinity) throw new $RangeError('Wrong number of repetitions');
-  for (;n > 0; (n >>>= 1) && (str += str)) if (n & 1) result += str;
-  return result;
-};
-
-
-/***/ }),
-
 /***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/symbol-constructor-detection.js":
 /*!**************************************************************************************************************************************************!*\
   !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/symbol-constructor-detection.js ***!
@@ -5531,126 +5528,6 @@ $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
 
 /***/ }),
 
-/***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/modules/es.date.to-json.js":
-/*!***********************************************************************************************************************************!*\
-  !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/modules/es.date.to-json.js ***!
-  \***********************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var $ = __webpack_require__(/*! ../internals/export */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/export.js");
-var call = __webpack_require__(/*! ../internals/function-call */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/function-call.js");
-var toObject = __webpack_require__(/*! ../internals/to-object */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/to-object.js");
-var toPrimitive = __webpack_require__(/*! ../internals/to-primitive */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/to-primitive.js");
-var toISOString = __webpack_require__(/*! ../internals/date-to-iso-string */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/date-to-iso-string.js");
-var classof = __webpack_require__(/*! ../internals/classof-raw */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/classof-raw.js");
-var fails = __webpack_require__(/*! ../internals/fails */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/fails.js");
-
-var FORCED = fails(function () {
-  return new Date(NaN).toJSON() !== null
-    || call(Date.prototype.toJSON, { toISOString: function () { return 1; } }) !== 1;
-});
-
-// `Date.prototype.toJSON` method
-// https://tc39.es/ecma262/#sec-date.prototype.tojson
-$({ target: 'Date', proto: true, forced: FORCED }, {
-  // eslint-disable-next-line no-unused-vars -- required for `.length`
-  toJSON: function toJSON(key) {
-    var O = toObject(this);
-    var pv = toPrimitive(O, 'number');
-    return typeof pv == 'number' && !isFinite(pv) ? null :
-      (!('toISOString' in O) && classof(O) === 'Date') ? call(toISOString, O) : O.toISOString();
-  }
-});
-
-
-/***/ }),
-
-/***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/modules/es.json.stringify.js":
-/*!*************************************************************************************************************************************!*\
-  !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/modules/es.json.stringify.js ***!
-  \*************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var $ = __webpack_require__(/*! ../internals/export */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/export.js");
-var getBuiltIn = __webpack_require__(/*! ../internals/get-built-in */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/get-built-in.js");
-var apply = __webpack_require__(/*! ../internals/function-apply */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/function-apply.js");
-var call = __webpack_require__(/*! ../internals/function-call */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/function-call.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/function-uncurry-this.js");
-var fails = __webpack_require__(/*! ../internals/fails */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/fails.js");
-var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/is-callable.js");
-var isSymbol = __webpack_require__(/*! ../internals/is-symbol */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/is-symbol.js");
-var arraySlice = __webpack_require__(/*! ../internals/array-slice */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/array-slice.js");
-var getReplacerFunction = __webpack_require__(/*! ../internals/get-json-replacer-function */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/get-json-replacer-function.js");
-var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/symbol-constructor-detection */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/internals/symbol-constructor-detection.js");
-
-var $String = String;
-var $stringify = getBuiltIn('JSON', 'stringify');
-var exec = uncurryThis(/./.exec);
-var charAt = uncurryThis(''.charAt);
-var charCodeAt = uncurryThis(''.charCodeAt);
-var replace = uncurryThis(''.replace);
-var numberToString = uncurryThis(1.0.toString);
-
-var tester = /[\uD800-\uDFFF]/g;
-var low = /^[\uD800-\uDBFF]$/;
-var hi = /^[\uDC00-\uDFFF]$/;
-
-var WRONG_SYMBOLS_CONVERSION = !NATIVE_SYMBOL || fails(function () {
-  var symbol = getBuiltIn('Symbol')('stringify detection');
-  // MS Edge converts symbol values to JSON as {}
-  return $stringify([symbol]) !== '[null]'
-    // WebKit converts symbol values to JSON as null
-    || $stringify({ a: symbol }) !== '{}'
-    // V8 throws on boxed symbols
-    || $stringify(Object(symbol)) !== '{}';
-});
-
-// https://github.com/tc39/proposal-well-formed-stringify
-var ILL_FORMED_UNICODE = fails(function () {
-  return $stringify('\uDF06\uD834') !== '"\\udf06\\ud834"'
-    || $stringify('\uDEAD') !== '"\\udead"';
-});
-
-var stringifyWithSymbolsFix = function (it, replacer) {
-  var args = arraySlice(arguments);
-  var $replacer = getReplacerFunction(replacer);
-  if (!isCallable($replacer) && (it === undefined || isSymbol(it))) return; // IE8 returns string on undefined
-  args[1] = function (key, value) {
-    // some old implementations (like WebKit) could pass numbers as keys
-    if (isCallable($replacer)) value = call($replacer, this, $String(key), value);
-    if (!isSymbol(value)) return value;
-  };
-  return apply($stringify, null, args);
-};
-
-var fixIllFormed = function (match, offset, string) {
-  var prev = charAt(string, offset - 1);
-  var next = charAt(string, offset + 1);
-  if ((exec(low, match) && !exec(hi, next)) || (exec(hi, match) && !exec(low, prev))) {
-    return '\\u' + numberToString(charCodeAt(match, 0), 16);
-  } return match;
-};
-
-if ($stringify) {
-  // `JSON.stringify` method
-  // https://tc39.es/ecma262/#sec-json.stringify
-  $({ target: 'JSON', stat: true, arity: 3, forced: WRONG_SYMBOLS_CONVERSION || ILL_FORMED_UNICODE }, {
-    // eslint-disable-next-line no-unused-vars -- required for `.length`
-    stringify: function stringify(it, replacer, space) {
-      var args = arraySlice(arguments);
-      var result = apply(WRONG_SYMBOLS_CONVERSION ? stringifyWithSymbolsFix : $stringify, null, args);
-      return ILL_FORMED_UNICODE && typeof result == 'string' ? replace(result, tester, fixIllFormed) : result;
-    }
-  });
-}
-
-
-/***/ }),
-
 /***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/modules/es.map.constructor.js":
 /*!**************************************************************************************************************************************!*\
   !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/modules/es.map.constructor.js ***!
@@ -5860,21 +5737,6 @@ module.exports = parent;
 "use strict";
 
 var parent = __webpack_require__(/*! ../../es/instance/splice */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/es/instance/splice.js");
-
-module.exports = parent;
-
-
-/***/ }),
-
-/***/ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/stable/json/stringify.js":
-/*!*********************************************************************************************************************************!*\
-  !*** ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/stable/json/stringify.js ***!
-  \*********************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var parent = __webpack_require__(/*! ../../es/json/stringify */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/es/json/stringify.js");
 
 module.exports = parent;
 
@@ -6295,11 +6157,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/@babel/runtime/helpers/esm/callSuper.js */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/@babel/runtime/helpers/esm/callSuper.js");
 /* harmony import */ var _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/@babel/runtime/helpers/esm/inherits.js */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/stable/json/stringify.js */ "../../../../../.nvm/versions/node/v20.9.0/lib/node_modules/@hummer/cli/node_modules/core-js-pure/stable/json/stringify.js");
-/* harmony import */ var _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _hummer_tenon_dev_tool_dist_tenon_dev_tool_es__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @hummer/tenon-dev-tool/dist/tenon-dev-tool.es */ "./node_modules/@hummer/tenon-dev-tool/dist/tenon-dev-tool.es.js");
 /* harmony import */ var _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../packages/hummer-api/dist/hummer-api.es */ "../../packages/hummer-api/dist/hummer-api.es.js");
-
 
 
 
@@ -6329,32 +6188,35 @@ var RootView = /*#__PURE__*/function (_View) {
     //     console.log("----查询成功", JSON.stringify(res))
     // })
 
-    var storage = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Storage();
-    storage.exist('daijiaStorage', function (res) {
-      console.log("----storage查询成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
-    });
-    storage.set('daijiaStorage', _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()({
-      name: 'hummer',
-      other: 'hummer_api'
-    }), function (res) {
-      console.log("----storage是否设置成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
-      storage.get('daijiaStorage', function (res) {
-        console.log("----storage查询成功", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(res));
-      });
-    });
-    var notifyCenter = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.NotifyCenter();
-    notifyCenter.addEventListener("myHummer", function (e) {
-      console.log("myHummer被执行内容：", e);
-    });
-    var testFunction = function test(e) {
-      console.log("myHummer被执行内容111111：", e);
-    };
-    notifyCenter.addEventListener("myHummer", testFunction);
-    notifyCenter.removeEventListener("myHummer");
-    var notifyCenter1 = new _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.NotifyCenter();
-    notifyCenter1.triggerEvent("myHummer", "内容xxxxxxxx");
-    var env = _packages_hummer_api_dist_hummer_api_es__WEBPACK_IMPORTED_MODULE_5__.Hummer.Env;
-    console.log("---------hummer全局环境变量", _Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_core_js_pure_stable_json_stringify_js__WEBPACK_IMPORTED_MODULE_6___default()(env));
+    //     let storage = new Storage()
+    //     storage.exist('daijiaStorage', (res) => {
+    //         console.log("----storage查询成功", JSON.stringify(res))
+    //     })
+
+    //     storage.set('daijiaStorage', JSON.stringify({name:'hummer', other:'hummer_api'}), (res) => {
+    //         console.log("----storage是否设置成功", JSON.stringify(res))
+    //         storage.get('daijiaStorage', (res) => {
+    //             console.log("----storage查询成功", JSON.stringify(res))
+    //         })
+
+    //     })
+
+    //     let notifyCenter = new NotifyCenter()
+    //     notifyCenter.addEventListener("myHummer", (e) => {
+    //         console.log("myHummer被执行内容：", e)
+    //     })
+    //     let testFunction = function test(e) {
+    //         console.log("myHummer被执行内容111111：", e)
+    //     }
+    //     notifyCenter.addEventListener("myHummer", testFunction)
+
+    //     notifyCenter.removeEventListener("myHummer")
+
+    //     let notifyCenter1 = new NotifyCenter()
+    //     notifyCenter1.triggerEvent("myHummer", "内容xxxxxxxx")
+
+    //    let env =  Hummer.Env
+    //     console.log("---------hummer全局环境变量", JSON.stringify(env))
     return _this;
   }
   return (0,_Users_didi_nvm_versions_node_v20_9_0_lib_node_modules_hummer_cli_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__["default"])(RootView);

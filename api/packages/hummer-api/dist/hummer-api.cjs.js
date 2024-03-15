@@ -632,6 +632,189 @@ __Hummer__;
 class KeyframeAnimation {
 }
 
+__Hummer__;
+class Button extends HummerElement {
+    constructor(id = "", name = "", props = {}) {
+        super("Button", name, Object.assign(Object.assign({}, props), { viewId: id }));
+        this._text = "";
+        this._pressed = {};
+        this._disabled = {};
+    }
+    get text() {
+        return this._text;
+    }
+    set text(value) {
+        this._text = value;
+        this._setAttribute("text", value);
+    }
+    get pressed() {
+        return this._pressed;
+    }
+    set pressed(value) {
+        this._pressed = value;
+        this._setAttribute("placeholder", value);
+    }
+    get focused() {
+        return this._disabled;
+    }
+    set focused(value) {
+        this._disabled = value;
+        this._setAttribute("disabled", value);
+    }
+}
+
+__Hummer__;
+class Scroller extends HummerElement {
+    constructor(id = "", name = "", props = {}) {
+        super("Scroller", name, Object.assign(Object.assign({}, props), { viewId: id }));
+        this._bounces = true;
+        this._showScrollBar = false;
+        this._onLoadMore = () => { };
+        this._onRefresh = () => { };
+        this._refreshView = new View();
+        this._loadMoreView = new View();
+    }
+    get refreshView() {
+        return this._refreshView;
+    }
+    set refreshView(value) {
+        this._refreshView = value;
+        this._setAttribute("refreshView", value);
+    }
+    get loadMoreView() {
+        return this._loadMoreView;
+    }
+    set loadMoreView(value) {
+        this._loadMoreView = value;
+        this._setAttribute("loadMoreView", value);
+    }
+    get onLoadMore() {
+        return this._onLoadMore;
+    }
+    set onLoadMore(value) {
+        this._onLoadMore = value;
+        this._setAttribute("onLoadMore", value);
+    }
+    get onRefresh() {
+        return this._onRefresh;
+    }
+    set onRefresh(value) {
+        this._onRefresh = value;
+        this._setAttribute("onRefresh", value);
+    }
+    get bounces() {
+        return this._bounces;
+    }
+    set bounces(value) {
+        this._bounces = value;
+        this._setAttribute("bounces", value);
+    }
+    get showScrollBar() {
+        return this._showScrollBar;
+    }
+    set showScrollBar(value) {
+        this._showScrollBar = value;
+        this._setAttribute("showScrollBar", value);
+    }
+    appendChild(child) {
+        this.call("appendChild", child);
+    }
+    removeChild(child) {
+        this.call("removeChild", child);
+    }
+    removeAll() {
+        this.call("removeAll");
+    }
+    insertBefore(child, existingChild) {
+        this.call("insertBefore", child, existingChild);
+    }
+    replaceChild(newChild, oldChild) {
+        this.call("replaceChild", newChild, oldChild);
+    }
+    scrollTo(x, y) {
+        this.call("scrollTo", x, y);
+    }
+    scrollBy(dx, dy) {
+        this.call("scrollBy", dx, dy);
+    }
+    scrollToTop() {
+        this.call("scrollToTop");
+    }
+    scrollToBottom() {
+        this.call("scrollToBottom");
+    }
+    setOnScrollToTopListener(callback) {
+        this.call("setOnScrollToTopListener", callback);
+    }
+    setOnScrollToBottomListener(callback) {
+        this.call("setOnScrollToBottomListener", callback);
+    }
+    stopPullRefresh() {
+        this.call("stopPullRefresh");
+    }
+    stopLoadMore(enable) {
+        this.call("stopLoadMore", enable);
+    }
+}
+
+__Hummer__;
+class Canvas extends HummerElement {
+    constructor(id = "", name = "", props = {}) {
+        super("Canvas", name, Object.assign(Object.assign({}, props), { viewId: id }));
+    }
+    lineWidth(widthValue) {
+        this.call("lineWidth", widthValue);
+    }
+    lineColor(colorHex) {
+        this.call("lineColor", colorHex);
+    }
+    lineCap(value) {
+        this.call("lineCap", value);
+    }
+    lineJoin(value) {
+        this.call("lineJoin", value);
+    }
+    drawLine(fraomX, fromY, toX, toY) {
+        this.call("drawLine", fraomX, fromY, toX, toY);
+    }
+    strokeRect(x, y, w, h) {
+        this.call("strokeRect", x, y, w, h);
+    }
+    strokeEllipse(x, y, trailX, trailY) {
+        this.call("strokeEllipse", x, y, trailX, trailY);
+    }
+    strokeCircle(x, y, radius) {
+        this.call("strokeCircle", x, y, radius);
+    }
+    arc(x, y, radius, startAngle, endAngle, clockwise) {
+        this.call("arc", x, y, radius, startAngle, endAngle, clockwise);
+    }
+    fillColor(colorHex) {
+        this.call("fillColor", colorHex);
+    }
+    fillRect(x, y, w, h) {
+        this.call("fillRect", x, y, w, h);
+    }
+    fillEllipse(x, y, trailX, trailY) {
+        this.call("fillEllipse", x, y, trailX, trailY);
+    }
+    fillCircle(x, y, radius) {
+        this.call("fillCircle", x, y, radius);
+    }
+    fontSize(size) {
+        this.call("fontSize", size);
+    }
+    textColor(colorHex) {
+        this.call("textColor", colorHex);
+    }
+    fillText(text, x, y, maxWidth) {
+        this.call("fillText", x, y, maxWidth);
+    }
+    drawImage(src, x, y, width, height) {
+        this.call("drawImage", x, y, width, height);
+    }
+}
+
 class Memory extends HummerComponent {
     constructor(props = {}) {
         super("Memory", props);
@@ -823,6 +1006,8 @@ __GLOBAL__.Hummer = {
 };
 
 exports.BasicAnimation = BasicAnimation;
+exports.Button = Button;
+exports.Canvas = Canvas;
 exports.Element = Element;
 exports.EventTarget = EventTarget;
 exports.HMObject = HMObject;
@@ -836,6 +1021,7 @@ exports.Memory = Memory;
 exports.Navigator = Navigator;
 exports.Node = Node;
 exports.NotifyCenter = NotifyCenter;
+exports.Scroller = Scroller;
 exports.Storage = Storage;
 exports.Text = Text;
 exports.TextArea = TextArea;
