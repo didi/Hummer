@@ -153,16 +153,6 @@ export class Element extends Node {
         })
     }
 
-    public hide() {
-        // TOOD 隐藏当前元素
-        // TODO 不实现
-    }
-
-    public show() {
-        // TODO 展示当前元素
-        // TODO 不实现
-    }
-
 
     /**
      * 获取节点调试信息

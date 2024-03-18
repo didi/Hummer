@@ -13,19 +13,89 @@ export class RootView extends View {
         };
 
         let text = new Text();
+        text.style = {
+            color: '#F0F0F0',
+            textAlign: 'center',
+            fontSize: 20,
+        };
+        
         // 普通文本
         text.text = 'This is a text!';
+        
 
+        let text2 = new Text();
+        text2.style = {
+            color: '#F0F0F0',
+            textAlign: 'center',
+            fontSize: 20,
+        };
         // 富文本（场景1）
-        text.richText = {
+        text2.richText = {
             text: "xxxx",
             color: '#FF0000',
             fontSize: 20,
         };
-       
+        
+        let text3 = new Text();
+        text3.style = {
+            color: '#F0F0F0',
+            textAlign: 'center',
+            fontSize: 20,
+        };
+        // 富文本（场景2）
+        text3.richText = [
+            {
+                text: "1111",
+                color: '#00FF00',
+                fontSize: '40',
+                href: 'http://www.baidu.com',
+                hrefColor: '#0000FF',
+            },
+            {
+                text: "2222", //相当于图片显示前的占位文本
+                color: '#00FF00',
+                fontSize: '16',
+                image: "http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg",
+                imageWidth: 100,
+                imageHeight: 100,
+                imageAlign: 'center',
+            },
+            {
+                text: "3333",
+                image: 'ic_loading',
+                imageWidth: 20,
+                imageHeight: 20,
+                imageAlign: 'center',
+                color: '#0000FF',
+                fontSize: '10',
+            }
+        ];
+        
 
-
+        let text4 = new Text();
+        text4.style = {
+            color: '#FF0000',
+            textAlign: 'center',
+            fontSize: 20,
+        };
+        // 富文本（场景3）
+        text4.richText = [
+            "1111",
+            {
+                text: "2222", //相当于图片显示前的占位文本
+                color: '#00FF00',
+                fontSize: '16',
+                image: "http://b-ssl.duitang.com/uploads/item/201503/08/20150308143143_wCVJF.jpeg",
+                imageWidth: 100,
+                imageHeight: 100,
+                imageAlign: 'center',
+            },
+            "3333"
+        ];
         this.appendChild(text)
+        this.appendChild(text2)
+        this.appendChild(text3)
+        this.appendChild(text4)
     }
 
 }

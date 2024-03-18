@@ -40,11 +40,18 @@ export * from "./HummerComponent"
 
 export * from "./api/Memory"
 
+export * from "./api/Dialog"
+
+export * from "./api/Toast"
+
 export * from "./api/Navigator"
 
 export * from "./api/Storage"
 
 export * from "./api/NotifyCenter"
+
+export * from "./api/Request"
+
 
 
 

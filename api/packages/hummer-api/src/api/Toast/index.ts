@@ -28,7 +28,7 @@ export class Toast extends HummerComponent {
      * @param msg 内容
      * @param duration 时长（安卓上duration<=2000时是短时长，duration>2000是长时长）
      */
-    static show(msg: string, duration: number){
+    static show(msg: string, duration?: number){
         Toast.checkInstance();
         Toast.instance.show(msg, duration);
     }
@@ -49,7 +49,7 @@ export class Toast extends HummerComponent {
    
  
 
-    protected show(msg: string, duration: number) {
+    protected show(msg: string, duration?: number) {
         this.call("show", msg, duration);
     }
 
