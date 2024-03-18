@@ -9,7 +9,7 @@ class HarmonyTemplatePlugin {
   apply(compiler) {
     compiler.hooks.emit.tapAsync('WrapFunctionPlugin', (compilation, callback) => {
       const outputDir = this.options.outputDir || './template';
-      const hummerApiDir = this.options.hummerApiDir || './template';
+      const hummerApiDir = this.options.hummerApiDir || './dist';
       // 获取所有输出的文件名
       const outputNames = Object.keys(compilation.assets);
       outputNames.forEach(outputName => {
@@ -61,7 +61,7 @@ class HarmonyTemplatePlugin {
           if (err) {
               console.error('写入文件时出错：', err);
           } else {
-              console.log('JavaScript 文件生成成功！');
+              console.log('文件生成成功');
           }
         });
       
