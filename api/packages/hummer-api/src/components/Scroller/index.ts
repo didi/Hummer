@@ -19,8 +19,6 @@ export class Scroller extends HummerElement {
 
 
 
-
-
     /**
      * 
      * @param id
@@ -111,55 +109,6 @@ export class Scroller extends HummerElement {
 
 
     /**
-     * 添加子视图
-     * @param child 子视图
-     */
-    appendChild(child: View) {
-        this.call("appendChild", child);
-    }
-
-
-    /**
-     * 移除子视图
-     * @param child 子视图
-     */
-    removeChild(child: View) {
-        this.call("removeChild", child);
-    }
-
-
-    /**
-     * 移除所有子视图
-     * @param child 子视图
-     */
-    removeAll() {
-        this.call("removeAll");
-    }
-
-
-
-    /**
-     * 在制定子视图前插入一个子视图
-     *
-     * @param child 新的子视图
-     * @param existingChild 指定的子视图
-     */
-    insertBefore(child: View, existingChild: View) {
-        this.call("insertBefore", child, existingChild);
-    }
-
-
-    /**
-     * 把指定的子视图替换成另一个子视图
-     * 
-     * @param newChild 新的子视图
-     * @param oldChild 指定的子视图
-     */
-    replaceChild(newChild: View, oldChild: View) {
-        this.call("replaceChild", newChild, oldChild);
-    }
-
-    /**
      * 滚动到指定坐标（单位：dp/pt/hm/px）
      */
     scrollTo(x: Object, y: Object) {
@@ -191,25 +140,24 @@ export class Scroller extends HummerElement {
 
 
 
-
     /**
     * 滚动到顶部事件监听
     */
     setOnScrollToTopListener(callback: () => void) {
-        this.call("setOnScrollToTopListener", callback);
+        this.addEventListener('onScrollTop',callback)
     }
 
     /**
      * 滚动到底部事件监听
      */
     setOnScrollToBottomListener(callback: () => void) {
-        this.call("setOnScrollToBottomListener", callback);
+        this.addEventListener('onScrollBottom',callback)
     }
 
 
 
     /**
-    * 滚结束下拉刷新
+    * 结束下拉刷新
     */
     stopPullRefresh() {
         this.call("stopPullRefresh");
