@@ -36,26 +36,26 @@ export class Button extends HummerElement {
     /**
      * 按压状态下的样式
      */
-    get pressed() {
+    get pressedStyle() {
         return this._pressed;
     }
 
-    set pressed(value: object) {
+    set pressedStyle(value: object) {
         this._pressed = value;
-        this._setAttribute("placeholder", value);
+        this._setAttribute("pressedStyle", value);
     }
 
 
     /**
      * 禁用状态下的样式
      */
-    get focused() {
+    get disabledStyle() {
         return this._disabled;
     }
 
-    set focused(value: object) {
+    set disabledStyle(value: object) {
         this._disabled = value;
-        this._setAttribute("disabled", value);
+        this._setAttribute("disabledStyle", value);
     }
 
 
