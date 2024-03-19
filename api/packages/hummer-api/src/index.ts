@@ -53,14 +53,16 @@ export * from "./api/NotifyCenter"
 export * from "./api/Request"
 
 
-
-
-
 __GLOBAL__.Hummer = {
 
     getRootView() {
         return Hummer.getRootView();
     }
+
+}
+
+__Hummer__.__api__   = {
+    notifyCenter :  undefined
 
 }
 

@@ -5,19 +5,6 @@ import { View } from "../View"
 
 export class Scroller extends HummerElement {
 
-    protected _bounces: boolean = true;
-
-    protected _showScrollBar: boolean = false;
-
-    protected _onLoadMore: (state: number) => void = () => { };
-
-    protected _onRefresh: (state: number) => void = () => { };
-
-    protected _refreshView: View = new View();
-    protected _loadMoreView: View = new View();
-
-
-
 
     /**
      * 
@@ -34,11 +21,10 @@ export class Scroller extends HummerElement {
     * 下拉刷新时展示的视图
     */
     get refreshView() {
-        return this._refreshView;
+        return this._getAttribute("refreshView")
     }
 
     set refreshView(value: View) {
-        this._refreshView = value;
         this._setAttribute("refreshView", value);
     }
 
@@ -46,11 +32,10 @@ export class Scroller extends HummerElement {
     * 上拉加载更多时展示的视图
     */
     get loadMoreView() {
-        return this._loadMoreView;
+        return this._getAttribute("loadMoreView")
     }
 
     set loadMoreView(value: View) {
-        this._loadMoreView = value;
         this._setAttribute("loadMoreView", value);
     }
 
@@ -59,11 +44,10 @@ export class Scroller extends HummerElement {
      * 上拉加载时触发的回调
      */
     get onLoadMore() {
-        return this._onLoadMore;
+        return this._getAttribute("onLoadMore")
     }
 
     set onLoadMore(value: (state: number) => void) {
-        this._onLoadMore = value;
         this._setAttribute("onLoadMore", value);
     }
 
@@ -72,11 +56,10 @@ export class Scroller extends HummerElement {
      * 下拉刷新时触发的回调
      */
     get onRefresh() {
-        return this._onRefresh;
+        return this._getAttribute("onRefresh")
     }
 
     set onRefresh(value: (state: number) => void) {
-        this._onRefresh = value;
         this._setAttribute("onRefresh", value);
     }
 
@@ -87,11 +70,10 @@ export class Scroller extends HummerElement {
      * 滑动到边缘时是否有回弹效果
      */
     get bounces() {
-        return this._bounces;
+        return this._getAttribute("bounces")
     }
 
     set bounces(value: boolean) {
-        this._bounces = value;
         this._setAttribute("bounces", value);
     }
 
@@ -99,11 +81,10 @@ export class Scroller extends HummerElement {
      * 滑动时是否显示滚动条
      */
     get showScrollBar() {
-        return this._showScrollBar;
+        return this._getAttribute("showScrollBar")
     }
 
     set showScrollBar(value: boolean) {
-        this._showScrollBar = value;
         this._setAttribute("showScrollBar", value);
     }
 

@@ -9,6 +9,7 @@ import { Image } from "../components/Image"
 import { Input } from "../components/Input"
 import { TextArea } from "../components/TextArea"
 import { HummerApi, Env } from "../api/HummerApi"
+import { NotifyCenter } from "../api/NotifyCenter"
 
 export class Hummer {
 
@@ -20,9 +21,14 @@ export class Hummer {
 
     }
 
-    public static get Env(): Env {
+    public static get env(): Env {
         return HummerApi.getEnv()
     }
+
+    public static get notifyCenter(): NotifyCenter {
+        return  new NotifyCenter()
+    }
+
 
     /**
      * 渲染页面

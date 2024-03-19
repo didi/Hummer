@@ -5,10 +5,6 @@ import { HummerElement } from "../../HummerElement"
 export class List extends HummerElement {
 
 
-    protected _placeholder: string = "";
-
-    protected _focused: boolean = false;
-
     /**
      * 
      * @param id
@@ -24,11 +20,10 @@ export class List extends HummerElement {
      * placeholder内容
      */
     get placeholder() {
-        return this._placeholder;
+        return this._getAttribute("placeholder")
     }
 
     set placeholder(value: string) {
-        this._placeholder = value;
         this._setAttribute("placeholder", value);
     }
 
@@ -37,11 +32,10 @@ export class List extends HummerElement {
      * 是否处于激活状态
      */
     get focused() {
-        return this._focused;
+        return this._getAttribute("focused")
     }
 
     set focused(value: boolean) {
-        this._focused = value;
         this._setAttribute("focused", value);
     }
 

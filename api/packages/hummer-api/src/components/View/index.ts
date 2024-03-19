@@ -26,12 +26,12 @@ export class View extends HummerElement {
      * 默认值:'visible'
      */
     set overflow(value: string) {
-        this.setAttribute("overflow", value);
+        this._setAttribute("overflow", value);
     }
 
 
     get overflow(): string {
-        return this.getAttribute('overflow');
+        return this._getAttribute('overflow');
     }
 
 }
