@@ -57,9 +57,11 @@ export class HummerElement extends Element {
     }
 
     //扩展支持disabled,与enabled相反
-    public set disabled(disabled: Boolean) {
-        this._enabled = !disabled;
-        super.setEnable(this.enabled);
+    public set disabled(disabled: Boolean | Object) {
+        if(typeof disabled === 'boolean'){
+            this._enabled = !disabled;
+            super.setEnable(this.enabled);
+        }
     }
 
     //扩展支持 className

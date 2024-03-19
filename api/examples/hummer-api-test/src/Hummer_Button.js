@@ -14,12 +14,13 @@ export class RootView extends View {
 
         let button = new Button();
         button.text = '按钮文案';
+        button.disabled = true
+
        
         button.style = {
             width: 60,
             height: 40,
             fontFamily: 'New Times Roma',
-            fontSize: 16,
             color: '#000000',
         };
         
@@ -29,7 +30,7 @@ export class RootView extends View {
             color: '#FFFF00',
         };
         
-        button.disabledStyle = {
+        button.disabled = {
             backgroundColor: '#0000FF',
             color: '#00FFFF',
         };

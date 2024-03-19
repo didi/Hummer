@@ -16,7 +16,7 @@ module.exports = {
         wrapFunction: 'renderFunc'
       }),
       new HarmonyTemplatePlugin({
-        outputDir: path.resolve(__dirname, './template'),
+        outputDir:  './template',
         hummerApiDir: path.resolve(__dirname, './dist')
       }),
     ]
