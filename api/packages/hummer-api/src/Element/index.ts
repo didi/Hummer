@@ -31,7 +31,7 @@ export class Element extends Node {
      * @param name 节点名称
      * @param props  构造参数
      */
-    constructor(tag: string, name: string = tag, props: any=undefined) {
+    constructor(tag: string, name: string = tag, props: any = undefined) {
         super(tag, name, props)
     }
 
@@ -49,6 +49,17 @@ export class Element extends Node {
     protected _setAttribute(key: string, value: any) {
         this._attributes[key] = value;
         this.obj.setAttributes({ [key]: value });
+    }
+
+
+    /**
+    * 初始化属性
+    * 
+    * @param attribute  属性
+    */
+    protected _initAttributes(attribute: object) {
+        this._attributes = attribute || {};
+        this.obj.setAttributes(attribute);
     }
 
     /**
@@ -72,7 +83,6 @@ export class Element extends Node {
 
     protected _getAttribute(key: string) {
         return this._attributes[key];
-        return this._attributes.get(key);
     }
 
 
@@ -95,9 +105,50 @@ export class Element extends Node {
         this._setStyles(style);
     }
 
-    protected _setStyles(style: object) {
-        this._style = { ...style };
-        this.obj.setStyles(style);
+
+    protected _setStyles(style: object | any) {
+        //TODO 临时代码，待优化
+        let newStyle: any = {};
+        if (style.margin) {
+            newStyle.marginLeft = style.margin;
+            newStyle.marginTop = style.margin;
+            newStyle.marginRight = style.margin;
+            newStyle.marginBottom = style.margin;
+        }
+        if (style.padding) {
+            newStyle.paddingLeft = style.padding;
+            newStyle.paddingTop = style.padding;
+            newStyle.paddingRight = style.padding;
+            newStyle.paddingBottom = style.padding;
+        }
+        if (style.borderStyle) {
+            newStyle.borderLeftStyle = style.borderStyle;
+            newStyle.borderTopStyle = style.borderStyle;
+            newStyle.borderRightStyle = style.borderStyle;
+            newStyle.borderBootomStyle = style.borderStyle;
+        }
+        if (style.borderColor) {
+            newStyle.borderLeftColor = style.borderColor;
+            newStyle.borderTopColor = style.borderColor;
+            newStyle.borderRightColor = style.borderColor;
+            newStyle.borderBootomColor = style.borderColor;
+        }
+        if (style.borderWidth) {
+            newStyle.borderLeftWidth = style.borderWidth;
+            newStyle.borderTopWidth = style.borderWidth;
+            newStyle.borderRightWidth = style.borderWidth;
+            newStyle.borderBootomWidth = style.borderWidth;
+        }
+
+        if (style.borderRadius) {
+            newStyle.borderTopLeftRadius = style.borderRadius;
+            newStyle.borderTopRightRadius = style.borderRadius;
+            newStyle.borderBottomLeftRadius = style.borderRadius;
+            newStyle.borderBottomRightRadius = style.borderRadius;
+        }
+
+        this._style = { ...newStyle, ...style };
+        this.obj.setStyles(this._style);
     }
 
 
