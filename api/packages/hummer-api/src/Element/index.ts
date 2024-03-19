@@ -125,19 +125,19 @@ export class Element extends Node {
             newStyle.borderLeftStyle = style.borderStyle;
             newStyle.borderTopStyle = style.borderStyle;
             newStyle.borderRightStyle = style.borderStyle;
-            newStyle.borderBootomStyle = style.borderStyle;
+            newStyle.borderBottomStyle = style.borderStyle;
         }
         if (style.borderColor) {
             newStyle.borderLeftColor = style.borderColor;
             newStyle.borderTopColor = style.borderColor;
             newStyle.borderRightColor = style.borderColor;
-            newStyle.borderBootomColor = style.borderColor;
+            newStyle.borderBottomColor = style.borderColor;
         }
         if (style.borderWidth) {
             newStyle.borderLeftWidth = style.borderWidth;
             newStyle.borderTopWidth = style.borderWidth;
             newStyle.borderRightWidth = style.borderWidth;
-            newStyle.borderBootomWidth = style.borderWidth;
+            newStyle.borderBottomWidth = style.borderWidth;
         }
 
         if (style.borderRadius) {
