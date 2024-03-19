@@ -22,14 +22,14 @@ export class EventTarget extends HMObject {
     }
 
     //消息事件回调入口
-    public onRecieveEvent(eventName: string, event: any) {
-        // event = this.onHandleRecieveEvent(eventName, event);
+    public onReceiveEvent(eventName: string, event: any) {
+        event = this.onHandleReceiveEvent(eventName, event);
         this.dispatchEvent(eventName, event)
     }
 
 
     //事件处理增强/扩展
-    protected onHandleRecieveEvent(eventName: string, event: any): any {
+    protected onHandleReceiveEvent(eventName: string, event: any): any {
         return event;
     }
 
@@ -38,7 +38,7 @@ export class EventTarget extends HMObject {
      */
     public bindEventTarget() {
         this.obj.setEventTarget((eventName: string, event: any) => {
-            this.onRecieveEvent(eventName, event);
+            this.onReceiveEvent(eventName, event);
         })
     }
 
