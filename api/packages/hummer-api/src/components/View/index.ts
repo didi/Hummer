@@ -5,7 +5,7 @@ import { HummerElement } from "../../HummerElement"
 export class View extends HummerElement {
 
 
-    protected _overflow: string = "visible";
+
 
     /**
      * 
@@ -23,13 +23,13 @@ export class View extends HummerElement {
      * 默认值:'visible'
      */
     set overflow(value: string) {
-        this._overflow = value;
-        this.setAttribute("overflow", value);
+
+        this._setAttribute("overflow", value);
     }
 
 
     get overflow(): string {
-        return this._overflow;
+        return this._getAttribute("overflow");
     }
 
 }

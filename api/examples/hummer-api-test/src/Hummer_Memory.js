@@ -36,20 +36,23 @@ export class RootView extends View {
        
     //     })
 
-    //     let notifyCenter = new NotifyCenter()
-    //     notifyCenter.addEventListener("myHummer", (e) => {
-    //         console.log("myHummer被执行内容：", e)
-    //     })
-    //     let testFunction = function test(e) {
-    //         console.log("myHummer被执行内容111111：", e)
-    //     }
-    //     notifyCenter.addEventListener("myHummer", testFunction)
+        let notifyCenter = Hummer.notifyCenter
+        notifyCenter.addEventListener("myHummer", (e) => {
+            console.log("myHummer被执行内容：", e)
+        })
 
-    //     notifyCenter.removeEventListener("myHummer")
+        notifyCenter.addEventListener("myHummer", (e) => {
+            console.log("myHummer被执行内容2222222222222：", e)
+        })
+        // let testFunction = function test(e) {
+        //     console.log("myHummer被执行内容111111：", e)
+        // }
+        // notifyCenter.addEventListener("myHummer", testFunction)
+
+        // notifyCenter.removeEventListener("myHummer")
         
         
-    //     let notifyCenter1 = new NotifyCenter()
-    //     notifyCenter1.triggerEvent("myHummer", "内容xxxxxxxx")
+        notifyCenter.triggerEvent("myHummer", "内容xxxxxxxx")
 
 
     //    let env =  Hummer.Env

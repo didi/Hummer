@@ -14,9 +14,9 @@ export class RootView extends View {
 
         let button = new Button();
         button.text = '按钮文案';
-        button.disabled = true
+        // button.disabled = true
 
-       
+    
         button.style = {
             width: 60,
             height: 40,
@@ -24,21 +24,19 @@ export class RootView extends View {
             color: '#000000',
         };
         
-
-        button.pressedStyle = {
+        button.pressed= {
             backgroundColor: '#FF0000',
             color: '#FFFF00',
         };
         
-        button.disabled = {
-            backgroundColor: '#0000FF',
-            color: '#00FFFF',
-        };
-
-   
+        // button.disabled = {
+        //     backgroundColor: '#0000FF',
+        //     color: '#00FFFF',
+        // };
 
         button.addEventListener('tap', (event) => {
             console.log('my button clicked');
+            button.text =  button.text + "1"
         });
 
 
