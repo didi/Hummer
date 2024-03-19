@@ -26,8 +26,6 @@ export class HummerElement extends Element {
     protected __style: Record<string, string> | null = {};
     protected __baseStyle: Record<string, string> | null = {};
 
-
-    private _enabled: any = null; //属性扩展
     private globalProxy: HummerGlobalProxy | undefined = undefined;//代理处理
 
     public constructor(tag: string, name: string = tag, props: any) {
@@ -42,25 +40,23 @@ export class HummerElement extends Element {
 
     //扩展支持disabled,与enabled相反
     public get enabled() {
-        return this._enabled;
+        return super.getEnable();
     }
 
     //扩展支持disabled,与enabled相反
     public set enabled(enabled: boolean) {
-        this._enabled = enabled;
-        super.setEnable(this._enabled);
+        super.setEnable(enabled);
     }
 
     //扩展支持disabled,与enabled相反
     public get disabled() {
-        return !this._enabled;
+        return !this.getEnable();
     }
 
     //扩展支持disabled,与enabled相反
     public set disabled(disabled: Boolean | Object) {
-        if(typeof disabled === 'boolean'){
-            this._enabled = !disabled;
-            super.setEnable(this.enabled);
+        if (typeof disabled === 'boolean') {
+            super.setEnable(!disabled);
         }
     }
 
@@ -200,11 +196,87 @@ export class HummerElement extends Element {
     }
 
 
-    protected onHandleRecieveEvent(eventName: string, event: any): any {
+    protected override onHandleReceiveEvent(eventName: string, event: any): any {
         if (this.globalProxy) {
-            return this.globalProxy.onHandleRecieveEvent(this, event);
+            return this.globalProxy.onHandleReceiveEvent(this, event);
         }
-        return super.onHandleRecieveEvent(eventName, event);
+        return super.onHandleReceiveEvent(eventName, event);
+    }
+
+
+
+    /**
+     * 分发页面事件
+     * 
+     * 页面事件无需注册，自动向下分发
+     * 
+     * @param eventName  事件名称
+     * @param event 事件类型
+     */
+    public override dispatchEvent(eventName: string, event: any): void {
+        switch (eventName) {
+            case '__onCreate__':
+                this.onCreate();
+            case '__onAppear__':
+                this.onAppear();
+            case '__onDisappear__':
+                this.onDisappear();
+            case '__onDestroy__':
+                this.onDestroy();
+            case '__onBack__':
+                this.onBack();
+        }
+        //继续向下分发事件
+        super.dispatchEvent(eventName, event);
+    }
+
+
+    /**
+     * 页面创建
+     *  native 不提供onReady， 
+     *  需手动加一个onReady生命周期
+     */
+    public onCreate() {
+
+    }
+
+    /**
+     * 页面显示周期
+     */
+    public onAppear() {
+
+    }
+
+    /**
+     * 页面隐藏
+     */
+    public onDisappear() {
+
+    }
+
+    /**
+     * 页面销毁
+     */
+    public onDestroy() {
+
+    }
+
+    /**
+     * 页面返回事件
+     * 需要控制页面是否可以返回，需要设置属性：canGoBack；而不是通过返回值
+     * @param event  事件信息，包含当前页面是否可返回:canGoBack
+     * @returns 
+     */
+    public onBack() {
+
+    }
+
+    public get canGoBack(): boolean {
+        return this._getAttribute('canGoBack');
+    }
+
+    public set canGoBack(canGoBack: boolean) {
+        this._setAttribute('canGoBack', canGoBack);
     }
 
 

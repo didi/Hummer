@@ -7,11 +7,6 @@ import { ImageStyle } from "./ImageStyle"
 export class Image extends HummerElement {
 
 
-    protected _src: string = "";
-
-    protected _gifSrc: string = "";
-
-    protected _gifRepeatCount: number = 0;
 
     /**
     * 
@@ -21,6 +16,10 @@ export class Image extends HummerElement {
     */
     public constructor(id: string = "", name: string = "", props: any = {}) {
         super("Image", name, { ...props, viewId: id });
+        //设置默认属性值
+        this._initAttributes({
+            gifRepeatCount: 0
+        });
     }
 
 
@@ -28,11 +27,10 @@ export class Image extends HummerElement {
     * 普通图片
     */
     get src() {
-        return this._src;
+        return this._getAttribute("src")
     }
 
     set src(value: string) {
-        this._src = value;
         this._setAttribute("src", value);
     }
 
@@ -40,11 +38,10 @@ export class Image extends HummerElement {
     * Gif图片
     */
     get gifSrc() {
-        return this._gifSrc;
+        return this._getAttribute("gifSrc")
     }
 
     set gifSrc(value: string) {
-        this._gifSrc = value;
         this._setAttribute("gifSrc", value);
     }
 
@@ -52,11 +49,10 @@ export class Image extends HummerElement {
     * Gif播放次数
     */
     get gifRepeatCount() {
-        return this._gifRepeatCount;
+        return this._getAttribute("gifRepeatCount")
     }
 
     set gifRepeatCount(value: number) {
-        this._gifRepeatCount = value;
         this._setAttribute("gifRepeatCount", value);
     }
 

@@ -4,13 +4,6 @@ import { HummerElement } from "../../HummerElement"
 
 export class Text extends HummerElement {
 
-
-    protected _text: string = "";
-
-    protected _richText: string = "";
-
-    protected _textCopyEnable: boolean = false;
-
     /**
      * 
      * @param id
@@ -19,6 +12,11 @@ export class Text extends HummerElement {
      */
     public constructor(id: string = "", name: string = "", props: any = {}) {
         super("Text", name, { ...props, viewId: id });
+        this._initAttributes({
+            text: '',
+            richText: '',
+            textCopyEnable: 'false'
+        });
     }
 
 
@@ -26,11 +24,10 @@ export class Text extends HummerElement {
      * 普通文本内容
      */
     get text() {
-        return this._text;
+        return this._getAttribute('text');
     }
 
     set text(value: string) {
-        this._text = value;
         this._setAttribute("text", value);
     }
 
@@ -38,11 +35,10 @@ export class Text extends HummerElement {
      * 富文本内容
      */
     get richText() {
-        return this._richText;
+        return this._getAttribute('richText');
     }
 
     set richText(value: string) {
-        this._richText = value;
         this._setAttribute("richText", value);
     }
 
@@ -52,12 +48,12 @@ export class Text extends HummerElement {
      * 默认：false
      */
     get textCopyEnable() {
-        return this._textCopyEnable;
+        return this._getAttribute('textCopyEnable');
     }
 
     set textCopyEnable(value: boolean) {
-        this._textCopyEnable = value;
         this._setAttribute("textCopyEnable", value);
     }
+
 
 }

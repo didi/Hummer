@@ -4,11 +4,6 @@ import { HummerElement } from "../../HummerElement"
 
 export class Button extends HummerElement {
 
-    protected _text: string = "";
-
-    protected _pressed: object = {};
-
-    protected _disabled: object = {};
 
     /**
      * 
@@ -25,11 +20,10 @@ export class Button extends HummerElement {
      * 按钮文案
      */
     get text() {
-        return this._text;
+        return this._getAttribute("text")
     }
 
     set text(value: string) {
-        this._text = value;
         this._setAttribute("text", value);
     }
 
@@ -37,11 +31,10 @@ export class Button extends HummerElement {
      * 按压状态下的样式
      */
     get pressed() {
-        return this._pressed;
+        return this._getAttribute("pressed")
     }
 
     set pressed(value: object) {
-        this._pressed = value;
         this._setAttribute("pressed", value);
     }
 
@@ -50,14 +43,13 @@ export class Button extends HummerElement {
      * 禁用状态下的样式
      */
     override get disabled() {
-        return this._disabled;
+        return this._getAttribute("disabled")
     }
 
     override set disabled(value:  Boolean | Object) {
         if(typeof value === "boolean"){
             super.disabled = value
         }else{
-            this._disabled = value;
             this._setAttribute("disabled", value);
         }
     }

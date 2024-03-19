@@ -4,11 +4,6 @@ import { HummerElement } from "../../HummerElement"
 
 export class TextArea extends HummerElement {
 
-    protected _text: string = "";
-
-    protected _placeholder: string = "";
-
-    protected _focused: boolean = false;
 
     /**
      * 
@@ -18,6 +13,11 @@ export class TextArea extends HummerElement {
      */
     public constructor(id: string = "", name: string = "", props: any = {}) {
         super("TextArea", name, { ...props, viewId: id });
+        this._initAttributes({
+            text: '',
+            placeholder: '',
+            focused: 'false'
+        });
     }
 
 
@@ -25,11 +25,10 @@ export class TextArea extends HummerElement {
      * 默认输入内容
      */
     get text() {
-        return this._text;
+        return this._getAttribute('text');
     }
 
     set text(value: string) {
-        this._text = value;
         this._setAttribute("text", value);
     }
 
@@ -37,11 +36,10 @@ export class TextArea extends HummerElement {
      * placeholder内容
      */
     get placeholder() {
-        return this._placeholder;
+        return this._getAttribute('placeholder');
     }
 
     set placeholder(value: string) {
-        this._placeholder = value;
         this._setAttribute("placeholder", value);
     }
 
@@ -50,11 +48,10 @@ export class TextArea extends HummerElement {
      * 是否处于激活状态
      */
     get focused() {
-        return this._focused;
+        return this._getAttribute('focused');
     }
 
     set focused(value: boolean) {
-        this._focused = value;
         this._setAttribute("focused", value);
     }
 

@@ -83,7 +83,7 @@ export interface HummerGlobalProxy {
      * @param element 响应目标元素
      * @param event  事件对象
      */
-    onHandleRecieveEvent(element: HummerElement, event: any): any;
+    onHandleReceiveEvent(element: HummerElement, event: any): any;
 
     // this.element.addEventListener(event, (e: any) => {
     //     // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝
