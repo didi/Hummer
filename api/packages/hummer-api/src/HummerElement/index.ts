@@ -217,14 +217,19 @@ export class HummerElement extends Element {
         switch (eventName) {
             case '__onCreate__':
                 this.onCreate();
+                break;
             case '__onAppear__':
                 this.onAppear();
+                break;
             case '__onDisappear__':
                 this.onDisappear();
+                break;
             case '__onDestroy__':
                 this.onDestroy();
+                break;
             case '__onBack__':
                 this.onBack();
+                break;
         }
         //继续向下分发事件
         super.dispatchEvent(eventName, event);
