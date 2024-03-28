@@ -1,7 +1,5 @@
-
 import { HMObject } from "../HMObject"
 
-const { document: _Document } = __Hummer__
 
 //***********************************************/
 // 引擎操作接口挂载点全局上的 ”__hummer__“上
@@ -11,6 +9,9 @@ export interface EventLisener {
     onEvent(event: any): any;
 }
 
+/**
+ * EventTarget 事件分发实现
+ */
 export class EventTarget extends HMObject {
 
     protected envents: Map<string, Array<EventLisener | Function>>;

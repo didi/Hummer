@@ -1,12 +1,14 @@
-
-const { document: _Document } = __Hummer__;
-
+/**
+ * 
+ */
 type Keyframe = {
     value: number|string|Record<string, any>
     percent:number
   }
   
-
+/**
+ * KeyframeAnimation 帧动画
+ */
 export class KeyframeAnimation {
 
     protected keyframes: Array<Keyframe> = [{

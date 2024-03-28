@@ -1,5 +1,3 @@
-const { document: _Document } = __Hummer__
-
 import { HummerElement } from "../../HummerElement"
 
 export class Input extends HummerElement {

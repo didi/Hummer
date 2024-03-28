@@ -1,9 +1,7 @@
-const { document: _Document } = __Hummer__
-
-import { LifeCycleManager } from "../../LifeCycle"
+import { LifeCycleElement } from "../../LifeCycleElement"
 import { View } from "../View"
 
-export class Scroller extends LifeCycleManager {
+export class Scroller extends LifeCycleElement {
 
 
     /**
@@ -92,7 +90,7 @@ export class Scroller extends LifeCycleManager {
     /**
      * 滚动到指定坐标（单位：dp/pt/hm/px）
      */
-    scrollTo(x: number | string, y:  number | string) {
+    scrollTo(x: number | string, y: number | string) {
         this.call("scrollTo", x, y);
     }
 
@@ -125,14 +123,14 @@ export class Scroller extends LifeCycleManager {
     * 滚动到顶部事件监听
     */
     setOnScrollToTopListener(callback: () => void) {
-        this.addEventListener('onScrollTop',callback)
+        this.addEventListener('onScrollTop', callback)
     }
 
     /**
      * 滚动到底部事件监听
      */
     setOnScrollToBottomListener(callback: () => void) {
-        this.addEventListener('onScrollBottom',callback)
+        this.addEventListener('onScrollBottom', callback)
     }
 
 

@@ -1,9 +1,7 @@
-
 import { HummerComponent } from "../../HummerComponent"
 import { View } from "src/components";
-const { document: _Document } = __Hummer__;
 
-const hm = __Hummer__;
+const HUMMER = __Hummer__;
 export class Dialog extends HummerComponent {
 
     protected _cancelable: boolean = true;
@@ -18,13 +16,13 @@ export class Dialog extends HummerComponent {
     }
 
     protected static checkInstance() {
-        if (!hm.__dialog__) {
-            hm.__dialog__ = Dialog.newInstance();
+        if (!HUMMER.__dialog__) {
+            HUMMER.__dialog__ = Dialog.newInstance();
         }
     }
 
     static get instance(): Dialog {
-        return hm.__dialog__
+        return HUMMER.__dialog__
     }
 
 

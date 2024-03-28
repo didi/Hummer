@@ -1,5 +1,3 @@
-const { document: _Document } = __Hummer__
-
 import { EventTarget } from "../EventTarget"
 
 export class HummerComponent extends EventTarget {

@@ -1,5 +1,3 @@
-const { document: _Document } = __Hummer__
-
 import { View } from "../../components/View"
 
 /**

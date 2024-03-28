@@ -1,8 +1,6 @@
-
 import { HummerComponent } from "../../HummerComponent"
-const { document: _Document } = __Hummer__;
 
-const hm = __Hummer__;
+const HUMMER = __Hummer__;
 export class Request extends HummerComponent {
 
     protected _url: string = '';
@@ -24,13 +22,13 @@ export class Request extends HummerComponent {
 
 
     protected static checkInstance() {
-        if (!hm.__request__) {
-            hm.__request__ = Request.newInstance();
+        if (!HUMMER.__request__) {
+            HUMMER.__request__ = Request.newInstance();
         }
     }
 
     static get instance(): Request {
-        return hm.__request__
+        return HUMMER.__request__
     }
 
     // API地址

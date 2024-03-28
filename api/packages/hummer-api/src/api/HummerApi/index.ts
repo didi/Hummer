@@ -1,8 +1,6 @@
-
 import { HummerComponent } from "../../HummerComponent"
-const { document: _Document } = __Hummer__;
 
-const hm = __Hummer__;
+const HUMMER = __Hummer__;
 
 
 export type Env = {
@@ -39,13 +37,13 @@ export class HummerApi extends HummerComponent {
     }
 
     protected static checkInstance() {
-        if (!hm.__hummerApi__) {
-            hm.__hummerApi__ = HummerApi.newInstance();
+        if (!HUMMER.__hummerApi__) {
+            HUMMER.__hummerApi__ = HummerApi.newInstance();
         }
     }
 
     static get instance(): HummerApi {
-        return hm.__hummerApi__
+        return HUMMER.__hummerApi__
     }
 
     /**

@@ -1,4 +1,4 @@
-const { document: _Document } = __Hummer__
+const { document: _Document_ } = __Hummer__
 
 //***********************************************/
 //
@@ -21,9 +21,9 @@ export class HMObject {
         this.isApi = isApi
         this.props = props
         if (isApi) {
-            this.obj = _Document.createComponent(tag, props)
+            this.obj = _Document_.createComponent(tag, props)
         } else {
-            this.obj = _Document.createElement(tag, props)
+            this.obj = _Document_.createElement(tag, props)
         }
     }
 

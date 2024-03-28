@@ -1,6 +1,6 @@
-const { document: _Document } = __Hummer__;
-
-
+/**
+ * BasicAnimation 基础动画
+ */
 export class BasicAnimation {
 
     protected value: number | string | Record<string, any> = '';
@@ -11,7 +11,7 @@ export class BasicAnimation {
     protected type: string = 'basic';
     protected property: string = 'position';
 
-    public  _startFunc: Function = () => { };
+    public _startFunc: Function = () => { };
     public _endFunc: Function = () => { };
 
 
@@ -20,15 +20,15 @@ export class BasicAnimation {
     }
 
 
-    private _innerFunc(event: string, callback: Function){
+    private _innerFunc(event: string, callback: Function) {
         switch (event) {
             case 'start':
-                this._startFunc =  () => {
+                this._startFunc = () => {
                     callback.call(this, event)
                 }
                 break;
             case 'end':
-                this._endFunc =  () => {
+                this._endFunc = () => {
                     callback.call(this, event)
                 }
                 break;

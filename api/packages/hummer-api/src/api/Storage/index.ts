@@ -1,7 +1,6 @@
 import { HummerComponent } from "../../HummerComponent"
-const { document: _Document } = __Hummer__;
 
-const hm = __Hummer__;
+const HUMMER = __Hummer__;
 export class Storage extends HummerComponent {
 
 
@@ -15,13 +14,13 @@ export class Storage extends HummerComponent {
 
 
     protected static checkInstance() {
-        if (!hm.__storage__) {
-            hm.__storage__ = Storage.newInstance();
+        if (!HUMMER.__storage__) {
+            HUMMER.__storage__ = Storage.newInstance();
         }
     }
 
     static get instance(): Storage {
-        return hm.__storage__
+        return HUMMER.__storage__
     }
 
 

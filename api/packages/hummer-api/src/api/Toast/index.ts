@@ -1,9 +1,9 @@
 
 import { HummerComponent } from "../../HummerComponent"
 import { View } from "src/components"; 
-const { document: _Document } = __Hummer__;
 
-const hm = __Hummer__;
+
+const HUMMER = __Hummer__;
 export class Toast extends HummerComponent {
 
     public constructor(props: any = {}) {
@@ -15,13 +15,13 @@ export class Toast extends HummerComponent {
     }
 
     protected static checkInstance() {
-        if (!hm.__toast__) {
-            hm.__toast__ = Toast.newInstance();
+        if (!HUMMER.__toast__) {
+            HUMMER.__toast__ = Toast.newInstance();
         }
     }
 
     static get instance(): Toast {
-        return hm.__toast__
+        return HUMMER.__toast__
     }
 
 
