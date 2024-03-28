@@ -39,6 +39,7 @@ export class Image extends HummerElement {
 
     set src(value: string) {
         this._setAttribute("src", value);
+        this._removeAttribute("gifSrc");
     }
 
     /**
@@ -50,6 +51,7 @@ export class Image extends HummerElement {
 
     set gifSrc(value: string) {
         this._setAttribute("gifSrc", value);
+        this._removeAttribute("src");
     }
 
     /**
@@ -117,14 +119,14 @@ export class Image extends HummerElement {
     load(source: string | ImageStyle, callback: Function) {
         if (typeof source === 'string') {
             this._setAttribute("src", source);
-            this._setAttribute("gifSrc", undefined);
+            this._removeAttribute("gifSrc");
         } else {
             this._setAttribute("src", source.src);
-            this._setAttribute("gifSrc", undefined);
+            this._removeAttribute("gifSrc");
 
             if (!source.gifSrc && source.gifSrc !== "") {
                 this._setAttribute("gifSrc", source.gifSrc);
-                this._setAttribute("src", undefined);
+                this._removeAttribute("src");
             }
             if (source.placeholder) {
                 this._setAttribute("placeholder", source.placeholder);

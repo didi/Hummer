@@ -305,6 +305,10 @@ export class Element extends Node {
         }
     }
 
+    protected _removeAttribute(key: string) {
+        delete this._attributes[key];
+    }
+
 
     /**
     * 初始化属性
