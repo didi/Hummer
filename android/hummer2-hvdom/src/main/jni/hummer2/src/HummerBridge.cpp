@@ -3,15 +3,20 @@
 //
 
 #include "jni.h"
-#include "Hummer2JNI.h"
+#include "FalconEngine.h"
 #include "HummerBridge.h"
 
-#include "hvdom/hm_object.h"
+#include "jsi/jsi_value.h"
+
+//******************************************************************************
+//
+//                 JsiValue
+//******************************************************************************
 
 
 jlong HMValue_init_value_(JNIEnv *env, jobject obj) {
     LOGI("HummerBridge::hmValue_init_value_() ");
-    auto *hmValue = new HMValue();
+    auto *hmValue = new JsiValue();
     hmValue->obj = reinterpret_cast<uintptr_t>(obj);
     uintptr_t identify = reinterpret_cast<uintptr_t>(hmValue);
     return identify;
@@ -19,7 +24,7 @@ jlong HMValue_init_value_(JNIEnv *env, jobject obj) {
 
 jstring HMValue_string_(JNIEnv *env, jobject obj, jlong identify) {
     LOGI("HummerBridge::HMValue_string_() identify=%lld", identify);
-    HMValue *value = (HMValue *) identify;
+    JsiValue *value = (JsiValue *) identify;
     string result = value->toString();
 
     jstring resultString = env->NewStringUTF(result.c_str());
@@ -28,18 +33,18 @@ jstring HMValue_string_(JNIEnv *env, jobject obj, jlong identify) {
 
 void HMValue_protect_(JNIEnv *env, jobject obj, jlong identify) {
     LOGI("HummerBridge::HMValue_protect_() identify=%lld", identify);
-    HMValue *value = (HMValue *) identify;
+    JsiValue *value = (JsiValue *) identify;
     value->protect();
 }
 
 void HMValue_unprotect_(JNIEnv *env, jobject obj, jlong identify) {
     LOGI("HummerBridge::HMValue_unprotect_() identify=%lld", identify);
-    HMValue *value = (HMValue *) identify;
+    JsiValue *value = (JsiValue *) identify;
     value->unprotect();
 }
 
 
-jobject HMValueGetJObject_(JNIEnv *env, HMValue *hmValue) {
+jobject HMValueGetJObject_(JNIEnv *env, JsiValue *hmValue) {
     if (hmValue->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmValue);
         jobject obj = env->NewObject(_HMValueCls, _HMValueInit, identify);
@@ -48,12 +53,17 @@ jobject HMValueGetJObject_(JNIEnv *env, HMValue *hmValue) {
     return (jobject) hmValue->obj;
 }
 
+//******************************************************************************
+//
+//                 JsiFunction
+//******************************************************************************
+
 
 jobject HMFunction_call_(JNIEnv *env, jobject obj, jlong identify, jlong value) {
-    HMFunction *hmFunction = (HMFunction *) identify;
-    HMValue *hmValue = (HMValue *) value;
+    JsiFunction *hmFunction = (JsiFunction *) identify;
+    JsiValue *hmValue = (JsiValue *) value;
 
-    HMValue *result = hmFunction->call(hmValue);
+    JsiValue *result = hmFunction->call(hmValue);
     if (result == nullptr) {
         return nullptr;
     }
@@ -62,7 +72,7 @@ jobject HMFunction_call_(JNIEnv *env, jobject obj, jlong identify, jlong value) 
 }
 
 
-jobject HMFunctionGetJObject_(JNIEnv *env, HMFunction *hmFunction) {
+jobject HMFunctionGetJObject_(JNIEnv *env, JsiFunction *hmFunction) {
     if (hmFunction->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmFunction);
         jobject obj = env->NewObject(_HMFunctionCls, _HMFunctionInit, identify);
@@ -71,8 +81,13 @@ jobject HMFunctionGetJObject_(JNIEnv *env, HMFunction *hmFunction) {
     return (jobject) hmFunction->obj;
 }
 
+//******************************************************************************
+//
+//                 JsiString
+//******************************************************************************
+
 jlong HMString_init_string_(JNIEnv *env, jobject obj, jstring value) {
-    HMString *hmString = new HMString();
+    JsiString *hmString = new JsiString();
     hmString->obj = reinterpret_cast<uintptr_t>(obj);
     hmString->value_ = env->GetStringUTFChars(value, hm_true_ptr);
     uintptr_t identify = reinterpret_cast<uintptr_t>(hmString);
@@ -80,78 +95,47 @@ jlong HMString_init_string_(JNIEnv *env, jobject obj, jstring value) {
 }
 
 
-jobject HMStringGetJObject_(JNIEnv *env, HMString *hmString) {
+jobject HMStringGetJObject_(JNIEnv *env, JsiString *hmString) {
     if (hmString->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmString);
         jstring value = env->NewStringUTF(hmString->value_.c_str());
         jobject obj = env->NewObject(_HMStringCls, _HMStringInit, identify, value);
+//        obj = env->NewGlobalRef(obj);
         hmString->obj = reinterpret_cast<uintptr_t>(obj);
-
-        env->NewGlobalRef(obj);
     }
     return (jobject) hmString->obj;
 }
 
 
+//******************************************************************************
+//
+//                 JsiObject
+//******************************************************************************
+
+
+
 jlong HMObject_init_object_(JNIEnv *env, jobject obj) {
-    HMObject *hmObject = new HMObject();
+    JsiObject *hmObject = new JsiObject();
     hmObject->obj = reinterpret_cast<uintptr_t>(obj);
     uintptr_t identify = reinterpret_cast<uintptr_t>(hmObject);
     return identify;
 }
 
 jobject HMObject_get_value_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
+    JsiObject *hmObject = (JsiObject *) identify;
 
     const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    HMValue *hmValue = hmObject->getValue(keyValue);
+    JsiValue *hmValue = hmObject->getValue(keyValue);
     jobject result = value2JObject(env, hmValue);
+    hmValue->obj = NULL;
+
+    env->ReleaseStringUTFChars(key, keyValue);
 
     return result;
 }
 
-void HMObject_set_value_(JNIEnv *env, jobject obj, jlong identify, jstring key, jlong value) {
-    HMObject *hmObject = (HMObject *) identify;
-    HMValue *hmValue = (HMValue *) value;
-
-    const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    hmObject->setValue(keyValue, hmValue);
-
-    env->ReleaseStringUTFChars(key, keyValue);
-}
-
-jboolean HMObject_is_boolean_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
-
-    const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    bool result = hmObject->isBoolean(keyValue);
-
-    env->ReleaseStringUTFChars(key, keyValue);
-    return result;
-}
-
-jboolean HMObject_is_number_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
-
-    const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    bool result = hmObject->isNumber(keyValue);
-
-    env->ReleaseStringUTFChars(key, keyValue);
-    return result;
-}
-
-jboolean HMObject_is_string_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
-
-    const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    bool result = hmObject->isString(keyValue);
-
-    env->ReleaseStringUTFChars(key, keyValue);
-    return result;
-}
-
-jboolean HMObject_is_object_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
+int HMObject_get_value_type_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
+    JsiObject *hmObject = (JsiObject *) identify;
 
     const char *keyValue = env->GetStringUTFChars(key, nullptr);
     bool result = hmObject->isObject(keyValue);
@@ -160,56 +144,41 @@ jboolean HMObject_is_object_(JNIEnv *env, jobject obj, jlong identify, jstring k
     return result;
 }
 
-jboolean HMObject_is_array_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
+jboolean HMObject_set_value_(JNIEnv *env, jobject obj, jlong identify, jstring key, jlong value) {
+    JsiObject *hmObject = (JsiObject *) identify;
+    JsiValue *hmValue = (JsiValue *) value;
 
     const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    bool result = hmObject->isArray(keyValue);
+    hmObject->setValue(keyValue, hmValue);
 
     env->ReleaseStringUTFChars(key, keyValue);
+}
+
+jboolean HMObject_remove_value_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
+    JsiObject *hmObject = (JsiObject *) identify;
+
+    const char *keyValue = env->GetStringUTFChars(key, nullptr);
+    hmObject->removeValue(keyValue);
+
+    env->ReleaseStringUTFChars(key, keyValue);
+}
+
+jobject HMObject_keys_(JNIEnv *env, jobject obj, jlong identify) {
+    JsiObject *hmObject = (JsiObject *) identify;
+
+    list<string> keys = hmObject->allKeys();
+    jobject result = HMUtils::getJavaList(env, &keys);
     return result;
 }
 
-jboolean HMObject_get_boolean_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
-
-    const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    bool result = hmObject->getBoolean(keyValue);
-
-    env->ReleaseStringUTFChars(key, keyValue);
-    return result;
+jobject HMObject_keys_array_(JNIEnv *env, jobject obj, jlong identify) {
+    JsiObject *hmObject = (JsiObject *) identify;
+    JsiArray *keys = hmObject->allKeysArray();
+    return value2JObject(env, keys);
 }
 
-jstring HMObject_get_string_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
 
-    const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    string result = hmObject->getString(keyValue);
-
-    env->ReleaseStringUTFChars(key, keyValue);
-    return env->NewStringUTF(result.c_str());
-}
-
-jdouble HMObject_get_number_(JNIEnv *env, jobject obj, jlong identify, jstring key) {
-    HMObject *hmObject = (HMObject *) identify;
-
-    const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    double result = hmObject->getNumber(keyValue);
-
-    env->ReleaseStringUTFChars(key, keyValue);
-    return result;
-}
-
-jobject HMObject_all_keys_(JNIEnv *env, jobject obj, jlong identify) {
-    HMObject *hmObject = (HMObject *) identify;
-
-    HMArray *hmArray = hmObject->allKeys();
-
-    jobject result = HMArrayGetJObject_(env, hmArray);
-    return result;
-}
-
-jobject HMObjectGetJObject_(JNIEnv *env, HMObject *hmObject) {
+jobject HMObjectGetJObject_(JNIEnv *env, JsiObject *hmObject) {
     if (hmObject->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmObject);
         jobject obj = env->NewObject(_HMObjectCls, _HMObjectInit, identify);
@@ -218,15 +187,23 @@ jobject HMObjectGetJObject_(JNIEnv *env, HMObject *hmObject) {
     return (jobject) hmObject->obj;
 }
 
+
+//******************************************************************************
+//
+//                 JsiNumber
+//******************************************************************************
+
+
+
 jlong HMNumber_init_number_(JNIEnv *env, jobject obj, jdouble value) {
-    HMNumber *hmNumber = new HMNumber();
+    JsiNumber *hmNumber = new JsiNumber();
     hmNumber->obj = reinterpret_cast<uintptr_t>(obj);
     hmNumber->value_ = value;
     uintptr_t identify = reinterpret_cast<uintptr_t>(hmNumber);
     return identify;
 }
 
-jobject HMNumberGetJObject_(JNIEnv *env, HMNumber *hmNumber) {
+jobject HMNumberGetJObject_(JNIEnv *env, JsiNumber *hmNumber) {
     if (hmNumber->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmNumber);
         jobject obj = env->NewObject(_HMNumberCls, _HMNumberInit, identify, hmNumber->value_);
@@ -235,8 +212,16 @@ jobject HMNumberGetJObject_(JNIEnv *env, HMNumber *hmNumber) {
     return (jobject) hmNumber->obj;
 }
 
+
+//******************************************************************************
+//
+//                 JsiBoolean
+//******************************************************************************
+
+
+
 jlong HMBoolean_init_boolean_(JNIEnv *env, jobject obj, jboolean value) {
-    HMBoolean *hmBoolean = new HMBoolean();
+    JsiBoolean *hmBoolean = new JsiBoolean();
     hmBoolean->obj = reinterpret_cast<uintptr_t>(obj);
     hmBoolean->value_ = value;
     uintptr_t identify = reinterpret_cast<uintptr_t>(hmBoolean);
@@ -244,7 +229,7 @@ jlong HMBoolean_init_boolean_(JNIEnv *env, jobject obj, jboolean value) {
 }
 
 
-jobject HMBooleanGetJObject_(JNIEnv *env, HMBoolean *hmBoolean) {
+jobject HMBooleanGetJObject_(JNIEnv *env, JsiBoolean *hmBoolean) {
     if (hmBoolean->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmBoolean);
         jobject obj = env->NewObject(_HMBooleanCls, _HMBooleanInit, identify, hmBoolean->value_);
@@ -253,52 +238,74 @@ jobject HMBooleanGetJObject_(JNIEnv *env, HMBoolean *hmBoolean) {
     return (jobject) hmBoolean->obj;
 }
 
+//******************************************************************************
+//
+//                 JsiArray
+//******************************************************************************
+
+
 jlong HMArray_init_array_(JNIEnv *env, jobject obj) {
-    HMArray *hmArray = new HMArray();
+    JsiArray *hmArray = new JsiArray();
     hmArray->obj = reinterpret_cast<uintptr_t>(obj);
     uintptr_t identify = reinterpret_cast<uintptr_t>(hmArray);
     return identify;
 }
 
+//
+
 jint HMArray_length_(JNIEnv *env, jobject obj, jlong identify) {
-    HMArray *hmArray = (HMArray *) identify;
+    JsiArray *hmArray = (JsiArray *) identify;
     return hmArray->length();
 }
 
 jobject HMArray_get_value_(JNIEnv *env, jobject obj, jlong identify, jint index) {
-    HMArray *hmArray = (HMArray *) identify;
-    HMValue *result = hmArray->getValue(index);
+    JsiArray *hmArray = (JsiArray *) identify;
+    JsiValue *result = hmArray->getValue(index);
     return value2JObject(env, result);
 }
 
 
 jboolean HMArray_set_value_(JNIEnv *env, jobject obj, jlong identify, jint index, jlong value) {
-    HMArray *hmArray = (HMArray *) identify;
-    HMValue *hmValue = (HMValue *) value;
+    JsiArray *hmArray = (JsiArray *) identify;
+    JsiValue *hmValue = (JsiValue *) value;
     hmArray->setValue(index, hmValue);
     return JNI_TRUE;
 }
 
-void HMArray_add_value_(JNIEnv *env, jobject obj, jlong identify, jlong value) {
-    HMArray *hmArray = (HMArray *) identify;
-    HMValue *hmValue = (HMValue *) value;
-    hmArray->addValue(hmValue);
+
+void HMArray_push_(JNIEnv *env, jobject obj, jlong identify, jlong value) {
+    JsiArray *hmArray = (JsiArray *) identify;
+    JsiValue *hmValue = (JsiValue *) value;
+    hmArray->pushValue(hmValue);
 }
 
-jobject HMArray_remove_value_(JNIEnv *env, jobject obj, jlong identify, jint index) {
-    HMArray *hmArray = (HMArray *) identify;
-    hmArray->removeValue(index);
-    return nullptr;
+jobject HMArray_pop_(JNIEnv *env, jobject obj, jlong identify) {
+    JsiArray *hmArray = (JsiArray *) identify;
+    JsiValue *jsiValue = hmArray->popValue();
+
+    return value2JObject(env, jsiValue);
 }
 
-jobject HMArray_remove_value2_(JNIEnv *env, jobject obj, jlong identify, jobject value) {
-    HMArray *hmArray = (HMArray *) identify;
-    HMValue *hmValue = (HMValue *) value;
+jobject HMArray_remove_value_at_(JNIEnv *env, jobject obj, jlong identify, jint index) {
+    JsiArray *hmArray = (JsiArray *) identify;
+    hmArray->removeValueAt(index);
+
+}
+
+jobject HMArray_remove_value_(JNIEnv *env, jobject obj, jlong identify, jlong value) {
+    JsiArray *hmArray = (JsiArray *) identify;
+    JsiValue *hmValue = (JsiValue *) value;
     hmArray->removeValue(hmValue);
-    return nullptr;
+
 }
 
-jobject HMArrayGetJObject_(JNIEnv *env, HMArray *hmArray) {
+void HMArray_clear_(JNIEnv *env, jobject obj, jlong identify) {
+    JsiArray *hmArray = (JsiArray *) identify;
+    hmArray->clear();
+}
+
+
+jobject HMArrayGetJObject_(JNIEnv *env, JsiArray *hmArray) {
     if (hmArray->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmArray);
         jobject obj = env->NewObject(_HMArrayCls, _HMArrayInit, identify);
@@ -307,30 +314,61 @@ jobject HMArrayGetJObject_(JNIEnv *env, HMArray *hmArray) {
     return (jobject) hmArray->obj;
 }
 
-jobject value2JObject(JNIEnv *env, HMValue *hmValue) {
+jobject value2JObject(JNIEnv *env, JsiValue *hmValue) {
     if (hmValue->obj == NULL) {
         ValueType type = hmValue->getType();
         switch (type) {
             case TYPE_NULL:
-                return HMValueGetJObject_(env, (HMValue *) hmValue);
+                return HMValueGetJObject_(env, (JsiValue *) hmValue);
             case TYPE_BOOLEAN:
-                return HMBooleanGetJObject_(env, (HMBoolean *) hmValue);
+                return HMBooleanGetJObject_(env, (JsiBoolean *) hmValue);
             case TYPE_NUMBER:
-                return HMNumberGetJObject_(env, (HMNumber *) hmValue);
+                return HMNumberGetJObject_(env, (JsiNumber *) hmValue);
             case TYPE_STRING:
-                return HMStringGetJObject_(env, (HMString *) hmValue);
+                return HMStringGetJObject_(env, (JsiString *) hmValue);
             case TYPE_OBJECT:
-                return HMObjectGetJObject_(env, (HMObject *) hmValue);
+                return HMObjectGetJObject_(env, (JsiObject *) hmValue);
             case TYPE_ARRAY:
-                return HMArrayGetJObject_(env, (HMArray *) hmValue);
+                return HMArrayGetJObject_(env, (JsiArray *) hmValue);
             case TYPE_NAPIFunction:
-                return HMFunctionGetJObject_(env, (HMFunction *) hmValue);
+                return HMFunctionGetJObject_(env, (JsiFunction *) hmValue);
         }
     }
     return (jobject) hmValue->obj;
 }
 
+static JNINativeMethod _HMValueMethods[] = {{"init_value_", "()J",                   (void *) HMValue_init_value_},
+                                            {"string_",     "(J)Ljava/lang/String;", (void *) HMValue_string_},
+                                            {"protect_",    "(J)V",                  (void *) HMValue_protect_},
+                                            {"unprotect_",  "(J)V",                  (void *) HMValue_unprotect_},};
 
+static JNINativeMethod _HMFunctionMethods[] = {{"call_", "(JJ)Lcom/didi/hummer2/bridge/JsiValue;", (void *) HMFunction_call_}};
+
+static JNINativeMethod _HMBooleanMethods[] = {{"init_boolean_", "(Z)J", (void *) HMBoolean_init_boolean_},};
+
+static JNINativeMethod _HMStringMethods[] = {{"init_string_", "(Ljava/lang/String;)J", (void *) HMString_init_string_},};
+
+static JNINativeMethod _HMNumberMethods[] = {{"init_number_", "(D)J", (void *) HMNumber_init_number_},};
+
+
+static JNINativeMethod _HMArrayMethods[] = {{"init_array_",      "()J",                                    (void *) HMArray_init_array_},
+                                            {"length_",          "(J)I",                                   (void *) HMArray_length_},
+                                            {"get_value_",       "(JI)Lcom/didi/hummer2/bridge/JsiValue;", (void *) HMArray_get_value_},
+                                            {"set_value_",       "(JIJ)Z",                                 (void *) HMArray_set_value_},
+                                            {"push_",            "(JJ)V",                                  (void *) HMArray_push_},
+                                            {"pop_",             "(J)Lcom/didi/hummer2/bridge/JsiValue;",  (void *) HMArray_pop_},
+                                            {"remove_value_at_", "(JI)Lcom/didi/hummer2/bridge/JsiValue;", (void *) HMArray_remove_value_at_},
+                                            {"remove_value_",    "(JJ)Lcom/didi/hummer2/bridge/JsiValue;", (void *) HMArray_remove_value_},
+                                            {"clear_",           "(J)V",                                   (void *) HMArray_clear_},};
+
+
+static JNINativeMethod _HMObjectMethods[] = {{"init_object_",    "()J",                                                     (void *) HMObject_init_object_},
+                                             {"get_value_",      "(JLjava/lang/String;)Lcom/didi/hummer2/bridge/JsiValue;", (void *) HMObject_get_value_},
+                                             {"set_value_",      "(JLjava/lang/String;J)Z",                                 (void *) HMObject_set_value_},
+                                             {"get_value_type_", "(JLjava/lang/String;)I",                                  (void *) HMObject_get_value_type_},
+                                             {"remove_value_",   "(JLjava/lang/String;)Z",                                  (void *) HMObject_remove_value_},
+                                             {"keys_",           "(J)Ljava/util/List;",                                     (void *) HMObject_keys_},
+                                             {"keys_array_",     "(J)Lcom/didi/hummer2/bridge/JsiArray;",                   (void *) HMObject_keys_array_},};
 
 void HummerBridge::init(JNIEnv *env) {
     LOGI("HummerBridge::init()");
@@ -338,7 +376,7 @@ void HummerBridge::init(JNIEnv *env) {
     jint state;
 
     //HMValue
-    _HMValueCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/HMValue"));
+    _HMValueCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiValue"));
     _HMValueInit = env->GetMethodID(_HMValueCls, "<init>", "(J)V");
 
     state = env->RegisterNatives(_HMValueCls, _HMValueMethods, 4);
@@ -347,7 +385,7 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMFunction
-    _HMFunctionCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/HMFunction"));
+    _HMFunctionCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiFunction"));
     _HMFunctionInit = env->GetMethodID(_HMFunctionCls, "<init>", "(J)V");
 
     state = env->RegisterNatives(_HMFunctionCls, _HMFunctionMethods, 1);
@@ -356,7 +394,7 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMString
-    _HMStringCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/HMString"));
+    _HMStringCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiString"));
     _HMStringInit = env->GetMethodID(_HMStringCls, "<init>", "(JLjava/lang/String;)V");
 
     state = env->RegisterNatives(_HMStringCls, _HMStringMethods, 1);
@@ -365,16 +403,16 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMObject
-    _HMObjectCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/HMObject"));
+    _HMObjectCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiObject"));
     _HMObjectInit = env->GetMethodID(_HMObjectCls, "<init>", "(J)V");
 
-    state = env->RegisterNatives(_HMObjectCls, _HMObjectMethods, 12);
+    state = env->RegisterNatives(_HMObjectCls, _HMObjectMethods, 7);
     if (state == JNI_OK) {
         LOGD("HMObject::init() OK");
     }
 
     //HMNumber
-    _HMNumberCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/HMNumber"));
+    _HMNumberCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiNumber"));
     _HMNumberInit = env->GetMethodID(_HMNumberCls, "<init>", "(JD)V");
 
     state = env->RegisterNatives(_HMNumberCls, _HMNumberMethods, 1);
@@ -383,7 +421,7 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMBoolean
-    _HMBooleanCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/HMBoolean"));
+    _HMBooleanCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiBoolean"));
     _HMBooleanInit = env->GetMethodID(_HMBooleanCls, "<init>", "(JZ)V");
 
     state = env->RegisterNatives(_HMBooleanCls, _HMBooleanMethods, 1);
@@ -392,10 +430,10 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMArray
-    _HMArrayCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/HMArray"));
+    _HMArrayCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiArray"));
     _HMArrayInit = env->GetMethodID(_HMArrayCls, "<init>", "(J)V");
 
-    state = env->RegisterNatives(_HMArrayCls, _HMArrayMethods, 7);
+    state = env->RegisterNatives(_HMArrayCls, _HMArrayMethods, 9);
     if (state == JNI_OK) {
         LOGD("HMArray::init() OK");
     }

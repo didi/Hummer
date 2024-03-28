@@ -11,22 +11,27 @@ import { TextArea } from "../components/TextArea"
 import { HummerApi, Env } from "../api/HummerApi"
 import { NotifyCenter } from "../api/NotifyCenter"
 
+const center = NotifyCenter;
+
 export class Hummer {
 
 
     private static rootElement: Element | undefined = undefined
   
 
+
     public static initGlobal() {
 
     }
 
     public static get env(): Env {
+        
         return HummerApi.getEnv()
     }
 
-    public static get notifyCenter(): NotifyCenter {
-        return  new NotifyCenter()
+
+    public static get notifyCenter():any| NotifyCenter{
+        return  NotifyCenter;
     }
 
 

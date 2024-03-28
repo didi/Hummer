@@ -3,7 +3,7 @@ package com.didi.hummer2.component;
 import android.content.Context;
 
 import com.didi.hummer.component.view.View;
-import com.didi.hummer2.bridge.HMValue;
+import com.didi.hummer2.bridge.JsiValue;
 
 /**
  * didi Create on 2023/12/4 .
@@ -18,7 +18,7 @@ import com.didi.hummer2.bridge.HMValue;
 
 public class ViewElement extends Element<View> {
 
-    public ViewElement(Context context, HMValue properties) {
+    public ViewElement(Context context, JsiValue properties) {
         super(context, properties);
     }
 

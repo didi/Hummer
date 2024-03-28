@@ -3,9 +3,9 @@ package com.didi.hummer2.component;
 import com.didi.hummer.core.engine.JSCallback;
 import com.didi.hummer.core.engine.JSContext;
 import com.didi.hummer.core.engine.JSValue;
-import com.didi.hummer2.bridge.HMFunction;
-import com.didi.hummer2.bridge.HMObject;
-import com.didi.hummer2.bridge.HMString;
+import com.didi.hummer2.bridge.JsiFunction;
+import com.didi.hummer2.bridge.JsiObject;
+import com.didi.hummer2.bridge.JsiString;
 
 import java.lang.reflect.Type;
 
@@ -22,9 +22,9 @@ import java.lang.reflect.Type;
 
 public class HVJSCallback implements JSCallback {
 
-    private HMFunction hmFunction;
+    private JsiFunction hmFunction;
 
-    public HVJSCallback(HMFunction hmFunction) {
+    public HVJSCallback(JsiFunction hmFunction) {
         this.hmFunction = hmFunction;
     }
 
@@ -40,8 +40,8 @@ public class HVJSCallback implements JSCallback {
 
     @Override
     public Object call(Object... params) {
-        HMObject hmObject = new HMObject();
-        hmObject.put("test", new HMString("call..."));
+        JsiObject hmObject = new JsiObject();
+        hmObject.put("test", new JsiString("call..."));
         Object o = hmFunction.call(hmObject);
         return null;
     }

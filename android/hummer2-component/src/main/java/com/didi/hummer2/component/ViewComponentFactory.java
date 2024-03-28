@@ -3,12 +3,12 @@ package com.didi.hummer2.component;
 import android.content.Context;
 import android.util.Log;
 
-import com.didi.hummer2.HummerVdomRender;
-import com.didi.hummer2.bridge.HMFunction;
-import com.didi.hummer2.bridge.HMNumber;
-import com.didi.hummer2.bridge.HMObject;
-import com.didi.hummer2.bridge.HMString;
-import com.didi.hummer2.bridge.HMValue;
+import com.didi.hummer2.HummerRender;
+import com.didi.hummer2.bridge.JsiFunction;
+import com.didi.hummer2.bridge.JsiNumber;
+import com.didi.hummer2.bridge.JsiObject;
+import com.didi.hummer2.bridge.JsiString;
+import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.hvdom.HMVComponentFactory;
 import com.didi.hummer2.hvdom.TypeDef;
 
@@ -26,7 +26,7 @@ import com.didi.hummer2.hvdom.TypeDef;
 public class ViewComponentFactory implements HMVComponentFactory {
 
     private Context context;
-    private HummerVdomRender render;
+    private HummerRender render;
 
     private ElementStorage elementStorage;
 
@@ -35,7 +35,7 @@ public class ViewComponentFactory implements HMVComponentFactory {
         this.elementStorage = new ElementStorage();
     }
 
-    public ViewComponentFactory(Context context, HummerVdomRender render) {
+    public ViewComponentFactory(Context context, HummerRender render) {
         this.context = context;
         this.render = render;
         this.elementStorage = new ElementStorage();
@@ -45,9 +45,9 @@ public class ViewComponentFactory implements HMVComponentFactory {
     public Object newInstance(long clsId, long objId, Object[] pramsX) {
         Object prams = pramsX[0];
         Log.i("Hummer2", "ViewComponentFactory::newInstance() clsId=" + clsId + ",objId=" + objId + ",prams=" + valueString(prams));
-        if (prams instanceof HMObject) {
+        if (prams instanceof JsiObject) {
             Log.i("Hummer2", "ViewComponentFactory::newInstance() ");
-            HMObject props = (HMObject) prams;
+            JsiObject props = (JsiObject) prams;
             String name = valueString(props.get("element_name"));
             Log.i("Hummer2", "ViewComponentFactory::newInstance() 2");
             Element element = null;
@@ -72,17 +72,20 @@ public class ViewComponentFactory implements HMVComponentFactory {
 
     @Override
     public Object callStaticMethod(long clsId, long methodId, Object[] pramsX) {
-        Object prams = pramsX[0];
-        Log.i("Hummer2", "Factory::callStaticMethod() clsId=" + clsId + ",prams=" + valueString(prams));
+        Object prams = null;
+        if (pramsX.length > 0){
+            prams=  pramsX[0];
+        }
+//        Log.i("Hummer2", "Factory::callStaticMethod() clsId=" + clsId + ",prams=" + valueString(prams));
         if (clsId == TypeDef.BridgeClsId) {
-            if (prams instanceof HMObject) {
-                HMObject props = (HMObject) prams;
-                String name = valueString(props.get("component_name"));
-                HMValue method = props.get("method");
-                HMValue args = props.get("args");
-                Log.i("Hummer2", "Factory::callStaticMethod() name=" + name + ",method=" + method + ",args=" + args);
-
-                return new HMString("callStaticMethod ok");
+            if (prams instanceof JsiObject) {
+//                HMObject props = (HMObject) prams;
+//                String name = valueString(props.get("component_name"));
+//                HMValue method = props.get("method");
+//                HMValue args = props.get("args");
+//                Log.i("Hummer2", "Factory::callStaticMethod() name=" + name + ",method=" + method + ",args=" + args);
+//
+                return new JsiString("callStaticMethod ok");
             }
 
         }
@@ -97,8 +100,8 @@ public class ViewComponentFactory implements HMVComponentFactory {
 
         if (clsId == TypeDef.RenderClsId && methodId == TypeDef.RenderMethod_renderRoot) {
             Log.i("Hummer2", "RenderMethod_renderRoot");
-            if (prams instanceof HMNumber) {
-                long rootElementId = ((HMNumber) prams).valueLong();
+            if (prams instanceof JsiNumber) {
+                long rootElementId = ((JsiNumber) prams).valueLong();
                 Element rootElement = elementStorage.findElement(rootElementId);
                 render.renderRootView(rootElement.getRenderView().getView());
             }
@@ -113,34 +116,34 @@ public class ViewComponentFactory implements HMVComponentFactory {
 
         switch ((int) methodId) {
             case TypeDef.ElementMethod_setAttribute:
-                if (prams instanceof HMObject) {
-                    HMObject props = (HMObject) prams;
+                if (prams instanceof JsiObject) {
+                    JsiObject props = (JsiObject) prams;
                     String name = valueString(props.get("attribute_name"));
-                    HMValue attribute = props.get("attribute");
+                    JsiValue attribute = props.get("attribute");
                     element.setAttribute(name, attribute);
                 }
                 break;
 
             case TypeDef.ElementMethod_setStyle:
-                if (prams instanceof HMValue) {
-                    element.setStyle((HMValue) prams);
+                if (prams instanceof JsiValue) {
+                    element.setStyle((JsiValue) prams);
                 }
                 break;
 
             case TypeDef.ElementMethod_addEventListener:
-                if (prams instanceof HMObject) {
-                    HMObject props = (HMObject) prams;
+                if (prams instanceof JsiObject) {
+                    JsiObject props = (JsiObject) prams;
                     String name = valueString(props.get("event_name"));
-                    HMFunction hmFunction = (HMFunction)props.get("event_listener");
+                    JsiFunction hmFunction = (JsiFunction)props.get("event_listener");
                     element.addEventListener(name, hmFunction);
                 }
                 break;
 
             case TypeDef.ElementMethod_removeEventListener:
-                if (prams instanceof HMObject) {
-                    HMObject props = (HMObject) prams;
+                if (prams instanceof JsiObject) {
+                    JsiObject props = (JsiObject) prams;
                     String name = valueString(props.get("event_name"));
-                    HMValue listener = props.get("event_listener");
+                    JsiValue listener = props.get("event_listener");
                     element.removeEventListener(name, null);
                 }
                 break;
@@ -148,8 +151,8 @@ public class ViewComponentFactory implements HMVComponentFactory {
             case TypeDef.ElementMethod_appendChild:
                 if (element instanceof ViewElement) {
                     ViewElement viewElement = (ViewElement) element;
-                    if (prams instanceof HMNumber) {
-                        long childId = ((HMNumber) prams).valueLong();
+                    if (prams instanceof JsiNumber) {
+                        long childId = ((JsiNumber) prams).valueLong();
                         Element child = elementStorage.findElement(childId);
                         viewElement.appendChild(child);
                     }
@@ -159,8 +162,8 @@ public class ViewComponentFactory implements HMVComponentFactory {
             case TypeDef.ElementMethod_removeChild:
                 if (element instanceof ViewElement) {
                     ViewElement viewElement = (ViewElement) element;
-                    if (prams instanceof HMNumber) {
-                        long childId = ((HMNumber) prams).valueLong();
+                    if (prams instanceof JsiNumber) {
+                        long childId = ((JsiNumber) prams).valueLong();
                         Element child = elementStorage.findElement(childId);
                         viewElement.removeChild(child);
                     }
@@ -177,8 +180,8 @@ public class ViewComponentFactory implements HMVComponentFactory {
         if (obj == null) {
             return "null";
         }
-        if (obj instanceof HMString) {
-            return ((HMString) obj).valueString();
+        if (obj instanceof JsiString) {
+            return ((JsiString) obj).valueString();
         }
         return obj.toString();
     }

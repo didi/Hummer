@@ -2,128 +2,88 @@
 // Created by didi on 2023/11/29.
 //
 
-#include "hvdom/js_console.h"
-
-static const int LOG_TYPE_LOG = 1;
-static const int LOG_TYPE_DEBUG = 2;
-static const int LOG_TYPE_INFO = 3;
-static const int LOG_TYPE_WARN = 4;
-static const int LOG_TYPE_ERROR = 5;
+#include "falcon/js_console.h"
 
 
-void JSConsole::init(NAPIEnv *env) {
-    NAPIExceptionStatus status;
-    NAPIValue console;
+JSConsole::JSConsole(JsiContext *jsiContext, ConsoleHandler *consoleHandler) {
+    this->jsiContext = jsiContext;
+    this->consoleHandler = consoleHandler;
 
-    NAPIHandleScope  handleScope;
-    JSUtils::openHandleScope(env,&handleScope);
-
-    status = JSUtils::createObject(env, "Object", 0, nullptr, &console);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::createObject() error. %d", status);
-    }
-
-    //log
-    NAPIValue logFunction;
-    status = napi_create_function(*env, "log", logWrapper, (void *) &LOG_TYPE_LOG, &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::napi_create_function() log error. %d", status);
-    }
-    status = JSUtils::setProperty(env, &console, "log", &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::setProperty() log error. %d", status);
-    }
-
-    //debug
-    status = napi_create_function(*env, "debug", logWrapper, (void *) &LOG_TYPE_DEBUG, &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::napi_create_function() debug error. %d", status);
-    }
-    status = JSUtils::setProperty(env, &console, "debug", &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::setProperty() debug error. %d", status);
-    }
-    //info
-    status = napi_create_function(*env, "info", logWrapper, (void *) &LOG_TYPE_INFO, &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::napi_create_function() info error. %d", status);
-    }
-    status = JSUtils::setProperty(env, &console, "info", &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::setProperty() info error. %d", status);
-    }
-    //warn
-    status = napi_create_function(*env, "warn", logWrapper, (void *) &LOG_TYPE_WARN, &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::napi_create_function() warn error. %d", status);
-    }
-    status = JSUtils::setProperty(env, &console, "warn", &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::setProperty() warn error. %d", status);
-    }
-    //error
-    status = napi_create_function(*env, "error", logWrapper, (void *) &LOG_TYPE_ERROR, &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::napi_create_function() error error. %d", status);
-    }
-    status = JSUtils::setProperty(env, &console, "error", &logFunction);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::setProperty() error error. %d", status);
-    }
-
-    status = JSUtils::setGlobalProperty(env, "console", &console);
-    if (status != NAPIExceptionOK) {
-        error("JSConsole::setGlobalProperty() console error. %d", status);
-    }
-    JSUtils::closeHandleScope(env,&handleScope);
 }
 
-void JSConsole::log_print(const char *message) {
-    native_Log(LEVEL_INFO, message);
+void JSConsole::onCreate() {
+    this->console = jsiContext->createGlobalObject("Object", "console");
+
+    this->console->registerFunction(MethodId_log, "log", consoleFuncWrapper, this);
+    this->console->registerFunction(MethodId_debug, "debug", consoleFuncWrapper, this);
+    this->console->registerFunction(MethodId_info, "info", consoleFuncWrapper, this);
+    this->console->registerFunction(MethodId_warn, "warn", consoleFuncWrapper, this);
+    this->console->registerFunction(MethodId_error, "error", consoleFuncWrapper, this);
+
 }
 
-void JSConsole::debug_print(const char *message) {
-    native_Log(LEVEL_DEBUG, message);
+JsiValue *JSConsole::log(size_t size, JsiValue **params) {
+    this->print(LOG_LEVEL_LOG, size, params);
 }
 
-void JSConsole::info_print(const char *message) {
-    native_Log(LEVEL_INFO, message);
+JsiValue *JSConsole::debug(size_t size, JsiValue **params) {
+    this->print(LOG_LEVEL_DEBUG, size, params);
 }
 
-void JSConsole::warn_print(const char *message) {
-    native_Log(LEVEL_WARN, message);
+JsiValue *JSConsole::info(size_t size, JsiValue **params) {
+    this->print(LOG_LEVEL_INFO, size, params);
 }
 
-void JSConsole::error_print(const char *message) {
-    native_Log(LEVEL_ERROR, message);
+JsiValue *JSConsole::warn(size_t size, JsiValue **params) {
+    this->print(LOG_LEVEL_WARN, size, params);
 }
 
-NAPIValue logWrapper(NAPIEnv env, NAPICallbackInfo callbackInfo) {
-    size_t argc = 1;
-    NAPIValue argv[1];
-    void *data;
-    napi_get_cb_info(env, callbackInfo, &argc, argv, nullptr, &data);
-    const char *messageT = JSUtils::getJsCString(&env, &argv[0]);
-    string result = string("[console]");
-    result.append(messageT);
-    const char *message = result.c_str();
-    int *type = static_cast<int *>(data);
-    switch (*type) {
-        case LOG_TYPE_LOG:
-            JSConsole::log_print(message);
-            break;
-        case LOG_TYPE_DEBUG:
-            JSConsole::debug_print(message);
-            break;
-        case LOG_TYPE_INFO:
-            JSConsole::info_print(message);
-            break;
-        case LOG_TYPE_WARN:
-            JSConsole::warn_print(message);
-            break;
-        case LOG_TYPE_ERROR:
-            JSConsole::error_print(message);
-            break;
+JsiValue *JSConsole::error(size_t size, JsiValue **params) {
+    this->print(LOG_LEVEL_ERROR, size, params);
+}
+
+JsiValue *JSConsole::print(int level, size_t size, JsiValue **params) {
+    if (consoleHandler != nullptr && size > 0) {
+        JsiValue *jsiValue = params[0];
+        const char *message;
+        if (jsiValue->getType() == TYPE_STRING) {
+            auto *text = dynamic_cast<JsiString *>(jsiValue);
+            message = text->value_.c_str();
+        } else {
+            message = jsiValue->toString().c_str();
+        }
+        consoleHandler->log(level, message);
+    }
+    return nullptr;
+}
+
+void JSConsole::onDestroy() {
+
+}
+
+JSConsole::~JSConsole() {
+    jsiContext = nullptr;
+    consoleHandler = nullptr;
+    if (console != nullptr) {
+        delete console;
+        console = nullptr;
+    }
+}
+
+
+JsiValue *consoleFuncWrapper(JsiObjectEx *value, long methodId, const char *methodName, size_t size, JsiValue **params, void *data) {
+    auto *bridge = static_cast<JSConsole *>(data);
+    switch (methodId) {
+        case JSConsole::MethodId_log:
+            return bridge->log(size, params);
+        case JSConsole::MethodId_debug:
+            return bridge->debug(size, params);
+        case JSConsole::MethodId_info:
+            return bridge->info(size, params);
+        case JSConsole::MethodId_warn:
+            return bridge->warn(size, params);
+        case JSConsole::MethodId_error:
+            return bridge->error(size, params);
     }
     return nullptr;
 }

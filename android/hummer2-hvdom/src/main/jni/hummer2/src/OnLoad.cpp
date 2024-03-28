@@ -21,7 +21,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 
 
     //Logger
-    VdomLogger::init();
+    HummerLogger::init();
     //Utils
     HMUtils::init(vm);
     //VDOM
@@ -29,11 +29,17 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     //HummerBridge
     HummerBridge::init(env);
     //Hummer2JNI
-    Hummer2JNI::init(vm,env);
+    FalconEngine::init(vm, env);
+
+    HummerTest::init(vm, env);
+
 
     LOGI("JNI_OnLoad OK");
     return JNI_VERSION_1_6;
 }
+
+
+
 
 // Hummer2 卸载
 JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {

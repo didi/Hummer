@@ -10,8 +10,8 @@ import com.didi.hummer.adapter.http.HttpCallback;
 import com.didi.hummer.adapter.navigator.NavPage;
 import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
 import com.didi.hummer.utils.NetworkUtil;
-import com.didi.hummer2.Hummer2Context;
-import com.didi.hummer2.HummerVdomRender;
+import com.didi.hummer2.HummerContext;
+import com.didi.hummer2.HummerRender;
 import com.didi.hummer2.component.ViewComponentFactory;
 import com.didi.hummer2.hvdom.TypeDef;
 import com.facebook.soloader.SoLoader;
@@ -30,7 +30,7 @@ import com.getkeepsafe.relinker.ReLinker;
 
 public class Hummer2PageActivity extends AppCompatActivity {
     protected NavPage page;
-    protected Hummer2Context hummer2Context;
+    protected HummerContext hummerFalconContext;
     FrameLayout frameLayout;
 
     @Override
@@ -44,16 +44,16 @@ public class Hummer2PageActivity extends AppCompatActivity {
         ReLinker.loadLibrary(getApplication(), "hummer2");
         ReLinker.loadLibrary(getApplication(), "hvdom");
 
-        hummer2Context = new Hummer2Context(getApplicationContext());
+        hummerFalconContext = new HummerContext(getApplicationContext());
 
 
-        HummerVdomRender hummerVdomRender = new HummerVdomRender(this);
-        hummer2Context.registerComponent(TypeDef.TYPE_COMPONENT, new ViewComponentFactory(this, hummerVdomRender));
+        HummerRender hummerRender = new HummerRender(this);
+        hummerFalconContext.registerComponent(TypeDef.TYPE_COMPONENT, new ViewComponentFactory(this, hummerRender));
 
         frameLayout = new FrameLayout(this);
         setContentView(frameLayout);
 
-        hummerVdomRender.setRootContentView(frameLayout);
+        hummerRender.setRootContentView(frameLayout);
 
 
         initData();
@@ -109,7 +109,7 @@ public class Hummer2PageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        hummer2Context.init();
+        hummerFalconContext.init();
 
 //        HMValue hmValue = new HMValue();
 //
@@ -138,7 +138,7 @@ public class Hummer2PageActivity extends AppCompatActivity {
         NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
             if (response != null) {
                 String js = response.data;
-                hummer2Context.evaluateJavaScript(js, "test.js");
+                hummerFalconContext.evaluateJavaScript(js, "test.js");
             }
         });
     }

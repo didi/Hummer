@@ -2,7 +2,7 @@
 // Created by didi on 2023/11/28.
 //
 
-#include <Logger.h>
+#include "Logger.h"
 
 
 // 定义一个用于在Android上输出日志的函数
@@ -25,7 +25,7 @@ void androidLog(int level, const char *msg) {
 }
 
 
-void VdomLogger::init() {
+void HummerLogger::init() {
     LOGI("VdomLogger::init() OK");
     // 绑定日志组件实现
     setLogger(androidLog);

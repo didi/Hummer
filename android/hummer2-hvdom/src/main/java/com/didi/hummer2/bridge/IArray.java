@@ -14,16 +14,18 @@ package com.didi.hummer2.bridge;
 public interface IArray {
     int length();
 
-    HMValue get(int index);
+    JsiValue getValue(int index);
 
-    boolean set(int index, HMValue value);
+    boolean setValue(int index, JsiValue value);
 
-    void add(HMValue value);
+    void push(JsiValue value);
 
-    void add(int index, HMValue value);
+    void pop();
 
-    HMValue remove(int index);
+    JsiValue removeAt(int index);
 
-    HMValue remove(HMValue value);
+    JsiValue remove(JsiValue value);
+
+    void clear();
 
 }

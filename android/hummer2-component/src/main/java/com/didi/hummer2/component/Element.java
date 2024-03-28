@@ -4,13 +4,13 @@ import android.content.Context;
 import android.util.Log;
 
 import com.didi.hummer.render.component.view.HMBase;
-import com.didi.hummer2.bridge.HMArray;
-import com.didi.hummer2.bridge.HMBoolean;
-import com.didi.hummer2.bridge.HMFunction;
-import com.didi.hummer2.bridge.HMNumber;
-import com.didi.hummer2.bridge.HMObject;
-import com.didi.hummer2.bridge.HMString;
-import com.didi.hummer2.bridge.HMValue;
+import com.didi.hummer2.bridge.JsiArray;
+import com.didi.hummer2.bridge.JsiBoolean;
+import com.didi.hummer2.bridge.JsiFunction;
+import com.didi.hummer2.bridge.JsiNumber;
+import com.didi.hummer2.bridge.JsiObject;
+import com.didi.hummer2.bridge.JsiString;
+import com.didi.hummer2.bridge.JsiValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,12 +30,12 @@ public abstract class Element<VIEW extends HMBase> {
 
 
     protected Context context;
-    protected HMValue properties;
+    protected JsiValue properties;
     protected VIEW renderView;
 
     protected long id;
 
-    public Element(Context context, HMValue properties) {
+    public Element(Context context, JsiValue properties) {
         this.context = context;
         this.properties = properties;
         this.renderView = createRenderView();
@@ -59,58 +59,58 @@ public abstract class Element<VIEW extends HMBase> {
         this.id = id;
     }
 
-    public void setAttribute(String name, HMValue hmValue) {
+    public void setAttribute(String name, JsiValue hmValue) {
 
     }
 
-    public void setAttributes(HMObject hmObject) {
+    public void setAttributes(JsiObject hmObject) {
 
     }
 
-    public HMValue getAttribute(String name) {
+    public JsiValue getAttribute(String name) {
         return null;
     }
 
-    public void setStyle(HMValue hmValue) {
+    public void setStyle(JsiValue hmValue) {
         Map<String, Object> styles = new HashMap<>();
-        if (hmValue instanceof HMObject) {
+        if (hmValue instanceof JsiObject) {
 
-            HMObject obj = (HMObject) hmValue;
-            HMArray array = obj.allKeys();
+            JsiObject obj = (JsiObject) hmValue;
+            JsiArray array = obj.allKeyArray();
             int size = array.length();
-            Log.e("Hummer2", "array size = " + size + "," + array.toString());
+//            Log.e("Hummer2", "array size = " + size + "," + array.toString());
             for (int i = 0; i < size; i++) {
-                String key = ((HMString) array.get(i)).valueString();
+                String key = ((JsiString) array.getValue(i)).valueString();
                 Object value = toJavaValue(obj.get(key));
                 styles.put(key, value);
-                Log.e("Hummer2", "array key = " + key + ",value=" + value.toString());
+//                Log.e("Hummer2", "array key = " + key + ",value=" + value.toString());
             }
         }
         renderView.setStyle(styles);
     }
 
-    public Object toJavaValue(HMValue hmValue) {
+    public Object toJavaValue(JsiValue hmValue) {
         if (hmValue.isBoolean()) {
-            return ((HMBoolean) hmValue).getValue();
+            return ((JsiBoolean) hmValue).getValue();
         } else if (hmValue.isString()) {
-            return ((HMString) hmValue).valueString();
+            return ((JsiString) hmValue).valueString();
         } else if (hmValue.isNumber()) {
-            return ((HMNumber) hmValue).getValue();
+            return ((JsiNumber) hmValue).getValue();
         } else {
             Log.e("HMValue", "::" + hmValue);
         }
         return null;
     }
 
-    public HMValue invoke(InvokeFunction invokeFunction) {
+    public JsiValue invoke(InvokeFunction invokeFunction) {
         return null;
     }
 
-    public void addEventListener(String eventName, HMFunction hmFunction) {
+    public void addEventListener(String eventName, JsiFunction hmFunction) {
         renderView.addEventListener(eventName, new HVJSCallback(hmFunction));
     }
 
-    public void removeEventListener(String eventName, HMFunction hmFunction) {
+    public void removeEventListener(String eventName, JsiFunction hmFunction) {
         renderView.removeEventListener(eventName, new HVJSCallback(hmFunction));
     }
 

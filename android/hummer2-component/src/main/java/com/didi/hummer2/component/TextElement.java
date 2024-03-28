@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.didi.hummer.component.text.Text;
-import com.didi.hummer2.bridge.HMString;
-import com.didi.hummer2.bridge.HMValue;
+import com.didi.hummer2.bridge.JsiString;
+import com.didi.hummer2.bridge.JsiValue;
 
 /**
  * didi Create on 2023/12/4 .
@@ -20,7 +20,7 @@ import com.didi.hummer2.bridge.HMValue;
 
 public class TextElement extends Element<Text> {
 
-    public TextElement(Context context, HMValue properties) {
+    public TextElement(Context context, JsiValue properties) {
         super(context, properties);
     }
 
@@ -30,25 +30,25 @@ public class TextElement extends Element<Text> {
     }
 
 
-    public void setAttribute(String name, HMValue hmValue) {
+    public void setAttribute(String name, JsiValue hmValue) {
         if ("text".equals(name)) {
-            HMString hmString = (HMString) hmValue;
+            JsiString hmString = (JsiString) hmValue;
             renderView.setText(hmString.valueString());
         } else if ("color".equals(name)) {
-            HMString hmString = (HMString) hmValue;
+            JsiString hmString = (JsiString) hmValue;
             renderView.setColor(Color.parseColor(hmString.valueString()));
         }
     }
 
 
     @Override
-    public void setStyle(HMValue hmValue) {
+    public void setStyle(JsiValue hmValue) {
         super.setStyle(hmValue);
 
 
     }
 
-    public HMValue invoke(InvokeFunction invokeFunction) {
+    public JsiValue invoke(InvokeFunction invokeFunction) {
         return null;
     }
 

@@ -1,5 +1,7 @@
 package com.didi.hummer2.bridge;
 
+import java.util.List;
+
 /**
  * didi Create on 2023/11/21 .
  * <p>
@@ -13,10 +15,11 @@ package com.didi.hummer2.bridge;
 
 public interface IObject {
 
-    HMValue get(String key);
+    JsiValue get(String key);
 
-    void put(String key, HMValue value);
+    int getValueType(String key);
 
+    void put(String key, JsiValue value);
     boolean isBoolean(String key);
 
     boolean isNumber(String key);
@@ -40,6 +43,8 @@ public interface IObject {
     String getString(String key);
 
 
-    HMArray allKeys();
+    JsiArray allKeyArray();
+
+    List<String> keys();
 
 }

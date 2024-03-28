@@ -1,17 +1,21 @@
 
 import { HummerComponent } from "../../HummerComponent"
-const { document: _Document, __api__ } = __Hummer__
+const { document: _Document } = __Hummer__;
+
+const hm = __Hummer__;
+
 
 export class NotifyCenter extends HummerComponent {
 
-   
+
     public constructor(props: any = {}) {
         super("NotifyCenter", props);
+        __api__ = hm.__api__;
     }
 
     protected static checkInstance() {
         if (!__api__.notifyCenter) {
-            __api__.notifyCenter = NotifyCenter.newInstance();
+            hm.__notifyCenter__ = NotifyCenter.newInstance();
         }
     }
 
@@ -20,10 +24,10 @@ export class NotifyCenter extends HummerComponent {
     }
 
 
-    static get instance(): NotifyCenter{
-        return  __api__.notifyCenter
+    static get instance(): NotifyCenter {
+        return __api__.notifyCenter
     }
-   
+
     /**
      * 添加事件监听
      *
@@ -59,6 +63,6 @@ export class NotifyCenter extends HummerComponent {
         NotifyCenter.instance.call("triggerEvent", value);
     }
 
-   
+
 
 }
