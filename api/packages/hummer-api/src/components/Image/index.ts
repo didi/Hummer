@@ -24,7 +24,7 @@ export class Image extends HummerElement {
             gifRepeatCount: 0
         });
 
-        this.addEventListener("__onImageOnLoad__", (event: any) => {
+        this.addEventListener("__onImageLoad__", (event: any) => {
             this.onImageOnLoad(event);
         })
     }
@@ -92,7 +92,7 @@ export class Image extends HummerElement {
         return this._onLoad;
     }
 
-    set onLoad(value: Function) {
+    set onLoad(value: Function | undefined) {
         this._onLoad = value;
     }
 
@@ -126,10 +126,16 @@ export class Image extends HummerElement {
                 this._setAttribute("gifSrc", source.gifSrc);
                 this._setAttribute("src", undefined);
             }
+            if (source.placeholder) {
+                this._setAttribute("placeholder", source.placeholder);
+            }
+            if (source.failedImage) {
+                this._setAttribute("failedImage", source.failedImage);
+            }
+            if (source.gifRepeatCount) {
+                this._setAttribute("gifRepeatCount", source.gifRepeatCount);
+            }
 
-            this._setAttribute("placeholder", source.placeholder);
-            this._setAttribute("failedImage", source.failedImage);
-            this._setAttribute("gifRepeatCount", source.gifRepeatCount);
         }
         this._onLoad = callback;
     }
