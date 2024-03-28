@@ -4,8 +4,12 @@ import { HummerElement } from "../../HummerElement"
 import { ImageStyle } from "./ImageStyle"
 
 
+
+
 export class Image extends HummerElement {
 
+
+    private _onLoad?: Function = undefined;
 
     /**
     * 
@@ -19,6 +23,10 @@ export class Image extends HummerElement {
         this._initAttributes({
             gifRepeatCount: 0
         });
+
+        this.addEventListener("__onImageOnLoad__", (event: any) => {
+            this.onImageOnLoad(event);
+        })
     }
 
 
@@ -55,7 +63,50 @@ export class Image extends HummerElement {
         this._setAttribute("gifRepeatCount", value);
     }
 
+    /**
+    * 加载失败资源
+    */
+    get failedImage() {
+        return this._getAttribute("failedImage")
+    }
 
+    set failedImage(value: string) {
+        this._setAttribute("failedImage", value);
+    }
+
+    /**
+    * 占位资源
+    */
+    get placeholder() {
+        return this._getAttribute("placeholder")
+    }
+
+    set placeholder(value: string) {
+        this._setAttribute("placeholder", value);
+    }
+
+    /** 
+    *资源加载结果
+    */
+    get onLoad(): Function | undefined {
+        return this._onLoad;
+    }
+
+    set onLoad(value: Function) {
+        this._onLoad = value;
+    }
+
+
+    /**
+     * 分发资源加载结果回调
+     * 
+     * @param event @see 
+     */
+    protected onImageOnLoad(event: any) {
+        if (this._onLoad) {
+            this._onLoad(event.srcType, event.state);
+        }
+    }
 
     /**
      * 加载资源
@@ -63,18 +114,24 @@ export class Image extends HummerElement {
      * @param src 资源
      * @param listener 结果监听
      */
-    load(source: string | ImageStyle, imageLoadEvent: Function) {
+    load(source: string | ImageStyle, callback: Function) {
         if (typeof source === 'string') {
             this._setAttribute("src", source);
+            this._setAttribute("gifSrc", undefined);
         } else {
             this._setAttribute("src", source.src);
+            this._setAttribute("gifSrc", undefined);
+
+            if (!source.gifSrc && source.gifSrc !== "") {
+                this._setAttribute("gifSrc", source.gifSrc);
+                this._setAttribute("src", undefined);
+            }
+
             this._setAttribute("placeholder", source.placeholder);
             this._setAttribute("failedImage", source.failedImage);
-            this._setAttribute("gifSrc", source.gifSrc);
             this._setAttribute("gifRepeatCount", source.gifRepeatCount);
         }
-        this._setAttribute("onLoad", imageLoadEvent);
-        this.addEventListener("__onImageOnLoad__", imageLoadEvent)
+        this._onLoad = callback;
     }
 
 }
