@@ -140,5 +140,28 @@ export class Image extends HummerElement {
         this._onLoad = callback;
     }
 
+    /**
+     * 
+     * @param key 
+     * @param value 
+     * @returns 
+     * 
+     * //TODO 
+     * 1、所有组件支持的属性都需要写 get set方法 兼容旧版本api使用。
+     * 2、对有额外处理的需要重新setAttribute方法，对tenon调用接口做补充，增加额外处理
+     */
+    public setAttribute(key: string, value: any): void {
+        switch (key) {
+            case 'src':
+                this.src = value;
+                return;
+            case 'gifSrc':
+                this.gifSrc = value;
+                return;
+
+        }
+        super.setAttribute(key, value);
+    }
+
 }
 

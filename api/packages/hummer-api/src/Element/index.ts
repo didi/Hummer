@@ -4,15 +4,30 @@ import { KeyframeAnimation } from "../anim/KeyframeAnimation"
 
 const AnimationStartName = "__onAnimationStart__"
 const AnimationEndName = "__onAnimationEnd__"
-/**
- * Element 
- * 
- * 需要对齐前端Element方法，参数MDN
- * 
- *
- */
 
+/**
+ * 基础事件结构
+ */
 export interface Event {
+
+    /**
+     * 	事件类 type: 'input'
+     */
+    type?: string,
+    /**
+     * 输入状态	
+     * eg:<input>
+     * // state: 1 // began（输入框获得焦点时的回调）
+     * // state: 2 // changed（输入框输入内容时的回调）
+     * // state: 3 // ended（输入框失去焦点时的回调）
+     * // state: 4 // confirmed（输入框完成输入时的回调）
+     */
+    state?: number,
+
+    /**
+     * 时间戳	timestamp: 1578973450142
+     */
+    timestamp?: number,
 
 }
 
@@ -256,6 +271,12 @@ export interface FlexStyle {
 }
 
 
+/**
+ * Element 
+ * 
+ * 需要对齐前端Element方法，参数MDN
+ * 
+ */
 export class Element extends Node {
 
     /**
@@ -358,12 +379,12 @@ export class Element extends Node {
      * @param style 样式对象
      * @param flag 标记
      */
-    protected setStyle(style: object | FlexStyle, flag: boolean = false) {
+    protected setStyle(style: FlexStyle | Record<string, any>, flag: boolean = false) {
         this._setStyles(style);
     }
 
 
-    protected _setStyles(style: object | any) {
+    protected _setStyles(style: FlexStyle | Record<string, any> | any) {
         //TODO 临时代码，待优化
         let newStyle: any = {};
         if (style.margin) {

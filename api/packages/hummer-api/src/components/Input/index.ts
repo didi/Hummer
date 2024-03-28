@@ -1,4 +1,12 @@
+import { EventListener } from "src/EventTarget";
 import { HummerElement } from "../../HummerElement"
+import { Event } from "../../Element"
+
+export interface InputEvent extends Event {
+
+    text?: string
+}
+
 
 export class Input extends HummerElement {
 
@@ -11,11 +19,11 @@ export class Input extends HummerElement {
      */
     public constructor(id: string = "", name: string = "", props: any = {}) {
         super("Input", name, { ...props, viewId: id });
-        this.addEventListener('input', (event: any) => {
+        this.addEventListener('input', (event: InputEvent) => {
             this._setAttribute("text", event.text, false);
+
         });
     }
-
 
     /**
      * 默认输入内容
@@ -51,5 +59,15 @@ export class Input extends HummerElement {
         this._setAttribute("focused", value);
     }
 
+
+    /**
+     * 
+     * @param eventName 
+     * @param eventListener   新增事件:input @see InputEvent
+     * @param useCapture 
+     */
+    public override addEventListener(eventName: string, eventListener: (event: InputEvent) => void | Function | EventListener, useCapture?: boolean | undefined): void {
+        super.addEventListener(eventName, eventListener, useCapture);
+    }
 
 }

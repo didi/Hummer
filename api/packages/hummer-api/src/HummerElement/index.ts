@@ -71,11 +71,11 @@ export class HummerElement extends Element {
     }
 
     //扩展样式属性：有代理时通过代理处理
-    public set style(value: object | FlexStyle) {
+    public set style(value: FlexStyle | Record<string,any>) {
         this.setStyle(value, false);
     }
 
-    protected setStyle(value: object, flag: boolean = false) {
+    protected setStyle(value: FlexStyle | Record<string,any>, flag: boolean = false) {
         if (this.globalProxy) {
             this.globalProxy.setStyle(this, value, flag);
         } else {

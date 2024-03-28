@@ -1,5 +1,5 @@
 import { HummerElement } from "../HummerElement"
-
+import { FlexStyle } from "../Element"
 
 
 
@@ -17,7 +17,7 @@ export interface HummerGlobalProxy {
      * @param style  样式
      * @param flag  标记
      */
-    setStyle(element: HummerElement, style: object, flag: boolean): undefined;
+    setStyle(element: HummerElement, style: FlexStyle | Record<string, any>, flag: boolean): undefined;
 
     //       /**
     //    * 设定元素样式，进行聚合
@@ -64,12 +64,12 @@ export interface HummerGlobalProxy {
     onMounted(element: HummerElement,): undefined;
 
     //销毁
-    onDestoryed(element: HummerElement,): undefined;
+    onDestroyed(element: HummerElement,): undefined;
 
     //  // Destoryed 生命周期
-    //     private _onDestoryed() {
+    //     private _onDestroyed() {
     //     removeChildWithFixed(this);
-    //     this.onDestoryed();
+    //     this.onDestroyed();
     // }
 
     /**

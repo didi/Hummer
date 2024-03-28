@@ -1,4 +1,14 @@
 import { HummerElement } from "../../HummerElement"
+import { FlexStyle } from "../../Element"
+
+
+/**
+ * 
+ */
+export interface TextStyle extends FlexStyle {
+    fontStyle?: string
+    //TODO 1、需要补充支持的样式。 2、其他组件同理 3、属性也需要
+}
 
 export class Text extends HummerElement {
 
@@ -15,6 +25,12 @@ export class Text extends HummerElement {
             richText: '',
             textCopyEnable: 'false'
         });
+    }
+
+
+    //扩展样式属性：有代理时通过代理处理
+    public set style(value: TextStyle | Record<string, any>) {
+        this.setStyle(value, false);
     }
 
 

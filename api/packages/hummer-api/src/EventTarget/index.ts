@@ -5,7 +5,7 @@ import { HMObject } from "../HMObject"
 // 引擎操作接口挂载点全局上的 ”__hummer__“上
 //***********************************************/
 
-export interface EventLisener {
+export interface EventListener {
     onEvent(event: any): any;
 }
 
@@ -14,7 +14,7 @@ export interface EventLisener {
  */
 export class EventTarget extends HMObject {
 
-    protected envents: Map<string, Array<EventLisener | Function>>;
+    protected envents: Map<string, Array<EventListener | Function>>;
 
 
     public constructor(tag: string, isApi: boolean = true, props: any) {
@@ -61,14 +61,20 @@ export class EventTarget extends HMObject {
     }
 
 
-    public addEventListener(eventName: string, eventLisener: EventLisener | Function, useCapture?: boolean) {
+    /**
+     * 
+     * @param eventName 
+     * @param eventListener  @see Event 
+     * @param useCapture 
+     */
+    public addEventListener(eventName: string, eventListener: EventListener | Function, useCapture?: boolean) {
         var listeners = this.envents.get(eventName)
         if (listeners == undefined) {
             listeners = new Array()
             this.envents.set(eventName, listeners);
         }
 
-        listeners.push(eventLisener);
+        listeners.push(eventListener);
         this._addEventListener(eventName);
     }
 
@@ -78,15 +84,15 @@ export class EventTarget extends HMObject {
     }
 
 
-    public removeEventListener(eventName: string, eventLisener?: EventLisener | Function, useCapture?: boolean) {
+    public removeEventListener(eventName: string, eventListener?: EventListener | Function, useCapture?: boolean) {
         var listeners = this.envents.get(eventName)
         if (listeners != undefined) {
-            if (eventLisener == undefined) {
+            if (eventListener == undefined) {
                 listeners.splice(0, listeners.length);
                 this.envents.delete(eventName);
                 this._removeEventListener(eventName);
             } else {
-                const index = listeners.indexOf(eventLisener); // 获取对象在数组中的索引位置
+                const index = listeners.indexOf(eventListener); // 获取对象在数组中的索引位置
                 if (index > -1) {
                     listeners.splice(index, 1); // 通过 splice() 函数将该对象从数组中移除
                 } else {
