@@ -56,7 +56,7 @@ export class Storage extends HummerComponent {
      */
     static remove(key: string, cb?: Function) {
         Storage.checkInstance();
-        Storage.instance.remove(key, cb);
+        return Storage.instance.remove(key, cb);
     }
 
 
@@ -65,7 +65,7 @@ export class Storage extends HummerComponent {
     */
     public static removeAll(cb?: Function) {
         Storage.checkInstance();
-        Storage.instance.removeAll(cb);
+        return Storage.instance.removeAll(cb);
     }
 
     /**
@@ -75,7 +75,7 @@ export class Storage extends HummerComponent {
      */
     public static exist(key: string, cb: Function) {
         Storage.checkInstance();
-        Storage.instance.exist(key, cb);
+        return Storage.instance.exist(key, cb);
     }
 
 
@@ -89,15 +89,15 @@ export class Storage extends HummerComponent {
     }
 
     protected remove(key: string, cb?: Function) {
-        this.call("remove", key, cb);
+        return this.call("remove", key, cb);
     }
 
     protected removeAll(cb?: Function) {
-        this.call("removeAll", cb);
+        return this.call("removeAll", cb);
     }
 
     protected exist(key: string, cb: Function) {
-        this.call("exist", key, cb)
+        return this.call("exist", key, cb)
     }
 
 }
