@@ -23,7 +23,10 @@ const LIFECYCLE = [LifeCycleEnum.ONLOAD, LifeCycleEnum.ONREADY, LifeCycleEnum.ON
  * @param config Options
  */
 export const initPageLifeCycle = (container: any, instance: any, config: any) => {
-  let {mixins: globalMixins} = instance._.appContext
+  let globalMixins;
+  if (instance && instance._ && instance._.appContext) {
+    globalMixins = instance._.appContext
+  }
   let { mixins, extends: extendOptions } = config
   let lifeCycleMixins: any = {
     onLoad: [],
