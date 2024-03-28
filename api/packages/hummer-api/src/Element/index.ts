@@ -25,7 +25,7 @@ export class Element extends Node {
     /**
      * 样式集合
      */
-    private _style: AA | Record<string, any> | null = {};
+    private _style:  Record<string, any> | null = {};
 
     /**
      * 动画集合

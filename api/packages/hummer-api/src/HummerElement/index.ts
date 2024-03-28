@@ -2,8 +2,6 @@ const { document: _Document, proxy: _Proxy } = __Hummer__
 
 import { Element } from "../Element"
 import { HummerGlobalProxy } from "./HummerGlobalProxy"
-import { BasicAnimation } from "../anim/BasicAnimation"
-import { KeyframeAnimation } from "../anim/KeyframeAnimation"
 
 let __view_id = 0;
 /**
