@@ -1,8 +1,6 @@
-
 import { HummerComponent } from "../../HummerComponent"
-const { document: _Document } = __Hummer__;
 
-const hm = __Hummer__;
+const HUMMER = __Hummer__;
 
 export class NotifyCenter extends HummerComponent {
 
@@ -12,8 +10,8 @@ export class NotifyCenter extends HummerComponent {
     }
 
     protected static checkInstance() {
-        if (!hm.__notifyCenter__) {
-            hm.__notifyCenter__ = NotifyCenter.newInstance();
+        if (!HUMMER.__notifyCenter__) {
+            HUMMER.__notifyCenter__ = NotifyCenter.newInstance();
         }
     }
 
@@ -23,7 +21,7 @@ export class NotifyCenter extends HummerComponent {
 
 
     static get instance(): NotifyCenter {
-        return hm.__notifyCenter__
+        return HUMMER.__notifyCenter__
     }
 
     /**

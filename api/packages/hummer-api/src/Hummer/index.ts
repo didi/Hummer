@@ -1,5 +1,5 @@
-const { document: _Document } = __Hummer__
-// const { Hummer: _Hummer } = __GLOBAL__
+const { document: _Document_ } = __Hummer__
+
 
 import { Element } from "../Element"
 import { HummerElement } from "../HummerElement"
@@ -48,7 +48,7 @@ export class Hummer {
     public static render(element: Element) {
         Hummer.initGlobal();
         Hummer.rootElement = element;
-        _Document.render(element.getThis());
+        _Document_.render(element.getThis());
     }
 
 

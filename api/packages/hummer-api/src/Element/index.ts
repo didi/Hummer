@@ -1,5 +1,3 @@
-const { document: _Document } = __Hummer__
-
 import { Node } from "../Node"
 import { BasicAnimation } from "../anim/BasicAnimation"
 import { KeyframeAnimation } from "../anim/KeyframeAnimation"
