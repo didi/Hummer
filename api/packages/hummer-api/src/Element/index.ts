@@ -13,6 +13,7 @@ const AnimationEndName =  "__onAnimationEnd__"
  * 
  *
  */
+
 export class Element extends Node {
 
     /**
@@ -24,7 +25,7 @@ export class Element extends Node {
     /**
      * 样式集合
      */
-    private _style: Record<string, string> | null = {};
+    private _style: AA | Record<string, any> | null = {};
 
     /**
      * 动画集合
@@ -69,6 +70,7 @@ export class Element extends Node {
     protected _initAttributes(attribute: object) {
         this._attributes = attribute || {};
         this.obj.setAttributes(attribute);
+     
     }
 
     /**
@@ -157,6 +159,7 @@ export class Element extends Node {
         }
 
         this._style = { ...newStyle, ...style };
+    
         this.obj.setStyles(this._style);
     }
 

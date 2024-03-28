@@ -56,7 +56,7 @@ export class HummerElement extends Element {
     }
 
     //扩展支持disabled,与enabled相反
-    public set disabled(disabled: Boolean | Object) {
+    public set disabled(disabled: Boolean | Record<string, any>) {
         if (typeof disabled === 'boolean') {
             super.setEnable(!disabled);
         }
@@ -125,7 +125,7 @@ export class HummerElement extends Element {
      * @param animation 
      * TODO:保持 Tenon Vue 的兼容，后期切换成同一 Core后，进行变更
      */
-    public handleAnimation(animation: BasicAnimation | KeyframeAnimation) {
+    public handleAnimation(animation: any) {
         this.setAnimation(animation);
     }
 
@@ -134,7 +134,7 @@ export class HummerElement extends Element {
      * 
      * @param animation 
      */
-    public setAnimation(animation: BasicAnimation | KeyframeAnimation) {
+    public setAnimation(animation: any) {
         if (this.globalProxy) {
             this.globalProxy.handleAnimation(this, animation);
         } else {

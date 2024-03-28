@@ -3,7 +3,7 @@ const { document: _Document } = __Hummer__;
 
 export class BasicAnimation {
 
-    protected value: number | string | Object = '';
+    protected value: number | string | Record<string, any> = '';
     protected duration: number = 0;
     protected delay: number = 0;
     protected repeatCount: number = 1;

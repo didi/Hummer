@@ -46,7 +46,7 @@ export class Button extends HummerElement {
         return this._getAttribute("disabled")
     }
 
-    override set disabled(value:  Boolean | Object) {
+    override set disabled(value:  Boolean | Record<string, any>) {
         if(typeof value === "boolean"){
             super.disabled = value
         }else{

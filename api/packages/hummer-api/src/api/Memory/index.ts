@@ -31,7 +31,7 @@ export class Memory extends HummerComponent {
      * @param key 名称
      * @param value 值
      */
-    static set(key: string, value: Object, cb?: Function) {
+    static set(key: string, value: Record<string, any>, cb?: Function) {
         Memory.checkInstance();
         Memory.instance.set(key, value, cb);
     }
@@ -79,7 +79,7 @@ export class Memory extends HummerComponent {
     }
 
 
-    protected set(key: string, value: Object, cb?: Function) {
+    protected set(key: string, value: Record<string, any>, cb?: Function) {
         this.call("set", key, value, cb);
     }
 

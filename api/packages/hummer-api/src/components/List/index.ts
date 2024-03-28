@@ -26,6 +26,7 @@ export class List extends HummerElement {
 
     set onRegister(value: (position: number) => number) {
         this._setAttribute("onRegister", value);
+        this.addEventListener("onRegister", value)
     }
 
     /**
@@ -37,6 +38,7 @@ export class List extends HummerElement {
 
     set onCreate(value: (type: number) => View) {
         this._setAttribute("onCreate", value);
+        this.addEventListener("onCreate", value)
     }
 
     /**
@@ -48,6 +50,7 @@ export class List extends HummerElement {
 
     set onUpdate(value: (position: number, cell: View) => void) {
         this._setAttribute("onUpdate", value);
+        this.addEventListener("onUpdate", value)
     }
 
 
@@ -83,6 +86,7 @@ export class List extends HummerElement {
 
     set onRefresh(value: (state: number) => void) {
         this._setAttribute("onRefresh", value);
+        this.addEventListener("onRefresh", value)
     }
 
     /**
@@ -94,6 +98,7 @@ export class List extends HummerElement {
 
     set onLoadMore(value: (state: number) => void) {
         this._setAttribute("onLoadMore", value);
+        this.addEventListener("onLoadMore", value)
     }
 
     /**
@@ -130,9 +135,9 @@ export class List extends HummerElement {
 
 
     /**
-* 滚动到指定位置
-* @param position 要滚动到的位置
- */
+    * 滚动到指定位置
+    * @param position 要滚动到的位置
+    */
     scrollToPosition(position: number) {
         this.call("scrollToPosition", position);
     }
@@ -140,14 +145,14 @@ export class List extends HummerElement {
     /**
      * 滚动到指定坐标（单位：dp/pt/hm/px）
      */
-    scrollTo(x: Object, y: Object) {
+    scrollTo(x: number | string, y: number | string) {
         this.call("scrollTo", x, y);
     }
 
     /**
     * 滚动到指定坐标（单位：dp/pt/hm/px）
     */
-    scrollBy(dx: Object, dy: Object) {
+    scrollBy(dx: number | string, dy: number | string) {
         this.call("scrollBy", dx, dy);
     }
 

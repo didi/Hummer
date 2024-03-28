@@ -32,7 +32,7 @@ export class NotifyCenter extends HummerComponent {
      * @param event 事件名称
      * @param callback 回调事件
      */
-    static addEventListener(event: string, callback: (value: Object) => void) {
+    static addEventListener(event: string, callback: Function) {
         NotifyCenter.checkInstance();
         NotifyCenter.instance.addEventListener(event, callback)
     }
@@ -43,7 +43,7 @@ export class NotifyCenter extends HummerComponent {
     * @param event 事件名称
     * @param callback 回调事件
     */
-    static removeEventListener(event: string, callback: (value: Object) => void) {
+    static removeEventListener(event: string, callback: Function) {
         NotifyCenter.checkInstance();
         if(!callback){
             NotifyCenter.instance.call("removeAllEventListener", event)
@@ -61,7 +61,7 @@ export class NotifyCenter extends HummerComponent {
      * @param event 事件名称
      * @param value 消息内容
      */
-    static triggerEvent(event: string, value: Object) {
+    static triggerEvent(event: string, value: Record<string, any>) {
         NotifyCenter.checkInstance();
         NotifyCenter.instance.call("triggerEvent",event, value);
     }

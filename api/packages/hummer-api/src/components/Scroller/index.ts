@@ -92,14 +92,14 @@ export class Scroller extends LifeCycleManager {
     /**
      * 滚动到指定坐标（单位：dp/pt/hm/px）
      */
-    scrollTo(x: Object, y: Object) {
+    scrollTo(x: number | string, y:  number | string) {
         this.call("scrollTo", x, y);
     }
 
     /**
     * 滚动到指定坐标（单位：dp/pt/hm/px）
     */
-    scrollBy(dx: Object, dy: Object) {
+    scrollBy(dx: number | string, dy: number | string) {
         this.call("scrollBy", dx, dy);
     }
 

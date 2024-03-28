@@ -2,7 +2,7 @@
 const { document: _Document } = __Hummer__;
 
 type Keyframe = {
-    value: number|string|Object
+    value: number|string|Record<string, any>
     percent:number
   }
   

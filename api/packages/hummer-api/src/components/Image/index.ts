@@ -7,7 +7,6 @@ import { ImageStyle } from "./ImageStyle"
 export class Image extends HummerElement {
 
 
-
     /**
     * 
     * @param id
@@ -24,8 +23,8 @@ export class Image extends HummerElement {
 
 
     /**
-    * 普通图片
-    */
+     * 普通图片
+     */
     get src() {
         return this._getAttribute("src")
     }
@@ -57,14 +56,26 @@ export class Image extends HummerElement {
     }
 
 
+
     /**
      * 加载资源
      * 
      * @param src 资源
      * @param listener 结果监听
      */
-    load(src: string | ImageStyle, listener: Function) {
-        this.call("load", src, listener);
+    load(source: string | ImageStyle, imageLoadEvent: Function) {
+        if (typeof source === 'string') {
+            this._setAttribute("src", source);
+        } else {
+            this._setAttribute("src", source.src);
+            this._setAttribute("placeholder", source.placeholder);
+            this._setAttribute("failedImage", source.failedImage);
+            this._setAttribute("gifSrc", source.gifSrc);
+            this._setAttribute("gifRepeatCount", source.gifRepeatCount);
+        }
+        this._setAttribute("onLoad", imageLoadEvent);
+        this.addEventListener("__onImageOnLoad__", imageLoadEvent)
     }
+
 }
 

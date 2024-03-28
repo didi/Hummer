@@ -61,7 +61,7 @@ export interface HummerGlobalProxy {
      * @param element
      * @param animation 
      */
-    handleAnimation(element: HummerElement, animation: BasicAnimation | KeyframeAnimation): undefined;
+    handleAnimation(element: HummerElement, animation: any): undefined;
 
     //挂载
     onMounted(element: HummerElement,): undefined;
