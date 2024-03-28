@@ -6,6 +6,11 @@ import { View } from "../View"
 export class Scroller extends LifeCycleManager {
 
 
+
+    private _onScrollTop?: Function = undefined;
+    private _onScrollBottom?: Function = undefined;
+
+
     /**
      * 
      * @param id
@@ -14,6 +19,36 @@ export class Scroller extends LifeCycleManager {
      */
     public constructor(id: string = "", name: string = "", props: any = {}) {
         super("Scroller", name, { ...props, viewId: id });
+
+        this.addEventListener("onScrollTop", () => {
+            this.onDispatch("onScrollTop");
+        })
+        this.addEventListener("onScrollBottom", () => {
+            this.onDispatch("onScrollBottom");
+        })
+    }
+
+
+    /**
+     * 分发资源加载结果回调
+     * 
+     */
+    protected onDispatch(type: string) {
+        switch(type) {
+            case "onScrollTop":
+                if (this._onScrollTop) {
+                    this._onScrollTop();
+                }
+                break
+            case "onScrollBottom":
+                if (this._onScrollBottom) {
+                    this._onScrollBottom();
+                }
+                break
+            default:
+                break
+        }       
+    
     }
 
 
@@ -125,14 +160,14 @@ export class Scroller extends LifeCycleManager {
     * 滚动到顶部事件监听
     */
     setOnScrollToTopListener(callback: () => void) {
-        this.addEventListener('onScrollTop',callback)
+        this._onScrollTop = callback
     }
 
     /**
      * 滚动到底部事件监听
      */
     setOnScrollToBottomListener(callback: () => void) {
-        this.addEventListener('onScrollBottom',callback)
+        this._onScrollBottom = callback
     }
 
 

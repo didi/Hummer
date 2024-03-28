@@ -5,7 +5,14 @@ import { View } from '../View'
 
 export class List extends HummerElement {
 
-
+    
+    private _onRegister?: Function = undefined;
+    private _onCreate?: Function = undefined;
+    private _onUpdate?: Function = undefined;
+    private _onRefresh?: Function = undefined;
+    private _onLoadMore?: Function = undefined;
+    
+    
     /**
      * 
      * @param id
@@ -14,6 +21,62 @@ export class List extends HummerElement {
      */
     public constructor(id: string = "", name: string = "", props: any = {}) {
         super("List", name, { ...props, viewId: id });
+        this.addEventListener("onRegister", (position: number) => {
+            this.onDispatch("onRegister", position);
+        })
+        this.addEventListener("onCreate", (type: number) => {
+            this.onDispatch("onCreate", type);
+        })
+        this.addEventListener("onUpdate", (position: number, cell: View) => {
+            this.onDispatch("onUpdate", position, cell);
+        })
+        this.addEventListener("onRefresh", (state: number) => {
+            this.onDispatch("onRefresh", state);
+        })
+        this.addEventListener("onLoadMore", (state: number) => {
+            this.onDispatch("onLoadMore", state);
+        })
+
+        
+    }
+
+
+
+    /**
+     * 分发资源加载结果回调
+     * 
+     */
+    protected onDispatch(type: string, event: number, cell?: View) {
+        switch(type) {
+            case "onRegister":
+                if (this._onRegister) {
+                    this._onRegister(event);
+                }
+                break
+            case "onCreate":
+                if (this._onCreate) {
+                    this._onCreate(event);
+                }
+                break
+            case "onUpdate":
+                if (this._onUpdate) {
+                    this._onUpdate(event, cell);
+                }
+                break
+            case "onRefresh":
+                if (this._onRefresh) {
+                    this._onRefresh(event);
+                }
+                break
+            case "onLoadMore":
+                if (this._onLoadMore) {
+                    this._onLoadMore(event);
+                }
+                break
+            default:
+                break
+        }       
+    
     }
 
 
@@ -26,7 +89,7 @@ export class List extends HummerElement {
 
     set onRegister(value: (position: number) => number) {
         this._setAttribute("onRegister", value);
-        this.addEventListener("onRegister", value)
+        this._onRegister = value
     }
 
     /**
@@ -38,7 +101,7 @@ export class List extends HummerElement {
 
     set onCreate(value: (type: number) => View) {
         this._setAttribute("onCreate", value);
-        this.addEventListener("onCreate", value)
+        this._onCreate = value
     }
 
     /**
@@ -50,7 +113,7 @@ export class List extends HummerElement {
 
     set onUpdate(value: (position: number, cell: View) => void) {
         this._setAttribute("onUpdate", value);
-        this.addEventListener("onUpdate", value)
+        this._onUpdate = value
     }
 
 
@@ -86,7 +149,7 @@ export class List extends HummerElement {
 
     set onRefresh(value: (state: number) => void) {
         this._setAttribute("onRefresh", value);
-        this.addEventListener("onRefresh", value)
+        this._onRefresh = value
     }
 
     /**
@@ -98,7 +161,7 @@ export class List extends HummerElement {
 
     set onLoadMore(value: (state: number) => void) {
         this._setAttribute("onLoadMore", value);
-        this.addEventListener("onLoadMore", value)
+        this._onLoadMore = value
     }
 
     /**
