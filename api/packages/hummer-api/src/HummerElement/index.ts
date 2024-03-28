@@ -1,6 +1,6 @@
 const { document: _Document, proxy: _Proxy } = __Hummer__
 
-import { Element } from "../Element"
+import { FlexStyle,Element } from "../Element"
 import { HummerGlobalProxy } from "./HummerGlobalProxy"
 
 let __view_id = 0;
@@ -72,7 +72,7 @@ export class HummerElement extends Element {
     }
 
     //扩展样式属性：有代理时通过代理处理
-    public set style(value: object) {
+    public set style(value: object|FlexStyle) {
         this.setStyle(value, false);
     }
 
