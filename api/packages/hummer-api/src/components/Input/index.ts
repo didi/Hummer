@@ -1,4 +1,4 @@
-import { EventListener } from "src/EventTarget";
+import { EventListener } from "../../EventTarget";
 import { HummerElement } from "../../HummerElement"
 import { HMEvent } from "../../HummerElement"
 import { FlexStyle } from "../../Element"

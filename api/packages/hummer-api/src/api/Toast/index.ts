@@ -1,6 +1,6 @@
 
 import { HummerComponent } from "../../HummerComponent"
-import { View } from "src/components"; 
+import { View } from "../../components/View"; 
 
 
 const HUMMER = __Hummer__;
