@@ -43,3 +43,7 @@ libjsc.a
 libquickjs.a
 napi_ios.tar.gz
 
+# dist
+api/examples/hummer-api-test/dist/*
+api/packages/hummer-api/dist/*
+api/examples/hummer-api-test/template/*
