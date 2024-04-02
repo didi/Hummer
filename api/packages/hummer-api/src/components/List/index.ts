@@ -136,7 +136,10 @@ export class List extends HummerElement {
     }
 
     set onCreate(value: (type: number) => View) {
-        this._setAttribute("onCreate", value);
+        let _onCreate = (type: number) => {
+            return value(type).getThis()
+        }
+        this._setAttribute("onCreate", _onCreate);
         this._onCreate = value
     }
 
@@ -161,7 +164,7 @@ export class List extends HummerElement {
     }
 
     set refreshView(value: View) {
-        this._setAttribute("refreshView", value);
+        this._setAttribute("refreshView", value.getThis());
     }
 
     /**
@@ -172,7 +175,7 @@ export class List extends HummerElement {
     }
 
     set loadMoreView(value: View) {
-        this._setAttribute("loadMoreView", value);
+        this._setAttribute("loadMoreView", value.getThis());
     }
 
 
