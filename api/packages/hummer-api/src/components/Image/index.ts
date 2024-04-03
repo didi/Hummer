@@ -15,7 +15,7 @@ interface ImageEvent extends HMEvent<number> {
 export class Image extends HummerElement {
 
 
-    private _onLoad?: ( (srcType: number, event: number) => void ) | Function | undefined;
+    private _onLoad?: ( (srcType: number, isSuccess: boolean) => void ) | Function | undefined;
 
     /**
     * 
@@ -101,11 +101,11 @@ export class Image extends HummerElement {
     /** 
     *资源加载结果
     */
-    get onLoad(): ( (srcType: number, event: number) => void ) | Function | undefined {
+    get onLoad(): ( (srcType: number, isSuccess: boolean) => void ) | Function | undefined {
         return this._onLoad;
     }
 
-    set onLoad(value: ( (srcType: number, event: number) => void ) | Function| undefined ) {
+    set onLoad(value: ( (srcType: number, isSuccess: boolean) => void ) | Function| undefined ) {
         this._onLoad = value;
     }
 
@@ -117,7 +117,12 @@ export class Image extends HummerElement {
      */
     protected onImageOnLoad(event: ImageEvent) {
         if (this._onLoad) {
-            this._onLoad(event.srcType, event.state);
+            let isSuccess = false
+            if(event.state === 0 ){
+                isSuccess = true
+            }
+
+            this._onLoad(event.srcType, isSuccess);
         }
     }
 
@@ -127,7 +132,7 @@ export class Image extends HummerElement {
      * @param src 资源
      * @param listener 结果监听
      */
-    load(source: string | ImageAttribute, callback: ( (srcType: number, event: number) => void ) | Function | undefined) {
+    load(source: string | ImageAttribute, callback: ( (srcType: number, isSuccess: boolean) => void ) | Function | undefined) {
         if (typeof source === 'string') {
             this._setAttribute("src", source);
             this._removeAttribute("gifSrc");
