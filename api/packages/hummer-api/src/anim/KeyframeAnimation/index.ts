@@ -2,40 +2,40 @@
  * 
  */
 type Keyframe = {
-    value: number|string|Record<string, any>
-    percent:number
-  }
-  
+    value: number | string | Record<string, any>
+    percent: number
+}
+
 /**
  * KeyframeAnimation 帧动画
  */
 export class KeyframeAnimation {
 
-    protected keyframes: Array<Keyframe> = [{
-        percent: 0,
-        value: { x: 0, y: 0 },
-    }, {
-        percent: 0.2,
-        value: { x: 30, y: 0 },
-    }, {
-        percent: 0.6,
-        value: { x: 30, y: 60 },
-    }, {
-        percent: 0.8,
-        value: { x: 100, y: 60 },
-    }, {
-        percent: 1.0,
-        value: { x: 100, y: 0 },
-    }]
-    protected duration: number = 0;
-    protected delay: number = 0;
-    protected repeatCount: number = 1;
-    protected easing: string = 'ease';
+    public keyframes: Array<Keyframe> = [];
+    public duration: number = 0;
+    public delay: number = 0;
+    public repeatCount: number = 1;
+    public easing: string = 'ease';
+
     protected type: string = 'keyframe';
     protected property: string = 'position';
 
-    public  _startFunc: Function = () => { };
-    public _endFunc: Function = () => { };
+
+    private _startFunc: Function | undefined = undefined;
+
+    private _endFunc: Function | undefined = undefined;
+
+    private _startCallback: Function = () => {
+        if (this._startFunc) {
+            this._startFunc();
+        }
+    }
+
+    private _endCallback: Function = () => {
+        if (this._endFunc) {
+            this._endFunc();
+        }
+    }
 
 
     public constructor(property: any) {
@@ -43,17 +43,22 @@ export class KeyframeAnimation {
     }
 
 
-    private _innerFunc(event: string, callback: Function){
+    public get startCallback(): Function {
+        return this._startCallback;
+    }
+
+
+    public get endCallback(): Function {
+        return this._endCallback;
+    }
+
+    private _onEventListener(event: string, callback: Function) {
         switch (event) {
             case 'start':
-                this._startFunc =  () => {
-                    callback.call(this, event)
-                }
+                this._startFunc = callback;
                 break;
             case 'end':
-                this._endFunc =  () => {
-                    callback.call(this, event)
-                }
+                this._endFunc = callback;
                 break;
         }
     }
@@ -63,10 +68,10 @@ export class KeyframeAnimation {
      * 动画执行开始或结束时的回调
      *
      * @param event 事件类型（'start' 或 'end'）
-     * @param callback 事件回调
+     * @param eventListener 事件回调
      */
-    public on(event: string, callback: Function) {
-        this._innerFunc(event, callback)
+    public on(event: string, eventListener: Function) {
+        this._onEventListener(event, eventListener)
     }
 
 

@@ -78,7 +78,7 @@ export interface FlexStyle {
     flexShrink?: number,
 
     /**
-     * 子控件在进行拉伸和收缩计算前的基础尺寸
+     * 子控件在进行拉伸和收缩计算前的基础尺寸
      * 默认: 'auto'	
      * 可选: flexBasis: 500 | 'auto'
      */
@@ -267,7 +267,7 @@ export class Element extends Node {
     /**
      * 动画集合
      */
-    private _animationMap: Map<string, BasicAnimation | KeyframeAnimation> | undefined = undefined;
+    private _animationMap: Map<string, BasicAnimation | KeyframeAnimation> = new Map();
 
     /**
      * 节点构造函数
@@ -416,20 +416,30 @@ export class Element extends Node {
      * @param key  动画唯一key
      */
     public addAnimation(animation: BasicAnimation | KeyframeAnimation, key: string = "") {
-        this._addAnimation(animation, key);
+        if (animation) {
+            this._addAnimation(animation, key);
+        } else {
+            console.warn("addAnimation() animation is " + typeof (animation));
+        }
     }
 
 
-
-    private _addAnimation(animation: BasicAnimation | KeyframeAnimation, key: string = "") {
+    /**
+     * //TODO 建议在这边做事件分发。
+     * 
+     * @param animation 
+     * @param key 
+     */
+    private _addAnimation(animation: BasicAnimation | KeyframeAnimation, key: string = "__default__") {
         // 监听动画的开始和结束事件
-        let startFunc = animation._startFunc;
-        let endFunc = animation._endFunc;
+        let lastAnim = this._animationMap.get(key);
 
-        if (!this.envents.has(key)) {
-            this.addEventListener(AnimationStartName, startFunc);
-            this.addEventListener(AnimationEndName, endFunc);
+        if (lastAnim) {
+            this.removeEventListener(AnimationStartName, lastAnim.startCallback);
+            this.removeEventListener(AnimationEndName, lastAnim.endCallback);
         }
+        this.addEventListener(AnimationStartName, animation.startCallback);
+        this.addEventListener(AnimationEndName, animation.endCallback);
 
         // 临时存储，方面后面移除监听
         this._animationMap && this._animationMap.set(key, animation)
@@ -446,12 +456,12 @@ export class Element extends Node {
 
     private _removeAnimationForKey(key: string) {
         // 移除事件监听
-        let anim = this._animationMap && this._animationMap.get(key);
-        if (this.envents.has(key) && anim) {
-            this.removeEventListener(AnimationStartName, anim._startFunc);
-            this.removeEventListener(AnimationEndName, anim._endFunc);
+        let lastAnim = this._animationMap.get(key);
+        if (lastAnim) {
+            this.removeEventListener(AnimationStartName, lastAnim.startCallback);
+            this.removeEventListener(AnimationEndName, lastAnim.endCallback);
         }
-
+        this._animationMap.delete(key);
         this.obj.removeAnimationForKey(key);
     }
 
@@ -467,7 +477,7 @@ export class Element extends Node {
         // 移除事件监听
         this.removeEventListener(AnimationStartName)
         this.removeEventListener(AnimationEndName)
-        this._animationMap = undefined
+        this._animationMap.clear();
         this.obj.removeAllAnimation();
     }
 

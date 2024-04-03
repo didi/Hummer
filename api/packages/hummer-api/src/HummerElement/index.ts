@@ -1,4 +1,3 @@
-const { document: _Document_, proxy: _Proxy_ } = __Hummer__
 import { FlexStyle, Element } from "../Element"
 import { HummerGlobalProxy } from "./HummerGlobalProxy"
 
@@ -59,10 +58,18 @@ export class HummerElement extends Element {
         super(tag, name, props);
         this.bindEventTarget();
         this.__view_id = __view_id;
-        if (_Proxy_ && _Proxy_.globalProxy) {
-            this.globalProxy = _Proxy_.globalProxy;
-        }
+        this.globalProxy = this.getProxy();
+    }
 
+    /**
+     * 获取代理接口
+     * @returns 
+     */
+    private getProxy() {
+        if (__Hummer__ && __Hummer__.__globalProxy__) {
+            return __Hummer__.__globalProxy__;
+        }
+        return undefined;
     }
 
     //扩展支持disabled,与enabled相反
@@ -99,16 +106,26 @@ export class HummerElement extends Element {
     }
 
     //扩展样式属性：有代理时通过代理处理
-    public set style(value: FlexStyle | Record<string,any>) {
+    public set style(value: FlexStyle | Record<string, any>) {
         this.setStyle(value, false);
     }
 
-    protected setStyle(value: FlexStyle | Record<string,any>, flag: boolean = false) {
+    protected setStyle(value: FlexStyle | Record<string, any>, flag: boolean = false) {
         if (this.globalProxy) {
             this.globalProxy.setStyle(this, value, flag);
         } else {
             super.setStyle(value, false);
         }
+    }
+
+
+    /**
+     *  提供的父类方法，绕开代理
+     * @param value
+     * @param flag 
+     */
+    public superSetStyle(value: FlexStyle | object, flag: boolean = false) {
+        super.setStyle(value, false);
     }
 
     public setScopeId(id: string) {
@@ -131,17 +148,6 @@ export class HummerElement extends Element {
         if (this.globalProxy) {
             this.globalProxy.updateClassStyle(this, className);
         }
-
-        // if (!this.__scopedIds.size) {
-        //     return
-        // }
-
-        // this.__scopedIds.forEach(scopedId => {
-        //     let elementStyle = getClassStyle(this, className, true, scopedId);
-        //     if (Object.keys(elementStyle).length > 0) {
-        //         this.setStyle(elementStyle, false);
-        //     }
-        // })
     }
 
     /**
