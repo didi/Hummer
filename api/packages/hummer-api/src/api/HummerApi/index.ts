@@ -1,4 +1,5 @@
 import { HummerComponent } from "../../HummerComponent"
+import { Element } from "../../Element"
 
 const HUMMER = __Hummer__;
 
@@ -22,11 +23,12 @@ export type PageInfo = {
     url: string;
     animated: boolean;
     params?: any
-  };
-  
-  
+};
+
+
 export class HummerApi extends HummerComponent {
 
+    private _rootElement: Element | undefined = undefined
 
     public constructor(props: any = {}) {
         super("Hummer", props);
@@ -56,13 +58,11 @@ export class HummerApi extends HummerComponent {
     }
 
     protected getEnv(): Env {
-       return this.call("getEnv");
+        return this.call("getEnv");
     }
-
 
     /**
      * 获取pageInfo
-     *
      */
     static getPageInfo(): PageInfo {
         HummerApi.checkInstance();
@@ -70,7 +70,7 @@ export class HummerApi extends HummerComponent {
     }
 
     protected getPageInfo(): PageInfo {
-       return this.call("getPageInfo");
+        return this.call("getPageInfo");
     }
 
 
@@ -85,8 +85,20 @@ export class HummerApi extends HummerComponent {
     }
 
     protected setPageResult(param: any) {
-       return this.call("setPageResult", param);
+        return this.call("setPageResult", param);
     }
+
+
+    static get rootElement() {
+        HummerApi.checkInstance();
+        return HummerApi.instance._rootElement;
+    }
+
+    static set rootElement(rootElement: Element | undefined) {
+        HummerApi.checkInstance();
+        HummerApi.instance._rootElement = rootElement;
+    }
+
 
 
 }
