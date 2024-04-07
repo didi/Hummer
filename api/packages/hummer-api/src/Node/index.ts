@@ -98,6 +98,9 @@ export class Node extends EventTarget {
      * @param child 在末尾添加节点
      */
     public appendChild(child: Node) {
+        if(!child){
+            return
+        }
         child.unlinkSiblings();
         child.parentNode = this;
         this.children.add(child);
@@ -146,6 +149,9 @@ export class Node extends EventTarget {
      * @param child 被移除的节点
      */
     public removeChild(child: Node) {
+        if(!child){
+            return
+        }
         child._onDestoryed();
         child.unlinkSiblings();
         child.parentNode = undefined;
@@ -164,6 +170,9 @@ export class Node extends EventTarget {
      * @param anchor 插入位置锚点
      */
     public insertBefore(child: Node, anchor: Node) {
+        if(!child||!anchor){
+            return
+        }
         child.unlinkSiblings();
         child.parentNode = this;
         if (anchor.prevSibling) {
@@ -192,6 +201,9 @@ export class Node extends EventTarget {
      * @param oldNode 旧节点
      */
     public replaceChild(newNode: Node, oldNode: Node) {
+        if(!newNode||!oldNode){
+            return
+        }
         oldNode._onDestoryed();
         var _prevSibling = oldNode.prevSibling
         var _nextSibling = oldNode.nextSibling
