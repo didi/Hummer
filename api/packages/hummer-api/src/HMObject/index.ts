@@ -22,8 +22,10 @@ export class HMObject {
         this.props = props
         if (isApi) {
             this.obj = _Document_.createComponent(tag, props)
+            this.obj.__element__ = this;
         } else {
             this.obj = _Document_.createElement(tag, props)
+            this.obj.__element__ = this;
         }
     }
 
