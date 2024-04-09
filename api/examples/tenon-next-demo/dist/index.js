@@ -1,3 +1,4 @@
+export function renderFunc(__Hummer__, __GLOBAL__) {
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -41,13 +42,9 @@ if (false) {}
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport default from dynamic */ _node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_node_modules_less_loader_dist_cjs_js_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_0_use_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true__WEBPACK_IMPORTED_MODULE_0___default.a)
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_node_modules_less_loader_dist_cjs_js_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_0_use_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
 /* harmony import */ var _node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_node_modules_less_loader_dist_cjs_js_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_0_use_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!../../node_modules/less-loader/dist/cjs.js!../../node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[0].use!./app.vue?vue&type=style&index=0&id=554f69db&lang=less&scoped=true */ "./node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!./node_modules/less-loader/dist/cjs.js!./node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[0].use!./src/index/app.vue?vue&type=style&index=0&id=554f69db&lang=less&scoped=true");
-/* harmony import */ var _node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_node_modules_less_loader_dist_cjs_js_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_0_use_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_node_modules_less_loader_dist_cjs_js_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_0_use_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_node_modules_less_loader_dist_cjs_js_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_0_use_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_hummer_tenon_style_loader_dist_index_js_clonedRuleSet_1_use_0_node_modules_less_loader_dist_cjs_js_node_modules_hummer_tenon_loader_dist_index_js_ruleSet_0_use_app_vue_vue_type_style_index_0_id_554f69db_lang_less_scoped_true__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
  
 
 /***/ }),
@@ -88,11 +85,4421 @@ __webpack_require__.r(__webpack_exports__);
 /*!*****************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/@hummer/tenon-style-loader/dist/index.js??clonedRuleSet-1.use[0]!./node_modules/less-loader/dist/cjs.js!./node_modules/@hummer/tenon-loader/dist/index.js??ruleSet[0].use!./src/index/app.vue?vue&type=style&index=0&id=554f69db&lang=less&scoped=true ***!
   \*****************************************************************************************************************************************************************************************************************************************************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @didi/tenon-vue-next */ "./node_modules/@didi/tenon-vue-next/dist/index.js");
 
-
+    
+    /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((function(){
+      
+    var ruleSetMap = {"global":{"classList":[]},"data-v-554f69db":{"classList":[{"selector":"page","n_selector":{"next":null,"value":"page","matchType":0,"relation":0},"style":{"backgroundColor":"'#fa9153'","width":"100%","height":"100%","display":"flex","justifyContent":"center","alignItems":"center","flexDirection":"row"},"matchType":0}]}};
+    var options = {"scoped":true,"id":"data-v-554f69db","packageName":"@didi/tenon-vue-next"};
   
+      return (0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.collectStyle)(ruleSetMap, options);
+    })());
+  
+
+/***/ }),
+
+/***/ "./node_modules/@didi/hummer-api/dist/hummer-api.es.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/@didi/hummer-api/dist/hummer-api.es.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BasicAnimation: () => (/* binding */ BasicAnimation),
+/* harmony export */   Button: () => (/* binding */ Button),
+/* harmony export */   Canvas: () => (/* binding */ Canvas),
+/* harmony export */   Dialog: () => (/* binding */ Dialog),
+/* harmony export */   Element: () => (/* binding */ Element),
+/* harmony export */   EventTarget: () => (/* binding */ EventTarget),
+/* harmony export */   HMObject: () => (/* binding */ HMObject),
+/* harmony export */   Hummer: () => (/* binding */ Hummer),
+/* harmony export */   HummerComponent: () => (/* binding */ HummerComponent),
+/* harmony export */   HummerElement: () => (/* binding */ HummerElement),
+/* harmony export */   Image: () => (/* binding */ Image),
+/* harmony export */   Input: () => (/* binding */ Input),
+/* harmony export */   KeyframeAnimation: () => (/* binding */ KeyframeAnimation),
+/* harmony export */   List: () => (/* binding */ List),
+/* harmony export */   Memory: () => (/* binding */ Memory),
+/* harmony export */   Navigator: () => (/* binding */ Navigator),
+/* harmony export */   Node: () => (/* binding */ Node),
+/* harmony export */   NotifyCenter: () => (/* binding */ NotifyCenter),
+/* harmony export */   Request: () => (/* binding */ Request),
+/* harmony export */   Scroller: () => (/* binding */ Scroller),
+/* harmony export */   Storage: () => (/* binding */ Storage),
+/* harmony export */   Text: () => (/* binding */ Text),
+/* harmony export */   TextArea: () => (/* binding */ TextArea),
+/* harmony export */   Toast: () => (/* binding */ Toast),
+/* harmony export */   View: () => (/* binding */ View)
+/* harmony export */ });
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_set_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/set.js */ "./node_modules/@babel/runtime/helpers/esm/set.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/get.js */ "./node_modules/@babel/runtime/helpers/esm/get.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js */ "./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+
+
+
+
+var _Hummer__ = __Hummer__,
+  _Document_$1 = _Hummer__.document;
+var HMObject = /*#__PURE__*/function () {
+  function HMObject(tag) {
+    var isApi = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    var props = arguments.length > 2 ? arguments[2] : undefined;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, HMObject);
+    this.tag = tag;
+    this.name = tag;
+    this.isApi = isApi;
+    this.props = props;
+    if (isApi) {
+      this.obj = _Document_$1.createComponent(tag, props);
+      this.obj.__element__ = this;
+    } else {
+      this.obj = _Document_$1.createElement(tag, props);
+      this.obj.__element__ = this;
+    }
+  }
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(HMObject, [{
+    key: "getThis",
+    value: function getThis() {
+      return this.obj;
+    }
+  }, {
+    key: "call",
+    value: function call(methodName) {
+      var _this$obj;
+      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
+      }
+      return (_this$obj = this.obj).invoke.apply(_this$obj, [methodName].concat(args));
+    }
+  }]);
+}();
+var EventTarget = /*#__PURE__*/function (_HMObject) {
+  function EventTarget(tag) {
+    var _this;
+    var isApi = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    var props = arguments.length > 2 ? arguments[2] : undefined;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, EventTarget);
+    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, EventTarget, [tag, isApi, props]);
+    _this.envents = new Map();
+    return _this;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(EventTarget, _HMObject);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(EventTarget, [{
+    key: "onReceiveEvent",
+    value: function onReceiveEvent(eventName, event) {
+      event = this.onHandleReceiveEvent(eventName, event);
+      this.dispatchEvent(eventName, event);
+    }
+  }, {
+    key: "onHandleReceiveEvent",
+    value: function onHandleReceiveEvent(eventName, event) {
+      return event;
+    }
+  }, {
+    key: "bindEventTarget",
+    value: function bindEventTarget() {
+      var _this2 = this;
+      this.obj.setEventTarget(function (eventName, event) {
+        _this2.onReceiveEvent(eventName, event);
+      });
+    }
+  }, {
+    key: "dispatchEvent",
+    value: function dispatchEvent(eventName, event) {
+      var _this3 = this;
+      var listeners = this.envents.get(eventName);
+      if (listeners != undefined) {
+        listeners.forEach(function (lisener) {
+          if (lisener instanceof Function) {
+            lisener.call(_this3, event);
+          } else {
+            lisener.onEvent(event);
+          }
+        });
+      }
+    }
+  }, {
+    key: "addEventListener",
+    value: function addEventListener(eventName, eventListener, useCapture) {
+      var listeners = this.envents.get(eventName);
+      if (listeners == undefined) {
+        listeners = new Array();
+        this.envents.set(eventName, listeners);
+      }
+      listeners.push(eventListener);
+      this._addEventListener(eventName);
+    }
+  }, {
+    key: "_addEventListener",
+    value: function _addEventListener(eventName) {
+      this.obj.addEventListener(eventName);
+    }
+  }, {
+    key: "removeEventListener",
+    value: function removeEventListener(eventName, eventListener, useCapture) {
+      var listeners = this.envents.get(eventName);
+      if (listeners != undefined) {
+        if (eventListener == undefined) {
+          listeners.splice(0, listeners.length);
+          this.envents.delete(eventName);
+          this._removeEventListener(eventName);
+        } else {
+          var index = listeners.indexOf(eventListener);
+          if (index > -1) {
+            listeners.splice(index, 1);
+          }
+          if (listeners.length == 0) {
+            this.envents.delete(eventName);
+            this._removeEventListener(eventName);
+          }
+        }
+      }
+    }
+  }, {
+    key: "_removeEventListener",
+    value: function _removeEventListener(eventName) {
+      this.obj.removeEventListener(eventName);
+    }
+  }]);
+}(HMObject);
+var Node = /*#__PURE__*/function (_EventTarget) {
+  function Node(tag) {
+    var _this4;
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : tag;
+    var props = arguments.length > 2 ? arguments[2] : undefined;
+    var nodeName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : tag;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Node);
+    _this4 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Node, [tag, false, props]);
+    _this4.nodeName = "";
+    _this4.name = "";
+    _this4.nodeType = 0;
+    _this4.parentNode = undefined;
+    _this4.prevSibling = null;
+    _this4.nextSibling = null;
+    _this4.children = new Set();
+    _this4.firstChild = null;
+    _this4.lastChild = null;
+    _this4.name = name;
+    _this4.nodeName = nodeName;
+    return _this4;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Node, _EventTarget);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Node, [{
+    key: "_onMounted",
+    value: function _onMounted() {
+      this.onMounted();
+    }
+  }, {
+    key: "onMounted",
+    value: function onMounted() {}
+  }, {
+    key: "_onDestoryed",
+    value: function _onDestoryed() {
+      this.onDestoryed();
+    }
+  }, {
+    key: "onDestoryed",
+    value: function onDestoryed() {}
+  }, {
+    key: "hasChildNodes",
+    value: function hasChildNodes() {
+      if (this.children.size > 0) {
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: "appendChild",
+    value: function appendChild(child) {
+      if (!child) {
+        return;
+      }
+      child.unlinkSiblings();
+      child.parentNode = this;
+      this.children.add(child);
+      if (!this.firstChild) {
+        this.firstChild = child;
+      }
+      child.prevSibling = this.lastChild;
+      child.nextSibling = null;
+      if (this.lastChild) {
+        this.lastChild.nextSibling = child;
+      }
+      this.lastChild = child;
+      this._appendChild(child);
+      child._onMounted();
+    }
+  }, {
+    key: "_appendChild",
+    value: function _appendChild(child) {
+      this.obj.appendChild(child.obj);
+    }
+  }, {
+    key: "unlinkSiblings",
+    value: function unlinkSiblings() {
+      if (this.parentNode && this.parentNode.firstChild === this) {
+        this.parentNode.firstChild = this.nextSibling;
+      }
+      if (this.parentNode && this.parentNode.lastChild === this) {
+        this.parentNode.lastChild = this.prevSibling;
+      }
+      if (this.prevSibling) {
+        this.prevSibling.nextSibling = this.nextSibling;
+      }
+      if (this.nextSibling) {
+        this.nextSibling.prevSibling = this.prevSibling;
+      }
+      this.prevSibling = null;
+      this.nextSibling = null;
+    }
+  }, {
+    key: "removeChild",
+    value: function removeChild(child) {
+      if (!child) {
+        return;
+      }
+      child._onDestoryed();
+      child.unlinkSiblings();
+      child.parentNode = undefined;
+      this.children.delete(child);
+      this._removeChild(child);
+    }
+  }, {
+    key: "_removeChild",
+    value: function _removeChild(child) {
+      this.obj.removeChild(child.obj);
+    }
+  }, {
+    key: "insertBefore",
+    value: function insertBefore(child, anchor) {
+      if (!child || !anchor) {
+        return;
+      }
+      child.unlinkSiblings();
+      child.parentNode = this;
+      if (anchor.prevSibling) {
+        child.prevSibling = anchor.prevSibling;
+        anchor.prevSibling.nextSibling = child;
+      }
+      anchor.prevSibling = child;
+      child.nextSibling = anchor;
+      if (this.firstChild === anchor) {
+        this.firstChild = child;
+      }
+      this.children.add(child);
+      this._insertBefore(child, anchor);
+      child._onMounted();
+    }
+  }, {
+    key: "_insertBefore",
+    value: function _insertBefore(child, anchor) {
+      this.obj.insertBefore(child.obj, anchor.obj);
+    }
+  }, {
+    key: "replaceChild",
+    value: function replaceChild(newNode, oldNode) {
+      if (!newNode || !oldNode) {
+        return;
+      }
+      oldNode._onDestoryed();
+      var _prevSibling = oldNode.prevSibling;
+      var _nextSibling = oldNode.nextSibling;
+      oldNode.unlinkSiblings();
+      oldNode.parentNode = undefined;
+      this.children.delete(oldNode);
+      newNode.unlinkSiblings();
+      newNode.parentNode = this;
+      if (_prevSibling) {
+        _prevSibling.nextSibling = newNode;
+        newNode.prevSibling = _prevSibling;
+      }
+      if (_nextSibling) {
+        _nextSibling.prevSibling = newNode;
+        newNode.nextSibling = _nextSibling;
+      }
+      if (this.firstChild === oldNode) {
+        this.firstChild = newNode;
+      }
+      if (this.lastChild === oldNode) {
+        this.lastChild = newNode;
+      }
+      this.children.add(newNode);
+      this._replaceChild(newNode, oldNode);
+      newNode._onMounted();
+    }
+  }, {
+    key: "_replaceChild",
+    value: function _replaceChild(newNode, oldNode) {
+      this.obj.replaceChild(newNode.obj, oldNode.obj);
+    }
+  }, {
+    key: "removeAll",
+    value: function removeAll() {
+      this.children.forEach(function (child) {
+        child._onDestoryed();
+        child.unlinkSiblings();
+        child.parentNode = undefined;
+      });
+      this.children.clear();
+      this._removeAll();
+    }
+  }, {
+    key: "_removeAll",
+    value: function _removeAll() {
+      this.obj.removeAll();
+    }
+  }]);
+}(EventTarget);
+var AnimationStartName = "__onAnimationStart__";
+var AnimationEndName = "__onAnimationEnd__";
+var Element = /*#__PURE__*/function (_Node) {
+  function Element(tag) {
+    var _this5;
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : tag;
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Element);
+    _this5 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Element, [tag, name, props]);
+    _this5._attributes = {};
+    _this5._style = {};
+    _this5._animationMap = new Map();
+    return _this5;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Element, _Node);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Element, [{
+    key: "setAttribute",
+    value: function setAttribute(key, value) {
+      this._setAttribute(key, value);
+    }
+  }, {
+    key: "_setAttribute",
+    value: function _setAttribute(key, value) {
+      var update = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+      this._attributes[key] = value;
+      if (update) {
+        this.obj.setAttributes({
+          [key]: value
+        });
+      }
+    }
+  }, {
+    key: "_removeAttribute",
+    value: function _removeAttribute(key) {
+      delete this._attributes[key];
+    }
+  }, {
+    key: "_initAttributes",
+    value: function _initAttributes(attribute) {
+      this._attributes = attribute || {};
+      this.obj.setAttributes(attribute);
+    }
+  }, {
+    key: "_setAttributes",
+    value: function _setAttributes(attribute) {
+      this._attributes = Object.assign(Object.assign({}, this._attributes), attribute);
+      this.obj.setAttributes(attribute);
+    }
+  }, {
+    key: "getAttribute",
+    value: function getAttribute(key) {
+      return this._getAttribute(key);
+    }
+  }, {
+    key: "_getAttribute",
+    value: function _getAttribute(key) {
+      return this._attributes[key];
+    }
+  }, {
+    key: "setEnable",
+    value: function setEnable(enabled) {
+      this._setAttribute("enable", enabled);
+    }
+  }, {
+    key: "getEnable",
+    value: function getEnable() {
+      return this._getAttribute("enable");
+    }
+  }, {
+    key: "setStyle",
+    value: function setStyle(style) {
+      var flag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      this._setStyles(style);
+    }
+  }, {
+    key: "_setStyles",
+    value: function _setStyles(style) {
+      var newStyle = {};
+      if (style.margin) {
+        newStyle.marginLeft = style.margin;
+        newStyle.marginTop = style.margin;
+        newStyle.marginRight = style.margin;
+        newStyle.marginBottom = style.margin;
+      }
+      if (style.padding) {
+        newStyle.paddingLeft = style.padding;
+        newStyle.paddingTop = style.padding;
+        newStyle.paddingRight = style.padding;
+        newStyle.paddingBottom = style.padding;
+      }
+      if (style.borderStyle) {
+        newStyle.borderLeftStyle = style.borderStyle;
+        newStyle.borderTopStyle = style.borderStyle;
+        newStyle.borderRightStyle = style.borderStyle;
+        newStyle.borderBottomStyle = style.borderStyle;
+      }
+      if (style.borderColor) {
+        newStyle.borderLeftColor = style.borderColor;
+        newStyle.borderTopColor = style.borderColor;
+        newStyle.borderRightColor = style.borderColor;
+        newStyle.borderBottomColor = style.borderColor;
+      }
+      if (style.borderWidth) {
+        newStyle.borderLeftWidth = style.borderWidth;
+        newStyle.borderTopWidth = style.borderWidth;
+        newStyle.borderRightWidth = style.borderWidth;
+        newStyle.borderBottomWidth = style.borderWidth;
+      }
+      if (style.borderRadius) {
+        newStyle.borderTopLeftRadius = style.borderRadius;
+        newStyle.borderTopRightRadius = style.borderRadius;
+        newStyle.borderBottomLeftRadius = style.borderRadius;
+        newStyle.borderBottomRightRadius = style.borderRadius;
+      }
+      this._style = Object.assign(Object.assign({}, newStyle), style);
+      this.obj.setStyles(this._style);
+    }
+  }, {
+    key: "getStyle",
+    value: function getStyle() {
+      return this._style || {};
+    }
+  }, {
+    key: "addAnimation",
+    value: function addAnimation(animation) {
+      var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+      if (animation) {
+        this._addAnimation(animation, key);
+      }
+    }
+  }, {
+    key: "_addAnimation",
+    value: function _addAnimation(animation) {
+      var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "__default__";
+      var lastAnim = this._animationMap.get(key);
+      if (lastAnim) {
+        this.removeEventListener(AnimationStartName, lastAnim.startCallback);
+        this.removeEventListener(AnimationEndName, lastAnim.endCallback);
+      }
+      this.addEventListener(AnimationStartName, animation.startCallback);
+      this.addEventListener(AnimationEndName, animation.endCallback);
+      this._animationMap && this._animationMap.set(key, animation);
+      this.obj.addAnimation(animation, key);
+    }
+  }, {
+    key: "removeAnimationForKey",
+    value: function removeAnimationForKey(key) {
+      this._removeAnimationForKey(key);
+    }
+  }, {
+    key: "_removeAnimationForKey",
+    value: function _removeAnimationForKey(key) {
+      var lastAnim = this._animationMap.get(key);
+      if (lastAnim) {
+        this.removeEventListener(AnimationStartName, lastAnim.startCallback);
+        this.removeEventListener(AnimationEndName, lastAnim.endCallback);
+      }
+      this._animationMap.delete(key);
+      this.obj.removeAnimationForKey(key);
+    }
+  }, {
+    key: "removeAllAnimation",
+    value: function removeAllAnimation() {
+      this._removeAllAnimation();
+    }
+  }, {
+    key: "_removeAllAnimation",
+    value: function _removeAllAnimation() {
+      this.removeEventListener(AnimationStartName);
+      this.removeEventListener(AnimationEndName);
+      this._animationMap.clear();
+      this.obj.removeAllAnimation();
+    }
+  }, {
+    key: "getRect",
+    value: function getRect(callback) {
+      var _this6 = this;
+      this.obj.getRect(function (rect) {
+        callback.call(_this6, rect);
+      });
+    }
+  }, {
+    key: "dbg_getDescription",
+    value: function dbg_getDescription(callback, id) {}
+  }]);
+}(Node);
+var __view_id = 0;
+var HummerElement = /*#__PURE__*/function (_Element) {
+  function HummerElement(tag) {
+    var _this7;
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : tag;
+    var props = arguments.length > 2 ? arguments[2] : undefined;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, HummerElement);
+    _this7 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, HummerElement, [tag, name, props]);
+    _this7.__scopedIds = new Set();
+    _this7.__NAME = null;
+    _this7.__view_id = 0;
+    _this7.dataset = {};
+    _this7.__defaultStyle = {};
+    _this7.__style = {};
+    _this7.__baseStyle = {};
+    _this7.globalProxy = undefined;
+    _this7.bindEventTarget();
+    _this7.__view_id = __view_id;
+    _this7.globalProxy = _this7.getProxy();
+    return _this7;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(HummerElement, _Element);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(HummerElement, [{
+    key: "getProxy",
+    value: function getProxy() {
+      if (__Hummer__ && __Hummer__.__globalProxy__) {
+        return __Hummer__.__globalProxy__;
+      }
+      return undefined;
+    }
+  }, {
+    key: "enabled",
+    get: function get() {
+      return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(HummerElement.prototype), "getEnable", this).call(this);
+    },
+    set: function set(enabled) {
+      (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(HummerElement.prototype), "setEnable", this).call(this, enabled);
+    }
+  }, {
+    key: "disabled",
+    get: function get() {
+      return !this.getEnable();
+    },
+    set: function set(disabled) {
+      if (typeof disabled === 'boolean') {
+        (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(HummerElement.prototype), "setEnable", this).call(this, !disabled);
+      }
+    }
+  }, {
+    key: "className",
+    get: function get() {
+      return this._getAttribute('class');
+    }
+  }, {
+    key: "style",
+    get: function get() {
+      return this.getStyle() || {};
+    },
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "setStyle",
+    value: function setStyle(value) {
+      var flag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      if (this.globalProxy) {
+        this.globalProxy.setStyle(this, value, flag);
+      } else {
+        (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(HummerElement.prototype), "setStyle", this).call(this, value, false);
+      }
+    }
+  }, {
+    key: "superSetStyle",
+    value: function superSetStyle(value) {
+      var flag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(HummerElement.prototype), "setStyle", this).call(this, value, false);
+    }
+  }, {
+    key: "setScopeId",
+    value: function setScopeId(id) {
+      this.__scopedIds.add(id);
+      this.updateStyle();
+    }
+  }, {
+    key: "updateStyle",
+    value: function updateStyle() {
+      var className = this._getAttribute('class');
+      this.updateClassStyle(className);
+    }
+  }, {
+    key: "updateClassStyle",
+    value: function updateClassStyle(className) {
+      if (this.globalProxy) {
+        this.globalProxy.updateClassStyle(this, className);
+      }
+    }
+  }, {
+    key: "handleAnimation",
+    value: function handleAnimation(animation) {
+      this.setAnimation(animation);
+    }
+  }, {
+    key: "setAnimation",
+    value: function setAnimation(animation) {
+      if (this.globalProxy) {
+        this.globalProxy.handleAnimation(this, animation);
+      } else {
+        (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(HummerElement.prototype), "addAnimation", this).call(this, animation);
+      }
+    }
+  }, {
+    key: "setElementText",
+    value: function setElementText(text) {}
+  }, {
+    key: "getAttribute",
+    value: function getAttribute(key) {
+      switch (key) {
+        case 'disabled':
+          return this.disabled;
+        default:
+          return this._getAttribute(key);
+      }
+    }
+  }, {
+    key: "setAttribute",
+    value: function setAttribute(key, value) {
+      this.setCacheProp(key, value);
+      switch (key) {
+        case 'disabled':
+          this.disabled = value !== false;
+          break;
+        case 'class':
+          this.updateClassStyle(value);
+          break;
+        default:
+          this._setAttribute(key, value);
+          break;
+      }
+    }
+  }, {
+    key: "setCacheProp",
+    value: function setCacheProp(key, value) {
+      if (/^data/.test(key)) {
+        var dataKey = key.slice(4).toLowerCase();
+        if (dataKey) {
+          this.dataset[dataKey] = value;
+        }
+      }
+    }
+  }, {
+    key: "onHandleReceiveEvent",
+    value: function onHandleReceiveEvent(eventName, event) {
+      if (this.globalProxy) {
+        return this.globalProxy.onHandleReceiveEvent(this, event);
+      }
+      return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(HummerElement.prototype), "onHandleReceiveEvent", this).call(this, eventName, event);
+    }
+  }]);
+}(Element);
+__Hummer__;
+var LifeCycleElement = /*#__PURE__*/function (_HummerElement) {
+  function LifeCycleElement(tag) {
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : tag;
+    var props = arguments.length > 2 ? arguments[2] : undefined;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, LifeCycleElement);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, LifeCycleElement, [tag, name, props]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(LifeCycleElement, _HummerElement);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(LifeCycleElement, [{
+    key: "dispatchEvent",
+    value: function dispatchEvent(eventName, event) {
+      switch (eventName) {
+        case '__onCreate__':
+          this.onCreate();
+          break;
+        case '__onAppear__':
+          this.onAppear();
+          break;
+        case '__onDisappear__':
+          this.onDisappear();
+          break;
+        case '__onDestroy__':
+          this.onDestroy();
+          break;
+        case '__onBack__':
+          this.onBack();
+          break;
+      }
+      (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(LifeCycleElement.prototype), "dispatchEvent", this).call(this, eventName, event);
+    }
+  }, {
+    key: "onCreate",
+    value: function onCreate(e) {}
+  }, {
+    key: "onAppear",
+    value: function onAppear() {}
+  }, {
+    key: "onDisappear",
+    value: function onDisappear() {}
+  }, {
+    key: "onDestroy",
+    value: function onDestroy() {}
+  }, {
+    key: "onBack",
+    value: function onBack() {}
+  }, {
+    key: "canGoBack",
+    get: function get() {
+      return this._getAttribute('canGoBack');
+    },
+    set: function set(canGoBack) {
+      this._setAttribute('canGoBack', canGoBack);
+    }
+  }]);
+}(HummerElement);
+var View = /*#__PURE__*/function (_LifeCycleElement) {
+  function View() {
+    var _this8;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, View);
+    _this8 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, View, ["View", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+    _this8._initAttributes({
+      overflow: 'visible'
+    });
+    return _this8;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(View, _LifeCycleElement);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(View, [{
+    key: "style",
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "overflow",
+    get: function get() {
+      return this._getAttribute('overflow');
+    },
+    set: function set(value) {
+      this._setAttribute("overflow", value);
+    }
+  }]);
+}(LifeCycleElement);
+var Anchor = /*#__PURE__*/function (_View) {
+  function Anchor() {
+    var _this9;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Anchor);
+    _this9 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Anchor, [id, name, props]);
+    _this9.setStyle({
+      display: "none"
+    });
+    return _this9;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Anchor, _View);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Anchor);
+}(View);
+var Button = /*#__PURE__*/function (_HummerElement2) {
+  function Button() {
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Button);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Button, ["Button", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Button, _HummerElement2);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Button, [{
+    key: "style",
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "text",
+    get: function get() {
+      return this._getAttribute("text");
+    },
+    set: function set(value) {
+      this._setAttribute("text", value);
+    }
+  }, {
+    key: "pressed",
+    get: function get() {
+      return this._getAttribute("pressed");
+    },
+    set: function set(value) {
+      this._setAttribute("pressed", value);
+    }
+  }, {
+    key: "setElementText",
+    value: function setElementText(text) {
+      this.text = text;
+    }
+  }, {
+    key: "disabled",
+    get: function get() {
+      return this._getAttribute("disabled");
+    },
+    set: function set(value) {
+      if (typeof value === "boolean") {
+        (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_set_js__WEBPACK_IMPORTED_MODULE_0__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Button.prototype), "disabled", value, this, true);
+      } else {
+        this._setAttribute("disabled", value);
+      }
+    }
+  }, {
+    key: "setAttribute",
+    value: function setAttribute(key, value) {
+      switch (key) {
+        case 'disabled':
+          if (typeof value === "boolean") {
+            (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_set_js__WEBPACK_IMPORTED_MODULE_0__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Button.prototype), "disabled", value, this, true);
+          } else {
+            this._setAttribute("disabled", value);
+          }
+          return;
+      }
+      this._setAttribute(key, value);
+    }
+  }]);
+}(HummerElement);
+var Canvas = /*#__PURE__*/function (_HummerElement3) {
+  function Canvas() {
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Canvas);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Canvas, ["Canvas", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Canvas, _HummerElement3);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Canvas, [{
+    key: "lineWidth",
+    value: function lineWidth(widthValue) {
+      this.call("lineWidth", widthValue);
+    }
+  }, {
+    key: "lineColor",
+    value: function lineColor(colorHex) {
+      this.call("lineColor", colorHex);
+    }
+  }, {
+    key: "lineCap",
+    value: function lineCap(value) {
+      this.call("lineCap", value);
+    }
+  }, {
+    key: "lineJoin",
+    value: function lineJoin(value) {
+      this.call("lineJoin", value);
+    }
+  }, {
+    key: "drawLine",
+    value: function drawLine(fraomX, fromY, toX, toY) {
+      this.call("drawLine", fraomX, fromY, toX, toY);
+    }
+  }, {
+    key: "strokeRect",
+    value: function strokeRect(x, y, w, h) {
+      this.call("strokeRect", x, y, w, h);
+    }
+  }, {
+    key: "strokeEllipse",
+    value: function strokeEllipse(x, y, trailX, trailY) {
+      this.call("strokeEllipse", x, y, trailX, trailY);
+    }
+  }, {
+    key: "strokeCircle",
+    value: function strokeCircle(x, y, radius) {
+      this.call("strokeCircle", x, y, radius);
+    }
+  }, {
+    key: "arc",
+    value: function arc(x, y, radius, startAngle, endAngle, clockwise) {
+      this.call("arc", x, y, radius, startAngle, endAngle, clockwise);
+    }
+  }, {
+    key: "fillColor",
+    value: function fillColor(colorHex) {
+      this.call("fillColor", colorHex);
+    }
+  }, {
+    key: "fillRect",
+    value: function fillRect(x, y, w, h) {
+      this.call("fillRect", x, y, w, h);
+    }
+  }, {
+    key: "fillEllipse",
+    value: function fillEllipse(x, y, trailX, trailY) {
+      this.call("fillEllipse", x, y, trailX, trailY);
+    }
+  }, {
+    key: "fillCircle",
+    value: function fillCircle(x, y, radius) {
+      this.call("fillCircle", x, y, radius);
+    }
+  }, {
+    key: "fontSize",
+    value: function fontSize(size) {
+      this.call("fontSize", size);
+    }
+  }, {
+    key: "textColor",
+    value: function textColor(colorHex) {
+      this.call("textColor", colorHex);
+    }
+  }, {
+    key: "fillText",
+    value: function fillText(text, x, y, maxWidth) {
+      this.call("fillText", x, y, maxWidth);
+    }
+  }, {
+    key: "drawImage",
+    value: function drawImage(src, x, y, width, height) {
+      this.call("drawImage", x, y, width, height);
+    }
+  }]);
+}(HummerElement);
+var Text = /*#__PURE__*/function (_HummerElement4) {
+  function Text() {
+    var _this10;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Text);
+    _this10 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Text, ["Text", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+    _this10._initAttributes({
+      text: '',
+      richText: '',
+      textCopyEnable: 'false'
+    });
+    return _this10;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Text, _HummerElement4);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Text, [{
+    key: "style",
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "text",
+    get: function get() {
+      return this._getAttribute('text');
+    },
+    set: function set(value) {
+      this._setAttribute("text", value);
+    }
+  }, {
+    key: "setElementText",
+    value: function setElementText(text) {
+      this.text = text;
+    }
+  }, {
+    key: "richText",
+    get: function get() {
+      return this._getAttribute('richText');
+    },
+    set: function set(value) {
+      this._setAttribute("richText", value);
+    }
+  }, {
+    key: "textCopyEnable",
+    get: function get() {
+      return this._getAttribute('textCopyEnable');
+    },
+    set: function set(value) {
+      this._setAttribute("textCopyEnable", value);
+    }
+  }]);
+}(HummerElement);
+var Image = /*#__PURE__*/function (_HummerElement5) {
+  function Image() {
+    var _this11;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Image);
+    _this11 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Image, ["Image", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+    _this11._initAttributes({
+      gifRepeatCount: 0
+    });
+    _this11.addEventListener("__onImageLoad__", function (event) {
+      _this11.onImageOnLoad(event);
+    });
+    return _this11;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Image, _HummerElement5);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Image, [{
+    key: "style",
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "src",
+    get: function get() {
+      return this._getAttribute("src");
+    },
+    set: function set(value) {
+      this._setAttribute("src", value);
+      this._removeAttribute("gifSrc");
+    }
+  }, {
+    key: "gifSrc",
+    get: function get() {
+      return this._getAttribute("gifSrc");
+    },
+    set: function set(value) {
+      this._setAttribute("gifSrc", value);
+      this._removeAttribute("src");
+    }
+  }, {
+    key: "gifRepeatCount",
+    get: function get() {
+      return this._getAttribute("gifRepeatCount");
+    },
+    set: function set(value) {
+      this._setAttribute("gifRepeatCount", value);
+    }
+  }, {
+    key: "failedImage",
+    get: function get() {
+      return this._getAttribute("failedImage");
+    },
+    set: function set(value) {
+      this._setAttribute("failedImage", value);
+    }
+  }, {
+    key: "placeholder",
+    get: function get() {
+      return this._getAttribute("placeholder");
+    },
+    set: function set(value) {
+      this._setAttribute("placeholder", value);
+    }
+  }, {
+    key: "onLoad",
+    get: function get() {
+      return this._onLoad;
+    },
+    set: function set(value) {
+      this._onLoad = value;
+    }
+  }, {
+    key: "onImageOnLoad",
+    value: function onImageOnLoad(event) {
+      if (this._onLoad) {
+        var isSuccess = false;
+        if (event.state === 0) {
+          isSuccess = true;
+        }
+        this._onLoad(event.srcType, isSuccess);
+      }
+    }
+  }, {
+    key: "load",
+    value: function load(source, callback) {
+      if (typeof source === 'string') {
+        this._setAttribute("src", source);
+        this._removeAttribute("gifSrc");
+      } else {
+        this._setAttribute("src", source.src);
+        this._removeAttribute("gifSrc");
+        if (!source.gifSrc && source.gifSrc !== "") {
+          this._setAttribute("gifSrc", source.gifSrc);
+          this._removeAttribute("src");
+        }
+        if (source.placeholder) {
+          this._setAttribute("placeholder", source.placeholder);
+        }
+        if (source.failedImage) {
+          this._setAttribute("failedImage", source.failedImage);
+        }
+        if (source.gifRepeatCount) {
+          this._setAttribute("gifRepeatCount", source.gifRepeatCount);
+        }
+      }
+      this._onLoad = callback;
+    }
+  }, {
+    key: "setAttribute",
+    value: function setAttribute(key, value) {
+      switch (key) {
+        case 'src':
+          this.src = value;
+          return;
+        case 'gifSrc':
+          this.gifSrc = value;
+          return;
+      }
+      this._setAttribute(key, value);
+    }
+  }]);
+}(HummerElement);
+var Input = /*#__PURE__*/function (_HummerElement6) {
+  function Input() {
+    var _this12;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Input);
+    _this12 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Input, ["Input", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+    _this12.addEventListener('input', function (event) {
+      _this12._setAttribute("text", event.text, false);
+    });
+    return _this12;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Input, _HummerElement6);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Input, [{
+    key: "style",
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "text",
+    get: function get() {
+      return this._getAttribute("text");
+    },
+    set: function set(value) {
+      this._setAttribute("text", value);
+    }
+  }, {
+    key: "placeholder",
+    get: function get() {
+      return this._getAttribute("placeholder");
+    },
+    set: function set(value) {
+      this._setAttribute("placeholder", value);
+    }
+  }, {
+    key: "focused",
+    get: function get() {
+      return this._getAttribute("focused");
+    },
+    set: function set(value) {
+      this._setAttribute("focused", value);
+    }
+  }, {
+    key: "addEventListener",
+    value: function addEventListener(eventName, eventListener, useCapture) {
+      (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Input.prototype), "addEventListener", this).call(this, eventName, eventListener, useCapture);
+    }
+  }]);
+}(HummerElement);
+var ListEventState;
+(function (ListEventState) {
+  ListEventState[ListEventState["normal"] = 0] = "normal";
+  ListEventState[ListEventState["beganDrag"] = 1] = "beganDrag";
+  ListEventState[ListEventState["scroll"] = 2] = "scroll";
+  ListEventState[ListEventState["stop"] = 3] = "stop";
+  ListEventState[ListEventState["endDrag"] = 4] = "endDrag";
+})(ListEventState || (ListEventState = {}));
+var List = /*#__PURE__*/function (_HummerElement7) {
+  function List() {
+    var _this13;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, List);
+    _this13 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, List, ["List", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+    _this13._onRegister = undefined;
+    _this13._onCreate = undefined;
+    _this13._onUpdate = undefined;
+    _this13._onRefresh = undefined;
+    _this13._onLoadMore = undefined;
+    _this13.addEventListener("onRegister", function (event) {
+      _this13.onDispatch("onRegister", event);
+    });
+    _this13.addEventListener("onCreate", function (event) {
+      _this13.onDispatch("onCreate", event);
+    });
+    _this13.addEventListener("onUpdate", function (event) {
+      _this13.onDispatch("onUpdate", event);
+    });
+    _this13.addEventListener("onRefresh", function (event) {
+      _this13.onDispatch("onRefresh", event);
+    });
+    _this13.addEventListener("onLoadMore", function (event) {
+      _this13.onDispatch("onLoadMore", event);
+    });
+    return _this13;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(List, _HummerElement7);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(List, [{
+    key: "style",
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "onDispatch",
+    value: function onDispatch(type, event, cell) {
+      switch (type) {
+        case "onRegister":
+          if (this._onRegister) {
+            this._onRegister(event);
+          }
+          break;
+        case "onCreate":
+          if (this._onCreate) {
+            this._onCreate(event);
+          }
+          break;
+        case "onUpdate":
+          if (this._onUpdate) {
+            this._onUpdate(event, cell);
+          }
+          break;
+        case "onRefresh":
+          if (this._onRefresh) {
+            this._onRefresh(event.state);
+          }
+          break;
+        case "onLoadMore":
+          if (this._onLoadMore) {
+            this._onLoadMore(event.state);
+          }
+          break;
+      }
+    }
+  }, {
+    key: "onRegister",
+    get: function get() {
+      return this._getAttribute("onRegister");
+    },
+    set: function set(value) {
+      this._setAttribute("onRegister", value);
+      this._onRegister = value;
+    }
+  }, {
+    key: "onCreate",
+    get: function get() {
+      return this._getAttribute("onCreate");
+    },
+    set: function set(value) {
+      var _onCreate = function _onCreate(type) {
+        return value(type).getThis();
+      };
+      this._setAttribute("onCreate", _onCreate);
+      this._onCreate = value;
+    }
+  }, {
+    key: "onUpdate",
+    get: function get() {
+      return this._getAttribute("onUpdate");
+    },
+    set: function set(value) {
+      this._setAttribute("onUpdate", value);
+      this._onUpdate = value;
+    }
+  }, {
+    key: "refreshView",
+    get: function get() {
+      return this._getAttribute("refreshView");
+    },
+    set: function set(value) {
+      this._setAttribute("refreshView", value.getThis());
+    }
+  }, {
+    key: "loadMoreView",
+    get: function get() {
+      return this._getAttribute("loadMoreView");
+    },
+    set: function set(value) {
+      this._setAttribute("loadMoreView", value.getThis());
+    }
+  }, {
+    key: "onRefresh",
+    get: function get() {
+      return this._getAttribute("onRefresh");
+    },
+    set: function set(value) {
+      this._setAttribute("onRefresh", value);
+      this._onRefresh = value;
+    }
+  }, {
+    key: "onLoadMore",
+    get: function get() {
+      return this._getAttribute("onLoadMore");
+    },
+    set: function set(value) {
+      this._setAttribute("onLoadMore", value);
+      this._onLoadMore = value;
+    }
+  }, {
+    key: "showScrollBar",
+    get: function get() {
+      return this._getAttribute("showScrollBar");
+    },
+    set: function set(value) {
+      this._setAttribute("showScrollBar", value);
+    }
+  }, {
+    key: "bounces",
+    get: function get() {
+      return this._getAttribute("bounces");
+    },
+    set: function set(value) {
+      this._setAttribute("bounces", value);
+    }
+  }, {
+    key: "refresh",
+    value: function refresh(count) {
+      this.call("refresh", count);
+    }
+  }, {
+    key: "scrollToPosition",
+    value: function scrollToPosition(position) {
+      this.call("scrollToPosition", position);
+    }
+  }, {
+    key: "scrollTo",
+    value: function scrollTo(x, y) {
+      this.call("scrollTo", x, y);
+    }
+  }, {
+    key: "scrollBy",
+    value: function scrollBy(dx, dy) {
+      this.call("scrollBy", dx, dy);
+    }
+  }, {
+    key: "stopPullRefresh",
+    value: function stopPullRefresh() {
+      this.call("stopPullRefresh");
+    }
+  }, {
+    key: "stopLoadMore",
+    value: function stopLoadMore(enable) {
+      this.call("stopLoadMore", enable);
+    }
+  }]);
+}(HummerElement);
+var ViewPager = /*#__PURE__*/function (_HummerElement8) {
+  function ViewPager() {
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, ViewPager);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, ViewPager, ["Input", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(ViewPager, _HummerElement8);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ViewPager, [{
+    key: "style",
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "data",
+    get: function get() {
+      return this._getAttribute("data");
+    },
+    set: function set(value) {
+      this._setAttribute("data", value);
+    }
+  }, {
+    key: "setCurrentItem",
+    value: function setCurrentItem(position) {
+      this.call("setCurrentItem", position);
+    }
+  }, {
+    key: "onPageChange",
+    value: function onPageChange(callback) {
+      this.call("onPageChange", callback);
+    }
+  }, {
+    key: "onItemClick",
+    value: function onItemClick(callback) {
+      this.call("onItemClick", callback);
+    }
+  }, {
+    key: "onItemView",
+    value: function onItemView(callback) {
+      this.call("onItemView", function (position, view) {
+        var thisElement = view === null || view === void 0 ? void 0 : view.__element__;
+        var element = callback(position, thisElement);
+        return element.getThis();
+      });
+    }
+  }]);
+}(HummerElement);
+var ScrollEventState;
+(function (ScrollEventState) {
+  ScrollEventState[ScrollEventState["normal"] = 0] = "normal";
+  ScrollEventState[ScrollEventState["beganDrag"] = 1] = "beganDrag";
+  ScrollEventState[ScrollEventState["scroll"] = 2] = "scroll";
+  ScrollEventState[ScrollEventState["stop"] = 3] = "stop";
+  ScrollEventState[ScrollEventState["endDrag"] = 4] = "endDrag";
+})(ScrollEventState || (ScrollEventState = {}));
+var Scroller = /*#__PURE__*/function (_LifeCycleElement2) {
+  function Scroller() {
+    var _this14;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Scroller);
+    _this14 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Scroller, ["Scroller", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+    _this14._onScrollTop = undefined;
+    _this14._onScrollBottom = undefined;
+    _this14._onRefresh = undefined;
+    _this14._onLoadMore = undefined;
+    _this14.addEventListener("onRefresh", function (event) {
+      _this14.onDispatch("onRefresh", event);
+    });
+    _this14.addEventListener("onLoadMore", function (event) {
+      _this14.onDispatch("onLoadMore", event);
+    });
+    _this14.addEventListener("onScrollTop", function () {
+      _this14.onDispatch("onScrollTop");
+    });
+    _this14.addEventListener("onScrollBottom", function () {
+      _this14.onDispatch("onScrollBottom");
+    });
+    return _this14;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Scroller, _LifeCycleElement2);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Scroller, [{
+    key: "onDispatch",
+    value: function onDispatch(type, event) {
+      switch (type) {
+        case "onRefresh":
+          if (this._onRefresh) {
+            this._onRefresh();
+          }
+          break;
+        case "onLoadMore":
+          if (this._onLoadMore) {
+            this._onLoadMore();
+          }
+          break;
+        case "onScrollTop":
+          if (this._onScrollTop) {
+            this._onScrollTop();
+          }
+          break;
+        case "onScrollBottom":
+          if (this._onScrollBottom) {
+            this._onScrollBottom();
+          }
+          break;
+      }
+    }
+  }, {
+    key: "refreshView",
+    get: function get() {
+      return this._getAttribute("refreshView");
+    },
+    set: function set(value) {
+      this._setAttribute("refreshView", value);
+    }
+  }, {
+    key: "loadMoreView",
+    get: function get() {
+      return this._getAttribute("loadMoreView");
+    },
+    set: function set(value) {
+      this._setAttribute("loadMoreView", value);
+    }
+  }, {
+    key: "onLoadMore",
+    get: function get() {
+      return this._getAttribute("onLoadMore");
+    },
+    set: function set(value) {
+      this._onLoadMore = value;
+      this._setAttribute("onLoadMore", value);
+    }
+  }, {
+    key: "onRefresh",
+    get: function get() {
+      return this._getAttribute("onRefresh");
+    },
+    set: function set(value) {
+      this._onRefresh = value;
+      this._setAttribute("onRefresh", value);
+    }
+  }, {
+    key: "bounces",
+    get: function get() {
+      return this._getAttribute("bounces");
+    },
+    set: function set(value) {
+      this._setAttribute("bounces", value);
+    }
+  }, {
+    key: "showScrollBar",
+    get: function get() {
+      return this._getAttribute("showScrollBar");
+    },
+    set: function set(value) {
+      this._setAttribute("showScrollBar", value);
+    }
+  }, {
+    key: "scrollTo",
+    value: function scrollTo(x, y) {
+      this.call("scrollTo", x, y);
+    }
+  }, {
+    key: "scrollBy",
+    value: function scrollBy(dx, dy) {
+      this.call("scrollBy", dx, dy);
+    }
+  }, {
+    key: "scrollToTop",
+    value: function scrollToTop() {
+      this.call("scrollToTop");
+    }
+  }, {
+    key: "scrollToBottom",
+    value: function scrollToBottom() {
+      this.call("scrollToBottom");
+    }
+  }, {
+    key: "setOnScrollToTopListener",
+    value: function setOnScrollToTopListener(callback) {
+      this._onScrollTop = callback;
+    }
+  }, {
+    key: "setOnScrollToBottomListener",
+    value: function setOnScrollToBottomListener(callback) {
+      this._onScrollBottom = callback;
+    }
+  }, {
+    key: "stopPullRefresh",
+    value: function stopPullRefresh() {
+      this.call("stopPullRefresh");
+    }
+  }, {
+    key: "stopLoadMore",
+    value: function stopLoadMore(enable) {
+      this.call("stopLoadMore", enable);
+    }
+  }, {
+    key: "addEventListener",
+    value: function addEventListener(eventName, eventListener, useCapture) {
+      (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Scroller.prototype), "addEventListener", this).call(this, eventName, eventListener, useCapture);
+    }
+  }]);
+}(LifeCycleElement);
+var TextArea = /*#__PURE__*/function (_HummerElement9) {
+  function TextArea() {
+    var _this15;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, TextArea);
+    _this15 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, TextArea, ["TextArea", name, Object.assign(Object.assign({}, props), {
+      viewId: id
+    })]);
+    _this15._initAttributes({
+      text: '',
+      placeholder: '',
+      focused: 'false'
+    });
+    _this15.addEventListener('input', function (event) {
+      _this15._setAttribute("text", event.text, false);
+    });
+    return _this15;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(TextArea, _HummerElement9);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(TextArea, [{
+    key: "style",
+    set: function set(value) {
+      this.setStyle(value, false);
+    }
+  }, {
+    key: "text",
+    get: function get() {
+      return this._getAttribute('text');
+    },
+    set: function set(value) {
+      this._setAttribute("text", value);
+    }
+  }, {
+    key: "placeholder",
+    get: function get() {
+      return this._getAttribute('placeholder');
+    },
+    set: function set(value) {
+      this._setAttribute("placeholder", value);
+    }
+  }, {
+    key: "focused",
+    get: function get() {
+      return this._getAttribute('focused');
+    },
+    set: function set(value) {
+      this._setAttribute("focused", value);
+    }
+  }]);
+}(HummerElement);
+var HummerComponent = /*#__PURE__*/function (_EventTarget2) {
+  function HummerComponent(tag, props) {
+    var _this16;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, HummerComponent);
+    _this16 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, HummerComponent, [tag, true, props]);
+    _this16.bindEventTarget();
+    return _this16;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(HummerComponent, _EventTarget2);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(HummerComponent);
+}(EventTarget);
+var HUMMER$7 = __Hummer__;
+var HummerApi = /*#__PURE__*/function (_HummerComponent) {
+  function HummerApi() {
+    var _this17;
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, HummerApi);
+    _this17 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, HummerApi, ["Hummer", props]);
+    _this17._rootElement = undefined;
+    return _this17;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(HummerApi, _HummerComponent);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(HummerApi, [{
+    key: "getEnv",
+    value: function getEnv() {
+      return this.call("getEnv");
+    }
+  }, {
+    key: "getPageInfo",
+    value: function getPageInfo() {
+      return this.call("getPageInfo");
+    }
+  }, {
+    key: "setPageResult",
+    value: function setPageResult(param) {
+      return this.call("setPageResult", param);
+    }
+  }], [{
+    key: "newInstance",
+    value: function newInstance() {
+      return new HummerApi();
+    }
+  }, {
+    key: "checkInstance",
+    value: function checkInstance() {
+      if (!HUMMER$7.__hummerApi__) {
+        HUMMER$7.__hummerApi__ = HummerApi.newInstance();
+      }
+    }
+  }, {
+    key: "instance",
+    get: function get() {
+      return HUMMER$7.__hummerApi__;
+    }
+  }, {
+    key: "getEnv",
+    value: function getEnv() {
+      HummerApi.checkInstance();
+      return HummerApi.instance.getEnv();
+    }
+  }, {
+    key: "getPageInfo",
+    value: function getPageInfo() {
+      HummerApi.checkInstance();
+      return HummerApi.instance.getPageInfo();
+    }
+  }, {
+    key: "setPageResult",
+    value: function setPageResult(param) {
+      HummerApi.checkInstance();
+      return HummerApi.instance.setPageResult(param);
+    }
+  }, {
+    key: "rootElement",
+    get: function get() {
+      HummerApi.checkInstance();
+      return HummerApi.instance._rootElement;
+    },
+    set: function set(rootElement) {
+      HummerApi.checkInstance();
+      HummerApi.instance._rootElement = rootElement;
+    }
+  }]);
+}(HummerComponent);
+var HUMMER$6 = __Hummer__;
+var NotifyCenter = /*#__PURE__*/function (_HummerComponent2) {
+  function NotifyCenter() {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, NotifyCenter);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, NotifyCenter, ["NotifyCenter", props]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(NotifyCenter, _HummerComponent2);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(NotifyCenter, null, [{
+    key: "checkInstance",
+    value: function checkInstance() {
+      if (!HUMMER$6.__notifyCenter__) {
+        HUMMER$6.__notifyCenter__ = NotifyCenter.newInstance();
+      }
+    }
+  }, {
+    key: "newInstance",
+    value: function newInstance() {
+      return new NotifyCenter();
+    }
+  }, {
+    key: "instance",
+    get: function get() {
+      return HUMMER$6.__notifyCenter__;
+    }
+  }, {
+    key: "addEventListener",
+    value: function addEventListener(event, callback) {
+      NotifyCenter.checkInstance();
+      NotifyCenter.instance.addEventListener(event, callback);
+    }
+  }, {
+    key: "removeEventListener",
+    value: function removeEventListener(event, callback) {
+      NotifyCenter.checkInstance();
+      if (!callback) {
+        NotifyCenter.instance.call("removeAllEventListener", event);
+      } else {
+        NotifyCenter.instance.removeEventListener(event, callback);
+      }
+    }
+  }, {
+    key: "triggerEvent",
+    value: function triggerEvent(event, value) {
+      NotifyCenter.checkInstance();
+      NotifyCenter.instance.call("triggerEvent", event, value);
+    }
+  }]);
+}(HummerComponent);
+var _Hummer__2 = __Hummer__,
+  _Document_ = _Hummer__2.document;
+var Hummer = /*#__PURE__*/function () {
+  function Hummer() {
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Hummer);
+  }
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Hummer, null, [{
+    key: "env",
+    get: function get() {
+      return HummerApi.getEnv();
+    }
+  }, {
+    key: "notifyCenter",
+    get: function get() {
+      return NotifyCenter;
+    }
+  }, {
+    key: "pageInfo",
+    get: function get() {
+      return HummerApi.getPageInfo();
+    }
+  }, {
+    key: "pageResult",
+    set: function set(param) {
+      HummerApi.setPageResult(param);
+    }
+  }, {
+    key: "createElement",
+    value: function createElement(tag) {
+      switch (tag) {
+        case "anchor":
+          return new Anchor();
+        case "view":
+          return new View();
+        case "text":
+          return new Text();
+        case "image":
+          return new Image();
+        case "button":
+          return new Button();
+        case "canvas":
+          return new Canvas();
+        case "list":
+          return new List();
+        case "viewpager":
+          return new ViewPager();
+        case "scroller":
+          return new Scroller();
+        case "input":
+          return new Input();
+        case "textarea":
+          return new TextArea();
+      }
+      return undefined;
+    }
+  }, {
+    key: "render",
+    value: function render(element) {
+      HummerApi.rootElement = element;
+      _Document_.render(element.getThis());
+    }
+  }, {
+    key: "getRootView",
+    value: function getRootView() {
+      return HummerApi.rootElement;
+    }
+  }]);
+}();
+var BasicAnimation = /*#__PURE__*/function () {
+  function BasicAnimation(property) {
+    var _this18 = this;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, BasicAnimation);
+    this.value = '';
+    this.duration = 0;
+    this.delay = 0;
+    this.repeatCount = 1;
+    this.easing = 'ease';
+    this.type = 'basic';
+    this.property = 'position';
+    this._startFunc = undefined;
+    this._endFunc = undefined;
+    this._startCallback = function () {
+      if (_this18._startFunc) {
+        _this18._startFunc();
+      }
+    };
+    this._endCallback = function () {
+      if (_this18._endFunc) {
+        _this18._endFunc();
+      }
+    };
+    this.property = property;
+  }
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(BasicAnimation, [{
+    key: "startCallback",
+    get: function get() {
+      return this._startCallback;
+    }
+  }, {
+    key: "endCallback",
+    get: function get() {
+      return this._endCallback;
+    }
+  }, {
+    key: "_onEventListener",
+    value: function _onEventListener(event, callback) {
+      switch (event) {
+        case 'start':
+          this._startFunc = callback;
+          break;
+        case 'end':
+          this._endFunc = callback;
+          break;
+      }
+    }
+  }, {
+    key: "on",
+    value: function on(event, eventListener) {
+      this._onEventListener(event, eventListener);
+    }
+  }]);
+}();
+var KeyframeAnimation = /*#__PURE__*/function () {
+  function KeyframeAnimation(property) {
+    var _this19 = this;
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, KeyframeAnimation);
+    this.keyframes = [];
+    this.duration = 0;
+    this.delay = 0;
+    this.repeatCount = 1;
+    this.easing = 'ease';
+    this.type = 'keyframe';
+    this.property = 'position';
+    this._startFunc = undefined;
+    this._endFunc = undefined;
+    this._startCallback = function () {
+      if (_this19._startFunc) {
+        _this19._startFunc();
+      }
+    };
+    this._endCallback = function () {
+      if (_this19._endFunc) {
+        _this19._endFunc();
+      }
+    };
+    this.property = property;
+  }
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(KeyframeAnimation, [{
+    key: "startCallback",
+    get: function get() {
+      return this._startCallback;
+    }
+  }, {
+    key: "endCallback",
+    get: function get() {
+      return this._endCallback;
+    }
+  }, {
+    key: "_onEventListener",
+    value: function _onEventListener(event, callback) {
+      switch (event) {
+        case 'start':
+          this._startFunc = callback;
+          break;
+        case 'end':
+          this._endFunc = callback;
+          break;
+      }
+    }
+  }, {
+    key: "on",
+    value: function on(event, eventListener) {
+      this._onEventListener(event, eventListener);
+    }
+  }]);
+}();
+var HUMMER$5 = __Hummer__;
+var Memory = /*#__PURE__*/function (_HummerComponent3) {
+  function Memory() {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Memory);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Memory, ["Memory", props]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Memory, _HummerComponent3);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Memory, [{
+    key: "set",
+    value: function set(key, value, cb) {
+      this.call("set", key, value, cb);
+    }
+  }, {
+    key: "get",
+    value: function get(key, cb) {
+      return this.call("get", key, cb);
+    }
+  }, {
+    key: "remove",
+    value: function remove(key, cb) {
+      this.call("remove", key, cb);
+    }
+  }, {
+    key: "removeAll",
+    value: function removeAll(cb) {
+      this.call("removeAll", cb);
+    }
+  }, {
+    key: "exist",
+    value: function exist(key, cb) {
+      return this.call("exist", key, cb);
+    }
+  }], [{
+    key: "newInstance",
+    value: function newInstance() {
+      return new Memory();
+    }
+  }, {
+    key: "checkInstance",
+    value: function checkInstance() {
+      if (!HUMMER$5.__memory__) {
+        HUMMER$5.__memory__ = Memory.newInstance();
+      }
+    }
+  }, {
+    key: "instance",
+    get: function get() {
+      return HUMMER$5.__memory__;
+    }
+  }, {
+    key: "set",
+    value: function set(key, value, cb) {
+      Memory.checkInstance();
+      Memory.instance.set(key, value, cb);
+    }
+  }, {
+    key: "get",
+    value: function get(key, cb) {
+      Memory.checkInstance();
+      return Memory.instance.get(key, cb);
+    }
+  }, {
+    key: "remove",
+    value: function remove(key, cb) {
+      Memory.checkInstance();
+      Memory.instance.remove(key, cb);
+    }
+  }, {
+    key: "removeAll",
+    value: function removeAll(cb) {
+      Memory.checkInstance();
+      Memory.instance.removeAll(cb);
+    }
+  }, {
+    key: "exist",
+    value: function exist(key, cb) {
+      Memory.checkInstance();
+      return Memory.instance.exist(key, cb);
+    }
+  }]);
+}(HummerComponent);
+var HUMMER$4 = __Hummer__;
+var Dialog = /*#__PURE__*/function (_HummerComponent4) {
+  function Dialog() {
+    var _this20;
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Dialog);
+    _this20 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Dialog, ["Dialog", props]);
+    _this20._cancelable = true;
+    _this20._lowLayer = false;
+    return _this20;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Dialog, _HummerComponent4);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Dialog, [{
+    key: "cancelable",
+    set: function set(value) {
+      this._cancelable = value;
+      this.call("setCancelable", value);
+    }
+  }, {
+    key: "lowLayer",
+    set: function set(value) {
+      this._lowLayer = value;
+      this.call("setLowLayer", value);
+    }
+  }, {
+    key: "alert",
+    value: function alert(msg, btnText, callback) {
+      this.call("alert", msg, btnText, callback);
+    }
+  }, {
+    key: "confirm",
+    value: function confirm(title, msg, okBtnText, cancelBtnText, okCallback, cancelCallback) {
+      this.call("confirm", title, msg, okBtnText, cancelBtnText, okCallback, cancelCallback);
+    }
+  }, {
+    key: "loading",
+    value: function loading(msg) {
+      this.call("loading", msg);
+    }
+  }, {
+    key: "custom",
+    value: function custom(view) {
+      this.call("custom", view);
+    }
+  }, {
+    key: "dismiss",
+    value: function dismiss() {
+      this.call("dismiss");
+    }
+  }], [{
+    key: "newInstance",
+    value: function newInstance() {
+      return new Dialog();
+    }
+  }, {
+    key: "checkInstance",
+    value: function checkInstance() {
+      if (!HUMMER$4.__dialog__) {
+        HUMMER$4.__dialog__ = Dialog.newInstance();
+      }
+    }
+  }, {
+    key: "instance",
+    get: function get() {
+      return HUMMER$4.__dialog__;
+    }
+  }, {
+    key: "alert",
+    value: function alert(msg, btnText, callback) {
+      Dialog.checkInstance();
+      Dialog.instance.alert(msg, btnText, callback);
+    }
+  }, {
+    key: "confirm",
+    value: function confirm(title, msg, okBtnText, cancelBtnText, okCallback, cancelCallback) {
+      Dialog.checkInstance();
+      Dialog.instance.confirm(title, msg, okBtnText, cancelBtnText, okCallback, cancelCallback);
+    }
+  }, {
+    key: "loading",
+    value: function loading(msg) {
+      Dialog.checkInstance();
+      Dialog.instance.loading(msg);
+    }
+  }, {
+    key: "custom",
+    value: function custom(view) {
+      Dialog.checkInstance();
+      Dialog.instance.custom(view);
+    }
+  }, {
+    key: "dismiss",
+    value: function dismiss() {
+      Dialog.checkInstance();
+      Dialog.instance.dismiss();
+    }
+  }]);
+}(HummerComponent);
+var HUMMER$3 = __Hummer__;
+var Toast = /*#__PURE__*/function (_HummerComponent5) {
+  function Toast() {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Toast);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Toast, ["Toast", props]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Toast, _HummerComponent5);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Toast, [{
+    key: "show",
+    value: function show(msg, duration) {
+      this.call("show", msg, duration);
+    }
+  }, {
+    key: "custom",
+    value: function custom(view, duration) {
+      this.call("custom", view, duration);
+    }
+  }], [{
+    key: "newInstance",
+    value: function newInstance() {
+      return new Toast();
+    }
+  }, {
+    key: "checkInstance",
+    value: function checkInstance() {
+      if (!HUMMER$3.__toast__) {
+        HUMMER$3.__toast__ = Toast.newInstance();
+      }
+    }
+  }, {
+    key: "instance",
+    get: function get() {
+      return HUMMER$3.__toast__;
+    }
+  }, {
+    key: "show",
+    value: function show(msg, duration) {
+      Toast.checkInstance();
+      Toast.instance.show(msg, duration);
+    }
+  }, {
+    key: "custom",
+    value: function custom(view, duration) {
+      Toast.checkInstance();
+      Toast.instance.custom(view, duration);
+    }
+  }]);
+}(HummerComponent);
+var HUMMER$2 = __Hummer__;
+var Navigator = /*#__PURE__*/function (_HummerComponent6) {
+  function Navigator() {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Navigator);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Navigator, ["Navigator", props]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Navigator, _HummerComponent6);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Navigator, [{
+    key: "openPage",
+    value: function openPage(pageInfo, callback) {
+      this.call("openPage", pageInfo, callback);
+    }
+  }, {
+    key: "popPage",
+    value: function popPage(pageInfo) {
+      this.call("popPage", pageInfo);
+    }
+  }, {
+    key: "popToPage",
+    value: function popToPage(pageInfo) {
+      this.call("popToPage", pageInfo);
+    }
+  }, {
+    key: "popToRootPage",
+    value: function popToRootPage(pageInfo) {
+      this.call("popToRootPage", pageInfo);
+    }
+  }, {
+    key: "popBack",
+    value: function popBack(count, pageInfo) {
+      this.call("popBack", count, pageInfo);
+    }
+  }], [{
+    key: "newInstance",
+    value: function newInstance() {
+      return new Navigator();
+    }
+  }, {
+    key: "checkInstance",
+    value: function checkInstance() {
+      if (!HUMMER$2.__navigator__) {
+        HUMMER$2.__navigator__ = Navigator.newInstance();
+      }
+    }
+  }, {
+    key: "instance",
+    get: function get() {
+      return HUMMER$2.__navigator__;
+    }
+  }, {
+    key: "openPage",
+    value: function openPage(pageInfo, callback) {
+      Navigator.checkInstance();
+      Navigator.instance.openPage(pageInfo, callback);
+    }
+  }, {
+    key: "popPage",
+    value: function popPage(pageInfo) {
+      Navigator.checkInstance();
+      Navigator.instance.popPage(pageInfo);
+    }
+  }, {
+    key: "popToPage",
+    value: function popToPage(pageInfo) {
+      Navigator.checkInstance();
+      Navigator.instance.popToPage(pageInfo);
+    }
+  }, {
+    key: "popToRootPage",
+    value: function popToRootPage(pageInfo) {
+      Navigator.checkInstance();
+      Navigator.instance.popToRootPage(pageInfo);
+    }
+  }, {
+    key: "popBack",
+    value: function popBack(count, pageInfo) {
+      Navigator.checkInstance();
+      Navigator.instance.popBack(count, pageInfo);
+    }
+  }]);
+}(HummerComponent);
+var HUMMER$1 = __Hummer__;
+var Storage = /*#__PURE__*/function (_HummerComponent7) {
+  function Storage() {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Storage);
+    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Storage, ["Storage", props]);
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Storage, _HummerComponent7);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Storage, [{
+    key: "set",
+    value: function set(key, value, cb) {
+      return this.call("set", key, value, cb);
+    }
+  }, {
+    key: "get",
+    value: function get(key, cb) {
+      return this.call("get", key, cb);
+    }
+  }, {
+    key: "remove",
+    value: function remove(key, cb) {
+      return this.call("remove", key, cb);
+    }
+  }, {
+    key: "removeAll",
+    value: function removeAll(cb) {
+      return this.call("removeAll", cb);
+    }
+  }, {
+    key: "exist",
+    value: function exist(key, cb) {
+      return this.call("exist", key, cb);
+    }
+  }], [{
+    key: "newInstance",
+    value: function newInstance() {
+      return new Storage();
+    }
+  }, {
+    key: "checkInstance",
+    value: function checkInstance() {
+      if (!HUMMER$1.__storage__) {
+        HUMMER$1.__storage__ = Storage.newInstance();
+      }
+    }
+  }, {
+    key: "instance",
+    get: function get() {
+      return HUMMER$1.__storage__;
+    }
+  }, {
+    key: "set",
+    value: function set(key, value, cb) {
+      Storage.checkInstance();
+      return Storage.instance.set(key, value, cb);
+    }
+  }, {
+    key: "get",
+    value: function get(key, cb) {
+      Storage.checkInstance();
+      return Storage.instance.get(key, cb);
+    }
+  }, {
+    key: "remove",
+    value: function remove(key, cb) {
+      Storage.checkInstance();
+      return Storage.instance.remove(key, cb);
+    }
+  }, {
+    key: "removeAll",
+    value: function removeAll(cb) {
+      Storage.checkInstance();
+      return Storage.instance.removeAll(cb);
+    }
+  }, {
+    key: "exist",
+    value: function exist(key, cb) {
+      Storage.checkInstance();
+      return Storage.instance.exist(key, cb);
+    }
+  }]);
+}(HummerComponent);
+var HUMMER = __Hummer__;
+var Request = /*#__PURE__*/function (_HummerComponent8) {
+  function Request() {
+    var _this21;
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Request);
+    _this21 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Request, ["Request", props]);
+    _this21._url = '';
+    _this21._method = 'POST';
+    _this21._timeout = 10000;
+    _this21._header = {};
+    _this21._param = {};
+    return _this21;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Request, _HummerComponent8);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(Request, [{
+    key: "url",
+    set: function set(value) {
+      this._url = value;
+      this.call("setUrl", value);
+    }
+  }, {
+    key: "method",
+    set: function set(value) {
+      this._method = value;
+      this.call("setMethod", value);
+    }
+  }, {
+    key: "timeout",
+    set: function set(value) {
+      this._timeout = value;
+      this.call("setTimeout", value);
+    }
+  }, {
+    key: "header",
+    set: function set(value) {
+      this._header = value;
+      this.call("setHeader", value);
+    }
+  }, {
+    key: "param",
+    set: function set(value) {
+      this._param = value;
+      this.call("setParam", value);
+    }
+  }, {
+    key: "send",
+    value: function send(callback) {
+      this.call("send", callback);
+    }
+  }], [{
+    key: "newInstance",
+    value: function newInstance() {
+      return new Request();
+    }
+  }, {
+    key: "checkInstance",
+    value: function checkInstance() {
+      if (!HUMMER.__request__) {
+        HUMMER.__request__ = Request.newInstance();
+      }
+    }
+  }, {
+    key: "instance",
+    get: function get() {
+      return HUMMER.__request__;
+    }
+  }, {
+    key: "send",
+    value: function send(callback) {
+      Request.checkInstance();
+      Request.instance.send(callback);
+    }
+  }]);
+}(HummerComponent);
+__GLOBAL__.Hummer = {
+  getRootView() {
+    return Hummer.getRootView();
+  }
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/index.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/index.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BaseTransition: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.BaseTransition),
+/* harmony export */   BaseTransitionPropsValidators: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.BaseTransitionPropsValidators),
+/* harmony export */   Comment: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.Comment),
+/* harmony export */   EffectScope: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.EffectScope),
+/* harmony export */   Fragment: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment),
+/* harmony export */   KeepAlive: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.KeepAlive),
+/* harmony export */   MatchType: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.MatchType),
+/* harmony export */   Page: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.Page),
+/* harmony export */   ReactiveEffect: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.ReactiveEffect),
+/* harmony export */   RelationType: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.RelationType),
+/* harmony export */   RuleKeyMap: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.RuleKeyMap),
+/* harmony export */   ScrollPage: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.ScrollPage),
+/* harmony export */   Static: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.Static),
+/* harmony export */   Suspense: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.Suspense),
+/* harmony export */   Teleport: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.Teleport),
+/* harmony export */   Text: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.Text),
+/* harmony export */   appContext: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.appContext),
+/* harmony export */   assertNumber: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.assertNumber),
+/* harmony export */   callWithAsyncErrorHandling: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.callWithAsyncErrorHandling),
+/* harmony export */   callWithErrorHandling: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.callWithErrorHandling),
+/* harmony export */   camelize: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.camelize),
+/* harmony export */   capitalize: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.capitalize),
+/* harmony export */   cloneVNode: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.cloneVNode),
+/* harmony export */   collectStyle: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.collectStyle),
+/* harmony export */   compatUtils: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.compatUtils),
+/* harmony export */   component: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.component),
+/* harmony export */   computed: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.computed),
+/* harmony export */   container: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.container),
+/* harmony export */   createApp: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createApp),
+/* harmony export */   createBlock: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createBlock),
+/* harmony export */   createCommentVNode: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode),
+/* harmony export */   createElementBlock: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createElementBlock),
+/* harmony export */   createElementVNode: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createElementVNode),
+/* harmony export */   createHydrationRenderer: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createHydrationRenderer),
+/* harmony export */   createPropsRestProxy: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createPropsRestProxy),
+/* harmony export */   createRenderer: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createRenderer),
+/* harmony export */   createRootContainer: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createRootContainer),
+/* harmony export */   createSlots: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createSlots),
+/* harmony export */   createStaticVNode: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode),
+/* harmony export */   createTextVNode: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createTextVNode),
+/* harmony export */   createVNode: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.createVNode),
+/* harmony export */   customRef: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.customRef),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   defineAsyncComponent: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.defineAsyncComponent),
+/* harmony export */   defineComponent: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.defineComponent),
+/* harmony export */   defineEmits: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.defineEmits),
+/* harmony export */   defineExpose: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.defineExpose),
+/* harmony export */   defineModel: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.defineModel),
+/* harmony export */   defineOptions: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.defineOptions),
+/* harmony export */   defineProps: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.defineProps),
+/* harmony export */   defineSlots: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.defineSlots),
+/* harmony export */   devtools: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.devtools),
+/* harmony export */   directive: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.directive),
+/* harmony export */   effect: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.effect),
+/* harmony export */   effectScope: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.effectScope),
+/* harmony export */   getClassStyle: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.getClassStyle),
+/* harmony export */   getComponent: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.getComponent),
+/* harmony export */   getCurrentInstance: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.getCurrentInstance),
+/* harmony export */   getCurrentScope: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.getCurrentScope),
+/* harmony export */   getTransitionRawChildren: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.getTransitionRawChildren),
+/* harmony export */   guardReactiveProps: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.guardReactiveProps),
+/* harmony export */   h: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.h),
+/* harmony export */   handleError: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.handleError),
+/* harmony export */   hasInjectionContext: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.hasInjectionContext),
+/* harmony export */   initCustomFormatter: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.initCustomFormatter),
+/* harmony export */   inject: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.inject),
+/* harmony export */   isMemoSame: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.isMemoSame),
+/* harmony export */   isProxy: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.isProxy),
+/* harmony export */   isReactive: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.isReactive),
+/* harmony export */   isReadonly: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.isReadonly),
+/* harmony export */   isRef: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.isRef),
+/* harmony export */   isRuntimeOnly: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.isRuntimeOnly),
+/* harmony export */   isShallow: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.isShallow),
+/* harmony export */   isVNode: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.isVNode),
+/* harmony export */   markRaw: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.markRaw),
+/* harmony export */   mergeDefaults: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.mergeDefaults),
+/* harmony export */   mergeModels: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.mergeModels),
+/* harmony export */   mergeProps: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.mergeProps),
+/* harmony export */   mixin: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.mixin),
+/* harmony export */   nextTick: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.nextTick),
+/* harmony export */   normalizeClass: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.normalizeClass),
+/* harmony export */   normalizeProps: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.normalizeProps),
+/* harmony export */   normalizeStyle: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle),
+/* harmony export */   onActivated: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onActivated),
+/* harmony export */   onBeforeMount: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onBeforeMount),
+/* harmony export */   onBeforeUnmount: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onBeforeUnmount),
+/* harmony export */   onBeforeUpdate: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onBeforeUpdate),
+/* harmony export */   onDeactivated: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onDeactivated),
+/* harmony export */   onErrorCaptured: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onErrorCaptured),
+/* harmony export */   onMounted: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onMounted),
+/* harmony export */   onRenderTracked: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onRenderTracked),
+/* harmony export */   onRenderTriggered: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onRenderTriggered),
+/* harmony export */   onScopeDispose: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onScopeDispose),
+/* harmony export */   onServerPrefetch: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onServerPrefetch),
+/* harmony export */   onUnmounted: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onUnmounted),
+/* harmony export */   onUpdated: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.onUpdated),
+/* harmony export */   openBlock: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.openBlock),
+/* harmony export */   popScopeId: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.popScopeId),
+/* harmony export */   provide: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.provide),
+/* harmony export */   proxyRefs: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.proxyRefs),
+/* harmony export */   pushScopeId: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.pushScopeId),
+/* harmony export */   queuePostFlushCb: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.queuePostFlushCb),
+/* harmony export */   reactive: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.reactive),
+/* harmony export */   readonly: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.readonly),
+/* harmony export */   ref: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.ref),
+/* harmony export */   register: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.register),
+/* harmony export */   registerRuntimeCompiler: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.registerRuntimeCompiler),
+/* harmony export */   render: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   renderApp: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.renderApp),
+/* harmony export */   renderCustomSlot: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.renderCustomSlot),
+/* harmony export */   renderList: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.renderList),
+/* harmony export */   renderSlot: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.renderSlot),
+/* harmony export */   resolveComponent: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.resolveComponent),
+/* harmony export */   resolveDirective: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.resolveDirective),
+/* harmony export */   resolveDynamicComponent: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent),
+/* harmony export */   resolveFilter: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.resolveFilter),
+/* harmony export */   resolveTransitionHooks: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.resolveTransitionHooks),
+/* harmony export */   setBlockTracking: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.setBlockTracking),
+/* harmony export */   setDevtoolsHook: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.setDevtoolsHook),
+/* harmony export */   setTransitionHooks: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.setTransitionHooks),
+/* harmony export */   shallowReactive: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.shallowReactive),
+/* harmony export */   shallowReadonly: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.shallowReadonly),
+/* harmony export */   shallowRef: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.shallowRef),
+/* harmony export */   ssrContextKey: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.ssrContextKey),
+/* harmony export */   ssrUtils: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.ssrUtils),
+/* harmony export */   stop: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.stop),
+/* harmony export */   toDisplayString: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.toDisplayString),
+/* harmony export */   toHandlerKey: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.toHandlerKey),
+/* harmony export */   toHandlers: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.toHandlers),
+/* harmony export */   toRaw: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.toRaw),
+/* harmony export */   toRef: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.toRef),
+/* harmony export */   toRefs: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.toRefs),
+/* harmony export */   toValue: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.toValue),
+/* harmony export */   transformVNodeArgs: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.transformVNodeArgs),
+/* harmony export */   triggerRef: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.triggerRef),
+/* harmony export */   unref: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.unref),
+/* harmony export */   use: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.use),
+/* harmony export */   useAttrs: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.useAttrs),
+/* harmony export */   useModel: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.useModel),
+/* harmony export */   useSSRContext: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.useSSRContext),
+/* harmony export */   useSlots: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.useSlots),
+/* harmony export */   useTransitionState: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.useTransitionState),
+/* harmony export */   vAnimation: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.vAnimation),
+/* harmony export */   vModelText: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.vModelText),
+/* harmony export */   vShow: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.vShow),
+/* harmony export */   version: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.version),
+/* harmony export */   warn: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.warn),
+/* harmony export */   watch: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.watch),
+/* harmony export */   watchEffect: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.watchEffect),
+/* harmony export */   watchPostEffect: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.watchPostEffect),
+/* harmony export */   watchSyncEffect: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.watchSyncEffect),
+/* harmony export */   withAsyncContext: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.withAsyncContext),
+/* harmony export */   withCtx: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.withCtx),
+/* harmony export */   withDefaults: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.withDefaults),
+/* harmony export */   withDirectives: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.withDirectives),
+/* harmony export */   withMemo: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.withMemo),
+/* harmony export */   withScopeId: () => (/* reexport safe */ _runtime__WEBPACK_IMPORTED_MODULE_0__.withScopeId)
+/* harmony export */ });
+/* harmony import */ var _runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./runtime */ "./node_modules/@didi/tenon-vue-next/dist/runtime/index.js");
+/* harmony import */ var _utils_style__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/style */ "./node_modules/@didi/tenon-vue-next/dist/utils/style.js");
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  render: _runtime__WEBPACK_IMPORTED_MODULE_0__.render
+});
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/api.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/api.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   component: () => (/* binding */ component),
+/* harmony export */   context: () => (/* binding */ context),
+/* harmony export */   directive: () => (/* binding */ directive),
+/* harmony export */   install: () => (/* binding */ install),
+/* harmony export */   mixin: () => (/* binding */ mixin),
+/* harmony export */   use: () => (/* binding */ use)
+/* harmony export */ });
+var context = {
+  plugins: [],
+  mixins: [],
+  components: [],
+  directives: []
+};
+var use = function use(plugin, options) {
+  context.plugins.push({
+    plugin: plugin,
+    options: options
+  });
+};
+var mixin = function mixin(_mixin) {
+  context.mixins.push({
+    mixin: _mixin
+  });
+};
+var component = function component(name, _component) {
+  context.components.push({
+    name: name,
+    component: _component
+  });
+};
+var directive = function directive(name, _directive) {
+  context.directives.push({
+    name: name,
+    directive: _directive
+  });
+};
+var install = function install(app) {
+  context.plugins.forEach(function (item) {
+    app.use(item.plugin, item.options);
+  });
+  context.mixins.forEach(function (item) {
+    app.mixin(item.mixin);
+  });
+  context.components.forEach(function (item) {
+    app.component(item.name, item.component);
+  });
+  context.directives.forEach(function (item) {
+    app.directive(item.name, item.directive);
+  });
+};
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vAnimation.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vAnimation.js ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   vAnimation: () => (/* binding */ vAnimation)
+/* harmony export */ });
+var vAnimation = {
+  mounted(el, _ref) {
+    var value = _ref.value;
+    value && el.handleAnimation(value);
+  },
+  updated(el, _ref2) {
+    var value = _ref2.value,
+      oldValue = _ref2.oldValue;
+    if (!value || value === oldValue) {
+      return;
+    } else {
+      el.handleAnimation(value);
+    }
+  },
+  beforeUnmount(el, _ref3) {
+    var value = _ref3.value;
+    console.log('Animation Unmounted');
+  }
+};
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vModel.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vModel.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   vModelText: () => (/* binding */ vModelText)
+/* harmony export */ });
+/* harmony import */ var _utils_event__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/event */ "./node_modules/@didi/tenon-vue-next/dist/utils/event.js");
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+
+
+var getModelAssigner = function getModelAssigner(vnode) {
+  var fn = vnode.props['onUpdate:modelValue'];
+  return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isArray)(fn) ? function (value) {
+    return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.invokeArrayFns)(fn, value);
+  } : fn;
+};
+var vModelText = {
+  beforeMount(el, _ref, vnode) {
+    var value = _ref.value,
+      _ref$modifiers = _ref.modifiers,
+      lazy = _ref$modifiers.lazy,
+      trim = _ref$modifiers.trim,
+      number = _ref$modifiers.number;
+    el.text = value == null ? '' : value;
+    el._assign = getModelAssigner(vnode);
+    var castToNumber = !!number;
+    (0,_utils_event__WEBPACK_IMPORTED_MODULE_0__.addEventListener)(el, 'input', function (e) {
+      var domValue = e.text;
+      if (lazy) {
+        if (e.state === _utils_event__WEBPACK_IMPORTED_MODULE_0__.InputEventState.CONFIRMED || e.state === _utils_event__WEBPACK_IMPORTED_MODULE_0__.InputEventState.ENDED) {
+          var _value = transformValue(trim, castToNumber, domValue);
+          el._assign(_value);
+        }
+      } else {
+        if (e.state === _utils_event__WEBPACK_IMPORTED_MODULE_0__.InputEventState.CHANGED) {
+          var _value2 = transformValue(trim, castToNumber, domValue);
+          el._assign(_value2);
+        }
+      }
+    });
+  },
+  beforeUpdate(el, _ref2, vnode) {
+    var value = _ref2.value,
+      _ref2$modifiers = _ref2.modifiers,
+      trim = _ref2$modifiers.trim,
+      number = _ref2$modifiers.number;
+    el._assign = getModelAssigner(vnode);
+    if (el.focused) {
+      if (trim && el.text.trim() === value) {
+        return;
+      }
+      if (number && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.toNumber)(el.text) === value) {
+        return;
+      }
+    }
+    var newValue = value == null ? '' : value;
+    if (el.text !== newValue) {
+      el.text = newValue;
+    }
+  }
+};
+function transformValue(trim, castToNumber, value) {
+  var domValue = value;
+  if (trim) {
+    domValue = domValue.trim();
+  }
+  if (castToNumber) {
+    domValue = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.toNumber)(domValue);
+  }
+  return domValue;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vShow.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vShow.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   vShow: () => (/* binding */ vShow)
+/* harmony export */ });
+var DefaultDisplay = 'flex';
+var vShow = {
+  beforeMount(el, _ref, _ref2) {
+    var value = _ref.value;
+    var transition = _ref2.transition;
+    if (el.style.display === 'none') {
+      el._vod = '';
+    } else {
+      el._vod = el.style.display || DefaultDisplay;
+    }
+    if (transition && value) {
+      transition.beforeEnter(el);
+    } else {
+      setDisplay(el, value);
+    }
+  },
+  mounted(el, _ref3, _ref4) {
+    var value = _ref3.value;
+    var transition = _ref4.transition;
+    if (transition && value) {
+      transition.enter(el);
+    }
+  },
+  updated(el, _ref5, _ref6) {
+    var value = _ref5.value,
+      oldValue = _ref5.oldValue;
+    var transition = _ref6.transition;
+    if (!value === !oldValue) return;
+    if (transition) {
+      if (value) {
+        transition.beforeEnter(el);
+        setDisplay(el, true);
+        transition.enter(el);
+      } else {
+        transition.leave(el, function () {
+          setDisplay(el, false);
+        });
+      }
+    } else {
+      setDisplay(el, value);
+    }
+  },
+  beforeUnmount(el, _ref7) {
+    var value = _ref7.value;
+    setDisplay(el, value);
+  }
+};
+function setDisplay(el, value) {
+  el.style = {
+    display: value ? el._vod : 'none',
+    "flex-direction": el.style.flexDirection ? el.style.flexDirection : 'column'
+  };
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/attrs.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/attrs.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   patchAttrs: () => (/* binding */ patchAttrs)
+/* harmony export */ });
+function patchAttrs(el, key, prevValue, nextValue) {
+  el.setAttribute(key, nextValue);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/class.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/class.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   patchClass: () => (/* binding */ patchClass)
+/* harmony export */ });
+function patchClass(el, key, prevValue, nextValue) {
+  el.setAttribute(key, nextValue);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/events.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/events.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addEventListener: () => (/* binding */ addEventListener),
+/* harmony export */   getStaticEventName: () => (/* binding */ getStaticEventName),
+/* harmony export */   patchEvents: () => (/* binding */ patchEvents),
+/* harmony export */   removeEventListener: () => (/* binding */ removeEventListener)
+/* harmony export */ });
+var LongPress = 'longpress';
+function patchEvents(el, rawName, prevValue, nextValue) {
+  var instance = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
+  var event = getStaticEventName(rawName);
+  var value = nextValue;
+  var invoker = prevValue && prevValue.invoker;
+  if (nextValue && value) {
+    if (invoker) {
+      prevValue.invoker = null;
+      invoker.value = value;
+      nextValue.invoker = invoker;
+    } else {
+      addEventListener(el, event, createInvoker(value, instance));
+    }
+  } else if (invoker) {
+    removeEventListener(el, event, invoker);
+  }
+}
+function createInvoker(initialValue, instance) {
+  var invoker = function invoker() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    if (Array.isArray(initialValue)) {
+      initialValue.forEach(function (func) {
+        func.apply(instance, [].concat(args));
+      });
+    } else {
+      initialValue.apply(instance, [].concat(args));
+    }
+  };
+  invoker.value = initialValue;
+  initialValue.invoker = invoker;
+  return invoker;
+}
+function addEventListener(el, event, handler) {
+  el.addEventListener(event, handler);
+}
+function removeEventListener(el, event, handler) {
+  el.removeEventListener(event, handler);
+}
+function getStaticEventName(rawName) {
+  var eventName = rawName.slice(2).toLowerCase();
+  if (eventName === LongPress) {
+    eventName = "longPress";
+  }
+  return eventName;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/style.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/style.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   patchStyle: () => (/* binding */ patchStyle)
+/* harmony export */ });
+/* harmony import */ var _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hummer/tenon-utils */ "./node_modules/@hummer/tenon-utils/dist/tenon-utils.cjs.js");
+
+function patchStyle(el, key, prevValue, nextValue) {
+  var style = nextValue;
+  if (typeof nextValue === 'string') {
+    style = (0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.parseStringStyle)(nextValue);
+  }
+  style = _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.styleTransformer.transformStyle(style, el);
+  el.style = style;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/helper/animation-helper.js":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/helper/animation-helper.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AnimationStyle: () => (/* binding */ AnimationStyle),
+/* harmony export */   EasingType: () => (/* binding */ EasingType),
+/* harmony export */   handleAnimation: () => (/* binding */ handleAnimation),
+/* harmony export */   handleBasicAnimation: () => (/* binding */ handleBasicAnimation),
+/* harmony export */   handleKeyframeAnimation: () => (/* binding */ handleKeyframeAnimation),
+/* harmony export */   handleStepAnimation: () => (/* binding */ handleStepAnimation)
+/* harmony export */ });
+/* harmony import */ var _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hummer/tenon-utils */ "./node_modules/@hummer/tenon-utils/dist/tenon-utils.cjs.js");
+/* harmony import */ var _didi_hummer_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @didi/hummer-api */ "./node_modules/@didi/hummer-api/dist/hummer-api.es.js");
+
+
+var animationId = 0;
+var EasingType;
+(function (EasingType) {
+  EasingType["LINEAR"] = "linear";
+  EasingType["EASE"] = "ease";
+  EasingType["EASE_IN"] = "ease-in";
+  EasingType["EASE_OUT"] = "ease-out";
+  EasingType["EASE_IN_OUT"] = "ease-in-out";
+})(EasingType || (EasingType = {}));
+var AnimationStyle;
+(function (AnimationStyle) {
+  AnimationStyle["POSITION"] = "position";
+  AnimationStyle["SCALE"] = "scale";
+  AnimationStyle["SCALEX"] = "scaleX";
+  AnimationStyle["SCALEY"] = "scaleY";
+  AnimationStyle["ROTATIONX"] = "rotationX";
+  AnimationStyle["ROTATIONY"] = "rotationY";
+  AnimationStyle["ROTATIONZ"] = "rotationZ";
+  AnimationStyle["OPACITY"] = "opacity";
+  AnimationStyle["BACKGROUND_COLOR"] = "backgroundColor";
+  AnimationStyle["WIDTH"] = "width";
+  AnimationStyle["HEIGHT"] = "height";
+})(AnimationStyle || (AnimationStyle = {}));
+function handleKeyframeAnimation(node, animation) {
+  var id = animation.id,
+    onEnd = animation.onEnd,
+    onStart = animation.onStart,
+    keyframes = animation.keyframes,
+    _animation$repeatCoun = animation.repeatCount,
+    repeatCount = _animation$repeatCoun === void 0 ? 1 : _animation$repeatCoun,
+    duration = animation.duration,
+    delay = animation.delay,
+    _animation$easing = animation.easing,
+    easing = _animation$easing === void 0 ? 'linear' : _animation$easing;
+  var element = node.element;
+  var styles = keyframes[0].styles;
+  styles = transformStyle(styles);
+  var len = Object.keys(styles).length;
+  if (!id) {
+    id = animationId++;
+  }
+  Object.keys(styles).forEach(function (key, index) {
+    var ani = new _didi_hummer_api__WEBPACK_IMPORTED_MODULE_1__.KeyframeAnimation(key);
+    var tempKeyframes = [];
+    keyframes.forEach(function (keyframe) {
+      var transformedStyles = transformStyle(keyframe.styles);
+      if (transformedStyles[key] !== undefined) {
+        tempKeyframes.push({
+          percent: keyframe.percent,
+          value: transformedStyles[key]
+        });
+      }
+    });
+    ani.keyframes = tempKeyframes;
+    easing && (ani.easing = easing);
+    duration && (ani.duration = handleDuration(duration));
+    delay && (ani.delay = handleDelay(delay));
+    repeatCount && (ani.repeatCount = repeatCount);
+    if (index === 0) {
+      onStart && ani.on("start", function () {
+        onStart && onStart();
+      });
+    }
+    onEnd && ani.on("end", function () {
+      if (--len <= 0) {
+        onEnd && onEnd();
+      }
+    });
+    element.addAnimation(ani, id + "_" + key);
+  });
+}
+function handleBasicAnimation(node, animation) {
+  var styles = animation.styles,
+    id = animation.id,
+    duration = animation.duration,
+    delay = animation.delay,
+    repeatCount = animation.repeatCount,
+    easing = animation.easing,
+    onStart = animation.onStart,
+    onEnd = animation.onEnd;
+  var element = node.element;
+  styles = transformStyle(styles);
+  if (!id) {
+    id = animationId++;
+  }
+  var len = Object.keys(styles).length;
+  Object.keys(styles).forEach(function (key, index) {
+    var ani = new _didi_hummer_api__WEBPACK_IMPORTED_MODULE_1__.BasicAnimation(key);
+    ani.value = styles[key];
+    easing && (ani.easing = easing);
+    !isNaN(duration) && (ani.duration = handleDuration(duration));
+    !isNaN(delay) && (ani.delay = handleDelay(delay));
+    !isNaN(repeatCount) && (ani.repeatCount = repeatCount);
+    if (index === 0) {
+      onStart && ani.on("start", function () {
+        onStart && onStart();
+      });
+    }
+    onEnd && ani.on("end", function () {
+      if (--len <= 0) {
+        onEnd && onEnd();
+      }
+    });
+    element.addAnimation(ani, id + "_" + key);
+  });
+}
+function handleStepAnimation(node, animation) {
+  var id = animation.id,
+    onEnd = animation.onEnd,
+    onStart = animation.onStart,
+    steps = animation.steps;
+  var current = Promise.resolve();
+  steps && steps.forEach(function (step, index) {
+    var _onStart;
+    var _onEnd;
+    current = current.then(function () {
+      return new Promise(function (resolve) {
+        if (index === 0) {
+          _onStart = function _onStart() {
+            step.onStart && step.onStart();
+            onStart && onStart();
+          };
+        }
+        if (index === steps.length - 1) {
+          _onEnd = function _onEnd() {
+            step.onEnd && step.onEnd();
+            onEnd && onEnd();
+          };
+        } else {
+          _onEnd = function _onEnd() {
+            step.onEnd && step.onEnd();
+            resolve();
+          };
+        }
+        handleBasicAnimation(node, Object.assign(Object.assign({}, step), {
+          id: id + "_" + index,
+          onStart: _onStart,
+          onEnd: _onEnd
+        }));
+      });
+    });
+  });
+}
+function transformStyle(styles) {
+  Object.keys(styles).forEach(function (key) {
+    switch (key) {
+      case AnimationStyle.POSITION:
+        var position = styles[key];
+        styles[key] = {
+          x: (0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.transformUnitValue)(position.x),
+          y: (0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.transformUnitValue)(position.y)
+        };
+        break;
+      case AnimationStyle.BACKGROUND_COLOR:
+        styles[key] = (0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.getColor)(styles[key]);
+        break;
+      case AnimationStyle.WIDTH:
+        styles[key] = (0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.transformUnitValue)(styles[key]);
+        break;
+      case AnimationStyle.HEIGHT:
+        styles[key] = (0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.transformUnitValue)(styles[key]);
+        break;
+      default:
+        break;
+    }
+  });
+  return styles;
+}
+function handleDuration(duration) {
+  return duration / 1000;
+}
+function handleDelay(delay) {
+  return delay / 1000;
+}
+var handleAnimation = function handleAnimation(context, animation) {
+  if (animation.keyframes) {
+    handleKeyframeAnimation(context, animation);
+  }
+  if (animation.styles) {
+    handleBasicAnimation(context, animation);
+  }
+  if (animation.steps) {
+    handleStepAnimation(context, animation);
+  }
+};
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/helper/global-proxy-helper.js":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/helper/global-proxy-helper.js ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   GlobalProxy: () => (/* binding */ GlobalProxy),
+/* harmony export */   initGlobalProxy: () => (/* binding */ initGlobalProxy)
+/* harmony export */ });
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @hummer/tenon-utils */ "./node_modules/@hummer/tenon-utils/dist/tenon-utils.cjs.js");
+/* harmony import */ var _animation_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./animation-helper */ "./node_modules/@didi/tenon-vue-next/dist/runtime/helper/animation-helper.js");
+/* harmony import */ var _utils_style__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/style */ "./node_modules/@didi/tenon-vue-next/dist/utils/style.js");
+
+
+
+
+
+var initGlobalProxy = function initGlobalProxy() {
+  if (!__Hummer__.__globalProxy__) {
+    __Hummer__.__globalProxy__ = new GlobalProxy();
+  }
+};
+var GlobalProxy = /*#__PURE__*/function () {
+  function GlobalProxy() {
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, GlobalProxy);
+  }
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(GlobalProxy, [{
+    key: "setStyle",
+    value: function setStyle(element, style, flag) {
+      var tempStyle = this.hackForStyle(style, element);
+      var newStyle = Object.assign(Object.assign({}, tempStyle), element.style);
+      element.superSetStyle(newStyle);
+    }
+  }, {
+    key: "updateClassStyle",
+    value: function updateClassStyle(element, className) {
+      if (!element.__scopedIds.size) {
+        return;
+      }
+      element.__scopedIds.forEach(function (scopedId) {
+        var elementStyle = (0,_utils_style__WEBPACK_IMPORTED_MODULE_4__.getClassStyle)(element, className, true, scopedId);
+        if (Object.keys(elementStyle).length > 0) {
+          element.style = elementStyle;
+        }
+      });
+    }
+  }, {
+    key: "handleAnimation",
+    value: function handleAnimation(element, animation) {
+      (0,_animation_helper__WEBPACK_IMPORTED_MODULE_3__.handleAnimation)(element, animation);
+    }
+  }, {
+    key: "onHandleReceiveEvent",
+    value: function onHandleReceiveEvent(element) {
+      var event = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      event.target = {
+        dataset: element.dataset
+      };
+      return event;
+    }
+  }, {
+    key: "onMounted",
+    value: function onMounted(element) {}
+  }, {
+    key: "onDestroyed",
+    value: function onDestroyed(element) {}
+  }, {
+    key: "hackForStyle",
+    value: function hackForStyle(style, base) {
+      return _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_2__.styleDynamicTransformer.transformStyle(style, base);
+    }
+  }]);
+}();
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/helper/lifecycle-helper.js":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/helper/lifecycle-helper.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   initPageLifeCycle: () => (/* binding */ initPageLifeCycle)
+/* harmony export */ });
+var LifeCycleEnum;
+(function (LifeCycleEnum) {
+  LifeCycleEnum["ONLOAD"] = "onLoad";
+  LifeCycleEnum["ONREADY"] = "onReady";
+  LifeCycleEnum["ONSHOW"] = "onShow";
+  LifeCycleEnum["ONHIDE"] = "onHide";
+  LifeCycleEnum["ONUNLOAD"] = "onUnload";
+  LifeCycleEnum["ONBACK"] = "onBack";
+})(LifeCycleEnum || (LifeCycleEnum = {}));
+var LIFECYCLE = [LifeCycleEnum.ONLOAD, LifeCycleEnum.ONREADY, LifeCycleEnum.ONSHOW, LifeCycleEnum.ONHIDE, LifeCycleEnum.ONUNLOAD, LifeCycleEnum.ONBACK];
+var LifeCycle2PageLifeCycle = {
+  onLoad: 'onPageLoad',
+  onReady: 'onPageReady',
+  onShow: 'onPageShow',
+  onHide: 'onPageHide',
+  onUnload: 'onPageUnload',
+  onBack: 'onPageBack'
+};
+var initPageLifeCycle = function initPageLifeCycle(container, instance, config) {
+  var globalMixins = instance._.appContext.mixins;
+  var mixins = config.mixins,
+    extendOptions = config.extends;
+  var lifeCycleMixins = {
+    onLoad: [],
+    onReady: [],
+    onShow: [],
+    onHide: [],
+    onUnload: [],
+    onBack: []
+  };
+  var globalLifeCycleMixins = {
+    onLoad: [],
+    onReady: [],
+    onShow: [],
+    onHide: [],
+    onUnload: [],
+    onBack: []
+  };
+  if (globalMixins) {
+    globalLifeCycleMixins = applyPageMixin(globalMixins);
+  }
+  if (mixins) {
+    lifeCycleMixins = applyPageMixin(mixins);
+  }
+  LIFECYCLE.forEach(function (lifecycle) {
+    if (lifecycle === LifeCycleEnum.ONBACK) {
+      container[LifeCycle2PageLifeCycle[lifecycle]] = function () {
+        for (var i = 0; i < globalLifeCycleMixins[lifecycle].length; i++) {
+          if (applyLifeCycle(instance, globalLifeCycleMixins[lifecycle][i])) {
+            return true;
+          }
+        }
+        if (extendOptions) {
+          if (applyLifeCycle(instance, extendOptions[lifecycle])) {
+            return true;
+          }
+        }
+        for (var _i = 0; _i < lifeCycleMixins[lifecycle].length; _i++) {
+          if (applyLifeCycle(instance, lifeCycleMixins[lifecycle][_i])) {
+            return true;
+          }
+        }
+        return applyLifeCycle(instance, config[lifecycle]);
+      };
+      return true;
+    }
+    container[LifeCycle2PageLifeCycle[lifecycle]] = function () {
+      globalLifeCycleMixins[lifecycle].forEach(function (func) {
+        applyLifeCycle(instance, func);
+      });
+      extendOptions && applyLifeCycle(instance, extendOptions[lifecycle]);
+      lifeCycleMixins[lifecycle].forEach(function (func) {
+        applyLifeCycle(instance, func);
+      });
+      applyLifeCycle(instance, config[lifecycle]);
+    };
+  });
+};
+function applyPageMixin(mixins) {
+  var lifeCycleMixins = {
+    onLoad: [],
+    onReady: [],
+    onShow: [],
+    onHide: [],
+    onUnload: [],
+    onBack: []
+  };
+  if (!mixins || mixins.length === 0) {
+    return lifeCycleMixins;
+  }
+  mixins.forEach(function (mixin) {
+    var onLoad = mixin.onLoad,
+      onReady = mixin.onReady,
+      onShow = mixin.onShow,
+      onHide = mixin.onHide,
+      onUnload = mixin.onUnload,
+      onBack = mixin.onBack;
+    onLoad && lifeCycleMixins.onLoad.push(onLoad);
+    onReady && lifeCycleMixins.onReady.push(onReady);
+    onShow && lifeCycleMixins.onShow.push(onShow);
+    onHide && lifeCycleMixins.onHide.push(onHide);
+    onUnload && lifeCycleMixins.onUnload.push(onUnload);
+    onBack && lifeCycleMixins.onBack.push(onBack);
+  });
+  return lifeCycleMixins;
+}
+function applyLifeCycle(instance, func) {
+  return func && func.apply(instance);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/index.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/index.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BaseTransition: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.BaseTransition),
+/* harmony export */   BaseTransitionPropsValidators: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.BaseTransitionPropsValidators),
+/* harmony export */   Comment: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.Comment),
+/* harmony export */   EffectScope: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.EffectScope),
+/* harmony export */   Fragment: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.Fragment),
+/* harmony export */   KeepAlive: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.KeepAlive),
+/* harmony export */   Page: () => (/* reexport safe */ _nodes__WEBPACK_IMPORTED_MODULE_10__.Page),
+/* harmony export */   ReactiveEffect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.ReactiveEffect),
+/* harmony export */   ScrollPage: () => (/* reexport safe */ _nodes__WEBPACK_IMPORTED_MODULE_10__.ScrollPage),
+/* harmony export */   Static: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.Static),
+/* harmony export */   Suspense: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.Suspense),
+/* harmony export */   Teleport: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.Teleport),
+/* harmony export */   Text: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.Text),
+/* harmony export */   appContext: () => (/* binding */ appContext),
+/* harmony export */   assertNumber: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.assertNumber),
+/* harmony export */   callWithAsyncErrorHandling: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.callWithAsyncErrorHandling),
+/* harmony export */   callWithErrorHandling: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.callWithErrorHandling),
+/* harmony export */   camelize: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.camelize),
+/* harmony export */   capitalize: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.capitalize),
+/* harmony export */   cloneVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.cloneVNode),
+/* harmony export */   compatUtils: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.compatUtils),
+/* harmony export */   component: () => (/* reexport safe */ _api__WEBPACK_IMPORTED_MODULE_3__.component),
+/* harmony export */   computed: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.computed),
+/* harmony export */   container: () => (/* binding */ container),
+/* harmony export */   createApp: () => (/* binding */ createApp),
+/* harmony export */   createBlock: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createBlock),
+/* harmony export */   createCommentVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createCommentVNode),
+/* harmony export */   createElementBlock: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createElementBlock),
+/* harmony export */   createElementVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createElementVNode),
+/* harmony export */   createHydrationRenderer: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createHydrationRenderer),
+/* harmony export */   createPropsRestProxy: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createPropsRestProxy),
+/* harmony export */   createRenderer: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createRenderer),
+/* harmony export */   createRootContainer: () => (/* binding */ createRootContainer),
+/* harmony export */   createSlots: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createSlots),
+/* harmony export */   createStaticVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createStaticVNode),
+/* harmony export */   createTextVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createTextVNode),
+/* harmony export */   createVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createVNode),
+/* harmony export */   customRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.customRef),
+/* harmony export */   defineAsyncComponent: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.defineAsyncComponent),
+/* harmony export */   defineComponent: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.defineComponent),
+/* harmony export */   defineEmits: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.defineEmits),
+/* harmony export */   defineExpose: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.defineExpose),
+/* harmony export */   defineModel: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.defineModel),
+/* harmony export */   defineOptions: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.defineOptions),
+/* harmony export */   defineProps: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.defineProps),
+/* harmony export */   defineSlots: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.defineSlots),
+/* harmony export */   devtools: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.devtools),
+/* harmony export */   directive: () => (/* reexport safe */ _api__WEBPACK_IMPORTED_MODULE_3__.directive),
+/* harmony export */   effect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.effect),
+/* harmony export */   effectScope: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.effectScope),
+/* harmony export */   getComponent: () => (/* reexport safe */ _nodes__WEBPACK_IMPORTED_MODULE_10__.getComponent),
+/* harmony export */   getCurrentInstance: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.getCurrentInstance),
+/* harmony export */   getCurrentScope: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.getCurrentScope),
+/* harmony export */   getTransitionRawChildren: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.getTransitionRawChildren),
+/* harmony export */   guardReactiveProps: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.guardReactiveProps),
+/* harmony export */   h: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.h),
+/* harmony export */   handleError: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.handleError),
+/* harmony export */   hasInjectionContext: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.hasInjectionContext),
+/* harmony export */   initCustomFormatter: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.initCustomFormatter),
+/* harmony export */   inject: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.inject),
+/* harmony export */   isMemoSame: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isMemoSame),
+/* harmony export */   isProxy: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isProxy),
+/* harmony export */   isReactive: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isReactive),
+/* harmony export */   isReadonly: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isReadonly),
+/* harmony export */   isRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isRef),
+/* harmony export */   isRuntimeOnly: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isRuntimeOnly),
+/* harmony export */   isShallow: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isShallow),
+/* harmony export */   isVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isVNode),
+/* harmony export */   markRaw: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.markRaw),
+/* harmony export */   mergeDefaults: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.mergeDefaults),
+/* harmony export */   mergeModels: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.mergeModels),
+/* harmony export */   mergeProps: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.mergeProps),
+/* harmony export */   mixin: () => (/* reexport safe */ _api__WEBPACK_IMPORTED_MODULE_3__.mixin),
+/* harmony export */   nextTick: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.nextTick),
+/* harmony export */   normalizeClass: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.normalizeClass),
+/* harmony export */   normalizeProps: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.normalizeProps),
+/* harmony export */   normalizeStyle: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.normalizeStyle),
+/* harmony export */   onActivated: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onActivated),
+/* harmony export */   onBeforeMount: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onBeforeMount),
+/* harmony export */   onBeforeUnmount: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onBeforeUnmount),
+/* harmony export */   onBeforeUpdate: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onBeforeUpdate),
+/* harmony export */   onDeactivated: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onDeactivated),
+/* harmony export */   onErrorCaptured: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onErrorCaptured),
+/* harmony export */   onMounted: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onMounted),
+/* harmony export */   onRenderTracked: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onRenderTracked),
+/* harmony export */   onRenderTriggered: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onRenderTriggered),
+/* harmony export */   onScopeDispose: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onScopeDispose),
+/* harmony export */   onServerPrefetch: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onServerPrefetch),
+/* harmony export */   onUnmounted: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onUnmounted),
+/* harmony export */   onUpdated: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onUpdated),
+/* harmony export */   openBlock: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.openBlock),
+/* harmony export */   popScopeId: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.popScopeId),
+/* harmony export */   provide: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.provide),
+/* harmony export */   proxyRefs: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.proxyRefs),
+/* harmony export */   pushScopeId: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.pushScopeId),
+/* harmony export */   queuePostFlushCb: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.queuePostFlushCb),
+/* harmony export */   reactive: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.reactive),
+/* harmony export */   readonly: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.readonly),
+/* harmony export */   ref: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.ref),
+/* harmony export */   register: () => (/* reexport safe */ _nodes__WEBPACK_IMPORTED_MODULE_10__.register),
+/* harmony export */   registerRuntimeCompiler: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.registerRuntimeCompiler),
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   renderApp: () => (/* binding */ renderApp),
+/* harmony export */   renderCustomSlot: () => (/* binding */ renderCustomSlot),
+/* harmony export */   renderList: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.renderList),
+/* harmony export */   renderSlot: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.renderSlot),
+/* harmony export */   resolveComponent: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.resolveComponent),
+/* harmony export */   resolveDirective: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.resolveDirective),
+/* harmony export */   resolveDynamicComponent: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.resolveDynamicComponent),
+/* harmony export */   resolveFilter: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.resolveFilter),
+/* harmony export */   resolveTransitionHooks: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.resolveTransitionHooks),
+/* harmony export */   setBlockTracking: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.setBlockTracking),
+/* harmony export */   setDevtoolsHook: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.setDevtoolsHook),
+/* harmony export */   setTransitionHooks: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.setTransitionHooks),
+/* harmony export */   shallowReactive: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.shallowReactive),
+/* harmony export */   shallowReadonly: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.shallowReadonly),
+/* harmony export */   shallowRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.shallowRef),
+/* harmony export */   ssrContextKey: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.ssrContextKey),
+/* harmony export */   ssrUtils: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.ssrUtils),
+/* harmony export */   stop: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.stop),
+/* harmony export */   toDisplayString: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.toDisplayString),
+/* harmony export */   toHandlerKey: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.toHandlerKey),
+/* harmony export */   toHandlers: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.toHandlers),
+/* harmony export */   toRaw: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.toRaw),
+/* harmony export */   toRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.toRef),
+/* harmony export */   toRefs: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.toRefs),
+/* harmony export */   toValue: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.toValue),
+/* harmony export */   transformVNodeArgs: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.transformVNodeArgs),
+/* harmony export */   triggerRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.triggerRef),
+/* harmony export */   unref: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.unref),
+/* harmony export */   use: () => (/* reexport safe */ _api__WEBPACK_IMPORTED_MODULE_3__.use),
+/* harmony export */   useAttrs: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.useAttrs),
+/* harmony export */   useModel: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.useModel),
+/* harmony export */   useSSRContext: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.useSSRContext),
+/* harmony export */   useSlots: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.useSlots),
+/* harmony export */   useTransitionState: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.useTransitionState),
+/* harmony export */   vAnimation: () => (/* reexport safe */ _directives_vAnimation__WEBPACK_IMPORTED_MODULE_7__.vAnimation),
+/* harmony export */   vModelText: () => (/* reexport safe */ _directives_vModel__WEBPACK_IMPORTED_MODULE_9__.vModelText),
+/* harmony export */   vShow: () => (/* reexport safe */ _directives_vShow__WEBPACK_IMPORTED_MODULE_8__.vShow),
+/* harmony export */   version: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.version),
+/* harmony export */   warn: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.warn),
+/* harmony export */   watch: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.watch),
+/* harmony export */   watchEffect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.watchEffect),
+/* harmony export */   watchPostEffect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.watchPostEffect),
+/* harmony export */   watchSyncEffect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.watchSyncEffect),
+/* harmony export */   withAsyncContext: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.withAsyncContext),
+/* harmony export */   withCtx: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.withCtx),
+/* harmony export */   withDefaults: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.withDefaults),
+/* harmony export */   withDirectives: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.withDirectives),
+/* harmony export */   withMemo: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.withMemo),
+/* harmony export */   withScopeId: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.withScopeId)
+/* harmony export */ });
+/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+/* harmony import */ var _nodeOps__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./nodeOps */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodeOps.js");
+/* harmony import */ var _patchProp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./patchProp */ "./node_modules/@didi/tenon-vue-next/dist/runtime/patchProp.js");
+/* harmony import */ var _nodes_document__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./nodes/document */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/document.js");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./api */ "./node_modules/@didi/tenon-vue-next/dist/runtime/api.js");
+/* harmony import */ var _helper_lifecycle_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helper/lifecycle-helper */ "./node_modules/@didi/tenon-vue-next/dist/runtime/helper/lifecycle-helper.js");
+/* harmony import */ var _helper_global_proxy_helper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helper/global-proxy-helper */ "./node_modules/@didi/tenon-vue-next/dist/runtime/helper/global-proxy-helper.js");
+/* harmony import */ var _directives_vAnimation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./directives/vAnimation */ "./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vAnimation.js");
+/* harmony import */ var _directives_vShow__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./directives/vShow */ "./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vShow.js");
+/* harmony import */ var _directives_vModel__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./directives/vModel */ "./node_modules/@didi/tenon-vue-next/dist/runtime/directives/vModel.js");
+/* harmony import */ var _nodes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./nodes */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/index.js");
+
+
+
+
+
+
+
+
+var extend = Object.assign;
+var _createRenderer = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createRenderer)(extend({
+    patchProp: _patchProp__WEBPACK_IMPORTED_MODULE_1__.patchProp
+  }, _nodeOps__WEBPACK_IMPORTED_MODULE_0__.nodeOps)),
+  baseRender = _createRenderer.render,
+  baseCreateApp = _createRenderer.createApp;
+(0,_helper_global_proxy_helper__WEBPACK_IMPORTED_MODULE_5__.initGlobalProxy)();
+var renderApp = baseRender;
+var appContext = null;
+var container = null;
+var renderCustomSlot = function renderCustomSlot(vnode, container) {
+  if (!(0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.isVNode)(vnode)) {
+    vnode = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.createVNode)(vnode);
+  }
+  vnode.appContext = appContext;
+  baseRender(vnode, container);
+};
+var createApp = function createApp() {
+  var app = baseCreateApp.apply(void 0, arguments);
+  var mount = app.mount;
+  app.mount = function (container) {
+    var proxy = mount(container);
+    return proxy;
+  };
+  return app;
+};
+
+
+
+
+
+var createRootContainer = function createRootContainer(options) {
+  return _nodes_document__WEBPACK_IMPORTED_MODULE_2__["default"].createPageView(options);
+};
+function render(App) {
+  var pageConfig = App.pageConfig;
+  var app = createApp(App);
+  (0,_api__WEBPACK_IMPORTED_MODULE_3__.install)(app);
+  appContext = app._context;
+  container = createRootContainer({
+    canScroll: pageConfig && pageConfig.canScroll,
+    pageStyle: pageConfig && pageConfig.pageStyle
+  });
+  var plugins = App.plugins;
+  plugins && plugins.forEach(function (plugin) {
+    app.use(plugin);
+  });
+  var instance = app.mount(container);
+  (0,_helper_lifecycle_helper__WEBPACK_IMPORTED_MODULE_4__.initPageLifeCycle)(container, instance, App);
+  container.render();
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodeOps.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/nodeOps.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   nodeOps: () => (/* binding */ nodeOps)
+/* harmony export */ });
+/* harmony import */ var _nodes_document__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./nodes/document */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/document.js");
+
+var insert = function insert(child, parent, anchor) {
+  if (!parent) {
+    return null;
+  }
+  if (anchor !== null) {
+    parent.insertBefore(child, anchor);
+  } else {
+    parent.appendChild(child);
+  }
+};
+var remove = function remove(child) {
+  var parent = child.parentNode;
+  if (parent !== null) {
+    parent.removeChild(child);
+  }
+};
+var createElement = function createElement(tag) {
+  return _nodes_document__WEBPACK_IMPORTED_MODULE_0__["default"].createElement(tag);
+};
+var createText = function createText(text) {
+  return _nodes_document__WEBPACK_IMPORTED_MODULE_0__["default"].createText(text);
+};
+var createComment = function createComment(comment) {
+  return _nodes_document__WEBPACK_IMPORTED_MODULE_0__["default"].createComment(comment);
+};
+var setText = function setText(node, text) {
+  node.setElementText(text);
+};
+var setElementText = function setElementText(node, text) {
+  node.setElementText(text);
+};
+var parentNode = function parentNode(node) {
+  return node.parentNode ? node.parentNode : null;
+};
+var nextSibling = function nextSibling(node) {
+  return node.nextSibling;
+};
+var querySelector = function querySelector(selector) {
+  return null;
+};
+var setScopeId = function setScopeId(el, id) {
+  el.setScopeId(id);
+};
+var nodeOps = {
+  insert,
+  remove,
+  createElement,
+  createText,
+  createComment,
+  setText,
+  setElementText,
+  parentNode,
+  nextSibling,
+  querySelector,
+  setScopeId
+};
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/component.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/component.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getComponent: () => (/* binding */ getComponent),
+/* harmony export */   register: () => (/* binding */ register)
+/* harmony export */ });
+var components = new Map();
+function register(component) {
+  if (Array.isArray(component)) {
+    component.forEach(function (component) {
+      registerComponent(component);
+    });
+  } else {
+    registerComponent(component);
+  }
+}
+function registerComponent(component) {
+  var name = component.name;
+  components.set("ex-".concat(name), component);
+}
+function getComponent(tag) {
+  var component = components.get(tag);
+  return component.factory();
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/anchor.js":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/anchor.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Anchor: () => (/* binding */ Anchor)
+/* harmony export */ });
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
+/* harmony import */ var _didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @didi/hummer-api */ "./node_modules/@didi/hummer-api/dist/hummer-api.es.js");
+
+
+
+
+
+var Anchor = /*#__PURE__*/function (_View) {
+  function Anchor() {
+    var _this;
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Anchor);
+    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Anchor, [id, 'anchor', props]);
+    _this.setStyle({
+      display: "none"
+    });
+    return _this;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(Anchor, _View);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__["default"])(Anchor);
+}(_didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__.View);
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/comment.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/comment.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Comment: () => (/* binding */ Comment)
+/* harmony export */ });
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
+/* harmony import */ var _didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @didi/hummer-api */ "./node_modules/@didi/hummer-api/dist/hummer-api.es.js");
+
+
+
+
+
+var Comment = /*#__PURE__*/function (_View) {
+  function Comment() {
+    var _this;
+    var comment = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Comment);
+    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Comment, ['', 'comment']);
+    _this.style = {
+      display: "none"
+    };
+    _this._comment = comment;
+    return _this;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(Comment, _View);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Comment, [{
+    key: "comment",
+    get: function get() {
+      return this._comment;
+    }
+  }]);
+}(_didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__.View);
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/page/PageOptions.js":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/page/PageOptions.js ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/page/index.js":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/page/index.js ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Page: () => (/* binding */ Page),
+/* harmony export */   ScrollPage: () => (/* binding */ ScrollPage)
+/* harmony export */ });
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
+/* harmony import */ var _didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @didi/hummer-api */ "./node_modules/@didi/hummer-api/dist/hummer-api.es.js");
+/* harmony import */ var _PageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PageOptions */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/page/PageOptions.js");
+
+
+
+
+
+
+var noFunc = function noFunc() {};
+var Page = /*#__PURE__*/function (_ViewComponent) {
+  function Page() {
+    var _this;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Page);
+    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Page);
+    var onLoad = options.onLoad,
+      onReady = options.onReady,
+      onShow = options.onShow,
+      onHide = options.onHide,
+      onUnload = options.onUnload,
+      onBack = options.onBack,
+      _options$pageStyle = options.pageStyle,
+      pageStyle = _options$pageStyle === void 0 ? {} : _options$pageStyle;
+    _this._onCreate = onLoad || noFunc;
+    _this._onReady = onReady || noFunc;
+    _this._onAppear = onShow || noFunc;
+    _this._onDisappear = onHide || noFunc;
+    _this._onDestroy = onUnload || noFunc;
+    _this._onBack = onBack || noFunc;
+    _this.style = Object.assign({
+      width: '100%',
+      height: '100%'
+    }, pageStyle);
+    return _this;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(Page, _ViewComponent);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Page, [{
+    key: "render",
+    value: function render() {
+      _didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__.Hummer.render(this);
+    }
+  }, {
+    key: "onReady",
+    value: function onReady() {
+      this._onReady();
+    }
+  }, {
+    key: "onCreate",
+    value: function onCreate() {
+      this._onCreate();
+      this.onReady();
+    }
+  }, {
+    key: "onDestroy",
+    value: function onDestroy() {
+      this._onDestroy();
+    }
+  }, {
+    key: "onAppear",
+    value: function onAppear() {
+      this._onAppear();
+    }
+  }, {
+    key: "onDisappear",
+    value: function onDisappear() {
+      this._onDisappear();
+    }
+  }, {
+    key: "onBack",
+    value: function onBack() {
+      var result = this._onBack();
+      return result || false;
+    }
+  }, {
+    key: "onPageLoad",
+    set: function set(load) {
+      this._onCreate = load;
+    }
+  }, {
+    key: "onPageReady",
+    set: function set(ready) {
+      this._onReady = ready;
+    }
+  }, {
+    key: "onPageShow",
+    set: function set(show) {
+      this._onAppear = show;
+    }
+  }, {
+    key: "onPageHide",
+    set: function set(hide) {
+      this._onDisappear = hide;
+    }
+  }, {
+    key: "onPageUnload",
+    set: function set(destroy) {
+      this._onDestroy = destroy;
+    }
+  }, {
+    key: "onPageBack",
+    set: function set(back) {
+      this._onBack = back;
+    }
+  }]);
+}(_didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__.View);
+var ScrollPage = /*#__PURE__*/function (_ScrollerViewComponen) {
+  function ScrollPage() {
+    var _this2;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, ScrollPage);
+    _this2 = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, ScrollPage);
+    var onLoad = options.onLoad,
+      onReady = options.onReady,
+      onShow = options.onShow,
+      onHide = options.onHide,
+      onUnload = options.onUnload,
+      onBack = options.onBack,
+      _options$pageStyle2 = options.pageStyle,
+      pageStyle = _options$pageStyle2 === void 0 ? {} : _options$pageStyle2;
+    _this2._onCreate = onLoad || noFunc;
+    _this2._onReady = onReady || noFunc;
+    _this2._onAppear = onShow || noFunc;
+    _this2._onDisappear = onHide || noFunc;
+    _this2._onDestroy = onUnload || noFunc;
+    _this2._onBack = onBack || noFunc;
+    _this2.style = Object.assign({
+      width: '100%',
+      height: '100%'
+    }, pageStyle);
+    return _this2;
+  }
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(ScrollPage, _ScrollerViewComponen);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(ScrollPage, [{
+    key: "render",
+    value: function render() {
+      _didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__.Hummer.render(this);
+    }
+  }, {
+    key: "onReady",
+    value: function onReady() {
+      this._onReady();
+    }
+  }, {
+    key: "onCreate",
+    value: function onCreate() {
+      this._onCreate();
+      this.onReady();
+    }
+  }, {
+    key: "onDestroy",
+    value: function onDestroy() {
+      this._onDestroy();
+    }
+  }, {
+    key: "onAppear",
+    value: function onAppear() {
+      this._onAppear();
+    }
+  }, {
+    key: "onDisappear",
+    value: function onDisappear() {
+      this._onDisappear();
+    }
+  }, {
+    key: "onBack",
+    value: function onBack() {
+      var result = this._onBack();
+      return result || false;
+    }
+  }, {
+    key: "onPageLoad",
+    set: function set(load) {
+      this._onCreate = load;
+    }
+  }, {
+    key: "onPageReady",
+    set: function set(ready) {
+      this._onReady = ready;
+    }
+  }, {
+    key: "onPageShow",
+    set: function set(show) {
+      this._onAppear = show;
+    }
+  }, {
+    key: "onPageHide",
+    set: function set(hide) {
+      this._onDisappear = hide;
+    }
+  }, {
+    key: "onPageUnload",
+    set: function set(destroy) {
+      this._onDestroy = destroy;
+    }
+  }, {
+    key: "onPageBack",
+    set: function set(back) {
+      this._onBack = back;
+    }
+  }]);
+}(_didi_hummer_api__WEBPACK_IMPORTED_MODULE_4__.Scroller);
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/document.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/document.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Document: () => (/* binding */ Document),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _components_page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/page */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/page/index.js");
+/* harmony import */ var _components_comment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/comment */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/comment.js");
+/* harmony import */ var _components_anchor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/anchor */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/anchor.js");
+/* harmony import */ var _component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./component */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/component.js");
+/* harmony import */ var _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @hummer/tenon-utils */ "./node_modules/@hummer/tenon-utils/dist/tenon-utils.cjs.js");
+/* harmony import */ var _didi_hummer_api__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @didi/hummer-api */ "./node_modules/@didi/hummer-api/dist/hummer-api.es.js");
+
+
+
+
+
+
+
+
+var Document = /*#__PURE__*/function () {
+  function Document() {
+    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Document);
+  }
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Document, [{
+    key: "createElement",
+    value: function createElement(tag) {
+      var component = _didi_hummer_api__WEBPACK_IMPORTED_MODULE_7__.Hummer.createElement(tag);
+      if (!component) {
+        if ((0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_6__.isCustomNativeTag)(tag)) {
+          component = (0,_component__WEBPACK_IMPORTED_MODULE_5__.getComponent)(tag) || _didi_hummer_api__WEBPACK_IMPORTED_MODULE_7__.Hummer.createElement('view');
+        } else {
+          component = _didi_hummer_api__WEBPACK_IMPORTED_MODULE_7__.Hummer.createElement('view');
+        }
+      }
+      return component;
+    }
+  }, {
+    key: "createText",
+    value: function createText(text) {
+      var component;
+      if (!text) {
+        component = new _components_anchor__WEBPACK_IMPORTED_MODULE_4__.Anchor();
+      } else {
+        component = _didi_hummer_api__WEBPACK_IMPORTED_MODULE_7__.Hummer.createElement('text');
+        component.text = text;
+      }
+      return component;
+    }
+  }, {
+    key: "createComment",
+    value: function createComment(comment) {
+      return new _components_comment__WEBPACK_IMPORTED_MODULE_3__.Comment(comment);
+    }
+  }, {
+    key: "createPageView",
+    value: function createPageView(options) {
+      var pageView = null;
+      if (options.canScroll) {
+        pageView = new _components_page__WEBPACK_IMPORTED_MODULE_2__.ScrollPage(options);
+      } else {
+        pageView = new _components_page__WEBPACK_IMPORTED_MODULE_2__.Page(options);
+      }
+      return pageView;
+    }
+  }]);
+}();
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new Document());
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/index.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/index.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Page: () => (/* reexport safe */ _components_page__WEBPACK_IMPORTED_MODULE_1__.Page),
+/* harmony export */   ScrollPage: () => (/* reexport safe */ _components_page__WEBPACK_IMPORTED_MODULE_1__.ScrollPage),
+/* harmony export */   getComponent: () => (/* reexport safe */ _component__WEBPACK_IMPORTED_MODULE_0__.getComponent),
+/* harmony export */   register: () => (/* reexport safe */ _component__WEBPACK_IMPORTED_MODULE_0__.register)
+/* harmony export */ });
+/* harmony import */ var _component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./component */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/component.js");
+/* harmony import */ var _components_page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/page */ "./node_modules/@didi/tenon-vue-next/dist/runtime/nodes/components/page/index.js");
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/runtime/patchProp.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/runtime/patchProp.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   patchProp: () => (/* binding */ patchProp)
+/* harmony export */ });
+/* harmony import */ var _handlers_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./handlers/class */ "./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/class.js");
+/* harmony import */ var _handlers_style__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./handlers/style */ "./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/style.js");
+/* harmony import */ var _handlers_attrs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./handlers/attrs */ "./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/attrs.js");
+/* harmony import */ var _handlers_events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./handlers/events */ "./node_modules/@didi/tenon-vue-next/dist/runtime/handlers/events.js");
+
+
+
+
+function patchProp(el, key, prevValue, nextValue) {
+  var isSVG = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  var prevChildren = arguments.length > 5 ? arguments[5] : undefined;
+  var parentComponent = arguments.length > 6 ? arguments[6] : undefined;
+  var parentSuspense = arguments.length > 7 ? arguments[7] : undefined;
+  var unmountChildren = arguments.length > 8 ? arguments[8] : undefined;
+  switch (key) {
+    case 'class':
+      (0,_handlers_class__WEBPACK_IMPORTED_MODULE_0__.patchClass)(el, key, prevValue, nextValue);
+      break;
+    case 'style':
+      (0,_handlers_style__WEBPACK_IMPORTED_MODULE_1__.patchStyle)(el, key, prevValue, nextValue);
+      break;
+    default:
+      if (isOn(key)) {
+        (0,_handlers_events__WEBPACK_IMPORTED_MODULE_3__.patchEvents)(el, key, prevValue, nextValue, parentComponent);
+      } else {
+        (0,_handlers_attrs__WEBPACK_IMPORTED_MODULE_2__.patchAttrs)(el, key, prevValue, nextValue);
+      }
+      break;
+  }
+}
+function isOn(key) {
+  var onRE = /^on[^a-z]/;
+  return onRE.test(key);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/utils/event.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/utils/event.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   InputEventState: () => (/* binding */ InputEventState),
+/* harmony export */   SwitchEventState: () => (/* binding */ SwitchEventState),
+/* harmony export */   addEventListener: () => (/* binding */ addEventListener),
+/* harmony export */   removeEventListener: () => (/* binding */ removeEventListener)
+/* harmony export */ });
+var InputEventState;
+(function (InputEventState) {
+  InputEventState[InputEventState["BEGIN"] = 1] = "BEGIN";
+  InputEventState[InputEventState["CHANGED"] = 2] = "CHANGED";
+  InputEventState[InputEventState["ENDED"] = 3] = "ENDED";
+  InputEventState[InputEventState["CONFIRMED"] = 4] = "CONFIRMED";
+})(InputEventState || (InputEventState = {}));
+var SwitchEventState;
+(function (SwitchEventState) {
+  SwitchEventState[SwitchEventState["CLOSE"] = 0] = "CLOSE";
+  SwitchEventState[SwitchEventState["OPEN"] = 1] = "OPEN";
+})(SwitchEventState || (SwitchEventState = {}));
+function addEventListener(el, event, handler) {
+  el.addEventListener(event, handler);
+}
+function removeEventListener(el, event, handler) {
+  el.removeEventListener(event, handler);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@didi/tenon-vue-next/dist/utils/style.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@didi/tenon-vue-next/dist/utils/style.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MatchType: () => (/* binding */ MatchType),
+/* harmony export */   RelationType: () => (/* binding */ RelationType),
+/* harmony export */   RuleKeyMap: () => (/* binding */ RuleKeyMap),
+/* harmony export */   collectStyle: () => (/* binding */ collectStyle),
+/* harmony export */   getClassStyle: () => (/* binding */ getClassStyle)
+/* harmony export */ });
+/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_toConsumableArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js */ "./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
+
+var MatchType;
+(function (MatchType) {
+  MatchType[MatchType["Class"] = 0] = "Class";
+  MatchType[MatchType["ID"] = 1] = "ID";
+  MatchType[MatchType["Attr"] = 2] = "Attr";
+  MatchType[MatchType["Tag"] = 3] = "Tag";
+})(MatchType || (MatchType = {}));
+var RuleKeyMap = {
+  'tagList': 'tagMap',
+  'classList': 'classMap',
+  'idList': 'idMap'
+};
+var RelationType;
+(function (RelationType) {
+  RelationType[RelationType["Subselector"] = 0] = "Subselector";
+  RelationType[RelationType["DescendantSpace"] = 1] = "DescendantSpace";
+  RelationType[RelationType["Child"] = 2] = "Child";
+  RelationType[RelationType["DirectAdjacent"] = 3] = "DirectAdjacent";
+  RelationType[RelationType["IndirectAdjacent"] = 4] = "IndirectAdjacent";
+})(RelationType || (RelationType = {}));
+var collectStyle = function collectStyle(ruleSetMap) {
+  if (!__GLOBAL__.CSSOM) {
+    var defaultRuleSetGroup = {
+      global: {
+        tagMap: new Map(),
+        classMap: new Map(),
+        idMap: new Map()
+      }
+    };
+    __GLOBAL__.CSSOM = defaultRuleSetGroup;
+  }
+  Object.keys(ruleSetMap).forEach(function (group) {
+    var ruleSet = ruleSetMap[group];
+    collectStyleGroup(ruleSet, group);
+  });
+};
+var collectStyleGroup = function collectStyleGroup(ruleSet, group) {
+  if (!__GLOBAL__.CSSOM[group]) {
+    var defaultRuleSet = {
+      tagMap: new Map(),
+      classMap: new Map(),
+      idMap: new Map()
+    };
+    __GLOBAL__.CSSOM[group] = defaultRuleSet;
+  }
+  Object.keys(ruleSet).forEach(function (ruleKey) {
+    var ruleList = ruleSet[ruleKey];
+    var key = RuleKeyMap[ruleKey];
+    key && ruleList.forEach(function (rule) {
+      if (rule) {
+        var selectorMap = __GLOBAL__.CSSOM[group][key];
+        var selectorKey = rule.selector;
+        var styleList = selectorMap.get(selectorKey) || [];
+        styleList.push(rule);
+        __GLOBAL__.CSSOM[group][key].set(selectorKey, styleList);
+      }
+    });
+  });
+};
+var getClassStyle = function getClassStyle(instance) {
+  var className = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var scoped = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var scopedId = arguments.length > 3 ? arguments[3] : undefined;
+  var elementStyle = {};
+  var classList = className.split(/\s/);
+  classList.forEach(function (item) {
+    if (!item) {
+      return;
+    }
+    var globalStyleArr = getGlobalStyle(MatchType.Class, item, filterStyle(classList));
+    var scopeStylesArr = [];
+    if (scoped && scopedId) {
+      scopeStylesArr = getScopedStyle(MatchType.Class, item, scopedId, filterStyle(classList));
+    }
+    elementStyle = Object.assign.apply(Object, [{}, elementStyle].concat((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_toConsumableArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(globalStyleArr), (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_toConsumableArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(scopeStylesArr)));
+  });
+  return elementStyle;
+};
+function filterStyle() {
+  var classList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  return function (rule) {
+    if (rule.relation === '') {
+      return true;
+    }
+    var flag = true;
+    var selector = rule.n_selector;
+    if (!selector.next) {
+      return true;
+    }
+    switch (selector.relation) {
+      case RelationType.Subselector:
+        while (selector) {
+          if (classList.indexOf(selector.value) < 0) {
+            flag = false;
+            break;
+          }
+          selector = selector.next;
+        }
+        break;
+      default:
+        break;
+    }
+    return flag;
+  };
+}
+function getGlobalStyle(type, key, filterFunc) {
+  var styles = [];
+  switch (type) {
+    case MatchType.Class:
+      styles = __GLOBAL__.CSSOM['global'].classMap.get(key) || [];
+      break;
+    default:
+      break;
+  }
+  return styles.filter(function (item) {
+    if (filterFunc) {
+      return filterFunc(item);
+    }
+    return item;
+  }).map(function (item) {
+    return item === null || item === void 0 ? void 0 : item.style;
+  });
+}
+function getScopedStyle(type, key, scopedId, filterFunc) {
+  var styles = [];
+  var _GLOBAL__ = __GLOBAL__,
+    CSSOM = _GLOBAL__.CSSOM;
+  if (CSSOM[scopedId]) {
+    switch (type) {
+      case MatchType.Class:
+        styles = CSSOM[scopedId].classMap.get(key) || [];
+        break;
+      default:
+        break;
+    }
+  }
+  return styles.filter(function (item) {
+    if (filterFunc) {
+      return filterFunc(item);
+    }
+    return item;
+  }).map(function (item) {
+    return item === null || item === void 0 ? void 0 : item.style;
+  });
+}
 
 /***/ }),
 
@@ -174,21 +4581,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
-/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
-/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+/* harmony import */ var _didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @didi/tenon-vue-next */ "./node_modules/@didi/tenon-vue-next/dist/index.js");
 
 var _withScopeId = function _withScopeId(n) {
-  return (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-554f69db"), n = n(), (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__.popScopeId)(), n;
+  return (0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-554f69db"), n = n(), (0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.popScopeId)(), n;
 };
 var _hoisted_1 = ["onTap"];
+var _hoisted_2 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("text", null, "12312312312312312321", -1 /* HOISTED */);
+});
+var _hoisted_3 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", null, "11111", -1 /* HOISTED */);
+});
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("view", {
-    class: (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.normalizeClass)("page")
-  }, [(0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("image", {
+  return (0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("view", {
+    class: (0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("page")
+  }, [(0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("image", {
     onTap: $options.imageClick,
-    style: (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.normalizeStyle)($data.imageStyle),
+    style: (0,_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.imageStyle),
     src: "https://pt-starimg.didistatic.com/static/starimg/img/9E6O0ZOwok1604372834424.png"
-  }, null, 44 /* STYLE, PROPS, NEED_HYDRATION */, _hoisted_1)], 2 /* CLASS */);
+  }, null, 44 /* STYLE, PROPS, NEED_HYDRATION */, _hoisted_1), _hoisted_2, _hoisted_3], 2 /* CLASS */);
 }
 
 /***/ }),
@@ -1145,7 +5557,7 @@ var StyleTransformer = /*#__PURE__*/function () {
     this.middlewares = [];
     this.registerMiddleware();
   }
-  _createClass(StyleTransformer, [{
+  return _createClass(StyleTransformer, [{
     key: "registerMiddleware",
     value: function registerMiddleware() {
       this.use(transformAdapter).use(transformBreakToken).use(transformBackground).use(transformTransform).use(transformTransition).use(transformFlex).use(transformBorder).use(transformShadow).use(transformColor).use(transformUnit).use(transformAttr);
@@ -1172,7 +5584,6 @@ var StyleTransformer = /*#__PURE__*/function () {
       return tempStyle;
     }
   }]);
-  return StyleTransformer;
 }();
 var StyleDynamicTransformer = /*#__PURE__*/function () {
   function StyleDynamicTransformer() {
@@ -1180,7 +5591,7 @@ var StyleDynamicTransformer = /*#__PURE__*/function () {
     this.middlewares = [];
     this.registerMiddleware();
   }
-  _createClass(StyleDynamicTransformer, [{
+  return _createClass(StyleDynamicTransformer, [{
     key: "registerMiddleware",
     value: function registerMiddleware() {
       this.use(dynamicTransformAdapter);
@@ -1207,7 +5618,6 @@ var StyleDynamicTransformer = /*#__PURE__*/function () {
       return tempStyle;
     }
   }]);
-  return StyleDynamicTransformer;
 }();
 var styleTransformer = new StyleTransformer();
 var styleDynamicTransformer = new StyleDynamicTransformer();
@@ -1343,7 +5753,7 @@ var EffectScope = /*#__PURE__*/function () {
       this.index = (activeEffectScope.scopes || (activeEffectScope.scopes = [])).push(this) - 1;
     }
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(EffectScope, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(EffectScope, [{
     key: "active",
     get: function get() {
       return this._active;
@@ -1409,7 +5819,6 @@ var EffectScope = /*#__PURE__*/function () {
       }
     }
   }]);
-  return EffectScope;
 }();
 function effectScope(detached) {
   return new EffectScope(detached);
@@ -1486,7 +5895,7 @@ var ReactiveEffect = /*#__PURE__*/function () {
     this.parent = void 0;
     recordEffectScope(this, scope);
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ReactiveEffect, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ReactiveEffect, [{
     key: "run",
     value: function run() {
       if (!this.active) {
@@ -1538,7 +5947,6 @@ var ReactiveEffect = /*#__PURE__*/function () {
       }
     }
   }]);
-  return ReactiveEffect;
 }();
 function cleanupEffect(effect2) {
   var deps = effect2.deps;
@@ -1802,7 +6210,7 @@ var BaseReactiveHandler = /*#__PURE__*/function () {
     this._isReadonly = _isReadonly;
     this._shallow = _shallow;
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(BaseReactiveHandler, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(BaseReactiveHandler, [{
     key: "get",
     value: function get(target, key, receiver) {
       var isReadonly2 = this._isReadonly,
@@ -1844,16 +6252,15 @@ var BaseReactiveHandler = /*#__PURE__*/function () {
       return res;
     }
   }]);
-  return BaseReactiveHandler;
 }();
 var MutableReactiveHandler = /*#__PURE__*/function (_BaseReactiveHandler) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_2__["default"])(MutableReactiveHandler, _BaseReactiveHandler);
   function MutableReactiveHandler() {
     var shallow = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, MutableReactiveHandler);
     return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, MutableReactiveHandler, [false, shallow]);
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(MutableReactiveHandler, [{
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_2__["default"])(MutableReactiveHandler, _BaseReactiveHandler);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(MutableReactiveHandler, [{
     key: "set",
     value: function set(target, key, value, receiver) {
       var oldValue = target[key];
@@ -1908,16 +6315,15 @@ var MutableReactiveHandler = /*#__PURE__*/function (_BaseReactiveHandler) {
       return Reflect.ownKeys(target);
     }
   }]);
-  return MutableReactiveHandler;
 }(BaseReactiveHandler);
 var ReadonlyReactiveHandler = /*#__PURE__*/function (_BaseReactiveHandler2) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_2__["default"])(ReadonlyReactiveHandler, _BaseReactiveHandler2);
   function ReadonlyReactiveHandler() {
     var shallow = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this, ReadonlyReactiveHandler);
     return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, ReadonlyReactiveHandler, [true, shallow]);
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ReadonlyReactiveHandler, [{
+  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_2__["default"])(ReadonlyReactiveHandler, _BaseReactiveHandler2);
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ReadonlyReactiveHandler, [{
     key: "set",
     value: function set(target, key) {
       if (true) {
@@ -1934,7 +6340,6 @@ var ReadonlyReactiveHandler = /*#__PURE__*/function (_BaseReactiveHandler2) {
       return true;
     }
   }]);
-  return ReadonlyReactiveHandler;
 }(BaseReactiveHandler);
 var mutableHandlers = /* @__PURE__ */new MutableReactiveHandler();
 var readonlyHandlers = /* @__PURE__ */new ReadonlyReactiveHandler();
@@ -2347,7 +6752,7 @@ var RefImpl = /*#__PURE__*/function () {
     this._rawValue = __v_isShallow ? value : toRaw(value);
     this._value = __v_isShallow ? value : toReactive(value);
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(RefImpl, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(RefImpl, [{
     key: "value",
     get: function get() {
       trackRefValue(this);
@@ -2363,7 +6768,6 @@ var RefImpl = /*#__PURE__*/function () {
       }
     }
   }]);
-  return RefImpl;
 }();
 function triggerRef(ref2) {
   triggerRefValue(ref2,  true ? ref2.value : 0);
@@ -2407,7 +6811,7 @@ var CustomRefImpl = /*#__PURE__*/function () {
     this._get = get;
     this._set = set;
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(CustomRefImpl, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(CustomRefImpl, [{
     key: "value",
     get: function get() {
       return this._get();
@@ -2416,7 +6820,6 @@ var CustomRefImpl = /*#__PURE__*/function () {
       this._set(newVal);
     }
   }]);
-  return CustomRefImpl;
 }();
 function customRef(factory) {
   return new CustomRefImpl(factory);
@@ -2439,7 +6842,7 @@ var ObjectRefImpl = /*#__PURE__*/function () {
     this._defaultValue = _defaultValue;
     this.__v_isRef = true;
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ObjectRefImpl, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ObjectRefImpl, [{
     key: "value",
     get: function get() {
       var val = this._object[this._key];
@@ -2454,7 +6857,6 @@ var ObjectRefImpl = /*#__PURE__*/function () {
       return getDepFromReactive(toRaw(this._object), this._key);
     }
   }]);
-  return ObjectRefImpl;
 }();
 var GetterRefImpl = /*#__PURE__*/function () {
   function GetterRefImpl(_getter) {
@@ -2463,13 +6865,12 @@ var GetterRefImpl = /*#__PURE__*/function () {
     this.__v_isRef = true;
     this.__v_isReadonly = true;
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(GetterRefImpl, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(GetterRefImpl, [{
     key: "value",
     get: function get() {
       return this._getter();
     }
   }]);
-  return GetterRefImpl;
 }();
 function toRef(source, key, defaultValue) {
   if (isRef(source)) {
@@ -2505,7 +6906,7 @@ var ComputedRefImpl = /*#__PURE__*/function () {
     this.effect.active = this._cacheable = !isSSR;
     this["__v_isReadonly"] = isReadonly;
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ComputedRefImpl, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(ComputedRefImpl, [{
     key: "value",
     get: function get() {
       var self = toRaw(this);
@@ -2520,7 +6921,6 @@ var ComputedRefImpl = /*#__PURE__*/function () {
       this._setter(newValue);
     }
   }]);
-  return ComputedRefImpl;
 }();
 function computed(getterOrOptions, debugOptions) {
   var isSSR = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
@@ -2607,7 +7007,7 @@ var DeferredComputedRefImpl = /*#__PURE__*/function () {
     });
     this.effect.computed = this;
   }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(DeferredComputedRefImpl, [{
+  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_6__["default"])(DeferredComputedRefImpl, [{
     key: "_get",
     value: function _get() {
       if (this._dirty) {
@@ -2623,7 +7023,6 @@ var DeferredComputedRefImpl = /*#__PURE__*/function () {
       return toRaw(this)._get();
     }
   }]);
-  return DeferredComputedRefImpl;
 }();
 function deferredComputed(getter) {
   return new DeferredComputedRefImpl(getter);
@@ -10272,3446 +14671,6 @@ var replacer = function replacer(_key, val) {
 
 /***/ }),
 
-/***/ "./src/tenon-next/src/index.ts":
-/*!*************************************!*\
-  !*** ./src/tenon-next/src/index.ts ***!
-  \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   MatchType: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.MatchType),
-/* harmony export */   RelationType: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.RelationType),
-/* harmony export */   RuleKeyMap: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.RuleKeyMap),
-/* harmony export */   collectStyle: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.collectStyle),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   getClassStyle: () => (/* reexport safe */ _utils_style__WEBPACK_IMPORTED_MODULE_1__.getClassStyle)
-/* harmony export */ });
-/* harmony import */ var _runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./runtime */ "./src/tenon-next/src/runtime/index.ts");
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _runtime__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _runtime__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-/* harmony import */ var _utils_style__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/style */ "./src/tenon-next/src/utils/style.ts");
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  render: _runtime__WEBPACK_IMPORTED_MODULE_0__.render
-});
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/api.ts":
-/*!*******************************************!*\
-  !*** ./src/tenon-next/src/runtime/api.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   component: () => (/* binding */ component),
-/* harmony export */   context: () => (/* binding */ context),
-/* harmony export */   directive: () => (/* binding */ directive),
-/* harmony export */   install: () => (/* binding */ install),
-/* harmony export */   mixin: () => (/* binding */ mixin),
-/* harmony export */   use: () => (/* binding */ use)
-/* harmony export */ });
-var context = {
-  plugins: [],
-  mixins: [],
-  components: [],
-  directives: []
-};
-
-// FIXME:兼容Vue2用法
-var use = function use(plugin, options) {
-  context.plugins.push({
-    plugin: plugin,
-    options: options
-  });
-};
-
-// FIXME:兼容Vue2用法
-var mixin = function mixin(_mixin) {
-  context.mixins.push({
-    mixin: _mixin
-  });
-};
-
-// FIXME:兼容Vue2用法
-var component = function component(name, _component) {
-  context.components.push({
-    name: name,
-    component: _component
-  });
-};
-
-// FIXME:兼容Vue2用法
-var directive = function directive(name, _directive) {
-  context.directives.push({
-    name: name,
-    directive: _directive
-  });
-};
-var install = function install(app) {
-  // Install Plugins
-  context.plugins.forEach(function (item) {
-    app.use(item.plugin, item.options);
-  });
-  // Install Mixins
-  context.mixins.forEach(function (item) {
-    app.mixin(item.mixin);
-  });
-  // Install Components
-  context.components.forEach(function (item) {
-    app.component(item.name, item.component);
-  });
-  // Install Directives
-  context.directives.forEach(function (item) {
-    app.directive(item.name, item.directive);
-  });
-};
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/directives/vAnimation.ts":
-/*!*************************************************************!*\
-  !*** ./src/tenon-next/src/runtime/directives/vAnimation.ts ***!
-  \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   vAnimation: () => (/* binding */ vAnimation)
-/* harmony export */ });
-var vAnimation = {
-  mounted(el, _ref) {
-    var value = _ref.value;
-    value && el.handleAnimation(value);
-  },
-  updated(el, _ref2) {
-    var value = _ref2.value,
-      oldValue = _ref2.oldValue;
-    // FIXME: Animation对象更新时,不会触发updated事件
-    if (!value || value === oldValue) {
-      return;
-    } else {
-      el.handleAnimation(value);
-    }
-  },
-  beforeUnmount(el, _ref3) {
-    var value = _ref3.value;
-    // TODO 是否在元素销毁的时候，去除动画
-    console.log('Animation Unmounted');
-  }
-};
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/directives/vModel.ts":
-/*!*********************************************************!*\
-  !*** ./src/tenon-next/src/runtime/directives/vModel.ts ***!
-  \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   vModelSwitch: () => (/* binding */ vModelSwitch),
-/* harmony export */   vModelText: () => (/* binding */ vModelText)
-/* harmony export */ });
-/* harmony import */ var _utils_event__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/event */ "./src/tenon-next/src/utils/event.ts");
-/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
-
-
-var getModelAssigner = function getModelAssigner(vnode) {
-  var fn = vnode.props['onUpdate:modelValue'];
-  return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isArray)(fn) ? function (value) {
-    return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.invokeArrayFns)(fn, value);
-  } : fn;
-};
-var vModelText = {
-  beforeMount(el, _ref, vnode) {
-    var value = _ref.value,
-      _ref$modifiers = _ref.modifiers,
-      lazy = _ref$modifiers.lazy,
-      trim = _ref$modifiers.trim,
-      number = _ref$modifiers.number;
-    el.value = value == null ? '' : value;
-    el._assign = getModelAssigner(vnode);
-    var castToNumber = !!number;
-    (0,_utils_event__WEBPACK_IMPORTED_MODULE_0__.addEventListener)(el, 'input', function (e) {
-      var domValue = e.text;
-      if (lazy) {
-        if (e.state === _utils_event__WEBPACK_IMPORTED_MODULE_0__.InputEventState.CONFIRMED || e.state === _utils_event__WEBPACK_IMPORTED_MODULE_0__.InputEventState.ENDED) {
-          var _value = transformValue(trim, castToNumber, domValue);
-          el._assign(_value);
-        }
-      } else {
-        if (e.state === _utils_event__WEBPACK_IMPORTED_MODULE_0__.InputEventState.CHANGED) {
-          var _value2 = transformValue(trim, castToNumber, domValue);
-          el._assign(_value2);
-        }
-      }
-    });
-  },
-  beforeUpdate(el, _ref2, vnode) {
-    var value = _ref2.value,
-      _ref2$modifiers = _ref2.modifiers,
-      trim = _ref2$modifiers.trim,
-      number = _ref2$modifiers.number;
-    el._assign = getModelAssigner(vnode);
-    if (el.focused) {
-      if (trim && el.value.trim() === value) {
-        return;
-      }
-      if (number && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.toNumber)(el.value) === value) {
-        return;
-      }
-    }
-    var newValue = value == null ? '' : value;
-    if (el.value !== newValue) {
-      el.value = newValue;
-    }
-  }
-};
-function transformValue(trim, castToNumber, value) {
-  var domValue = value;
-  if (trim) {
-    domValue = domValue.trim();
-  }
-  if (castToNumber) {
-    domValue = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.toNumber)(domValue);
-  }
-  return domValue;
-}
-var vModelSwitch = {
-  beforeMount(el, _ref3, vnode) {
-    var value = _ref3.value;
-    el.value = value == null ? '' : value;
-    el._assign = getModelAssigner(vnode);
-    (0,_utils_event__WEBPACK_IMPORTED_MODULE_0__.addEventListener)(el, 'switch', function (e) {
-      var state = e.state;
-      if (state === _utils_event__WEBPACK_IMPORTED_MODULE_0__.SwitchEventState.CLOSE) {
-        el._assign(false);
-      } else if (state === _utils_event__WEBPACK_IMPORTED_MODULE_0__.SwitchEventState.OPEN) {
-        el._assign(true);
-      }
-    });
-  },
-  beforeUpdate(el, _ref4, vnode) {
-    var value = _ref4.value,
-      _ref4$modifiers = _ref4.modifiers,
-      trim = _ref4$modifiers.trim,
-      number = _ref4$modifiers.number;
-    el._assign = getModelAssigner(vnode);
-    if (el.value === value) {
-      return;
-    }
-    el.value = value;
-  }
-};
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/directives/vShow.ts":
-/*!********************************************************!*\
-  !*** ./src/tenon-next/src/runtime/directives/vShow.ts ***!
-  \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   vShow: () => (/* binding */ vShow)
-/* harmony export */ });
-var DefaultDisplay = 'flex';
-var vShow = {
-  beforeMount(el, _ref, _ref2) {
-    var value = _ref.value;
-    var transition = _ref2.transition;
-    if (el.style.display === 'none') {
-      el._vod = '';
-    } else {
-      el._vod = el.style.display || DefaultDisplay;
-    }
-    if (transition && value) {
-      transition.beforeEnter(el);
-    } else {
-      setDisplay(el, value);
-    }
-  },
-  mounted(el, _ref3, _ref4) {
-    var value = _ref3.value;
-    var transition = _ref4.transition;
-    if (transition && value) {
-      transition.enter(el);
-    }
-  },
-  updated(el, _ref5, _ref6) {
-    var value = _ref5.value,
-      oldValue = _ref5.oldValue;
-    var transition = _ref6.transition;
-    if (!value === !oldValue) return;
-    if (transition) {
-      if (value) {
-        transition.beforeEnter(el);
-        setDisplay(el, true);
-        transition.enter(el);
-      } else {
-        transition.leave(el, function () {
-          setDisplay(el, false);
-        });
-      }
-    } else {
-      setDisplay(el, value);
-    }
-  },
-  beforeUnmount(el, _ref7) {
-    var value = _ref7.value;
-    setDisplay(el, value);
-  }
-};
-function setDisplay(el, value) {
-  el.setStyle({
-    display: value ? el._vod : 'none',
-    "flex-direction": el.style.flexDirection ? el.style.flexDirection : 'column'
-  });
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/handlers/attrs.ts":
-/*!******************************************************!*\
-  !*** ./src/tenon-next/src/runtime/handlers/attrs.ts ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   patchAttrs: () => (/* binding */ patchAttrs)
-/* harmony export */ });
-// import { Base } from '../nodes/Base'
-
-function patchAttrs(el, key, prevValue, nextValue) {
-  el.setAttribute(key, nextValue);
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/handlers/class.ts":
-/*!******************************************************!*\
-  !*** ./src/tenon-next/src/runtime/handlers/class.ts ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   patchClass: () => (/* binding */ patchClass)
-/* harmony export */ });
-// import { Base } from '../nodes/Base'
-function patchClass(el, key, prevValue, nextValue) {
-  // 处理Class的绑定
-  el.setAttribute(key, nextValue);
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/handlers/events.ts":
-/*!*******************************************************!*\
-  !*** ./src/tenon-next/src/runtime/handlers/events.ts ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   addEventListener: () => (/* binding */ addEventListener),
-/* harmony export */   getStaticEventName: () => (/* binding */ getStaticEventName),
-/* harmony export */   patchEvents: () => (/* binding */ patchEvents),
-/* harmony export */   removeEventListener: () => (/* binding */ removeEventListener)
-/* harmony export */ });
-// import { Base } from '../nodes/Base'
-
-var LongPress = 'longpress';
-function patchEvents(el, rawName, prevValue, nextValue) {
-  var instance = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
-  var event = getStaticEventName(rawName);
-  var value = nextValue;
-  var invoker = prevValue && prevValue.invoker;
-  if (nextValue && value) {
-    if (invoker) {
-      prevValue.invoker = null;
-      invoker.value = value;
-      nextValue.invoker = invoker;
-    } else {
-      addEventListener(el, event, createInvoker(value, instance));
-    }
-  } else if (invoker) {
-    removeEventListener(el, event, invoker);
-  }
-}
-function createInvoker(initialValue, instance) {
-  // TODO: Array.isArray兼容性测试
-  var invoker = function invoker() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-    if (Array.isArray(initialValue)) {
-      initialValue.forEach(function (func) {
-        func.apply(instance, [].concat(args));
-      });
-    } else {
-      initialValue.apply(instance, [].concat(args));
-    }
-  };
-  invoker.value = initialValue;
-  initialValue.invoker = invoker;
-  return invoker;
-}
-function addEventListener(el, event, handler) {
-  el.addEventListener(event, handler);
-}
-function removeEventListener(el, event, handler) {
-  el.removeEventListener(event, handler);
-}
-function getStaticEventName(rawName) {
-  var eventName = rawName.slice(2).toLowerCase();
-  if (eventName === LongPress) {
-    eventName = "longPress";
-  }
-  return eventName;
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/handlers/style.ts":
-/*!******************************************************!*\
-  !*** ./src/tenon-next/src/runtime/handlers/style.ts ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   patchStyle: () => (/* binding */ patchStyle)
-/* harmony export */ });
-/* harmony import */ var _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hummer/tenon-utils */ "./node_modules/@hummer/tenon-utils/dist/tenon-utils.cjs.js");
-
-function patchStyle(el, key, prevValue, nextValue) {
-  var style = nextValue;
-  if (typeof nextValue === 'string') {
-    style = (0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.parseStringStyle)(nextValue);
-  }
-  // 样式转换为 Hummer 特有样式
-  style = _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_0__.styleTransformer.transformStyle(style, el);
-  el.style = style;
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/helper/lifecycle-helper.ts":
-/*!***************************************************************!*\
-  !*** ./src/tenon-next/src/runtime/helper/lifecycle-helper.ts ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   initPageLifeCycle: () => (/* binding */ initPageLifeCycle)
-/* harmony export */ });
-var LifeCycleEnum = /*#__PURE__*/function (LifeCycleEnum) {
-  LifeCycleEnum["ONLOAD"] = "onLoad";
-  LifeCycleEnum["ONREADY"] = "onReady";
-  LifeCycleEnum["ONSHOW"] = "onShow";
-  LifeCycleEnum["ONHIDE"] = "onHide";
-  LifeCycleEnum["ONUNLOAD"] = "onUnload";
-  LifeCycleEnum["ONBACK"] = "onBack";
-  return LifeCycleEnum;
-}(LifeCycleEnum || {});
-var LIFECYCLE = [LifeCycleEnum.ONLOAD, LifeCycleEnum.ONREADY, LifeCycleEnum.ONSHOW, LifeCycleEnum.ONHIDE, LifeCycleEnum.ONUNLOAD, LifeCycleEnum.ONBACK];
-
-/**
- * 初始化页面生命周期
- * @param container 页面实例
- * @param instance 组件实例
- * @param config Options
- */
-var initPageLifeCycle = function initPageLifeCycle(container, instance, config) {
-  var globalMixins = instance._.appContext.mixins;
-  var mixins = config.mixins,
-    extendOptions = config.extends;
-  var lifeCycleMixins = {
-    onLoad: [],
-    onReady: [],
-    onShow: [],
-    onHide: [],
-    onUnload: [],
-    onBack: []
-  };
-  var globalLifeCycleMixins = {
-    onLoad: [],
-    onReady: [],
-    onShow: [],
-    onHide: [],
-    onUnload: [],
-    onBack: []
-  };
-  if (globalMixins) {
-    globalLifeCycleMixins = applyPageMixin(globalMixins);
-  }
-  if (mixins) {
-    lifeCycleMixins = applyPageMixin(mixins);
-  }
-  LIFECYCLE.forEach(function (lifecycle) {
-    // 页面生命周期执行顺序，extend => mixin => option
-    // On Back 生命周期特殊处理
-    if (lifecycle === LifeCycleEnum.ONBACK) {
-      container[lifecycle] = function () {
-        /**
-         * 背景：onBack Return true 拦截返回键；Return false 不拦截。
-         * 依次执行 onBack 的回调，若有函数返回 true，进行拦截，后续函数不再调用
-         */
-        for (var i = 0; i < globalLifeCycleMixins[lifecycle].length; i++) {
-          if (applyLifeCycle(instance, globalLifeCycleMixins[lifecycle][i])) {
-            return true;
-          }
-        }
-        if (extendOptions) {
-          if (applyLifeCycle(instance, extendOptions[lifecycle])) {
-            return true;
-          }
-        }
-        for (var _i = 0; _i < lifeCycleMixins[lifecycle].length; _i++) {
-          if (applyLifeCycle(instance, lifeCycleMixins[lifecycle][_i])) {
-            return true;
-          }
-        }
-        return applyLifeCycle(instance, config[lifecycle]);
-      };
-      return true;
-    }
-    container[lifecycle] = function () {
-      globalLifeCycleMixins[lifecycle].forEach(function (func) {
-        applyLifeCycle(instance, func);
-      });
-      extendOptions && applyLifeCycle(instance, extendOptions[lifecycle]);
-      lifeCycleMixins[lifecycle].forEach(function (func) {
-        applyLifeCycle(instance, func);
-      });
-      applyLifeCycle(instance, config[lifecycle]);
-    };
-  });
-};
-function applyPageMixin(mixins) {
-  var lifeCycleMixins = {
-    onLoad: [],
-    onReady: [],
-    onShow: [],
-    onHide: [],
-    onUnload: [],
-    onBack: []
-  };
-  if (!mixins || mixins.length === 0) {
-    return lifeCycleMixins;
-  }
-  mixins.forEach(function (mixin) {
-    var onLoad = mixin.onLoad,
-      onReady = mixin.onReady,
-      onShow = mixin.onShow,
-      onHide = mixin.onHide,
-      onUnload = mixin.onUnload,
-      onBack = mixin.onBack;
-    onLoad && lifeCycleMixins.onLoad.push(onLoad);
-    onReady && lifeCycleMixins.onReady.push(onReady);
-    onShow && lifeCycleMixins.onShow.push(onShow);
-    onHide && lifeCycleMixins.onHide.push(onHide);
-    onUnload && lifeCycleMixins.onUnload.push(onUnload);
-    onBack && lifeCycleMixins.onBack.push(onBack);
-  });
-  return lifeCycleMixins;
-}
-function applyLifeCycle(instance, func) {
-  return func && func.apply(instance);
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/index.ts":
-/*!*********************************************!*\
-  !*** ./src/tenon-next/src/runtime/index.ts ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BaseTransition: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.BaseTransition),
-/* harmony export */   BaseTransitionPropsValidators: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.BaseTransitionPropsValidators),
-/* harmony export */   Comment: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.Comment),
-/* harmony export */   EffectScope: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.EffectScope),
-/* harmony export */   Fragment: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.Fragment),
-/* harmony export */   KeepAlive: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.KeepAlive),
-/* harmony export */   ReactiveEffect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.ReactiveEffect),
-/* harmony export */   Static: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.Static),
-/* harmony export */   Suspense: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.Suspense),
-/* harmony export */   Teleport: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.Teleport),
-/* harmony export */   Text: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.Text),
-/* harmony export */   appContext: () => (/* binding */ appContext),
-/* harmony export */   assertNumber: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.assertNumber),
-/* harmony export */   callWithAsyncErrorHandling: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.callWithAsyncErrorHandling),
-/* harmony export */   callWithErrorHandling: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.callWithErrorHandling),
-/* harmony export */   camelize: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.camelize),
-/* harmony export */   capitalize: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.capitalize),
-/* harmony export */   cloneVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.cloneVNode),
-/* harmony export */   compatUtils: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.compatUtils),
-/* harmony export */   component: () => (/* reexport safe */ _api__WEBPACK_IMPORTED_MODULE_3__.component),
-/* harmony export */   computed: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.computed),
-/* harmony export */   container: () => (/* binding */ container),
-/* harmony export */   createApp: () => (/* binding */ createApp),
-/* harmony export */   createBlock: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createBlock),
-/* harmony export */   createCommentVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode),
-/* harmony export */   createElementBlock: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createElementBlock),
-/* harmony export */   createElementVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createElementVNode),
-/* harmony export */   createHydrationRenderer: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createHydrationRenderer),
-/* harmony export */   createPropsRestProxy: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createPropsRestProxy),
-/* harmony export */   createRenderer: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createRenderer),
-/* harmony export */   createRootContainer: () => (/* binding */ createRootContainer),
-/* harmony export */   createSlots: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createSlots),
-/* harmony export */   createStaticVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createStaticVNode),
-/* harmony export */   createTextVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createTextVNode),
-/* harmony export */   createVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createVNode),
-/* harmony export */   customRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.customRef),
-/* harmony export */   defineAsyncComponent: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.defineAsyncComponent),
-/* harmony export */   defineComponent: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.defineComponent),
-/* harmony export */   defineEmits: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.defineEmits),
-/* harmony export */   defineExpose: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.defineExpose),
-/* harmony export */   defineModel: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.defineModel),
-/* harmony export */   defineOptions: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.defineOptions),
-/* harmony export */   defineProps: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.defineProps),
-/* harmony export */   defineSlots: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.defineSlots),
-/* harmony export */   devtools: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.devtools),
-/* harmony export */   directive: () => (/* reexport safe */ _api__WEBPACK_IMPORTED_MODULE_3__.directive),
-/* harmony export */   effect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.effect),
-/* harmony export */   effectScope: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.effectScope),
-/* harmony export */   getCurrentInstance: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.getCurrentInstance),
-/* harmony export */   getCurrentScope: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.getCurrentScope),
-/* harmony export */   getTransitionRawChildren: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.getTransitionRawChildren),
-/* harmony export */   guardReactiveProps: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.guardReactiveProps),
-/* harmony export */   h: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.h),
-/* harmony export */   handleError: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.handleError),
-/* harmony export */   hasInjectionContext: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.hasInjectionContext),
-/* harmony export */   initCustomFormatter: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.initCustomFormatter),
-/* harmony export */   inject: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.inject),
-/* harmony export */   isMemoSame: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isMemoSame),
-/* harmony export */   isProxy: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isProxy),
-/* harmony export */   isReactive: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isReactive),
-/* harmony export */   isReadonly: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isReadonly),
-/* harmony export */   isRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isRef),
-/* harmony export */   isRuntimeOnly: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isRuntimeOnly),
-/* harmony export */   isShallow: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isShallow),
-/* harmony export */   isVNode: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isVNode),
-/* harmony export */   markRaw: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.markRaw),
-/* harmony export */   mergeDefaults: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.mergeDefaults),
-/* harmony export */   mergeModels: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.mergeModels),
-/* harmony export */   mergeProps: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.mergeProps),
-/* harmony export */   mixin: () => (/* reexport safe */ _api__WEBPACK_IMPORTED_MODULE_3__.mixin),
-/* harmony export */   nextTick: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.nextTick),
-/* harmony export */   normalizeClass: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.normalizeClass),
-/* harmony export */   normalizeProps: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.normalizeProps),
-/* harmony export */   normalizeStyle: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.normalizeStyle),
-/* harmony export */   onActivated: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onActivated),
-/* harmony export */   onBeforeMount: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onBeforeMount),
-/* harmony export */   onBeforeUnmount: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onBeforeUnmount),
-/* harmony export */   onBeforeUpdate: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onBeforeUpdate),
-/* harmony export */   onDeactivated: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onDeactivated),
-/* harmony export */   onErrorCaptured: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onErrorCaptured),
-/* harmony export */   onMounted: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onMounted),
-/* harmony export */   onRenderTracked: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onRenderTracked),
-/* harmony export */   onRenderTriggered: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onRenderTriggered),
-/* harmony export */   onScopeDispose: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onScopeDispose),
-/* harmony export */   onServerPrefetch: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onServerPrefetch),
-/* harmony export */   onUnmounted: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onUnmounted),
-/* harmony export */   onUpdated: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onUpdated),
-/* harmony export */   openBlock: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.openBlock),
-/* harmony export */   popScopeId: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.popScopeId),
-/* harmony export */   provide: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.provide),
-/* harmony export */   proxyRefs: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.proxyRefs),
-/* harmony export */   pushScopeId: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.pushScopeId),
-/* harmony export */   queuePostFlushCb: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.queuePostFlushCb),
-/* harmony export */   reactive: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.reactive),
-/* harmony export */   readonly: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.readonly),
-/* harmony export */   ref: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.ref),
-/* harmony export */   registerRuntimeCompiler: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.registerRuntimeCompiler),
-/* harmony export */   render: () => (/* binding */ render),
-/* harmony export */   renderApp: () => (/* binding */ renderApp),
-/* harmony export */   renderCustomSlot: () => (/* binding */ renderCustomSlot),
-/* harmony export */   renderList: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.renderList),
-/* harmony export */   renderSlot: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.renderSlot),
-/* harmony export */   resolveComponent: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.resolveComponent),
-/* harmony export */   resolveDirective: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.resolveDirective),
-/* harmony export */   resolveDynamicComponent: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.resolveDynamicComponent),
-/* harmony export */   resolveFilter: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.resolveFilter),
-/* harmony export */   resolveTransitionHooks: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.resolveTransitionHooks),
-/* harmony export */   setBlockTracking: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.setBlockTracking),
-/* harmony export */   setDevtoolsHook: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.setDevtoolsHook),
-/* harmony export */   setTransitionHooks: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.setTransitionHooks),
-/* harmony export */   shallowReactive: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.shallowReactive),
-/* harmony export */   shallowReadonly: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.shallowReadonly),
-/* harmony export */   shallowRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.shallowRef),
-/* harmony export */   ssrContextKey: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.ssrContextKey),
-/* harmony export */   ssrUtils: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.ssrUtils),
-/* harmony export */   stop: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.stop),
-/* harmony export */   toDisplayString: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.toDisplayString),
-/* harmony export */   toHandlerKey: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.toHandlerKey),
-/* harmony export */   toHandlers: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.toHandlers),
-/* harmony export */   toRaw: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.toRaw),
-/* harmony export */   toRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.toRef),
-/* harmony export */   toRefs: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.toRefs),
-/* harmony export */   toValue: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.toValue),
-/* harmony export */   transformVNodeArgs: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.transformVNodeArgs),
-/* harmony export */   triggerRef: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.triggerRef),
-/* harmony export */   unref: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.unref),
-/* harmony export */   use: () => (/* reexport safe */ _api__WEBPACK_IMPORTED_MODULE_3__.use),
-/* harmony export */   useAttrs: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.useAttrs),
-/* harmony export */   useModel: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.useModel),
-/* harmony export */   useSSRContext: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.useSSRContext),
-/* harmony export */   useSlots: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.useSlots),
-/* harmony export */   useTransitionState: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.useTransitionState),
-/* harmony export */   vAnimation: () => (/* reexport safe */ _directives_vAnimation__WEBPACK_IMPORTED_MODULE_6__.vAnimation),
-/* harmony export */   vModelSwitch: () => (/* reexport safe */ _directives_vModel__WEBPACK_IMPORTED_MODULE_8__.vModelSwitch),
-/* harmony export */   vModelText: () => (/* reexport safe */ _directives_vModel__WEBPACK_IMPORTED_MODULE_8__.vModelText),
-/* harmony export */   vShow: () => (/* reexport safe */ _directives_vShow__WEBPACK_IMPORTED_MODULE_7__.vShow),
-/* harmony export */   version: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.version),
-/* harmony export */   warn: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.warn),
-/* harmony export */   watch: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.watch),
-/* harmony export */   watchEffect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.watchEffect),
-/* harmony export */   watchPostEffect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.watchPostEffect),
-/* harmony export */   watchSyncEffect: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.watchSyncEffect),
-/* harmony export */   withAsyncContext: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.withAsyncContext),
-/* harmony export */   withCtx: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.withCtx),
-/* harmony export */   withDefaults: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.withDefaults),
-/* harmony export */   withDirectives: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.withDirectives),
-/* harmony export */   withMemo: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.withMemo),
-/* harmony export */   withScopeId: () => (/* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.withScopeId)
-/* harmony export */ });
-/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
-/* harmony import */ var _nodeOps__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./nodeOps */ "./src/tenon-next/src/runtime/nodeOps.ts");
-/* harmony import */ var _patchProp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./patchProp */ "./src/tenon-next/src/runtime/patchProp.ts");
-/* harmony import */ var _nodes_document__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./nodes/document */ "./src/tenon-next/src/runtime/nodes/document.ts");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./api */ "./src/tenon-next/src/runtime/api.ts");
-/* harmony import */ var _helper_lifecycle_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helper/lifecycle-helper */ "./src/tenon-next/src/runtime/helper/lifecycle-helper.ts");
-/* harmony import */ var _directives_vAnimation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./directives/vAnimation */ "./src/tenon-next/src/runtime/directives/vAnimation.ts");
-/* harmony import */ var _directives_vShow__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./directives/vShow */ "./src/tenon-next/src/runtime/directives/vShow.ts");
-/* harmony import */ var _directives_vModel__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./directives/vModel */ "./src/tenon-next/src/runtime/directives/vModel.ts");
-/* harmony import */ var _nodes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./nodes */ "./src/tenon-next/src/runtime/nodes/index.ts");
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _nodes__WEBPACK_IMPORTED_MODULE_9__) if(["default","use","mixin","directive","component","renderApp","appContext","container","renderCustomSlot","createApp","vAnimation","vShow","vModelText","vModelSwitch","createRootContainer","render","BaseTransition","BaseTransitionPropsValidators","Comment","EffectScope","Fragment","KeepAlive","ReactiveEffect","Static","Suspense","Teleport","Text","assertNumber","callWithAsyncErrorHandling","callWithErrorHandling","camelize","capitalize","cloneVNode","compatUtils","computed","createBlock","createCommentVNode","createElementBlock","createElementVNode","createHydrationRenderer","createPropsRestProxy","createRenderer","createSlots","createStaticVNode","createTextVNode","createVNode","customRef","defineAsyncComponent","defineComponent","defineEmits","defineExpose","defineModel","defineOptions","defineProps","defineSlots","devtools","effect","effectScope","getCurrentInstance","getCurrentScope","getTransitionRawChildren","guardReactiveProps","h","handleError","hasInjectionContext","initCustomFormatter","inject","isMemoSame","isProxy","isReactive","isReadonly","isRef","isRuntimeOnly","isShallow","isVNode","markRaw","mergeDefaults","mergeModels","mergeProps","nextTick","normalizeClass","normalizeProps","normalizeStyle","onActivated","onBeforeMount","onBeforeUnmount","onBeforeUpdate","onDeactivated","onErrorCaptured","onMounted","onRenderTracked","onRenderTriggered","onScopeDispose","onServerPrefetch","onUnmounted","onUpdated","openBlock","popScopeId","provide","proxyRefs","pushScopeId","queuePostFlushCb","reactive","readonly","ref","registerRuntimeCompiler","renderList","renderSlot","resolveComponent","resolveDirective","resolveDynamicComponent","resolveFilter","resolveTransitionHooks","setBlockTracking","setDevtoolsHook","setTransitionHooks","shallowReactive","shallowReadonly","shallowRef","ssrContextKey","ssrUtils","stop","toDisplayString","toHandlerKey","toHandlers","toRaw","toRef","toRefs","toValue","transformVNodeArgs","triggerRef","unref","useAttrs","useModel","useSSRContext","useSlots","useTransitionState","version","warn","watch","watchEffect","watchPostEffect","watchSyncEffect","withAsyncContext","withCtx","withDefaults","withDirectives","withMemo","withScopeId"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _nodes__WEBPACK_IMPORTED_MODULE_9__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-
-
-
-
-
-
-
-var extend = Object.assign;
-var _createRenderer = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createRenderer)(extend({
-    patchProp: _patchProp__WEBPACK_IMPORTED_MODULE_1__.patchProp
-  }, _nodeOps__WEBPACK_IMPORTED_MODULE_0__.nodeOps)),
-  baseRender = _createRenderer.render,
-  baseCreateApp = _createRenderer.createApp;
-var renderApp = baseRender;
-var appContext = null;
-var container = null;
-// 供自定义渲染组件渲染 Slot 模块使用，保证 AppContext 和 Global Context 统一
-var renderCustomSlot = function renderCustomSlot(vnode, container) {
-  // 支持纯粹的 Component Options Case
-  if (!(0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.isVNode)(vnode)) {
-    vnode = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.createVNode)(vnode);
-  }
-  vnode.appContext = appContext;
-  baseRender(vnode, container);
-};
-var createApp = function createApp() {
-  var app = baseCreateApp.apply(void 0, arguments);
-  var mount = app.mount;
-  app.mount = function (container) {
-    var proxy = mount(container);
-    return proxy;
-  };
-  return app;
-};
-
-
-
-
-
-var createRootContainer = function createRootContainer(options) {
-  return _nodes_document__WEBPACK_IMPORTED_MODULE_2__["default"].createPageView(options);
-};
-function render(App) {
-  var pageConfig = App.pageConfig;
-  var app = createApp(App);
-  (0,_api__WEBPACK_IMPORTED_MODULE_3__.install)(app);
-  appContext = app._context;
-  container = createRootContainer({
-    canScroll: pageConfig && pageConfig.canScroll,
-    pageStyle: pageConfig && pageConfig.pageStyle
-  });
-  var plugins = App.plugins;
-  plugins && plugins.forEach(function (plugin) {
-    app.use(plugin);
-  });
-  var instance = app.mount(container);
-  (0,_helper_lifecycle_helper__WEBPACK_IMPORTED_MODULE_4__.initPageLifeCycle)(container, instance, App);
-  container.render();
-  // if(NODE_DEBUG_ENV){
-  //   // dev环境开启devtool
-  //   require('@hummer/tenon-dev-tool').run(container)
-  // }
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/nodeOps.ts":
-/*!***********************************************!*\
-  !*** ./src/tenon-next/src/runtime/nodeOps.ts ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   nodeOps: () => (/* binding */ nodeOps)
-/* harmony export */ });
-/* harmony import */ var _nodes_document__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./nodes/document */ "./src/tenon-next/src/runtime/nodes/document.ts");
-// import {Base} from './nodes/Base'
-
-
-var insert = function insert(child, parent, anchor) {
-  if (!parent) {
-    return null;
-  }
-  if (anchor !== null) {
-    parent.insertBefore(child, anchor);
-  } else {
-    parent.appendChild(child);
-  }
-};
-var remove = function remove(child) {
-  var parent = child.parentNode;
-  if (parent !== null) {
-    parent.removeChild(child);
-  }
-};
-var createElement = function createElement(tag) {
-  return _nodes_document__WEBPACK_IMPORTED_MODULE_0__["default"].createElement(tag);
-};
-var createText = function createText(text) {
-  return _nodes_document__WEBPACK_IMPORTED_MODULE_0__["default"].createText(text);
-};
-var createComment = function createComment(comment) {
-  return _nodes_document__WEBPACK_IMPORTED_MODULE_0__["default"].createComment(comment);
-};
-var setText = function setText(node, text) {
-  node.setElementText(text);
-  // TODO: hummer api text类通过setElementText实现在文本嵌套的case
-};
-var setElementText = function setElementText(node, text) {
-  node.setElementText(text);
-};
-var parentNode = function parentNode(node) {
-  return node.parentNode ? node.parentNode : null;
-};
-var nextSibling = function nextSibling(node) {
-  return node.nextSibling;
-};
-var querySelector = function querySelector(selector) {
-  return null;
-};
-var setScopeId = function setScopeId(el, id) {
-  el.setScopeId(id);
-};
-var nodeOps = {
-  insert,
-  remove,
-  createElement,
-  createText,
-  createComment,
-  setText,
-  setElementText,
-  parentNode,
-  nextSibling,
-  querySelector,
-  setScopeId
-};
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/nodes/component.ts":
-/*!*******************************************************!*\
-  !*** ./src/tenon-next/src/runtime/nodes/component.ts ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getComponent: () => (/* binding */ getComponent),
-/* harmony export */   register: () => (/* binding */ register)
-/* harmony export */ });
-// import {Base} from './Base'
-
-var components = new Map();
-function register(component) {
-  if (Array.isArray(component)) {
-    component.forEach(function (component) {
-      registerComponent(component);
-    });
-  } else {
-    registerComponent(component);
-  }
-}
-function registerComponent(component) {
-  var name = component.name;
-  components.set("ex-".concat(name), component);
-}
-// TODO: next 实现组件注册机制
-function getComponent(tag) {
-  var component = components.get(tag);
-  return component.factory();
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/nodes/components/anchor.ts":
-/*!***************************************************************!*\
-  !*** ./src/tenon-next/src/runtime/nodes/components/anchor.ts ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Anchor: () => (/* binding */ Anchor)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../../../../../packages/hummer-api/src/index */ "../../packages/hummer-api/src/index.ts");
-
-
-
-
-// const { document: _Document } = __Hummer__
-
-
-
-/**
- * 锚点
- */
-var Anchor = /*#__PURE__*/function (_View) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(Anchor, _View);
-  /**
-   * 构造函数
-   * 
-   * @param id
-   * @param name 
-   * @param props 
-   */
-  function Anchor() {
-    var _this;
-    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Anchor);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Anchor, [id, 'anchor', props]);
-    _this.setStyle({
-      display: "none"
-    });
-    return _this;
-  }
-  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__["default"])(Anchor);
-}(_packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_4__.View);
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/nodes/components/comment.ts":
-/*!****************************************************************!*\
-  !*** ./src/tenon-next/src/runtime/nodes/components/comment.ts ***!
-  \****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Comment: () => (/* binding */ Comment)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../../../../../packages/hummer-api/src/index */ "../../packages/hummer-api/src/index.ts");
-
-
-
-
-
-
-/**
- * 注释节点，使用Hummer侧View对象进行封装
- */
-var Comment = /*#__PURE__*/function (_View) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(Comment, _View);
-  /**
-   * 构造函数
-   * 
-   * @param id
-   * @param name 
-   * @param props 
-   */
-
-  function Comment() {
-    var _this;
-    var comment = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Comment);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Comment, ['', 'comment']);
-    _this.style = {
-      display: "none"
-    };
-    _this._comment = comment;
-    return _this;
-  }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Comment, [{
-    key: "comment",
-    get: function get() {
-      return this._comment;
-    }
-  }]);
-  return Comment;
-}(_packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_4__.View);
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/nodes/components/page/PageOptions.ts":
-/*!*************************************************************************!*\
-  !*** ./src/tenon-next/src/runtime/nodes/components/page/PageOptions.ts ***!
-  \*************************************************************************/
-/***/ (() => {
-
-
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/nodes/components/page/index.ts":
-/*!*******************************************************************!*\
-  !*** ./src/tenon-next/src/runtime/nodes/components/page/index.ts ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Page: () => (/* binding */ Page)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../../../../../../../../packages/hummer-api/src/index */ "../../packages/hummer-api/src/index.ts");
-/* harmony import */ var _PageOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PageOptions */ "./src/tenon-next/src/runtime/nodes/components/page/PageOptions.ts");
-/* harmony import */ var _PageOptions__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_PageOptions__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _PageOptions__WEBPACK_IMPORTED_MODULE_6__) if(["default","Page"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _PageOptions__WEBPACK_IMPORTED_MODULE_6__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-
-
-
-
-
-
-// import { RootScrollView } from "./RootScrollView"
-// import { RootView } from "./RootView"
-
-
-var noFunc = function noFunc() {};
-var Page = /*#__PURE__*/function (_ViewComponent) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Page, _ViewComponent);
-  // private _element: ScrollViewComponent|null = null
-  // private _canScroll: Boolean = true
-  function Page() {
-    var _this;
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Page);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Page);
-    var onLoad = options.onLoad,
-      onReady = options.onReady,
-      onShow = options.onShow,
-      onHide = options.onHide,
-      onUnload = options.onUnload,
-      onBack = options.onBack,
-      _options$canScroll = options.canScroll,
-      canScroll = _options$canScroll === void 0 ? true : _options$canScroll,
-      _options$pageStyle = options.pageStyle,
-      pageStyle = _options$pageStyle === void 0 ? {} : _options$pageStyle;
-    _this._onCreate = onLoad || noFunc;
-    _this._onReady = onReady || noFunc;
-    _this._onAppear = onShow || noFunc;
-    _this._onDisappear = onHide || noFunc;
-    _this._onDestroy = onUnload || noFunc;
-    _this._onBack = onBack || noFunc;
-    // this._canScroll = canScroll
-    _this.style = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])({
-      width: '100%',
-      height: '100%'
-    }, pageStyle);
-    //   if( this._canScroll){
-    //     this._element = new ScrollViewComponent()
-    //     this._element.style = {
-    //       width: "100%",
-    //       height: "100%",
-    //     }
-    //     this.appendChild(this._element)
-    //   }
-    return _this;
-  }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Page, [{
-    key: "render",
-    value: function render() {
-      _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_5__.Hummer.render(this);
-    }
-    // get element():ScrollViewComponent | ViewComponent{
-    //   return this._canScroll && this._element ? this._element : this
-    // }
-  }, {
-    key: "onCreate",
-    value: function onCreate() {
-      // 页面创建
-      this._onCreate();
-      // native 不提供onReady， 手动加一个onReady生命周期
-      this.onReady();
-    }
-  }, {
-    key: "onReady",
-    value: function onReady() {
-      // 页面ready
-      this._onReady();
-    }
-  }, {
-    key: "onAppear",
-    value: function onAppear() {
-      // 页面显示周期
-      this._onAppear();
-    }
-  }, {
-    key: "onDisappear",
-    value: function onDisappear() {
-      // 页面隐藏
-      this._onDisappear();
-    }
-  }, {
-    key: "onDestroy",
-    value: function onDestroy() {
-      // 页面销毁
-      this._onDestroy();
-    }
-  }, {
-    key: "onBack",
-    value: function onBack() {
-      // 页面销毁
-      var result = this._onBack();
-      return result || false;
-    }
-  }]);
-  return Page;
-}(_packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_5__.View);
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/nodes/document.ts":
-/*!******************************************************!*\
-  !*** ./src/tenon-next/src/runtime/nodes/document.ts ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Document: () => (/* binding */ Document),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _components_page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/page */ "./src/tenon-next/src/runtime/nodes/components/page/index.ts");
-/* harmony import */ var _components_comment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/comment */ "./src/tenon-next/src/runtime/nodes/components/comment.ts");
-/* harmony import */ var _components_anchor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/anchor */ "./src/tenon-next/src/runtime/nodes/components/anchor.ts");
-/* harmony import */ var _component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./component */ "./src/tenon-next/src/runtime/nodes/component.ts");
-/* harmony import */ var _hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @hummer/tenon-utils */ "./node_modules/@hummer/tenon-utils/dist/tenon-utils.cjs.js");
-/* harmony import */ var _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../../../../../../../packages/hummer-api/src/index */ "../../packages/hummer-api/src/index.ts");
-
-
-// import {ELEMNT_TAG_MAP,NODE_SWITCH, NODE_VIEW, NODE_TEXT, NODE_IMAGE, NODE_INPUT, NODE_TEXTAREA, NODE_BUTTON, NODE_SCROLLER, NODE_REFRESH, NODE_LOADMORE} from '@hummer/tenon-utils'
-
-// import {View} from './components/view'
-// import {Text} from './components/text'
-// import {Image} from './components/image'
-// import {Input} from './components/input'
-// import {TextArea} from './components/textarea'
-// import {Button} from './components/button'
-
-// import { Scroller } from './components/scroller'
-
-// import { Switch } from './components/switch'
-// import {Refresh} from './components/extend/refresh'
-// import {LoadMore} from './components/extend/loadmore'
-
-// import {Base} from './Base'
-
-
-
-
-/**
- * 通用Document对象
- */
-var Document = /*#__PURE__*/function () {
-  function Document() {
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Document);
-  }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Document, [{
-    key: "createElement",
-    value: function createElement(tag) {
-      // TODO: as 去掉
-      var component = _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_7__.Hummer.createElement(tag);
-      if (!component) {
-        if ((0,_hummer_tenon_utils__WEBPACK_IMPORTED_MODULE_6__.isCustomNativeTag)(tag)) {
-          // Custom Native Tag
-          component = (0,_component__WEBPACK_IMPORTED_MODULE_5__.getComponent)(tag) || _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_7__.Hummer.createElement('view');
-        } else {
-          // Default
-          component = _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_7__.Hummer.createElement('view');
-        }
-      }
-      return component;
-    }
-  }, {
-    key: "createText",
-    value: function createText(text) {
-      // Vue中调用该方法实现锚点，做特殊处理
-      var component;
-      if (!text) {
-        // 创建锚点
-        component = new _components_anchor__WEBPACK_IMPORTED_MODULE_4__.Anchor();
-      } else {
-        component = _packages_hummer_api_src_index__WEBPACK_IMPORTED_MODULE_7__.Hummer.createElement('text');
-        component.text = text;
-      }
-      return component;
-    }
-  }, {
-    key: "createComment",
-    value: function createComment(comment) {
-      return new _components_comment__WEBPACK_IMPORTED_MODULE_3__.Comment(comment);
-    }
-  }, {
-    key: "createPageView",
-    value: function createPageView(options) {
-      var pageView = new _components_page__WEBPACK_IMPORTED_MODULE_2__.Page(options);
-      return pageView;
-    }
-  }]);
-  return Document;
-}();
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new Document());
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/nodes/index.ts":
-/*!***************************************************!*\
-  !*** ./src/tenon-next/src/runtime/nodes/index.ts ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getComponent: () => (/* reexport safe */ _component__WEBPACK_IMPORTED_MODULE_0__.getComponent),
-/* harmony export */   register: () => (/* reexport safe */ _component__WEBPACK_IMPORTED_MODULE_0__.register)
-/* harmony export */ });
-/* harmony import */ var _component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./component */ "./src/tenon-next/src/runtime/nodes/component.ts");
-/* harmony import */ var _components_page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/page */ "./src/tenon-next/src/runtime/nodes/components/page/index.ts");
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _components_page__WEBPACK_IMPORTED_MODULE_1__) if(["default","getComponent","register"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _components_page__WEBPACK_IMPORTED_MODULE_1__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-// export * from './Base'
-
-
-// export * from './components/image'
-// export * from './components/input'
-
-// FIXME: Text组件命令与RuntimeCore命名冲突，暂时不导出Text组件
-// export * from './components/text'
-// export * from './components/view'
-// export * from './components/textarea'
-
-// export * from './components/button'
-// export * from './components/switch'
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/runtime/patchProp.ts":
-/*!*************************************************!*\
-  !*** ./src/tenon-next/src/runtime/patchProp.ts ***!
-  \*************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   patchProp: () => (/* binding */ patchProp)
-/* harmony export */ });
-/* harmony import */ var _handlers_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./handlers/class */ "./src/tenon-next/src/runtime/handlers/class.ts");
-/* harmony import */ var _handlers_style__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./handlers/style */ "./src/tenon-next/src/runtime/handlers/style.ts");
-/* harmony import */ var _handlers_attrs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./handlers/attrs */ "./src/tenon-next/src/runtime/handlers/attrs.ts");
-/* harmony import */ var _handlers_events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./handlers/events */ "./src/tenon-next/src/runtime/handlers/events.ts");
-// import { Base } from './nodes'
-
-
-
-
-function patchProp(el, key, prevValue, nextValue) {
-  var isSVG = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-  var prevChildren = arguments.length > 5 ? arguments[5] : undefined;
-  var parentComponent = arguments.length > 6 ? arguments[6] : undefined;
-  var parentSuspense = arguments.length > 7 ? arguments[7] : undefined;
-  var unmountChildren = arguments.length > 8 ? arguments[8] : undefined;
-  switch (key) {
-    case 'class':
-      (0,_handlers_class__WEBPACK_IMPORTED_MODULE_0__.patchClass)(el, key, prevValue, nextValue);
-      break;
-    case 'style':
-      (0,_handlers_style__WEBPACK_IMPORTED_MODULE_1__.patchStyle)(el, key, prevValue, nextValue);
-      break;
-    default:
-      if (isOn(key)) {
-        (0,_handlers_events__WEBPACK_IMPORTED_MODULE_3__.patchEvents)(el, key, prevValue, nextValue, parentComponent);
-      } else {
-        (0,_handlers_attrs__WEBPACK_IMPORTED_MODULE_2__.patchAttrs)(el, key, prevValue, nextValue);
-      }
-      break;
-  }
-}
-function isOn(key) {
-  var onRE = /^on[^a-z]/;
-  return onRE.test(key);
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/utils/event.ts":
-/*!*******************************************!*\
-  !*** ./src/tenon-next/src/utils/event.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   InputEventState: () => (/* binding */ InputEventState),
-/* harmony export */   SwitchEventState: () => (/* binding */ SwitchEventState),
-/* harmony export */   addEventListener: () => (/* binding */ addEventListener),
-/* harmony export */   removeEventListener: () => (/* binding */ removeEventListener)
-/* harmony export */ });
-var InputEventState = /*#__PURE__*/function (InputEventState) {
-  InputEventState[InputEventState["BEGIN"] = 1] = "BEGIN";
-  InputEventState[InputEventState["CHANGED"] = 2] = "CHANGED";
-  InputEventState[InputEventState["ENDED"] = 3] = "ENDED";
-  InputEventState[InputEventState["CONFIRMED"] = 4] = "CONFIRMED";
-  return InputEventState;
-}({});
-var SwitchEventState = /*#__PURE__*/function (SwitchEventState) {
-  SwitchEventState[SwitchEventState["CLOSE"] = 0] = "CLOSE";
-  SwitchEventState[SwitchEventState["OPEN"] = 1] = "OPEN";
-  return SwitchEventState;
-}({});
-function addEventListener(el, event, handler) {
-  el.addEventListener(event, handler);
-}
-function removeEventListener(el, event, handler) {
-  el.removeEventListener(event, handler);
-}
-
-/***/ }),
-
-/***/ "./src/tenon-next/src/utils/style.ts":
-/*!*******************************************!*\
-  !*** ./src/tenon-next/src/utils/style.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   MatchType: () => (/* binding */ MatchType),
-/* harmony export */   RelationType: () => (/* binding */ RelationType),
-/* harmony export */   RuleKeyMap: () => (/* binding */ RuleKeyMap),
-/* harmony export */   collectStyle: () => (/* binding */ collectStyle),
-/* harmony export */   getClassStyle: () => (/* binding */ getClassStyle)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_toConsumableArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js */ "./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
-
-var MatchType = /*#__PURE__*/function (MatchType) {
-  MatchType[MatchType["Class"] = 0] = "Class";
-  MatchType[MatchType["ID"] = 1] = "ID";
-  MatchType[MatchType["Attr"] = 2] = "Attr";
-  MatchType[MatchType["Tag"] = 3] = "Tag";
-  return MatchType;
-}({});
-var RuleKeyMap = {
-  'tagList': 'tagMap',
-  'classList': 'classMap',
-  'idList': 'idMap'
-};
-var RelationType = /*#__PURE__*/function (RelationType) {
-  RelationType[RelationType["Subselector"] = 0] = "Subselector";
-  RelationType[RelationType["DescendantSpace"] = 1] = "DescendantSpace";
-  RelationType[RelationType["Child"] = 2] = "Child";
-  RelationType[RelationType["DirectAdjacent"] = 3] = "DirectAdjacent";
-  RelationType[RelationType["IndirectAdjacent"] = 4] = "IndirectAdjacent";
-  return RelationType;
-}({}); // .a ~ .b
-var collectStyle = function collectStyle(ruleSetMap) {
-  if (!__GLOBAL__.CSSOM) {
-    var defaultRuleSetGroup = {
-      global: {
-        tagMap: new Map(),
-        classMap: new Map(),
-        idMap: new Map()
-      }
-    };
-    __GLOBAL__.CSSOM = defaultRuleSetGroup;
-  }
-  Object.keys(ruleSetMap).forEach(function (group) {
-    var ruleSet = ruleSetMap[group];
-    collectStyleGroup(ruleSet, group);
-  });
-};
-var collectStyleGroup = function collectStyleGroup(ruleSet, group) {
-  if (!__GLOBAL__.CSSOM[group]) {
-    var defaultRuleSet = {
-      tagMap: new Map(),
-      classMap: new Map(),
-      idMap: new Map()
-    };
-    __GLOBAL__.CSSOM[group] = defaultRuleSet;
-  }
-  Object.keys(ruleSet).forEach(function (ruleKey) {
-    var ruleList = ruleSet[ruleKey];
-    var key = RuleKeyMap[ruleKey];
-    key && ruleList.forEach(function (rule) {
-      if (rule) {
-        var selectorMap = __GLOBAL__.CSSOM[group][key];
-        var selectorKey = rule.selector;
-        var styleList = selectorMap.get(selectorKey) || [];
-        styleList.push(rule);
-        __GLOBAL__.CSSOM[group][key].set(selectorKey, styleList);
-      }
-    });
-  });
-};
-var getClassStyle = function getClassStyle(instance) {
-  var className = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-  var scoped = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-  var scopedId = arguments.length > 3 ? arguments[3] : undefined;
-  var elementStyle = {};
-  var classList = className.split(/\s/);
-  classList.forEach(function (item) {
-    if (!item) {
-      return;
-    }
-    var globalStyleArr = getGlobalStyle(MatchType.Class, item, filterStyle(classList));
-    var scopeStylesArr = [];
-    if (scoped && scopedId) {
-      scopeStylesArr = getScopedStyle(MatchType.Class, item, scopedId, filterStyle(classList));
-    }
-    // 将元素总样式、全局变量、scoped变量按照顺序合并
-    // TODO 增加样式优先级概念，处理 .a.b 和 .b 的优先级
-    elementStyle = Object.assign.apply(Object, [{}, elementStyle].concat(globalStyleArr, (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_toConsumableArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(scopeStylesArr)));
-  });
-  return elementStyle;
-};
-function filterStyle() {
-  var classList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  return function (rule) {
-    if (rule.relation === '') {
-      // 向下兼容
-      return true;
-    }
-    var flag = true;
-    var selector = rule.n_selector;
-    // 不存在组合关系的话，直接返回，从而优化性能
-    if (!selector.next) {
-      return true;
-    }
-    switch (selector.relation) {
-      case RelationType.Subselector:
-        // case1: .a.b
-        while (selector) {
-          if (classList.indexOf(selector.value) < 0) {
-            flag = false;
-            break;
-          }
-          selector = selector.next;
-        }
-        break;
-      default:
-        break;
-    }
-    return flag;
-  };
-}
-function getGlobalStyle(type, key, filterFunc) {
-  var styles = [];
-  switch (type) {
-    case MatchType.Class:
-      styles = __GLOBAL__.CSSOM['global'].classMap.get(key) || [];
-      break;
-    default:
-      break;
-  }
-  return styles.filter(function (item) {
-    if (filterFunc) {
-      return filterFunc(item);
-    }
-    return item;
-  }).map(function (item) {
-    return item === null || item === void 0 ? void 0 : item.style;
-  });
-}
-function getScopedStyle(type, key, scopedId, filterFunc) {
-  var styles = [];
-  var _GLOBAL__ = __GLOBAL__,
-    CSSOM = _GLOBAL__.CSSOM;
-  if (CSSOM[scopedId]) {
-    switch (type) {
-      case MatchType.Class:
-        styles = CSSOM[scopedId].classMap.get(key) || [];
-        break;
-      default:
-        break;
-    }
-  }
-  return styles.filter(function (item) {
-    if (filterFunc) {
-      return filterFunc(item);
-    }
-    return item;
-  }).map(function (item) {
-    return item === null || item === void 0 ? void 0 : item.style;
-  });
-}
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/Element/index.ts":
-/*!******************************************************!*\
-  !*** ../../packages/hummer-api/src/Element/index.ts ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Element: () => (/* binding */ Element)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _Node__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Node */ "../../packages/hummer-api/src/Node/index.ts");
-
-
-
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-/**
- * Element 
- * 
- * 需要对齐前端Element方法，参数MDN
- * 
- *
- */
-var Element = /*#__PURE__*/function (_Node) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_5__["default"])(Element, _Node);
-  /**
-   * 节点构造函数
-   * 
-   * @param tag  节点标签
-   * @param name 节点名称
-   * @param props  构造参数
-   */
-  function Element(tag) {
-    var _this;
-    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : tag;
-    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Element);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Element, [tag, name, props]);
-    /**
-     * 元素属性集合
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_attributes", {});
-    /**
-     * 样式集合
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_style", {});
-    return _this;
-  }
-
-  /**
-  * 设置属性
-  * 
-  * @param key 属性名称
-  * @param value  属性值
-  */
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Element, [{
-    key: "setAttribute",
-    value: function setAttribute(key, value) {
-      this._setAttribute(key, value);
-    }
-  }, {
-    key: "_setAttribute",
-    value: function _setAttribute(key, value) {
-      this._attributes[key] = value;
-      this.obj.setAttributes({
-        [key]: value
-      });
-    }
-
-    /**
-     * 设置属性
-     * 
-     * @param attribute  属性
-     */
-  }, {
-    key: "_setAttributes",
-    value: function _setAttributes(attribute) {
-      this._attributes = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])({}, this._attributes), attribute);
-      this.obj.setAttributes(attribute);
-    }
-
-    /**
-     * 获取属性名
-     * @param key 属性名
-     */
-  }, {
-    key: "getAttribute",
-    value: function getAttribute(key) {
-      return this._getAttribute(key);
-    }
-  }, {
-    key: "_getAttribute",
-    value: function _getAttribute(key) {
-      return this._attributes[key];
-      return this._attributes.get(key);
-    }
-  }, {
-    key: "setEnable",
-    value: function setEnable(enabled) {
-      this._setAttribute("enable", enabled);
-    }
-  }, {
-    key: "getEnable",
-    value: function getEnable() {
-      return this._getAttribute("enable");
-    }
-
-    /**
-     * 设置样式
-     * 
-     * @param style 样式对象
-     * @param flag 标记
-     */
-  }, {
-    key: "setStyle",
-    value: function setStyle(style) {
-      var flag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      this._setStyles(style);
-    }
-  }, {
-    key: "_setStyles",
-    value: function _setStyles(style) {
-      this._style = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])({}, style);
-      this.obj.setStyles(style);
-    }
-  }, {
-    key: "getStyle",
-    value: function getStyle() {
-      return this._style || {};
-    }
-
-    /**
-     *  添加动画
-     * 
-     * @param animation 动画对象
-     * @param key  动画唯一key
-     */
-  }, {
-    key: "addAnimation",
-    value: function addAnimation(animation) {
-      var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-      this._addAnimation(animation, key);
-    }
-  }, {
-    key: "_addAnimation",
-    value: function _addAnimation(animation) {
-      var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-      this.obj.addAnimation(animation, key);
-    }
-
-    /**
-     * 移除指定动画
-     * @param key 动画对象的唯一key
-     */
-  }, {
-    key: "removeAnimationForKey",
-    value: function removeAnimationForKey(key) {
-      this._removeAnimationForKey(key);
-    }
-  }, {
-    key: "_removeAnimationForKey",
-    value: function _removeAnimationForKey(key) {
-      this.obj.removeAnimationForKey(key);
-    }
-
-    /**
-     * 移除全部动画
-     */
-  }, {
-    key: "removeAllAnimation",
-    value: function removeAllAnimation() {
-      this._removeAllAnimation();
-    }
-  }, {
-    key: "_removeAllAnimation",
-    value: function _removeAllAnimation() {
-      this.obj.removeAllAnimation();
-    }
-
-    /**
-     * 获取视图区域
-     * @param callback  区域信息回调
-     */
-  }, {
-    key: "getRect",
-    value: function getRect(callback) {
-      var _this2 = this;
-      this.obj.getRect(function (rect) {
-        callback.call(_this2, rect);
-      });
-    }
-  }, {
-    key: "hide",
-    value: function hide() {
-      // TOOD 隐藏当前元素
-      // TODO 不实现
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      // TODO 展示当前元素
-      // TODO 不实现
-    }
-
-    /**
-     * 获取节点调试信息
-     * 
-     * @param callback 
-     * @param id 
-     */
-  }, {
-    key: "dbg_getDescription",
-    value: function dbg_getDescription(callback, id) {
-      console.log("dbg_getDescription()");
-    }
-  }]);
-  return Element;
-}(_Node__WEBPACK_IMPORTED_MODULE_7__.Node);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/EventTarget/index.ts":
-/*!**********************************************************!*\
-  !*** ../../packages/hummer-api/src/EventTarget/index.ts ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   EventTarget: () => (/* binding */ EventTarget)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _HMObject__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../HMObject */ "../../packages/hummer-api/src/HMObject/index.ts");
-
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-//***********************************************/
-// 引擎操作接口挂载点全局上的 ”__hummer__“上
-//***********************************************/
-
-var EventTarget = /*#__PURE__*/function (_HMObject) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(EventTarget, _HMObject);
-  function EventTarget(tag) {
-    var _this;
-    var isApi = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    var props = arguments.length > 2 ? arguments[2] : undefined;
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, EventTarget);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, EventTarget, [tag, isApi, props]);
-    _this.envents = new Map();
-    return _this;
-  }
-
-  //消息事件回调入口
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(EventTarget, [{
-    key: "onRecieveEvent",
-    value: function onRecieveEvent(eventName, event) {
-      event = this.onHandleRecieveEvent(eventName, event);
-      this.dispatchEvent(eventName, event);
-    }
-
-    //事件处理增强/扩展
-  }, {
-    key: "onHandleRecieveEvent",
-    value: function onHandleRecieveEvent(eventName, event) {
-      return event;
-    }
-
-    /**
-     * 绑定 EventTatget
-     */
-  }, {
-    key: "bindEventTarget",
-    value: function bindEventTarget() {
-      var _this2 = this;
-      this.obj.setEventTarget(function (eventName, event) {
-        _this2.onRecieveEvent(eventName, event);
-      });
-    }
-  }, {
-    key: "dispatchEvent",
-    value: function dispatchEvent(eventName, event) {
-      var listeners = this.envents.get(eventName);
-      if (listeners != undefined) {
-        listeners.forEach(function (lisener) {
-          if (lisener instanceof Function) {
-            lisener.call(event);
-          } else {
-            lisener.onEvent(event);
-          }
-        });
-      } else {
-        console.log("未找到事件处理器");
-      }
-    }
-  }, {
-    key: "addEventListener",
-    value: function addEventListener(eventName, eventLisener, useCapture) {
-      var listeners = this.envents.get(eventName);
-      if (listeners == undefined) {
-        listeners = new Array();
-        this.envents.set(eventName, listeners);
-      }
-      listeners.push(eventLisener);
-      this._addEventListener(eventName);
-    }
-  }, {
-    key: "_addEventListener",
-    value: function _addEventListener(eventName) {
-      this.obj.addEventListener(eventName);
-    }
-  }, {
-    key: "removeEventListener",
-    value: function removeEventListener(eventName, eventLisener, useCapture) {
-      var listeners = this.envents.get(eventName);
-      if (listeners != undefined) {
-        if (eventLisener == undefined) {
-          listeners.splice(0, listeners.length);
-          this.envents.delete(eventName);
-        } else {
-          var index = listeners.indexOf(eventLisener); // 获取对象在数组中的索引位置
-          if (index > -1) {
-            listeners.splice(index, 1); // 通过 splice() 函数将该对象从数组中移除
-          } else {
-            console.log("未找到指定对象");
-          }
-        }
-        this._removeEventListener(eventName);
-      }
-    }
-  }, {
-    key: "_removeEventListener",
-    value: function _removeEventListener(eventName) {
-      this.obj.removeEventListener(eventName);
-    }
-  }]);
-  return EventTarget;
-}(_HMObject__WEBPACK_IMPORTED_MODULE_4__.HMObject);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/HMObject/index.ts":
-/*!*******************************************************!*\
-  !*** ../../packages/hummer-api/src/HMObject/index.ts ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   HMObject: () => (/* binding */ HMObject)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-//***********************************************/
-//
-//    引擎操作接口挂载点全局上的 ”__hummer__“上
-//
-//***********************************************/
-
-var HMObject = /*#__PURE__*/function () {
-  function HMObject(tag) {
-    var isApi = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    var props = arguments.length > 2 ? arguments[2] : undefined;
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, HMObject);
-    this.tag = tag;
-    this.name = tag;
-    this.isApi = isApi;
-    this.props = props;
-    if (isApi) {
-      this.obj = _Document.createComponent(tag, props);
-    } else {
-      this.obj = _Document.createElement(tag, props);
-    }
-  }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(HMObject, [{
-    key: "getThis",
-    value: function getThis() {
-      return this.obj;
-    }
-  }, {
-    key: "call",
-    value: function call(methodName) {
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
-      this.obj.invoke(methodName, args);
-    }
-  }]);
-  return HMObject;
-}();
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/Hummer/index.ts":
-/*!*****************************************************!*\
-  !*** ../../packages/hummer-api/src/Hummer/index.ts ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Hummer: () => (/* binding */ Hummer)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _components_View__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/View */ "../../packages/hummer-api/src/components/View/index.ts");
-/* harmony import */ var _components_Text__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Text */ "../../packages/hummer-api/src/components/Text/index.ts");
-/* harmony import */ var _components_Image__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Image */ "../../packages/hummer-api/src/components/Image/index.ts");
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-// const { Hummer: _Hummer } = __GLOBAL__
-
-
-
-
-var Hummer = /*#__PURE__*/function () {
-  function Hummer() {
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Hummer);
-  }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Hummer, null, [{
-    key: "initGlobal",
-    value: function initGlobal() {}
-
-    /**
-     * 渲染页面
-     * 
-     * @param element 页面视图根节点
-     */
-  }, {
-    key: "render",
-    value: function render(element) {
-      Hummer.initGlobal();
-      Hummer.rootElement = element;
-      _Document.render(element.getThis());
-    }
-  }, {
-    key: "createElement",
-    value: function createElement(tag) {
-      switch (tag) {
-        case "view":
-          return new _components_View__WEBPACK_IMPORTED_MODULE_3__.View();
-        case "text":
-          return new _components_Text__WEBPACK_IMPORTED_MODULE_4__.Text();
-        case "image":
-          return new _components_Image__WEBPACK_IMPORTED_MODULE_5__.Image();
-      }
-      return undefined;
-    }
-  }, {
-    key: "getRootView",
-    value: function getRootView() {
-      return Hummer.rootElement;
-    }
-  }]);
-  return Hummer;
-}();
-(0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Hummer, "rootElement", undefined);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/HummerComponent/index.ts":
-/*!**************************************************************!*\
-  !*** ../../packages/hummer-api/src/HummerComponent/index.ts ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   HummerComponent: () => (/* binding */ HummerComponent)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _EventTarget__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../EventTarget */ "../../packages/hummer-api/src/EventTarget/index.ts");
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-var HummerComponent = /*#__PURE__*/function (_EventTarget) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(HummerComponent, _EventTarget);
-  function HummerComponent(tag, props) {
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, HummerComponent);
-    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, HummerComponent, [tag, true, props]);
-  }
-  return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__["default"])(HummerComponent);
-}(_EventTarget__WEBPACK_IMPORTED_MODULE_4__.EventTarget);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/HummerElement/HummerGlobalProxy.ts":
-/*!************************************************************************!*\
-  !*** ../../packages/hummer-api/src/HummerElement/HummerGlobalProxy.ts ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/HummerElement/index.ts":
-/*!************************************************************!*\
-  !*** ../../packages/hummer-api/src/HummerElement/index.ts ***!
-  \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   HummerElement: () => (/* binding */ HummerElement)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/get.js */ "./node_modules/@babel/runtime/helpers/esm/get.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js */ "./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _Element__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Element */ "../../packages/hummer-api/src/Element/index.ts");
-
-
-
-
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document,
-  _Proxy = _Hummer__.proxy;
-
-var __view_id = 0;
-/**
- * HummerElement
- * 
- * 1、提供Element标准以外的Hummer能力
- * 2、对接Tenon实现/保留能力
- */
-var HummerElement = /*#__PURE__*/function (_Element) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_6__["default"])(HummerElement, _Element);
-  //代理处理
-
-  function HummerElement(tag) {
-    var _this;
-    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : tag;
-    var props = arguments.length > 2 ? arguments[2] : undefined;
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, HummerElement);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, HummerElement, [tag, name, props]);
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "__scopedIds", new Set());
-    //作用域ID
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "__NAME", null);
-    //节点类型（）
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "__view_id", 0);
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "dataset", {});
-    //扩展数据存储   
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "__defaultStyle", {});
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "__style", {});
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "__baseStyle", {});
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "_enabled", null);
-    //属性扩展
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_7__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "globalProxy", undefined);
-    _this.bindEventTarget();
-    _this.__view_id = __view_id;
-    if (_Proxy && _Proxy.globalProxy) {
-      _this.globalProxy = _Proxy.globalProxy;
-    }
-    return _this;
-  }
-
-  //扩展支持disabled,与enabled相反
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(HummerElement, [{
-    key: "enabled",
-    get: function get() {
-      return this._enabled;
-    }
-
-    //扩展支持disabled,与enabled相反
-    ,
-    set: function set(enabled) {
-      this._enabled = enabled;
-      (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_4__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_5__["default"])(HummerElement.prototype), "setEnable", this).call(this, this._enabled);
-    }
-
-    //扩展支持disabled,与enabled相反
-  }, {
-    key: "disabled",
-    get: function get() {
-      return !this._enabled;
-    }
-
-    //扩展支持disabled,与enabled相反
-    ,
-    set: function set(disabled) {
-      this._enabled = !disabled;
-      (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_4__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_5__["default"])(HummerElement.prototype), "setEnable", this).call(this, this.enabled);
-    }
-
-    //扩展支持 className
-  }, {
-    key: "className",
-    get: function get() {
-      return this._getAttribute('class');
-    }
-
-    //扩展样式属性
-  }, {
-    key: "style",
-    get: function get() {
-      return this.getStyle || {};
-    }
-
-    //扩展样式属性：有代理时通过代理处理
-    ,
-    set: function set(value) {
-      this.setStyle(value, false);
-    }
-  }, {
-    key: "setStyle",
-    value: function setStyle(value) {
-      var flag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      if (this.globalProxy) {
-        this.globalProxy.setStyle(this, value, flag);
-      } else {
-        (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_4__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_5__["default"])(HummerElement.prototype), "setStyle", this).call(this, value, false);
-      }
-    }
-  }, {
-    key: "setScopeId",
-    value: function setScopeId(id) {
-      this.__scopedIds.add(id);
-      this.updateStyle();
-    }
-  }, {
-    key: "updateStyle",
-    value: function updateStyle() {
-      var className = this._getAttribute('class');
-      this.updateClassStyle(className);
-    }
-
-    /**
-     * 根据class更新样式，如果不在tenon环境中无globalProxy，无操作
-     * 
-     * @param className class名称
-     */
-  }, {
-    key: "updateClassStyle",
-    value: function updateClassStyle(className) {
-      if (this.globalProxy) {
-        this.globalProxy.updateClassStyle(this, className);
-      }
-
-      // if (!this.__scopedIds.size) {
-      //     return
-      // }
-
-      // this.__scopedIds.forEach(scopedId => {
-      //     let elementStyle = getClassStyle(this, className, true, scopedId);
-      //     if (Object.keys(elementStyle).length > 0) {
-      //         this.setStyle(elementStyle, false);
-      //     }
-      // })
-    }
-
-    /**
-     * 扩展处理动画
-     * 
-     * @param animation 
-     * TODO:保持 Tenon Vue 的兼容，后期切换成同一 Core后，进行变更
-     */
-  }, {
-    key: "handleAnimation",
-    value: function handleAnimation(animation) {
-      this.setAnimation(animation);
-    }
-
-    /**
-     * 扩展设置动画
-     * 
-     * @param animation 
-     */
-  }, {
-    key: "setAnimation",
-    value: function setAnimation(animation) {
-      if (this.globalProxy) {
-        this.globalProxy.handleAnimation(this, animation);
-      } else {
-        (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_4__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_5__["default"])(HummerElement.prototype), "addAnimation", this).call(this, animation);
-      }
-    }
-
-    /**
-     * 不支持方法
-     * @param text 
-     */
-  }, {
-    key: "setElementText",
-    value: function setElementText(text) {
-      // TODO 抛出异常
-      console.warn('非text元素不支持');
-    }
-
-    /**
-    * 获取属性名
-    * @param key 属性名
-    */
-  }, {
-    key: "getAttribute",
-    value: function getAttribute(key) {
-      switch (key) {
-        case 'disabled':
-          return this.disabled;
-        default:
-          return this._getAttribute(key);
-      }
-    }
-
-    /**
-     * 设定属性
-     * @param key 属性名
-     * @param value 属性值
-     */
-  }, {
-    key: "setAttribute",
-    value: function setAttribute(key, value) {
-      this.setCacheProp(key, value);
-      switch (key) {
-        case 'disabled':
-          this.disabled = value !== false;
-          break;
-        case 'class':
-          this.updateClassStyle(value);
-          break;
-        default:
-          this._setAttribute(key, value);
-          break;
-      }
-    }
-
-    // Cache Props To Get
-  }, {
-    key: "setCacheProp",
-    value: function setCacheProp(key, value) {
-      // 如果是 dataattr 格式的属性，缓存到 dataset 中，方便事件可以获取到 dataset （Chameleon事件需求）
-      if (/^data/.test(key)) {
-        var dataKey = key.slice(4).toLowerCase();
-        if (dataKey) {
-          this.dataset[dataKey] = value;
-        }
-      }
-      // TODO:  这数据结构不对 会报错
-      // this.props.set(key, value)
-    }
-  }, {
-    key: "onHandleRecieveEvent",
-    value: function onHandleRecieveEvent(eventName, event) {
-      if (this.globalProxy) {
-        return this.globalProxy.onHandleRecieveEvent(this, event);
-      }
-      return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_get_js__WEBPACK_IMPORTED_MODULE_4__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_5__["default"])(HummerElement.prototype), "onHandleRecieveEvent", this).call(this, eventName, event);
-    }
-
-    // public addEventListener(event: string, func: Function) {
-    //     // this.element.addEventListener(event, (e: any) => {
-    //     //     // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝
-    //     //     e.target = {
-    //     //         dataset: this.dataset
-    //     //     }
-    //     //     func.call(this, e)
-    //     // })
-    // }
-    // public removeEventListener(event: string, func?: Function) {
-    //     // this.element.removeEventListener(event, func)
-    // }
-  }]);
-  return HummerElement;
-}(_Element__WEBPACK_IMPORTED_MODULE_8__.Element);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/Node/index.ts":
-/*!***************************************************!*\
-  !*** ../../packages/hummer-api/src/Node/index.ts ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Node: () => (/* binding */ Node)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _EventTarget__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../EventTarget */ "../../packages/hummer-api/src/EventTarget/index.ts");
-
-
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-var Node = /*#__PURE__*/function (_EventTarget) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_4__["default"])(Node, _EventTarget);
-  /**
-   * 节点构造函数
-   * 
-   * @param tag  节点标签
-   * @param name 组件名称
-   * @param props  构造参数
-   * @param nodeName  节点名称
-   * 
-   */
-  function Node(tag) {
-    var _this;
-    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : tag;
-    var props = arguments.length > 2 ? arguments[2] : undefined;
-    var nodeName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : tag;
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Node);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Node, [tag, false, props]);
-    /**
-     * 节点名称
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "nodeName", "");
-    /**
-     * 标签名称
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "name", "");
-    /**
-     * 节点类型
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "nodeType", 0);
-    /**
-     * 父节点
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "parentNode", undefined);
-    /**
-     * 当前节点的前一个节点
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "prevSibling", null);
-    /**
-     * 当前节点的后一个节点
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "nextSibling", null);
-    /**
-     * Node 子节点集合
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "children", new Set());
-    /**
-     * 第一个子节点
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "firstChild", null);
-    /**
-     * 最后一个子节点
-     */
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this), "lastChild", null);
-    _this.name = name;
-    _this.nodeName = nodeName;
-    return _this;
-  }
-
-  // Mounted 生命周期
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Node, [{
-    key: "_onMounted",
-    value: function _onMounted() {
-      this.onMounted();
-    }
-  }, {
-    key: "onMounted",
-    value: function onMounted() {
-      //TODO 
-    }
-
-    // Destoryed 生命周期
-  }, {
-    key: "_onDestoryed",
-    value: function _onDestoryed() {
-      // removeChildWithFixed(this);
-      this.onDestoryed();
-    }
-  }, {
-    key: "onDestoryed",
-    value: function onDestoryed() {
-      //TODO 
-    }
-
-    /**
-     * 是否有子节点
-     * 
-     * @returns 有：true；没有false
-     */
-  }, {
-    key: "hasChildNodes",
-    value: function hasChildNodes() {
-      if (this.children.size > 0) {
-        return true;
-      }
-      return false;
-    }
-
-    /**
-     * 
-     * @param child 在末尾添加节点
-     */
-  }, {
-    key: "appendChild",
-    value: function appendChild(child) {
-      child.unlinkSiblings();
-      child.parentNode = this;
-      this.children.add(child);
-      if (!this.firstChild) {
-        this.firstChild = child;
-      }
-      child.prevSibling = this.lastChild;
-      child.nextSibling = null;
-      if (this.lastChild) {
-        this.lastChild.nextSibling = child;
-      }
-      this.lastChild = child;
-      this._appendChild(child);
-      child._onMounted();
-    }
-  }, {
-    key: "_appendChild",
-    value: function _appendChild(child) {
-      this.obj.appendChild(child.obj);
-    }
-  }, {
-    key: "unlinkSiblings",
-    value: function unlinkSiblings() {
-      if (this.parentNode && this.parentNode.firstChild === this) {
-        this.parentNode.firstChild = this.nextSibling;
-      }
-      if (this.parentNode && this.parentNode.lastChild === this) {
-        this.parentNode.lastChild = this.prevSibling;
-      }
-      if (this.prevSibling) {
-        this.prevSibling.nextSibling = this.nextSibling;
-      }
-      if (this.nextSibling) {
-        this.nextSibling.prevSibling = this.prevSibling;
-      }
-      this.prevSibling = null;
-      this.nextSibling = null;
-    }
-
-    /**
-     * 移除指定节点
-     * @param child 被移除的节点
-     */
-  }, {
-    key: "removeChild",
-    value: function removeChild(child) {
-      child._onDestoryed();
-      child.unlinkSiblings();
-      child.parentNode = undefined;
-      this.children.delete(child);
-      this._removeChild(child);
-    }
-  }, {
-    key: "_removeChild",
-    value: function _removeChild(child) {
-      this.obj.removeChild(child.obj);
-    }
-
-    /**
-     * 在制定节点前插入节点
-     * 
-     * @param child  被插入的阶段
-     * @param anchor 插入位置锚点
-     */
-  }, {
-    key: "insertBefore",
-    value: function insertBefore(child, anchor) {
-      child.unlinkSiblings();
-      child.parentNode = this;
-      if (anchor.prevSibling) {
-        child.prevSibling = anchor.prevSibling;
-        anchor.prevSibling.nextSibling = child;
-      }
-      anchor.prevSibling = child;
-      child.nextSibling = anchor;
-      if (this.firstChild === anchor) {
-        this.firstChild = child;
-      }
-      this.children.add(child);
-      this._insertBefore(child, anchor);
-      child._onMounted();
-    }
-  }, {
-    key: "_insertBefore",
-    value: function _insertBefore(child, anchor) {
-      this.obj.insertBefore(child.obj, anchor.obj);
-    }
-
-    /**
-     * 替换节点
-     * 
-     * @param newNode 新节点
-     * @param oldNode 旧节点
-     */
-  }, {
-    key: "replaceChild",
-    value: function replaceChild(newNode, oldNode) {
-      oldNode._onDestoryed();
-      var _prevSibling = oldNode.prevSibling;
-      var _nextSibling = oldNode.nextSibling;
-      oldNode.unlinkSiblings();
-      oldNode.parentNode = undefined;
-      this.children.delete(oldNode);
-      newNode.unlinkSiblings();
-      newNode.parentNode = this;
-      if (_prevSibling) {
-        _prevSibling.nextSibling = newNode;
-        newNode.prevSibling = _prevSibling;
-      }
-      if (_nextSibling) {
-        _nextSibling.prevSibling = newNode;
-        newNode.nextSibling = _nextSibling;
-      }
-      if (this.firstChild === oldNode) {
-        this.firstChild = newNode;
-      }
-      if (this.lastChild === oldNode) {
-        this.lastChild = newNode;
-      }
-      this.children.add(newNode);
-      this._replaceChild(newNode, oldNode);
-      newNode._onMounted();
-    }
-  }, {
-    key: "_replaceChild",
-    value: function _replaceChild(newNode, oldNode) {
-      this.obj.replaceChild(newNode.obj, oldNode.obj);
-    }
-
-    /**
-     * 删除全部节点
-     */
-  }, {
-    key: "removeAll",
-    value: function removeAll() {
-      this.children.forEach(function (child) {
-        child._onDestoryed();
-        child.unlinkSiblings();
-        child.parentNode = undefined;
-      });
-      this.children.clear();
-      this._removeAll();
-    }
-  }, {
-    key: "_removeAll",
-    value: function _removeAll() {
-      this.obj.removeAll();
-    }
-  }]);
-  return Node;
-}(_EventTarget__WEBPACK_IMPORTED_MODULE_6__.EventTarget);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/anim/BasicAnimation/index.ts":
-/*!******************************************************************!*\
-  !*** ../../packages/hummer-api/src/anim/BasicAnimation/index.ts ***!
-  \******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BasicAnimation: () => (/* binding */ BasicAnimation)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-var BasicAnimation = /*#__PURE__*/(0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function BasicAnimation() {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, BasicAnimation);
-});
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/anim/KeyframeAnimation/index.ts":
-/*!*********************************************************************!*\
-  !*** ../../packages/hummer-api/src/anim/KeyframeAnimation/index.ts ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   KeyframeAnimation: () => (/* binding */ KeyframeAnimation)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-var KeyframeAnimation = /*#__PURE__*/(0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function KeyframeAnimation() {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, KeyframeAnimation);
-});
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/api/Memory/index.ts":
-/*!*********************************************************!*\
-  !*** ../../packages/hummer-api/src/api/Memory/index.ts ***!
-  \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Memory: () => (/* binding */ Memory)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _HummerComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../HummerComponent */ "../../packages/hummer-api/src/HummerComponent/index.ts");
-
-
-
-
-
-var Memory = /*#__PURE__*/function (_HummerComponent) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(Memory, _HummerComponent);
-  function Memory() {
-    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Memory);
-    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Memory, ["Memory", props]);
-  }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Memory, [{
-    key: "set",
-    value: function set(key, value) {
-      this.call("set", key, value);
-    }
-  }, {
-    key: "get",
-    value: function get(key) {
-      return this.call("get", key);
-    }
-  }, {
-    key: "remove",
-    value: function remove(key) {
-      this.call("remove", key);
-    }
-  }, {
-    key: "removeAll",
-    value: function removeAll() {
-      this.call("removeAll");
-    }
-  }, {
-    key: "exist",
-    value: function exist(key) {
-      var value = this.call("exist", key);
-      return value;
-    }
-  }], [{
-    key: "newInstance",
-    value: function newInstance() {
-      return new Memory();
-    }
-  }, {
-    key: "checkInstance",
-    value: function checkInstance() {
-      if (!Memory.instance) {
-        Memory.instance = Memory.newInstance();
-      }
-    }
-
-    /**
-     * 保存键值对
-     *
-     * @param key 名称
-     * @param value 值
-     */
-  }, {
-    key: "set",
-    value: function set(key, value) {
-      Memory.checkInstance();
-      Memory.instance.set(key, value);
-    }
-
-    /**
-    * 获取键对应的值
-    *
-    * @param key 名称
-    * @return value 值
-    */
-  }, {
-    key: "get",
-    value: function get(key) {
-      Memory.checkInstance();
-      return Memory.instance.get(key);
-    }
-
-    /**
-     * 删除键值对
-     *
-     * @param key 名称
-     */
-  }, {
-    key: "remove",
-    value: function remove(key) {
-      Memory.checkInstance();
-      Memory.instance.remove(key);
-    }
-
-    /**
-    * 删除所有数据
-    */
-  }, {
-    key: "removeAll",
-    value: function removeAll() {
-      Memory.checkInstance();
-      Memory.instance.removeAll();
-    }
-
-    /**
-     * 是否存在某个键值对
-     *
-     * @param key 名称
-     */
-  }, {
-    key: "exist",
-    value: function exist(key) {
-      Memory.checkInstance();
-      return Memory.instance.exist(key);
-    }
-  }]);
-  return Memory;
-}(_HummerComponent__WEBPACK_IMPORTED_MODULE_4__.HummerComponent);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/api/Navigator/index.ts":
-/*!************************************************************!*\
-  !*** ../../packages/hummer-api/src/api/Navigator/index.ts ***!
-  \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Navigator: () => (/* binding */ Navigator)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _HummerComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../HummerComponent */ "../../packages/hummer-api/src/HummerComponent/index.ts");
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-var Navigator = /*#__PURE__*/function (_HummerComponent) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(Navigator, _HummerComponent);
-  function Navigator() {
-    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Navigator);
-    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Navigator, ["Navigator", props]);
-  }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Navigator, [{
-    key: "openPage",
-    value: function openPage(pageInfo, callback) {
-      this.call("openPage", pageInfo, callback);
-    }
-  }, {
-    key: "popPage",
-    value: function popPage(pageInfo) {
-      this.call("popPage", pageInfo);
-    }
-  }, {
-    key: "popToPage",
-    value: function popToPage(pageInfo) {
-      this.call("popToPage", pageInfo);
-    }
-  }, {
-    key: "popToRootPage",
-    value: function popToRootPage(pageInfo) {
-      this.call("popToRootPage", pageInfo);
-    }
-  }, {
-    key: "popBack",
-    value: function popBack(count, pageInfo) {
-      this.call("popBack", count, pageInfo);
-    }
-  }], [{
-    key: "newInstance",
-    value: function newInstance() {
-      return new Navigator();
-    }
-  }, {
-    key: "checkInstance",
-    value: function checkInstance() {
-      if (!Navigator.instance) {
-        Navigator.instance = Navigator.newInstance();
-      }
-    }
-
-    /**
-    * 打开某个页面
-    * @param pageInfo 页面信息
-    * @param callback 页面结果回调
-    */
-  }, {
-    key: "openPage",
-    value: function openPage(pageInfo, callback) {
-      Navigator.checkInstance();
-      Navigator.instance.openPage(pageInfo, callback);
-    }
-
-    /**
-     * 关闭当前页面
-     * @param pageInfo 页面信息
-     */
-  }, {
-    key: "popPage",
-    value: function popPage(pageInfo) {
-      Navigator.checkInstance();
-      Navigator.instance.popPage(pageInfo);
-    }
-
-    /**
-     * 回退到指定页面
-     * @param pageInfo 页面信息
-     */
-  }, {
-    key: "popToPage",
-    value: function popToPage(pageInfo) {
-      Navigator.checkInstance();
-      Navigator.instance.popToPage(pageInfo);
-    }
-
-    /**
-     * 回退到首页
-     * @param pageInfo 页面信息（是否需要动画）
-     */
-  }, {
-    key: "popToRootPage",
-    value: function popToRootPage(pageInfo) {
-      Navigator.checkInstance();
-      Navigator.instance.popToRootPage(pageInfo);
-    }
-
-    /**
-     * 向前回退指定数量的页面
-     * @param count 要回退的页面级数（默认是1）
-     * @param pageInfo 页面信息（是否需要动画）
-     */
-  }, {
-    key: "popBack",
-    value: function popBack(count, pageInfo) {
-      Navigator.checkInstance();
-      Navigator.instance.popBack(count, pageInfo);
-    }
-  }]);
-  return Navigator;
-}(_HummerComponent__WEBPACK_IMPORTED_MODULE_4__.HummerComponent);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/api/Storage/index.ts":
-/*!**********************************************************!*\
-  !*** ../../packages/hummer-api/src/api/Storage/index.ts ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Storage: () => (/* binding */ Storage)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _HummerComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../HummerComponent */ "../../packages/hummer-api/src/HummerComponent/index.ts");
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-var Storage = /*#__PURE__*/function (_HummerComponent) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_3__["default"])(Storage, _HummerComponent);
-  function Storage() {
-    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Storage);
-    return (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Storage, ["Storage", props]);
-  }
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Storage, [{
-    key: "set",
-    value: function set(key, value) {
-      this.call("set", key, value);
-    }
-  }, {
-    key: "get",
-    value: function get(key) {
-      return this.call("get", key);
-    }
-  }, {
-    key: "remove",
-    value: function remove(key) {
-      this.call("remove", key);
-    }
-  }, {
-    key: "removeAll",
-    value: function removeAll() {
-      this.call("removeAll");
-    }
-  }, {
-    key: "exist",
-    value: function exist(key) {
-      var value = this.call("exist", key);
-      return value;
-    }
-  }], [{
-    key: "newInstance",
-    value: function newInstance() {
-      return new Storage();
-    }
-  }, {
-    key: "checkInstance",
-    value: function checkInstance() {
-      if (!Storage.instance) {
-        Storage.instance = Storage.newInstance();
-      }
-    }
-
-    /**
-     * 保存键值对
-     *
-     * @param key 名称
-     * @param value 值
-     */
-  }, {
-    key: "set",
-    value: function set(key, value) {
-      Storage.checkInstance();
-      Storage.instance.set(key, value);
-    }
-
-    /**
-    * 获取键对应的值
-    *
-    * @param key 名称
-    * @return value 值
-    */
-  }, {
-    key: "get",
-    value: function get(key) {
-      Storage.checkInstance();
-      return Storage.instance.get(key);
-    }
-
-    /**
-     * 删除键值对
-     *
-     * @param key 名称
-     */
-  }, {
-    key: "remove",
-    value: function remove(key) {
-      Storage.checkInstance();
-      Storage.instance.remove(key);
-    }
-
-    /**
-    * 删除所有数据
-    */
-  }, {
-    key: "removeAll",
-    value: function removeAll() {
-      Storage.checkInstance();
-      Storage.instance.removeAll();
-    }
-
-    /**
-     * 是否存在某个键值对
-     *
-     * @param key 名称
-     */
-  }, {
-    key: "exist",
-    value: function exist(key) {
-      Storage.checkInstance();
-      return Storage.instance.exist(key);
-    }
-  }]);
-  return Storage;
-}(_HummerComponent__WEBPACK_IMPORTED_MODULE_4__.HummerComponent);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/components/Image/index.ts":
-/*!***************************************************************!*\
-  !*** ../../packages/hummer-api/src/components/Image/index.ts ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Image: () => (/* binding */ Image)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _HummerElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../HummerElement */ "../../packages/hummer-api/src/HummerElement/index.ts");
-
-
-
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-var Image = /*#__PURE__*/function (_HummerElement) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_5__["default"])(Image, _HummerElement);
-  /**
-  * 
-  * @param id
-  * @param name 
-  * @param props 
-  */
-  function Image() {
-    var _this;
-    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Image);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Image, ["Image", name, (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props), {}, {
-      viewId: id
-    })]);
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_src", "");
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_gifSrc", "");
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_gifRepeatCount", 0);
-    return _this;
-  }
-
-  /**
-  * 普通图片
-  */
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Image, [{
-    key: "src",
-    get: function get() {
-      return this._src;
-    },
-    set: function set(value) {
-      this._src = value;
-      this._setAttribute("src", value);
-    }
-
-    /**
-    * Gif图片
-    */
-  }, {
-    key: "gifSrc",
-    get: function get() {
-      return this._gifSrc;
-    },
-    set: function set(value) {
-      this._gifSrc = value;
-      this._setAttribute("gifSrc", value);
-    }
-
-    /**
-    * Gif播放次数
-    */
-  }, {
-    key: "gifRepeatCount",
-    get: function get() {
-      return this._gifRepeatCount;
-    },
-    set: function set(value) {
-      this._gifRepeatCount = value;
-      this._setAttribute("gifRepeatCount", value);
-    }
-
-    /**
-     * 加载资源
-     * 
-     * @param src 资源
-     * @param listener 结果监听
-     */
-  }, {
-    key: "load",
-    value: function load(src, listener) {
-      this.call("load", src, listener);
-    }
-  }]);
-  return Image;
-}(_HummerElement__WEBPACK_IMPORTED_MODULE_7__.HummerElement);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/components/Text/index.ts":
-/*!**************************************************************!*\
-  !*** ../../packages/hummer-api/src/components/Text/index.ts ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Text: () => (/* binding */ Text)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _HummerElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../HummerElement */ "../../packages/hummer-api/src/HummerElement/index.ts");
-
-
-
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-var Text = /*#__PURE__*/function (_HummerElement) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_5__["default"])(Text, _HummerElement);
-  /**
-   * 
-   * @param id
-   * @param name 
-   * @param props 
-   */
-  function Text() {
-    var _this;
-    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Text);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Text, ["Text", name, (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props), {}, {
-      viewId: id
-    })]);
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_text", "");
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_richText", "");
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_textCopyEnable", false);
-    return _this;
-  }
-
-  /**
-   * 普通文本内容
-   */
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Text, [{
-    key: "text",
-    get: function get() {
-      return this._text;
-    },
-    set: function set(value) {
-      this._text = value;
-      this._setAttribute("text", value);
-    }
-
-    /**
-     * 富文本内容
-     */
-  }, {
-    key: "richText",
-    get: function get() {
-      return this._richText;
-    },
-    set: function set(value) {
-      this._richText = value;
-      this._setAttribute("richText", value);
-    }
-
-    /**
-     * 是否支持长按复制功能
-     * 默认：false
-     */
-  }, {
-    key: "textCopyEnable",
-    get: function get() {
-      return this._textCopyEnable;
-    },
-    set: function set(value) {
-      this._textCopyEnable = value;
-      this._setAttribute("textCopyEnable", value);
-    }
-  }]);
-  return Text;
-}(_HummerElement__WEBPACK_IMPORTED_MODULE_7__.HummerElement);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/components/View/index.ts":
-/*!**************************************************************!*\
-  !*** ../../packages/hummer-api/src/components/View/index.ts ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   View: () => (/* binding */ View)
-/* harmony export */ });
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createClass.js */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/callSuper.js */ "./node_modules/@babel/runtime/helpers/esm/callSuper.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/inherits.js */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _HummerElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../HummerElement */ "../../packages/hummer-api/src/HummerElement/index.ts");
-
-
-
-
-
-
-
-var _Hummer__ = __Hummer__,
-  _Document = _Hummer__.document;
-
-var View = /*#__PURE__*/function (_HummerElement) {
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_inherits_js__WEBPACK_IMPORTED_MODULE_5__["default"])(View, _HummerElement);
-  /**
-   * 
-   * @param id
-   * @param name 
-   * @param props 
-   */
-  function View() {
-    var _this;
-    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_classCallCheck_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this, View);
-    _this = (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_callSuper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this, View, ["View", name, (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_objectSpread2_js__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props), {}, {
-      viewId: id
-    })]);
-    (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "_overflow", "visible");
-    return _this;
-  }
-
-  /**
-   * 扩展属性
-   * 可选值:overflow: 'hidden' | 'visible'
-   * 默认值:'visible'
-   */
-  (0,_Users_didi_Desktop_Harmony_Hummer_api_examples_tenon_next_demo_node_modules_babel_runtime_helpers_esm_createClass_js__WEBPACK_IMPORTED_MODULE_2__["default"])(View, [{
-    key: "overflow",
-    get: function get() {
-      return this._overflow;
-    },
-    set: function set(value) {
-      this._overflow = value;
-      this.setAttribute("overflow", value);
-    }
-  }]);
-  return View;
-}(_HummerElement__WEBPACK_IMPORTED_MODULE_7__.HummerElement);
-
-/***/ }),
-
-/***/ "../../packages/hummer-api/src/index.ts":
-/*!**********************************************!*\
-  !*** ../../packages/hummer-api/src/index.ts ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BasicAnimation: () => (/* reexport safe */ _anim_BasicAnimation__WEBPACK_IMPORTED_MODULE_7__.BasicAnimation),
-/* harmony export */   Element: () => (/* reexport safe */ _Element__WEBPACK_IMPORTED_MODULE_4__.Element),
-/* harmony export */   EventTarget: () => (/* reexport safe */ _EventTarget__WEBPACK_IMPORTED_MODULE_2__.EventTarget),
-/* harmony export */   HMObject: () => (/* reexport safe */ _HMObject__WEBPACK_IMPORTED_MODULE_1__.HMObject),
-/* harmony export */   Hummer: () => (/* reexport safe */ _Hummer__WEBPACK_IMPORTED_MODULE_0__.Hummer),
-/* harmony export */   HummerComponent: () => (/* reexport safe */ _HummerComponent__WEBPACK_IMPORTED_MODULE_12__.HummerComponent),
-/* harmony export */   HummerElement: () => (/* reexport safe */ _HummerElement__WEBPACK_IMPORTED_MODULE_5__.HummerElement),
-/* harmony export */   Image: () => (/* reexport safe */ _components_Image__WEBPACK_IMPORTED_MODULE_11__.Image),
-/* harmony export */   KeyframeAnimation: () => (/* reexport safe */ _anim_KeyframeAnimation__WEBPACK_IMPORTED_MODULE_8__.KeyframeAnimation),
-/* harmony export */   Memory: () => (/* reexport safe */ _api_Memory__WEBPACK_IMPORTED_MODULE_13__.Memory),
-/* harmony export */   Navigator: () => (/* reexport safe */ _api_Navigator__WEBPACK_IMPORTED_MODULE_14__.Navigator),
-/* harmony export */   Node: () => (/* reexport safe */ _Node__WEBPACK_IMPORTED_MODULE_3__.Node),
-/* harmony export */   Storage: () => (/* reexport safe */ _api_Storage__WEBPACK_IMPORTED_MODULE_15__.Storage),
-/* harmony export */   Text: () => (/* reexport safe */ _components_Text__WEBPACK_IMPORTED_MODULE_10__.Text),
-/* harmony export */   View: () => (/* reexport safe */ _components_View__WEBPACK_IMPORTED_MODULE_9__.View)
-/* harmony export */ });
-/* harmony import */ var _Hummer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Hummer */ "../../packages/hummer-api/src/Hummer/index.ts");
-/* harmony import */ var _HMObject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HMObject */ "../../packages/hummer-api/src/HMObject/index.ts");
-/* harmony import */ var _EventTarget__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EventTarget */ "../../packages/hummer-api/src/EventTarget/index.ts");
-/* harmony import */ var _Node__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Node */ "../../packages/hummer-api/src/Node/index.ts");
-/* harmony import */ var _Element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Element */ "../../packages/hummer-api/src/Element/index.ts");
-/* harmony import */ var _HummerElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./HummerElement */ "../../packages/hummer-api/src/HummerElement/index.ts");
-/* harmony import */ var _HummerElement_HummerGlobalProxy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./HummerElement/HummerGlobalProxy */ "../../packages/hummer-api/src/HummerElement/HummerGlobalProxy.ts");
-/* harmony import */ var _anim_BasicAnimation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./anim/BasicAnimation */ "../../packages/hummer-api/src/anim/BasicAnimation/index.ts");
-/* harmony import */ var _anim_KeyframeAnimation__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./anim/KeyframeAnimation */ "../../packages/hummer-api/src/anim/KeyframeAnimation/index.ts");
-/* harmony import */ var _components_View__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/View */ "../../packages/hummer-api/src/components/View/index.ts");
-/* harmony import */ var _components_Text__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/Text */ "../../packages/hummer-api/src/components/Text/index.ts");
-/* harmony import */ var _components_Image__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/Image */ "../../packages/hummer-api/src/components/Image/index.ts");
-/* harmony import */ var _HummerComponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./HummerComponent */ "../../packages/hummer-api/src/HummerComponent/index.ts");
-/* harmony import */ var _api_Memory__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./api/Memory */ "../../packages/hummer-api/src/api/Memory/index.ts");
-/* harmony import */ var _api_Navigator__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./api/Navigator */ "../../packages/hummer-api/src/api/Navigator/index.ts");
-/* harmony import */ var _api_Storage__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./api/Storage */ "../../packages/hummer-api/src/api/Storage/index.ts");
-//Hummer api
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-__GLOBAL__.Hummer = {
-  getRootView() {
-    return _Hummer__WEBPACK_IMPORTED_MODULE_0__.Hummer.getRootView();
-  }
-};
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime/helpers/arrayLikeToArray.js":
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/arrayLikeToArray.js ***!
@@ -14000,7 +14959,7 @@ var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/run
 var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/toPrimitive.js");
 function toPropertyKey(t) {
   var i = toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : String(i);
+  return "symbol" == _typeof(i) ? i : i + "";
 }
 module.exports = toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -14489,43 +15448,6 @@ function _nonIterableSpread() {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js ***!
-  \******************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _objectSpread2)
-/* harmony export */ });
-/* harmony import */ var _defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-
-function ownKeys(e, r) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function (r) {
-      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-    })), t.push.apply(t, o);
-  }
-  return t;
-}
-function _objectSpread2(e) {
-  for (var r = 1; r < arguments.length; r++) {
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
-      (0,_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__["default"])(e, r, t[r]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
-      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-    });
-  }
-  return e;
-}
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js":
 /*!******************************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js ***!
@@ -14548,6 +15470,62 @@ function _possibleConstructorReturn(self, call) {
     throw new TypeError("Derived constructors may only return object or undefined");
   }
   return (0,_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_1__["default"])(self);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/set.js":
+/*!********************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/set.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _set)
+/* harmony export */ });
+/* harmony import */ var _superPropBase_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./superPropBase.js */ "./node_modules/@babel/runtime/helpers/esm/superPropBase.js");
+/* harmony import */ var _defineProperty_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./defineProperty.js */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+
+
+function set(target, property, value, receiver) {
+  if (typeof Reflect !== "undefined" && Reflect.set) {
+    set = Reflect.set;
+  } else {
+    set = function set(target, property, value, receiver) {
+      var base = (0,_superPropBase_js__WEBPACK_IMPORTED_MODULE_0__["default"])(target, property);
+      var desc;
+      if (base) {
+        desc = Object.getOwnPropertyDescriptor(base, property);
+        if (desc.set) {
+          desc.set.call(receiver, value);
+          return true;
+        } else if (!desc.writable) {
+          return false;
+        }
+      }
+      desc = Object.getOwnPropertyDescriptor(receiver, property);
+      if (desc) {
+        if (!desc.writable) {
+          return false;
+        }
+        desc.value = value;
+        Object.defineProperty(receiver, property, desc);
+      } else {
+        (0,_defineProperty_js__WEBPACK_IMPORTED_MODULE_1__["default"])(receiver, property, value);
+      }
+      return true;
+    };
+  }
+  return set(target, property, value, receiver);
+}
+function _set(target, property, value, receiver, isStrict) {
+  var s = set(target, property, value, receiver || target);
+  if (!s && isStrict) {
+    throw new TypeError('failed to set property');
+  }
+  return value;
 }
 
 /***/ }),
@@ -14689,7 +15667,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function toPropertyKey(t) {
   var i = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(t, "string");
-  return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : String(i);
+  return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : i + "";
 }
 
 /***/ }),
@@ -14768,18 +15746,6 @@ function _unsupportedIterableToArray(o, minLen) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -14829,13 +15795,14 @@ var __webpack_exports__ = {};
   !*** ./src/index/entry.js ***!
   \****************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _tenon_next_src_index_ts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../tenon-next/src/index.ts */ "./src/tenon-next/src/index.ts");
+/* harmony import */ var _didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @didi/tenon-vue-next */ "./node_modules/@didi/tenon-vue-next/dist/index.js");
 /* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app */ "./src/index/app.vue");
 
 
-_tenon_next_src_index_ts__WEBPACK_IMPORTED_MODULE_0__.render(_app__WEBPACK_IMPORTED_MODULE_1__["default"]);
+_didi_tenon_vue_next__WEBPACK_IMPORTED_MODULE_0__.render(_app__WEBPACK_IMPORTED_MODULE_1__["default"]);
 })();
 
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
+}

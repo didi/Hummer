@@ -5,11 +5,14 @@
       :style=imageStyle
       src="https://pt-starimg.didistatic.com/static/starimg/img/9E6O0ZOwok1604372834424.png">
     </image>
+   <text>12312312312312312321</text> 
+   <button>11111</button>
   </view>
 </template>
 
 <style lang="less" scoped>
   .page{
+    background-color: '#fa9153';
     width: 100%;
     height: 100%;
     display: flex;
