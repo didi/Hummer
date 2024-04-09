@@ -1,4 +1,10 @@
-declare var __GLOBAL__: any
+/**
+ * 兼容久框架Hummer代码挂载位置
+ */
+declare var __GLOBAL__: any;
+/**
+ * 新架构挂载位置
+ */
 declare var __Hummer__: {
     __globalProxy__?: any;
     __hummerApi__?: any;
