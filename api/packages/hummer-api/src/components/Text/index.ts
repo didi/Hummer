@@ -8,15 +8,15 @@ import { FlexStyle } from "../../Element"
 interface TextStyle extends FlexStyle {
     fontStyle?: string
     fontFamily?: string
-    fontSize?: number|string
+    fontSize?: number | string
     fontWeight?: string
-    textAlign?:	string
-    textVerticalAlign?:	string
-    textDecoration?:	string
-    textOverflow?:	string
-    textLineClamp?:	number
-    letterSpacing?:	number
-    lineSpacingMulti?:	number	
+    textAlign?: string
+    textVerticalAlign?: string
+    textDecoration?: string
+    textOverflow?: string
+    textLineClamp?: number
+    letterSpacing?: number
+    lineSpacingMulti?: number
 }
 
 export class Text extends HummerElement {
@@ -52,6 +52,10 @@ export class Text extends HummerElement {
 
     set text(value: string) {
         this._setAttribute("text", value);
+    }
+
+    public setElementText(text: string): void {
+        this.text = text;
     }
 
     /**
