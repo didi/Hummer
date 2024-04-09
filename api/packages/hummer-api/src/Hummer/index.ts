@@ -20,6 +20,8 @@ import { NotifyCenter } from "../api/NotifyCenter"
 
 export class Hummer {
 
+    private static __elementFactor__: Record<string, Function> = {}
+
     public static get env(): Env {
         return HummerApi.getEnv()
     }
@@ -69,7 +71,31 @@ export class Hummer {
             case "textarea":
                 return new TextArea();
         }
+        return Hummer.createElementFromFactor(tag);
+    }
+
+    /**
+     * 创建注册的组件
+     * 
+     * @param tag 
+     * @returns 
+     */
+    public static createElementFromFactor(tag: string): HummerElement | undefined {
+        let factor = Hummer.__elementFactor__[tag];
+        if (factor) {
+            return factor();
+        }
         return undefined;
+    }
+
+    /**
+     * 注册组件
+     * 
+     * @param tag 
+     * @param factor 
+     */
+    public static register(tag: string, factor: () => HummerElement) {
+        Hummer.__elementFactor__[tag] = factor;
     }
 
     /**
