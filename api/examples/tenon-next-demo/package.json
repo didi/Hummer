@@ -4,18 +4,15 @@
   "description": "Hummer Project",
   "author": "AdamCaoQAQ <1209600784@qq.com>",
   "scripts": {
-    "build": "npx npm-run-all postinstall hummer build",
-    "dev": "npx npm-run-all postinstall  hummer dev",
-    "debug": "npm run dev & hummer debug",
-    "postinstall": "patch-package"
+    "build": "npx hummer build",
+    "dev": "npx hummer dev",
+    "debug": "npm run dev & hummer debug"
   },
   "dependencies": {
-    "@hummer/cli": "0.14.0",
-    "@hummer/tenon-utils": "^1.2.15",
-    "@hummer/tenon-vue": "^1.9.0",
-    "@vue/reactivity": "3.3.9",
-    "@vue/runtime-core": "3.3.9",
-    "npm-run-all": "^4.1.5",
-    "patch-package": "^8.0.0"
+    "@didi/harmony-page-generator": "^0.0.1",
+    "@didi/harmony-render-function-generator": "^0.0.1",
+    "@didi/hummer-api": "^0.1.0",
+    "@didi/tenon-vue-next": "^0.0.3",
+    "@hummer/cli": "^0.16.0"
   }
 }
