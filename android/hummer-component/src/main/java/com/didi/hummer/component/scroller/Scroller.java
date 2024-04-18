@@ -464,17 +464,37 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
     }
 
     @JsMethod("scrollTo")
-    public void scrollTo(Object x, Object y) {
+    public void scrollTo(Object x, Object y, Object animated) {
+        // animated设置为Object类型，是为了实现不传参时默认为true
         int nX = (int) HummerStyleUtils.convertNumber(x);
         int nY = (int) HummerStyleUtils.convertNumber(y);
-        scrollView.smoothScrollTo(nX, nY);
+
+        boolean smooth = true;
+        if (animated instanceof Boolean) {
+            smooth = (boolean) animated;
+        }
+        if (smooth) {
+            scrollView.smoothScrollTo(nX, nY);
+        } else {
+            scrollView.scrollTo(nX, nY);
+        }
     }
 
     @JsMethod("scrollBy")
-    public void scrollBy(Object dx, Object dy) {
+    public void scrollBy(Object dx, Object dy, Object animated) {
+        // animated设置为Object类型，是为了实现不传参时默认为true
         int nDx = (int) HummerStyleUtils.convertNumber(dx);
         int nDy = (int) HummerStyleUtils.convertNumber(dy);
-        scrollView.smoothScrollBy(nDx, nDy);
+
+        boolean smooth = true;
+        if (animated instanceof Boolean) {
+            smooth = (boolean) animated;
+        }
+        if (smooth) {
+            scrollView.smoothScrollBy(nDx, nDy);
+        } else {
+            scrollView.scrollBy(nDx, nDy);
+        }
     }
 
     @JsMethod("scrollToTop")
