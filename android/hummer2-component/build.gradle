@@ -26,12 +26,13 @@ dependencies {
 
     api  rootProject.ext.androidx["appcompat"]
     api  rootProject.ext.androidx["recyclerview"]
+    api project(':hummer-falcon')
 
-    api project(':hummer')
-    api project(':hummer2-hvdom')
+    api project(':hummer2-annotation')
+    api project(':hummer2')
 
 
-    annotationProcessor project(":hummer-compiler")
+    annotationProcessor project(":hummer2-compiler")
 
     // 下拉刷新和加载更多
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.1'

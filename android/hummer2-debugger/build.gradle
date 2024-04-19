@@ -46,7 +46,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    compileOnly project(':hummer-sdk')
+//    compileOnly project(':hummer-sdk')
 
     // OkHttp
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'

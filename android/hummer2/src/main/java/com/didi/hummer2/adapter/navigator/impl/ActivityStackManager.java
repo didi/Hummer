@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 
-import com.didi.hummer2.core.util.DebugUtil;
-import com.didi.hummer2.core.util.HMLog;
+import com.didi.hummer2.utils.HMLog;
+import com.didi.hummer2.utils.DebugUtil;
 
 import java.util.Stack;
 

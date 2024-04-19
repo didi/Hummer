@@ -2,6 +2,8 @@ package com.didi.hummer2.adapter;
 
 import com.didi.hummer2.adapter.http.IHttpAdapter;
 import com.didi.hummer2.adapter.http.impl.DefaultHttpAdapter;
+import com.didi.hummer2.adapter.tracker.ITrackerAdapter;
+import com.didi.hummer2.adapter.tracker.impl.EmptyTrackerAdapter;
 
 /**
  * didi Create on 2024/3/21 .
@@ -19,5 +21,10 @@ public class HummerAdapter {
     public static IHttpAdapter getHttpAdapter() {
         return new DefaultHttpAdapter();
     }
+
+    public static ITrackerAdapter getTrackerAdapter() {
+        return new EmptyTrackerAdapter();
+    }
+
 
 }

@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "com.didi.hummer.demo"
+        applicationId "com.didi.hummer2.demo"
         minSdkVersion 18
         targetSdkVersion 31
         versionCode 1
@@ -77,13 +77,13 @@ dependencies {
     api rootProject.ext.androidx["recyclerview"]
     api rootProject.ext.androidx["constraintLayout"]
 
-    api project(':hummer-dev-tools')
+//    api project(':hummer-dev-tools')
 
-    implementation project(':hummer')
-    implementation project(':hummer2-hvdom')
+//    implementation project(':hummer')
+    implementation project(':hummer-falcon')
     implementation project(':hummer2-component')
 
-    annotationProcessor project(":hummer-compiler")
+    annotationProcessor project(":hummer2-compiler")
 
 
 
@@ -111,5 +111,5 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

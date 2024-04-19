@@ -22,7 +22,7 @@ import com.didi.hummer2.adapter.imageloader.DrawableCallback;
 import com.didi.hummer2.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer2.adapter.imageloader.ImageSizeCallback;
 import com.didi.hummer2.core.HummerSDK;
-import com.didi.hummer2.core.engine.JSCallback;
+import com.didi.hummer2.engine.JSCallback;
 
 /**
  * 默认图片加载适配器

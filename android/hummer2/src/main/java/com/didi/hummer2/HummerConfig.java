@@ -1,5 +1,7 @@
 package com.didi.hummer2;
 
+import android.content.Context;
+
 import com.didi.hummer2.adapter.font.IFontAdapter;
 import com.didi.hummer2.adapter.font.impl.DefaultFontAdapter;
 import com.didi.hummer2.adapter.http.IHttpAdapter;
@@ -15,12 +17,19 @@ import com.didi.hummer2.adapter.storage.IStorageAdapter;
 import com.didi.hummer2.adapter.storage.impl.DefaultStorageAdapter;
 import com.didi.hummer2.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer2.adapter.tracker.impl.EmptyTrackerAdapter;
+import com.didi.hummer2.invoke.RenderInvoker;
+import com.didi.hummer2.register.HummerInvokerRegister;
+import com.didi.hummer2.register.InvokerRegister;
+import com.didi.hummer2.handler.DefalutLogHandler;
+import com.didi.hummer2.handler.DefaultEventTraceHandler;
+import com.didi.hummer2.handler.DefaultJsConsoleHandler;
+import com.didi.hummer2.handler.DefaultJsExceptionHandler;
 import com.didi.hummer2.handler.EventTraceHandler;
 import com.didi.hummer2.handler.JsConsoleHandler;
 import com.didi.hummer2.handler.JsExceptionHandler;
 import com.didi.hummer2.handler.LogHandler;
-import com.didi.hummer2.rigister.AutoBindHummerRegister;
-import com.didi.hummer2.rigister.HummerRegister;
+import com.didi.hummer2.register.AutoBindHummerRegister;
+import com.didi.hummer2.register.HummerRegister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +42,7 @@ import java.util.List;
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
  * @Date 2024/3/21 11:19 AM
- * @Description 用一句话说明文件功能
+ * @Description Hummer 配置选项
  */
 
 public class HummerConfig {
@@ -110,7 +119,11 @@ public class HummerConfig {
      */
     private List<HummerRegister> hummerRegisters;
 
+    private InvokerRegister invokerRegister;
+    private Context context;
+
     private HummerConfig(Builder builder) {
+        this.context = builder.context;
         this.namespace = builder.namespace;
         this.debuggable = builder.debuggable;
         this.logHandler = builder.logHandler;
@@ -128,48 +141,55 @@ public class HummerConfig {
         this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
         this.trackerAdapter = builder.trackerAdapter;
         this.hummerRegisters = builder.hummerRegisters;
+        this.invokerRegister = new HummerInvokerRegister(hummerRegisters);
+
+        //注册必须接口
+        invokerRegister.registerInvoker(RenderInvoker.INSTANCE);
     }
+
 
     public String getNamespace() {
         return namespace;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public boolean isDebuggable() {
         return debuggable;
     }
 
-    public JsConsoleHandler getJsLogger() {
-        if (jsConsoleHandler == null) {
-            //TODO JSLogger
-        }
-        return jsConsoleHandler;
-    }
 
-    public EventTraceHandler getEventTracer() {
-        //TODO EventTracer
-        return eventTraceHandler;
-    }
-
-    public JsExceptionHandler getExceptionCallback() {
-        if (jsExceptionHandler == null) {
-            //TODO ExceptionCallback
-        }
-        return jsExceptionHandler;
+    public InvokerRegister getInvokerRegister() {
+        return invokerRegister;
     }
 
     public LogHandler getLogHandler() {
+        if (logHandler == null) {
+            logHandler = new DefalutLogHandler();
+        }
         return logHandler;
     }
 
     public JsConsoleHandler getJsConsoleHandler() {
+        if (jsConsoleHandler == null) {
+            jsConsoleHandler = new DefaultJsConsoleHandler();
+        }
         return jsConsoleHandler;
     }
 
     public JsExceptionHandler getJsExceptionHandler() {
+        if (jsExceptionHandler == null) {
+            jsExceptionHandler = new DefaultJsExceptionHandler();
+        }
         return jsExceptionHandler;
     }
 
     public EventTraceHandler getEventTraceHandler() {
+        if (eventTraceHandler == null) {
+            eventTraceHandler = new DefaultEventTraceHandler();
+        }
         return eventTraceHandler;
     }
 
@@ -241,6 +261,7 @@ public class HummerConfig {
     }
 
     public List<HummerRegister> getHummerRegisters() {
+
         return hummerRegisters;
     }
 
@@ -264,6 +285,12 @@ public class HummerConfig {
         private ITrackerAdapter trackerAdapter;
         private List<HummerRegister> hummerRegisters = new ArrayList<>();
         private boolean autoRegisterHummerModule = false;
+
+        private Context context;
+
+        public Builder(Context context) {
+            this.context = context;
+        }
 
         public Builder setNamespace(String namespace) {
             this.namespace = namespace;
@@ -366,7 +393,7 @@ public class HummerConfig {
             return this;
         }
 
-        public HummerConfig builder() {
+        public HummerConfig build() {
             if (autoRegisterHummerModule) {
                 hummerRegisters.add(0, AutoBindHummerRegister.instance());
             }

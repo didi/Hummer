@@ -1,0 +1,70 @@
+//
+// Created by didi on 2024/4/11.
+//
+
+#include <jni.h>
+#include "FalconEngine.h"
+#include "FalconContext.h"
+#include "HummerBridge.h"
+#include "falcon/logger.h"
+
+
+static jclass J_FalconContext;
+static jmethodID J_MethodID_printNativeLog;
+static jmethodID J_MethodID_printJsLog;
+static jmethodID J_MethodID_onCatchJsException;
+static jmethodID J_MethodID_onTraceEvent;
+
+void FalconContext::init(JavaVM *vm, JNIEnv *env) {
+
+    J_FalconContext = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/falcon/FalconContext"));
+
+    J_MethodID_printNativeLog = env->GetMethodID(J_FalconContext, "printNativeLog", "(ILjava/lang/String;)V");
+    J_MethodID_printJsLog = env->GetMethodID(J_FalconContext, "printJsLog", "(ILjava/lang/String;)V");
+    J_MethodID_onCatchJsException = env->GetMethodID(J_FalconContext, "onCatchJsException", "(Ljava/lang/String;)V");
+    J_MethodID_onTraceEvent = env->GetMethodID(J_FalconContext, "onTraceEvent", "(Ljava/lang/String;Ljava/lang/Object;)V");
+}
+
+
+void FalconContext::printNativeLog(jobject context, int level, string value) {
+    JNIEnv *jniEnv = JNI_GetEnv();
+    jstring msg = jniEnv->NewStringUTF(value.c_str());
+    jniEnv->CallVoidMethod(context, J_MethodID_printNativeLog, level, msg);
+    jniEnv->DeleteLocalRef(msg);
+    clearException(jniEnv);
+}
+
+void FalconContext::printJsLog(jobject context, int level, string value) {
+    JNIEnv *jniEnv = JNI_GetEnv();
+    jstring msg = jniEnv->NewStringUTF(value.c_str());
+    jniEnv->CallVoidMethod(context, J_MethodID_printJsLog, level, msg);
+    jniEnv->DeleteLocalRef(msg);
+    clearException(jniEnv);
+}
+
+void FalconContext::onCatchJsException(jobject context, string value) {
+    JNIEnv *jniEnv = JNI_GetEnv();
+    jstring msg = jniEnv->NewStringUTF(value.c_str());
+    jniEnv->CallVoidMethod(context, J_MethodID_onCatchJsException, msg);
+    jniEnv->DeleteLocalRef(msg);
+    clearException(jniEnv);
+}
+
+void FalconContext::onTraceEvent(jobject context, string event, JsiValue *value) {
+    JNIEnv *jniEnv = JNI_GetEnv();
+    jstring msg = jniEnv->NewStringUTF(event.c_str());
+    jniEnv->CallVoidMethod(context, J_MethodID_onTraceEvent, msg, value2JObject(jniEnv, value));
+    jniEnv->DeleteLocalRef(msg);
+    clearException(jniEnv);
+}
+
+void FalconContext::clearException(JNIEnv *env) {
+    // 检查并处理异常
+    jthrowable exception = env->ExceptionOccurred();
+    if (exception != NULL) {
+        env->ExceptionDescribe();
+        env->ExceptionClear(); // 清除异常
+        warn("FalconEngine:: %s", "已清除异常");
+    }
+}
+

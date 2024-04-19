@@ -5,6 +5,15 @@ apply from: '../upload.gradle'
 
 android {
 
+    defaultConfig {
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [HUMMER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -17,13 +26,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.so'])
 
     api  rootProject.ext.androidx["annotation"]
+    api  rootProject.ext.androidx["appcompat"]
+    api  rootProject.ext.androidx["fragment"]
+
+
     api 'com.google.code.gson:gson:2.8.5'
+
+    annotationProcessor project(":hummer2-compiler")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    api project(':hummer-falcon')
 
-    api project(':hummer2-hvdom')
+    api project(':hummer2-annotation')
 
     // Yoga
     api ('com.facebook.yoga.android:yoga-layout:1.19.0') {

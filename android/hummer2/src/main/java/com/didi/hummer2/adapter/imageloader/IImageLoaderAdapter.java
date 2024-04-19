@@ -3,7 +3,7 @@ package com.didi.hummer2.adapter.imageloader;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
-import com.didi.hummer2.core.engine.JSCallback;
+import com.didi.hummer2.engine.JSCallback;
 
 
 /**

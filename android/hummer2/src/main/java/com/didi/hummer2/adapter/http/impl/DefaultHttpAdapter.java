@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.didi.hummer2.adapter.http.HttpCallback;
 import com.didi.hummer2.adapter.http.HttpResponse;
 import com.didi.hummer2.adapter.http.IHttpAdapter;
-import com.didi.hummer2.core.util.HMGsonUtil;
+import com.didi.hummer2.utils.HMGsonUtil;
 import com.didi.hummer2.utils.UIThreadUtil;
 
 import java.io.IOException;

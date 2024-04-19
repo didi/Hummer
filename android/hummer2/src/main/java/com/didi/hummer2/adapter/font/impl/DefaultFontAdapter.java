@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.didi.hummer2.adapter.font.IFontAdapter;
-import com.didi.hummer2.core.util.HMLog;
+import com.didi.hummer2.utils.HMLog;
 
 
 /**
