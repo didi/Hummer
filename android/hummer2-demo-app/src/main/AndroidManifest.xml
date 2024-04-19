@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Hummer2PageActivity"
+            android:name=".HummerPageActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 <!--        <activity-->
 <!--            android:name=".HummerSinglePageFragmentActivity"-->

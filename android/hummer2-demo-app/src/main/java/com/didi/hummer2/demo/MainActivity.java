@@ -8,11 +8,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.didi.hummer.adapter.http.HttpCallback;
-import com.didi.hummer.adapter.http.HttpResponse;
-import com.didi.hummer.adapter.navigator.NavPage;
-import com.didi.hummer.adapter.navigator.impl.DefaultNavigatorAdapter;
-import com.didi.hummer.utils.NetworkUtil;
+import com.didi.hummer2.adapter.http.HttpCallback;
+import com.didi.hummer2.adapter.http.HttpResponse;
+import com.didi.hummer2.adapter.navigator.NavPage;
+import com.didi.hummer2.adapter.navigator.impl.DefaultNavigatorAdapter;
+import com.didi.hummer2.utils.NetworkUtil;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.Collections;
@@ -31,8 +31,7 @@ public class MainActivity extends Activity {
         setContentView(mScrollView);
 
         mRootView = new LinearLayout(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mRootView.setLayoutParams(lp);
         mRootView.setOrientation(LinearLayout.VERTICAL);
         mScrollView.addView(mRootView);
@@ -54,7 +53,7 @@ public class MainActivity extends Activity {
                 Button b = new Button(MainActivity.this);
                 b.setText(filename);
                 b.setOnClickListener(v -> {
-                    Intent i = new Intent(MainActivity.this, Hummer2PageActivity.class);
+                    Intent i = new Intent(MainActivity.this, HummerPageActivity.class);
                     i.putExtra(DefaultNavigatorAdapter.EXTRA_PAGE_MODEL, new NavPage(Constant.HOST + filename));
                     startActivity(i);
                 });

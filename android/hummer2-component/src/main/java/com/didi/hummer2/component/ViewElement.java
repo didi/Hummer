@@ -1,9 +1,12 @@
 package com.didi.hummer2.component;
 
-import android.content.Context;
 
-import com.didi.hummer.component.view.View;
-import com.didi.hummer2.bridge.HMValue;
+import com.didi.hummer2.HummerContext;
+import com.didi.hummer2.annotation.HMComponent;
+import com.didi.hummer2.annotation.HMMethod;
+import com.didi.hummer2.annotation.HMStyle;
+import com.didi.hummer2.component.hummer.view.View;
+
 
 /**
  * didi Create on 2023/12/4 .
@@ -13,34 +16,55 @@ import com.didi.hummer2.bridge.HMValue;
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
  * @Date 2023/12/4 3:59 PM
- * @Description 用一句话说明文件功能
+ * @Description View 组件
  */
 
+@HMComponent("View")
 public class ViewElement extends Element<View> {
 
-    public ViewElement(Context context, HMValue properties) {
-        super(context, properties);
+    public ViewElement(HummerContext context) {
+        super(context, null);
     }
 
     @Override
     public View createRenderView() {
-        return new View(GlobalRef.getHummerContext(context), null, null);
+        return new View(context, null, null);
     }
 
+    @HMStyle("overflow")
+    public void setOverflow(String overflow) {
+        getView().setOverflow(overflow);
+    }
 
+    @Override
+    @HMMethod("appendChild")
     public void appendChild(Element element) {
-        renderView.appendChild(element.getRenderView());
+        getView().appendChild(element.getView());
     }
 
-    public void appendChild(int index, Element element) {
-
-    }
-
+    @Override
+    @HMMethod("removeChild")
     public void removeChild(Element element) {
-        renderView.removeChild(element.getRenderView());
+        getView().removeChild(element.getView());
     }
 
-    public void removeChildAt(int index) {
-
+    @Override
+    @HMMethod("removeAll")
+    public void removeAll() {
+        getView().removeAll();
     }
+
+    @Override
+    @HMMethod("insertBefore")
+    public void insertBefore(Element child, Element existing) {
+        getView().insertBefore(child.getView(), existing.getView());
+    }
+
+    @Override
+    @HMMethod("replaceChild")
+    public void replaceChild(Element child, Element old) {
+        getView().replaceChild(child.getView(), old.getView());
+    }
+
+
 }

@@ -6,8 +6,8 @@
 #define ANDROID_JSUTILS_H
 
 #include <jni.h>
-#include <map>
 #include <js_native_api.h>
+#include <map>
 
 class JSUtils {
 

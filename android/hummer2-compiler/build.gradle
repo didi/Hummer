@@ -9,6 +9,9 @@ java {
 dependencies {
     implementation 'com.squareup:javapoet:1.11.1'
 
+//    api project(':hummer-falcon')
+    api project(':hummer2-annotation')
+
     if (project.publishArchivesType == '3') {
         implementation 'io.github.didi.hummer:hummer-annotation:0.2.3'
     } else {
