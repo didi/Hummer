@@ -26,7 +26,7 @@ export class Scroller extends LifeCycleElement {
     private _onRefresh?: Function = undefined;
     private _onLoadMore?: Function = undefined;
 
-    
+
     /**
      * 
      * @param id
@@ -48,7 +48,7 @@ export class Scroller extends LifeCycleElement {
         this.addEventListener("onScrollBottom", () => {
             this.onDispatch("onScrollBottom");
         })
-    
+
     }
 
 
@@ -57,15 +57,15 @@ export class Scroller extends LifeCycleElement {
      * 
      */
     protected onDispatch(type: string, event?: ScrollEvent) {
-        switch(type) {
+        switch (type) {
             case "onRefresh":
                 if (this._onRefresh) {
-                    this._onRefresh();
+                    this._onRefresh(event?.state);
                 }
                 break
             case "onLoadMore":
                 if (this._onLoadMore) {
-                    this._onLoadMore();
+                    this._onLoadMore(event?.state);
                 }
                 break
             case "onScrollTop":
@@ -80,8 +80,8 @@ export class Scroller extends LifeCycleElement {
                 break
             default:
                 break
-        }       
-    
+        }
+
     }
 
 
