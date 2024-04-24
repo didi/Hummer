@@ -88,23 +88,31 @@ export class Scroller extends LifeCycleElement {
     /**
     * 下拉刷新时展示的视图
     */
-    get refreshView() {
-        return this._getAttribute("refreshView")
+    get refreshView(): View | undefined {
+        let view = this._getAttribute("refreshView");
+        if (view) {
+            return view.__element__
+        }
+        return undefined;
     }
 
     set refreshView(value: View) {
-        this._setAttribute("refreshView", value);
+        this._setAttribute("refreshView", value.getThis());
     }
 
     /**
     * 上拉加载更多时展示的视图
     */
-    get loadMoreView() {
-        return this._getAttribute("loadMoreView")
+    get loadMoreView(): View | undefined {
+        let view = this._getAttribute("loadMoreView");
+        if (view) {
+            return view.__element__
+        }
+        return undefined;
     }
 
     set loadMoreView(value: View) {
-        this._setAttribute("loadMoreView", value);
+        this._setAttribute("loadMoreView", value.getThis());
     }
 
 
