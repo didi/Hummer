@@ -24,8 +24,8 @@ import com.didi.hummer2.utils.JsSourceUtil;
 @HMComponent("Navigator")
 public class NavigatorComponent extends Component {
 
-    public NavigatorComponent() {
-
+    public NavigatorComponent(HummerContext hummerContext) {
+        super(hummerContext);
     }
 
     @HMMethod("openPage")

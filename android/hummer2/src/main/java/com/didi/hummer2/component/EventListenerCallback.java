@@ -30,7 +30,7 @@ public class EventListenerCallback extends NoOpJSCallback {
     public Object call(Object... params) {
         JsiValue[] jsiValues = toJsiValues(params);
         JsiValue result = null;
-        if (params[0] instanceof Event) {
+        if (params.length > 0 && params[0] instanceof Event) {
             String type = ((Event) params[0]).getType();
             result = hmFunction.call(new JsiString(type), ((Event) params[0]).toJsiValue());
         } else {

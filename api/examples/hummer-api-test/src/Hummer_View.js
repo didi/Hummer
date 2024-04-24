@@ -10,6 +10,7 @@ export class RootView extends View {
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
+            backgroundColor:"#FF0000",
         };
 
         let view = new View();

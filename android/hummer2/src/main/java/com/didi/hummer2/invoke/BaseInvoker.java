@@ -3,16 +3,13 @@ package com.didi.hummer2.invoke;
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.bridge.EventTarget;
 import com.didi.hummer2.bridge.JsiFunction;
-import com.didi.hummer2.bridge.JsiObject;
-import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.component.Component;
 import com.didi.hummer2.component.Element;
+import com.didi.hummer2.component.anim.HummerAnimation;
 import com.didi.hummer2.register.HummerObject;
-import com.didi.hummer2.render.component.anim.BasicAnimation;
 import com.didi.hummer2.utils.HummerObjectUtil;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +27,8 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
 
     @Override
     public HummerObject createInstance(HummerContext hummerContext, Object... params) {
-        return onCreateInstance(hummerContext, params);
+        HummerObject hummerObject = onCreateInstance(hummerContext, params);
+        return hummerObject;
     }
 
     @Override
@@ -44,62 +42,16 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
         return invokeResult;
     }
 
-    protected Object setStyles(HummerContext hummerContext, T element, String methodName, Object... params) {
-        if (params != null && params[0] instanceof JsiObject) {
-            JsiObject styles = (JsiObject) params[0];
-            List<String> keys = styles.keys();
-            for (String key : keys) {
-                Object value = styles.get(key);
-                boolean success = onSetStyle(hummerContext, element, key, new Object[]{value});
-//                if (!success) {
-//                    element.setStyle(key, value);
-//                }
-            }
-        }
-        return null;
+    public boolean onUpdateStyle(HummerContext hummerContext, T instance, String styleName, Object value) {
+        return onInvokeUpdateStyle(hummerContext, instance, styleName, new Object[]{value});
     }
 
-    public boolean onSetStyle(HummerContext hummerContext, T element, String styleName, Object[] params) {
+
+    public boolean onInvokeUpdateStyle(HummerContext hummerContext, T instance, String styleName, Object[] params) {
         return false;
     }
 
 
-    /**
-     * 属性集合处理
-     *
-     * @param hummerContext
-     * @param element
-     * @param methodName
-     * @param params
-     * @return
-     */
-    protected Object setAttributes(HummerContext hummerContext, T element, String methodName, Object... params) {
-        if (params != null && params.length > 0 && params[0] instanceof JsiObject) {
-            JsiObject attributes = (JsiObject) params[0];
-            List<String> keys = attributes.keys();
-            for (String name : keys) {
-                Object value = attributes.get(name);
-                onElementSetAttribute(hummerContext, element, name, value);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 单属性处理
-     *
-     * @param hummerContext
-     * @param instance
-     * @param methodName
-     * @param params
-     * @return
-     */
-    protected Object setAttribute(HummerContext hummerContext, T instance, String methodName, Object... params) {
-        String param0 = params.length > 0 && params[0] != null ? HummerObjectUtil.toUTFString(params[0]) : null;
-        JsiValue param1 = params.length > 1 && params[1] != null ? (JsiValue) HummerObjectUtil.toJsiValue(params[1]) : null;
-        onElementSetAttribute(hummerContext, instance, param0, param1);
-        return null;
-    }
 
     /**
      * 视图组件扩展属性处理
@@ -109,8 +61,8 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
      * @param attributeName
      * @param attribute
      */
-    protected Object onInvokeAttribute(HummerContext hummerContext, T instance, String attributeName, Object[] attribute) {
-        return null;
+    protected boolean onInvokeUpdateAttribute(HummerContext hummerContext, T instance, String attributeName, Object[] attribute) {
+        return false;
     }
 
     /**
@@ -121,7 +73,7 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
      * @param attributeName
      * @param attribute
      */
-    protected void onElementSetAttribute(HummerContext hummerContext, T instance, String attributeName, Object attribute) {
+    public void onUpdateAttribute(HummerContext hummerContext, T instance, String attributeName, Object attribute) {
         Element element = (Element) instance;
         switch (attributeName) {
             case "enabled": {
@@ -156,7 +108,7 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
             }
             break;
             default: {
-                onInvokeAttribute(hummerContext, instance, attributeName, new Object[]{attribute});
+                onInvokeUpdateAttribute(hummerContext, instance, attributeName, new Object[]{attribute});
             }
             break;
         }
@@ -176,18 +128,14 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
         Object invokeResult = null;
         switch (methodName) {
             case "setStyles": {
-//                setStyles(hummerContext, element, methodName, params);
                 Map<String, Object> param0 = params.length > 0 && params[0] != null ? HummerObjectUtil.toJavaModel(params[0], new TypeToken<Map<String, Object>>() {
                 }.getType()) : null;
-                element.setStyle(param0);
+                element.setStyles(param0);
             }
             break;
             case "setAttributes": {
-                setAttributes(hummerContext, instance, methodName, params);
-            }
-            break;
-            case "setAttribute": {
-                setAttribute(hummerContext, instance, methodName, params);
+                Map<String, Object> param0 = params.length > 0 && params[0] != null ? HummerObjectUtil.toFlatJavaMap(params[0]) : null;
+                element.setAttributes(param0);
             }
             break;
             case "getAttribute": {
@@ -222,7 +170,6 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
                 element.replaceChild(param0, param1);
             }
             break;
-
             case "addEventListener": {
                 String param0 = params.length > 0 && params[0] != null ? HummerObjectUtil.toUTFString(params[0]) : null;
                 element.addEventListener(param0);
@@ -239,7 +186,7 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
             }
             break;
             case "addAnimation": {
-                BasicAnimation param0 = params.length > 0 && params[0] != null ? HummerObjectUtil.toJavaModel(params[0], new TypeToken<BasicAnimation>() {
+                HummerAnimation param0 = params.length > 0 && params[0] != null ? HummerObjectUtil.toJavaModel(params[0], new TypeToken<HummerAnimation>() {
                 }.getType()) : null;
                 String param1 = params.length > 1 && params[1] != null ? HummerObjectUtil.toUTFString(params[1]) : null;
                 element.addAnimation(param0, param1);
@@ -288,22 +235,27 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
      * @return
      */
     protected Object onComponentInvoke(HummerContext hummerContext, T instance, String methodName, Object[] params) {
-        Component element = (Component) instance;
+        Component component = (Component) instance;
         Object invokeResult = null;
         switch (methodName) {
             case "addEventListener": {
                 String param0 = params.length > 0 && params[0] != null ? (String) HummerObjectUtil.toUTFString(params[0]) : null;
-                element.addEventListener(param0);
+                component.addEventListener(param0);
             }
             break;
             case "removeEventListener": {
                 String param0 = params.length > 0 && params[0] != null ? (String) HummerObjectUtil.toUTFString(params[0]) : null;
-                element.removeEventListener(param0);
+                component.removeEventListener(param0);
             }
             break;
             case "setEventTarget": {
                 JsiFunction param0 = params.length > 0 && params[0] != null ? (JsiFunction) HummerObjectUtil.toJsiValue(params[0]) : null;
-                element.setEventTarget(new EventTarget(param0));
+                component.setEventTarget(new EventTarget(param0));
+            }
+            break;
+            case "setAttributes": {
+                Map<String, Object> param0 = params.length > 0 && params[0] != null ? HummerObjectUtil.toFlatJavaMap(params[0]) : null;
+                component.setAttributes(param0);
             }
             break;
             default: {
@@ -313,5 +265,4 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
         }
         return invokeResult;
     }
-
 }

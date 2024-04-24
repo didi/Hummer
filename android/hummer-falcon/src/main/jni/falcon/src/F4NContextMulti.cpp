@@ -60,7 +60,7 @@ void F4NContextMulti::onStart() {
     contextDelegate_->onStart();
 }
 
-JsiValue *F4NContextMulti::evaluateJavaScript(const char *script, const char *scriptId) {
+JsiValue *F4NContextMulti::evaluateJavaScript(string script, string scriptId) {
     return contextDelegate_->evaluateJavaScript(script, scriptId);
 }
 

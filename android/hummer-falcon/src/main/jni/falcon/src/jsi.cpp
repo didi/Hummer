@@ -130,7 +130,7 @@ NAPIValue functionWrapper(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 
 //    info("JsiObject::functionWrapper() methodName=%s,argc=%d",jsiFunction->methodName,argc);
 
-    JsiValue *params[argc];
+    JsiValue **params = new JsiValue* [argc];
     for (int i = 0; i < argc; i++) {
         params[i] = JSUtils::toValue(&env, &argv[i]);
     }

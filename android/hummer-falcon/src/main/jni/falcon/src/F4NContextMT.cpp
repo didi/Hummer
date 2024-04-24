@@ -37,6 +37,7 @@ void F4NContextMT::onThreadLoopEnd(F4NHandler *threadHandler) {
             info("F4NContextMT::applyRenderElementCall()");
             elementRender_->applyRenderElementCall();
         };
+        mainThreadHandler_->sendMessage(message);
     }
 
 }
@@ -60,11 +61,11 @@ void F4NContextMT::onStart() {
     F4NContext::onStart();
 }
 
-JsiValue *F4NContextMT::evaluateJavaScript(const char *script, const char *scriptId) {
+JsiValue *F4NContextMT::evaluateJavaScript(string script, string scriptId) {
     if (prepared) {
-        F4NMessage message = F4NMessage(1, "run");
+        F4NMessage message = F4NMessage("run");
         message.function = [&, script, scriptId](int id, const string &msg, void *data) {
-            info("VDOMContextMT::evaluateJavaScript()  scriptId=%s", scriptId);
+            info("VDOMContextMT::evaluateJavaScript()  scriptId=%s", scriptId.c_str());
             JsiObjectEx *result = jsiContext_->evaluateJavaScript(script, scriptId);
             if (result != nullptr) {
                 info("VDOMContextMT::evaluateJavaScript()  result=%s", result->toJsiValue()->toCString());
@@ -87,7 +88,7 @@ JsiValue *F4NContextMT::evaluateBytecode(const uint8_t *byteArray, size_t length
 
 void *F4NContextMT::submitJsTask(function<void *(void *, void *)> task) {
     F4NMessage message = F4NMessage("js");
-    message.function = [&,task](int id, const string &msg, void *data) {
+    message.function = [&, task](int id, const string &msg, void *data) {
         F4NContext::submitJsTask(task);
     };
     jsThreadHandler_->sendMessage(message);
@@ -96,7 +97,7 @@ void *F4NContextMT::submitJsTask(function<void *(void *, void *)> task) {
 
 void *F4NContextMT::submitUITask(function<void *(void *, void *)> task) {
     F4NMessage message = F4NMessage("ui");
-    message.function = [&,task](int id, const string &msg, void *data) {
+    message.function = [&, task](int id, const string &msg, void *data) {
         F4NContext::submitUITask(task);
     };
     mainThreadHandler_->sendMessage(message);

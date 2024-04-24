@@ -6,14 +6,9 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.view.View;
 
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsProperty;
-//import com.didi.hummer.render.component.view.HMBase;
-//import com.didi.hummer.render.style.HummerStyleUtils;
-//import com.didi.hummer.render.utility.YogaAttrUtils;
-
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsProperty;
+import com.didi.hummer2.component.anim.KeyFrame;
 import com.didi.hummer2.render.component.view.HMBase;
 import com.didi.hummer2.render.style.HummerStyleUtils;
 import com.didi.hummer2.render.utility.YogaAttrUtils;
@@ -31,11 +26,6 @@ public class KeyframeAnimation extends BasicAnimation {
 
     @JsProperty("keyframes")
     private List<KeyFrame> keyframes;
-
-    public class KeyFrame implements Serializable {
-        public float percent;
-        public Object value;
-    }
 
     public KeyframeAnimation(String animType) {
         super(animType);

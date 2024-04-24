@@ -6,6 +6,7 @@ import android.content.Context;
 import com.didi.hummer2.Hummer;
 import com.didi.hummer2.HummerConfig;
 import com.didi.hummer2.register.HummerRegister;
+import com.didi.hummer2.register.HummerRegister$$hummer2;
 import com.didi.hummer2.register.HummerRegister$$hummer2_component;
 import com.didi.hummer2.register.InvokerRegister;
 import com.didi.hummer2.utils.DebugUtil;
@@ -48,6 +49,7 @@ public class App extends Application {
                     @Override
                     public void register(InvokerRegister invokerRegister) {
                         new HummerRegister$$hummer2_component().register(invokerRegister);
+                        new HummerRegister$$hummer2().register(invokerRegister);
                     }
                 })
                 .setDebuggable(false)

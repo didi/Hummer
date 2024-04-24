@@ -198,9 +198,9 @@ public class HummerInvokerClassCreator {
     }
 
     private MethodSpec generateAttributeMethod() {
-        MethodSpec.Builder invokeMethod = MethodSpec.methodBuilder("onInvokeAttribute").addAnnotation(Override.class).addModifiers(Modifier.PROTECTED).returns(Object.class).addParameter(TypeUtil.hummerContext, "hummerContext").addParameter(thisClass, "instance").addParameter(String.class, "attributeName").addParameter(Object[].class, "params");
+        MethodSpec.Builder invokeMethod = MethodSpec.methodBuilder("onInvokeUpdateAttribute").addAnnotation(Override.class).addModifiers(Modifier.PROTECTED).returns(boolean.class).addParameter(TypeUtil.hummerContext, "hummerContext").addParameter(thisClass, "instance").addParameter(String.class, "attributeName").addParameter(Object[].class, "params");
 
-        invokeMethod.addStatement("$T jsRet = null", Object.class).beginControlFlow("switch ($L)", "attributeName");
+        invokeMethod.addStatement("$T jsRet = false", boolean.class).beginControlFlow("switch ($L)", "attributeName");
 
         List<? extends Element> allMembers = getClassAllElements(classElement);
         for (Element member : allMembers) {
@@ -237,7 +237,7 @@ public class HummerInvokerClassCreator {
 
 
     private MethodSpec generateInvokeStyleMethod() {
-        MethodSpec.Builder invokeMethod = MethodSpec.methodBuilder("onSetStyle").addAnnotation(Override.class).addModifiers(Modifier.PUBLIC).returns(boolean.class).addParameter(TypeUtil.hummerContext, "hummerContext").addParameter(thisClass, "instance").addParameter(String.class, "styleName").addParameter(Object[].class, "params");
+        MethodSpec.Builder invokeMethod = MethodSpec.methodBuilder("onInvokeUpdateStyle").addAnnotation(Override.class).addModifiers(Modifier.PUBLIC).returns(boolean.class).addParameter(TypeUtil.hummerContext, "hummerContext").addParameter(thisClass, "instance").addParameter(String.class, "styleName").addParameter(Object[].class, "params");
 
         invokeMethod.addStatement("$T supportStyle = false", boolean.class).beginControlFlow("switch ($L)", "styleName");
 
@@ -294,7 +294,7 @@ public class HummerInvokerClassCreator {
         String instance = isStaticMethod ? className : "instance";
         if (TypeUtil.isVoid(returnType)) {
             methodSpec.addStatement("$L.$L($L)", instance, funcName, params);
-//            methodSpec.addStatement("supportStyle = true");
+            methodSpec.addStatement("jsRet = true");
         } else {
             methodSpec.addStatement("jsRet = $L.$L($L)", instance, funcName, params);
         }
@@ -366,6 +366,7 @@ public class HummerInvokerClassCreator {
         processSingleStatement(methodSpec, variableElement, 0);
         String varName = variableElement.getSimpleName().toString();
         methodSpec.addStatement("instance.$L = param0", varName);
+        methodSpec.addStatement("jsRet = true");
         methodSpec.endControlFlow("break");
     }
 

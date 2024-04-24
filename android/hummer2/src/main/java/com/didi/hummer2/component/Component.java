@@ -1,8 +1,14 @@
 package com.didi.hummer2.component;
 
+import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.bridge.EventTarget;
+import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.engine.JSCallback;
+import com.didi.hummer2.invoke.BaseInvoker;
+import com.didi.hummer2.invoke.Invoker;
+
+import java.util.Map;
 
 /**
  * didi Create on 2024/4/2 .
@@ -18,9 +24,17 @@ import com.didi.hummer2.engine.JSCallback;
 public class Component extends AbsHummerObject {
 
     protected EventTarget eventTarget;
+    protected HummerContext hummerContext;
 
     protected EventDispatcher eventDispatcher = new EventDispatcher();
 
+
+    public Component() {
+    }
+
+    public Component(HummerContext hummerContext) {
+        this.hummerContext = hummerContext;
+    }
 
     @HMMethod("setEventTarget")
     public void setEventTarget(EventTarget eventTarget) {
@@ -39,12 +53,43 @@ public class Component extends AbsHummerObject {
         eventDispatcher.removeEventListener(eventName);
     }
 
+
+    @HMMethod("setAttributes")
+    public void setAttributes(Map<String, Object> attributes) {
+        Invoker invoker = getInvoker();
+        if (invoker instanceof BaseInvoker && attributes != null && attributes.size() > 0) {
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                onUpdateAttribute((BaseInvoker) invoker, entry.getKey(), entry.getValue());
+            }
+        }
+        onAttributesUpdated();
+    }
+
+    protected void onUpdateAttribute(BaseInvoker invoker, String attributeName, Object value) {
+        invoker.onUpdateAttribute(hummerContext, this, attributeName, value);
+    }
+
+
+    protected void onAttributesUpdated() {
+
+    }
+
     protected void dispatchEvent(String eventName, Object event) {
         eventDispatcher.dispatchEvent(eventName, event);
     }
 
     protected JSCallback getEventTargetListener() {
-        return new EventListenerCallback(eventTarget.getJsiFunction());
+        if (eventTarget != null) {
+            return new EventListenerCallback(eventTarget.getJsiFunction());
+        }
+        return null;
+    }
+
+    protected JSCallback getCallback(JsiFunction jsiFunction) {
+        if (jsiFunction != null) {
+            return new EventListenerCallback(jsiFunction);
+        }
+        return null;
     }
 
     @Override

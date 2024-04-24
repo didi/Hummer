@@ -3,6 +3,7 @@ package com.didi.hummer2.register;
 
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.invoke.Invoker;
+import com.didi.hummer2.utils.HMLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,16 +53,25 @@ public class HummerObjectManager implements InvokerRegister {
 
     private Object onCreateInstance(long type, long objId, long methodType, String componentName, String methodName, int argc, Object... params) {
         Invoker invoker = invokerRegister.getInvoker(componentName);
-        HummerObject object = invoker.createInstance(hummerContext, params);
-        object.setInvoker(invoker);
-        objectMap.put(objId, object);
-        object.onCreate();
+        if (invoker != null) {
+            HummerObject object = invoker.createInstance(hummerContext, params);
+            object.setInvoker(invoker);
+            objectMap.put(objId, object);
+            object.onCreate();
+        } else {
+            HMLog.e("HummerNative", "onCreateInstance() not found " + componentName + "." + methodName);
+        }
         return null;
     }
 
     private Object onInvoke(long type, long objId, long methodType, String componentName, String methodName, int argc, Object... params) {
         HummerObject object = objectMap.get(objId);
-        return invokerRegister.invoke(hummerContext, object, type, objId, methodType, componentName, methodName, argc, params);
+        if (object != null) {
+            return invokerRegister.invoke(hummerContext, object, type, objId, methodType, componentName, methodName, argc, params);
+        } else {
+            HMLog.e("HummerNative", "onInvoke() not found " + componentName + methodName + ",id=" + objId);
+        }
+        return null;
     }
 
     private Object onDeletedInstance(long type, long objId, long methodType, String componentName, String methodName, int argc, Object... params) {

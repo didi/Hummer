@@ -11,14 +11,20 @@ module.exports = {
       path: path.resolve(__dirname, './dist'),
       filename: "[name].js"
     },
+
+    // devTool: {
+    //   devServerPort: 8002, // 静态资源服务端口
+    //   webServerPort: 8004  // web模拟器服务端口
+    // },
+
     plugins: [
-      new WrapFunctionPlugin({
-        wrapFunction: 'renderFunc'
-      }),
-      new HarmonyTemplatePlugin({
-        outputDir:  './template',
-        hummerApiDir: path.resolve(__dirname, './dist')
-      }),
+      // new WrapFunctionPlugin({
+      //   wrapFunction: 'renderFunc'
+      // }),
+      // new HarmonyTemplatePlugin({
+      //   outputDir:  './template',
+      //   hummerApiDir: path.resolve(__dirname, './dist')
+      // }),
     ]
   }
 }

@@ -28,6 +28,7 @@ public class RequestComponent extends Component {
     private Request delegate;
 
     public RequestComponent(HummerContext hummerContext) {
+        super(hummerContext);
         delegate = new Request(hummerContext);
     }
 

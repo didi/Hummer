@@ -2,6 +2,7 @@ package com.didi.hummer2.register;
 
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.invoke.Invoker;
+import com.didi.hummer2.utils.HMLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,12 @@ public class BaseInvokerRegister implements InvokerRegister {
     @Override
     public Object invoke(HummerContext hummerContext, HummerObject hummerObject, long type, long objId, long methodType, String componentName, String methodName, int argc, Object[] params) {
         Invoker invoker = hummerObject.getInvoker();
-        return invoker.invoke(hummerContext, hummerObject, methodName, params);
+        if (invoker!= null){
+            return invoker.invoke(hummerContext, hummerObject, methodName, params);
+        }else {
+            HMLog.e("HummerNative","invoke() not found "+componentName+"."+methodName);
+        }
+        return null;
     }
 
 

@@ -40,6 +40,7 @@ public class ImageElement extends Element<Image> {
 
     public void setSrc(String src) {
         this.src = src;
+        getView().setSrc(src);
     }
 
     @HMAttribute("gifSrc")
@@ -47,6 +48,7 @@ public class ImageElement extends Element<Image> {
 
     public void setGifSrc(String gifSrc) {
         this.gifSrc = gifSrc;
+        getView().setGifSrc(gifSrc);
     }
 
     @HMAttribute("gifRepeatCount")
@@ -54,6 +56,7 @@ public class ImageElement extends Element<Image> {
 
     public void setGifRepeatCount(int gifRepeatCount) {
         this.gifRepeatCount = gifRepeatCount;
+        getView().setGifRepeatCount(gifRepeatCount);
     }
 
 

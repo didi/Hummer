@@ -7,6 +7,7 @@ import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiValue;
+import com.didi.hummer2.component.anim.HummerAnimation;
 import com.didi.hummer2.engine.JSCallback;
 import com.didi.hummer2.invoke.BaseInvoker;
 import com.didi.hummer2.invoke.Invoker;
@@ -36,6 +37,7 @@ public abstract class Element<VIEW extends HMBase> extends Component {
 
 
     public Element(HummerContext context, Object[] properties) {
+        super(context);
         this.context = context;
         this.properties = properties;
         this.renderView = createRenderView();
@@ -63,20 +65,6 @@ public abstract class Element<VIEW extends HMBase> extends Component {
         return renderView;
     }
 
-
-    @HMMethod("setStyles")
-    public void setStyle(Map<String, Object> styles) {
-        getView().setStyle(styles);
-    }
-
-    public boolean setElementStyle(String key, Object value) {
-        Invoker invoker = getInvoker();
-        if (invoker instanceof BaseInvoker) {
-            BaseInvoker baseInvoker = (BaseInvoker) getInvoker();
-            return baseInvoker.onSetStyle((HummerContext) context, this, key, new Object[]{value});
-        }
-        return false;
-    }
 
     @HMAttribute("enabled")
     public boolean enabled;
@@ -132,6 +120,31 @@ public abstract class Element<VIEW extends HMBase> extends Component {
      */
     @HMAttribute("accessibilityState")
     public Map<String, Object> accessibilityState;
+
+
+    @HMMethod("setStyles")
+    public void setStyles(Map<String, Object> styles) {
+        getView().setStyle(styles);
+        onStyleUpdated();
+    }
+
+    protected void onStyleUpdated() {
+
+    }
+
+    public boolean setElementStyle(String key, Object value) {
+        return onUpdateStyle(key, value);
+    }
+
+
+    protected boolean onUpdateStyle(String key, Object value) {
+        Invoker invoker = getInvoker();
+        if (invoker instanceof BaseInvoker) {
+            return ((BaseInvoker) invoker).onUpdateStyle((HummerContext) context, this, key,value);
+        }
+        return false;
+    }
+
 
     public void setAccessibilityState(Map<String, Object> state) {
         getView().setAccessibilityState(state);
@@ -197,8 +210,13 @@ public abstract class Element<VIEW extends HMBase> extends Component {
     }
 
     @HMMethod("addAnimation")
-    public void addAnimation(BasicAnimation anim, String id) {
-        getView().addAnimation(anim, id);
+    public void addAnimation(HummerAnimation anim, String id) {
+        if (anim != null) {
+            BasicAnimation animation = anim.getOriginAnimation();
+            animation.on("start", getEventTargetListener());
+            animation.on("end", getEventTargetListener());
+            getView().addAnimation(animation, id);
+        }
     }
 
     @HMMethod("removeAnimationForKey")

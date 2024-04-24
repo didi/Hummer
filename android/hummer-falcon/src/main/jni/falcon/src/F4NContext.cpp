@@ -67,7 +67,7 @@ void F4NContext::onStart() {
 }
 
 
-JsiValue *F4NContext::evaluateJavaScript(const char *script, const char *scriptId) {
+JsiValue *F4NContext::evaluateJavaScript(string script,string scriptId) {
     JsiObjectEx *object = jsiContext_->evaluateJavaScript(script, scriptId);
     if (object != nullptr) {
         delete object;

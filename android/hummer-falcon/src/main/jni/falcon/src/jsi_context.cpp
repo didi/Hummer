@@ -35,8 +35,8 @@ void JsiContext::start() {
     napi_open_handle_scope(env_, &handleScope);
 }
 
-JsiObjectEx *JsiContext::evaluateJavaScript(const char *script, const char *scriptId) {
-    info("JsiContext::evaluateJavaScript() %s ", scriptId);
+JsiObjectEx *JsiContext::evaluateJavaScript(string script, string scriptId) {
+    info("JsiContext::evaluateJavaScript() %s ", scriptId.c_str());
     if (env_ == nullptr) {
         error("JsiContext::evaluateJavaScript() error! Env=null.");
     }
@@ -45,10 +45,10 @@ JsiObjectEx *JsiContext::evaluateJavaScript(const char *script, const char *scri
     NAPIHandleScope handleScope;
     napi_open_handle_scope(env_, &handleScope);
 
-    NAPIExceptionStatus status = NAPIRunScript(env_, script, scriptId, &result);
+    NAPIExceptionStatus status = NAPIRunScript(env_, script.c_str(), scriptId.c_str(), &result);
     if (status != NAPIExceptionOK) {
         JsiError *jsError = JSUtils::getAndClearLastError(&env_);
-        error("JsiContext::evaluateJavaScript() error! status=&d,scriptId=%s,script=\n%s", scriptId, script);
+        error("JsiContext::evaluateJavaScript() error! status=&d,scriptId=%s,script=\n%s", scriptId.c_str(), script.c_str());
         error("JsiContext::evaluateJavaScript() error! jsError=%s", jsError->toCString());
     }
 

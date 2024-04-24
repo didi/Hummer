@@ -7,12 +7,6 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.text.TextUtils;
 
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsMethod;
-//import com.didi.hummer.annotation.JsProperty;
-//import com.didi.hummer.core.engine.JSCallback;
-//import com.didi.hummer.render.component.view.HMBase;
-
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.annotationx.JsProperty;
@@ -30,15 +24,15 @@ import java.util.List;
 public class BasicAnimation {
 
     @JsProperty("from")
-    protected Object from;
+    public Object from;
     @JsProperty("value")
-    protected Object value;
+    public Object value;
     @JsProperty("duration")
-    protected float duration; //单位(s)
+    public float duration; //单位(s)
     @JsProperty("delay")
-    protected float delay; //单位(s)
+    public float delay; //单位(s)
     @JsProperty("easing")
-    protected String easing;
+    public String easing;
     /**
      * 动画重复次数（默认是1）
      * <p>
@@ -47,7 +41,7 @@ public class BasicAnimation {
      * 2: 动画做2次
      */
     @JsProperty("repeatCount")
-    protected int repeatCount;
+    public int repeatCount;
     /**
      * 动画重复模式（默认是'normal'）
      * <p>
@@ -55,7 +49,7 @@ public class BasicAnimation {
      * 'reverse': 反向重复，如：[0->1] [1->0] [0->1]
      */
     @JsProperty("repeatMode")
-    protected String repeatMode;
+    public String repeatMode;
 
     protected Animator animator;
     protected String animType;

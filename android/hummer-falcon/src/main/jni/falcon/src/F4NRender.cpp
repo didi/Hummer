@@ -9,14 +9,14 @@ F4NRender::F4NRender() {
 }
 
 void F4NRender::init(F4NRenderInvoker *componentFactory, F4NHandler *renderThreadHandler, F4NHandler *jsThreadHandler) {
-    componentFactory_ = componentFactory;
+    renderInvoker = componentFactory;
 }
 
 
 void F4NRender::renderRoot(F4NElement *rootElement) {
     _rootElement_ = rootElement;
     buildElement(rootElement);
-    componentFactory_->render(rootElement);
+    renderInvoker->render(rootElement);
 }
 
 
@@ -54,10 +54,10 @@ void F4NRender::copyElementCall(list<F4NFunctionCall *> *source, list<F4NFunctio
 void F4NRender::createElement(F4NElement *rootElement, F4NElement *element) {
     element->_rootElement_ = rootElement;
 
-    componentFactory_->newInstance(element);
+    renderInvoker->newInstance(element);
 
     if (element->eventTarget != nullptr) {
-        componentFactory_->setEventTarget(element, element->eventTarget);
+        renderInvoker->setEventTarget(element, element->eventTarget);
     }
 
     applyElementAttribute(element);
@@ -70,7 +70,7 @@ void F4NRender::createElement(F4NElement *rootElement, F4NElement *element) {
     for (auto child = children->begin(); child != children->end(); child++) {
         F4NElement *childElement = *child;
         createElement(rootElement, childElement);
-        componentFactory_->appendChild(element, childElement);
+        renderInvoker->appendChild(element, childElement);
     }
 
 }
@@ -81,26 +81,26 @@ void F4NRender::applyElementAttribute(F4NElement *element) {
     for (auto it = attributes->begin(); it != attributes->end(); it++) {
         jsiObject->setValue(it->first, it->second);
     }
-    componentFactory_->setAttributes(element, jsiObject);
+    renderInvoker->setAttributes(element, jsiObject);
 }
 
 void F4NRender::applyElementStyle(F4NElement *element) {
     if (element->hmStyle_ != nullptr) {
-        componentFactory_->setStyles(element, element->hmStyle_);
+        renderInvoker->setStyles(element, element->hmStyle_);
     }
 }
 
 void F4NRender::applyElementEvent(F4NElement *element) {
     auto *events = element->_events_;
     for (auto event = events->begin(); event != events->end(); event++) {
-        componentFactory_->addEventListener(element, *event);
+        renderInvoker->addEventListener(element, *event);
     }
 }
 
 void F4NRender::applyElementAnimation(F4NElement *element) {
     auto animations = element->_animations_;
     for (auto it = animations->begin(); it != animations->end(); it++) {
-        componentFactory_->addAnimation(element, it->second, it->first);
+        renderInvoker->addAnimation(element, it->second, it->first);
     }
 }
 
@@ -113,15 +113,15 @@ void F4NRender::applyElementCall(F4NElement *element) {
 
 
 void F4NRender::applyElementFunctionCall(F4NFunctionCall *call) {
-    switch (call->methodId) {
-        componentFactory_->invoke(FACTORY_TYPE_RENDER,
-                                  call->thisElement->odjId,
-                                  METHOD_TYPE_CALL,
-                                  call->thisElement->tag,
-                                  call->methodName,
-                                  call->size,
-                                  call->params);
-    }
+//    switch (call->methodId) {
+        renderInvoker->invoke(FACTORY_TYPE_RENDER,
+                              call->thisElement->odjId,
+                              METHOD_TYPE_CALL,
+                              call->thisElement->tag.c_str(),
+                              call->methodName.c_str(),
+                              call->size,
+                              call->params);
+//    }
 }
 
 void F4NRender::applyRenderTag(F4NElement *element) {

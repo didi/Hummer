@@ -7,6 +7,7 @@ import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.component.hummer.dialog.Dialog;
+import com.didi.hummer2.utils.UIThreadUtil;
 
 /**
  * didi Create on 2024/4/10 .
@@ -25,6 +26,7 @@ public class DialogComponent extends Component {
     private Dialog delegate;
 
     public DialogComponent(HummerContext context) {
+        super(context);
         delegate = new Dialog(context);
     }
 
@@ -37,7 +39,13 @@ public class DialogComponent extends Component {
 
     public void setCancelable(boolean cancelable) {
         this.cancelable = cancelable;
-        delegate.cancelable = cancelable;
+        UIThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                delegate.cancelable = cancelable;
+            }
+        });
+
     }
 
     /**
@@ -50,7 +58,13 @@ public class DialogComponent extends Component {
 
     public void setLowLayer(boolean lowLayer) {
         this.lowLayer = lowLayer;
-        delegate.lowLayer = lowLayer;
+        UIThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                delegate.lowLayer = lowLayer;
+            }
+        });
+
     }
 
     /**
@@ -62,7 +76,12 @@ public class DialogComponent extends Component {
      */
     @HMMethod("alert")
     public void alert(String msg, String btnText, JsiFunction callback) {
-        delegate.alert(msg, btnText, new EventListenerCallback(callback));
+        UIThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                delegate.alert(msg, btnText, getCallback(callback));
+            }
+        });
     }
 
     /**
@@ -77,21 +96,43 @@ public class DialogComponent extends Component {
      */
     @HMMethod("confirm")
     public void confirm(String title, String msg, String okBtnText, String cancelBtnText, JsiFunction okCallback, JsiFunction cancelCallback) {
-        delegate.confirm(title, msg, okBtnText, cancelBtnText, new EventListenerCallback(okCallback), new EventListenerCallback(cancelCallback));
+        UIThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                delegate.confirm(title, msg, okBtnText, cancelBtnText, getCallback(okCallback), getCallback(cancelCallback));
+            }
+        });
     }
 
     @HMMethod("loading")
     public void loading(String msg) {
-        delegate.loading(msg);
+        UIThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                delegate.loading(msg);
+            }
+        });
+
     }
 
     @HMMethod("custom")
     public void custom(Element element) {
-        delegate.custom(element.getView());
+        UIThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                delegate.custom(element.getView());
+            }
+        });
     }
 
     @HMMethod("dismiss")
     public void dismiss() {
-        delegate.dismiss();
+        UIThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                delegate.dismiss();
+            }
+        });
+
     }
 }

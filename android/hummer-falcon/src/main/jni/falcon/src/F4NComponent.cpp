@@ -101,7 +101,7 @@ JsiValue *F4NComponent::invoke(size_t size, JsiValue *params[]) {
                 }
             }
             JsiValue *result = invoke(methodName, newSize, newParams);
-            delete newParams;
+//            delete newParams;
             return result;
         } else {
             warn("Component::invoke() methodName is null or not string.");
