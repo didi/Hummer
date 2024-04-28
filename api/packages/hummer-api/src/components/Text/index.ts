@@ -30,8 +30,6 @@ export class Text extends HummerElement {
     public constructor(id: string = "", name: string = "", props: any = {}) {
         super("Text", name, { ...props, viewId: id });
         this._initAttributes({
-            text: '',
-            richText: '',
             textCopyEnable: 'false'
         });
     }

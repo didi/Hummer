@@ -47,7 +47,7 @@ export class Toast extends HummerComponent {
      */
     static custom(view: View, duration: number){
         Toast.checkInstance();
-        Toast.instance.custom(view, duration);
+        Toast.instance.custom(view.getThis(), duration);
     }
    
  

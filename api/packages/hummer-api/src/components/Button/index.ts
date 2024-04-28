@@ -89,7 +89,7 @@ export class Button extends HummerElement {
                 }
                 return;
         }
-        this._setAttribute(key, value);
+        super.setAttribute(key, value);
     }
 
 

@@ -34,7 +34,13 @@ export * from "./components/Button"
 
 export * from "./components/Scroller"
 
+export * from "./components/HorizontalScroller"
+
 export * from "./components/Canvas"
+
+export * from "./components/Loading"
+
+export * from "./components/Switch"
 
 export * from "./components/Image"
 
@@ -60,6 +66,11 @@ __GLOBAL__.Hummer = {
 
     getRootView() {
         return Hummer.getRootView();
+    },
+
+    Hummer:{
+        pageInfo:{},
+        dd:"xxx"
     }
 
 }

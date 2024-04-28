@@ -16,6 +16,9 @@ import { Scroller } from "../components/Scroller"
 import { TextArea } from "../components/TextArea"
 import { HummerApi, Env, PageInfo } from "../api/HummerApi"
 import { NotifyCenter } from "../api/NotifyCenter"
+import { Loading } from "src/components/Loading"
+import { Switch } from "src/components/Switch"
+import { HorizontalScroller } from "src/components/HorizontalScroller"
 
 
 export class Hummer {
@@ -66,6 +69,12 @@ export class Hummer {
                 return new ViewPager();
             case "scroller":
                 return new Scroller();
+            case "horizontalscroller":
+                return new HorizontalScroller();
+            case "switch":
+                return new Switch();
+            case "loadin":
+                return new Loading();
             case "input":
                 return new Input();
             case "textarea":

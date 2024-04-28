@@ -1,10 +1,9 @@
 import { LifeCycleElement } from "../../LifeCycleElement"
-import { View } from "../View"
 import { HMEvent } from "../../HummerElement"
 
 
 enum ScrollEventState {
-    normal = 0, // normal
+    normal = 0,
     beganDrag,
     scroll,
     stop,
@@ -19,13 +18,10 @@ interface ScrollEvent extends HMEvent<ScrollEventState> {
 }
 
 
-export class Scroller extends LifeCycleElement {
+export class HorizontalScroller extends LifeCycleElement {
 
     private _onScrollTop?: Function = undefined;
     private _onScrollBottom?: Function = undefined;
-    private _onRefresh?: Function = undefined;
-    private _onLoadMore?: Function = undefined;
-
 
     /**
      * 
@@ -34,14 +30,8 @@ export class Scroller extends LifeCycleElement {
      * @param props 
      */
     public constructor(id: string = "", name: string = "", props: any = {}) {
-        super("Scroller", name, { ...props, viewId: id });
+        super("HorizontalScroller", name, { ...props, viewId: id });
 
-        this.addEventListener("onRefresh", (event: ScrollEvent) => {
-            this.onDispatch("onRefresh", event);
-        })
-        this.addEventListener("onLoadMore", (event: ScrollEvent) => {
-            this.onDispatch("onLoadMore", event);
-        })
         this.addEventListener("onScrollTop", () => {
             this.onDispatch("onScrollTop");
         })
@@ -58,16 +48,6 @@ export class Scroller extends LifeCycleElement {
      */
     protected onDispatch(type: string, event?: ScrollEvent) {
         switch (type) {
-            case "onRefresh":
-                if (this._onRefresh) {
-                    this._onRefresh(event?.state);
-                }
-                break
-            case "onLoadMore":
-                if (this._onLoadMore) {
-                    this._onLoadMore(event?.state);
-                }
-                break
             case "onScrollTop":
                 if (this._onScrollTop) {
                     this._onScrollTop();
@@ -83,66 +63,6 @@ export class Scroller extends LifeCycleElement {
         }
 
     }
-
-
-    /**
-    * 下拉刷新时展示的视图
-    */
-    get refreshView(): View | undefined {
-        let view = this._getAttribute("refreshView");
-        if (view) {
-            return view.__element__
-        }
-        return undefined;
-    }
-
-    set refreshView(value: View|undefined) {
-        this._setAttribute("refreshView", value?.getThis());
-    }
-
-    /**
-    * 上拉加载更多时展示的视图
-    */
-    get loadMoreView(): View | undefined {
-        let view = this._getAttribute("loadMoreView");
-        if (view) {
-            return view.__element__
-        }
-        return undefined;
-    }
-
-    set loadMoreView(value: View|undefined) {
-        this._setAttribute("loadMoreView", value?.getThis());
-    }
-
-
-    /**
-     * 上拉加载时触发的回调
-     */
-    get onLoadMore() {
-        return this._getAttribute("onLoadMore")
-    }
-
-    set onLoadMore(value: (state: number) => void) {
-        this._onLoadMore = value
-        this._setAttribute("onLoadMore", value);
-    }
-
-
-    /**
-     * 下拉刷新时触发的回调
-     */
-    get onRefresh() {
-        return this._getAttribute("onRefresh")
-    }
-
-    set onRefresh(value: (state: number) => void) {
-        this._onRefresh = value
-        this._setAttribute("onRefresh", value);
-    }
-
-
-
 
     /**
      * 滑动到边缘时是否有回弹效果
@@ -213,25 +133,9 @@ export class Scroller extends LifeCycleElement {
         this._onScrollBottom = callback
     }
 
-
-
-    /**
-    * 结束下拉刷新
-    */
-    stopPullRefresh() {
-        this.call("stopPullRefresh");
+    updateContentSize(){
+        
     }
-
-
-    /**
-     * 结束上拉加载更多
-     * 
-     * @param enable 下次能否继续触发加载更多
-     */
-    stopLoadMore(enable: boolean) {
-        this.call("stopLoadMore", enable);
-    }
-
 
     /**
      * 

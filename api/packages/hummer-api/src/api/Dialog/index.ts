@@ -118,7 +118,7 @@ export class Dialog extends HummerComponent {
 
 
     protected custom(view: View) {
-        this.call("custom", view);
+        this.call("custom", view.getThis());
     }
 
 
