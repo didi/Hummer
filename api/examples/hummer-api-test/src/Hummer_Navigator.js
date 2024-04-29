@@ -1,4 +1,4 @@
-import{View, Navigator, Hummer,Memory, Button, NotifyCenter} from '../../../packages/hummer-api/dist/hummer-api.es'
+import { View, Navigator, Hummer, Memory, Button, NotifyCenter } from '../../../packages/hummer-api/dist/hummer-api.es'
 
 export class RootView extends View {
     constructor() {
@@ -14,7 +14,7 @@ export class RootView extends View {
 
         let pageInfo = {
             id: '111',
-            url: 'hummer://template',
+            url: './Hummer_NavigatorBack.js',
             params: {
                 aaa: 111,
                 bbb: 222,
@@ -28,23 +28,29 @@ export class RootView extends View {
         button.addEventListener('tap', (event) => {
             console.log("------开始跳转")
             Navigator.openPage(pageInfo, (result) => {
-                console.log('下一个页面的返回值Page result: ' + JSON.stringify(result));
+                console.log('Navigator::下一个页面的返回值Page result: ', JSON.stringify(result));
             });
-            
+
         });
 
         let memory = new Memory()
         memory.set('daijia', 'daijiaValue')
 
-     
+
 
         let notifyCenter = Hummer.notifyCenter
-        notifyCenter.addEventListener("myHummer", (e) => {
-            console.log("后一个页面触发myHummer事件", e)
+        notifyCenter.addEventListener("myHummer", (value) => {
+            console.log("Navigator::收到后一个页面触发myHummer事件::" + value)
         })
 
         this.appendChild(button)
+        this.canGoBack = true;
 
+    }
+
+
+    onBack() {
+        console.log("page onBack")
     }
 
 }

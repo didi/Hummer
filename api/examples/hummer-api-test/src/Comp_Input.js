@@ -35,6 +35,7 @@ class RootView extends Scroller {
         layout.style = {
             flexDirection: 'column',
             padding: 10,
+            width:"100%",
             borderWidth: 1,
             borderColor: '#22222222',
             backgroundColor: '#00FF0022',
@@ -65,7 +66,7 @@ class RootView extends Scroller {
         btn1.style = {
             position: 'absolute',
             width: 70,
-            height: 40,
+            height: 60,
             right: 0,
             fontSize: 12,
         };

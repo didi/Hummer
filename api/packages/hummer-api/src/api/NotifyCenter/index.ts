@@ -43,9 +43,9 @@ export class NotifyCenter extends HummerComponent {
     */
     static removeEventListener(event: string, callback: Function) {
         NotifyCenter.checkInstance();
-        if(!callback){
+        if (!callback) {
             NotifyCenter.instance.call("removeAllEventListener", event)
-        }else {
+        } else {
             NotifyCenter.instance.removeEventListener(event, callback)
         }
 
@@ -59,9 +59,29 @@ export class NotifyCenter extends HummerComponent {
      * @param event 事件名称
      * @param value 消息内容
      */
-    static triggerEvent(event: string, value: Record<string, any>) {
+    static triggerEvent(eventName: string, value: Record<string, any>) {
+        let event = {
+            type: eventName,
+            state: 0,
+            timestamp: new Date().getTime(),
+            value: value,
+        };
+
         NotifyCenter.checkInstance();
-        NotifyCenter.instance.call("triggerEvent",event, value);
+        NotifyCenter.instance.call("triggerEvent", eventName, event);
+    }
+
+    /**
+     * 重新获取实际传递的数据
+     * @param eventName 
+     * @param event 
+     * @returns 
+     */
+    protected onHandleReceiveEvent(eventName: string, event: any): any {
+        if (event) {
+            return event.value;
+        }
+        return undefined;
     }
 
 

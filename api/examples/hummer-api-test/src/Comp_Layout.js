@@ -190,8 +190,8 @@ class RootView extends View {
   updateOpetation(id, v) {
     selectViewId = `${id}`;
     idText.text = `元素：${selectViewId}`;
-    btnPosition.text = `position：${v.style["position"]}`;
-    btnDisplay.text = `display：${v.style["display"]}`;
+    // btnPosition.text = `position：${v.style["position"]}`;
+    // btnDisplay.text = `display：${v.style["display"]}`;
   }
 
 }

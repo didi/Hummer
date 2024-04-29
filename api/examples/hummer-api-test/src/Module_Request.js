@@ -42,7 +42,7 @@ class RootView extends View {
         };
         btn1.addEventListener('tap', e => {
             let request = new Request();
-            request.url = 'http://172.23.161.161:8000/fileList';
+            request.url = 'http://172.23.164.20:8000/fileList';
             request.method = 'GET';
             request.send(response => {
                 console.log('method: ' + request.method);
@@ -67,7 +67,7 @@ class RootView extends View {
         };
         btn2.addEventListener('tap', e => {
             let request = new Request();
-            request.url = 'http://172.23.161.161:8000/fileList';
+            request.url = 'http://172.23.164.201:8000/fileList';
             request.method = 'POST';
             request.send(response => {
                 console.log('method: ' + request.method);

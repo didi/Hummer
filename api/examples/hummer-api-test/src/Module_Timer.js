@@ -82,7 +82,7 @@ class RootView extends View {
 
         let infoText = new Text();
         infoText.style = {
-            width: Hummer.env.deviceWidth - 50,
+            // width: Hummer.env.deviceWidth - 50,
             marginLeft: 5,
             marginTop: 10,
         };

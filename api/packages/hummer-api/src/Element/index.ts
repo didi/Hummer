@@ -294,7 +294,7 @@ export class Element extends Node {
     protected _setAttribute(key: string, value: any, update: boolean = true) {
         this._attributes[key] = value;
         if (update) {
-            this.obj.setAttributes({ [key]: value });
+            this.getThis().setAttributes({ [key]: value });
         }
     }
 
@@ -310,7 +310,7 @@ export class Element extends Node {
     */
     protected _initAttributes(attribute: object) {
         this._attributes = attribute || {};
-        this.obj.setAttributes(attribute);
+        this.getThis().setAttributes(attribute);
 
     }
 
@@ -321,7 +321,7 @@ export class Element extends Node {
      */
     protected _setAttributes(attribute: object) {
         this._attributes = { ...this._attributes, ...attribute }
-        this.obj.setAttributes(attribute);
+        this.getThis().setAttributes(attribute);
     }
 
 
@@ -401,7 +401,7 @@ export class Element extends Node {
 
         this._style = { ...newStyle, ...style };
 
-        this.obj.setStyles(this._style);
+        this.getThis().setStyles(this._style);
     }
 
 
@@ -443,7 +443,7 @@ export class Element extends Node {
 
         // 临时存储，方面后面移除监听
         this._animationMap && this._animationMap.set(key, animation)
-        this.obj.addAnimation(animation, key);
+        this.getThis().addAnimation(animation, key);
     }
 
     /**
@@ -462,7 +462,7 @@ export class Element extends Node {
             this.removeEventListener(AnimationEndName, lastAnim.endCallback);
         }
         this._animationMap.delete(key);
-        this.obj.removeAnimationForKey(key);
+        this.getThis().removeAnimationForKey(key);
     }
 
     /**
@@ -478,7 +478,7 @@ export class Element extends Node {
         this.removeEventListener(AnimationStartName)
         this.removeEventListener(AnimationEndName)
         this._animationMap.clear();
-        this.obj.removeAllAnimation();
+        this.getThis().removeAllAnimation();
     }
 
     /**
@@ -486,7 +486,7 @@ export class Element extends Node {
      * @param callback  区域信息回调
      */
     public getRect(callback: Function) {
-        this.obj.getRect((rect: object) => {
+        this.getThis().getRect((rect: object) => {
             callback.call(this, rect);
         })
     }

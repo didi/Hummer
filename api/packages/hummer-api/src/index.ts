@@ -60,6 +60,8 @@ export * from "./api/NotifyCenter"
 
 export * from "./api/Request"
 
+export * from "./api/WebSocket"
+
 
 
 __GLOBAL__.Hummer = {

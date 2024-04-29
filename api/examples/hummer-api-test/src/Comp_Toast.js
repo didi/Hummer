@@ -1,4 +1,4 @@
-import{View, Text, Button, Toast, Hummer} from './../../../packages/hummer-api/dist/hummer-api.es'
+import{View, Text, Button, Toast, Hummer,Loading} from './../../../packages/hummer-api/dist/hummer-api.es'
 
 class RootView extends View {
     constructor() {
@@ -33,11 +33,11 @@ class RootView extends View {
                 paddingBottom: 12,
             }
 
-            // let iconView = new Loading();
-            // iconView.style = {
-            //     width: 24,
-            //     height: 24,
-            // }
+            let iconView = new Loading();
+            iconView.style = {
+                width: 24,
+                height: 24,
+            }
 
             let textView = new Text();
             textView.text = "这是Toast内容"
@@ -47,7 +47,7 @@ class RootView extends View {
                 color: '#CCCCCC'
             }
 
-            // layout.appendChild(iconView);
+            layout.appendChild(iconView);
             layout.appendChild(textView)
 
             Toast.custom(layout);

@@ -63,7 +63,7 @@ export class Node extends EventTarget {
 
 
     // Mounted 生命周期
-    private _onMounted() {
+    protected _onMounted() {
         this.onMounted();
     }
 
@@ -72,7 +72,7 @@ export class Node extends EventTarget {
     }
 
     // Destoryed 生命周期
-    private _onDestoryed() {
+    protected _onDestoryed() {
         // removeChildWithFixed(this);
         this.onDestoryed();
     }
@@ -120,7 +120,7 @@ export class Node extends EventTarget {
 
 
     private _appendChild(child: Node) {
-        this.obj.appendChild(child.obj);
+        this.getThis().appendChild(child.getThis());
     }
 
     private unlinkSiblings() {
@@ -160,7 +160,7 @@ export class Node extends EventTarget {
     }
 
     private _removeChild(child: Node) {
-        this.obj.removeChild(child.obj);
+        this.getThis().removeChild(child.getThis());
     }
 
     /**
@@ -191,7 +191,7 @@ export class Node extends EventTarget {
     }
 
     private _insertBefore(child: Node, anchor: Node) {
-        this.obj.insertBefore(child.obj, anchor.obj);
+        this.getThis().insertBefore(child.getThis(), anchor.getThis());
     }
 
     /**
@@ -237,7 +237,7 @@ export class Node extends EventTarget {
     }
 
     private _replaceChild(newNode: Node, oldNode: Node) {
-        this.obj.replaceChild(newNode.obj, oldNode.obj);
+        this.getThis().replaceChild(newNode.getThis(), oldNode.getThis());
     }
 
     /**
@@ -254,6 +254,6 @@ export class Node extends EventTarget {
     }
 
     private _removeAll() {
-        this.obj.removeAll();
+        this.getThis().removeAll();
     }
 }

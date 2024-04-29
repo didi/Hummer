@@ -110,7 +110,7 @@ class RootView extends View {
         btn4.addEventListener('tap', (event) => {
             let key = inputKey.text;
             let isExist = Memory.exist(key);
-            console.log(key + " exist: " + exist);
+            console.log(key + " exist: " + isExist);
             this.infoText.text = 'isExist: ' + isExist;
         });
 

@@ -1,4 +1,4 @@
-import{View, Text, Switch, Hummer} from './../../../packages/hummer-api/dist/hummer-api.es'
+import{View, Text, Switch,Button, Hummer} from './../../../packages/hummer-api/dist/hummer-api.es'
 
 class RootView extends View {
     constructor() {

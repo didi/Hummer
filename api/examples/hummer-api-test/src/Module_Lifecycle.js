@@ -42,8 +42,8 @@ class RootView extends View {
 
     onDestroy() {
         // 页面销毁
-        this.info += "onDestroy\n";
-        this.infoView.text = this.info;
+        // this.info += "onDestroy\n";
+        // this.infoView.text = this.info;
         console.log('-- onDestroy');
     }
 }

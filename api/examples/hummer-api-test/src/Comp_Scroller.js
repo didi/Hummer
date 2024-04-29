@@ -10,8 +10,9 @@ class RootView extends View {
 
         this.scroll = new Scroller();
         this.scroll.style = {
-            width: '100%',
+            width: '90%',
             height: '100%',
+            backgroundColor:"#2ff03f"
         }
     //    this.scroll.showScrollBar = true;
     //    this.scroll.bounces = false;

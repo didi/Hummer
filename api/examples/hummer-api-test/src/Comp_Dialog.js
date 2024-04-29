@@ -1,4 +1,4 @@
-import{View, Text, Button, Dialog, Hummer} from './../../../packages/hummer-api/dist/hummer-api.es'
+import{View, Text, Button, Dialog, Hummer,Toast} from './../../../packages/hummer-api/dist/hummer-api.es'
 
 class RootView extends View {
     constructor() {
@@ -131,6 +131,7 @@ class RootView extends View {
 
         let dialog = new Dialog();
         dialog.custom(layout);
+        // dialog.loading("加载中...");
 
         btn1.addEventListener("tap", (event) => {
             dialog.dismiss();

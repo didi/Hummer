@@ -58,8 +58,8 @@ class RootView extends View {
             height: 40,
         };
         btnAppendChild.addEventListener('tap', (event) => {
-            // let text = this.makeTextView(childViews);
-            viewLayout.appendChild(null);
+            let text = this.makeTextView(childViews);
+            viewLayout.appendChild(text);
 
             childViews.push(text);
             this.printViewIds(viewIdsText, childViews);

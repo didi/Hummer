@@ -51,6 +51,7 @@ export class HummerElement extends Element {
     protected __defaultStyle: Record<string, string> | null = {};
     protected __style: Record<string, string> | null = {};
     protected __baseStyle: Record<string, string> | null = {};
+    protected __propsVue__ = new Map<any, any>();
 
     private globalProxy: HummerGlobalProxy | undefined = undefined;//代理处理
 
@@ -215,6 +216,11 @@ export class HummerElement extends Element {
         }
     }
 
+
+    public get props() {
+        return this.__propsVue__;
+    }
+
     // Cache Props To Get
     private setCacheProp(key: string, value: any) {
         // 如果是 dataattr 格式的属性，缓存到 dataset 中，方便事件可以获取到 dataset （Chameleon事件需求）
@@ -224,8 +230,7 @@ export class HummerElement extends Element {
                 this.dataset[dataKey] = value
             }
         }
-        // TODO:  这数据结构不对 会报错
-        // this.props.set(key, value)
+        this.__propsVue__.set(key, value)
     }
 
 

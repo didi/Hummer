@@ -12,7 +12,7 @@ class RootView extends View {
             paddingTop: 10,
         };
 
-        var isKeyFrame = true;
+        var isKeyFrame = false;
 
         var layout0 = new View();
         layout0.style = {

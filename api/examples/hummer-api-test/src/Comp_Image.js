@@ -10,6 +10,7 @@ class RootView extends Scroller {
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
+            // backgroundColor:"#ff0000"
         }
 
         this.testBackground();

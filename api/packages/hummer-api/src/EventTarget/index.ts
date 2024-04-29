@@ -38,7 +38,7 @@ export class EventTarget extends HMObject {
      * 绑定 EventTatget
      */
     public bindEventTarget() {
-        this.obj.setEventTarget((eventName: string, event: any) => {
+        this.getThis().setEventTarget((eventName: string, event: any) => {
             this.onReceiveEvent(eventName, event);
         })
     }
@@ -55,7 +55,7 @@ export class EventTarget extends HMObject {
                 }
             }))
         } else {
-            console.log("未找到事件处理器");
+            console.log("dispatchEvent() eventName=" + eventName + " not found event listener.");
         }
 
     }
@@ -80,7 +80,7 @@ export class EventTarget extends HMObject {
 
 
     private _addEventListener(eventName: string) {
-        this.obj.addEventListener(eventName);
+        this.getThis().addEventListener(eventName);
     }
 
 
@@ -96,19 +96,19 @@ export class EventTarget extends HMObject {
                 if (index > -1) {
                     listeners.splice(index, 1); // 通过 splice() 函数将该对象从数组中移除
                 } else {
-                    console.log("未找到指定对象");
+                    console.log("removeEventListener() eventName=" + eventName + " not found listener.");
                 }
-                if (listeners.length ==0){
+                if (listeners.length == 0) {
                     this.envents.delete(eventName);
                     this._removeEventListener(eventName);
                 }
             }
         }
-       
+
     }
 
     private _removeEventListener(eventName: string) {
-        this.obj.removeEventListener(eventName);
+        this.getThis().removeEventListener(eventName);
     }
 
 

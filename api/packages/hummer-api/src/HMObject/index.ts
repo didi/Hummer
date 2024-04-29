@@ -12,30 +12,33 @@ export class HMObject {
     public name: string
     public isApi: boolean
 
-    protected props: any
-    protected obj: any
+    private __props__: any
+    private __obj__: any
 
     public constructor(tag: string, isApi: boolean = true, props: any) {
         this.tag = tag
         this.name = tag
         this.isApi = isApi
-        this.props = props
+        this.__props__ = props
         if (isApi) {
-            this.obj = _Document_.createComponent(tag, props)
-            this.obj.__element__ = this;
+            this.__obj__ = _Document_.createComponent(tag, props)
+            this.__obj__.__element__ = this;
         } else {
-            this.obj = _Document_.createElement(tag, props)
-            this.obj.__element__ = this;
+            this.__obj__ = _Document_.createElement(tag, props)
+            this.__obj__.__element__ = this;
         }
     }
 
     public getThis() {
-        return this.obj;
+        return this.__obj__;
     }
 
+    public getCreateProps(){
+        return this.__props__;
+    }
 
     protected call(methodName: string, ...args: any): any {
-        return this.obj.invoke(methodName, ...args)
+        return this.__obj__.invoke(methodName, ...args)
     }
 
 
