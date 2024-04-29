@@ -24,8 +24,10 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    api  rootProject.ext.androidx["appcompat"]
-    api  rootProject.ext.androidx["recyclerview"]
+    api rootProject.ext.androidx["appcompat"]
+    api rootProject.ext.androidx["recyclerview"]
+    api rootProject.ext.androidx["constraintLayout"]
+
     api project(':hummer-falcon')
 
     api project(':hummer2-annotation')

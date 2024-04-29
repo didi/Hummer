@@ -21,7 +21,6 @@ import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-//import com.didi.hummer.render.utility.RTLUtil;
 
 import com.didi.hummer2.render.utility.RTLUtil;
 

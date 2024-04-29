@@ -39,7 +39,7 @@ public class EventDispatcher {
         this.eventTarget = eventTarget;
     }
 
-    protected void dispatchEvent(String eventName, Object event) {
+    public void dispatchEvent(String eventName, Object event) {
         if (eventTarget != null && eventNames.contains(eventName)) {
             eventTarget.dispatchEvent(eventName, event);
         }

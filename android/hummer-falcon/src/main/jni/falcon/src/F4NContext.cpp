@@ -5,6 +5,8 @@
 #include "falcon/F4NContext.h"
 #include <falcon/F4NDocument.h>
 #include <falcon/F4NElement.h>
+#include <falcon/F4NUtil.h>
+
 
 F4NContext::F4NContext() {
 
@@ -54,6 +56,10 @@ void F4NContext::start() {
 
 void F4NContext::onStart() {
 
+    F4NTimer *f4NTimer = new F4NTimer(this, jsiContext_);
+    f4NTimer->onCreate();
+    timer = f4NTimer;
+
     F4NConsole *jsConsole = new F4NConsole(jsiContext_, consoleHandler_);
     jsConsole->onCreate();
     jsConsole_ = jsConsole;
@@ -67,7 +73,7 @@ void F4NContext::onStart() {
 }
 
 
-JsiValue *F4NContext::evaluateJavaScript(string script,string scriptId) {
+JsiValue *F4NContext::evaluateJavaScript(string script, string scriptId) {
     JsiObjectEx *object = jsiContext_->evaluateJavaScript(script, scriptId);
     if (object != nullptr) {
         delete object;
@@ -86,6 +92,27 @@ JsiValue *F4NContext::evaluateBytecode(const uint8_t *byteArray, size_t length, 
 JsiValue *F4NContext::render(F4NElement *rootElement) {
     elementRender_->renderRoot(rootElement);
     return nullptr;
+}
+
+
+void F4NContext::buildElementParams(size_t size, JsiValue **params) {
+    if (size > 0) {
+        for (int i = 0; i < size; i++) {
+            params[i] = elementRender_->convertElementParams(nullptr, params[i]);
+        }
+    }
+}
+
+
+void F4NContext::applyElementRender(size_t size, JsiValue **params) {
+    if (size > 0) {
+        for (int i = 0; i < size; i++) {
+            F4NElement *element = F4NUtil::convert2Element(params[i]);
+            if (element != nullptr) {
+                elementRender_->applyRenderTag(element);
+            }
+        }
+    }
 }
 
 
@@ -139,17 +166,18 @@ void F4NContext::onStop() {
 void F4NContext::onDestroy() {
     document_->onDestroy();
     jsConsole_->onDestroy();
+    timer->onDestroy();
     jsiContext_->stop();
 }
 
 F4NContext::~F4NContext() {
-    onDestroy();
 
     delete componentFactory_;
     delete document_;
     delete jsConsole_;
     delete jsiContext_;
 }
+
 
 
 

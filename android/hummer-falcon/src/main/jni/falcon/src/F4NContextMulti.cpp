@@ -77,7 +77,9 @@ void F4NContextMulti::onStop() {
 }
 
 void F4NContextMulti::onDestroy() {
-    contextDelegate_->onDestroy();
+    if (contextDelegate_ != nullptr){
+        contextDelegate_->onDestroy();
+    }
 }
 
 
@@ -121,6 +123,7 @@ void *F4NContextMulti::submitUITask(function<void *(void *, void *)> task) {
 F4NContextMulti::~F4NContextMulti() {
     if (contextDelegate_ != nullptr) {
         delete contextDelegate_;
+        contextDelegate_ = nullptr;
     }
 }
 

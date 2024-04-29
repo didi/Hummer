@@ -3,6 +3,7 @@
 //
 
 #include "falcon/F4NConsole.h"
+#include "falcon/F4NUtil.h"
 
 
 F4NConsole::F4NConsole(JsiContext *jsiContext, ConsoleHandler *consoleHandler) {
@@ -44,15 +45,8 @@ JsiValue *F4NConsole::error(size_t size, JsiValue **params) {
 
 JsiValue *F4NConsole::print(int level, size_t size, JsiValue **params) {
     if (consoleHandler != nullptr && size > 0) {
-        JsiValue *jsiValue = params[0];
-        const char *message;
-        if (jsiValue->getType() == TYPE_STRING) {
-            auto *text = dynamic_cast<JsiString *>(jsiValue);
-            message = text->value_.c_str();
-        } else {
-            message = jsiValue->toString().c_str();
-        }
-        consoleHandler->log(level, message);
+        string message = F4NUtil::buildString(size, params);
+        consoleHandler->log(level, message.c_str());
     }
     return nullptr;
 }

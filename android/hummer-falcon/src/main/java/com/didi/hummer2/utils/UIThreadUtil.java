@@ -60,7 +60,7 @@ public class UIThreadUtil {
 
     public static void assetOnMainThread() {
         if (UIThreadUtil.isNotOnUiThread()) {
-            if (DebugUtil.isDebuggable()) {
+            if (F4NDebugUtil.isDebuggable()) {
                 throw new JSThreadCallException("this is not on main thread.");
             }
         }
@@ -68,7 +68,7 @@ public class UIThreadUtil {
 
     public static void assetOnMainThreadCall(String method) {
         if (UIThreadUtil.isNotOnUiThread()) {
-            if (DebugUtil.isDebuggable()) {
+            if (F4NDebugUtil.isDebuggable()) {
                 throw new JSThreadCallException("call " + method + "() is not on main thread.");
             }
         }
@@ -76,7 +76,7 @@ public class UIThreadUtil {
 
     public static void assetOnMainThread(String message) {
         if (UIThreadUtil.isNotOnUiThread()) {
-            if (DebugUtil.isDebuggable()) {
+            if (F4NDebugUtil.isDebuggable()) {
                 throw new JSThreadCallException(message);
             }
         }

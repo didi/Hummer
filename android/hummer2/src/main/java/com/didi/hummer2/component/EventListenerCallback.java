@@ -1,9 +1,11 @@
 package com.didi.hummer2.component;
 
+import com.didi.hummer2.adapter.http.HttpResponse;
 import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
+import com.didi.hummer2.component.module.hummer.NoOpJSCallback;
 import com.didi.hummer2.render.event.base.Event;
 import com.didi.hummer2.utils.HMLog;
 
@@ -28,12 +30,12 @@ public class EventListenerCallback extends NoOpJSCallback {
 
     @Override
     public Object call(Object... params) {
-        JsiValue[] jsiValues = toJsiValues(params);
         JsiValue result = null;
         if (params.length > 0 && params[0] instanceof Event) {
             String type = ((Event) params[0]).getType();
             result = hmFunction.call(new JsiString(type), ((Event) params[0]).toJsiValue());
         } else {
+            JsiValue[] jsiValues = toJsiValues(params);
             result = hmFunction.call(jsiValues);
         }
         if (result != null) {
@@ -57,6 +59,9 @@ public class EventListenerCallback extends NoOpJSCallback {
     private JsiValue toJsiValue(Object value) {
         if (value instanceof Event) {
             return ((Event) value).toJsiValue();
+        }
+        if (value instanceof HttpResponse) {
+            return ((HttpResponse<?>) value).toJsiValue();
         }
         return new JsiObject();
     }

@@ -4,7 +4,7 @@ import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.bridge.EventTarget;
 import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.component.Component;
-import com.didi.hummer2.component.Element;
+import com.didi.hummer2.render.Element;
 import com.didi.hummer2.component.anim.HummerAnimation;
 import com.didi.hummer2.register.HummerObject;
 import com.didi.hummer2.utils.HummerObjectUtil;
@@ -76,7 +76,7 @@ public abstract class BaseInvoker<T extends HummerObject> extends AbsInvoker<T> 
     public void onUpdateAttribute(HummerContext hummerContext, T instance, String attributeName, Object attribute) {
         Element element = (Element) instance;
         switch (attributeName) {
-            case "enabled": {
+            case "enable": {
                 boolean param0 = attribute != null ? HummerObjectUtil.toBoolean(attribute) : false;
                 element.setEnabled(param0);
             }

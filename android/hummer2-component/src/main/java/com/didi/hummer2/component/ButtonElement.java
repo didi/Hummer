@@ -5,6 +5,7 @@ import com.didi.hummer2.annotation.HMAttribute;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMStyle;
 import com.didi.hummer2.component.hummer.button.Button;
+import com.didi.hummer2.render.Element;
 
 import java.util.Map;
 

@@ -33,6 +33,7 @@ import com.didi.hummer2.engine.JSCallback;
 import com.didi.hummer2.engine.JSValue;
 import com.didi.hummer2.render.component.view.FixedNoneBox;
 import com.didi.hummer2.render.component.view.HMBase;
+import com.didi.hummer2.render.event.guesture.StatEvent;
 import com.didi.hummer2.render.event.view.ScrollEvent;
 import com.didi.hummer2.render.style.HummerLayout;
 import com.didi.hummer2.render.style.HummerLayoutExtendUtils;
@@ -95,21 +96,33 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
             @Override
             public void onRefreshStarted() {
                 if (refreshCallback != null) {
-                    refreshCallback.call(PullRefreshState.START_PULL_DOWN);
+                    StatEvent statEvent = new StatEvent();
+                    statEvent.setType("onRefresh");
+                    statEvent.setState( PullRefreshState.START_PULL_DOWN);
+                    statEvent.setTimestamp(System.currentTimeMillis());
+                    refreshCallback.call(statEvent);
                 }
             }
 
             @Override
             public void onRefreshing() {
                 if (refreshCallback != null) {
-                    refreshCallback.call(PullRefreshState.REFRESHING);
+                    StatEvent statEvent = new StatEvent();
+                    statEvent.setType("onRefresh");
+                    statEvent.setState( PullRefreshState.REFRESHING);
+                    statEvent.setTimestamp(System.currentTimeMillis());
+                    refreshCallback.call(statEvent);
                 }
             }
 
             @Override
             public void onRefreshFinished() {
                 if (refreshCallback != null) {
-                    refreshCallback.call(PullRefreshState.IDLE);
+                    StatEvent statEvent = new StatEvent();
+                    statEvent.setType("onRefresh");
+                    statEvent.setState( PullRefreshState.IDLE);
+                    statEvent.setTimestamp(System.currentTimeMillis());
+                    refreshCallback.call(statEvent);
                 }
             }
         });
@@ -123,7 +136,11 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
             @Override
             public void onLoading() {
                 if (loadMoreCallback != null) {
-                    loadMoreCallback.call(LoadMoreState.LOADING);
+                    StatEvent statEvent = new StatEvent();
+                    statEvent.setType("onLoadMore");
+                    statEvent.setState( LoadMoreState.LOADING);
+                    statEvent.setTimestamp(System.currentTimeMillis());
+                    loadMoreCallback.call(statEvent);
                 }
             }
 
@@ -266,7 +283,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
             return;
         }
 
-        child.getJSValue().protect();
+        //child.getJSValue().protect();
         child.setPositionChangedListener(this);
         children.add(child);
         HMBase finalChild = child;
@@ -289,7 +306,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
             return;
         }
 
-        child.getJSValue().unprotect();
+        //child.getJSValue().unprotect();
         child.setPositionChangedListener(null);
         children.remove(child);
         getNode().removeChild(child.getNode());
@@ -317,7 +334,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         fixedNoneBoxMap.clear();
         // 解除 PositionChangedListener 绑定关系
         for (HMBase hmBase : children) {
-            hmBase.getJSValue().unprotect();
+            //hmBase.getJSValue().unprotect();
             hmBase.setPositionChangedListener(null);
         }
         children.clear();
@@ -332,7 +349,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
             return;
         }
 
-        child.getJSValue().protect();
+        //child.getJSValue().protect();
         child.setPositionChangedListener(this);
         children.add(child);
         HMBase finalChild = child;
@@ -360,9 +377,9 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
             return;
         }
 
-        child.getJSValue().protect();
+        //child.getJSValue().protect();
         child.setPositionChangedListener(this);
-        old.getJSValue().unprotect();
+        //old.getJSValue().unprotect();
         old.setPositionChangedListener(null);
         children.add(child);
         children.remove(old);
@@ -405,7 +422,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
         if (result != null) {
             // JSValue从native返回到js侧时，引用计数会自动减1，这里需要protect一下避免被回收
-            result.getJSValue().protect();
+            //result.getJSValue().protect();
         }
         return result;
     }
@@ -466,7 +483,11 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         }
 
         if (loadMoreCallback != null) {
-            loadMoreCallback.call(enable ? LoadMoreState.IDLE : LoadMoreState.NO_MORE_DATA);
+            StatEvent statEvent = new StatEvent();
+            statEvent.setType("onLoadMore");
+            statEvent.setState(enable ? LoadMoreState.IDLE : LoadMoreState.NO_MORE_DATA);
+            statEvent.setTimestamp(System.currentTimeMillis());
+            loadMoreCallback.call(statEvent);
         }
     }
 

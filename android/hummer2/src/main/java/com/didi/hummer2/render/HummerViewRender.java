@@ -1,14 +1,18 @@
 package com.didi.hummer2.render;
 
-import android.graphics.Color;
 import android.view.ViewGroup;
 
 import com.didi.hummer2.HummerRender;
 import com.didi.hummer2.HummerScriptContext;
-import com.didi.hummer2.component.Element;
 import com.didi.hummer2.lifecycle.IFullLifeCycle;
+import com.didi.hummer2.register.HummerObject;
+import com.didi.hummer2.register.HummerObjectManager;
 import com.didi.hummer2.render.component.view.HMBase;
+import com.didi.hummer2.render.event.PageStateEvent;
+import com.didi.hummer2.render.event.base.Event;
 import com.didi.hummer2.render.style.HummerLayout;
+
+import java.util.List;
 
 /**
  * didi Create on 2024/4/7 .
@@ -18,19 +22,25 @@ import com.didi.hummer2.render.style.HummerLayout;
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
  * @Date 2024/4/7 5:40 PM
- * @Description 用一句话说明文件功能
+ * @Description Hummer视图渲染器
  */
 
 public class HummerViewRender implements HummerRender, IFullLifeCycle {
-
 
     private HummerScriptContext hummerScriptContext;
     private HummerLayout rootLayout;
     private HummerLayout mContent;
     private Element rootElement;
+    private HummerObjectManager objectManager;
 
-    public HummerViewRender(HummerScriptContext hummerScriptContext, HummerLayout rootLayout) {
+    private boolean isPageCreated = false;
+    private boolean isPageStarted = false;
+    private boolean isPageForeground = false;
+
+    public HummerViewRender(HummerScriptContext hummerScriptContext, HummerLayout rootLayout, HummerObjectManager objectManager) {
+        this.hummerScriptContext = hummerScriptContext;
         this.rootLayout = rootLayout;
+        this.objectManager = objectManager;
 
         mContent = new HummerLayout(hummerScriptContext);
         mContent.getYogaNode().setWidthPercent(100);
@@ -38,10 +48,29 @@ public class HummerViewRender implements HummerRender, IFullLifeCycle {
         rootLayout.addView(mContent);
     }
 
+    @Override
+    public void render(ViewGroup rootView) {
+        //
+    }
+
     public void renderElement(Element element) {
         this.rootElement = element;
         renderHummerPage();
+        isPageCreated = true;
+        checkAndDispatchOnStart();
+        checkAndDispatchOnResume();
     }
+
+
+    public boolean canGoBack() {
+        //给页面发送页面返回事件
+        onPageBack();
+        if (rootElement instanceof HummerGoBack) {
+            return ((HummerGoBack) rootElement).canGoBack();
+        }
+        return true;
+    }
+
 
     private void renderHummerPage() {
         if (rootElement != null) {
@@ -51,87 +80,143 @@ public class HummerViewRender implements HummerRender, IFullLifeCycle {
                 mContent.removeAllViews();
                 mContent.addView(hmBase);
             }
-            startIfNeed();
-            resumeIfNeed();
         }
     }
 
 
+    protected void dispatchEvent(Event event) {
+        if (rootElement != null) {
+            rootElement.directDispatchEvent(event);
+        }
+    }
+
     private void onPageCreate() {
-//        if (mJsPage != null) {
-//            mJsPage.callFunction("onCreate");
-//        }
+        dispatchEvent(PageStateEvent.__onCreate__());
     }
 
     private void onPageAppear() {
-//        if (mJsPage != null) {
-//            mJsPage.callFunction("onCreate");
-//        }
-    }
-
-    private void startIfNeed() {
-//        if (isJsCreated && isStarted && mJsPage != null) {
-//            mComponentPool.onStart();
-//        }
-    }
-
-    private void resumeIfNeed() {
-//        if (isJsCreated && isResumed && mJsPage != null) {
-//            mComponentPool.onResume();
-//            mJsPage.callFunction("onAppear");
-//        }
+        dispatchEvent(PageStateEvent.__onAppear__());
     }
 
     private void onPageDisappear() {
-//        if (mJsPage != null) {
-//            mJsPage.callFunction("onDisappear");
-//        }
-//        mComponentPool.onPause();
-    }
-
-    private void stop() {
-//        mComponentPool.onStop();
+        dispatchEvent(PageStateEvent.__onDisappear__());
     }
 
     private void onPageDestroy() {
-//        if (mJsPage != null) {
-//            mJsPage.callFunction("onDestroy");
-//        }
-//        mComponentPool.onDestroy();
+        dispatchEvent(PageStateEvent.__onDestroy__());
     }
 
-    @Override
-    public void render(ViewGroup rootView) {
-        //
+    private void onPageBack() {
+        dispatchEvent(PageStateEvent.__onBack__());
     }
 
-    @Override
-    public void onStart() {
-
+    private void onComponentStart() {
+        if (objectManager != null) {
+            List<HummerObject> objects = objectManager.getAllObject();
+            for (HummerObject hummerObject : objects) {
+                if (hummerObject instanceof IFullLifeCycle) {
+                    ((IFullLifeCycle) hummerObject).onStart();
+                }
+            }
+        }
     }
 
-    @Override
-    public void onResume() {
-
+    private void onComponentStop() {
+        if (objectManager != null) {
+            List<HummerObject> objects = objectManager.getAllObject();
+            for (HummerObject hummerObject : objects) {
+                if (hummerObject instanceof IFullLifeCycle) {
+                    ((IFullLifeCycle) hummerObject).onStop();
+                }
+            }
+        }
     }
 
-    @Override
-    public void onPause() {
-
+    private void onComponentResume() {
+        if (objectManager != null) {
+            List<HummerObject> objects = objectManager.getAllObject();
+            for (HummerObject hummerObject : objects) {
+                if (hummerObject instanceof IFullLifeCycle) {
+                    ((IFullLifeCycle) hummerObject).onResume();
+                }
+            }
+        }
     }
 
-    @Override
-    public void onStop() {
+    private void onComponentPause() {
+        if (objectManager != null) {
+            List<HummerObject> objects = objectManager.getAllObject();
+            for (HummerObject hummerObject : objects) {
+                if (hummerObject instanceof IFullLifeCycle) {
+                    ((IFullLifeCycle) hummerObject).onPause();
+                }
+            }
+        }
+    }
 
+    private void onComponentDestroy() {
+        if (objectManager != null) {
+            List<HummerObject> objects = objectManager.getAllObject();
+            for (HummerObject hummerObject : objects) {
+                hummerObject.onDestroy();
+            }
+        }
+    }
+
+    /**
+     * 保证在页面创建完成后回调
+     */
+    private void checkAndDispatchOnStart() {
+        if (isPageCreated && isPageStarted) {
+            onComponentStart();
+        }
+    }
+
+
+    /**
+     * 保证在页面创建完成后回调
+     */
+    private void checkAndDispatchOnResume() {
+        if (isPageCreated && isPageForeground) {
+            onPageAppear();
+            onComponentResume();
+        }
     }
 
     @Override
     public void onCreate() {
+        //事件在组件或者页面创建时分发
+    }
 
+    @Override
+    public void onStart() {
+        isPageStarted = true;
+        //仅支持组件
+        checkAndDispatchOnStart();
+    }
+
+    @Override
+    public void onResume() {
+        isPageForeground = true;
+        checkAndDispatchOnResume();
+    }
+
+    @Override
+    public void onPause() {
+        isPageForeground = false;
+        onComponentPause();
+        onPageDisappear();
+    }
+
+    @Override
+    public void onStop() {
+        //仅支持组件
+        onComponentStop();
     }
 
     @Override
     public void onDestroy() {
-
+        onComponentDestroy();
+        onPageDestroy();
     }
 }

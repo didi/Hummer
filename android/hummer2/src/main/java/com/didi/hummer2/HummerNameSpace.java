@@ -1,5 +1,7 @@
 package com.didi.hummer2;
 
+import com.didi.hummer2.component.module.hummer.notifycenter.NotifyCenterEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,13 @@ public class HummerNameSpace {
     public void removeHummerContext(HummerScriptContext hummerContext) {
         hummerScriptContexts.remove(hummerContext);
 
+    }
+
+    public void triggerEvent(String key, NotifyCenterEvent event) {
+        List<HummerScriptContext> contexts = new ArrayList<>(hummerScriptContexts);
+        for (HummerScriptContext context : contexts) {
+            context.triggerSelfEvent(key, event);
+        }
     }
 
 

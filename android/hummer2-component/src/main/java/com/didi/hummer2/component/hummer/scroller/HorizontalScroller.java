@@ -197,7 +197,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
             return;
         }
 
-        child.getJSValue().protect();
+//        child.getJSValue().protect();
         child.setPositionChangedListener(this);
         children.add(child);
         HMBase finalChild = child;
@@ -220,7 +220,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
             return;
         }
 
-        child.getJSValue().unprotect();
+//        child.getJSValue().unprotect();
         child.setPositionChangedListener(null);
         children.remove(child);
         getNode().removeChild(child.getNode());
@@ -248,7 +248,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
         fixedNoneBoxMap.clear();
         // 解除 PositionChangedListener 绑定关系
         for (HMBase hmBase : children) {
-            hmBase.getJSValue().unprotect();
+//            hmBase.getJSValue().unprotect();
             hmBase.setPositionChangedListener(null);
         }
         children.clear();
@@ -263,7 +263,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
             return;
         }
 
-        child.getJSValue().protect();
+//        child.getJSValue().protect();
         child.setPositionChangedListener(this);
         children.add(child);
         HMBase finalChild = child;
@@ -291,9 +291,9 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
             return;
         }
 
-        child.getJSValue().protect();
+//        child.getJSValue().protect();
         child.setPositionChangedListener(this);
-        old.getJSValue().unprotect();
+//        old.getJSValue().unprotect();
         old.setPositionChangedListener(null);
         children.add(child);
         children.remove(old);
@@ -335,7 +335,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
 
         if (result != null) {
             // JSValue从native返回到js侧时，引用计数会自动减1，这里需要protect一下避免被回收
-            result.getJSValue().protect();
+//            result.getJSValue().protect();
         }
         return result;
     }

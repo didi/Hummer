@@ -18,7 +18,7 @@ import com.didi.hummer2.engine.JSValue;
 import com.didi.hummer2.render.style.HummerLayout;
 import com.didi.hummer2.render.utils.AssetsUtil;
 import com.didi.hummer2.render.utils.FileUtil;
-import com.didi.hummer2.utils.DebugUtil;
+import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.utils.JsSourceUtil;
 import com.didi.hummer2.utils.NetworkUtil;
 import com.didi.hummer2.utils.UIThreadUtil;
@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 负责JS的加载，可以加载JS字符串或JS对应的URL
- *
+ * <p>
  * Created by XiaoFeng on 2019-08-27.
  */
 public class HummerScriptRender {
@@ -42,10 +42,6 @@ public class HummerScriptRender {
     private HummerPageTracker tracker;
     private String namespace;
 
-    public interface HummerRenderCallback {
-        void onSucceed(HummerContext hmContext, JSValue jsPage);
-        void onFailed(Exception e);
-    }
 
     public HummerScriptRender(@NonNull HummerLayout container) {
         this(container, null);
@@ -58,11 +54,11 @@ public class HummerScriptRender {
     public HummerScriptRender(@NonNull HummerLayout hummerLayout, String namespace, DevToolsConfig config) {
         tracker = new HummerPageTracker(namespace);
         tracker.trackContextInitStart();
-        scriptContext = Hummer.getHummerEngine().createHummerContext(namespace,hummerLayout.getContext(), hummerLayout);
+        scriptContext = Hummer.getHummerEngine().createHummerContext(namespace, hummerLayout.getContext(), hummerLayout);
         tracker.trackContextInitEnd();
         this.namespace = namespace;
 
-        if (DebugUtil.isDebuggable(namespace)) {
+        if (F4NDebugUtil.isDebuggable(namespace)) {
             devTools = HummerDevToolsFactory.create(scriptContext, config);
         }
 
@@ -111,7 +107,7 @@ public class HummerScriptRender {
         scriptContext.onDestroy();
         tracker.trackContextDestroy();
 
-        if (DebugUtil.isDebuggable(namespace)) {
+        if (F4NDebugUtil.isDebuggable(namespace)) {
             HummerDebugger.release(scriptContext);
             if (devTools != null) {
                 devTools.release(scriptContext);
@@ -141,8 +137,8 @@ public class HummerScriptRender {
 //                processRenderFinish();
 //            });
 //        } else {
-            scriptContext.evaluateJavaScript(js, sourcePath);
-            processRenderFinish();
+        scriptContext.evaluateJavaScript(js, sourcePath);
+        processRenderFinish();
 //        }
     }
 
@@ -154,7 +150,7 @@ public class HummerScriptRender {
         scriptContext.setJsSourcePath(sourcePath);
 
         tracker.trackJSEvalStart(bytecode.length, sourcePath);
-        scriptContext.evaluateBytecode(bytecode,"");
+        scriptContext.evaluateBytecode(bytecode, "");
         processRenderFinish();
     }
 
@@ -193,7 +189,7 @@ public class HummerScriptRender {
             return;
         }
 
-        if (DebugUtil.isDebuggable(namespace)) {
+        if (F4NDebugUtil.isDebuggable(namespace)) {
             // 调试插件
             HummerDebugger.init(scriptContext, url);
 
@@ -237,13 +233,13 @@ public class HummerScriptRender {
             }
 
             // 如果是刷新流程，那么在执行JS之前，需要先模拟走一遍生命周期，来做相关的清理工作
-//            if (DebugUtil.isDebuggable(namespace) && isHotReload) {
-//                hmContext.onHotReload(url);
-//            }
+            if (F4NDebugUtil.isDebuggable(namespace) && isHotReload) {
+                scriptContext.onHotReload(url);
+            }
 
             render(response.data, url);
 
-            if (DebugUtil.isDebuggable(namespace) && isHotReload) {
+            if (F4NDebugUtil.isDebuggable(namespace) && isHotReload) {
                 Toast.makeText(scriptContext, "页面已刷新", Toast.LENGTH_SHORT).show();
             }
         });
@@ -319,19 +315,6 @@ public class HummerScriptRender {
     }
 
     /**
-     * 向JS的Hummer域中注入Native参数
-     *
-     * @param key
-     * @param data
-     */
-    public void setNativeDataToHummer(String key, Map<String, Object> data) {
-        if (isDestroyed.get()) {
-            return;
-        }
-//        hmContext.getJsContext().getJSValue("Hummer").set(key, data);
-    }
-
-    /**
      * 设置JS页面打开时，前一个JS页面传递过来的参数
      *
      * @param page
@@ -340,13 +323,10 @@ public class HummerScriptRender {
         if (isDestroyed.get()) {
             return;
         }
-//        JSValue hv = hmContext.getJsContext().getJSValue("Hummer");
-//        if (hv != null) {
-//            hv.set("pageInfo", page);
-//        }
-//        hmContext.setPageUrl(page.url);
-//        hmContext.setJsSourcePath(page.sourcePath);
-//        tracker.trackPageView(page.url);
+        scriptContext.setNavPage(page);
+        scriptContext.setPageUrl(page.url);
+        scriptContext.setJsSourcePath(page.sourcePath);
+        tracker.trackPageView(page.url);
     }
 
     /**
@@ -358,12 +338,9 @@ public class HummerScriptRender {
         if (isDestroyed.get()) {
             return null;
         }
-        // 使用JSContext.getJSValue的方式目前拿不到Object类型的数据，所以只能先用下面的方法代替
-//        return hmContext.getJsContext().getJSValue("Hummer").getJSValue("pageResult").jsonValueOf(new TypeToken<Map<String, Object>>(){}.getType());
-//        Object result = hmContext.getJsContext().evaluateJavaScript("JSON.stringify(Hummer.pageResult)");
-//        if (result instanceof String) {
-//            return HMGsonUtil.fromJson((String) result, new TypeToken<Map<String, Object>>(){}.getType());
-//        }
+        if (scriptContext!= null){
+            return scriptContext.getPageResult();
+        }
         return null;
     }
 
@@ -390,6 +367,19 @@ public class HummerScriptRender {
     }
 
     /**
+     * 向JS的Hummer域中注入Native参数
+     *
+     * @param key
+     * @param data
+     */
+    public void setNativeDataToHummer(String key, Map<String, Object> data) {
+        if (isDestroyed.get()) {
+            return;
+        }
+//        hmContext.getJsContext().getJSValue("Hummer").set(key, data);
+    }
+
+    /**
      * 给当前JS页面的根View注册Native方法（需要在render结束之后才能调用）
      *
      * @param funcName
@@ -401,4 +391,13 @@ public class HummerScriptRender {
         }
 //        hmContext.registerJSFunction(hmContext.getJsPage(), funcName, callback);
     }
+
+
+    public interface HummerRenderCallback {
+
+        void onSucceed(HummerContext hmContext, JSValue jsPage);
+
+        void onFailed(Exception e);
+    }
+
 }

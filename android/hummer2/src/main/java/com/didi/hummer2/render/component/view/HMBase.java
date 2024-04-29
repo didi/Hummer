@@ -45,7 +45,7 @@ import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.annotationx.JsProperty;
 //import com.didi.hummer2.core.engine.JSCallback;
 //import com.didi.hummer2.core.util.DebugUtil;
-import com.didi.hummer2.component.Element;
+import com.didi.hummer2.render.Element;
 import com.didi.hummer2.debug.Highlight;
 import com.didi.hummer2.engine.JSCallback;
 import com.didi.hummer2.engine.JSValue;
@@ -60,7 +60,7 @@ import com.didi.hummer2.render.style.HummerNode;
 import com.didi.hummer2.render.style.HummerStyleUtils;
 import com.didi.hummer2.render.utility.DPUtil;
 import com.didi.hummer2.render.utility.YogaAttrUtils;
-import com.didi.hummer2.utils.DebugUtil;
+import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.utils.ScreenUtils;
 import com.facebook.yoga.YogaEdge;
 import com.facebook.yoga.YogaNode;
@@ -470,7 +470,7 @@ public abstract class HMBase<T extends View> implements ILifeCycle {
      */
     @JsMethod("dbg_getDescription")
     public void dbg_getDescription(JSCallback callback, int depth) {
-        if (!DebugUtil.isDebuggable(getHummerContext().getNamespace()) || callback == null) {
+        if (!F4NDebugUtil.isDebuggable(getHummerContext().getNamespace()) || callback == null) {
             return;
         }
 

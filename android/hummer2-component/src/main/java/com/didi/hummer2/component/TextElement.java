@@ -6,6 +6,7 @@ import com.didi.hummer2.annotation.HMAttribute;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMStyle;
 import com.didi.hummer2.component.hummer.text.Text;
+import com.didi.hummer2.render.Element;
 
 /**
  * didi Create on 2023/12/4 .
@@ -103,15 +104,18 @@ public class TextElement extends Element<Text> {
     }
 
     @HMAttribute("richText")
-    private String richText;
+    private Object richText;
 
-    public String getRichText() {
+    public Object getRichText() {
         return richText;
     }
 
-    public void setRichText(String richText) {
+    public void setRichText(Object richText) {
         this.richText = richText;
-        getView().setRichText(richText);
+        //richText只有非空才可以生效
+        if (richText != null) {
+            getView().setRichText(richText);
+        }
     }
 
     @HMAttribute("textCopyEnable")

@@ -32,7 +32,7 @@ public class TapEvent extends Event {
                 Map.Entry<String, Float> entry = iterator.next();
                 value.put(entry.getKey(), new JsiNumber(entry.getValue()));
             }
-            object.put("translation", value);
+            object.put("position", value);
         }
         return object;
     }

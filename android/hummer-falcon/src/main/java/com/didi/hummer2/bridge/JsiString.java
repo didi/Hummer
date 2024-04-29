@@ -17,8 +17,8 @@ public class JsiString extends JsiValue {
     private String value;
 
     public JsiString(String value) {
-        this.identify = init_string_(value);
-        this.value = value;
+        this.value = value == null ? "" : value;
+        this.identify = init_string_(this.value);
     }
 
     private JsiString(long identify, String value) {
@@ -30,7 +30,7 @@ public class JsiString extends JsiValue {
         return value;
     }
 
-    public String getValue(){
+    public String getValue() {
         return value;
     }
 

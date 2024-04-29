@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 
 import com.didi.hummer2.utils.HMLog;
-import com.didi.hummer2.utils.DebugUtil;
+import com.didi.hummer2.utils.F4NDebugUtil;
 
 import java.util.Stack;
 
@@ -218,7 +218,7 @@ public class ActivityStackManager implements Application.ActivityLifecycleCallba
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         addActivity(activity);
 
-        if (DebugUtil.isDebuggable()) {
+        if (F4NDebugUtil.isDebuggable()) {
             printActivityStack(stack);
         }
     }
@@ -252,7 +252,7 @@ public class ActivityStackManager implements Application.ActivityLifecycleCallba
     public void onActivityDestroyed(Activity activity) {
         removeActivity(activity);
 
-        if (DebugUtil.isDebuggable()) {
+        if (F4NDebugUtil.isDebuggable()) {
             printActivityStack(stack);
         }
     }

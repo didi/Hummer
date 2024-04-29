@@ -20,7 +20,7 @@ public class DefaultIntentCreator implements IntentCreator {
     @Override
     public Intent createHummerIntent(Context context, NavPage page) {
         Intent intent = new Intent();
-        intent.setClassName(context, "com.didi.hummer.HummerActivity");
+        intent.setClassName(context, "com.didi.hummer2.HummerActivity");
         appendBaseIntentParams(intent, page);
         return intent;
     }

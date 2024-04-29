@@ -2,7 +2,7 @@ package com.didi.hummer2.debug;
 
 import android.text.TextUtils;
 
-import com.didi.hummer2.utils.DebugUtil;
+import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.utils.HMLog;
 
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public class DebugConfig {
         if (tempDebug == null || TextUtils.isEmpty(tempDebug.getNamespace())) {
             configs.put(namespace, debuggable);
         } else {
-            if (DebugUtil.isDebuggable()) {
+            if (F4NDebugUtil.isDebuggable()) {
                 HMLog.w("HummerNative", "There is already a duplicate namespace: " + namespace);
             }
         }

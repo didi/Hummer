@@ -9,7 +9,7 @@ import com.didi.hummer2.register.HummerRegister;
 import com.didi.hummer2.register.HummerRegister$$hummer2;
 import com.didi.hummer2.register.HummerRegister$$hummer2_component;
 import com.didi.hummer2.register.InvokerRegister;
-import com.didi.hummer2.utils.DebugUtil;
+import com.didi.hummer2.utils.F4NDebugUtil;
 import com.facebook.soloader.SoLoader;
 import com.getkeepsafe.relinker.ReLinker;
 
@@ -36,7 +36,7 @@ public class App extends Application {
         super.onCreate();
 
 
-        DebugUtil.setDebuggable(true);
+        F4NDebugUtil.setDebuggable(true);
         SoLoader.init(getApplication(), false);
         SoLoader.loadLibrary("yoga");
 //        ReLinker.loadLibrary(getApplication(), "yoga");

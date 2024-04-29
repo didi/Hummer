@@ -3,4 +3,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+
+    <application>
+        <activity
+            android:name=".HummerActivity"
+            android:theme="@style/HummerTheme.NoActionBar" />
+    </application>
+
 </manifest>

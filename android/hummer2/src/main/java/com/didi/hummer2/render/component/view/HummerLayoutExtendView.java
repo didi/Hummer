@@ -169,7 +169,7 @@ public abstract class HummerLayoutExtendView extends HMBase<HummerLayout>
         fixedNoneBoxMap.clear();
         // 解除 HummerExtLayout 绑定关系
         for (HMBase hmBase : children) {
-            hmBase.getJSValue().unprotect();
+//            hmBase.getJSValue().unprotect();
             hmBase.setPositionChangedListener(null);
             hmBase.setDisplayChangedListener(null);
         }

@@ -30,6 +30,7 @@ public class Hummer {
         if (hummerConfig != null) {
             appContext = hummerConfig.getContext().getApplicationContext();
             HummerSDK.appContext = appContext;
+            hummerEngine.initHummer(appContext);
             hummerEngine.registerHummerConfig(hummerConfig);
         }
     }

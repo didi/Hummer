@@ -2,8 +2,7 @@ package com.didi.hummer2.invoke;
 
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.HummerScriptContext;
-import com.didi.hummer2.component.Element;
-import com.didi.hummer2.register.HummerObject;
+import com.didi.hummer2.render.Element;
 import com.didi.hummer2.utils.HummerObjectUtil;
 
 /**
@@ -17,14 +16,12 @@ import com.didi.hummer2.utils.HummerObjectUtil;
  * @Description 负责渲染接口转接
  */
 
-public class RenderInvoker extends AbsInvoker<RenderInvoker> implements HummerObject {
+public class RenderInvoker extends SelfBindInvoker<RenderInvoker> {
 
     /**
      * 单例方式运行
      */
     public static final RenderInvoker INSTANCE = new RenderInvoker();
-
-    private long objectId = 0;
 
     private RenderInvoker() {
     }
@@ -50,35 +47,5 @@ public class RenderInvoker extends AbsInvoker<RenderInvoker> implements HummerOb
             }
         }
         return null;
-    }
-
-    @Override
-    public Invoker getInvoker() {
-        return this;
-    }
-
-    @Override
-    public void setInvoker(Invoker invoker) {
-
-    }
-
-    @Override
-    public long getObjectId() {
-        return objectId;
-    }
-
-    @Override
-    public void setObjectId(long objectId) {
-        this.objectId = objectId;
-    }
-
-    @Override
-    public void onCreate() {
-
-    }
-
-    @Override
-    public void onDestroy() {
-
     }
 }

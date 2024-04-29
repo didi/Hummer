@@ -4,6 +4,7 @@
 
 #include "jsi/jsi_value.h"
 #include "jsi/jsi_utils.h"
+#include "jsi/jsi.h"
 
 #include "falcon/logger.h"
 
@@ -43,7 +44,7 @@ const char *getTypeValueName(ValueType type) {
 
 
 JsiValue::JsiValue() {
-
+    type_ = TYPE_VALUE;
 }
 
 JsiValue::JsiValue(ValueType type) {
@@ -146,12 +147,17 @@ JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue) {
     napi_get_reference_value(env_, ref_, &func);
 
     NAPIValue result;
-    napi_call_function(env_, nullptr, func, argc, argv, &result);
-
+    NAPIExceptionStatus status = napi_call_function(env_, nullptr, func, argc, argv, &result);
+    if (status != NAPIExceptionOK) {
+        warn("JsiFunction::call() params=%s  error status=%u", JSUtils::buildArrayString(argc, jsiValue).c_str(), status);
+        JsiError *jsiError = JSUtils::getAndClearLastError(&env_);
+        error("JsiFunction::call() error %s", jsiError->toString().c_str());
+        return nullptr;
+    }
 
     JsiValue *resultValue = JSUtils::toValue(&env_, &result);
     JSUtils::closeHandleScope(&env_, &handleScope);
-    if (resultValue->getType() != TYPE_NAPIUndefined) {
+    if (resultValue != nullptr && resultValue->getType() != TYPE_NAPIUndefined) {
         return resultValue;
     }
     return nullptr;

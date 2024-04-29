@@ -6,9 +6,12 @@
 #include <cmath>
 #include <iostream>
 #include "falcon/F4NUtil.h"
+#include "falcon/F4NElement.h"
 #include "falcon/logger.h"
 #include "jsi/jsi_value.h"
 
+
+thread_local bool mainThread = false;
 
 int countDecimalPlaces(double num) {
     double p = num - floor(num);
@@ -51,10 +54,68 @@ string F4NUtil::buildArrayString(size_t argc, JsiValue **argv) {
     return sb;
 }
 
+string F4NUtil::buildString(size_t argc, JsiValue **argv) {
+    if (argc == 0) {
+        return "";
+    }
+    string sb = string("");
+    for (int i = 0; i < argc; i++) {
+        if (i > 0) {
+            sb.append(",");
+        }
+        JsiValue *value = argv[i];
+        if (value == nullptr) {
+            sb.append("undefined");
+        } else if (value->getType() == TYPE_STRING) {
+            JsiString *v = (JsiString *) value;
+            sb.append(v->value_);
+        } else if (value->getType() == TYPE_OBJECT) {
+            sb.append("[object Object]");
+        } else if (value->getType() == TYPE_ARRAY) {
+            sb.append(value->toString());
+        } else {
+            sb.append(value->toString());
+        }
+    }
+    sb.append("");
+    return sb;
+}
+
 string F4NUtil::optString(JsiValue *value) {
-    if (value != nullptr && value->getType()==TYPE_STRING){
-        return ((JsiString*)value)->value_;
+    if (value != nullptr && value->getType() == TYPE_STRING) {
+        return ((JsiString *) value)->value_;
     }
     return "";
+}
+
+F4NElement *F4NUtil::convert2Element(JsiValue *jsiValue) {
+    if (jsiValue != nullptr && jsiValue->getType() == TYPE_OBJECT) {
+        JsiValue *finalize = ((JsiObject *) jsiValue)->getValue("__finalize__");
+        if (finalize != nullptr && finalize->getType() == TYPE_EXT) {
+            JsiValueExt *valueExt = (JsiValueExt *) finalize;
+            F4NElement *element = static_cast<F4NElement *>(valueExt->data);
+            return element;
+        }
+    }
+    return nullptr;
+}
+
+bool F4NUtil::isElement(JsiValue *jsiValue) {
+    if (jsiValue != nullptr && jsiValue->getType() == TYPE_OBJECT) {
+        JsiValue *finalize = ((JsiObject *) jsiValue)->getValue("__finalize__");
+        if (finalize->getType() == TYPE_EXT) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool F4NUtil::isMainThread() {
+    return mainThread;
+}
+
+void F4NUtil::makeMainThread() {
+    mainThread = true;
 }
 

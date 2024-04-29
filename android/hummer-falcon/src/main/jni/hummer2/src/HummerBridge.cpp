@@ -45,11 +45,11 @@ void HMValue_unprotect_(JNIEnv *env, jobject obj, jlong identify) {
 
 
 jobject HMValueGetJObject_(JNIEnv *env, JsiValue *hmValue) {
-    if (hmValue->obj == NULL) {
+//    if (hmValue->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmValue);
         jobject obj = env->NewObject(_HMValueCls, _HMValueInit, identify);
         hmValue->obj = reinterpret_cast<uintptr_t>(obj);
-    }
+//    }
     return (jobject) hmValue->obj;
 }
 
@@ -87,11 +87,11 @@ jobject HMFunction_calls_(JNIEnv *env, jobject obj, jlong identify, jlongArray a
 
 
 jobject HMFunctionGetJObject_(JNIEnv *env, JsiFunction *hmFunction) {
-    if (hmFunction->obj == NULL) {
+//    if (hmFunction->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmFunction);
         jobject obj = env->NewObject(_HMFunctionCls, _HMFunctionInit, identify);
         hmFunction->obj = reinterpret_cast<uintptr_t>(obj);
-    }
+//    }
     return (jobject) hmFunction->obj;
 }
 
@@ -110,13 +110,13 @@ jlong HMString_init_string_(JNIEnv *env, jobject obj, jstring value) {
 
 
 jobject HMStringGetJObject_(JNIEnv *env, JsiString *hmString) {
-    if (hmString->obj == NULL) {
+//    if (hmString->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmString);
         jstring value = env->NewStringUTF(hmString->value_.c_str());
         jobject obj = env->NewObject(_HMStringCls, _HMStringInit, identify, value);
 //        obj = env->NewGlobalRef(obj);
         hmString->obj = reinterpret_cast<uintptr_t>(obj);
-    }
+//    }
     return (jobject) hmString->obj;
 }
 
@@ -194,11 +194,11 @@ jobject HMObject_keys_array_(JNIEnv *env, jobject obj, jlong identify) {
 
 
 jobject HMObjectGetJObject_(JNIEnv *env, JsiObject *hmObject) {
-    if (hmObject->obj == NULL) {
+//    if (hmObject->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmObject);
         jobject obj = env->NewObject(_HMObjectCls, _HMObjectInit, identify);
         hmObject->obj = reinterpret_cast<uintptr_t>(obj);
-    }
+//    }
     return (jobject) hmObject->obj;
 }
 
@@ -218,11 +218,11 @@ jlong HMNumber_init_number_(JNIEnv *env, jobject obj, jdouble value) {
 }
 
 jobject HMNumberGetJObject_(JNIEnv *env, JsiNumber *hmNumber) {
-    if (hmNumber->obj == NULL) {
+//    if (hmNumber->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmNumber);
         jobject obj = env->NewObject(_HMNumberCls, _HMNumberInit, identify, hmNumber->value_);
         hmNumber->obj = reinterpret_cast<uintptr_t>(obj);
-    }
+//    }
     return (jobject) hmNumber->obj;
 }
 
@@ -244,11 +244,11 @@ jlong HMBoolean_init_boolean_(JNIEnv *env, jobject obj, jboolean value) {
 
 
 jobject HMBooleanGetJObject_(JNIEnv *env, JsiBoolean *hmBoolean) {
-    if (hmBoolean->obj == NULL) {
+//    if (hmBoolean->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmBoolean);
         jobject obj = env->NewObject(_HMBooleanCls, _HMBooleanInit, identify, hmBoolean->value_);
         hmBoolean->obj = reinterpret_cast<uintptr_t>(obj);
-    }
+//    }
     return (jobject) hmBoolean->obj;
 }
 
@@ -320,11 +320,11 @@ void HMArray_clear_(JNIEnv *env, jobject obj, jlong identify) {
 
 
 jobject HMArrayGetJObject_(JNIEnv *env, JsiArray *hmArray) {
-    if (hmArray->obj == NULL) {
+//    if (hmArray->obj == NULL) {
         jlong identify = reinterpret_cast<uintptr_t>(hmArray);
         jobject obj = env->NewObject(_HMArrayCls, _HMArrayInit, identify);
         hmArray->obj = reinterpret_cast<uintptr_t>(obj);
-    }
+//    }
     return (jobject) hmArray->obj;
 }
 

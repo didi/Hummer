@@ -2,10 +2,13 @@ package com.didi.hummer2.component;
 
 
 import com.didi.hummer2.HummerContext;
+import com.didi.hummer2.annotation.HMAttribute;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.annotation.HMStyle;
 import com.didi.hummer2.component.hummer.view.View;
+import com.didi.hummer2.render.Element;
+import com.didi.hummer2.render.HummerGoBack;
 
 
 /**
@@ -20,10 +23,27 @@ import com.didi.hummer2.component.hummer.view.View;
  */
 
 @HMComponent("View")
-public class ViewElement extends Element<View> {
+public class ViewElement extends Element<View> implements HummerGoBack {
 
     public ViewElement(HummerContext context) {
         super(context, null);
+    }
+
+
+    @HMAttribute("canGoBack")
+    private boolean canGoBack = true;
+
+    public void setCanGoBack(boolean canGoBack) {
+        this.canGoBack = canGoBack;
+    }
+
+    public boolean getCanGoBack() {
+        return canGoBack;
+    }
+
+    @Override
+    public boolean canGoBack() {
+        return canGoBack;
     }
 
     @Override

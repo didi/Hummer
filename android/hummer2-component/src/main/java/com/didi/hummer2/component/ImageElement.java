@@ -5,6 +5,7 @@ import com.didi.hummer2.annotation.HMAttribute;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMStyle;
 import com.didi.hummer2.component.hummer.image.Image;
+import com.didi.hummer2.render.Element;
 
 /**
  * didi Create on 2024/4/9 .
@@ -30,8 +31,8 @@ public class ImageElement extends Element<Image> {
         return new Image(context,null,null);
     }
 
-    @HMStyle("reSize")
-    public void setColor(String value) {
+    @HMStyle("resize")
+    public void setContentMode(String value) {
         getView().setContentMode(value);
     }
 

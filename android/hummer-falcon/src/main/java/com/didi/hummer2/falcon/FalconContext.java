@@ -9,10 +9,7 @@ import com.didi.hummer2.handler.EventTraceHandler;
 import com.didi.hummer2.handler.JsConsoleHandler;
 import com.didi.hummer2.handler.JsExceptionHandler;
 import com.didi.hummer2.handler.LogHandler;
-import com.didi.hummer2.utils.FAObjectUtil;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.Map;
+import com.didi.hummer2.utils.F4NObjectUtil;
 
 
 /**
@@ -95,7 +92,7 @@ public class FalconContext {
     public Object invoke(long type, long objId, long methodType, String componentName, String methodName, int argc, JsiValue[] value) {
         Object result = invokerRegister.invoke(null, null, type, objId, methodType, componentName, methodName, argc, value);
         if (result != null) {
-            JsiValue jsiValue = FAObjectUtil.toJsiValue(result);
+            JsiValue jsiValue = F4NObjectUtil.toJsiValue(result);
             return jsiValue;
         }
         return null;
@@ -129,7 +126,7 @@ public class FalconContext {
 
     public void onTraceEvent(String event, Object params) {
         if (eventTraceHandler != null) {
-            eventTraceHandler.onEvent(this.namespace, event, FAObjectUtil.toJavaMap(params));
+            eventTraceHandler.onEvent(this.namespace, event, F4NObjectUtil.toJavaMap(params));
         }
     }
 

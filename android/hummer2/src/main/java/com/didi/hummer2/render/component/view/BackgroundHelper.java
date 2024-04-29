@@ -8,10 +8,6 @@ import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.render.utility.RTLUtil;
 import com.didi.hummer2.render.utility.YogaDrawableUtil;
 
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.render.utility.RTLUtil;
-//import com.didi.hummer.render.utility.YogaDrawableUtil;
-
 /**
  * 控件背景设置帮助类
  *

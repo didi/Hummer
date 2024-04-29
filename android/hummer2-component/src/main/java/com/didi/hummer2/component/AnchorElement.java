@@ -3,6 +3,7 @@ package com.didi.hummer2.component;
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.component.hummer.anchor.Anchor;
+import com.didi.hummer2.render.Element;
 
 /**
  * didi Create on 2024/4/9 .

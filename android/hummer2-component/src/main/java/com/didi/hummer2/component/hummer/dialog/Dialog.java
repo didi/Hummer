@@ -8,13 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsMethod;
-//import com.didi.hummer.annotation.JsProperty;
-//import com.didi.hummer.component.R;
-//import com.didi.hummer.core.engine.JSCallback;
-//import com.didi.hummer.render.component.view.HMBase;
-//import com.didi.hummer.render.style.HummerLayout;
+
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.annotationx.JsProperty;
@@ -150,7 +144,7 @@ public class Dialog {
 
     @JsMethod("custom")
     public void custom(HMBase baseView) {
-        baseView.getJSValue().protect();
+        //baseView.getJSValue().protect();
         customView = baseView;
 
         if (customContainer == null) {
@@ -189,7 +183,7 @@ public class Dialog {
         }
 
         if (customView != null) {
-            customView.getJSValue().unprotect();
+            //customView.getJSValue().unprotect();
             customView = null;
         }
     }

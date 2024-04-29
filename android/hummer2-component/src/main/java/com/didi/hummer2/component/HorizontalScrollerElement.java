@@ -5,6 +5,7 @@ import com.didi.hummer2.annotation.HMAttribute;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.component.hummer.scroller.HorizontalScroller;
+import com.didi.hummer2.render.Element;
 
 /**
  * didi Create on 2024/4/9 .
@@ -28,6 +29,37 @@ public class HorizontalScrollerElement extends Element<HorizontalScroller> {
     @Override
     public HorizontalScroller createRenderView() {
         return new HorizontalScroller(context,null,null);
+    }
+
+
+    @HMMethod("appendChild")
+    public void appendChild(Element element) {
+        getView().appendChild(element.getView());
+    }
+
+    @HMMethod("removeChild")
+    public void removeChild(Element element) {
+        getView().removeChild(element.getView());
+    }
+
+    @HMMethod("removeAll")
+    public void removeAll() {
+        getView().removeAll();
+    }
+
+    @HMMethod("insertBefore")
+    public void insertBefore(Element child, Element existing) {
+        getView().insertBefore(child.getView(), existing.getView());
+    }
+
+    @HMMethod("replaceChild")
+    public void replaceChild(Element child, Element old) {
+        getView().replaceChild(child.getView(), old.getView());
+    }
+
+    @HMMethod("updateContentSize")
+    public void updateContentSize() {
+        getView().updateContentSize();
     }
 
 

@@ -232,6 +232,10 @@ bool JSUtils::isFloatNumber(NAPIEnv *env, NAPIValue *napiValue) {
 
 JsiValue *JSUtils::toValue(NAPIEnv *env, NAPIValue *value) {
     NAPIValueType valueType;
+    if (*value == NULL) {
+        error("JSUtils::toValue()  napi_typeof() error. status=%u", 100);
+        return  new JsiValue();
+    }
     NAPICommonStatus status = napi_typeof(*env, *value, &valueType);
     if (status != NAPICommonOK) {
         warn("JSUtils::toValue()  napi_typeof() error. status=%u", status);

@@ -5,6 +5,7 @@
 
 #include "falcon/F4NComponent.h"
 #include "falcon/F4NUtil.h"
+#include "falcon/F4NContext.h"
 
 
 F4NComponent::F4NComponent(long objId, JsiContext *context, F4NRenderInvoker *renderInvoker) : F4NObject(context) {
@@ -22,6 +23,19 @@ F4NComponent::F4NComponent(long objId, JsiContext *context, F4NRenderInvoker *re
 void F4NComponent::onCreate(string tag, JsiValue *props) {
     F4NObject::onCreate(tag, props);
     jsiComponent->name_ = tag;
+    if (tag == "Dialog") {
+        main = true;
+    }
+    if (tag == "Toast") {
+        main = true;
+    }
+    if (tag == "Navigator") {
+        main = true;
+    }
+    if (tag == "NotifyCenter") {
+        main = true;
+    }
+
 
     object->registerFunction(MethodId_setEventTarget, "setEventTarget", componentFuncWrapper, this);
     object->registerFunction(MethodId_addEventListener, "addEventListener", componentFuncWrapper, this);
@@ -49,7 +63,8 @@ JsiValue *F4NComponent::setEventTarget(size_t size, JsiValue *params[]) {
 }
 
 JsiValue *F4NComponent::setEventTarget(JsiFunction *jsiFunction) {
-    this->eventTarget = new F4NEventTarget(jsiFunction);
+    F4NFunction *f4NFunction = new F4NFunction(context, jsiFunction, false);
+    this->eventTarget = new F4NEventTarget(f4NFunction);
     this->renderInvoker->setEventTarget(this, eventTarget);
     return nullptr;
 }
@@ -110,15 +125,47 @@ JsiValue *F4NComponent::invoke(size_t size, JsiValue *params[]) {
     return nullptr;
 }
 
-JsiValue *F4NComponent::invoke(string methodName, size_t size, JsiValue **params) {
+JsiValue *F4NComponent::invoke(F4NFunctionCall *call) {
+    context->buildElementParams(call->size, call->params);
+
     JsiValue *result = renderInvoker->invoke(FACTORY_TYPE_INVOKE,
                                              odjId,
                                              METHOD_TYPE_CALL,
                                              tag,
-                                             methodName,
-                                             size,
-                                             params);
+                                             call->methodName,
+                                             call->size,
+                                             call->params);
+    delete call;
     return result;
+}
+
+JsiValue *F4NComponent::invoke(string methodName, size_t size, JsiValue **params) {
+
+    for (int i = 0; i < size; i++) {
+        JsiValue *value = params[i];
+        if (value != nullptr && value->getType() == TYPE_NAPIFunction) {
+            params[i] = new F4NFunction(context, (JsiFunction *) params[i]);
+        }
+    }
+
+    if (main) {
+        context->applyElementRender(size, params);
+        F4NFunctionCall *functionCall = new F4NFunctionCall(nullptr, MethodId_invoke, methodName, size, params);
+        context->submitUITask([&, functionCall](void *, void *) {
+            invoke(functionCall);
+            return nullptr;
+        });
+    } else {
+        JsiValue *result = renderInvoker->invoke(FACTORY_TYPE_INVOKE,
+                                                 odjId,
+                                                 METHOD_TYPE_CALL,
+                                                 tag,
+                                                 methodName,
+                                                 size,
+                                                 params);
+        return result;
+    }
+    return nullptr;
 }
 
 

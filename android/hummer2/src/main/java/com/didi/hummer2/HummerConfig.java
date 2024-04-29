@@ -17,6 +17,7 @@ import com.didi.hummer2.adapter.storage.IStorageAdapter;
 import com.didi.hummer2.adapter.storage.impl.DefaultStorageAdapter;
 import com.didi.hummer2.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer2.adapter.tracker.impl.EmptyTrackerAdapter;
+import com.didi.hummer2.invoke.HummerInvoker;
 import com.didi.hummer2.invoke.RenderInvoker;
 import com.didi.hummer2.register.HummerInvokerRegister;
 import com.didi.hummer2.register.InvokerRegister;
@@ -145,6 +146,7 @@ public class HummerConfig {
 
         //注册必须接口
         invokerRegister.registerInvoker(RenderInvoker.INSTANCE);
+        invokerRegister.registerInvoker(HummerInvoker.INSTANCE);
     }
 
 

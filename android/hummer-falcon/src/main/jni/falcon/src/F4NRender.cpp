@@ -2,6 +2,7 @@
 //// Created by didi on 2023/11/20.
 ////
 #include "falcon/F4NRender.h"
+#include "falcon/F4NUtil.h"
 
 
 F4NRender::F4NRender() {
@@ -53,6 +54,7 @@ void F4NRender::copyElementCall(list<F4NFunctionCall *> *source, list<F4NFunctio
 
 void F4NRender::createElement(F4NElement *rootElement, F4NElement *element) {
     element->_rootElement_ = rootElement;
+    element->_created_ = true;
 
     renderInvoker->newInstance(element);
 
@@ -69,7 +71,9 @@ void F4NRender::createElement(F4NElement *rootElement, F4NElement *element) {
     list<F4NElement *> *children = element->_children_;
     for (auto child = children->begin(); child != children->end(); child++) {
         F4NElement *childElement = *child;
-        createElement(rootElement, childElement);
+        if (!childElement->_created_) {
+            createElement(rootElement, childElement);
+        }
         renderInvoker->appendChild(element, childElement);
     }
 
@@ -79,7 +83,8 @@ void F4NRender::applyElementAttribute(F4NElement *element) {
     map<string, JsiValue *> *attributes = element->_attributes_;
     JsiObject *jsiObject = new JsiObject();
     for (auto it = attributes->begin(); it != attributes->end(); it++) {
-        jsiObject->setValue(it->first, it->second);
+        JsiValue *jsiValue = convertElementParams(element, it->second);
+        jsiObject->setValue(it->first, jsiValue);
     }
     renderInvoker->setAttributes(element, jsiObject);
 }
@@ -111,17 +116,184 @@ void F4NRender::applyElementCall(F4NElement *element) {
     }
 }
 
+F4NElement *F4NRender::createChildElement(F4NElement *thisElement, JsiValue *jsiValue) {
+    F4NElement *child = F4NUtil::convert2Element(jsiValue);
+    if (child != nullptr && !child->_created_) {
+        F4NElement *rootElement = thisElement == nullptr ? nullptr : thisElement->_rootElement_;
+        createElement(rootElement, child);
+    }
+    return child;
+}
+
+JsiValue *F4NRender::convertElementParams(F4NElement *thisElement, JsiValue *jsiValue) {
+    F4NElement *element = createChildElement(thisElement, jsiValue);
+    if (element != nullptr) {
+        return new JsiNumber(element->odjId);
+    }
+    return jsiValue;
+}
 
 void F4NRender::applyElementFunctionCall(F4NFunctionCall *call) {
-//    switch (call->methodId) {
-        renderInvoker->invoke(FACTORY_TYPE_RENDER,
-                              call->thisElement->odjId,
-                              METHOD_TYPE_CALL,
-                              call->thisElement->tag.c_str(),
-                              call->methodName.c_str(),
-                              call->size,
-                              call->params);
-//    }
+    switch (call->methodId) {
+        case F4NElement::MethodId_appendChild: {
+            if (call->size > 0) {
+                JsiValue *params = call->params[0];
+                F4NElement *child = createChildElement(call->thisElement, params);
+                if (child == nullptr) {
+                    return;
+                }
+                renderInvoker->appendChild(call->thisElement, child);
+            }
+        }
+            break;
+        case F4NElement::MethodId_removeChild: {
+            if (call->size > 0) {
+                JsiValue *params = call->params[0];
+                F4NElement *child = createChildElement(call->thisElement, params);
+                if (child == nullptr) {
+                    return;
+                }
+                renderInvoker->removeChild(call->thisElement, child);
+            }
+        }
+            break;
+        case F4NElement::MethodId_removeAll:
+            renderInvoker->removeAll(call->thisElement);
+            break;
+        case F4NElement::MethodId_insertBefore: {
+            if (call->size >= 2) {
+                JsiValue *params0 = call->params[0];
+                JsiValue *params1 = call->params[1];
+                F4NElement *child = createChildElement(call->thisElement, params0);
+                F4NElement *anchor = createChildElement(call->thisElement, params1);
+                if (child == nullptr || anchor == nullptr) {
+                    return;
+                }
+                renderInvoker->insertBefore(call->thisElement, child, anchor);
+            }
+        }
+            break;
+        case F4NElement::MethodId_replaceChild: {
+            if (call->size >= 2) {
+                JsiValue *params0 = call->params[0];
+                JsiValue *params1 = call->params[1];
+                F4NElement *newNode = createChildElement(call->thisElement, params0);
+                F4NElement *oldNode = createChildElement(call->thisElement, params1);
+                if (newNode == nullptr || oldNode == nullptr) {
+                    return;
+                }
+                renderInvoker->replaceChild(call->thisElement, newNode, oldNode);
+            }
+        }
+            break;
+        case F4NElement::MethodId_setAttributes: {
+            if (call->size > 0) {
+                JsiValue *params0 = call->params[0];
+                if (params0->getType() == TYPE_OBJECT) {
+                    JsiObject *object = (JsiObject *) params0;
+                    map<string, JsiValue *> attributes = object->valueMap_;
+                    JsiObject *jsiObject = new JsiObject();
+                    for (auto it = attributes.begin(); it != attributes.end(); it++) {
+                        JsiValue *jsiValue = convertElementParams(call->thisElement, it->second);
+                        jsiObject->setValue(it->first, jsiValue);
+                    }
+                    renderInvoker->setAttributes(call->thisElement, jsiObject);
+                }
+            }
+        }
+            break;
+        case F4NElement::MethodId_getAttribute: {
+            if (call->size >= 2) {
+                JsiValue *params0 = call->params[0];
+                JsiValue *params1 = call->params[1];
+                string attributeName = ((JsiString *) params0)->value_;
+                auto jsiFunction = (JsiFunction *) params1;
+                auto *function = new F4NFunction(call->thisElement->context, jsiFunction);
+
+                renderInvoker->getAttribute(call->thisElement, attributeName, function);
+            }
+        }
+            break;
+        case F4NElement::MethodId_setStyles: {
+            renderInvoker->setStyles(call->thisElement, call->thisElement->hmStyle_);
+        }
+            break;
+        case F4NElement::MethodId_getReact: {
+            if (call->size > 0) {
+                JsiFunction *params0 = (JsiFunction *) call->params[0];
+                auto *function = new F4NFunction(call->thisElement->context, params0);
+                renderInvoker->getReact(call->thisElement, function);
+            }
+        }
+            break;
+        case F4NElement::MethodId_addEventListener: {
+            if (call->size > 0) {
+                string params0 = ((JsiString *) call->params[0])->value_;
+                renderInvoker->addEventListener(call->thisElement, params0);
+            }
+        }
+            break;
+        case F4NElement::MethodId_removeEventListener: {
+            if (call->size > 0) {
+                string params0 = ((JsiString *) call->params[0])->value_;
+                renderInvoker->removeEventListener(call->thisElement, params0);
+            }
+        }
+            break;
+        case F4NElement::MethodId_addAnimation: {
+            if (call->size >= 2) {
+                JsiValue *params0 = call->params[0];
+                JsiValue *params1 = call->params[1];
+                string key = ((JsiString *) params1)->value_;
+                renderInvoker->addAnimation(call->thisElement, params0, key);
+            }
+        }
+
+            break;
+        case F4NElement::MethodId_removeAnimationForKey: {
+            if (call->size > 0) {
+                string params0 = ((JsiString *) call->params[0])->value_;
+                renderInvoker->removeAnimationForKey(call->thisElement, params0);
+            }
+        }
+
+            break;
+        case F4NElement::MethodId_removeAllAnimation: {
+            renderInvoker->removeAllAnimation(call->thisElement);
+        }
+            break;
+        case F4NElement::MethodId_setEventTarget: {
+            renderInvoker->setEventTarget(call->thisElement, call->thisElement->eventTarget);
+        }
+            break;
+        case F4NElement::MethodId_invoke:
+            //如果参数中有Element需要转换
+            if (call->size > 0) {
+                for (int i = 0; i < call->size; i++) {
+                    call->params[i] = convertElementParams(call->thisElement, call->params[i]);
+                }
+            }
+
+            renderInvoker->invoke(FACTORY_TYPE_RENDER,
+                                  call->thisElement->odjId,
+                                  METHOD_TYPE_CALL,
+                                  call->thisElement->tag.c_str(),
+                                  call->methodName.c_str(),
+                                  call->size,
+                                  call->params);
+            break;
+
+    }
+
+
+//    renderInvoker->invoke(FACTORY_TYPE_RENDER,
+//                          call->thisElement->odjId,
+//                          METHOD_TYPE_CALL,
+//                          call->thisElement->tag.c_str(),
+//                          call->methodName.c_str(),
+//                          call->size,
+//                          call->params);
+
 }
 
 void F4NRender::applyRenderTag(F4NElement *element) {

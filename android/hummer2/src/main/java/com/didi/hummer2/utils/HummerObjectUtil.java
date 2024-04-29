@@ -8,7 +8,8 @@ import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.component.Component;
-import com.didi.hummer2.component.Element;
+import com.didi.hummer2.render.Element;
+import com.didi.hummer2.component.module.hummer.notifycenter.NotifyCenterEvent;
 import com.didi.hummer2.register.HummerObject;
 import com.google.gson.reflect.TypeToken;
 
@@ -119,9 +120,15 @@ public class HummerObjectUtil {
     }
 
     public static <T> T toJavaModel(Object object, Type type) {
+
         if (object instanceof JsiObject || object instanceof JsiArray) {
             String value = ((JsiValue) object).toString();
-            return HMGsonUtil.fromJson(value, type);
+            Object result = HMGsonUtil.fromJson(value, type);
+            if (result instanceof NotifyCenterEvent) {
+                JsiObject event = ((JsiObject) object);
+                ((NotifyCenterEvent) result).setValue(event.get("value"));
+            }
+            return (T) result;
         }
         if (object instanceof JsiNumber) {
             Object result = ((JsiNumber) object).valueDouble();

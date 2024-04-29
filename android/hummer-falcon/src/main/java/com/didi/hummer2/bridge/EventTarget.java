@@ -1,6 +1,6 @@
 package com.didi.hummer2.bridge;
 
-import com.didi.hummer2.utils.FAObjectUtil;
+import com.didi.hummer2.utils.F4NObjectUtil;
 import com.didi.hummer2.utils.HMLog;
 
 /**
@@ -28,7 +28,7 @@ public class EventTarget {
 
     public void dispatchEvent(String eventName, Object event) {
         JsiString jsiString = new JsiString(eventName);
-        JsiValue value = FAObjectUtil.toJsiValue(event);
+        JsiValue value = F4NObjectUtil.toJsiValue(event);
 
         JsiValue result = jsiFunction.call(jsiString, value);
         if (result != null) {

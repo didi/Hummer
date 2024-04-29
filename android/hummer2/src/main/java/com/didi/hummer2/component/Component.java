@@ -7,6 +7,7 @@ import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.engine.JSCallback;
 import com.didi.hummer2.invoke.BaseInvoker;
 import com.didi.hummer2.invoke.Invoker;
+import com.didi.hummer2.render.event.base.Event;
 
 import java.util.Map;
 
@@ -29,9 +30,6 @@ public class Component extends AbsHummerObject {
     protected EventDispatcher eventDispatcher = new EventDispatcher();
 
 
-    public Component() {
-    }
-
     public Component(HummerContext hummerContext) {
         this.hummerContext = hummerContext;
     }
@@ -51,6 +49,29 @@ public class Component extends AbsHummerObject {
     @HMMethod("removeEventListener")
     public void removeEventListener(String eventName) {
         eventDispatcher.removeEventListener(eventName);
+    }
+
+
+    /**
+     * 分发监听的事件
+     *
+     * @param event
+     */
+    public void dispatchEvent(Event event) {
+        if (eventDispatcher != null) {
+            eventDispatcher.dispatchEvent(event.getType(), event.toJsiValue());
+        }
+    }
+
+    /**
+     * 直接分发事件，即时未设置监听
+     *
+     * @param event
+     */
+    public void directDispatchEvent(Event event) {
+        if (eventTarget != null && event != null) {
+            eventTarget.dispatchEvent(event.getType(), event.toJsiValue());
+        }
     }
 
 

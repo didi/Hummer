@@ -2,8 +2,6 @@ package com.didi.hummer2.render.component.view;
 
 import android.content.Context;
 
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.render.style.HummerLayout;
 import com.facebook.yoga.YogaFlexDirection;

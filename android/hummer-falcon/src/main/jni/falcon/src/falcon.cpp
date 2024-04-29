@@ -4,6 +4,7 @@
 
 #include "falcon/falcon.h"
 #include "falcon/F4NContext.h"
+#include "falcon/F4NUtil.h"
 
 //********************************************************
 //               F4NFunction
@@ -33,17 +34,27 @@ JsiValue *F4NFunction::call(JsiValue *jsiValue) {
         warn("F4NFunction::call() is released params=%s", jsiValue->toString().c_str());
         return nullptr;
     }
-    context->submitJsTask([&, jsiValue](void *, void *) {
-        jsiFunction->call(jsiValue);
-        if (autoRelease) {
-            delete jsiFunction;
-        }
-        return nullptr;
-    });
+
+    JsiValue *result = nullptr;
+    if (!F4NUtil::isMainThread()) {
+        result = jsiFunction->call(jsiValue);
+    } else {
+        context->submitJsTask([&, jsiValue](void *, void *) {
+            JsiValue *result = jsiFunction->call(jsiValue);
+            if (result != nullptr) {
+                delete result;
+            }
+            if (autoRelease) {
+                delete jsiFunction;
+            }
+            return nullptr;
+        });
+    }
+
     if (autoRelease) {
         released = true;
     }
-    return nullptr;
+    return result;
 }
 
 JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
@@ -51,17 +62,26 @@ JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
         warn("F4NFunction::call() is released params=%s", JSUtils::buildArrayString(argc, argv).c_str());
         return nullptr;
     }
-    context->submitJsTask([&, argc, argv](void *, void *) {
-        jsiFunction->call(argc, argv);
-        if (autoRelease) {
-            delete jsiFunction;
-        }
-        return nullptr;
-    });
+
+    JsiValue *result = nullptr;
+    if (!F4NUtil::isMainThread()) {
+        result = jsiFunction->call(argc, argv);
+    } else {
+        context->submitJsTask([&, argc, argv](void *, void *) {
+            JsiValue *result = jsiFunction->call(argc, argv);
+            if (result != nullptr) {
+                delete result;
+            }
+            if (autoRelease) {
+                delete jsiFunction;
+            }
+            return nullptr;
+        });
+    }
     if (autoRelease) {
         released = true;
     }
-    return nullptr;
+    return result;
 }
 
 F4NFunction::~F4NFunction() {

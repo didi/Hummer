@@ -1,11 +1,15 @@
 package com.didi.hummer2.component;
 
 
+import android.text.TextUtils;
+
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.annotation.HMAttribute;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.component.hummer.scroller.Scroller;
+import com.didi.hummer2.render.Element;
+import com.didi.hummer2.render.HummerGoBack;
 
 /**
  * didi Create on 2024/4/9 .
@@ -19,7 +23,7 @@ import com.didi.hummer2.component.hummer.scroller.Scroller;
  */
 
 @HMComponent("Scroller")
-public class ScrollerElement extends Element<Scroller> {
+public class ScrollerElement extends Element<Scroller> implements HummerGoBack {
 
 
     public ScrollerElement(HummerContext context, Object[] properties) {
@@ -28,9 +32,49 @@ public class ScrollerElement extends Element<Scroller> {
 
     @Override
     public Scroller createRenderView() {
-        return new Scroller(context,null,null);
+        return new Scroller(context, null, null);
     }
 
+    @HMAttribute("canGoBack")
+    private boolean canGoBack = true;
+
+    public void setCanGoBack(boolean canGoBack) {
+        this.canGoBack = canGoBack;
+    }
+
+    public boolean getCanGoBack() {
+        return canGoBack;
+    }
+
+    @Override
+    public boolean canGoBack() {
+        return canGoBack;
+    }
+
+    @HMMethod("appendChild")
+    public void appendChild(Element element) {
+        getView().appendChild(element.getView());
+    }
+
+    @HMMethod("removeChild")
+    public void removeChild(Element element) {
+        getView().removeChild(element.getView());
+    }
+
+    @HMMethod("removeAll")
+    public void removeAll() {
+        getView().removeAll();
+    }
+
+    @HMMethod("insertBefore")
+    public void insertBefore(Element child, Element existing) {
+        getView().insertBefore(child.getView(), existing.getView());
+    }
+
+    @HMMethod("replaceChild")
+    public void replaceChild(Element child, Element old) {
+        getView().replaceChild(child.getView(), old.getView());
+    }
 
     @HMAttribute("refreshView")
     private Element refreshView;
@@ -63,6 +107,22 @@ public class ScrollerElement extends Element<Scroller> {
     public void setBounces(boolean bounces) {
         this.bounces = bounces;
         getView().setBounces(bounces);
+    }
+
+    @Override
+    public void addEventListener(String eventName) {
+        if (TextUtils.equals(eventName, "onRefresh")) {
+            getView().setOnRefresh(getEventTargetListener());
+        }
+        if (TextUtils.equals(eventName, "onLoadMore")) {
+            getView().setOnLoadMore(getEventTargetListener());
+        }
+        super.addEventListener(eventName);
+    }
+
+    @Override
+    public void removeEventListener(String eventName) {
+        super.removeEventListener(eventName);
     }
 
     @HMMethod("scrollTo")

@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 //import com.didi.hummer.core.util.DebugUtil;
 //import com.didi.hummer.render.component.view.HMBase;
 //import com.didi.hummer.render.utility.YogaNodeUtil;
-import com.didi.hummer2.utils.DebugUtil;
+import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.render.component.view.HMBase;
 import com.didi.hummer2.render.utility.YogaNodeUtil;
 import com.facebook.yoga.YogaNode;
@@ -67,7 +67,7 @@ public class HummerNode implements Serializable {
         this.id = TextUtils.isEmpty(nodeId) ? createNodeId() : nodeId;
         this.yogaNode = getYogaNode(linkView);
 
-        if (DebugUtil.isDebuggable(namespace) && linkView.getJSValue() != null) {
+        if (F4NDebugUtil.isDebuggable(namespace) && linkView.getJSValue() != null) {
 //            name = linkView.getJSValue().getString("className");
 //            objId = linkView.getJSValue().getLong("objID");
         }

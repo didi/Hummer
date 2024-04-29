@@ -84,7 +84,7 @@ void F4NRenderInvoker::insertBefore(F4NElement *thisObj, F4NElement *child, F4NE
            thisObj->odjId,
            METHOD_TYPE_CALL,
            thisObj->tag,
-           "removeChild",
+           "insertBefore",
            2,
            params);
     delete[] params;
@@ -98,7 +98,7 @@ void F4NRenderInvoker::replaceChild(F4NElement *thisObj, F4NElement *newNode, F4
            thisObj->odjId,
            METHOD_TYPE_CALL,
            thisObj->tag,
-           "removeChild",
+           "replaceChild",
            2,
            params);
     delete[] params;
@@ -117,7 +117,7 @@ void F4NRenderInvoker::setAttributes(F4NElement *thisObj, JsiValue *jsiValue) {
     delete[] params;
 }
 
-void F4NRenderInvoker::getAttribute(F4NElement *thisObj, string key, F4NFunction hmFunction) {
+void F4NRenderInvoker::getAttribute(F4NElement *thisObj, string key, F4NFunction * function) {
 
 }
 
@@ -134,7 +134,7 @@ void F4NRenderInvoker::setStyles(F4NElement *thisObj, F4NStyle *hmStyle) {
     delete[] params;
 }
 
-void F4NRenderInvoker::getReact(F4NElement *thisObj, F4NFunction hmFunction) {
+void F4NRenderInvoker::getReact(F4NElement *thisObj, F4NFunction* hmFunction) {
 
 }
 

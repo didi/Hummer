@@ -31,23 +31,23 @@ public abstract class HummerContext extends ContextWrapper {
     /**
      * Hummer 命名空间
      */
-    private String namespace;
+    protected String namespace;
     /**
      * Android 上下文
      */
-    private Context context;
+    protected Context context;
     /**
      * Falcon引擎上下文
      */
-    private FalconContext falconContext;
+    protected FalconContext falconContext;
     /**
      * 引擎配置信息
      */
-    private ConfigOption configOption;
+    protected ConfigOption configOption;
     /**
      * 渲染器
      */
-    private HummerRender hummerRender;
+    protected HummerRender hummerRender;
 
     /**
      * JS引擎类型
@@ -74,6 +74,8 @@ public abstract class HummerContext extends ContextWrapper {
     private InvokerRegister invokerRegister;
 
     private String jsSourcePath;
+
+    private String pageUrl = "";
 
 
     public HummerContext(Context context) {
@@ -138,6 +140,15 @@ public abstract class HummerContext extends ContextWrapper {
         return jsSourcePath;
     }
 
+    public String getPageUrl() {
+        return pageUrl;
+    }
+
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
+    }
+
+
     public void registerInvoker(Invoker invoker) {
         this.invokerRegister.registerInvoker(invoker);
     }
@@ -169,6 +180,23 @@ public abstract class HummerContext extends ContextWrapper {
 
     public Object evaluateBytecode(byte[] script, String scriptId) {
         return falconContext.evaluateBytecode(script, scriptId);
+    }
+
+
+    public LogHandler getLogHandler() {
+        return logHandler;
+    }
+
+    public JsConsoleHandler getJsConsoleHandler() {
+        return jsConsoleHandler;
+    }
+
+    public JsExceptionHandler getJsExceptionHandler() {
+        return jsExceptionHandler;
+    }
+
+    public EventTraceHandler getEventTraceHandler() {
+        return eventTraceHandler;
     }
 
     public void destroy() {

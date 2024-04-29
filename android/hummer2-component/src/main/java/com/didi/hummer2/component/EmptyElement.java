@@ -6,6 +6,7 @@ import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.annotation.HMStyle;
 import com.didi.hummer2.component.hummer.view.View;
+import com.didi.hummer2.render.Element;
 
 /**
  * didi Create on 2024/4/9 .

@@ -6,6 +6,7 @@ import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.annotation.HMStyle;
 import com.didi.hummer2.component.hummer.view.View;
+import com.didi.hummer2.render.Element;
 
 
 /**
@@ -20,7 +21,7 @@ import com.didi.hummer2.component.hummer.view.View;
  */
 
 @HMComponent("List")
-public class ListElement extends Element<View>{
+public class ListElement extends Element<View> {
 
 
     public ListElement(HummerContext context, Object[] properties) {

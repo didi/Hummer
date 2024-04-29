@@ -29,18 +29,13 @@ dependencies {
     api  rootProject.ext.androidx["appcompat"]
     api  rootProject.ext.androidx["fragment"]
 
-
-    api 'com.google.code.gson:gson:2.8.5'
-
-    annotationProcessor project(":hummer2-compiler")
-
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     api project(':hummer-falcon')
 
     api project(':hummer2-annotation')
 
+    annotationProcessor project(":hummer2-compiler")
+
+    api 'com.google.code.gson:gson:2.8.5'
     // Yoga
     api ('com.facebook.yoga.android:yoga-layout:1.19.0') {
         exclude(group: 'com.facebook.yoga', module: 'proguard-annotations')
@@ -56,4 +51,9 @@ dependencies {
 
     // OkHttp
     api 'com.squareup.okhttp3:okhttp:3.10.0'
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

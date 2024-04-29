@@ -1,10 +1,25 @@
 package com.didi.hummer2;
 
+
+import static com.didi.hummer2.core.JsEngine.FALCON_HERMES;
+import static com.didi.hummer2.core.JsEngine.NAPI_HERMES;
+
+import android.app.Application;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
+
+import com.didi.hummer2.adapter.navigator.impl.ActivityStackManager;
+import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.core.JsEngine;
+import com.didi.hummer2.component.module.hummer.notifycenter.NotifyCenterEvent;
+import com.didi.hummer2.render.utils.EnvUtil;
+import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.utils.HMLog;
+import com.facebook.soloader.SoLoader;
+import com.getkeepsafe.relinker.ReLinker;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,17 +37,100 @@ import java.util.Map;
 
 public class HummerEngine {
 
+
     private Map<String, HummerNameSpace> hummerNameSpaceMap;
 
+
+    private boolean isInit = false;
+    private Context appContext;
 
     public HummerEngine() {
         hummerNameSpaceMap = new HashMap<>();
     }
 
+
+    public void initHummer(Context appContext) {
+        if (isInit) {
+            return;
+        }
+        this.appContext = appContext;
+        parseAppDebuggable(appContext);
+//        Utils.init((Application) appContext);
+        ActivityStackManager.getInstance().register((Application) appContext);
+
+        loadYogaEngine();
+        loadJSEngine(appContext, JsEngine.FALCON_HERMES);
+
+        EnvUtil.initHummerEnv(appContext);
+
+        isInit = true;
+    }
+
+
+    private void parseAppDebuggable(Context context) {
+        try {
+            boolean isAppDebuggable = context.getApplicationInfo() != null && (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+            F4NDebugUtil.setDebuggable(isAppDebuggable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void loadYogaEngine() {
+        try {
+            SoLoader.init(appContext, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean loadJSEngine(Context context, @JsEngine int engine) {
+        try {
+            switch (engine) {
+                case JsEngine.JSC:
+                    ReLinker.loadLibrary(context, "hummer-jsc");
+                    break;
+                case JsEngine.HERMES:
+                    ReLinker.loadLibrary(context, "hummer-hermes");
+                    break;
+                case JsEngine.NAPI_QJS:
+                case NAPI_HERMES:
+                    if (HummerSDK.getHermesDebugger() != null) {
+                        ReLinker.loadLibrary(context, "hummer-napi-debugger");
+                    } else {
+                        ReLinker.loadLibrary(context, "hummer-napi");
+                    }
+                    break;
+                case FALCON_HERMES:
+                    ReLinker.loadLibrary(context, "hummer2");
+                    ReLinker.loadLibrary(context, "falcon");
+                    break;
+                case JsEngine.QUICK_JS:
+                default:
+                    ReLinker.loadLibrary(context, "hummer-qjs");
+                    break;
+            }
+            return true;
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public void registerHummerConfig(HummerConfig hummerConfig) {
         String namespace = hummerConfig.getNamespace();
         HummerNameSpace hummerNameSpace = new HummerNameSpace(namespace, hummerConfig);
         hummerNameSpaceMap.put(namespace, hummerNameSpace);
+    }
+
+
+    public void triggerEvent(String namespace, String key, NotifyCenterEvent event) {
+        HummerNameSpace nameSpace = hummerNameSpaceMap.get(namespace);
+        if (nameSpace != null) {
+            nameSpace.triggerEvent(key, event);
+        }
     }
 
 

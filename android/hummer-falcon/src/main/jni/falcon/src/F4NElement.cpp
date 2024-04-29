@@ -5,6 +5,7 @@
 #include "falcon/F4NElement.h"
 #include "falcon/F4NDocument.h"
 #include "falcon/F4NFunctionCall.h"
+#include "falcon/F4NUtil.h"
 
 
 F4NElement::F4NElement(long objId, JsiContext *context, F4NRenderInvoker *componentFactory) : F4NComponent(objId, context, componentFactory) {
@@ -31,15 +32,7 @@ void F4NElement::onCreate(string tag, JsiValue *props) {
 
 
 F4NElement *F4NElement::convert2Element(JsiValue *jsiValue) {
-    if (jsiValue != nullptr && jsiValue->getType() == TYPE_OBJECT) {
-        JsiValue *finalize = ((JsiObject *) jsiValue)->getValue("__finalize__");
-        if (finalize->getType() == TYPE_EXT) {
-            JsiValueExt *valueExt = (JsiValueExt *) finalize;
-            F4NElement *element = static_cast<F4NElement *>(valueExt->data);
-            return element;
-        }
-    }
-    return nullptr;
+    return F4NUtil::convert2Element(jsiValue);
 }
 
 
@@ -136,9 +129,17 @@ JsiValue *F4NElement::setAttributes(size_t size, JsiValue **params) {
 }
 
 void F4NElement::setAttributes(JsiObject *jsiObject) {
+    info("F4NElement::setAttributes() id=%u,params=%s,origin=%s", odjId, jsiObject->toString().c_str(), "");
     map<string, JsiValue *> temp = jsiObject->valueMap_;
     if (temp.size() > 0) {
-        _attributes_->insert(temp.begin(), temp.end());
+        for (auto it = temp.begin(); it != temp.end(); it++) {
+            auto existing = _attributes_->find(it->first);
+            // 如果key已经存在，则删除旧值
+            if (existing != _attributes_->end()) {
+                _attributes_->erase(existing);
+            }
+            _attributes_->insert(make_pair(it->first, it->second));
+        }
     }
 }
 
@@ -180,11 +181,11 @@ void F4NElement::getReact(JsiFunction *jsiFunction) {
 }
 
 JsiValue *F4NElement::addEventListener(size_t size, JsiValue **params) {
-    applyInvoke(MethodId_addEventListener, "addEventListener", size, params);
     if (size >= 1) {
         string event = static_cast<JsiString *>(params[0])->value_;
         addEventListener(event);
     }
+    applyInvoke(MethodId_addEventListener, "addEventListener", size, params);
     return nullptr;
 }
 
@@ -193,11 +194,11 @@ void F4NElement::addEventListener(string event) {
 }
 
 JsiValue *F4NElement::removeEventListener(size_t size, JsiValue **params) {
-    applyInvoke(MethodId_removeEventListener, "removeEventListener", size, params);
     if (size >= 1) {
         string event = static_cast<JsiString *>(params[0])->value_;
         removeEventListener(event);
     }
+    applyInvoke(MethodId_removeEventListener, "removeEventListener", size, params);
     return nullptr;
 }
 
@@ -245,8 +246,9 @@ void F4NElement::removeAllAnimation() {
 }
 
 JsiValue *F4NElement::setEventTarget(size_t size, JsiValue **params) {
+    JsiValue *result = F4NComponent::setEventTarget(size, params);
     applyInvoke(MethodId_setEventTarget, "setEventTarget", size, params);
-    return F4NComponent::setEventTarget(size, params);
+    return result;
 }
 
 JsiValue *F4NElement::setEventTarget(JsiFunction *jsiFunction) {
@@ -299,32 +301,45 @@ F4NElement::~F4NElement() {
 
 JsiValue *elementFuncWrapper(JsiObjectEx *value, long methodId, const char *methodName, size_t size, JsiValue *params[], void *data) {
     auto *bridge = static_cast<F4NElement *>(data);
-    bridge->applyInvoke(methodId, methodName, size, params);
+    JsiValue *result = nullptr;
     switch (methodId) {
         case F4NElement::MethodId_appendChild:
-            return bridge->appendChild(size, params);
+            result = bridge->appendChild(size, params);
+            break;
         case F4NElement::MethodId_removeChild:
-            return bridge->removeChild(size, params);
+            result = bridge->removeChild(size, params);
+            break;
         case F4NElement::MethodId_removeAll:
-            return bridge->removeAll(size, params);
+            result = bridge->removeAll(size, params);
+            break;
         case F4NElement::MethodId_insertBefore:
-            return bridge->insertBefore(size, params);
+            result = bridge->insertBefore(size, params);
+            break;
         case F4NElement::MethodId_replaceChild:
-            return bridge->replaceChild(size, params);
+            result = bridge->replaceChild(size, params);
+            break;
         case F4NElement::MethodId_setAttributes:
-            return bridge->setAttributes(size, params);
+            result = bridge->setAttributes(size, params);
+            break;
         case F4NElement::MethodId_getAttribute:
-            return bridge->getAttribute(size, params);
+            result = bridge->getAttribute(size, params);
+            break;
         case F4NElement::MethodId_setStyles:
-            return bridge->setStyles(size, params);
+            result = bridge->setStyles(size, params);
+            break;
         case F4NElement::MethodId_getReact:
-            return bridge->getReact(size, params);
+            result = bridge->getReact(size, params);
+            break;
         case F4NElement::MethodId_addAnimation:
-            return bridge->addAnimation(size, params);
+            result = bridge->addAnimation(size, params);
+            break;
         case F4NElement::MethodId_removeAnimationForKey:
-            return bridge->removeAnimationForKey(size, params);
+            result = bridge->removeAnimationForKey(size, params);
+            break;
         case F4NElement::MethodId_removeAllAnimation:
-            return bridge->removeAllAnimation(size, params);
+            result = bridge->removeAllAnimation(size, params);
+            break;
     }
-    return nullptr;
+    bridge->applyInvoke(methodId, methodName, size, params);
+    return result;
 }

@@ -10,7 +10,7 @@ import com.didi.hummer2.invoke.Invoker;
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
  * @Date 2024/3/27 2:36 PM
- * @Description 基础组件需要具备的接口
+ * @Description Hummer基础对象类型，基础组件需要具备的接口
  */
 
 public interface HummerObject {
