@@ -1,3 +1,5 @@
+import{View, Text, Button, Navigator, Hummer} from '../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 class RootView extends View {
     constructor() {
         super();
@@ -27,7 +29,8 @@ class RootView extends View {
                 params: {
                     aaa: 111,
                     bbb: 222,
-                }
+                },
+                // closeSelf: true,
             };
             Navigator.openPage(pageInfo, (result) => {
                 console.log('Page result: ' + JSON.stringify(result));
@@ -63,6 +66,12 @@ class RootView extends View {
     onDestroy() {
         // 页面销毁
         console.log("-- onDestroy");
+    }
+
+    onBack() {
+        // 页面返回
+        console.log("-- onBack");
+        return true;
     }
 }
 

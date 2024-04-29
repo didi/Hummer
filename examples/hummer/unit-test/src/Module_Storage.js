@@ -1,3 +1,5 @@
+import{View, Text, Button, Input, Storage, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 class RootView extends View {
     constructor() {
         super();
@@ -38,6 +40,8 @@ class RootView extends View {
         inputKey.style = {
             padding: 10,
             fontSize: 14,
+            width: 100,
+            maxWidth: 100,
         };
 
         let inputValue = new Input();
@@ -64,6 +68,7 @@ class RootView extends View {
         btn1.addEventListener('tap', (event) => {
             let key = inputKey.text;
             let value = inputValue.text;
+            console.log(key + ": " + value);
             Storage.set(key, value);
             this.infoMap[key] = value;
             this.printInfo();
@@ -79,7 +84,6 @@ class RootView extends View {
             let key = inputKey.text;
             let value = Storage.get(key);
             console.log(key + ": " + value);
-            inputValue.text = value;
             this.printInfo();
         });
 
@@ -105,6 +109,7 @@ class RootView extends View {
         btn4.addEventListener('tap', (event) => {
             let key = inputKey.text;
             let isExist = Storage.exist(key);
+            console.log(key + " isExist: " + isExist);
             this.infoText.text = 'isExist: ' + isExist;
         });
 

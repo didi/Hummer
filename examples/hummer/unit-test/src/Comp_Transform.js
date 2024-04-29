@@ -1,3 +1,5 @@
+import{View, Button,Text, Image, Input, TextArea, Scroller, Hummer} from '../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 class RootView extends View {
     constructor() {
         super();

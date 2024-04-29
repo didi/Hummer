@@ -1,3 +1,5 @@
+import{View, Text, Button, ViewPager, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 const data = [
     'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3207781657,3460758070&fm=27&gp=0.jpg',
     'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2735633715,2749454924&fm=27&gp=0.jpg',

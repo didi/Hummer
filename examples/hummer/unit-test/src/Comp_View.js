@@ -1,13 +1,20 @@
+import{View, Text, Button, Input, TextArea, Scroller, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 class RootView extends View {
     constructor() {
         super();
         this.style = {
+            width: '100%',
+            height: '100%',
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
         }
 
         this.scroller = new Scroller();
+        this.scroller.style = {
+            width: '100%',
+        };
         this.appendChild(this.scroller);
 
         // View - 背景
@@ -44,6 +51,7 @@ class RootView extends View {
             padding: 10,
             borderWidth: 1,
             borderColor: '#22222222',
+            // alignItems: 'flex-start',
         };
 
         let view1 = new View();
@@ -430,6 +438,8 @@ class RootView extends View {
         };
         button.addEventListener('tap', (event) => {
             let isHide = view1.style.display === 'none';
+            console.log('view1.style.display: ', view1.style.display);
+            console.log('isHide: ', isHide);
             view1.style = {
                 display: isHide ? 'flex' : 'none',
             };
@@ -469,6 +479,7 @@ class RootView extends View {
             padding: 10,
             borderWidth: 1,
             borderColor: '#22222222',
+            alignItems: 'flex-start',
         };
 
         let view1 = new View();

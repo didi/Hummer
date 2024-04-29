@@ -1,3 +1,5 @@
+import{View, Text, Button, Input, TextArea, Scroller, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 class RootView extends View {
     constructor() {
         super();
@@ -56,7 +58,7 @@ class RootView extends View {
         let pinchListener = (event) => {
             infoText.text = this.formatEvent(event);
         }
-        // iew.addEventListener('touch', touchListener);
+        view.addEventListener('touch', touchListener);
         view.addEventListener('tap', tapListener);
         view.addEventListener('longPress', longPressListener);
         view.addEventListener('pan', panListener);

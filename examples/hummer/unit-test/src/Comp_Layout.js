@@ -1,3 +1,5 @@
+import{View, Text, Hummer} from '../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 // ID Count
 let count = 0;
 // 操作面板
@@ -188,8 +190,8 @@ class RootView extends View {
   updateOpetation(id, v) {
     selectViewId = `${id}`;
     idText.text = `元素：${selectViewId}`;
-    btnPosition.text = `position：${v.style["position"]}`;
-    btnDisplay.text = `display：${v.style["display"]}`;
+    // btnPosition.text = `position：${v.style["position"]}`;
+    // btnDisplay.text = `display：${v.style["display"]}`;
   }
 
 }

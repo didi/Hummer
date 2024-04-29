@@ -1,4 +1,6 @@
-class RootView extends View {
+import{View, Text, Button, Input, TextArea, Scroller, Hummer} from '../../../../api/packages/hummer-api/dist/hummer-api.es'
+
+class RootView extends Scroller {
     constructor() {
         super();
 
@@ -8,6 +10,8 @@ class RootView extends View {
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
         }
 
         this.testAction();
@@ -31,14 +35,17 @@ class RootView extends View {
         layout.style = {
             flexDirection: 'column',
             padding: 10,
+            width:"100%",
             borderWidth: 1,
             borderColor: '#22222222',
+            backgroundColor: '#00FF0022',
         };
 
         let subLayout1 = new View();
         subLayout1.style = {
             flexDirection: 'row',
             alignItems: 'center',
+            backgroundColor: '#FF000022',
         };
 
         let input = new Input();
@@ -59,7 +66,7 @@ class RootView extends View {
         btn1.style = {
             position: 'absolute',
             width: 70,
-            height: 40,
+            height: 60,
             right: 0,
             fontSize: 12,
         };
@@ -73,6 +80,7 @@ class RootView extends View {
             flexDirection: 'row',
             alignItems: 'center',
             marginTop: 10,
+            backgroundColor: '#0000FF22',
         };
 
         let textArea = new TextArea();
@@ -105,7 +113,7 @@ class RootView extends View {
 
         let infoText = new Text();
 
-        subLayout1.appendChild(this.feeInput);
+        subLayout1.appendChild(input);
         subLayout1.appendChild(btn1);
         subLayout2.appendChild(textArea);
         subLayout2.appendChild(btn2);

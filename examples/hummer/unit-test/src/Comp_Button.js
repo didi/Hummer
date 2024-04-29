@@ -1,3 +1,7 @@
+import{View, Text, Button, Input, TextArea, Scroller, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+
+
+// from './../../../../api/packages/hummer-api/dist/hummer-api.es'
 class RootView extends View {
     constructor() {
         super();
@@ -228,7 +232,9 @@ class RootView extends View {
             height: 40,
             right: 0,
         };
+        btnState.enabled = true;
         btnState.addEventListener('tap', (event) => {
+            console.log('btnState tap: ', btnState.text);
             if (btnState.text === 'disable') {
                 btn1.enabled = false;
                 btn2.enabled = false;

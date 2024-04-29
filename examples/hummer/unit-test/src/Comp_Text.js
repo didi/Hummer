@@ -1,3 +1,5 @@
+import{View, Text, Input, TextArea, Scroller, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 class RootView extends View {
     constructor() {
         super();
@@ -487,6 +489,7 @@ class RootView extends View {
             backgroundColor: '#FF0000',
             color: '#FFFFFF',
             textLineClamp: 1,
+            fontSize: 16,
         };
 
         let text2 = new Text();
@@ -497,6 +500,7 @@ class RootView extends View {
             marginLeft: 10,
             color: '#FFFFFF',
             textLineClamp: 2,
+            fontSize: 16,
         };
 
         let text3 = new Text();
@@ -507,6 +511,7 @@ class RootView extends View {
             marginLeft: 10,
             color: '#FFFFFF',
             textLineClamp: 0,
+            fontSize: 16,
         };
 
         layout.appendChild(text1);
@@ -543,6 +548,7 @@ class RootView extends View {
             color: '#FFFFFF',
             textLineClamp: 1,
             textOverflow: 'ellipsis',
+            fontSize: 16,
         };
 
         let text2 = new Text();
@@ -554,6 +560,7 @@ class RootView extends View {
             color: '#FFFFFF',
             textLineClamp: 2,
             textOverflow: 'ellipsis',
+            fontSize: 16,
         };
 
         text1.textCopyEnable = true;
@@ -568,6 +575,7 @@ class RootView extends View {
             color: '#FFFFFF',
             textLineClamp: 1,
             textOverflow: 'clip',
+            fontSize: 16,
         };
 
         let text4 = new Text();
@@ -580,6 +588,7 @@ class RootView extends View {
             color: '#FFFFFF',
             textLineClamp: 2,
             textOverflow: 'clip',
+            fontSize: 16,
         };
 
         layout.appendChild(text1);

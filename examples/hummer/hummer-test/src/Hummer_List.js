@@ -1,11 +1,10 @@
-import{View, Text, List, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+import{View, Input,TextArea,Text, Hummer, List} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
 
 const TYPE_TITLE = 1;
 const TYPE_ITEM = 2;
 
 const ITEM_COUNT = 20;
 
-let stextView = new Text();
 class RootView extends View {
     constructor() {
         super();
@@ -30,10 +29,9 @@ class RootView extends View {
             leftSpacing: 10,
             rightSpacing: 10,
             bottomSpacing: 10,
+            backgroundColor: '#eeeeee'
+//            showScrollBar: true,
         };
-//        this.listView.showScrollBar = true;
-//        this.listView.bounces = false;
-
         this.listView.onRegister = position => {
             console.log("TypeCallback: position = " + position);
             if (position % 2 === 0) {
@@ -102,16 +100,6 @@ class RootView extends View {
 
         this.appendChild(this.listView);
 
-
-        // stextView.text = "~ Hello Hummer ~";
-        // stextView.style = {
-        //     width: 100,
-        //     height: 100,
-        //     fontSize: 20,
-        //     color: '#000000',
-        // }
-        // this.appendChild(stextView);
-
         this.loadData();
     }
 
@@ -123,10 +111,10 @@ class RootView extends View {
     }
 
     loadMore() {
-        if (this.page < 5) {
+        if (this.page < 1000) {
             setTimeout(() => {
-                this.listView.stopLoadMore(true);
                 this.listView.refresh(ITEM_COUNT * this.page);
+                this.listView.stopLoadMore(true);
             }, 300);
         } else {
             this.listView.stopLoadMore(false);
@@ -138,7 +126,6 @@ class TitleCell extends View {
     constructor() {
         super();
         this.style = {
-            width: '100%',
             backgroundColor: '#dddddd',
         };
 
@@ -156,7 +143,6 @@ class ItemCell extends View {
     constructor() {
         super();
         this.style = {
-            width: '100%',
             backgroundColor: '#FF000022',
         };
 
@@ -175,39 +161,10 @@ class ItemCell extends View {
 
         this.appendChild(this.textView);
         // this.appendChild(lineView);
-
-
-        // let isIntercepted = false;
-        // this.addEventListener('pan', event => {
-        //     if (event.state == 1) {
-        //         console.log("event: start");
-        //         isIntercepted = false;
-        //     } else if (event.state == 2) {
-        //         console.log("event: ", event);
-        //         console.log("偏移量: ", event.translation.deltaX);
-
-        //         if (Math.abs(event.translation.deltaX) > 3 && !isIntercepted) {
-        //             isIntercepted = true;
-        //             requestDisallowInterceptTouchEvent(this, true);
-        //         }
-        //     } else if (event.state == 3) {
-        //         console.log("event: end");
-        //         isIntercepted = false;
-        //     }
-        // })
-
-        // stextView.text = 's';
-        // stextView.style = {
-        //     width: 111,
-        // }
     }
 
     refresh(position) {
         this.textView.text = position.toString();
-
-        // this.feeInput.text = ''
-
-        // stextView.text = 's';
     }
 }
 

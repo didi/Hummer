@@ -1,3 +1,5 @@
+import{View, Text, Image, Input, TextArea, Scroller, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+
 class RootView extends Scroller {
     constructor() {
         super();
@@ -8,6 +10,7 @@ class RootView extends Scroller {
             paddingLeft: 10,
             paddingRight: 10,
             paddingTop: 10,
+            // backgroundColor:"#ff0000"
         }
 
         this.testBackground();
@@ -34,7 +37,7 @@ class RootView extends Scroller {
             padding: 10,
             borderWidth: 1,
             borderColor: '#22222222',
-            flexWrap: 'wrap',
+            // flexWrap: 'wrap',
         };
 
         let layout1 = new View();
@@ -147,7 +150,7 @@ class RootView extends Scroller {
             padding: 10,
             borderWidth: 1,
             borderColor: '#22222222',
-            flexWrap: 'wrap',
+            // flexWrap: 'wrap', 
         };
 
         let layout1 = new View();
