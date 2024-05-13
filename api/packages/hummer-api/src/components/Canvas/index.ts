@@ -186,7 +186,7 @@ export class Canvas extends HummerElement {
      * @param maxWidth 文本换行的最大宽度, 0 代表不换行,支持px，hm 单位， 如果不写单位就是dp
      */
     fillText(text: string, x: number, y: number, maxWidth: number) {
-        this.call("fillText", x, y, maxWidth);
+        this.call("fillText",text, x, y, maxWidth);
     }
 
 
@@ -201,7 +201,7 @@ export class Canvas extends HummerElement {
      * @param height 图片高 ,支持px，hm 单位， 如果不写单位就是dp
      */
     drawImage(src: string, x: number, y: number, width: number, height: number) {
-        this.call("drawImage", x, y, width, height);
+        this.call("drawImage",src, x, y, width, height);
     }
 
 }
