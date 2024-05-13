@@ -1,4 +1,4 @@
-import{View, Text, Button, Input, TextArea, Scroller, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+import { View, Text, Button, Input, TextArea, Scroller, Hummer } from './../../../../api/packages/hummer-api/dist/hummer-api.es'
 
 class RootView extends View {
     constructor() {
@@ -10,18 +10,19 @@ class RootView extends View {
 
         this.scroll = new Scroller();
         this.scroll.style = {
-            width: '90%',
+            // marginLeft:"5%",
+            // paddingLeft: "5%",
+            width: '100%',
             height: '100%',
-            backgroundColor:"#2ff03f"
         }
-    //    this.scroll.showScrollBar = true;
-    //    this.scroll.bounces = false;
+        //    this.scroll.showScrollBar = true;
+        //    this.scroll.bounces = false;
 
         for (let i = 0; i < 10; i++) {
             let item = new Text();
             item.text = "" + i;
             item.style = {
-                width: '100%',
+                // width: '100%',
                 height: 120,
                 margin: 15,
                 backgroundColor: '#FF000022',
@@ -53,16 +54,16 @@ class RootView extends View {
         this.scroll.loadMoreView = loadMoreCell;
 
         this.scroll.onLoadMore = state => {
-             console.log("LoadMore: state = " + state);
-             if (state == 1) {
-                 loadMoreCell.setHint("加载中...");
-                 this.page++;
-                 this.loadMore();
-             } else if (state == 2) {
-                 loadMoreCell.setHint("没有更多数据");
-             } else {
-                 loadMoreCell.setHint("加载完成");
-             }
+            console.log("LoadMore: state = " + state);
+            if (state == 1) {
+                loadMoreCell.setHint("加载中...");
+                this.page++;
+                this.loadMore();
+            } else if (state == 2) {
+                loadMoreCell.setHint("没有更多数据");
+            } else {
+                loadMoreCell.setHint("加载完成");
+            }
         };
 
         this.scroll.addEventListener('scroll', (event) => {
@@ -99,7 +100,7 @@ class RootView extends View {
         };
         btn1.text = "滑到顶部";
         btn1.addEventListener("tap", event => {
-             this.scroll.scrollToTop();
+            this.scroll.scrollToTop();
         });
 
         let btn2 = new Button();
@@ -109,7 +110,7 @@ class RootView extends View {
         };
         btn2.text = "滑到底部";
         btn2.addEventListener("tap", event => {
-             this.scroll.scrollToBottom();
+            this.scroll.scrollToBottom();
         });
 
         btnLayout.appendChild(btn1);

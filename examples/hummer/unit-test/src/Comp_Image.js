@@ -146,7 +146,7 @@ class RootView extends Scroller {
 
         let layout = new View();
         layout.style = {
-            alignItems: 'center',
+            // alignItems: 'center',
             padding: 10,
             borderWidth: 1,
             borderColor: '#22222222',
