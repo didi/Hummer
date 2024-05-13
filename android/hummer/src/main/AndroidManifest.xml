@@ -3,14 +3,6 @@
 
     <application>
 
-        <activity
-            android:name=".HummerActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".delegate.HummerDelegateActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
     </application>
 
 </manifest>

@@ -1,2 +1,0 @@
-android.R.dimen.status_bar_height
-android.R.dimen.navigation_bar_height
