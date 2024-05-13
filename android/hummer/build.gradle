@@ -14,6 +14,7 @@ android {
 
 dependencies {
 
+    api project(':hummer-framework')
     api project(':hummer-component')
 }
 

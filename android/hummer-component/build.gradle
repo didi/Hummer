@@ -29,12 +29,11 @@ dependencies {
     api rootProject.ext.androidx["constraintLayout"]
 
     api project(':hummer-falcon')
+    api project(':hummer-annotation')
+    api project(':hummer-framework')
 
-    api project(':hummer2-annotation')
-    api project(':hummer2')
+    annotationProcessor project(':hummer-compiler')
 
-
-    annotationProcessor project(":hummer2-compiler")
 
     // 下拉刷新和加载更多
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.1'

@@ -6,8 +6,8 @@ import android.content.Context;
 import com.didi.hummer2.Hummer;
 import com.didi.hummer2.HummerConfig;
 import com.didi.hummer2.register.HummerRegister;
-import com.didi.hummer2.register.HummerRegister$$hummer2;
-import com.didi.hummer2.register.HummerRegister$$hummer2_component;
+import com.didi.hummer2.register.HummerRegister$$hummer_framework;
+import com.didi.hummer2.register.HummerRegister$$hummer_component;
 import com.didi.hummer2.register.InvokerRegister;
 import com.didi.hummer2.utils.F4NDebugUtil;
 import com.facebook.soloader.SoLoader;
@@ -48,8 +48,8 @@ public class App extends Application {
                 .addHummerRegister(new HummerRegister() {
                     @Override
                     public void register(InvokerRegister invokerRegister) {
-                        new HummerRegister$$hummer2_component().register(invokerRegister);
-                        new HummerRegister$$hummer2().register(invokerRegister);
+                        new HummerRegister$$hummer_framework().register(invokerRegister);
+                        new HummerRegister$$hummer_component().register(invokerRegister);
                     }
                 })
                 .setFontAdapter(new TestFontAdapter())

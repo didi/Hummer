@@ -30,10 +30,10 @@ dependencies {
     api  rootProject.ext.androidx["fragment"]
 
     api project(':hummer-falcon')
+    api project(':hummer-annotation')
 
-    api project(':hummer2-annotation')
+    annotationProcessor project(':hummer-compiler')
 
-    annotationProcessor project(":hummer2-compiler")
 
     api 'com.google.code.gson:gson:2.8.5'
     // Yoga

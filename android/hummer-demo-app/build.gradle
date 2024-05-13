@@ -81,10 +81,8 @@ dependencies {
 
 //    implementation project(':hummer')
     implementation project(':hummer-falcon')
-    implementation project(':hummer2-component')
-
-    annotationProcessor project(":hummer2-compiler")
-
+    implementation project(':hummer-component')
+    annotationProcessor project(':hummer-compiler')
 
 
     implementation 'com.facebook.soloader:soloader:0.10.1'
