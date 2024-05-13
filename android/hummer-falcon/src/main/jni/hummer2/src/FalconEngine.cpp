@@ -7,6 +7,8 @@
 #include "HMLogHandler.h"
 #include "HMExceptionHandler.h"
 #include "HMEventTraceHandler.h"
+#include "HMContextListener.h"
+#include "HMPageLifeCycle.h"
 
 
 JavaVM *_JavaVM_ = NULL;
@@ -42,7 +44,7 @@ static F4NRuntime *_vdomRuntime = nullptr;
 
 void FalconEngine_createEngine_(JNIEnv *env, jclass cls) {
     if (_vdomRuntime == nullptr) {
-        LOGI("HummerVdomEngine::createEngine()");
+        LOGI("FalconEngine::createEngine()");
         F4NRuntime *vdomRuntime = new F4NRuntime();
         vdomRuntime->init();
         _vdomRuntime = vdomRuntime;
@@ -50,18 +52,18 @@ void FalconEngine_createEngine_(JNIEnv *env, jclass cls) {
 }
 
 void FalconEngine_releaseEngine_(JNIEnv *env, jclass cls) {
-    LOGI("HummerVdomEngine::releaseEngine()");
+    LOGI("FalconEngine::releaseEngine()");
     if (_vdomRuntime != nullptr) {
         _vdomRuntime->release();
         delete _vdomRuntime;
     }
 }
 
-jlong FalconEngine_createVdomContext_(JNIEnv *env, jclass cls) {
+jlong FalconEngine_createContext_(JNIEnv *env, jclass cls) {
     if (_vdomRuntime == nullptr) {
-        LOGD("HummerVdomEngine::createVdomContext() null");
+        LOGD("FalconEngine::createVdomContext() null");
     } else {
-        LOGD("HummerVdomEngine::createVdomContext() no null");
+        LOGD("FalconEngine::createVdomContext() no null");
     }
     F4NContext *vdomContext = _vdomRuntime->createContext();
 
@@ -69,17 +71,18 @@ jlong FalconEngine_createVdomContext_(JNIEnv *env, jclass cls) {
     return identify;
 }
 
-void FalconEngine_destroyVdomContext_(JNIEnv *env, jclass cls, jlong contextId) {
-    LOGI("HummerVdomEngine::destroyVdomContext()");
+void FalconEngine_destroyContext_(JNIEnv *env, jclass cls, jlong contextId) {
+    LOGI("FalconEngine::destroyVdomContext()");
     F4NContext *vdomContext = (F4NContext *) contextId;
+    vdomContext->stop();
     _vdomRuntime->destroyContext(vdomContext);
     env->DeleteGlobalRef((jobject) vdomContext->nativeContext);
 }
 
-jboolean FalconEngine_bindVdomContext_(JNIEnv *env, jclass cls, jlong contextId, jobject context, jobject configOption) {
+jboolean FalconEngine_bindContext_(JNIEnv *env, jclass cls, jlong contextId, jobject context, jobject configOption) {
     F4NContext *f4NContext = (F4NContext *) contextId;
     jobject globalContext = env->NewGlobalRef(context);
-    LOGI("HummerVdomEngine::bindVdomContext() contextId=%u，context=%u,globalContext=%u", contextId, context, globalContext);
+    LOGI("FalconEngine::bindVdomContext() contextId=%u，context=%u,globalContext=%u", contextId, context, globalContext);
 
     f4NContext->nativeContext = (uintptr_t) globalContext;
 
@@ -87,14 +90,12 @@ jboolean FalconEngine_bindVdomContext_(JNIEnv *env, jclass cls, jlong contextId,
     componentFactory->jniEnv = env;
     componentFactory->contextId = (long) globalContext;
 
-
     F4NConfigOptions *vdomConfig = new F4NConfigOptions();
     vdomConfig->singleThread = false;
 
     MainThreadHandler *threadHandler = new MainThreadHandler();
     threadHandler->init();
 
-    LOGI("HummerVdomEngine::bindVdomContext() 1");
     f4NContext->init(vdomConfig, componentFactory);
     f4NContext->setMainThreadHandler(threadHandler);
 
@@ -102,16 +103,15 @@ jboolean FalconEngine_bindVdomContext_(JNIEnv *env, jclass cls, jlong contextId,
     f4NContext->setLogHandler(new HMLogHandler(f4NContext));
     f4NContext->setExceptionHandler(new HMExceptionHandler(f4NContext));
     f4NContext->setEventTraceHandler(new HMEventTraceHandler(f4NContext));
+    f4NContext->setContextStateListener(new HMContextListener(f4NContext));
+    f4NContext->setPageLifeCycle(new HMPageLifeCycle(f4NContext));
 
-    LOGI("HummerVdomEngine::bindVdomContext() 2");
-    LOGI("HummerVdomEngine::bindVdomContext() 3");
     f4NContext->start();
-    LOGI("HummerVdomEngine::bindVdomContext() 4");
     return JNI_TRUE;
 }
 
 jobject FalconEngine_evaluateJavaScript_(JNIEnv *env, jclass cls, jlong contextId, jstring script, jstring scriptId) {
-    LOGI("HummerVdomEngine::evaluateJavaScript() contextId=%u", contextId);
+    LOGI("FalconEngine::evaluateJavaScript() contextId=%u", contextId);
 
     F4NContext *vdomContext = (F4NContext *) contextId;
 
@@ -131,14 +131,38 @@ jobject FalconEngine_evaluateBytecode_(JNIEnv *env, jclass cls, jlong contextId,
 }
 
 
+jobject FalconEngine_dispatchEvent_(JNIEnv *env, jclass cls, jlong contextId, jstring eventName, jlongArray params) {
+    F4NContext *f4NContext = (F4NContext *) contextId;
+    const char *eventNameString = env->GetStringUTFChars(eventName, hm_false_ptr);
+    if (params != nullptr) {
+        jsize size = env->GetArrayLength(params);
+        // 分配本地内存来保存数组元素
+        jlong *array = env->GetLongArrayElements(params, NULL);
+
+        JsiValue **hmValue = new JsiValue *[size];
+        for (int i = 0; i < size; i++) {
+            hmValue[i] = (JsiValue *) array[i];
+        }
+        //释放本地内存
+        env->ReleaseLongArrayElements(params, array, 0);
+        f4NContext->dispatchEvent(eventNameString, size, hmValue);
+    } else {
+        f4NContext->dispatchEvent(eventNameString, 0, nullptr);
+    }
+    env->ReleaseStringUTFChars(eventName, eventNameString);
+    return nullptr;
+}
+
+
 static JNINativeMethod _FalconEngineMethods[] = {
         {"createEngine",         "()V",                                                                               (void *) FalconEngine_createEngine_},
         {"releaseEngine",        "()V",                                                                               (void *) FalconEngine_releaseEngine_},
-        {"createFalconContext",  "()J",                                                                               (void *) FalconEngine_createVdomContext_},
-        {"destroyFalconContext", "(J)V",                                                                              (void *) FalconEngine_destroyVdomContext_},
-        {"bindFalconContext",    "(JLcom/didi/hummer2/falcon/FalconContext;Lcom/didi/hummer2/falcon/ConfigOption;)Z", (void *) FalconEngine_bindVdomContext_},
+        {"createFalconContext",  "()J", (void *) FalconEngine_createContext_},
+        {"destroyFalconContext", "(J)V", (void *) FalconEngine_destroyContext_},
+        {"bindFalconContext",    "(JLcom/didi/hummer2/falcon/FalconContext;Lcom/didi/hummer2/falcon/ConfigOption;)Z", (void *) FalconEngine_bindContext_},
         {"evaluateJavaScript",   "(JLjava/lang/String;Ljava/lang/String;)Ljava/lang/Object;",                         (void *) FalconEngine_evaluateJavaScript_},
         {"evaluateBytecode",     "(J[BLjava/lang/String;)Ljava/lang/Object;",                                         (void *) FalconEngine_evaluateBytecode_},
+        {"dispatchEvent",        "(JLjava/lang/String;[J)Ljava/lang/Object;",                                         (void *) FalconEngine_dispatchEvent_},
 };
 
 static jclass J_FalconEngine;
@@ -148,9 +172,9 @@ void FalconEngine::init(JavaVM *vm, JNIEnv *env) {
     //HummerEngine
     J_FalconEngine = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/falcon/FalconEngine"));
 
-    jint state = env->RegisterNatives(J_FalconEngine, _FalconEngineMethods, 7);
+    jint state = env->RegisterNatives(J_FalconEngine, _FalconEngineMethods, 8);
     if (state == JNI_OK) {
-        LOGI("HummerVdomEngine::init() OK");
+        LOGI("FalconEngine::init() OK");
     }
 
     LOGI("Hummer2JNI::init() OK");

@@ -52,6 +52,7 @@ public class App extends Application {
                         new HummerRegister$$hummer2().register(invokerRegister);
                     }
                 })
+                .setFontAdapter(new TestFontAdapter())
                 .setDebuggable(false)
                 .build();
         Hummer.init(config);

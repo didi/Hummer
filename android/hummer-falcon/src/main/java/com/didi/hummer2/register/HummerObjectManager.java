@@ -6,9 +6,7 @@ import com.didi.hummer2.invoke.Invoker;
 import com.didi.hummer2.utils.HMLog;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +41,10 @@ public class HummerObjectManager implements InvokerRegister {
 
     public List<HummerObject> getAllObject() {
         return new ArrayList<>(objectMap.values());
+    }
+
+    public void clear() {
+        objectMap.clear();
     }
 
     @Override

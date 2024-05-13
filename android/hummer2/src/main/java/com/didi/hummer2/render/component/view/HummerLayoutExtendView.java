@@ -2,11 +2,6 @@ package com.didi.hummer2.render.component.view;
 
 import android.content.Context;
 
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.core.engine.JSValue;
-//import com.didi.hummer.render.style.HummerLayout;
-//import com.didi.hummer.render.style.HummerLayoutExtendUtils;
-
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.HummerScriptContext;
 import com.didi.hummer2.engine.JSValue;

@@ -14,6 +14,8 @@ static jmethodID J_MethodID_printNativeLog;
 static jmethodID J_MethodID_printJsLog;
 static jmethodID J_MethodID_onCatchJsException;
 static jmethodID J_MethodID_onTraceEvent;
+static jmethodID J_MethodID_onContextStateChanged;
+static jmethodID J_MethodID_onReceivePageLifeCycle;
 
 void FalconContext::init(JavaVM *vm, JNIEnv *env) {
 
@@ -23,6 +25,8 @@ void FalconContext::init(JavaVM *vm, JNIEnv *env) {
     J_MethodID_printJsLog = env->GetMethodID(J_FalconContext, "printJsLog", "(ILjava/lang/String;)V");
     J_MethodID_onCatchJsException = env->GetMethodID(J_FalconContext, "onCatchJsException", "(Ljava/lang/String;)V");
     J_MethodID_onTraceEvent = env->GetMethodID(J_FalconContext, "onTraceEvent", "(Ljava/lang/String;Ljava/lang/Object;)V");
+    J_MethodID_onContextStateChanged = env->GetMethodID(J_FalconContext, "onContextStateChanged", "(I)V");
+    J_MethodID_onReceivePageLifeCycle = env->GetMethodID(J_FalconContext, "onReceivePageLifeCycle", "(I)V");
 }
 
 
@@ -55,6 +59,18 @@ void FalconContext::onTraceEvent(jobject context, string event, JsiValue *value)
     jstring msg = jniEnv->NewStringUTF(event.c_str());
     jniEnv->CallVoidMethod(context, J_MethodID_onTraceEvent, msg, value2JObject(jniEnv, value));
     jniEnv->DeleteLocalRef(msg);
+    clearException(jniEnv);
+}
+
+void FalconContext::onContextStateChanged(jobject context, jint state) {
+    JNIEnv *jniEnv = JNI_GetEnv();
+    jniEnv->CallVoidMethod(context, J_MethodID_onContextStateChanged, state);
+    clearException(jniEnv);
+}
+
+void FalconContext::onReceivePageLifeCycle(jobject context, jint event) {
+    JNIEnv *jniEnv = JNI_GetEnv();
+    jniEnv->CallVoidMethod(context, J_MethodID_onReceivePageLifeCycle, event);
     clearException(jniEnv);
 }
 

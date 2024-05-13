@@ -3,7 +3,10 @@ package com.didi.hummer2;
 import android.content.Context;
 import android.content.ContextWrapper;
 
+import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.falcon.HMEngineType;
+import com.didi.hummer2.falcon.OnContextStateListener;
+import com.didi.hummer2.falcon.PageLifeCycle;
 import com.didi.hummer2.register.HummerObject;
 import com.didi.hummer2.register.InvokerRegister;
 import com.didi.hummer2.falcon.ConfigOption;
@@ -13,6 +16,7 @@ import com.didi.hummer2.handler.JsConsoleHandler;
 import com.didi.hummer2.handler.JsExceptionHandler;
 import com.didi.hummer2.handler.LogHandler;
 import com.didi.hummer2.invoke.Invoker;
+import com.didi.hummer2.utils.HMLog;
 
 
 /**
@@ -26,7 +30,7 @@ import com.didi.hummer2.invoke.Invoker;
  * @Description Hummer2Context 注册及绑定Hummer2的相关组件，初始设置数据状态等
  */
 
-public abstract class HummerContext extends ContextWrapper {
+public abstract class HummerContext extends ContextWrapper implements PageLifeCycle, OnContextStateListener {
 
     /**
      * Hummer 命名空间
@@ -44,10 +48,6 @@ public abstract class HummerContext extends ContextWrapper {
      * 引擎配置信息
      */
     protected ConfigOption configOption;
-    /**
-     * 渲染器
-     */
-    protected HummerRender hummerRender;
 
     /**
      * JS引擎类型
@@ -87,6 +87,8 @@ public abstract class HummerContext extends ContextWrapper {
 
     public void init() {
         falconContext.bindVdomContext(namespace, configOption);
+        falconContext.registerPageLifeCycle(this);
+        falconContext.setOnContextStateListener(this);
     }
 
 
@@ -98,13 +100,6 @@ public abstract class HummerContext extends ContextWrapper {
         return configOption;
     }
 
-    public void setHummerRender(HummerRender hummerRender) {
-        this.hummerRender = hummerRender;
-    }
-
-    public HummerRender getHummerRender() {
-        return hummerRender;
-    }
 
     public void setNamespace(String namespace) {
         this.namespace = namespace;
@@ -130,6 +125,26 @@ public abstract class HummerContext extends ContextWrapper {
     }
 
 
+    @Override
+    public void onContextCreate() {
+        HMLog.i("HummerNative", "HummerContext.onContextCreate()");
+    }
+
+    @Override
+    public void onContextStart() {
+        HMLog.i("HummerNative", "HummerContext.onContextStart()");
+    }
+
+    @Override
+    public void onContextStop() {
+        HMLog.i("HummerNative", "HummerContext.onContextStop()");
+    }
+
+    @Override
+    public void onContextDestroy() {
+        HMLog.i("HummerNative", "HummerContext.onContextDestroy()");
+    }
+
     public abstract HummerObject searchObject(long objId);
 
     public void setJsSourcePath(String jsSourcePath) {
@@ -148,11 +163,34 @@ public abstract class HummerContext extends ContextWrapper {
         this.pageUrl = pageUrl;
     }
 
-
     public void registerInvoker(Invoker invoker) {
         this.invokerRegister.registerInvoker(invoker);
     }
 
+
+    @Override
+    public void onPageCreate() {
+    }
+
+    @Override
+    public void onPageAppear() {
+
+    }
+
+    @Override
+    public void onPageDisappear() {
+
+    }
+
+    @Override
+    public void onPageDestroy() {
+
+    }
+
+    @Override
+    public void onPageBack() {
+
+    }
 
     public void setLogHandler(LogHandler logHandler) {
         this.logHandler = logHandler;
@@ -182,6 +220,10 @@ public abstract class HummerContext extends ContextWrapper {
         return falconContext.evaluateBytecode(script, scriptId);
     }
 
+    public Object dispatchEvent(String eventName, JsiValue... params) {
+        return falconContext.dispatchEvent(eventName, params);
+    }
+
 
     public LogHandler getLogHandler() {
         return logHandler;
@@ -200,7 +242,7 @@ public abstract class HummerContext extends ContextWrapper {
     }
 
     public void destroy() {
-        falconContext.destroyVdomContext();
+        falconContext.destroyFalconContext();
     }
 
 

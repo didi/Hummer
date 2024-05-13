@@ -56,6 +56,13 @@ public class FalconEngine {
      */
     public static native Object evaluateBytecode(long contextId, byte[] script, String scriptId);
 
+    /**
+     * 分发事件给Falcon引擎
+     * <p>
+     * 备注:页面生命周期事件等
+     */
+    public static native Object dispatchEvent(long contextId, String eventName, long[] params);
+
 
     @Override
     public int hashCode() {

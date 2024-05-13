@@ -71,7 +71,7 @@ public class HummerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (hmRender != null && hmRender.onBack()) {
+        if (hmRender != null && hmRender.onBackPressed()) {
             return;
         }
         super.onBackPressed();
@@ -145,6 +145,12 @@ public class HummerActivity extends AppCompatActivity {
             @Override
             public void onFailed(Exception e) {
                 onPageRenderFailed(e);
+            }
+        });
+        hmRender.setHummerPageHandler(new HummerScriptContext.HummerPageHandler() {
+            @Override
+            public void finishPage() {
+                finish();
             }
         });
     }

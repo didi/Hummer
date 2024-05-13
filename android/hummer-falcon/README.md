@@ -9,7 +9,7 @@ dependencies {
 ```
 
 ### 2. 初始化 Hummer SDK
-在 `Application` 的 `onCreate` 中初始化 Hummer SDK。
+在 `Application` 的 `onContextCreate` 中初始化 Hummer SDK。
 ```java
 Hummer.init(this);
 ```

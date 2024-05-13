@@ -1,6 +1,8 @@
 package com.didi.hummer2.falcon;
 
 
+import android.text.TextUtils;
+
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.register.InvokerRegister;
 import com.didi.hummer2.exception.JSException;
@@ -10,6 +12,9 @@ import com.didi.hummer2.handler.JsConsoleHandler;
 import com.didi.hummer2.handler.JsExceptionHandler;
 import com.didi.hummer2.handler.LogHandler;
 import com.didi.hummer2.utils.F4NObjectUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,7 +28,29 @@ import com.didi.hummer2.utils.F4NObjectUtil;
  * @Description Falcon引擎上下文，与引擎直接交互
  */
 
-public class FalconContext {
+public class FalconContext implements PageLifeCycle {
+
+
+
+    public static final int STATE_ON_CONTEXT_CREATE = 1;
+
+    public static final int STATE_ON_CONTEXT_START = 2;
+
+    public static final int STATE_ON_CONTEXT_STOP = 3;
+
+    public static final int STATE_ON_CONTEXT_DESTROY = 4;
+
+
+    public static final int PAGE_EVENT_ON_CREATE = 11;
+
+    public static final int PAGE_EVENT_ON_APPEAR = 12;
+
+    public static final int PAGE_EVENT_ON_DISAPPEAR = 13;
+
+    public static final int PAGE_EVENT_ON_DESTROY = 14;
+
+    public static final int PAGE_EVENT_ON_BACK = 15;
+
 
     private long identify;
 
@@ -68,10 +95,14 @@ public class FalconContext {
      */
     private LogHandler logHandler;
 
+    protected OnContextStateListener onContextStateListener;
+
+    protected List<PageLifeCycle> pageLifeCycles;
+
     public FalconContext() {
         FalconEngine.createEngine();
         identify = FalconEngine.createFalconContext();
-        invokerRegister = null;
+        pageLifeCycles = new ArrayList<>();
     }
 
     public void bindVdomContext(String namespace, ConfigOption configOption) {
@@ -89,6 +120,7 @@ public class FalconContext {
     }
 
 
+    // C++ 直接回调
     public Object invoke(long type, long objId, long methodType, String componentName, String methodName, int argc, JsiValue[] value) {
         Object result = invokerRegister.invoke(null, null, type, objId, methodType, componentName, methodName, argc, value);
         if (result != null) {
@@ -106,27 +138,155 @@ public class FalconContext {
         invokerRegister.registerInvoker(invoker);
     }
 
+    // C++ 直接回调
     public void printNativeLog(int level, String message) {
         if (logHandler != null) {
             logHandler.printLog(this.namespace, level, message);
         }
     }
 
+    // C++ 直接回调
     public void printJsLog(int level, String message) {
         if (jsConsoleHandler != null) {
             jsConsoleHandler.printLog(this.namespace, level, message);
         }
     }
 
+    // C++ 直接回调
     public void onCatchJsException(String exception) {
         if (jsExceptionHandler != null) {
             jsExceptionHandler.onCatchException(this.namespace, new JSException(exception));
         }
     }
 
+    // C++ 直接回调
     public void onTraceEvent(String event, Object params) {
         if (eventTraceHandler != null) {
             eventTraceHandler.onEvent(this.namespace, event, F4NObjectUtil.toJavaMap(params));
+        }
+    }
+
+    public Object dispatchEvent(String eventName, JsiValue[] params) {
+        if (TextUtils.isEmpty(eventName)) {
+            return null;
+        }
+        long[] paramsLong;
+        if (params == null || params.length == 0) {
+            paramsLong = null;
+        } else {
+            int size = params.length;
+            paramsLong = new long[size];
+            for (int i = 0; i < size; i++) {
+                paramsLong[i] = params[i].getIdentify();
+            }
+        }
+        return FalconEngine.dispatchEvent(identify, eventName, paramsLong);
+    }
+
+    // C++ 直接回调
+    public void onContextStateChanged(int state) {
+        if (onContextStateListener != null) {
+            switch (state) {
+                case STATE_ON_CONTEXT_CREATE:
+                    onContextStateListener.onContextCreate();
+                    break;
+                case STATE_ON_CONTEXT_START:
+                    onContextStateListener.onContextStart();
+                    break;
+                case STATE_ON_CONTEXT_STOP:
+                    onContextStateListener.onContextStop();
+                    break;
+                case STATE_ON_CONTEXT_DESTROY:
+                    onContextStateListener.onContextDestroy();
+                    break;
+            }
+        }
+    }
+
+    // C++ 直接回调
+    public void onReceivePageLifeCycle(int event) {
+        switch (event) {
+            case PAGE_EVENT_ON_CREATE:
+                onPageCreate();
+                break;
+            case PAGE_EVENT_ON_APPEAR:
+                onPageAppear();
+                break;
+            case PAGE_EVENT_ON_DISAPPEAR:
+                onPageDisappear();
+                break;
+            case PAGE_EVENT_ON_DESTROY:
+                onPageDestroy();
+                break;
+            case PAGE_EVENT_ON_BACK:
+                onPageBack();
+                break;
+        }
+    }
+
+    @Override
+    public void onPageCreate() {
+        if (pageLifeCycles.size() > 0) {
+            for (PageLifeCycle cycle : pageLifeCycles) {
+                cycle.onPageCreate();
+            }
+        }
+    }
+
+    @Override
+    public void onPageAppear() {
+        if (pageLifeCycles.size() > 0) {
+            for (PageLifeCycle cycle : pageLifeCycles) {
+                cycle.onPageAppear();
+            }
+        }
+    }
+
+    @Override
+    public void onPageDisappear() {
+        if (pageLifeCycles.size() > 0) {
+            for (PageLifeCycle cycle : pageLifeCycles) {
+                cycle.onPageDisappear();
+            }
+        }
+    }
+
+    @Override
+    public void onPageDestroy() {
+        if (pageLifeCycles.size() > 0) {
+            for (PageLifeCycle cycle : pageLifeCycles) {
+                cycle.onPageDestroy();
+            }
+        }
+    }
+
+    @Override
+    public void onPageBack() {
+        if (pageLifeCycles.size() > 0) {
+            for (PageLifeCycle cycle : pageLifeCycles) {
+                cycle.onPageBack();
+            }
+        }
+    }
+
+    public OnContextStateListener getOnContextStateListener() {
+        return onContextStateListener;
+    }
+
+    public void setOnContextStateListener(OnContextStateListener onContextStateListener) {
+        this.onContextStateListener = onContextStateListener;
+    }
+
+
+    public void registerPageLifeCycle(PageLifeCycle pageLifeCycle) {
+        if (!pageLifeCycles.contains(pageLifeCycle)) {
+            pageLifeCycles.add(pageLifeCycle);
+        }
+    }
+
+    public void unregisterPageLifeCycle(PageLifeCycle pageLifeCycle) {
+        if (pageLifeCycle != null) {
+            pageLifeCycles.remove(pageLifeCycle);
         }
     }
 
@@ -146,7 +306,7 @@ public class FalconContext {
         this.logHandler = logHandler;
     }
 
-    public void destroyVdomContext() {
+    public void destroyFalconContext() {
         FalconEngine.destroyFalconContext(identify);
     }
 

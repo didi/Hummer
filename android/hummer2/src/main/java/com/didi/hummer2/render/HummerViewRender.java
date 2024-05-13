@@ -1,8 +1,6 @@
 package com.didi.hummer2.render;
 
-import android.view.ViewGroup;
 
-import com.didi.hummer2.HummerRender;
 import com.didi.hummer2.HummerScriptContext;
 import com.didi.hummer2.lifecycle.IFullLifeCycle;
 import com.didi.hummer2.register.HummerObject;
@@ -25,7 +23,7 @@ import java.util.List;
  * @Description Hummer视图渲染器
  */
 
-public class HummerViewRender implements HummerRender, IFullLifeCycle {
+public class HummerViewRender implements IFullLifeCycle {
 
     private HummerScriptContext hummerScriptContext;
     private HummerLayout rootLayout;
@@ -48,10 +46,6 @@ public class HummerViewRender implements HummerRender, IFullLifeCycle {
         rootLayout.addView(mContent);
     }
 
-    @Override
-    public void render(ViewGroup rootView) {
-        //
-    }
 
     public void renderElement(Element element) {
         this.rootElement = element;
@@ -62,9 +56,12 @@ public class HummerViewRender implements HummerRender, IFullLifeCycle {
     }
 
 
-    public boolean canGoBack() {
+    public void onBackPressed() {
         //给页面发送页面返回事件
         onPageBack();
+    }
+
+    public boolean canGoBack() {
         if (rootElement instanceof HummerGoBack) {
             return ((HummerGoBack) rootElement).canGoBack();
         }
@@ -91,23 +88,23 @@ public class HummerViewRender implements HummerRender, IFullLifeCycle {
     }
 
     private void onPageCreate() {
-        dispatchEvent(PageStateEvent.__onCreate__());
+        hummerScriptContext.dispatchEvent(PageStateEvent.PAGE_ON_CREATE);
     }
 
     private void onPageAppear() {
-        dispatchEvent(PageStateEvent.__onAppear__());
+        hummerScriptContext.dispatchEvent(PageStateEvent.PAGE_ON_APPEAR);
     }
 
     private void onPageDisappear() {
-        dispatchEvent(PageStateEvent.__onDisappear__());
+        hummerScriptContext.dispatchEvent(PageStateEvent.PAGE_ON_DISAPPEAR);
     }
 
     private void onPageDestroy() {
-        dispatchEvent(PageStateEvent.__onDestroy__());
+//        hummerScriptContext.dispatchEvent(PageStateEvent.PAGE_ON_DESTROY);
     }
 
     private void onPageBack() {
-        dispatchEvent(PageStateEvent.__onBack__());
+        hummerScriptContext.dispatchEvent(PageStateEvent.PAGE_ON_BACK);
     }
 
     private void onComponentStart() {

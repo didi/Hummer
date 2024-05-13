@@ -105,32 +105,6 @@ JsiFunction::JsiFunction(NAPIValue *napiValue, NAPIEnv *env) {
 }
 
 
-JsiValue *JsiFunction::call(JsiValue *jsiValue) {
-    debug("JsiFunction::call() params=%s", jsiValue->toString().c_str());
-
-    NAPIHandleScope handleScope;
-    JSUtils::openHandleScope(&env_, &handleScope);
-
-    size_t argc = 1;
-    NAPIValue argv[argc];
-
-    JSUtils::toJSValue(&env_, jsiValue, &argv[0]);
-
-    NAPIValue func;
-    napi_get_reference_value(env_, ref_, &func);
-
-    NAPIValue result;
-    napi_call_function(env_, nullptr, func, argc, argv, &result);
-
-    JsiValue *resultValue = JSUtils::toValue(&env_, &result);
-    JSUtils::closeHandleScope(&env_, &handleScope);
-    if (resultValue->getType() != TYPE_NAPIUndefined) {
-        return resultValue;
-    }
-    return nullptr;
-}
-
-
 JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue) {
     debug("JsiFunction::call() params=%s", JSUtils::buildArrayString(argc, jsiValue).c_str());
 
@@ -533,6 +507,30 @@ string JsiComponent::toString() const {
 }
 
 JsiComponent::~JsiComponent() {
+
+}
+
+
+//*******************************************************************************
+//                                     JsiCallback
+//*******************************************************************************
+
+
+JsiCallback::JsiCallback() {
+    type_ = TYPE_COMPONENT;
+}
+
+
+JsiValue *JsiCallback::call(size_t argc, JsiValue **argv) {
+    return nullptr;
+}
+
+string JsiCallback::toString() const {
+    return string("{\"type\":\"").append(getTypeValueName(type_))
+            .append(+"\"}");
+}
+
+JsiCallback::~JsiCallback() {
 
 }
 

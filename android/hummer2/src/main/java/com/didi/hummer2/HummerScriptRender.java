@@ -115,8 +115,8 @@ public class HummerScriptRender {
         }
     }
 
-    public boolean onBack() {
-        return scriptContext.onBack();
+    public boolean onBackPressed() {
+        return scriptContext.onBackPressed();
     }
 
     public void render(String js) {
@@ -391,6 +391,11 @@ public class HummerScriptRender {
         }
 //        hmContext.registerJSFunction(hmContext.getJsPage(), funcName, callback);
     }
+
+    public void setHummerPageHandler(HummerScriptContext.HummerPageHandler hummerPageHandler) {
+        scriptContext.setHummerPageHandler(hummerPageHandler);
+    }
+
 
 
     public interface HummerRenderCallback {

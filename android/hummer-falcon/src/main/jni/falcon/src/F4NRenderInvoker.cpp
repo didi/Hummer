@@ -117,7 +117,7 @@ void F4NRenderInvoker::setAttributes(F4NElement *thisObj, JsiValue *jsiValue) {
     delete[] params;
 }
 
-void F4NRenderInvoker::getAttribute(F4NElement *thisObj, string key, F4NFunction * function) {
+void F4NRenderInvoker::getAttribute(F4NElement *thisObj, string key, F4NFunction *function) {
 
 }
 
@@ -134,7 +134,7 @@ void F4NRenderInvoker::setStyles(F4NElement *thisObj, F4NStyle *hmStyle) {
     delete[] params;
 }
 
-void F4NRenderInvoker::getReact(F4NElement *thisObj, F4NFunction* hmFunction) {
+void F4NRenderInvoker::getReact(F4NElement *thisObj, F4NFunction *hmFunction) {
 
 }
 
@@ -240,7 +240,7 @@ void F4NRenderInvoker::render(F4NElement *rootElement) {
     if (!isCreateRender) {
         createRender();
     }
-    auto **params = (JsiValue **) malloc(sizeof(JsiValue *));
+    auto **params = new JsiValue *[1];
     params[0] = new JsiNumber(rootElement->odjId);
 
     invoke(FACTORY_TYPE_RENDER,
@@ -249,6 +249,23 @@ void F4NRenderInvoker::render(F4NElement *rootElement) {
            "Render",
            "render",
            1,
+           params);
+
+    delete[] params;
+}
+
+void F4NRenderInvoker::loadScriptWithUrl(string script, JsiFunction *callback) {
+
+    auto **params = new JsiValue *[2];
+    params[0] = new JsiString(script.c_str());
+    params[0] = callback;
+
+    invoke(FACTORY_TYPE_RENDER,
+           -1,
+           METHOD_TYPE_CALL,
+           "Hummer",
+           "loadScriptWithUrl",
+           2,
            params);
 
     delete[] params;

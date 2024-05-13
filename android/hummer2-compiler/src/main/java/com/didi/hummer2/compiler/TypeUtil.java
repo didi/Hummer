@@ -22,13 +22,9 @@ import javax.lang.model.type.TypeMirror;
 public class TypeUtil {
 
     public static final ClassName context = ClassName.get("android.content", "Context");
-//    public static final ClassName jsValue = ClassName.get("com.didi.hummer.core.engine", "JSValue");
-//    public static final ClassName jsCallback = ClassName.get("com.didi.hummer.core.engine", "JSCallback");
     public static final ClassName hummerContext = ClassName.get("com.didi.hummer2", "HummerContext");
-//    public static final ClassName hmBase = ClassName.get("com.didi.hummer.render.component.view", "HMBase");
     public static final ClassName baseInvoker = ClassName.get("com.didi.hummer2.invoke", "BaseInvoker");
     public static final ClassName typeToken = ClassName.get("com.google.gson.reflect", "TypeToken");
-//    public static final ClassName hmGsonUtil = ClassName.get("com.didi.hummer2.utils", "HMGsonUtil");
 
     public static final ClassName hummerObjectUtil = ClassName.get("com.didi.hummer2.utils", "HummerObjectUtil");
 
@@ -41,13 +37,14 @@ public class TypeUtil {
     public static final String JsiObjectClass = "com.didi.hummer2.bridge.JsiObject";
     public static final String JsiArrayClass = "com.didi.hummer2.bridge.JsiArray";
     public static final String JsiFunctionClass = "com.didi.hummer2.bridge.JsiFunction";
+
     public static final ClassName JsiValue = ClassName.get("com.didi.hummer2.bridge", "JsiValue");
     public static final ClassName JsiFunction = ClassName.get("com.didi.hummer2.bridge", "JsiFunction");
     public static final ClassName EventTarget = ClassName.get("com.didi.hummer2.bridge", "EventTarget");
 
     public static final String HummerObjectClass = "com.didi.hummer2.register.HummerObject";
 
-    public static final String ElementClass = "com.didi.hummer2.component.Element";
+    public static final String ElementClass = "com.didi.hummer2.render.Element";
     public static final String ComponentClass = "com.didi.hummer2.component.Component";
 
     public static boolean isHummerObject(String type) {

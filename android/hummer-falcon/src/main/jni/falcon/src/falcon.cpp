@@ -29,33 +29,6 @@ string F4NFunction::toString() const {
     return jsiFunction->toString();
 }
 
-JsiValue *F4NFunction::call(JsiValue *jsiValue) {
-    if (released) {
-        warn("F4NFunction::call() is released params=%s", jsiValue->toString().c_str());
-        return nullptr;
-    }
-
-    JsiValue *result = nullptr;
-    if (!F4NUtil::isMainThread()) {
-        result = jsiFunction->call(jsiValue);
-    } else {
-        context->submitJsTask([&, jsiValue](void *, void *) {
-            JsiValue *result = jsiFunction->call(jsiValue);
-            if (result != nullptr) {
-                delete result;
-            }
-            if (autoRelease) {
-                delete jsiFunction;
-            }
-            return nullptr;
-        });
-    }
-
-    if (autoRelease) {
-        released = true;
-    }
-    return result;
-}
 
 JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
     if (released) {
@@ -67,7 +40,7 @@ JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
     if (!F4NUtil::isMainThread()) {
         result = jsiFunction->call(argc, argv);
     } else {
-        context->submitJsTask([&, argc, argv](void *, void *) {
+        context->submitJsTask([&, argc, argv]() {
             JsiValue *result = jsiFunction->call(argc, argv);
             if (result != nullptr) {
                 delete result;
@@ -75,7 +48,6 @@ JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
             if (autoRelease) {
                 delete jsiFunction;
             }
-            return nullptr;
         });
     }
     if (autoRelease) {

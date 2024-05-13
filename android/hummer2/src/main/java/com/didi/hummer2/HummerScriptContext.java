@@ -16,12 +16,11 @@ import com.didi.hummer2.component.module.hummer.notifycenter.NotifyCenterEvent;
 import com.didi.hummer2.register.HummerObject;
 import com.didi.hummer2.register.HummerObjectManager;
 import com.didi.hummer2.render.HummerViewRender;
+import com.didi.hummer2.render.event.PageStateEvent;
 import com.didi.hummer2.render.utils.EnvUtil;
 import com.didi.hummer2.utils.HMLog;
 import com.didi.hummer2.render.style.HummerLayout;
 import com.didi.hummer2.utils.HummerObjectUtil;
-import com.facebook.soloader.SoLoader;
-import com.getkeepsafe.relinker.ReLinker;
 
 import java.util.Map;
 
@@ -53,15 +52,11 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
     protected NotifyCenterComponent notifyCenterComponent;
 
     protected NavPage navPage;
+    protected HummerPageHandler hummerPageHandler;
 
 
     public HummerScriptContext(Context context, HummerConfig hummerConfig, ViewGroup rootView) {
         super(context);
-
-        SoLoader.loadLibrary("yoga");
-        ReLinker.loadLibrary(context, "hummer2");
-        ReLinker.loadLibrary(context, "falcon");
-
         setHummerConfig(hummerConfig, rootView);
         init();
     }
@@ -113,8 +108,8 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
     /**
      * 分发自身的NotifyCenter消息
      *
-     * @param key
-     * @param event
+     * @param key   事件名称
+     * @param event 事件
      */
     public void triggerSelfEvent(String key, NotifyCenterEvent event) {
         if (notifyCenterComponent != null) {
@@ -169,46 +164,90 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
     }
 
     public void onCreate() {
-        HMLog.d("HummerNative", "HummerContext.onCreate");
+        HMLog.d("HummerNative", "HummerContext.onCreate()");
         viewRender.onCreate();
     }
 
     public void onStart() {
-        HMLog.d("HummerNative", "HummerContext.onStart");
+        HMLog.d("HummerNative", "HummerContext.onStart()");
         viewRender.onStart();
     }
 
 
     public void onResume() {
-        HMLog.d("HummerNative", "HummerContext.onResume");
+        HMLog.d("HummerNative", "HummerContext.onResume()");
         viewRender.onResume();
     }
 
 
     public void onPause() {
-        HMLog.d("HummerNative", "HummerContext.onPause");
+        HMLog.d("HummerNative", "HummerContext.onPause()");
         viewRender.onPause();
     }
 
     public void onStop() {
-        HMLog.d("HummerNative", "HummerContext.onStop");
+        HMLog.d("HummerNative", "HummerContext.onStop()");
         viewRender.onStop();
     }
 
 
+    /**
+     * 销毁页面延后
+     * <p>
+     * 页面销毁的时候不可理解销毁页面，需要等待hummer逻辑执行完毕后回调 {@link #onPageDestroy() }进行页面真实销毁
+     */
     public void onDestroy() {
-        HMLog.d("HummerNative", "HummerContext.onDestroy");
-        viewRender.onDestroy();
-//        releaseInvokerAnalyzer();
-//        NotifyCenter.release(getContext());
-//        NotifyCenter.release(mJsContext);
-//        releaseJSContext();
-//        destroy();
+        HMLog.d("HummerNative", "HummerContext.onDestroy()");
+        dispatchEvent(PageStateEvent.PAGE_ON_DESTROY);
     }
 
+    @Override
+    public void onPageCreate() {
+        HMLog.d("HummerNative", "HummerContext.onPageCreate()");
+        super.onPageCreate();
+    }
 
-    public boolean onBack() {
-        return !viewRender.canGoBack();
+    @Override
+    public void onPageAppear() {
+        HMLog.d("HummerNative", "HummerContext.onPageAppear()");
+        super.onPageAppear();
+    }
+
+    @Override
+    public void onPageDisappear() {
+        HMLog.d("HummerNative", "HummerContext.onPageDisappear()");
+        super.onPageDisappear();
+    }
+
+    /**
+     * 真实的释放全部页面资源
+     * 仅仅让页面销毁等待Hummer逻辑执行完毕后才开始销毁，其他页面事件正常直接处理
+     */
+    @Override
+    public void onPageDestroy() {
+        HMLog.d("HummerNative", "HummerContext.onPageDestroy()");
+        super.onPageDestroy();
+        viewRender.onDestroy();
+        destroy();
+    }
+
+    @Override
+    public void onPageBack() {
+        HMLog.d("HummerNative", "HummerContext.onPageBack()");
+        super.onPageBack();
+        boolean canGoBack = viewRender.canGoBack();
+        if (canGoBack && hummerPageHandler != null) {
+            hummerPageHandler.finishPage();
+        }
+    }
+
+    /**
+     * 返回事件全部直接拦截，等待onBack事件执行完毕后回调{@link  #onPageBack()}，再根据页面参数：canGoBack 决定是否需要关闭页面
+     */
+    public boolean onBackPressed() {
+        HMLog.d("HummerNative", "HummerContext.onBackPressed()");
+        viewRender.onBackPressed();
+        return true;
     }
 
 
@@ -220,6 +259,15 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
     @Override
     public Lifecycle getLifecycle() {
         return null;
+    }
+
+
+    public void setHummerPageHandler(HummerPageHandler hummerPageHandler) {
+        this.hummerPageHandler = hummerPageHandler;
+    }
+
+    public interface HummerPageHandler {
+        void finishPage();
     }
 
 

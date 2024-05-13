@@ -60,6 +60,10 @@ void F4NContextMulti::onStart() {
     contextDelegate_->onStart();
 }
 
+JsiValue *F4NContextMulti::loadScript(string script, string scriptId) {
+    return contextDelegate_->loadScript(script, scriptId);
+}
+
 JsiValue *F4NContextMulti::evaluateJavaScript(string script, string scriptId) {
     return contextDelegate_->evaluateJavaScript(script, scriptId);
 }
@@ -67,6 +71,19 @@ JsiValue *F4NContextMulti::evaluateJavaScript(string script, string scriptId) {
 JsiValue *F4NContextMulti::evaluateBytecode(const uint8_t *byteArray, size_t length, const char *scriptId) {
     return contextDelegate_->evaluateBytecode(byteArray, length, scriptId);
 }
+
+void F4NContextMulti::dispatchEvent(string eventName, size_t size, JsiValue **params) {
+    contextDelegate_->dispatchEvent(eventName, size, params);
+}
+
+void F4NContextMulti::setPageLifeCycle(PageLifeCycle *pageLifeCycle) {
+    contextDelegate_->setPageLifeCycle(pageLifeCycle);
+}
+
+void F4NContextMulti::setContextStateListener(F4NContextStateListener *contextStateListener) {
+    contextDelegate_->setContextStateListener(contextStateListener);
+}
+
 
 void F4NContextMulti::stop() {
     contextDelegate_->stop();
@@ -77,7 +94,7 @@ void F4NContextMulti::onStop() {
 }
 
 void F4NContextMulti::onDestroy() {
-    if (contextDelegate_ != nullptr){
+    if (contextDelegate_ != nullptr) {
         contextDelegate_->onDestroy();
     }
 }
@@ -111,12 +128,40 @@ ExceptionHandler *F4NContextMulti::getExceptionHandler() {
     return contextDelegate_->getExceptionHandler();
 }
 
-void *F4NContextMulti::submitJsTask(function<void *(void *, void *)> task) {
+long F4NContextMulti::submitJsTask(function<void()> task) {
     return contextDelegate_->submitJsTask(task);
 }
 
-void *F4NContextMulti::submitUITask(function<void *(void *, void *)> task) {
+long F4NContextMulti::submitJsTask(function<void()> task, time_t delay) {
+    return contextDelegate_->submitJsTask(task, delay);
+}
+
+long F4NContextMulti::submitJsTask(function<void()> task, time_t delay, time_t interval) {
+    return contextDelegate_->submitJsTask(task, delay, interval);
+}
+
+void F4NContextMulti::cancelJsTask(long id) {
+    contextDelegate_->cancelJsTask(id);
+}
+
+long F4NContextMulti::submitUITask(function<void()> task) {
     return contextDelegate_->submitUITask(task);
+}
+
+void F4NContextMulti::cancelUITask(long id) {
+    contextDelegate_->cancelUITask(id);
+}
+
+void F4NContextMulti::buildElementParams(size_t size, JsiValue **params) {
+    contextDelegate_->buildElementParams(size, params);
+}
+
+void F4NContextMulti::applyElementRender(size_t size, JsiValue **params) {
+    contextDelegate_->applyElementRender(size, params);
+}
+
+F4NRenderInvoker *F4NContextMulti::getComponentFactory() {
+    return contextDelegate_->getComponentFactory();
 }
 
 

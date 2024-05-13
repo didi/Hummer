@@ -12,24 +12,25 @@ F4NTimer::F4NTimer(F4NContext *f4NContext, JsiContext *jsiContext) {
 
 void F4NTimer::onCreate() {
 
-    JsiObjectEx global = jsiContext->getGlobalObject();
+    JsiObjectEx *global = jsiContext->getGlobalObject();
 
-    global.registerFunction(MethodId_setTimeout, "setTimeout", timerFuncWrapper, this);
-    global.registerFunction(MethodId_setInterval, "setInterval", timerFuncWrapper, this);
-    global.registerFunction(MethodId_clearTimeout, "clearTimeout", timerFuncWrapper, this);
-    global.registerFunction(MethodId_clearInterval, "clearInterval", timerFuncWrapper, this);
+    global->registerFunction(MethodId_setTimeout, "setTimeout", timerFuncWrapper, this);
+    global->registerFunction(MethodId_setInterval, "setInterval", timerFuncWrapper, this);
+    global->registerFunction(MethodId_clearTimeout, "clearTimeout", timerFuncWrapper, this);
+    global->registerFunction(MethodId_clearInterval, "clearInterval", timerFuncWrapper, this);
 
-    global.release();
+    global->release();
 }
 
 JsiValue *F4NTimer::setTimeout(size_t size, JsiValue **params) {
     if (size >= 2) {
-        JsiFunction *function = (JsiFunction *) params[0];
-        JsiNumber *timeout = (JsiNumber *) params[1];
-        f4NContext->submitJsTask([&, function, timeout](void *, void *) {
+        auto *function = (JsiFunction *) params[0];
+        auto *timeout = (JsiNumber *) params[1];
+        auto delay = (time_t) timeout->value_;
+        long id = f4NContext->submitJsTask([&, function]() {
             function->call(0, nullptr);
-            return nullptr;
-        });
+        }, delay);
+        return new JsiNumber(id);
     }
 
     return nullptr;
@@ -37,21 +38,36 @@ JsiValue *F4NTimer::setTimeout(size_t size, JsiValue **params) {
 
 JsiValue *F4NTimer::setInterval(size_t size, JsiValue **params) {
     if (size >= 2) {
-        JsiFunction *function = (JsiFunction *) params[0];
-        JsiNumber *interval = (JsiNumber *) params[1];
-        f4NContext->submitJsTask([&, function, interval](void *, void *) {
+        auto *function = (JsiFunction *) params[0];
+        auto *interval = (JsiNumber *) params[1];
+        auto interval_time_t = (time_t) interval->value_;
+        long id = f4NContext->submitJsTask([&, function, interval]() {
             function->call(0, nullptr);
-            return nullptr;
-        });
+
+        }, 0, interval_time_t);
+
+        debug("F4NTimer::setInterval() id=%d",id);
+        return new JsiNumber(id);
     }
     return nullptr;
 }
 
 JsiValue *F4NTimer::clearTimeout(size_t size, JsiValue **params) {
+    if (size > 0) {
+        auto *value = (JsiNumber *) params[0];
+        long id = value->value_;
+        f4NContext->cancelJsTask(id);
+    }
     return nullptr;
 }
 
 JsiValue *F4NTimer::clearInterval(size_t size, JsiValue **params) {
+    if (size > 0) {
+        auto *value = (JsiNumber *) params[0];
+        long id = value->value_;
+        debug("F4NTimer::clearInterval() id=%d",id);
+        f4NContext->cancelJsTask(id);
+    }
     return nullptr;
 }
 

@@ -21,9 +21,16 @@ void F4NDocument::onCreate() {
     __Hummer__->setProperty("document", _document_);
 
     //兼容老版本挂载点，创建一个空的即可
-    JsiObjectEx *global = _jsiContext_->createGlobalObject("Object", "__GLOBAL__");
+    JsiObjectEx *__global__ = _jsiContext_->createGlobalObject("Object", "__GLOBAL__");
+    __global__->release();
+
+    //全局挂载方法
+    JsiObjectEx *global = _jsiContext_->getGlobalObject();
+    global->registerFunction(MethodId_loadScript, "loadScript", docFuncWrapper, this);
+    global->registerFunction(MethodId_loadScriptWithUrl, "loadScriptWithUrl", docFuncWrapper, this);
     global->release();
 
+    //在 “__Hummer__.document” 挂载方法
     _document_->registerFunction(MethodId_createElement, "createElement", docFuncWrapper, this);
     _document_->registerFunction(MethodId_createComponent, "createComponent", docFuncWrapper, this);
     _document_->registerFunction(MethodId_render, "render", docFuncWrapper, this);
@@ -99,6 +106,39 @@ F4NDocument::~F4NDocument() {
 
 }
 
+JsiValue *F4NDocument::loadScript(size_t size, JsiValue **params) {
+    if (size > 0) {
+        JsiValue *jsiValue = (JsiValue *) params[0];
+        if (jsiValue != nullptr && jsiValue->getType() == TYPE_STRING) {
+            JsiString *script = (JsiString *) jsiValue;
+            loadScript(script->value_);
+        }
+    }
+    return nullptr;
+}
+
+JsiValue *F4NDocument::loadScript(string script) {
+    fnContext->loadScript(script, "unknown");
+    return nullptr;
+}
+
+JsiValue *F4NDocument::loadScriptWithUrl(size_t size, JsiValue **params) {
+    if (size >= 2) {
+        JsiValue *jsiValue = (JsiValue *) params[0];
+        JsiFunction *callback = (JsiFunction *) params[1];
+        if (jsiValue != nullptr && jsiValue->getType() == TYPE_STRING) {
+            JsiString *script = (JsiString *) jsiValue;
+            loadScriptWithUrl(script->value_, callback);
+        }
+    }
+    return nullptr;
+}
+
+
+JsiValue *F4NDocument::loadScriptWithUrl(string url, JsiFunction *jsiFunction) {
+    componentFactory->loadScriptWithUrl(url, new F4NFunction(fnContext, jsiFunction));
+    return nullptr;
+}
 
 JsiValue *docFuncWrapper(JsiObjectEx *value, long methodId, const char *methodName, size_t size, JsiValue **params, void *data) {
     auto *bridge = static_cast<F4NDocument *>(data);
@@ -109,6 +149,10 @@ JsiValue *docFuncWrapper(JsiObjectEx *value, long methodId, const char *methodNa
             return bridge->createComponent(size, params);
         case F4NDocument::MethodId_render:
             return bridge->render(size, params);
+        case F4NDocument::MethodId_loadScript:
+            return bridge->loadScript(size, params);
+        case F4NDocument::MethodId_loadScriptWithUrl:
+            return bridge->loadScriptWithUrl(size, params);
     }
     return nullptr;
 }

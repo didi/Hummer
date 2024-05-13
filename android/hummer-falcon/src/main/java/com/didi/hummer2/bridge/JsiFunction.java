@@ -24,8 +24,9 @@ public class JsiFunction extends JsiValue {
 
     public JsiValue call(JsiValue... args) {
         int size = args.length;
-        long[] params = new long[size];
+        long[] params = null;
         if (size > 0) {
+            params = new long[size];
             for (int i = 0; i < size; i++) {
                 params[i] = args[i].getIdentify();
             }

@@ -11,7 +11,6 @@
 F4NComponent::F4NComponent(long objId, JsiContext *context, F4NRenderInvoker *renderInvoker) : F4NObject(context) {
     this->odjId = objId;
     this->renderInvoker = renderInvoker;
-    this->jsiComponent = new JsiComponent("", odjId);
 
     JsiObjectEx *id = jsiContext->createJsNumber(odjId);
     object->setProperty("__objId__", id);
@@ -22,7 +21,6 @@ F4NComponent::F4NComponent(long objId, JsiContext *context, F4NRenderInvoker *re
 
 void F4NComponent::onCreate(string tag, JsiValue *props) {
     F4NObject::onCreate(tag, props);
-    jsiComponent->name_ = tag;
     if (tag == "Dialog") {
         main = true;
     }
@@ -151,9 +149,8 @@ JsiValue *F4NComponent::invoke(string methodName, size_t size, JsiValue **params
     if (main) {
         context->applyElementRender(size, params);
         F4NFunctionCall *functionCall = new F4NFunctionCall(nullptr, MethodId_invoke, methodName, size, params);
-        context->submitUITask([&, functionCall](void *, void *) {
+        context->submitUITask([&, functionCall]() {
             invoke(functionCall);
-            return nullptr;
         });
     } else {
         JsiValue *result = renderInvoker->invoke(FACTORY_TYPE_INVOKE,
@@ -190,7 +187,6 @@ void F4NComponent::release() {
 F4NComponent::~F4NComponent() {
     renderInvoker = nullptr;
 
-    delete jsiComponent;
     delete eventTarget;
 }
 

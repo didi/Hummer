@@ -128,10 +128,10 @@ bool JsiContext::deleteGlobalProperty(const char *propertyName) {
     return result;
 }
 
-JsiObjectEx JsiContext::getGlobalObject() {
+JsiObjectEx *JsiContext::getGlobalObject() {
     NAPIValue global;
     napi_get_global(env_, &global);
-    return JsiObjectEx(env_, global);
+    return new JsiObjectEx(env_, global);
 }
 
 void JsiContext::stop() {
