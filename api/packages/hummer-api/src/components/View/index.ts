@@ -1,9 +1,21 @@
 import { LifeCycleElement } from "../../LifeCycleElement"
 import { FlexStyle } from "../../Element"
 
-interface ViewStyle extends FlexStyle {
+
+/**
+ * 除支持 通用布局样式 和 通用视图样式 以外，还支持以下样式
+ */
+export interface ViewStyle extends FlexStyle {
+
+    /**
+     * 子控件超出父容器部分是否显示
+     * 默认:'visible'	
+     * 
+     * overflow: 'hidden' | 'visible'
+     */
     overflow?: string
 }
+
 
 export class View extends LifeCycleElement {
 
@@ -23,16 +35,17 @@ export class View extends LifeCycleElement {
         });
     }
 
-        
+
     //扩展样式属性：有代理时通过代理处理
     public set style(value: ViewStyle | Record<string, any>) {
         this.setStyle(value, false);
     }
 
     /**
-     * 扩展属性
-     * 可选值:overflow: 'hidden' | 'visible'
-     * 默认值:'visible'
+     * 扩展属性:子控件超出父容器部分是否显示
+     * 默认:'visible'
+     * 
+     * 可选:overflow: 'hidden' | 'visible'
      */
     set overflow(value: string) {
         this._setAttribute("overflow", value);

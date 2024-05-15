@@ -1,20 +1,43 @@
 import { LifeCycleElement } from "../../LifeCycleElement"
 import { View } from "../View"
-import { HMEvent } from "../../HummerElement"
+import { HMEvent, ViewEvent } from "../../HummerElement"
 
 
-enum ScrollEventState {
-    normal = 0, // normal
+// state: 0 // normal（初始禁止状态）
+// state: 1 // began（开始滚动）
+// state: 2 // scroll（滚动中）
+// state: 3 // ended（停止滚动）
+// state: 4 // scroll_up（滚动过程中，手指抬起）
+
+export enum ScrollEventState {
+    normal = 0,
     beganDrag,
     scroll,
     stop,
     endDrag,
 }
 
-interface ScrollEvent extends HMEvent<ScrollEventState> {
+/**
+ * 滚动事件
+ * 
+ * eventName:'scroll'
+ */
+export interface ScrollEvent extends HMEvent<ScrollEventState> {
+    /**
+     * x方向实际滚动偏移量（单位：dp或pt）	
+     */
     offsetX: number
+    /**
+     * y方向实际滚动偏移量（单位：dp或pt）	
+     */
     offsetY: number
+    /**
+     * x方向滚动与上一个事件的差值（单位：dp或pt）	
+     */
     dx: number
+    /**
+     * y方向滚动与上一个事件的差值（单位：dp或pt）	
+     */
     dy: number
 }
 
@@ -96,7 +119,7 @@ export class Scroller extends LifeCycleElement {
         return undefined;
     }
 
-    set refreshView(value: View|undefined) {
+    set refreshView(value: View | undefined) {
         this._setAttribute("refreshView", value?.getThis());
     }
 
@@ -111,7 +134,7 @@ export class Scroller extends LifeCycleElement {
         return undefined;
     }
 
-    set loadMoreView(value: View|undefined) {
+    set loadMoreView(value: View | undefined) {
         this._setAttribute("loadMoreView", value?.getThis());
     }
 
@@ -234,12 +257,13 @@ export class Scroller extends LifeCycleElement {
 
 
     /**
+     * 添加事件监听
      * 
      * @param eventName 
      * @param eventListener   滚动事件:scroll @see ScrollEvent
      * @param useCapture 
      */
-    public override addEventListener(eventName: string, eventListener: (event: ScrollEvent) => void | Function | EventListener, useCapture?: boolean | undefined): void {
+    public override addEventListener(eventName: string, eventListener: (event: ScrollEvent | ViewEvent | any) => void | Function | EventListener, useCapture?: boolean | undefined): void {
         super.addEventListener(eventName, eventListener, useCapture);
     }
 

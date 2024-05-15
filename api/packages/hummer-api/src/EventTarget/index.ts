@@ -62,6 +62,7 @@ export class EventTarget extends HMObject {
 
 
     /**
+     * 添加事件监听
      * 
      * @param eventName 
      * @param eventListener  @see Event 
@@ -84,6 +85,13 @@ export class EventTarget extends HMObject {
     }
 
 
+    /**
+     * 移除事件监听
+     * 
+     * @param eventName 
+     * @param eventListener 
+     * @param useCapture 
+     */
     public removeEventListener(eventName: string, eventListener?: EventListener | Function, useCapture?: boolean) {
         var listeners = this.envents.get(eventName)
         if (listeners != undefined) {

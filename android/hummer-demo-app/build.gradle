@@ -5,7 +5,7 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.didi.hummer2.demo"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"

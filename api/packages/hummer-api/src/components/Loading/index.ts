@@ -1,6 +1,9 @@
 import { HummerElement } from "../../HummerElement"
 
 
+/**
+ * TODO 废弃组件
+ */
 export class Loading extends HummerElement {
 
 

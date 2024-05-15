@@ -37,6 +37,11 @@ dependencies {
 
     api 'com.google.code.gson:gson:2.8.5'
     // Yoga
+//    api ('com.facebook.yoga.android:yoga-layout:1.19.0') {
+//        exclude(group: 'com.facebook.yoga', module: 'proguard-annotations')
+//    }
+
+    api ('com.facebook.yoga:yoga:3.0.4')
     api ('com.facebook.yoga.android:yoga-layout:1.19.0') {
         exclude(group: 'com.facebook.yoga', module: 'proguard-annotations')
     }

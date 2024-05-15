@@ -1,12 +1,39 @@
 import { HummerElement } from "../../HummerElement"
 import { FlexStyle } from "../../Element"
 
-interface ButtonStyle extends FlexStyle {
+
+export interface ButtonStyle extends FlexStyle {
+    /**
+     * 文本颜色	
+     * 默认:系统默认
+     * 
+     * color: '#000000'
+     */
     color?: string
+    /**
+     * 字体	
+     * 默认:系统默认
+     * 
+     * fontFamily: 'Times New Roman'
+     */
     fontFamily?: string
+    /**
+     * 字体大小	
+     * 默认:16
+     * 
+     * fontSize: 16 | '48px'
+     */
     fontSize?: number | string
+    /**
+     * 文本对齐方式	
+     * 默认:'left'
+     * 
+     * textAlign:'left' | 'center' | 'right'
+     */
     textAlign?: string
 }
+
+
 export class Button extends HummerElement {
 
 

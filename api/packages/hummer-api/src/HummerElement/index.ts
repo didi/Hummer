@@ -1,3 +1,4 @@
+import { EventListener } from "src/EventTarget";
 import { FlexStyle, Element } from "../Element"
 import { HummerGlobalProxy } from "./HummerGlobalProxy"
 
@@ -7,7 +8,9 @@ import { HummerGlobalProxy } from "./HummerGlobalProxy"
  */
 export interface HMEvent<T> {
     /**
-     * 	事件类 type: 'input'
+     * 	事件类 
+     * 
+     * eg: type: 'input'
      */
     type?: string,
 
@@ -27,6 +30,165 @@ export interface HMEvent<T> {
     timestamp?: number
 }
 
+
+/**
+ * 触摸事件
+ * 
+ * eventName:'touch'
+ * 
+ */
+export interface TouchEvent extends HMEvent<number> {
+
+    /**
+     * 手势状态
+     * 
+     * state: 0 // normal
+     * state: 1 // began
+     * state: 2 // changed
+     * state: 3 // ended
+     * state: 4 // cancelled   
+     */
+    state: number,
+
+    /**
+     * 触摸位置（单位：dp或pt）	
+     * 
+     * position: {x: 111.1, y: 222.2}
+     */
+    position?: object
+}
+
+/**
+ * 点击事件
+ * 
+ * eventName:'tap'
+ */
+export interface TapEvent extends HMEvent<number> {
+
+    /**
+    * 手势状态 
+    * 
+    * state: 0 // normal
+    * state: 1 // began
+    * state: 2 // changed
+    * state: 3 // ended
+    * state: 4 // cancelled   
+    */
+    state: number,
+    /**
+    * 触摸位置（单位：dp或pt）	
+    * 
+    * position: {x: 111.1, y: 222.2}
+    */
+    position?: object
+
+}
+
+/**
+ * 长按事件
+ * 
+ * eventName:'longPress'
+ */
+export interface LongPressEvent extends HMEvent<number> {
+
+    /**
+    * 手势状态 
+    * 
+    * state: 0 // normal
+    * state: 1 // began
+    * state: 2 // changed
+    * state: 3 // ended
+    * state: 4 // cancelled   
+    */
+    state: number,
+    /**
+    * 触摸位置（单位：dp或pt）	
+    * 
+    * position: {x: 111.1, y: 222.2}
+    */
+    position?: object
+
+}
+
+/**
+ * 拖动事件
+ * 
+ * eventName:'pan'
+ */
+export interface PanEvent extends HMEvent<number> {
+
+    /**
+    * 手势状态 
+    * 
+    * state: 0 // normal
+    * state: 1 // began
+    * state: 2 // changed
+    * state: 3 // ended
+    * state: 4 // cancelled   
+    */
+    state: number,
+    /**
+    * 移动的偏移位置（单位：dp或pt）	
+    * 
+    * translation: {deltaX: 10, deltaY: 20.5}
+    */
+    translation?: object
+}
+
+/**
+ * 扫动事件
+ * 
+ * eventName:'swipe'
+ */
+export interface SwipeEvent extends HMEvent<number> {
+
+    /**
+     * 手势状态 
+     * 
+     * state: 0 // normal
+     * state: 1 // began
+     * state: 2 // changed
+     * state: 3 // ended
+     * state: 4 // cancelled   
+     */
+    state: number,
+    /**
+     * 滑动方向	(1:right, 2:left, 4:up, 8:down)	
+     * 
+     * direction: 1
+     * 
+     */
+    direction?: number
+}
+
+/**
+ * 缩放事件
+ * 
+ * eventName:'pinch'
+ */
+export interface PinchEvent extends HMEvent<number> {
+    /**
+     * 手势状态 
+     * 
+     * state: 0 // normal
+     * state: 1 // began
+     * state: 2 // changed
+     * state: 3 // ended
+     * state: 4 // cancelled   
+     */
+    state: number,
+
+    /**
+     * 拉伸的比例		
+     * 
+     * scale: 1.5
+     */
+    scale?: number
+
+}
+
+
+export type ViewEvent = TouchEvent | TapEvent | LongPressEvent | PanEvent | SwipeEvent | PinchEvent;
 
 
 let __view_id = 0;
@@ -239,5 +401,16 @@ export class HummerElement extends Element {
             return this.globalProxy.onHandleReceiveEvent(this, event);
         }
         return super.onHandleReceiveEvent(eventName, event);
+    }
+
+
+
+
+    public addEventListener(eventName: string,
+        eventListener: (event: TouchEvent | TapEvent | LongPressEvent | PanEvent | SwipeEvent | PinchEvent | any) => void
+            | Function
+            | EventListener,
+        useCapture?: boolean | undefined): void {
+        super.addEventListener(eventName, eventListener, useCapture);
     }
 }

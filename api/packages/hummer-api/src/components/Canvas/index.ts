@@ -3,10 +3,10 @@ import { HummerElement } from "../../HummerElement"
 
 export class Canvas extends HummerElement {
 
- 
 
 
     /**
+     * Canvas
      * 
      * @param id
      * @param name 
@@ -20,7 +20,7 @@ export class Canvas extends HummerElement {
      * 设置stroke的线粗细
      * @param widthValue 粗细值，支持px，hm 单位， 如果不写单位就是dp
      */
-    lineWidth(widthValue: number){
+    lineWidth(widthValue: number) {
         this.call("lineWidth", widthValue);
     }
 
@@ -28,7 +28,7 @@ export class Canvas extends HummerElement {
      * 设置stroke的颜色
      * @param colorHex 颜色16进制
      */
-    lineColor(colorHex: string){
+    lineColor(colorHex: string) {
         this.call("lineColor", colorHex);
     }
 
@@ -36,7 +36,7 @@ export class Canvas extends HummerElement {
      * 设置线头样式
      * @param value 0:LineCapButt, ， 1:LineCapRound   2:LineCapSquare
      */
-    lineCap(value: number){
+    lineCap(value: number) {
         this.call("lineCap", value);
     }
 
@@ -45,7 +45,7 @@ export class Canvas extends HummerElement {
      * 设置折线折点样式
      * @param value 0:LineJoinMiter, ， 1:LineJoinRound  2:LineJoinBevel
      */
-    lineJoin(value: number){
+    lineJoin(value: number) {
         this.call("lineJoin", value);
     }
 
@@ -56,7 +56,7 @@ export class Canvas extends HummerElement {
      * @param toX 终点的x值，支持px，hm 单位， 如果不写单位就是dp
      * @param toY 终点的y值，支持px，hm 单位， 如果不写单位就是dp
      */
-    drawLine(fraomX: number, fromY: number, toX: number, toY: number){
+    drawLine(fraomX: number, fromY: number, toX: number, toY: number) {
         this.call("drawLine", fraomX, fromY, toX, toY);
     }
 
@@ -67,7 +67,7 @@ export class Canvas extends HummerElement {
      * @param w 矩形宽，支持px，hm 单位， 如果不写单位就是dp
      * @param h 矩形高，支持px，hm 单位， 如果不写单位就是dp
      */
-    strokeRect(x: number, y: number, w: number, h: number){
+    strokeRect(x: number, y: number, w: number, h: number) {
         this.call("strokeRect", x, y, w, h);
     }
 
@@ -78,7 +78,7 @@ export class Canvas extends HummerElement {
      * @param trailX 椭圆所在矩形右下角坐标点的x值，支持px，hm 单位， 如果不写单位就是dp
      * @param trailY 椭圆所在矩形右下角坐标点的y值，支持px，hm 单位， 如果不写单位就是dp
      */
-    strokeEllipse(x: number, y: number, trailX: number, trailY: number){
+    strokeEllipse(x: number, y: number, trailX: number, trailY: number) {
         this.call("strokeEllipse", x, y, trailX, trailY);
     }
 
@@ -89,7 +89,7 @@ export class Canvas extends HummerElement {
      * @param y 圆心坐标点的y值，支持px，hm 单位， 如果不写单位就是dp
      * @param raduis 半径 ， 支持px，hm 单位， 如果不写单位就是dp
      */
-    strokeCircle(x: number, y: number, radius: number){
+    strokeCircle(x: number, y: number, radius: number) {
         this.call("strokeCircle", x, y, radius);
     }
 
@@ -102,7 +102,7 @@ export class Canvas extends HummerElement {
      * @param endAngle 结束弧度 ，
      * @param clockwise ture 顺时针 ， false 逆时针
      */
-    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, clockwise: boolean){
+    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, clockwise: boolean) {
         this.call("arc", x, y, radius, startAngle, endAngle, clockwise);
     }
 
@@ -113,7 +113,7 @@ export class Canvas extends HummerElement {
      * 设置填充颜色
      * @param colorHex 颜色16进制
      */
-    fillColor(colorHex: string){
+    fillColor(colorHex: string) {
         this.call("fillColor", colorHex);
     }
 
@@ -126,7 +126,7 @@ export class Canvas extends HummerElement {
      * @param w 矩形宽，支持px，hm 单位， 如果不写单位就是dp
      * @param h 矩形高，支持px，hm 单位， 如果不写单位就是dp
      */
-    fillRect(x: number, y: number, w: number, h: number){
+    fillRect(x: number, y: number, w: number, h: number) {
         this.call("fillRect", x, y, w, h);
     }
 
@@ -153,7 +153,7 @@ export class Canvas extends HummerElement {
      * @param y 圆心坐标点的y值，支持px，hm 单位， 如果不写单位就是dp
      * @param raduis 半径 ， 支持px，hm 单位， 如果不写单位就是dp
      */
-    fillCircle(x: number, y: number, radius: number){
+    fillCircle(x: number, y: number, radius: number) {
         this.call("fillCircle", x, y, radius);
     }
 
@@ -163,7 +163,7 @@ export class Canvas extends HummerElement {
      * 设置绘制文本字号
      * @param size 字号大小
      */
-    fontSize(size: number){
+    fontSize(size: number) {
         this.call("fontSize", size);
     }
 
@@ -172,7 +172,7 @@ export class Canvas extends HummerElement {
      * 设置绘制文本字色
      * @param colorHex 字体颜色 16进制色号
      */
-    textColor(colorHex: string){
+    textColor(colorHex: string) {
         this.call("textColor", colorHex);
     }
 
@@ -186,7 +186,7 @@ export class Canvas extends HummerElement {
      * @param maxWidth 文本换行的最大宽度, 0 代表不换行,支持px，hm 单位， 如果不写单位就是dp
      */
     fillText(text: string, x: number, y: number, maxWidth: number) {
-        this.call("fillText",text, x, y, maxWidth);
+        this.call("fillText", text, x, y, maxWidth);
     }
 
 
@@ -201,7 +201,7 @@ export class Canvas extends HummerElement {
      * @param height 图片高 ,支持px，hm 单位， 如果不写单位就是dp
      */
     drawImage(src: string, x: number, y: number, width: number, height: number) {
-        this.call("drawImage",src, x, y, width, height);
+        this.call("drawImage", src, x, y, width, height);
     }
 
 }

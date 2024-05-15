@@ -1,21 +1,45 @@
 import { HummerElement } from "../../HummerElement"
 import { ImageAttribute } from "./ImageAttribute"
-import { HMEvent } from "../../HummerElement"
+import { HMEvent, ViewEvent } from "../../HummerElement"
 import { FlexStyle } from "../../Element"
 
-interface ImageStyle extends FlexStyle {
+
+export interface ImageStyle extends FlexStyle {
     resize?: string
 }
 
 
-interface ImageEvent extends HMEvent<number> {
-    srcType:number;
+/**
+ * eventName:'__onImageLoad__'
+ */
+export interface ImageLoadEvent extends HMEvent<number> {
+
+
+    /**
+     * 加载状态
+     * 
+     * state:0:成功，-1:失败，-2:取消.
+     */
+    state: number;
+
+    // 不需要支持所有路径，只需要支持：
+    
+    // 1、编译产物相对路径 （工程资源）
+    // 2、APP图片资源名称（id）---()
+    // 3、APP文件资源路径（assets）
+    // 4、APP存储文件，绝对路径（访问截图等）
+    // 5、http网络资源（线上资源）
+    // 6、base64（直接数据）
+    /**
+     * 资源类型（所加载的资源是:）
+     */
+    srcType: number;
 }
 
 export class Image extends HummerElement {
 
 
-    private _onLoad?: ( (srcType: number, isSuccess: boolean) => void ) | Function | undefined;
+    private _onLoad?: ((srcType: number, isSuccess: boolean) => void) | Function | undefined;
 
     /**
     * 
@@ -30,7 +54,7 @@ export class Image extends HummerElement {
             gifRepeatCount: 0
         });
 
-        this.addEventListener("__onImageLoad__", (event: ImageEvent) => {
+        this.addEventListener("__onImageLoad__", (event: ImageLoadEvent) => {
             this.onImageOnLoad(event);
         })
     }
@@ -101,11 +125,11 @@ export class Image extends HummerElement {
     /** 
     *资源加载结果
     */
-    get onLoad(): ( (srcType: number, isSuccess: boolean) => void ) | Function | undefined {
+    get onLoad(): ((srcType: number, isSuccess: boolean) => void) | Function | undefined {
         return this._onLoad;
     }
 
-    set onLoad(value: ( (srcType: number, isSuccess: boolean) => void ) | Function| undefined ) {
+    set onLoad(value: ((srcType: number, isSuccess: boolean) => void) | Function | undefined) {
         this._onLoad = value;
     }
 
@@ -115,10 +139,10 @@ export class Image extends HummerElement {
      * 
      * @param event @see 
      */
-    protected onImageOnLoad(event: ImageEvent) {
+    protected onImageOnLoad(event: ImageLoadEvent) {
         if (this._onLoad) {
             let isSuccess = false
-            if(event.state === 0 ){
+            if (event.state === 0) {
                 isSuccess = true
             }
 
@@ -132,7 +156,7 @@ export class Image extends HummerElement {
      * @param src 资源
      * @param listener 结果监听
      */
-    load(source: string | ImageAttribute, callback: ( (srcType: number, isSuccess: boolean) => void ) | Function | undefined) {
+    public load(source: string | ImageAttribute, callback: ((srcType: number, isSuccess: boolean) => void) | Function | undefined) {
         if (typeof source === 'string') {
             this._setAttribute("src", source);
             this._removeAttribute("gifSrc");
@@ -179,6 +203,19 @@ export class Image extends HummerElement {
         }
         super.setAttribute(key, value);
     }
+
+    /**
+    * 添加事件监听
+    * 
+    * @param eventName 
+    * @param eventListener   新增事件:input @see ImageLoadEvent
+    * @param useCapture 
+    */
+    public override addEventListener(eventName: string, eventListener: (event: ImageLoadEvent | ViewEvent | any) => void | Function | EventListener, useCapture?: boolean | undefined): void {
+        super.addEventListener(eventName, eventListener, useCapture);
+    }
+
+
 
 }
 

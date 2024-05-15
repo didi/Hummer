@@ -1,17 +1,38 @@
 import { HummerElement } from "../../HummerElement"
 import { FlexStyle } from "../../Element"
 
-interface TextAreaStyle extends FlexStyle {
+
+
+
+
+export interface TextAreaStyle extends FlexStyle {
+
+    // type	string	'default'	键盘可输入字符类型	type: 'default' | 'number' | 'tel' | 'email' | 'password'
+    // color	string	系统默认	输入文本颜色	color: '#000000'
+    // placeholderColor	string	系统默认	占位提示文本颜色	placeholderColor: '#999999'
+    // cursorColor	string	系统默认	光标颜色	cursorColor: '#007AFF'
+
     type?: string
-    color?:	string
-    placeholderColor?:	string
-    cursorColor?:	string
-    textAlign?:	string
-    fontFamily?:	string
-    fontSize?:	number|string
-    maxLength?:	number
-    returnKeyType?:	string
-    textLineClamp?:	number
+    color?: string
+    placeholderColor?: string
+    cursorColor?: string
+
+
+    // textAlign	string	'left'	文本对齐方式	textAlign: 'left' | 'center' | 'right'
+    // fontFamily	string	系统默认	字体	fontFamily: "New Times Roma"
+    // fontSize	number|string	16	字体大小	fontSize: 16 | '48px'
+
+    textAlign?: string
+    fontFamily?: string
+    fontSize?: number | string
+
+    // maxLength	number	0（无限制）	最大输入长度	maxLength: 10
+    // returnKeyType	string	'done'	键盘输入结束按钮类型	returnKeyType: 'done' | 'go' | 'next' | 'search' | 'send'
+    // textLineClamp	number	0（无限制）	最大输入行数	textLineClamp: 1 // 单行输入
+
+    maxLength?: number
+    returnKeyType?: string
+    textLineClamp?: number
 }
 
 
@@ -42,7 +63,7 @@ export class TextArea extends HummerElement {
     }
 
 
-    
+
     /**
      * 默认输入内容
      */

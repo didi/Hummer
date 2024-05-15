@@ -5,9 +5,9 @@ import { HummerElement } from "../HummerElement"
 
 
 /**
- * LifeCycleManager
+ * LifeCycleElement
  * 
- * 1、提供生命周期能力
+ * 提供页面生命周期能力,仅在作为根节点有效
  */
 export class LifeCycleElement extends HummerElement {
 
@@ -52,7 +52,7 @@ export class LifeCycleElement extends HummerElement {
      *  native 不提供onReady， 
      *  需手动加一个onReady生命周期
      */
-    public onCreate(e?: undefined|Function|any) {
+    public onCreate(e?: undefined | Function | any) {
 
     }
 

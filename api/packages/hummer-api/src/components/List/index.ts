@@ -1,22 +1,24 @@
 import { HummerElement } from "../../HummerElement"
 import { View } from '../View'
-import { HMEvent } from "../../HummerElement"
+import { HMEvent, ViewEvent } from "../../HummerElement"
 import { FlexStyle } from "../../Element"
 
-interface ListStyle extends FlexStyle {
+
+// TODO 后续待修改
+export interface ListStyle extends FlexStyle {
     mode?: string
-    scrollDirection?:	string
-    column?:	number
-    lineSpacing?:	number|string
-    itemSpacing?:	number|string
-    leftSpacing?:	number|string
-    rightSpacing?:	number|string
-    topSpacing?:	number|string
-    bottomSpacing?:	number|string
+    scrollDirection?: string
+    column?: number
+    lineSpacing?: number | string
+    itemSpacing?: number | string
+    leftSpacing?: number | string
+    rightSpacing?: number | string
+    topSpacing?: number | string
+    bottomSpacing?: number | string
 }
 
-
-enum ListEventState {
+// TODO 后续待修改
+export enum ListEventState {
     normal = 0, // normal
     beganDrag,
     scroll,
@@ -24,8 +26,9 @@ enum ListEventState {
     endDrag,
 }
 
-// todo后续待修改
-interface ListEvent extends HMEvent<ListEventState> {
+
+// TODO 后续待修改
+export interface ListEvent extends HMEvent<ListEventState> {
     offsetX: number
     offsetY: number
     dx: number
@@ -34,15 +37,15 @@ interface ListEvent extends HMEvent<ListEventState> {
 
 export class List extends HummerElement {
 
-    
+
     private _onRegister?: Function = undefined;
     private _onCreate?: Function = undefined;
     private _onUpdate?: Function = undefined; // todo 这三个后续需根据实际类型修改
 
     private _onRefresh?: Function = undefined;
     private _onLoadMore?: Function = undefined;
-    
-    
+
+
     /**
      * 
      * @param id
@@ -68,7 +71,7 @@ export class List extends HummerElement {
         })
 
 
-        
+
     }
 
 
@@ -83,7 +86,7 @@ export class List extends HummerElement {
      * 
      */
     protected onDispatch(type: string, event: ListEvent, cell?: View) {
-        switch(type) {
+        switch (type) {
             case "onRegister":
                 if (this._onRegister) {
                     this._onRegister(event);
@@ -111,8 +114,8 @@ export class List extends HummerElement {
                 break
             default:
                 break
-        }       
-    
+        }
+
     }
 
 
@@ -278,6 +281,16 @@ export class List extends HummerElement {
     }
 
 
+    /**
+     * 添加事件监听
+     * 
+     * @param eventName 
+     * @param eventListener   新增事件:input @see ListEvent
+     * @param useCapture 
+     */
+    public override addEventListener(eventName: string, eventListener: (event: ListEvent | ViewEvent | any) => void | Function | EventListener, useCapture?: boolean | undefined): void {
+        super.addEventListener(eventName, eventListener, useCapture);
+    }
 
 
 

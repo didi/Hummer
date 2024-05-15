@@ -4,7 +4,7 @@ import { FlexStyle } from "../../Element"
 
 
 
-interface ViewPagerStyle extends FlexStyle {
+export interface ViewPagerStyle extends FlexStyle {
     /**
      * 整个ViewPager的圆角半径
      * 默认值：0
