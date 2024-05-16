@@ -1,4 +1,4 @@
-import { Hummer, View } from '@hummer/hummer-front'
+import { Hummer, View } from '@didi/hummer-api'
 import { ComponentPage } from '../../common/CommonPage'
 import { Color } from '../../common/CommonColor'
 

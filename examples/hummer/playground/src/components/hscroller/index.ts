@@ -1,4 +1,4 @@
-import { Hummer, View, Text, HorizontalScroller } from '@hummer/hummer-front'
+import { Hummer, View, Text, HorizontalScroller } from '@didi/hummer-api'
 import { NormalContentView, OperationLayout } from '../../common/CommonLayout';
 import { ComponentPage } from '../../common/CommonPage'
 import { Color } from '../../common/CommonColor'

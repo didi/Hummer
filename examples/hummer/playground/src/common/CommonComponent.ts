@@ -1,4 +1,4 @@
-import { View, Text, Image, Navigator, Scroller, PanEvent } from "@hummer/hummer-front"
+import { View, Text, Image, Navigator, Scroller, PanEvent } from "@didi/hummer-api"
 import { Color } from './CommonColor'
 import { Style } from './CommonStyle'
 import { Img } from './CommonResource'

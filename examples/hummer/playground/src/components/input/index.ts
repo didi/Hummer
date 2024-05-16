@@ -1,4 +1,4 @@
-import { Hummer, View, Input } from '@hummer/hummer-front'
+import { Hummer, View, Input } from '@didi/hummer-api'
 import { InputPage } from './InputPage'
 import { Color } from '../../common/CommonColor'
 

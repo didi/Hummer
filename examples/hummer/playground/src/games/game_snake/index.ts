@@ -1,4 +1,4 @@
-import { Hummer, View, Button } from '@hummer/hummer-front'
+import { Hummer, View, Button } from '@didi/hummer-api'
 import { Style } from '../../common/CommonStyle'
 import { Color } from '../../common/CommonColor'
 import { GamePanel } from './GamePanel';

@@ -1,4 +1,4 @@
-import { Hummer, View, Button, Toast } from '@hummer/hummer-front'
+import { Hummer, View, Button, Toast } from '@didi/hummer-api'
 import { ComponentPage } from '../../common/CommonPage'
 //定义按键
 var KEY_LEFT = 2;
@@ -353,6 +353,7 @@ function printMapState() {
 }
 
 function loop() {
+    console.info("-------loop---------");
     if (canFall(currR, currC)) {
         easeBlock();
         ++currR;

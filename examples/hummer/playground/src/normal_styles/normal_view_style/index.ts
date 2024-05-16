@@ -1,4 +1,4 @@
-import { Hummer, View, Text } from '@hummer/hummer-front'
+import { Hummer, View, Text } from '@didi/hummer-api'
 import { Page, ScrollContentView, GroupTitle, GroupContent } from '../../common/CommonLayout'
 import { Color } from '../../common/CommonColor'
 import { Style } from '../../common/CommonStyle'

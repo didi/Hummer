@@ -8,5 +8,9 @@ module.exports = {
       filename: "[name].js"
     },
     plugins: []
-  }
+  },
+  devTool: {
+    devServerPort: 8030, // 静态资源服务端口
+    webServerPort: 8031  // web模拟器服务端口
+  },
 }

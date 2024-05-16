@@ -1,4 +1,4 @@
-import { Hummer, View, Text, EventListener } from '@hummer/hummer-front'
+import { Hummer, View, Text, EventListener } from '@didi/hummer-api'
 import { Page, GroupTitle, GroupContent, OperationLayout } from '../../common/CommonLayout';
 import { ComponentPage } from '../../common/CommonPage'
 import { Color } from '../../common/CommonColor';

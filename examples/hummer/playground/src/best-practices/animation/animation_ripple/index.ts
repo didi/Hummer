@@ -1,4 +1,4 @@
-import { Hummer, View, KeyframeAnimation } from '@hummer/hummer-front'
+import { Hummer, View, KeyframeAnimation } from '@didi/hummer-api'
 import { Style } from '../../../common/CommonStyle'
 import { Color } from '../../../common/CommonColor'
 import { ComponentPage } from '../../../common/CommonPage'

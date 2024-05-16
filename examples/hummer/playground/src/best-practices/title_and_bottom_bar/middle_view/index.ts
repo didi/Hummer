@@ -1,4 +1,4 @@
-import { Hummer, View, Text, Image, Navigator, Toast } from '@hummer/hummer-front'
+import { Hummer, View, Text, Image, Navigator, Toast } from '@didi/hummer-api'
 import { Style } from '../../../common/CommonStyle'
 import { Color } from '../../../common/CommonColor'
 import { Img } from '../../../common/CommonResource'

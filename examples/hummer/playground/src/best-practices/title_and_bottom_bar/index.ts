@@ -1,4 +1,4 @@
-import { Hummer, View, Scroller } from '@hummer/hummer-front'
+import { Hummer, View, Scroller } from '@didi/hummer-api'
 import { MainListItem } from '../../common/CommonLayout'
 import { ComponentPage } from '../../common/CommonPage'
 import { Style } from '../../common/CommonStyle'

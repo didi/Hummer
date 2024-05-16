@@ -1,4 +1,4 @@
-import { Hummer, View, Text, Button, Toast, BasicAnimation, KeyframeAnimation } from '@hummer/hummer-front'
+import { Hummer, View, Text, Button, Toast, BasicAnimation, KeyframeAnimation } from '@didi/hummer-api'
 import { ComponentPage } from '../../common/CommonPage'
 var board = new Array();
 var added = new Array();

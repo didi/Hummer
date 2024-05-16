@@ -1,4 +1,4 @@
-import { View, Toast } from '@hummer/hummer-front'
+import { View, Toast } from '@didi/hummer-api'
 import { Color } from '../../common/CommonColor';
 
 var CELL_SIZE = 16;

@@ -1,4 +1,4 @@
-import { ViewStyle, TextStyle } from "@hummer/hummer-front"
+import { ViewStyle, TextStyle } from "@didi/hummer-api"
 import { Color } from "./CommonColor"
 
 const FullParentStyle: ViewStyle = {

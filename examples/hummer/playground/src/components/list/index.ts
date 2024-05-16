@@ -1,4 +1,4 @@
-import { Hummer, View, List, ScrollEvent } from '@hummer/hummer-front'
+import { Hummer, View, List, ScrollEvent } from '@didi/hummer-api'
 import { NormalContentView, ListTitleCell, ListItemCell, ListHoriItemCell, GridItemCell, WaterfallItemCell, PullRefreshCell, LoadMoreCell } from '../../common/CommonLayout';
 import { ComponentPage } from '../../common/CommonPage'
 import { Color } from '../../common/CommonColor'

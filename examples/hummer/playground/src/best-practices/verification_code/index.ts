@@ -1,4 +1,4 @@
-import { Hummer, View, Text, Input, InputEvent } from '@hummer/hummer-front'
+import { Hummer, View, Text, Input, InputEvent } from '@didi/hummer-api'
 import { Color } from '../../common/CommonColor'
 import { ComponentPage } from '../../common/CommonPage'
 class RootView extends ComponentPage {
