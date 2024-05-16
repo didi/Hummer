@@ -49,12 +49,12 @@ void HummerInvokeFactory::init(JNIEnv *env) {
 }
 
 JsiValue *HummerInvokeFactory::invoke(long type, long objId, long methodType, string componentName, string methodName, size_t argc, JsiValue **argv) {
-    LOGI("HummerComponentFactory::invoke() name=%s,methodType=%u,objId=%u,methodName=%s,prams=%s",
-         componentName.c_str(),
-         methodType,
-         objId,
-         methodName.c_str(),
-         JSUtils::buildArrayString(argc, argv).c_str());
+//    LOGI("HummerComponentFactory::invoke() name=%s,methodType=%u,objId=%u,methodName=%s,prams=%s",
+//         componentName.c_str(),
+//         methodType,
+//         objId,
+//         methodName.c_str(),
+//         JSUtils::buildArrayString(argc, argv).c_str());
 
     JNIEnv *jniEnv = JNI_GetEnv();
     jobject obj = (jobject) contextId;

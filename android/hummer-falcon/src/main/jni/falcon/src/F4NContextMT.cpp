@@ -55,17 +55,18 @@ void F4NContextMT::onThreadLoopEnd(F4NHandler *threadHandler) {
 void F4NContextMT::start() {
     info("F4NContextMT::start()");
 
-    jsThreadHandler_->onThreadStart = [&](F4NHandler *thread) {
+    jsThreadHandler_->setOnThreadStart([&](F4NHandler *thread) {
         info("F4NContextMT::start onThreadStart()");
         onJsThreadStart(thread);
-        prepared = true;
-    };
-    jsThreadHandler_->onThreadLoopEnd = [&](F4NHandler *thread) {
+
+    });
+    jsThreadHandler_->setOnThreadLoopEnd([&](F4NHandler *thread) {
         info("F4NContextMT::loop onThreadLoopEnd()");
         onThreadLoopEnd(thread);
-    };
+    });
 
     jsThreadHandler_->start();
+    prepared = true;
 }
 
 

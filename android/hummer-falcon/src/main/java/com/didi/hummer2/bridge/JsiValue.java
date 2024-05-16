@@ -80,7 +80,7 @@ public abstract class JsiValue implements IValue {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        unprotect_(identify);
+//        unprotect_(identify);
     }
 
     @NonNull

@@ -22,11 +22,11 @@ void F4NHandler::removeMessage(const F4NMessage &message) {
 
 }
 
-void F4NHandler::addLoopEndListener(function<void(F4NHandler *)> function) {
+void F4NHandler::addLoopEndListener(function<void(F4NHandler *, long id)> function) {
 
 }
 
-void F4NHandler::removeLoopEndListener(function<void(F4NHandler *)> function) {
+void F4NHandler::removeLoopEndListener(function<void(F4NHandler *, long id)> function) {
 
 }
 

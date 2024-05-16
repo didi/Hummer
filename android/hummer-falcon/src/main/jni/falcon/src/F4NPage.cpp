@@ -82,6 +82,7 @@ void F4NPage::onDestroy() {
             event->setValue("type", new JsiString("__onDestroy__"));
             _rootElement_->eventTarget->onEvent("__onDestroy__", event);
         }
+        pageDestroy = true;
         context->submitJsTask([&]() {
             context->submitUITask([&]() {
                 pageLifeCycle->onDestroy();

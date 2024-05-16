@@ -27,7 +27,7 @@ int MainThreadHandler::callbackFunc(int fd, int events, void *data) {
     memset(buffer, 0, 2);
     size_t size = 2;
     read(fd, buffer, size);
-    LOGD("MainLooper::handleMessage() buffer=%s", buffer);
+//    LOGD("MainLooper::handleMessage() buffer=%s", buffer);
 
     thread::id id = this_thread::get_id();
     LOGD("MainLooper::handleMessage()  fd=%u,events=%u,id=%u", fd, events, id);
@@ -40,7 +40,7 @@ int MainThreadHandler::callbackFunc(int fd, int events, void *data) {
 
 
 void MainThreadHandler::runOne() {
-    LOGD("MainLooper::runOne()");
+//    LOGD("MainLooper::runOne()");
     pthread_mutex_lock(&mutex);
 
     if (!messageQueue.empty()) {
@@ -56,18 +56,18 @@ void MainThreadHandler::runOne() {
 }
 
 void MainThreadHandler::handleMessage(const F4NMessage &message) {
-    LOGD("MainLooper::handleMessage() start id=%d", message.messageId);
+//    LOGD("MainLooper::handleMessage() start id=%d", message.messageId);
     if (message.function != nullptr) {
         message.function(message.messageId, message.content, message.data);
     }
-    LOGD("MainLooper::handleMessage() stop id=%d", message.messageId);
+//    LOGD("MainLooper::handleMessage() stop id=%d", message.messageId);
     if (onThreadLoopEnd != nullptr) {
-        onThreadLoopEnd(this);
+        onThreadLoopEnd(this,message.messageId);
     }
 }
 
 void MainThreadHandler::sendMessage(const F4NMessage &message) {
-    LOGD("MainLooper::sendMessage()");
+//    LOGD("MainLooper::sendMessage()");
     pthread_mutex_lock(&mutex);
     const static char *msg = "fd";
     size_t size = strlen(msg);

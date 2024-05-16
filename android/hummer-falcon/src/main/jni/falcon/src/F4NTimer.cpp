@@ -4,6 +4,7 @@
 
 #include "falcon/F4NTimer.h"
 #include "falcon/F4NContext.h"
+#include "falcon/F4NPage.h"
 
 F4NTimer::F4NTimer(F4NContext *f4NContext, JsiContext *jsiContext) {
     this->f4NContext = f4NContext;
@@ -42,11 +43,13 @@ JsiValue *F4NTimer::setInterval(size_t size, JsiValue **params) {
         auto *interval = (JsiNumber *) params[1];
         auto interval_time_t = (time_t) interval->value_;
         long id = f4NContext->submitJsTask([&, function, interval]() {
+            if (f4NContext->_page_->pageDestroy) {
+                return;
+            }
             function->call(0, nullptr);
 
         }, 0, interval_time_t);
-
-        debug("F4NTimer::setInterval() id=%d",id);
+        debug("F4NTimer::setInterval() id=%d", id);
         return new JsiNumber(id);
     }
     return nullptr;
@@ -65,7 +68,7 @@ JsiValue *F4NTimer::clearInterval(size_t size, JsiValue **params) {
     if (size > 0) {
         auto *value = (JsiNumber *) params[0];
         long id = value->value_;
-        debug("F4NTimer::clearInterval() id=%d",id);
+        debug("F4NTimer::clearInterval() id=%d", id);
         f4NContext->cancelJsTask(id);
     }
     return nullptr;

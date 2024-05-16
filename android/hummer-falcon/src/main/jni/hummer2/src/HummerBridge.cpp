@@ -32,13 +32,13 @@ jstring HMValue_string_(JNIEnv *env, jobject obj, jlong identify) {
 }
 
 void HMValue_protect_(JNIEnv *env, jobject obj, jlong identify) {
-    LOGI("HummerBridge::HMValue_protect_() identify=%lld", identify);
+//    LOGI("HummerBridge::HMValue_protect_() identify=%lld", identify);
     JsiValue *value = (JsiValue *) identify;
     value->protect();
 }
 
 void HMValue_unprotect_(JNIEnv *env, jobject obj, jlong identify) {
-    LOGI("HummerBridge::HMValue_unprotect_() identify=%lld", identify);
+//    LOGI("HummerBridge::HMValue_unprotect_() identify=%lld", identify);
     JsiValue *value = (JsiValue *) identify;
     value->unprotect();
 }

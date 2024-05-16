@@ -61,9 +61,9 @@ void FalconEngine_releaseEngine_(JNIEnv *env, jclass cls) {
 
 jlong FalconEngine_createContext_(JNIEnv *env, jclass cls) {
     if (_vdomRuntime == nullptr) {
-        LOGD("FalconEngine::createVdomContext() null");
+        LOGD("FalconEngine::createContext() null");
     } else {
-        LOGD("FalconEngine::createVdomContext() no null");
+        LOGD("FalconEngine::createContext() no null");
     }
     F4NContext *vdomContext = _vdomRuntime->createContext();
 
@@ -72,7 +72,7 @@ jlong FalconEngine_createContext_(JNIEnv *env, jclass cls) {
 }
 
 void FalconEngine_destroyContext_(JNIEnv *env, jclass cls, jlong contextId) {
-    LOGI("FalconEngine::destroyVdomContext()");
+    LOGI("FalconEngine::destroyContext()");
     F4NContext *vdomContext = (F4NContext *) contextId;
     vdomContext->stop();
     _vdomRuntime->destroyContext(vdomContext);
@@ -82,7 +82,7 @@ void FalconEngine_destroyContext_(JNIEnv *env, jclass cls, jlong contextId) {
 jboolean FalconEngine_bindContext_(JNIEnv *env, jclass cls, jlong contextId, jobject context, jobject configOption) {
     F4NContext *f4NContext = (F4NContext *) contextId;
     jobject globalContext = env->NewGlobalRef(context);
-    LOGI("FalconEngine::bindVdomContext() contextId=%u，context=%u,globalContext=%u", contextId, context, globalContext);
+    LOGI("FalconEngine::bindContext() contextId=%u，context=%u,globalContext=%u", contextId, context, globalContext);
 
     f4NContext->nativeContext = (uintptr_t) globalContext;
 

@@ -56,6 +56,8 @@ JsiValue *F4NElement::appendChild(size_t size, JsiValue **params) {
 void F4NElement::appendChild(F4NElement *child) {
     child->_parentElement_ = this;
     _children_->push_back(child);
+
+    applyRenderElement(child);
 }
 
 JsiValue *F4NElement::removeChild(size_t size, JsiValue **params) {
@@ -99,6 +101,8 @@ void F4NElement::insertBefore(F4NElement *child, F4NElement *anchor) {
     auto it = find(_children_->begin(), _children_->end(), anchor);
     anchor->_parentElement_ = this;
     _children_->insert(it, child);
+
+    applyRenderElement(child);
 }
 
 JsiValue *F4NElement::replaceChild(size_t size, JsiValue **params) {
@@ -114,6 +118,8 @@ void F4NElement::replaceChild(F4NElement *newNode, F4NElement *oldNode) {
     newNode->_parentElement_ = this;
     oldNode->_parentElement_ = nullptr;
     replace(_children_->begin(), _children_->end(), oldNode, newNode);
+
+    applyRenderElement(newNode);
 }
 
 
@@ -129,7 +135,7 @@ JsiValue *F4NElement::setAttributes(size_t size, JsiValue **params) {
 }
 
 void F4NElement::setAttributes(JsiObject *jsiObject) {
-    info("F4NElement::setAttributes() id=%u,params=%s,origin=%s", odjId, jsiObject->toString().c_str(), "");
+    //info("F4NElement::setAttributes() id=%u,params=%s,origin=%s", odjId, jsiObject->toString().c_str(), "");
     map<string, JsiValue *> temp = jsiObject->valueMap_;
     if (temp.size() > 0) {
         for (auto it = temp.begin(); it != temp.end(); it++) {
@@ -271,6 +277,19 @@ void F4NElement::applyRenderTag() {
     this->_alreadyRender_ = true;
 }
 
+
+void F4NElement::applyRenderElement(F4NElement *element) {
+    if (_alreadyRender_) {
+        element->applyRenderTag();
+        element->_renderFunctionCalls_ = _renderFunctionCalls_;
+
+        auto *children = element->_children_;
+        for (auto child = children->begin(); child != children->end(); child++) {
+            element->applyRenderElement(*child);
+        }
+    }
+}
+
 void F4NElement::applyInvoke(long methodId, string methodName, size_t size, JsiValue **params) {
     if (!_alreadyRender_) {
         if (methodId == MethodId_invoke || methodId == MethodId_getReact || methodId == MethodId_getAttribute) {
@@ -297,6 +316,7 @@ void F4NElement::onJsiFinalize(void *finalizeData, void *finalizeHint) {
 F4NElement::~F4NElement() {
 
 }
+
 
 
 JsiValue *elementFuncWrapper(JsiObjectEx *value, long methodId, const char *methodName, size_t size, JsiValue *params[], void *data) {
