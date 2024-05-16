@@ -472,38 +472,38 @@ export class Element extends Node {
     protected _setStyles(style: FlexStyle | Record<string, any> | any) {
         //TODO 临时代码，待优化
         let newStyle: any = {};
-        if (style.margin) {
+        if (style.margin !== undefined) {
             newStyle.marginLeft = style.margin;
             newStyle.marginTop = style.margin;
             newStyle.marginRight = style.margin;
             newStyle.marginBottom = style.margin;
         }
-        if (style.padding) {
+        if (style.padding !== undefined) {
             newStyle.paddingLeft = style.padding;
             newStyle.paddingTop = style.padding;
             newStyle.paddingRight = style.padding;
             newStyle.paddingBottom = style.padding;
         }
-        if (style.borderStyle) {
+        if (style.borderStyle !== undefined) {
             newStyle.borderLeftStyle = style.borderStyle;
             newStyle.borderTopStyle = style.borderStyle;
             newStyle.borderRightStyle = style.borderStyle;
             newStyle.borderBottomStyle = style.borderStyle;
         }
-        if (style.borderColor) {
+        if (style.borderColor !== undefined) {
             newStyle.borderLeftColor = style.borderColor;
             newStyle.borderTopColor = style.borderColor;
             newStyle.borderRightColor = style.borderColor;
             newStyle.borderBottomColor = style.borderColor;
         }
-        if (style.borderWidth) {
+        if (style.borderWidth !== undefined) {
             newStyle.borderLeftWidth = style.borderWidth;
             newStyle.borderTopWidth = style.borderWidth;
             newStyle.borderRightWidth = style.borderWidth;
             newStyle.borderBottomWidth = style.borderWidth;
         }
 
-        if (style.borderRadius) {
+        if (style.borderRadius !== undefined) {
             newStyle.borderTopLeftRadius = style.borderRadius;
             newStyle.borderTopRightRadius = style.borderRadius;
             newStyle.borderBottomLeftRadius = style.borderRadius;
