@@ -123,7 +123,7 @@ class RootView extends View {
             this.printViewIds(viewIdsText, childViews);
         });
 
-        // removeAll
+        // getElementById
         let btnGetElementById = new Button();
         btnGetElementById.text = 'getElementById';
         btnGetElementById.style = {
@@ -131,7 +131,7 @@ class RootView extends View {
             height: 40,
         };
         btnGetElementById.addEventListener('tap', (event) => {
-            let lastViewId = this.viewId - 1;
+            let lastViewId = this.viewId - 3;
             let lastChild = viewLayout.getElementById('' + lastViewId);
             viewIdsText.text = 'lastChild.text = ' + lastChild.text + ", viewId = " + lastViewId;
         });

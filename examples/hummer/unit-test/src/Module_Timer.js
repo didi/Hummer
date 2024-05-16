@@ -48,8 +48,24 @@ class RootView extends View {
                 infoText.text = '';
                 timer1 = setTimeout(() => {
                     console.log('timer Timeout 2s');
-                    infoText.text += 'timer Timeout 2s';
+                    infoText.text += 'timer Timeout 2s\n';
                 }, 2000);
+
+                setTimeout(() => {
+                    console.log('timer Timeout 5s');
+                    infoText.text += 'timer Timeout 5s\n';
+                }, 5000);
+
+                setTimeout(() => {
+                    console.log('timer Timeout 1s');
+                    infoText.text += 'timer Timeout 1s\n';
+                }, 1000);
+
+                setTimeout(() => {
+                    console.log('timer Timeout 3s');
+                    infoText.text += 'timer Timeout 3s\n';
+                }, 3000);
+
             } else {
                 clearTimeout(timer1);
                 infoText.text = 'timer timeout canceled';
