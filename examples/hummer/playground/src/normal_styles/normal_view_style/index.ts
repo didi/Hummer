@@ -5,7 +5,7 @@ import { Style } from '../../common/CommonStyle'
 import { Img } from '../../common/CommonResource'
 
 class RootView extends Page {
-  contentView: View;
+  contentView: ScrollContentView;
 
   constructor() {
     super();
