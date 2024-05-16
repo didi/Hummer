@@ -140,7 +140,7 @@ export class List extends HummerElement {
 
     set onCreate(value: (type: number) => View) {
         let _onCreate = (type: number) => {
-            return value(type).getThis()
+            return value(type).getOriginObject()
         }
         this._setAttribute("onCreate", _onCreate);
         this._onCreate = value
@@ -167,7 +167,7 @@ export class List extends HummerElement {
     }
 
     set refreshView(value: View) {
-        this._setAttribute("refreshView", value.getThis());
+        this._setAttribute("refreshView", value.getOriginObject());
     }
 
     /**
@@ -178,7 +178,7 @@ export class List extends HummerElement {
     }
 
     set loadMoreView(value: View) {
-        this._setAttribute("loadMoreView", value.getThis());
+        this._setAttribute("loadMoreView", value.getOriginObject());
     }
 
 

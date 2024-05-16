@@ -63,7 +63,7 @@ export class Node extends EventTarget {
 
 
     // Mounted 生命周期
-    protected _onMounted() {
+    protected _onMounted_() {
         this.onMounted();
     }
 
@@ -72,7 +72,7 @@ export class Node extends EventTarget {
     }
 
     // Destoryed 生命周期
-    protected _onDestoryed() {
+    protected _onDestoryed_() {
         // removeChildWithFixed(this);
         this.onDestoryed();
     }
@@ -114,13 +114,13 @@ export class Node extends EventTarget {
             this.lastChild.nextSibling = child;
         }
         this.lastChild = child;
-        this._appendChild(child);
-        child._onMounted();
+        this._appendChild_(child);
+        child._onMounted_();
     }
 
 
-    private _appendChild(child: Node) {
-        this.getThis().appendChild(child.getThis());
+    private _appendChild_(child: Node) {
+        this.getOriginObject().appendChild(child.getOriginObject());
     }
 
     private unlinkSiblings() {
@@ -152,15 +152,15 @@ export class Node extends EventTarget {
         if(!child){
             return
         }
-        child._onDestoryed();
+        child._onDestoryed_();
         child.unlinkSiblings();
         child.parentNode = undefined;
         this.children.delete(child);
-        this._removeChild(child);
+        this._removeChild_(child);
     }
 
-    private _removeChild(child: Node) {
-        this.getThis().removeChild(child.getThis());
+    private _removeChild_(child: Node) {
+        this.getOriginObject().removeChild(child.getOriginObject());
     }
 
     /**
@@ -186,12 +186,12 @@ export class Node extends EventTarget {
             this.firstChild = child;
         }
         this.children.add(child);
-        this._insertBefore(child, anchor);
-        child._onMounted();
+        this._insertBefore_(child, anchor);
+        child._onMounted_();
     }
 
-    private _insertBefore(child: Node, anchor: Node) {
-        this.getThis().insertBefore(child.getThis(), anchor.getThis());
+    private _insertBefore_(child: Node, anchor: Node) {
+        this.getOriginObject().insertBefore(child.getOriginObject(), anchor.getOriginObject());
     }
 
     /**
@@ -204,7 +204,7 @@ export class Node extends EventTarget {
         if(!newNode||!oldNode){
             return
         }
-        oldNode._onDestoryed();
+        oldNode._onDestoryed_();
         var _prevSibling = oldNode.prevSibling
         var _nextSibling = oldNode.nextSibling
         oldNode.unlinkSiblings();
@@ -231,13 +231,13 @@ export class Node extends EventTarget {
         }
 
         this.children.add(newNode);
-        this._replaceChild(newNode, oldNode);
-        newNode._onMounted()
+        this._replaceChild_(newNode, oldNode);
+        newNode._onMounted_()
 
     }
 
-    private _replaceChild(newNode: Node, oldNode: Node) {
-        this.getThis().replaceChild(newNode.getThis(), oldNode.getThis());
+    private _replaceChild_(newNode: Node, oldNode: Node) {
+        this.getOriginObject().replaceChild(newNode.getOriginObject(), oldNode.getOriginObject());
     }
 
     /**
@@ -245,15 +245,15 @@ export class Node extends EventTarget {
      */
     public removeAll() {
         this.children.forEach(child => {
-            child._onDestoryed();
+            child._onDestoryed_();
             child.unlinkSiblings();
             child.parentNode = undefined;
         })
         this.children.clear()
-        this._removeAll();
+        this._removeAll_();
     }
 
-    private _removeAll() {
-        this.getThis().removeAll();
+    private _removeAll_() {
+        this.getOriginObject().removeAll();
     }
 }

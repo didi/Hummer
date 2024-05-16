@@ -28,6 +28,8 @@ export * from "./components/Input"
 
 export * from "./components/List"
 
+export * from "./components/ViewPager"
+
 export * from "./components/TextArea"
 
 export * from "./components/Button"
@@ -46,21 +48,21 @@ export * from "./components/Image"
 
 export * from "./HummerComponent"
 
-export * from "./api/Memory"
+export * from "./module/Memory"
 
-export * from "./api/Dialog"
+export * from "./module/Dialog"
 
-export * from "./api/Toast"
+export * from "./module/Toast"
 
-export * from "./api/Navigator"
+export * from "./module/Navigator"
 
-export * from "./api/Storage"
+export * from "./module/Storage"
 
-export * from "./api/NotifyCenter"
+export * from "./module/NotifyCenter"
 
-export * from "./api/Request"
+export * from "./module/Request"
 
-export * from "./api/WebSocket"
+export * from "./module/WebSocket"
 
 
 

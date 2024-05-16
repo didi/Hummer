@@ -207,8 +207,9 @@ export class HummerElement extends Element {
     public __view_id: number = 0;
 
 
-
     public dataset: any = {};//扩展数据存储   
+
+    public viewId: string = "";
 
     protected __defaultStyle: Record<string, string> | null = {};
     protected __style: Record<string, string> | null = {};
@@ -217,10 +218,20 @@ export class HummerElement extends Element {
 
     private globalProxy: HummerGlobalProxy | undefined = undefined;//代理处理
 
+
+
+    /**
+     * 视图Element构造函数
+     * 
+     * @param tag  视图标签，必须与平台导出组件名称一致
+     * @param name  视图名称，用于给组件取名称，组件封装后应当给封装的组件根节点一个表示其功能的名称，设计用于加快DIFF算法。
+     * @param props 组件构造参数：必须包含：viewId，用于“getElementById()” 查找节点。或者 Node dump标示不同Element。
+     */
     public constructor(tag: string, name: string = tag, props: any) {
         super(tag, name, props);
         this.bindEventTarget();
-        this.__view_id = __view_id;
+        this.__view_id = ++__view_id;
+        this.viewId = props.viewId;
         this.globalProxy = this.getProxy();
     }
 
@@ -412,5 +423,36 @@ export class HummerElement extends Element {
             | EventListener,
         useCapture?: boolean | undefined): void {
         super.addEventListener(eventName, eventListener, useCapture);
+    }
+
+
+    public getElementById(id: string): HummerElement | undefined {
+        return this.findElementById(id);
+    }
+
+    public findElementById(id: string): HummerElement | undefined {
+        //console.info("findElementById() this=" + this.viewId + ",id=" + id + ",__view_id=" + this.__view_id);
+        if (id == "") {
+            return undefined;
+        }
+        if (this.viewId == id) {
+            return this;
+        }
+        let result = undefined;
+
+        let childNode: HummerElement | undefined = this.firstChild ? this.firstChild as HummerElement : undefined;
+
+        while (childNode) {
+            let target = childNode.findElementById(id);
+            if (target) {
+                //console.info("findElementById(): this=" + this.__view_id + ",id=" + id + ",__view_id=" + target.__view_id);
+         
+                result = target;
+                childNode = undefined;
+            }else{
+                childNode = childNode.nextSibling?childNode.nextSibling as HummerElement :undefined;
+            }
+        }
+        return result;
     }
 }

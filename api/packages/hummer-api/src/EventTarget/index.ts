@@ -14,12 +14,12 @@ export interface EventListener {
  */
 export class EventTarget extends HMObject {
 
-    protected envents: Map<string, Array<EventListener | Function>>;
+    protected __enventListenerMap__: Map<string, Array<EventListener | Function>>;
 
 
     public constructor(tag: string, isApi: boolean = true, props: any) {
         super(tag, isApi, props)
-        this.envents = new Map()
+        this.__enventListenerMap__ = new Map()
     }
 
     //消息事件回调入口
@@ -38,14 +38,14 @@ export class EventTarget extends HMObject {
      * 绑定 EventTatget
      */
     public bindEventTarget() {
-        this.getThis().setEventTarget((eventName: string, event: any) => {
+        this.getOriginObject().setEventTarget((eventName: string, event: any) => {
             this.onReceiveEvent(eventName, event);
         })
     }
 
 
     public dispatchEvent(eventName: string, event: any) {
-        var listeners = this.envents.get(eventName);
+        var listeners = this.__enventListenerMap__.get(eventName);
         if (listeners != undefined) {
             listeners.forEach((lisener => {
                 if (lisener instanceof Function) {
@@ -69,19 +69,19 @@ export class EventTarget extends HMObject {
      * @param useCapture 
      */
     public addEventListener(eventName: string, eventListener: EventListener | Function, useCapture?: boolean) {
-        var listeners = this.envents.get(eventName)
+        var listeners = this.__enventListenerMap__.get(eventName)
         if (listeners == undefined) {
             listeners = new Array()
-            this.envents.set(eventName, listeners);
+            this.__enventListenerMap__.set(eventName, listeners);
         }
 
         listeners.push(eventListener);
-        this._addEventListener(eventName);
+        this._addEventListener_(eventName);
     }
 
 
-    private _addEventListener(eventName: string) {
-        this.getThis().addEventListener(eventName);
+    private _addEventListener_(eventName: string) {
+        this.getOriginObject().addEventListener(eventName);
     }
 
 
@@ -93,12 +93,12 @@ export class EventTarget extends HMObject {
      * @param useCapture 
      */
     public removeEventListener(eventName: string, eventListener?: EventListener | Function, useCapture?: boolean) {
-        var listeners = this.envents.get(eventName)
+        var listeners = this.__enventListenerMap__.get(eventName)
         if (listeners != undefined) {
             if (eventListener == undefined) {
                 listeners.splice(0, listeners.length);
-                this.envents.delete(eventName);
-                this._removeEventListener(eventName);
+                this.__enventListenerMap__.delete(eventName);
+                this._removeEventListener_(eventName);
             } else {
                 const index = listeners.indexOf(eventListener); // 获取对象在数组中的索引位置
                 if (index > -1) {
@@ -107,16 +107,16 @@ export class EventTarget extends HMObject {
                     console.log("removeEventListener() eventName=" + eventName + " not found listener.");
                 }
                 if (listeners.length == 0) {
-                    this.envents.delete(eventName);
-                    this._removeEventListener(eventName);
+                    this.__enventListenerMap__.delete(eventName);
+                    this._removeEventListener_(eventName);
                 }
             }
         }
 
     }
 
-    private _removeEventListener(eventName: string) {
-        this.getThis().removeEventListener(eventName);
+    private _removeEventListener_(eventName: string) {
+        this.getOriginObject().removeEventListener(eventName);
     }
 
 

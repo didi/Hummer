@@ -22,18 +22,36 @@ export class HMObject {
         this.__props__ = props
         if (isApi) {
             this.__obj__ = _Document_.createComponent(tag, props)
-            this.__obj__.__element__ = this;
+            this.__obj__.__shadow__ = this;
         } else {
             this.__obj__ = _Document_.createElement(tag, props)
-            this.__obj__.__element__ = this;
+            this.__obj__.__shadow__ = this;
         }
     }
 
+    public static getShadowObject(obj: any) {
+        if (obj && obj.__shadow__) {
+            return obj.__shadow__;
+        }
+        return undefined;
+    }
+
+    public static getOriginObject(obj: any) {
+        if (obj && obj.__obj__) {
+            return obj.__obj__;
+        }
+    }
+
+    //废弃方法，用“getOriginObject()”替代
     public getThis() {
         return this.__obj__;
     }
 
-    public getCreateProps(){
+    public getOriginObject() {
+        return this.__obj__;
+    }
+
+    public getCreateProps() {
         return this.__props__;
     }
 

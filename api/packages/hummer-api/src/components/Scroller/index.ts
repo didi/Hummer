@@ -1,6 +1,7 @@
 import { LifeCycleElement } from "../../LifeCycleElement"
 import { View } from "../View"
 import { HMEvent, ViewEvent } from "../../HummerElement"
+import { HMObject } from "src/HMObject"
 
 
 // state: 0 // normal（初始禁止状态）
@@ -114,13 +115,13 @@ export class Scroller extends LifeCycleElement {
     get refreshView(): View | undefined {
         let view = this._getAttribute("refreshView");
         if (view) {
-            return view.__element__
+            return HMObject.getShadowObject(view);
         }
         return undefined;
     }
 
     set refreshView(value: View | undefined) {
-        this._setAttribute("refreshView", value?.getThis());
+        this._setAttribute("refreshView", value?.getOriginObject());
     }
 
     /**
@@ -129,13 +130,13 @@ export class Scroller extends LifeCycleElement {
     get loadMoreView(): View | undefined {
         let view = this._getAttribute("loadMoreView");
         if (view) {
-            return view.__element__
+            return HMObject.getShadowObject(view);
         }
         return undefined;
     }
 
     set loadMoreView(value: View | undefined) {
-        this._setAttribute("loadMoreView", value?.getThis());
+        this._setAttribute("loadMoreView", value?.getOriginObject());
     }
 
 

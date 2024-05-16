@@ -12,19 +12,21 @@ export class BasicAnimation {
     protected type: string = 'basic';
     protected property: string = 'position';
 
-    private _startFunc: Function | undefined = undefined;
+     //使用双下划线开始和结尾避免被falcon引擎处理 eg:"__***__"
+    private __startFunc__: Function | undefined = undefined;
 
-    private _endFunc: Function | undefined = undefined;
+     //使用双下划线开始和结尾避免被falcon引擎处理 eg:"__***__"
+    private __endFunc__: Function | undefined = undefined;
 
-    private _startCallback: Function = () => {
-        if (this._startFunc) {
-            this._startFunc();
+    private __startCallback__: Function = () => {
+        if (this.__startFunc__) {
+            this.__startFunc__();
         }
     }
 
-    private _endCallback: Function = () => {
-        if (this._endFunc) {
-            this._endFunc();
+    private __endCallback__: Function = () => {
+        if (this.__endFunc__) {
+            this.__endFunc__();
         }
     }
 
@@ -35,21 +37,21 @@ export class BasicAnimation {
 
 
     public get startCallback(): Function {
-        return this._startCallback;
+        return this.__startCallback__;
     }
 
 
     public get endCallback(): Function {
-        return this._endCallback;
+        return this.__endCallback__;
     }
 
-    private _onEventListener(event: string, callback: Function) {
+    private _setOnEventListener_(event: string, callback: Function) {
         switch (event) {
             case 'start':
-                this._startFunc = callback;
+                this.__startFunc__ = callback;
                 break;
             case 'end':
-                this._endFunc = callback;
+                this.__endFunc__ = callback;
                 break;
         }
     }
@@ -62,7 +64,7 @@ export class BasicAnimation {
      * @param eventListener 事件回调
      */
     public on(event: string, eventListener: Function) {
-        this._onEventListener(event, eventListener)
+        this._setOnEventListener_(event, eventListener)
     }
 
 

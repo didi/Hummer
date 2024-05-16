@@ -14,8 +14,8 @@ import { List } from "../components/List"
 import { ViewPager } from "../components/ViewPager"
 import { Scroller } from "../components/Scroller"
 import { TextArea } from "../components/TextArea"
-import { HummerApi, Env, PageInfo } from "../api/HummerApi"
-import { NotifyCenter } from "../api/NotifyCenter"
+import { HummerApi, Env, PageInfo } from "../module/HummerApi"
+import { NotifyCenter } from "../module/NotifyCenter"
 import { Loading } from "src/components/Loading"
 import { Switch } from "src/components/Switch"
 import { HorizontalScroller } from "src/components/HorizontalScroller"
@@ -114,7 +114,7 @@ export class Hummer {
      */
     public static render(element: Element) {
         HummerApi.rootElement = element;
-        _Document_.render(element.getThis());
+        _Document_.render(element.getOriginObject());
     }
 
 

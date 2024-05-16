@@ -1,4 +1,5 @@
 import { HummerElement } from "../../HummerElement"
+import { HMObject } from "../../HMObject"
 import { Element } from "../../Element"
 import { FlexStyle } from "../../Element"
 
@@ -9,17 +10,17 @@ export interface ViewPagerStyle extends FlexStyle {
      * 整个ViewPager的圆角半径
      * 默认值：0
      */
-    borderRadius?: number|string;
+    borderRadius?: number | string;
     /**
      * 两个page之间的距离
      * 默认值：0
      */
-    itemSpacing?: number|string;
+    itemSpacing?: number | string;
     /**
      * 正中间的page离手机边缘的距离
      * 默认值：0
      */
-    edgeSpacing?: number|string;
+    edgeSpacing?: number | string;
     /**
      * 是否可以无限循环	
      * 默认值：false
@@ -45,7 +46,7 @@ export interface ViewPagerStyle extends FlexStyle {
      * 	当前元素前后两个的透明度
      *  默认值：0.5	
      */
-    alphaFactor?: number; 
+    alphaFactor?: number;
 }
 
 /**
@@ -61,7 +62,7 @@ export class ViewPager extends HummerElement {
      * @param props 
      */
     public constructor(id: string = "", name: string = "", props: any = {}) {
-        super("Input", name, { ...props, viewId: id });
+        super("ViewPager", name, { ...props, viewId: id });
     }
 
     //扩展样式属性：有代理时通过代理处理
@@ -112,9 +113,9 @@ export class ViewPager extends HummerElement {
      */
     public onItemView(callback: (position: number, view: Element) => Element) {
         this.call("onItemView", (position: number, view: any) => {
-            let thisElement = view?.__element__;
+            let thisElement = HMObject.getShadowObject(view);;
             let element: Element = callback(position, thisElement);
-            return element.getThis();
+            return element.getOriginObject();
         });
     }
 }

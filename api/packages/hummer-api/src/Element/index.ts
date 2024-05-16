@@ -405,7 +405,7 @@ export class Element extends Node {
     protected _setAttribute(key: string, value: any, update: boolean = true) {
         this._attributes[key] = value;
         if (update) {
-            this.getThis().setAttributes({ [key]: value });
+            this.getOriginObject().setAttributes({ [key]: value });
         }
     }
 
@@ -421,7 +421,7 @@ export class Element extends Node {
     */
     protected _initAttributes(attribute: object) {
         this._attributes = attribute || {};
-        this.getThis().setAttributes(attribute);
+        this.getOriginObject().setAttributes(attribute);
 
     }
 
@@ -432,7 +432,7 @@ export class Element extends Node {
      */
     protected _setAttributes(attribute: object) {
         this._attributes = { ...this._attributes, ...attribute }
-        this.getThis().setAttributes(attribute);
+        this.getOriginObject().setAttributes(attribute);
     }
 
 
@@ -512,7 +512,7 @@ export class Element extends Node {
 
         this._style = { ...newStyle, ...style };
 
-        this.getThis().setStyles(this._style);
+        this.getOriginObject().setStyles(this._style);
     }
 
 
@@ -554,7 +554,7 @@ export class Element extends Node {
 
         // 临时存储，方面后面移除监听
         this._animationMap && this._animationMap.set(key, animation)
-        this.getThis().addAnimation(animation, key);
+        this.getOriginObject().addAnimation(animation, key);
     }
 
     /**
@@ -573,7 +573,7 @@ export class Element extends Node {
             this.removeEventListener(AnimationEndName, lastAnim.endCallback);
         }
         this._animationMap.delete(key);
-        this.getThis().removeAnimationForKey(key);
+        this.getOriginObject().removeAnimationForKey(key);
     }
 
     /**
@@ -589,7 +589,7 @@ export class Element extends Node {
         this.removeEventListener(AnimationStartName)
         this.removeEventListener(AnimationEndName)
         this._animationMap.clear();
-        this.getThis().removeAllAnimation();
+        this.getOriginObject().removeAllAnimation();
     }
 
     /**
@@ -597,7 +597,7 @@ export class Element extends Node {
      * @param callback  区域信息回调
      */
     public getRect(callback: Function) {
-        this.getThis().getRect((rect: object) => {
+        this.getOriginObject().getRect((rect: object) => {
             callback.call(this, rect);
         })
     }
