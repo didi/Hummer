@@ -10,8 +10,6 @@ import com.didi.hummer2.register.HummerRegister$$hummer_framework;
 import com.didi.hummer2.register.HummerRegister$$hummer_component;
 import com.didi.hummer2.register.InvokerRegister;
 import com.didi.hummer2.utils.F4NDebugUtil;
-import com.facebook.soloader.SoLoader;
-import com.getkeepsafe.relinker.ReLinker;
 
 /**
  * Created by XiaoFeng on 2019/3/25.
@@ -37,24 +35,15 @@ public class App extends Application {
 
 
         F4NDebugUtil.setDebuggable(true);
-        SoLoader.init(getApplication(), false);
-        SoLoader.loadLibrary("yoga");
-//        ReLinker.loadLibrary(getApplication(), "yoga");
-        ReLinker.loadLibrary(getApplication(), "hummer2");
-        ReLinker.loadLibrary(getApplication(), "falcon");
 
 
-        HummerConfig config = new HummerConfig.Builder(this)
-                .addHummerRegister(new HummerRegister() {
-                    @Override
-                    public void register(InvokerRegister invokerRegister) {
-                        new HummerRegister$$hummer_framework().register(invokerRegister);
-                        new HummerRegister$$hummer_component().register(invokerRegister);
-                    }
-                })
-                .setFontAdapter(new TestFontAdapter())
-                .setDebuggable(false)
-                .build();
+        HummerConfig config = new HummerConfig.Builder(this).addHummerRegister(new HummerRegister() {
+            @Override
+            public void register(InvokerRegister invokerRegister) {
+                new HummerRegister$$hummer_framework().register(invokerRegister);
+                new HummerRegister$$hummer_component().register(invokerRegister);
+            }
+        }).setFontAdapter(new TestFontAdapter()).setDebuggable(false).build();
         Hummer.init(config);
 
 //        DoraemonKit.install(this, null, "cfe007137560fd511dfbcbbb3c9889c8");

@@ -10,12 +10,13 @@ rootProject.name = "Hummer-Android"
 //        ':hummer-dev-tools'
 //include ':hermes-debugger'
 
-include ':hummer-framework',
-        ':hummer',
-        ':hummer-demo-app',
+include ':hummer-demo-app',
         ':hummer-compiler',
         ':hummer-annotation',
         ':hummer-falcon',
+        ':hummer-framework',
         ':hummer-component',
+        ':hummer',
+        ':hummer-dev-tools',
         ':hummer-debugger'
 

@@ -77,21 +77,13 @@ dependencies {
     api rootProject.ext.androidx["recyclerview"]
     api rootProject.ext.androidx["constraintLayout"]
 
-//    api project(':hummer-dev-tools')
 
-//    implementation project(':hummer')
-    implementation project(':hummer-falcon')
-    implementation project(':hummer-component')
+    api project(':hummer')
+
+    api project(':hummer-dev-tools')
+
     annotationProcessor project(':hummer-compiler')
-
-
-    implementation 'com.facebook.soloader:soloader:0.10.1'
-
-    // relinker
-    implementation 'com.getkeepsafe.relinker:relinker:1.4.1'
-
-
-//    annotationProcessor 'io.github.didi.hummer:hummer-compiler:0.2.17'
+    
 
 //    debugImplementation project(':v8-debugger')
 //    debugImplementation 'com.didi.hummer:v8-debugger:0.0.1-SNAPSHOT'

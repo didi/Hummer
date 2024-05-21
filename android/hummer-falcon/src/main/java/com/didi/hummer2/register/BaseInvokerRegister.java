@@ -4,8 +4,8 @@ import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.invoke.Invoker;
 import com.didi.hummer2.utils.HMLog;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * didi Create on 2024/3/27 .
@@ -24,7 +24,7 @@ public class BaseInvokerRegister implements InvokerRegister {
 
 
     public BaseInvokerRegister() {
-        invokers = new HashMap<>();
+        invokers = new ConcurrentHashMap<>();
     }
 
     public BaseInvokerRegister(Map<String, Invoker> invokers) {

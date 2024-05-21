@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * didi Create on 2024/3/27 .
@@ -31,7 +32,7 @@ public class HummerObjectManager implements InvokerRegister {
     public HummerObjectManager(HummerContext hummerContext, InvokerRegister invokerRegister) {
         this.hummerContext = hummerContext;
         this.invokerRegister = invokerRegister;
-        this.objectMap = new HashMap<>();
+        this.objectMap = new ConcurrentHashMap<>();
     }
 
 
