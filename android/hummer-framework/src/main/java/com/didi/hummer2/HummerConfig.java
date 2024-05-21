@@ -17,10 +17,7 @@ import com.didi.hummer2.adapter.storage.IStorageAdapter;
 import com.didi.hummer2.adapter.storage.impl.DefaultStorageAdapter;
 import com.didi.hummer2.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer2.adapter.tracker.impl.EmptyTrackerAdapter;
-import com.didi.hummer2.invoke.HummerInvoker;
-import com.didi.hummer2.invoke.RenderInvoker;
 import com.didi.hummer2.register.HummerInvokerRegister;
-import com.didi.hummer2.register.InvokerRegister;
 import com.didi.hummer2.handler.DefalutLogHandler;
 import com.didi.hummer2.handler.DefaultEventTraceHandler;
 import com.didi.hummer2.handler.DefaultJsConsoleHandler;
@@ -120,7 +117,7 @@ public class HummerConfig {
      */
     private List<HummerRegister> hummerRegisters;
 
-    private InvokerRegister invokerRegister;
+    private HummerInvokerRegister invokerRegister;
     private Context context;
 
     private HummerConfig(Builder builder) {
@@ -144,9 +141,6 @@ public class HummerConfig {
         this.hummerRegisters = builder.hummerRegisters;
         this.invokerRegister = new HummerInvokerRegister(hummerRegisters);
 
-        //注册必须接口
-        invokerRegister.registerInvoker(RenderInvoker.INSTANCE);
-        invokerRegister.registerInvoker(HummerInvoker.INSTANCE);
     }
 
 
@@ -163,7 +157,7 @@ public class HummerConfig {
     }
 
 
-    public InvokerRegister getInvokerRegister() {
+    public HummerInvokerRegister getInvokerRegister() {
         return invokerRegister;
     }
 

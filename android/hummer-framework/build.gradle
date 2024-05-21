@@ -41,7 +41,7 @@ dependencies {
 //        exclude(group: 'com.facebook.yoga', module: 'proguard-annotations')
 //    }
 
-    api ('com.facebook.yoga:yoga:3.0.4')
+//    api ('com.facebook.yoga:yoga:3.0.4')
     api ('com.facebook.yoga.android:yoga-layout:1.19.0') {
         exclude(group: 'com.facebook.yoga', module: 'proguard-annotations')
     }

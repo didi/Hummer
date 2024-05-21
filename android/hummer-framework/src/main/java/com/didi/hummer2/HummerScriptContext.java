@@ -72,7 +72,7 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
         setJsExceptionHandler(hummerConfig.getJsExceptionHandler());
         setEventTraceHandler(hummerConfig.getEventTraceHandler());
 
-        objectManager = new HummerObjectManager(this, hummerConfig.getInvokerRegister());
+        objectManager = new HummerObjectManager(this, hummerConfig.getInvokerRegister().newInvokerRegister());
 
         viewRender = new HummerViewRender(this, (HummerLayout) rootView, objectManager);
 
@@ -228,6 +228,8 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
         HMLog.d("HummerNative", "HummerContext.onPageDestroy()");
         super.onPageDestroy();
         viewRender.onDestroy();
+        //释放引擎
+        Hummer.getHummerEngine().destroyHummerContext(this);
         destroy();
     }
 

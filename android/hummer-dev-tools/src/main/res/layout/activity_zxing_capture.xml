@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center" />
 
-        <com.didi.hummer.devtools.zxing.view.QrcodeViewfinderView
+        <com.didi.hummer2.devtools.zxing.view.QrcodeViewfinderView
             android:id="@+id/viewfinder_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
