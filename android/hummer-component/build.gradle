@@ -45,4 +45,4 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
 }
 
-uploadArchives.dependsOn(':hummer-sdk:uploadArchives')
+uploadArchives.dependsOn(':hummer-framework:uploadArchives')
