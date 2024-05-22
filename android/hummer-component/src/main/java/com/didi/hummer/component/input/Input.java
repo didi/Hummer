@@ -205,6 +205,10 @@ public class Input extends HMBase<EditText> {
     private String text;
 
     public void setText(String text) {
+        // 输入相同文本时，不触发真正文本的设置，避免文本变化回调重复循环触发
+        if (getView() != null && getView().getText() != null && getView().getText().toString().equals(text)) {
+            return;
+        }
         mProperty.setText(text);
         requestLayout();
     }
