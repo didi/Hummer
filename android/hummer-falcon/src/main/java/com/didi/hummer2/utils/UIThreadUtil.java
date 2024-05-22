@@ -3,7 +3,7 @@ package com.didi.hummer2.utils;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.didi.hummer2.exception.JSThreadCallException;
+import com.didi.hummer2.exception.HummerThreadException;
 
 /**
  * didi Create on 2023/3/20 .
@@ -61,7 +61,7 @@ public class UIThreadUtil {
     public static void assetOnMainThread() {
         if (UIThreadUtil.isNotOnUiThread()) {
             if (F4NDebugUtil.isDebuggable()) {
-                throw new JSThreadCallException("this is not on main thread.");
+                throw new HummerThreadException("this is not on main thread.");
             }
         }
     }
@@ -69,7 +69,7 @@ public class UIThreadUtil {
     public static void assetOnMainThreadCall(String method) {
         if (UIThreadUtil.isNotOnUiThread()) {
             if (F4NDebugUtil.isDebuggable()) {
-                throw new JSThreadCallException("call " + method + "() is not on main thread.");
+                throw new HummerThreadException("call " + method + "() is not on main thread.");
             }
         }
     }
@@ -77,7 +77,7 @@ public class UIThreadUtil {
     public static void assetOnMainThread(String message) {
         if (UIThreadUtil.isNotOnUiThread()) {
             if (F4NDebugUtil.isDebuggable()) {
-                throw new JSThreadCallException(message);
+                throw new HummerThreadException(message);
             }
         }
     }

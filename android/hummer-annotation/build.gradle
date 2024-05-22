@@ -1,6 +1,8 @@
 apply plugin: 'java-library'
 apply from: 'upload.gradle'
 
+version = properties["VERSION"]
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

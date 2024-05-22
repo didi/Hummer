@@ -7,7 +7,7 @@ import com.didi.hummer2.adapter.HummerAdapter;
 import com.didi.hummer2.adapter.tracker.PerfCustomInfo;
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsMethod;
-import com.didi.hummer2.exception.JSException;
+import com.didi.hummer2.exception.JavaScriptException;
 
 import java.io.Serializable;
 
@@ -49,6 +49,6 @@ public class Tracker {
             return;
         }
         String strErr = info.name + ": " + info.message + "\n" + info.stack;
-        HummerAdapter.getTrackerAdapter().trackException(((HummerScriptContext) context).getPageUrl(), new JSException(strErr));
+        HummerAdapter.getTrackerAdapter().trackException(((HummerScriptContext) context).getPageUrl(), new JavaScriptException(strErr));
     }
 }

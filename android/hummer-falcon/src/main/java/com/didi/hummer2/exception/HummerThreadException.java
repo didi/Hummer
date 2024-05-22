@@ -11,20 +11,20 @@ package com.didi.hummer2.exception;
  * @Description JS 线程异常
  */
 
-public class JSThreadCallException extends RuntimeException {
+public class HummerThreadException extends RuntimeException {
 
-    public JSThreadCallException() {
+    public HummerThreadException() {
     }
 
-    public JSThreadCallException(String message) {
+    public HummerThreadException(String message) {
         super(message);
     }
 
-    public JSThreadCallException(String message, Throwable cause) {
+    public HummerThreadException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public JSThreadCallException(Throwable cause) {
+    public HummerThreadException(Throwable cause) {
         super(cause);
     }
 }

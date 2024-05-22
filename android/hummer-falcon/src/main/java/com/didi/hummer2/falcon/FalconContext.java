@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.register.InvokerRegister;
-import com.didi.hummer2.exception.JSException;
+import com.didi.hummer2.exception.JavaScriptException;
 import com.didi.hummer2.invoke.Invoker;
 import com.didi.hummer2.handler.EventTraceHandler;
 import com.didi.hummer2.handler.JsConsoleHandler;
@@ -155,7 +155,7 @@ public class FalconContext implements PageLifeCycle {
     // C++ 直接回调
     public void onCatchJsException(String exception) {
         if (jsExceptionHandler != null) {
-            jsExceptionHandler.onCatchException(this.namespace, new JSException(exception));
+            jsExceptionHandler.onCatchException(this.namespace, new JavaScriptException(exception));
         }
     }
 

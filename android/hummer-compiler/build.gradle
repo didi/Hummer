@@ -1,6 +1,8 @@
 apply plugin: 'java-library'
 apply from: 'upload.gradle'
 
+version = properties["VERSION"]
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -9,8 +11,6 @@ java {
 dependencies {
     implementation 'com.squareup:javapoet:1.11.1'
     api project(':hummer-annotation')
-
-//    api project(':hummer-falcon')
 
     if (project.publishArchivesType == '3') {
         implementation 'io.github.didi.hummer:hummer-annotation:0.2.3'

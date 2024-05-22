@@ -1,7 +1,7 @@
 package com.didi.hummer2.bridge;
 
 
-import com.didi.hummer2.exception.HMValueException;
+import com.didi.hummer2.exception.HummerValueException;
 
 import java.util.List;
 
@@ -71,7 +71,7 @@ public class JsiObject extends JsiValue implements IObject {
     public boolean getBoolean(String key) {
         JsiValue hmValue = get_value_(identify, key);
         if (!hmValue.isBoolean()) {
-            throw new HMValueException("value is not boolean.");
+            throw new HummerValueException("value is not boolean.");
         }
         return ((JsiBoolean) hmValue).getValue();
     }
@@ -80,7 +80,7 @@ public class JsiObject extends JsiValue implements IObject {
     public int getInt(String key) {
         JsiValue hmValue = get_value_(identify, key);
         if (!hmValue.isNumber()) {
-            throw new HMValueException("value is not number.");
+            throw new HummerValueException("value is not number.");
         }
         return (int) ((JsiNumber) hmValue).getValue();
     }
@@ -89,7 +89,7 @@ public class JsiObject extends JsiValue implements IObject {
     public long getLong(String key) {
         JsiValue hmValue = get_value_(identify, key);
         if (!hmValue.isNumber()) {
-            throw new HMValueException("value is not number.");
+            throw new HummerValueException("value is not number.");
         }
         return (long) ((JsiNumber) hmValue).getValue();
     }
@@ -98,7 +98,7 @@ public class JsiObject extends JsiValue implements IObject {
     public float getFloat(String key) {
         JsiValue hmValue = get_value_(identify, key);
         if (!hmValue.isNumber()) {
-            throw new HMValueException("value is not number.");
+            throw new HummerValueException("value is not number.");
         }
         return (long) ((JsiNumber) hmValue).getValue();
     }
@@ -107,7 +107,7 @@ public class JsiObject extends JsiValue implements IObject {
     public double getDouble(String key) {
         JsiValue hmValue = get_value_(identify, key);
         if (!hmValue.isNumber()) {
-            throw new HMValueException("value is not number.");
+            throw new HummerValueException("value is not number.");
         }
         return (long) ((JsiNumber) hmValue).getValue();
     }
@@ -116,7 +116,7 @@ public class JsiObject extends JsiValue implements IObject {
     public String getString(String key) {
         JsiValue hmValue = get_value_(identify, key);
         if (!hmValue.isString()) {
-            throw new HMValueException("value is not string.");
+            throw new HummerValueException("value is not string.");
         }
         return ((JsiString) hmValue).getValue();
     }

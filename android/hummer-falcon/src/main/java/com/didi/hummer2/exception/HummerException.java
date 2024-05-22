@@ -11,20 +11,20 @@ package com.didi.hummer2.exception;
  * @Description 用一句话说明文件功能
  */
 
-public class HMValueException extends RuntimeException {
+public class HummerException extends RuntimeException {
 
-    public HMValueException(String message) {
+    public HummerException(String message) {
         super(message);
     }
 
-    public HMValueException(String message, Throwable cause) {
+    public HummerException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public HMValueException(Throwable cause) {
+    public HummerException(Throwable cause) {
         super(cause);
     }
 
-    public HMValueException() {
+    public HummerException() {
     }
 }

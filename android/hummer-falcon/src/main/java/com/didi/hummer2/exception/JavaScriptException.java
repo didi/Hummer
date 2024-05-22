@@ -16,7 +16,7 @@ import android.text.TextUtils;
  *
  * Created by XiaoFeng on 2019-11-20.
  */
-public class JSException extends Exception {
+public class JavaScriptException extends Exception {
 
     /**
      * 错误类型，如：ReferenceError
@@ -36,7 +36,7 @@ public class JSException extends Exception {
      */
     private String errStack;
 
-    public JSException(String stackTrace) {
+    public JavaScriptException(String stackTrace) {
         super(stackTrace);
         try {
             setStackTrace(new StackTraceElement[0]);

@@ -4,6 +4,7 @@ apply from: '../upload.gradle'
 
 android {
 
+
     buildTypes {
         release {
             minifyEnabled false
