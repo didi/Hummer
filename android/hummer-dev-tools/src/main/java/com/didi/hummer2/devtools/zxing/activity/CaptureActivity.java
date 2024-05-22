@@ -47,7 +47,7 @@ public class CaptureActivity extends Activity implements Callback {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_zxing_capture);
+        setContentView(R.layout.activity_zxing_capture_v2);
         CameraManager.init(getApplication());
         qrcodeViewfinderView = findViewById(R.id.viewfinder_content);
         hasSurface = false;

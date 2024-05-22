@@ -21,21 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.didi.hummer2.BuildConfig;
 import com.didi.hummer2.HummerContext;
-import com.didi.hummer2.debug.HummerInvokerAnalyzer;
-import com.didi.hummer2.debug.InvokeTracker;
-import com.didi.hummer2.debug.InvokerAnalyzer;
-import com.didi.hummer2.debug.PerformanceTracker;
 import com.didi.hummer2.devtools.HummerDevTools;
 import com.didi.hummer2.devtools.R;
 import com.didi.hummer2.devtools.bean.LogBean;
 import com.didi.hummer2.devtools.bean.NetBean;
 import com.didi.hummer2.devtools.manager.HummerLogManager;
 import com.didi.hummer2.devtools.manager.HummerNetManager;
-import com.didi.hummer2.devtools.utils.CallStackFormat;
-import com.didi.hummer2.devtools.utils.ComponentTreeFormat;
 import com.didi.hummer2.devtools.utils.JSONFormat;
-import com.didi.hummer2.devtools.utils.PerformanceListFormat;
-import com.didi.hummer2.render.style.HummerNode;
 import com.didi.hummer2.render.utility.DPUtil;
 import com.didi.hummer2.utils.ScreenUtils;
 
@@ -111,7 +103,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.layout_console_container, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.layout_console_container_v2, this);
 
         layoutConsole = findViewById(R.id.layout_console);
         btnClearLog = findViewById(R.id.btn_clear_log);
@@ -357,7 +349,7 @@ public class ConsoleView extends FrameLayout implements HummerLogManager.ILogLis
         @NonNull
         @Override
         public ConsoleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
-            return new ConsoleHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_console_item, viewGroup, false));
+            return new ConsoleHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_console_item_v2, viewGroup, false));
         }
 
         @Override

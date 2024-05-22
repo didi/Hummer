@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">hummersdk</string>
-    <string name="permission_rationale_message">您上次已拒绝了权限授权，请同意权限授权，否则该功能将无法正常使用！</string>
+<!--    <string name="app_name">hummer-framework</string>-->
+<!--    <string name="permission_rationale_message">您上次已拒绝了权限授权，请同意权限授权，否则该功能将无法正常使用！</string>-->
 
     <!-- 无障碍 -->
     <string name="accessibility_role_text">文本</string>

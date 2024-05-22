@@ -8,7 +8,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 
-import com.didi.hummer2.Hummer;
 import com.didi.hummer2.HummerScriptContext;
 import com.didi.hummer2.adapter.navigator.NavCallback;
 import com.didi.hummer2.adapter.navigator.NavPage;
@@ -74,7 +73,7 @@ public class DevToolsEntrance {
             }
         });
 
-        mLayoutDevtools = View.inflate(context, R.layout.layout_devtools_btn, floatLayout);
+        mLayoutDevtools = View.inflate(context, R.layout.layout_devtools_btn_v2, floatLayout);
         mLayoutDevtools.setFocusableInTouchMode(true);
         mLayoutDevtools.setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {

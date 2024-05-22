@@ -125,7 +125,7 @@ public class HummerActivity extends AppCompatActivity {
      * 初始化视图（子类可以重写，构造自己的视图）
      */
     protected void initView() {
-        setContentView(R.layout.activity_hummer);
+        setContentView(R.layout.activity_hummer_v2);
         hummerLayout = findViewById(R.id.hummer_container);
     }
 

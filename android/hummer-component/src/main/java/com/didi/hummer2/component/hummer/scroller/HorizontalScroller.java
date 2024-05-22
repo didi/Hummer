@@ -63,7 +63,7 @@ public class HorizontalScroller extends HMBase<HScrollView> implements HMBase.Po
 
     @Override
     protected HScrollView createViewInstance(Context context) {
-        HScrollView scrollView = (HScrollView) LayoutInflater.from(context).inflate(R.layout.horizontal_scroll_view, null, false);
+        HScrollView scrollView = (HScrollView) LayoutInflater.from(context).inflate(R.layout.horizontal_scroll_view_v2, null, false);
         scrollView.setClipChildren(false);
         scrollView.setFillViewport(true);
         return scrollView;

@@ -128,7 +128,7 @@ public class Dialog {
 
     @JsMethod("loading")
     public void loading(String msg) {
-        View view = View.inflate(context, R.layout.loading_dialog, null);
+        View view = View.inflate(context, R.layout.loading_dialog_v2, null);
         TextView tVMsg = view.findViewById(R.id.tv_msg);
         tVMsg.setText(msg);
 

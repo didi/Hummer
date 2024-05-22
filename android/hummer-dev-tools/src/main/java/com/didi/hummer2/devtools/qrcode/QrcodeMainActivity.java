@@ -52,7 +52,7 @@ public class QrcodeMainActivity extends AppCompatActivity {
         preUpdateStatusBar(this);
         setLightStatusBar();
 
-        setContentView(R.layout.activity_qrcode_main);
+        setContentView(R.layout.activity_qrcode_main_v2);
         recyclerView = findViewById(R.id.history);
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +166,7 @@ public class QrcodeMainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_qrcode_history, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_qrcode_history_v2, parent, false);
             return new ItemViewHolder(view, this);
         }
 

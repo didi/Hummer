@@ -101,7 +101,7 @@ public class DefaultHummerDevTools implements HummerDevTools {
             }
         });
         ViewCompat.setElevation(floatLayout, 9000);
-        View.inflate(context, R.layout.layout_refresh_btn, floatLayout);
+        View.inflate(context, R.layout.layout_refresh_btn_v2, floatLayout);
 
         HMBase<FloatLayout> base = new HMBase<FloatLayout>(context, null, null) {
             @Override
