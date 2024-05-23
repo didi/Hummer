@@ -5,8 +5,8 @@ import android.text.TextUtils;
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.devtools.manager.HummerNetManager;
+import com.didi.hummer2.module.Request$$Invoker;
 import com.didi.hummer2.module.RequestComponent;
-import com.didi.hummer2.component.module.Request$$Invoker;
 import com.didi.hummer2.utils.HummerObjectUtil;
 
 /**
