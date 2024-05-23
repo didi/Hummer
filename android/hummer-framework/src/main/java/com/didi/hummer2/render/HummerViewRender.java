@@ -2,7 +2,7 @@ package com.didi.hummer2.render;
 
 
 import com.didi.hummer2.HummerScriptContext;
-import com.didi.hummer2.lifecycle.IFullLifeCycle;
+import com.didi.hummer2.render.lifecycle.IFullLifeCycle;
 import com.didi.hummer2.register.HummerObject;
 import com.didi.hummer2.register.HummerObjectManager;
 import com.didi.hummer2.render.component.view.HMBase;

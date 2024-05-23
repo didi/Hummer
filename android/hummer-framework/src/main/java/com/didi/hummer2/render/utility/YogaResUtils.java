@@ -2,7 +2,7 @@ package com.didi.hummer2.render.utility;
 
 import android.graphics.drawable.Drawable;
 
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 
 
 public class YogaResUtils {
@@ -19,9 +19,9 @@ public class YogaResUtils {
     public static int getResourceId(String pVariableName, String pResourceName, String pPackageName) throws RuntimeException {
         try {
             if (pPackageName == null) {
-                pPackageName = HummerSDK.appContext.getPackageName();
+                pPackageName = HummerGlobal.appContext.getPackageName();
             }
-            return HummerSDK.appContext.getResources().getIdentifier(pVariableName, pResourceName, pPackageName);
+            return HummerGlobal.appContext.getResources().getIdentifier(pVariableName, pResourceName, pPackageName);
         } catch (Exception ex) {
             throw new RuntimeException("Error getResourceId by NJContextUtil.getContext()", ex);
         }
@@ -32,6 +32,6 @@ public class YogaResUtils {
         if (imageId <= 0) {
             return null;
         }
-        return HummerSDK.appContext.getResources().getDrawable(imageId);
+        return HummerGlobal.appContext.getResources().getDrawable(imageId);
     }
 }

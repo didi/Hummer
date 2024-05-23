@@ -1,5 +1,7 @@
 package com.didi.hummer2.falcon;
 
+import java.io.Serializable;
+
 /**
  * didi Create on 2024/1/22 .
  * <p>
@@ -11,5 +13,5 @@ package com.didi.hummer2.falcon;
  * @Description 用一句话说明文件功能
  */
 
-public enum HMEngineType {
+public enum HMEngineType implements Serializable {
 }

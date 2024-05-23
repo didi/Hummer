@@ -1,8 +1,8 @@
 package com.didi.hummer2;
 
 
-import static com.didi.hummer2.core.JsEngine.FALCON_HERMES;
-import static com.didi.hummer2.core.JsEngine.NAPI_HERMES;
+import static com.didi.hummer2.tools.JsEngine.FALCON_HERMES;
+import static com.didi.hummer2.tools.JsEngine.NAPI_HERMES;
 
 import android.app.Application;
 import android.content.Context;
@@ -12,16 +12,19 @@ import android.view.ViewGroup;
 
 
 import com.didi.hummer2.adapter.navigator.impl.ActivityStackManager;
-import com.didi.hummer2.core.HummerSDK;
-import com.didi.hummer2.core.JsEngine;
-import com.didi.hummer2.component.module.hummer.notifycenter.NotifyCenterEvent;
+import com.didi.hummer2.module.component.notifycenter.OnNotifyCenterEventListener;
+import com.didi.hummer2.tools.HummerGlobal;
+import com.didi.hummer2.tools.JsEngine;
+import com.didi.hummer2.module.component.notifycenter.NotifyCenterEvent;
 import com.didi.hummer2.render.utils.EnvUtil;
 import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.utils.HMLog;
 import com.facebook.soloader.SoLoader;
 import com.getkeepsafe.relinker.ReLinker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,13 +42,14 @@ public class HummerEngine {
 
 
     private Map<String, HummerNameSpace> hummerNameSpaceMap;
-
+    private List<OnNotifyCenterEventListener> notifyCenterEventListeners;
 
     private boolean isInit = false;
     private Context appContext;
 
     public HummerEngine() {
         hummerNameSpaceMap = new HashMap<>();
+        notifyCenterEventListeners = new ArrayList<>();
     }
 
 
@@ -96,7 +100,7 @@ public class HummerEngine {
                     break;
                 case JsEngine.NAPI_QJS:
                 case NAPI_HERMES:
-                    if (HummerSDK.getHermesDebugger() != null) {
+                    if (HummerGlobal.getHermesDebugger() != null) {
                         ReLinker.loadLibrary(context, "hummer-napi-debugger");
                     } else {
                         ReLinker.loadLibrary(context, "hummer-napi");
@@ -127,10 +131,50 @@ public class HummerEngine {
 
 
     public void triggerEvent(String namespace, String key, NotifyCenterEvent event) {
+        dispatchTriggerEvent(namespace, key, event);
+    }
+
+    /**
+     * 发布全局事件通知，不回触发监听
+     *
+     * @param namespace 命名空间，区分业务线
+     * @param key       事件名称
+     * @param event     事件消息
+     */
+    public void publishTriggerEvent(String namespace, String key, NotifyCenterEvent event) {
         HummerNameSpace nameSpace = hummerNameSpaceMap.get(namespace);
         if (nameSpace != null) {
             nameSpace.triggerEvent(key, event);
         }
+    }
+
+
+    private void dispatchTriggerEvent(String namespace, String key, NotifyCenterEvent event) {
+        //对内通知事件
+        publishTriggerEvent(namespace, key, event);
+        //对外通知事件
+        for (OnNotifyCenterEventListener eventListener : notifyCenterEventListeners) {
+            eventListener.onReceiveNotifyCenterEvent(namespace, key, event);
+        }
+    }
+
+
+    public void addOnNotifyCenterEventListener(OnNotifyCenterEventListener eventListener) {
+        if (eventListener != null) {
+            if (!notifyCenterEventListeners.contains(eventListener)) {
+                notifyCenterEventListeners.add(eventListener);
+            }
+        }
+    }
+
+    public void removeOnNotifyCenterEventListener(OnNotifyCenterEventListener eventListener) {
+        if (eventListener != null) {
+            notifyCenterEventListeners.remove(eventListener);
+        }
+    }
+
+    public void removeAllOnNotifyCenterEventListener() {
+        notifyCenterEventListeners.clear();
     }
 
 
@@ -195,6 +239,24 @@ public class HummerEngine {
             }
         }
         return hummerNameSpace;
+    }
+
+
+    public HummerConfig getDefaultConfig() {
+        HummerNameSpace hummerNameSpace = searchHummerNameSpace(Hummer.NAMESPACE_DEFAULT);
+        if (hummerNameSpace != null) {
+            return hummerNameSpace.getHummerConfig();
+        }
+        return null;
+    }
+
+
+    public HummerConfig getHummerConfig(String namespace) {
+        HummerNameSpace hummerNameSpace = searchHummerNameSpace(namespace);
+        if (hummerNameSpace != null) {
+            return hummerNameSpace.getHummerConfig();
+        }
+        return null;
     }
 
 

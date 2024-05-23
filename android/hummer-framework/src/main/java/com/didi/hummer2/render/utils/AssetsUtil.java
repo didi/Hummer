@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.io.UnsupportedEncodingException;
 public class AssetsUtil {
 
     public static String readFile(String path) {
-        return readFile(HummerSDK.appContext, path);
+        return readFile(HummerGlobal.appContext, path);
     }
 
     public static String readFile(Context context, String path) {
@@ -52,7 +52,7 @@ public class AssetsUtil {
 
     public static Bitmap loadBitmap(String path) {
         Bitmap image = null;
-        AssetManager am = HummerSDK.appContext.getAssets();
+        AssetManager am = HummerGlobal.appContext.getAssets();
         try {
             InputStream stream = am.open(path);
             image = BitmapFactory.decodeStream(stream);

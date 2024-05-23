@@ -4,7 +4,7 @@ package com.didi.hummer2.component.module;
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
-import com.didi.hummer2.component.Component;
+import com.didi.hummer2.module.Component;
 import com.didi.hummer2.render.Element;
 import com.didi.hummer2.component.hummer.toast.Toast;
 import com.didi.hummer2.utils.UIThreadUtil;

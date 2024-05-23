@@ -8,9 +8,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
-//import com.didi.hummer.render.style.HummerStyleUtils;
-//import com.didi.hummer.render.utility.YogaAttrUtils;
-
 import com.didi.hummer2.render.style.HummerStyleUtils;
 import com.didi.hummer2.render.utility.YogaAttrUtils;
 

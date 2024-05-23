@@ -49,7 +49,7 @@ import com.didi.hummer2.render.Element;
 import com.didi.hummer2.debug.Highlight;
 import com.didi.hummer2.engine.JSCallback;
 import com.didi.hummer2.engine.JSValue;
-import com.didi.hummer2.lifecycle.ILifeCycle;
+import com.didi.hummer2.render.lifecycle.ILifeCycle;
 import com.didi.hummer2.render.component.anim.AnimViewWrapper;
 import com.didi.hummer2.render.component.anim.BasicAnimation;
 import com.didi.hummer2.render.component.anim.HummerAnimationUtils;

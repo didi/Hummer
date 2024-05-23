@@ -20,7 +20,7 @@ import java.util.List;
  * <p>
  * Created by XiaoFeng on 2019/3/27.
  */
-@Component("BasicAnimation")
+//@Component("BasicAnimation")
 public class BasicAnimation {
 
     @JsProperty("from")

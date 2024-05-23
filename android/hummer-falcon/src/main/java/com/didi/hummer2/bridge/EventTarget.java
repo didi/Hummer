@@ -3,6 +3,8 @@ package com.didi.hummer2.bridge;
 import com.didi.hummer2.utils.F4NObjectUtil;
 import com.didi.hummer2.utils.HMLog;
 
+import java.io.Serializable;
+
 /**
  * didi Create on 2024/4/2 .
  * <p>
@@ -14,7 +16,7 @@ import com.didi.hummer2.utils.HMLog;
  * @Description EventTarget 组件事件回调处理
  */
 
-public class EventTarget {
+public class EventTarget implements Serializable {
 
     private JsiFunction jsiFunction;
 

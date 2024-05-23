@@ -9,6 +9,8 @@ import com.didi.hummer2.adapter.http.IHttpAdapter;
 import com.didi.hummer2.adapter.http.impl.DefaultHttpAdapter;
 import com.didi.hummer2.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer2.adapter.imageloader.impl.DefaultImageLoaderAdapter;
+import com.didi.hummer2.adapter.memory.IMemoryAdapter;
+import com.didi.hummer2.adapter.memory.iml.DefaultMemoryAdapter;
 import com.didi.hummer2.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer2.adapter.navigator.impl.DefaultNavigatorAdapter;
 import com.didi.hummer2.adapter.scriptloader.IScriptLoaderAdapter;
@@ -101,6 +103,10 @@ public class HummerConfig {
      */
     private IStorageAdapter storageAdapter;
     /**
+     * 内存适配器
+     */
+    private IMemoryAdapter memoryAdapter;
+    /**
      * 导航适配器
      */
     private INavigatorAdapter navAdapter;
@@ -135,6 +141,7 @@ public class HummerConfig {
         this.fontAdapter = builder.fontAdapter;
         this.imageLoaderAdapter = builder.imageLoaderAdapter;
         this.storageAdapter = builder.storageAdapter;
+        this.memoryAdapter = builder.memoryAdapter;
         this.navAdapter = builder.navAdapter;
         this.scriptLoaderAdapter = builder.scriptLoaderAdapter;
         this.trackerAdapter = builder.trackerAdapter;
@@ -235,6 +242,14 @@ public class HummerConfig {
         return storageAdapter;
     }
 
+    public IMemoryAdapter getMemoryAdapter() {
+        if (memoryAdapter == null) {
+            memoryAdapter = new DefaultMemoryAdapter();
+        }
+        memoryAdapter.setNamespace(namespace);
+        return memoryAdapter;
+    }
+
     public INavigatorAdapter getNavAdapter() {
         if (navAdapter == null) {
             navAdapter = new DefaultNavigatorAdapter();
@@ -276,6 +291,7 @@ public class HummerConfig {
         private IFontAdapter fontAdapter;
         private IImageLoaderAdapter imageLoaderAdapter;
         private IStorageAdapter storageAdapter;
+        private IMemoryAdapter memoryAdapter;
         private INavigatorAdapter navAdapter;
         private IScriptLoaderAdapter scriptLoaderAdapter;
         private ITrackerAdapter trackerAdapter;
@@ -356,6 +372,11 @@ public class HummerConfig {
 
         public Builder setStorageAdapter(IStorageAdapter adapter) {
             storageAdapter = adapter;
+            return this;
+        }
+
+        public Builder setMemoryAdapter(IMemoryAdapter memoryAdapter) {
+            this.memoryAdapter = memoryAdapter;
             return this;
         }
 

@@ -6,7 +6,7 @@ import com.didi.hummer2.annotation.HMAttribute;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.bridge.JsiFunction;
-import com.didi.hummer2.component.Component;
+import com.didi.hummer2.module.Component;
 import com.didi.hummer2.render.Element;
 import com.didi.hummer2.component.hummer.dialog.Dialog;
 import com.didi.hummer2.utils.UIThreadUtil;

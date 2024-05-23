@@ -2,7 +2,7 @@ package com.didi.hummer2.invoke;
 
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.bridge.EventTarget;
-import com.didi.hummer2.component.EventDispatcher;
+import com.didi.hummer2.module.component.EventDispatcher;
 import com.didi.hummer2.register.HummerObject;
 import com.didi.hummer2.render.event.base.Event;
 

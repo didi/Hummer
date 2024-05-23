@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.didi.hummer2.render.component.view.HMBase;
 
-//import com.didi.hummer.render.component.view.HMBase;
 
 public class AnimViewWrapper {
 

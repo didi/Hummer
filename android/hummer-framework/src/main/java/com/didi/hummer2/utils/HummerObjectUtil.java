@@ -7,9 +7,9 @@ import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
-import com.didi.hummer2.component.Component;
+import com.didi.hummer2.module.Component;
 import com.didi.hummer2.render.Element;
-import com.didi.hummer2.component.module.hummer.notifycenter.NotifyCenterEvent;
+import com.didi.hummer2.module.component.notifycenter.NotifyCenterEvent;
 import com.didi.hummer2.register.HummerObject;
 import com.google.gson.reflect.TypeToken;
 

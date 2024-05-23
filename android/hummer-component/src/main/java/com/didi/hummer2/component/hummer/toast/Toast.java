@@ -11,7 +11,7 @@ import android.os.Message;
 
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsMethod;
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 import com.didi.hummer2.render.component.view.HMBase;
 
 import java.lang.reflect.Field;
@@ -24,14 +24,14 @@ public class Toast {
 
     @JsMethod("show")
     public static void show(String msg, int duration) {
-        android.widget.Toast toast = android.widget.Toast.makeText(HummerSDK.appContext, msg, duration <= 2000 ? android.widget.Toast.LENGTH_SHORT : android.widget.Toast.LENGTH_LONG);
+        android.widget.Toast toast = android.widget.Toast.makeText(HummerGlobal.appContext, msg, duration <= 2000 ? android.widget.Toast.LENGTH_SHORT : android.widget.Toast.LENGTH_LONG);
         hook(toast);
         toast.show();
     }
 
     @JsMethod("custom")
     public static void custom(HMBase baseView, int duration) {
-        android.widget.Toast toast = new android.widget.Toast(HummerSDK.appContext);
+        android.widget.Toast toast = new android.widget.Toast(HummerGlobal.appContext);
         hook(toast);
         toast.setDuration(duration <= 2000 ? android.widget.Toast.LENGTH_SHORT : android.widget.Toast.LENGTH_LONG);
         toast.setView(baseView.getView());

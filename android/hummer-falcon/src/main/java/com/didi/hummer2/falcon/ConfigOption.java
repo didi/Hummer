@@ -1,5 +1,7 @@
 package com.didi.hummer2.falcon;
 
+import java.io.Serializable;
+
 /**
  * didi Create on 2024/3/28 .
  * <p>
@@ -11,7 +13,7 @@ package com.didi.hummer2.falcon;
  * @Description 引擎配置选项
  */
 
-public class ConfigOption {
+public class ConfigOption  implements Serializable {
 
     /**
      * 命名空间

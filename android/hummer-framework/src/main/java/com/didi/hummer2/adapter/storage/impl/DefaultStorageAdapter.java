@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 
 import com.didi.hummer2.adapter.storage.IStorageAdapter;
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class DefaultStorageAdapter implements IStorageAdapter {
 
     private SharedPreferences getSP() {
         if (sp == null) {
-            sp = HummerSDK.appContext.getSharedPreferences(getSpName(namespace), Context.MODE_PRIVATE);
+            sp = HummerGlobal.appContext.getSharedPreferences(getSpName(namespace), Context.MODE_PRIVATE);
             checkUpgrade(sp);
         }
         return sp;
@@ -42,7 +42,7 @@ public class DefaultStorageAdapter implements IStorageAdapter {
      */
     private String getSpName(String namespace) {
         String spName;
-        if (namespace != null && !HummerSDK.NAMESPACE_DEFAULT.equals(namespace)) {
+        if (namespace != null && !HummerGlobal.NAMESPACE_DEFAULT.equals(namespace)) {
             spName = SP_NAME + "_" + namespace;
         } else {
             spName = SP_NAME + "_default";
@@ -60,7 +60,7 @@ public class DefaultStorageAdapter implements IStorageAdapter {
             if (version > oldVer) {
                 // 需要升级
                 SharedPreferences.Editor editor = sp.edit();
-                SharedPreferences oldSP = HummerSDK.appContext.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+                SharedPreferences oldSP = HummerGlobal.appContext.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
                 Set<String> keys = oldSP.getAll().keySet();
                 for (String k : keys) {
                     if (k != null && !k.equals(KEY_VERSION)) {

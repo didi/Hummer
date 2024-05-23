@@ -18,6 +18,8 @@ import com.didi.hummer2.handler.LogHandler;
 import com.didi.hummer2.invoke.Invoker;
 import com.didi.hummer2.utils.HMLog;
 
+import java.io.Serializable;
+
 
 /**
  * didi Create on 2023/11/20 .
@@ -30,7 +32,7 @@ import com.didi.hummer2.utils.HMLog;
  * @Description Hummer2Context 注册及绑定Hummer2的相关组件，初始设置数据状态等
  */
 
-public abstract class HummerContext extends ContextWrapper implements PageLifeCycle, OnContextStateListener {
+public abstract class HummerContext extends ContextWrapper implements PageLifeCycle, OnContextStateListener, Serializable {
 
     /**
      * Hummer 命名空间

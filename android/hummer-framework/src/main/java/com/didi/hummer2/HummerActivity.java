@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.didi.hummer2.adapter.navigator.NavPage;
 import com.didi.hummer2.adapter.navigator.impl.DefaultNavigatorAdapter;
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 import com.didi.hummer2.devtools.DevToolsConfig;
 import com.didi.hummer2.engine.JSValue;
 import com.didi.hummer2.render.style.HummerLayout;
@@ -161,7 +161,7 @@ public class HummerActivity extends AppCompatActivity {
      * @return
      */
     protected String getNamespace() {
-        return HummerSDK.NAMESPACE_DEFAULT;
+        return HummerGlobal.NAMESPACE_DEFAULT;
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.didi.hummer2;
 
-import com.didi.hummer2.component.module.hummer.notifycenter.NotifyCenterEvent;
+import com.didi.hummer2.module.component.notifycenter.NotifyCenterEvent;
 
 import java.util.ArrayList;
 import java.util.List;

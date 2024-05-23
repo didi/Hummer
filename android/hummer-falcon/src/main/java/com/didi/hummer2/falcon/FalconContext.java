@@ -13,6 +13,7 @@ import com.didi.hummer2.handler.JsExceptionHandler;
 import com.didi.hummer2.handler.LogHandler;
 import com.didi.hummer2.utils.F4NObjectUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ import java.util.List;
  * @Description Falcon引擎上下文，与引擎直接交互
  */
 
-public class FalconContext implements PageLifeCycle {
+public class FalconContext implements PageLifeCycle, Serializable {
 
 
 

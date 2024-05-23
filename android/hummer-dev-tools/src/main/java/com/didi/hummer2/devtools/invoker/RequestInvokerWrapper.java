@@ -3,11 +3,9 @@ package com.didi.hummer2.devtools.invoker;
 import android.text.TextUtils;
 
 import com.didi.hummer2.HummerContext;
-import com.didi.hummer2.adapter.http.HttpResponse;
 import com.didi.hummer2.bridge.JsiFunction;
-import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.devtools.manager.HummerNetManager;
-import com.didi.hummer2.component.module.RequestComponent;
+import com.didi.hummer2.module.RequestComponent;
 import com.didi.hummer2.component.module.Request$$Invoker;
 import com.didi.hummer2.utils.HummerObjectUtil;
 

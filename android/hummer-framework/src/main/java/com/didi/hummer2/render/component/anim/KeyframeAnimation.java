@@ -8,12 +8,11 @@ import android.view.View;
 
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsProperty;
-import com.didi.hummer2.component.anim.KeyFrame;
+import com.didi.hummer2.render.anim.KeyFrame;
 import com.didi.hummer2.render.component.view.HMBase;
 import com.didi.hummer2.render.style.HummerStyleUtils;
 import com.didi.hummer2.render.utility.YogaAttrUtils;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
  * <p>
  * Created by XiaoFeng on 2019/3/27.
  */
-@Component("KeyframeAnimation")
+//@Component("KeyframeAnimation")
 public class KeyframeAnimation extends BasicAnimation {
 
     @JsProperty("keyframes")

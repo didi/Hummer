@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * didi Create on 2023/11/21 .
  * <p>
@@ -15,7 +17,7 @@ import androidx.annotation.NonNull;
  * @Description 用一句话说明文件功能
  */
 
-public abstract class JsiValue implements IValue {
+public abstract class JsiValue implements IValue, Serializable {
 
     /**
      * c++ 映射数据对象指针

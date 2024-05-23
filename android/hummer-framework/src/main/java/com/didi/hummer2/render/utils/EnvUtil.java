@@ -9,7 +9,7 @@ import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 import com.didi.hummer2.render.utility.DPUtil;
 import com.didi.hummer2.utils.ScreenUtils;
 
@@ -70,7 +70,7 @@ public class EnvUtil {
         }
 
         Map<String, Object> envs = new HashMap<>(gEnvs);
-        if (!TextUtils.isEmpty(namespace) && !namespace.equals(HummerSDK.NAMESPACE_DEFAULT)) {
+        if (!TextUtils.isEmpty(namespace) && !namespace.equals(HummerGlobal.NAMESPACE_DEFAULT)) {
             envs.put(ENV_KEY_NAMESPACE, namespace);
         }
 

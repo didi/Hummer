@@ -12,7 +12,7 @@ import android.graphics.Color;
 //import com.didi.hummer.render.utility.RTLUtil;
 //import com.didi.hummer.render.utility.RemUtil;
 //import com.didi.hummer.render.utility.YogaAttrUtils;
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 //import com.didi.hummer2.core.engine.jsc.jni.HummerException;
 //import com.didi.hummer2.core.engine.napi.jni.JSException;
 //import com.didi.hummer2.core.util.ExceptionUtil;
@@ -894,7 +894,7 @@ public class HummerStyleUtils {
         float value = 0f;
         if (number instanceof Number) {
             if (isDPStyle) {
-                value = DPUtil.dp2px(HummerSDK.appContext, ((Number) number).floatValue());
+                value = DPUtil.dp2px(HummerGlobal.appContext, ((Number) number).floatValue());
             } else {
                 value = ((Number) number).floatValue();
             }
@@ -913,7 +913,7 @@ public class HummerStyleUtils {
             if (isHm) {
                 value = RemUtil.rem2px(value);
             } else if (!isPx && isDPStyle) {
-                value = DPUtil.dp2px(HummerSDK.appContext, value);
+                value = DPUtil.dp2px(HummerGlobal.appContext, value);
             }
         }
         return value;

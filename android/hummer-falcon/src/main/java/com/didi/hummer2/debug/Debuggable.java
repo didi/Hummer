@@ -13,7 +13,9 @@ package com.didi.hummer2.debug;
  */
 
 public class Debuggable {
+
     private String namespace;
+
     private boolean debuggable;
 
     public Debuggable(String namespace, boolean debuggable) {

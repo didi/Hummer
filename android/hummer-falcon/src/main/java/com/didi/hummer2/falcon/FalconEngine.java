@@ -1,5 +1,7 @@
 package com.didi.hummer2.falcon;
 
+import java.io.Serializable;
+
 /**
  * didi Create on 2023/11/20 .
  * <p>
@@ -11,7 +13,7 @@ package com.didi.hummer2.falcon;
  * @Description Hummer 虚拟DOM引擎
  */
 
-public class FalconEngine {
+public class FalconEngine implements Serializable {
 
     static {
         System.loadLibrary("hummer2");

@@ -27,7 +27,7 @@
 -keep @com.didi.hummer2.annotation.HMConfig class * {*;}
 -keep class com.didi.hummer.core.engine.jsc.jni.** {*;}
 -keep class com.didi.hummer.core.engine.napi.** {*;}
--keep class com.didi.hummer2.core.JsEngine {*;}
+-keep class com.didi.hummer2.tools.JsEngine {*;}
 -keep class com.didi.hummer2.render.component.anim.AnimViewWrapper {*;}
 -keep class com.facebook.yoga.** {*;}
 -keep class com.facebook.jni.** {*;}

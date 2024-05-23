@@ -21,7 +21,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.didi.hummer2.adapter.imageloader.DrawableCallback;
 import com.didi.hummer2.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer2.adapter.imageloader.ImageSizeCallback;
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 import com.didi.hummer2.engine.JSCallback;
 
 /**
@@ -215,7 +215,7 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     @Override
     public void loadDrawable(String url, DrawableCallback callback) {
         try {
-            Glide.with(HummerSDK.appContext).load(url).into(new CustomTarget<Drawable>() {
+            Glide.with(HummerGlobal.appContext).load(url).into(new CustomTarget<Drawable>() {
                 @Override
                 public void onLoadCleared(@Nullable Drawable placeholder) {
 
@@ -241,7 +241,7 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
         // 使用Glide加载resId图片时，.9图自动拉伸功能会失效，所以这里直接用原生加载方式
         Drawable drawable = null;
         try {
-            drawable = HummerSDK.appContext.getResources().getDrawable(resId);
+            drawable = HummerGlobal.appContext.getResources().getDrawable(resId);
         } catch (Exception ignored) {}
         if (callback != null) {
             callback.onDrawableLoaded(drawable);
@@ -251,7 +251,7 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     @Override
     public void getImageSize(String url, ImageSizeCallback callback) {
         try {
-            Glide.with(HummerSDK.appContext).load(url).into(new CustomTarget<Drawable>() {
+            Glide.with(HummerGlobal.appContext).load(url).into(new CustomTarget<Drawable>() {
                 @Override
                 public void onLoadCleared(@Nullable Drawable placeholder) {
 
@@ -275,7 +275,7 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
     @Override
     public void getImageSize(int resId, ImageSizeCallback callback) {
         try {
-            Glide.with(HummerSDK.appContext).load(resId).into(new CustomTarget<Drawable>() {
+            Glide.with(HummerGlobal.appContext).load(resId).into(new CustomTarget<Drawable>() {
                 @Override
                 public void onLoadCleared(@Nullable Drawable placeholder) {
 

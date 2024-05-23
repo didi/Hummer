@@ -7,6 +7,7 @@ import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.component.hummer.lottie.LottieView;
+import com.didi.hummer2.module.component.EventListenerCallback;
 import com.didi.hummer2.render.Element;
 
 /**

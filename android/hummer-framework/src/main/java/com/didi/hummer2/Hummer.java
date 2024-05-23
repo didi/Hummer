@@ -2,7 +2,7 @@ package com.didi.hummer2;
 
 import android.content.Context;
 
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 
 /**
  * didi Create on 2024/3/21 .
@@ -29,7 +29,7 @@ public class Hummer {
     public static void init(HummerConfig hummerConfig) {
         if (hummerConfig != null) {
             appContext = hummerConfig.getContext().getApplicationContext();
-            HummerSDK.appContext = appContext;
+            HummerGlobal.appContext = appContext;
             hummerEngine.initHummer(appContext);
             hummerEngine.registerHummerConfig(hummerConfig);
         }
@@ -44,5 +44,21 @@ public class Hummer {
         return hummerEngine;
     }
 
+
+    public static HummerConfig getDefaultConfig() {
+        return hummerEngine.getDefaultConfig();
+    }
+
+
+    public static HummerConfig getHummerConfig(String namespace) {
+        return hummerEngine.getHummerConfig(namespace);
+    }
+
+    public static HummerConfig getHummerConfig(HummerContext hummerContext) {
+        if (hummerContext != null) {
+            return hummerEngine.getHummerConfig(hummerContext.getNamespace());
+        }
+        return null;
+    }
 
 }

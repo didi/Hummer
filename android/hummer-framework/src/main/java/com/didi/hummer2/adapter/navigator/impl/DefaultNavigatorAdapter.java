@@ -12,7 +12,7 @@ import com.didi.hummer2.adapter.navigator.INavigatorAdapter;
 import com.didi.hummer2.adapter.navigator.NavCallback;
 import com.didi.hummer2.adapter.navigator.NavPage;
 import com.didi.hummer2.adapter.navigator.impl.router.ActivityLauncher;
-import com.didi.hummer2.core.HummerSDK;
+import com.didi.hummer2.tools.HummerGlobal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class DefaultNavigatorAdapter implements INavigatorAdapter {
     @Override
     public void openPage(Context context, NavPage page, NavCallback callback) {
         if (context == null) {
-            context = HummerSDK.appContext;
+            context = HummerGlobal.appContext;
         }
 
         goToPage(context, page, callback);
