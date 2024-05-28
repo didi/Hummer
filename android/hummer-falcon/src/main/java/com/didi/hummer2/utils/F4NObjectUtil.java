@@ -10,6 +10,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +50,43 @@ public class F4NObjectUtil {
     }
 
 
+    public static Object toJavaObject(JsiValue object) {
+        if (object != null) {
+            if (object instanceof JsiNumber) {
+                Object result = ((JsiNumber) object).valueDouble();
+                return result;
+            }
+            if (object instanceof JsiString) {
+                Object result = ((JsiString) object).valueString();
+                return result;
+            }
+            if (object instanceof JsiBoolean) {
+                Object result = ((JsiBoolean) object).getValue();
+                return result;
+            }
+            if (object instanceof JsiObject) {
+                JsiObject jsiObject = (JsiObject) object;
+                List<String> keys = jsiObject.keys();
+                Map<String, Object> result = new HashMap<>();
+                for (String key : keys) {
+                    result.put(key, toJavaObject(jsiObject.get(key)));
+                }
+                return result;
+            }
+            if (object instanceof JsiArray) {
+                JsiArray jsiArray = (JsiArray) object;
+                int size = jsiArray.length();
+                List<Object> result = new ArrayList<>();
+                for (int i = 0; i < size; i++) {
+                    result.add(toJavaObject(jsiArray.getValue(i)));
+                }
+                return result;
+            }
+        }
+        return null;
+    }
+
+
     public static JsiValue toJsiValue(Object object) {
         if (object instanceof JsiValue) {
             return (JsiValue) object;
@@ -81,6 +120,7 @@ public class F4NObjectUtil {
                     jsiArray.push(jsiValue);
                 }
             }
+            return jsiArray;
         }
         if (object instanceof Array) {
             Object[] array = (Object[]) object;
@@ -91,6 +131,7 @@ public class F4NObjectUtil {
                     jsiArray.push(jsiValue);
                 }
             }
+            return jsiArray;
         }
         return null;
     }
