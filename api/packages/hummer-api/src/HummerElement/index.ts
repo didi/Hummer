@@ -233,6 +233,16 @@ export class HummerElement extends Element {
         this.__view_id = ++__view_id;
         this.viewId = props.viewId;
         this.globalProxy = this.getProxy();
+        this.initialize();
+    }
+
+
+    /**
+     * //TODO 后续发布需要移除，并在业务代码中替换为新的方式，用“构造函数”替代
+     * 已废弃/临时兼容旧版本
+     */
+    protected initialize(){
+
     }
 
     /**

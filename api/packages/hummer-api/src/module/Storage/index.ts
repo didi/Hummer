@@ -8,18 +8,10 @@ export class Storage extends HummerComponent {
         super("Storage", props);
     }
 
-    protected static newInstance(): Storage {
-        return new Storage();
-    }
-
-
-    protected static checkInstance() {
-        if (!HUMMER.__storage__) {
-            HUMMER.__storage__ = Storage.newInstance();
-        }
-    }
-
     static get instance(): Storage {
+        if (!HUMMER.__storage__) {
+            HUMMER.__storage__ = new Storage();
+        }
         return HUMMER.__storage__
     }
 
@@ -30,8 +22,7 @@ export class Storage extends HummerComponent {
      * @param key 名称
      * @param value 值
      */
-    static set(key: string, value: Record<string, any>, cb?: Function) {
-        Storage.checkInstance();
+    static set(key: string, value: string, cb?: Function) {
         return Storage.instance.set(key, value, cb);
     }
 
@@ -42,7 +33,6 @@ export class Storage extends HummerComponent {
     * @return value 值
     */
     static get(key: string, cb: Function): any {
-        Storage.checkInstance();
         return Storage.instance.get(key, cb);
     }
 
@@ -54,7 +44,6 @@ export class Storage extends HummerComponent {
      * @param key 名称
      */
     static remove(key: string, cb?: Function) {
-        Storage.checkInstance();
         return Storage.instance.remove(key, cb);
     }
 
@@ -63,7 +52,6 @@ export class Storage extends HummerComponent {
     * 删除所有数据
     */
     public static removeAll(cb?: Function) {
-        Storage.checkInstance();
         return Storage.instance.removeAll(cb);
     }
 
@@ -72,13 +60,12 @@ export class Storage extends HummerComponent {
      *
      * @param key 名称
      */
-    public static exist(key: string, cb: Function) {
-        Storage.checkInstance();
+    public static exist(key: string, cb?: Function): boolean {
         return Storage.instance.exist(key, cb);
     }
 
 
-    protected set(key: string, value: Record<string, any>, cb?: Function) {
+    protected set(key: string, value: string, cb?: Function) {
         return this.call("set", key, value, cb);
     }
 
@@ -95,7 +82,7 @@ export class Storage extends HummerComponent {
         return this.call("removeAll", cb);
     }
 
-    protected exist(key: string, cb: Function) {
+    protected exist(key: string, cb?: Function): boolean {
         return this.call("exist", key, cb)
     }
 

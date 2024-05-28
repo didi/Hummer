@@ -8,17 +8,11 @@ export class Memory extends HummerComponent {
         super("Memory", props);
     }
 
-    protected static newInstance(): Memory {
-        return new Memory();
-    }
-
-    protected static checkInstance() {
-        if (!HUMMER.__memory__) {
-            HUMMER.__memory__ = Memory.newInstance();
-        }
-    }
 
     static get instance(): Memory {
+        if (!HUMMER.__memory__) {
+            HUMMER.__memory__ = new Memory();
+        }
         return HUMMER.__memory__
     }
 
@@ -27,10 +21,9 @@ export class Memory extends HummerComponent {
      * 保存键值对
      *
      * @param key 名称
-     * @param value 值
+     * @param value 值   不能是function，或者包含function
      */
-    static set(key: string, value: Record<string, any>, cb?: Function) {
-        Memory.checkInstance();
+    static set(key: string, value: object, cb?: Function) {
         Memory.instance.set(key, value, cb);
     }
 
@@ -41,7 +34,6 @@ export class Memory extends HummerComponent {
     * @return value 值
     */
     static get(key: string, cb?: Function): any {
-        Memory.checkInstance();
         return Memory.instance.get(key, cb);
     }
 
@@ -53,7 +45,6 @@ export class Memory extends HummerComponent {
      * @param key 名称
      */
     static remove(key: string, cb?: Function) {
-        Memory.checkInstance();
         Memory.instance.remove(key, cb);
     }
 
@@ -62,7 +53,6 @@ export class Memory extends HummerComponent {
     * 删除所有数据
     */
     public static removeAll(cb?: Function) {
-        Memory.checkInstance();
         Memory.instance.removeAll(cb);
     }
 
@@ -71,13 +61,12 @@ export class Memory extends HummerComponent {
      *
      * @param key 名称
      */
-    public static exist(key: string, cb?: Function) {
-        Memory.checkInstance();
+    public static exist(key: string, cb?: Function): boolean {
         return Memory.instance.exist(key, cb);
     }
 
 
-    protected set(key: string, value: Record<string, any>, cb?: Function) {
+    protected set(key: string, value: object, cb?: Function) {
         this.call("set", key, value, cb);
     }
 
@@ -94,7 +83,7 @@ export class Memory extends HummerComponent {
         this.call("removeAll", cb);
     }
 
-    protected exist(key: string, cb?: Function) {
+    protected exist(key: string, cb?: Function): boolean {
         return this.call("exist", key, cb);
     }
 

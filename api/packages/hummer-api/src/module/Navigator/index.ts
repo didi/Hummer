@@ -26,19 +26,17 @@ export class Navigator extends HummerComponent {
     * @param pageInfo 页面信息
     * @param callback 页面结果回调
     */
-    static openPage(pageInfo: Record<string, any>, callback: Function) {
+    static openPage(pageInfo: Record<string, any>, callback?: Function) {
         Navigator.checkInstance();
         Navigator.instance.openPage(pageInfo, callback);
     }
-
-
 
 
     /**
      * 关闭当前页面
      * @param pageInfo 页面信息
      */
-    static popPage(pageInfo: Record<string, any>) {
+    static popPage(pageInfo?: Record<string, any> ) {
         Navigator.checkInstance();
         Navigator.instance.popPage(pageInfo);
 
@@ -57,7 +55,7 @@ export class Navigator extends HummerComponent {
      * 回退到首页
      * @param pageInfo 页面信息（是否需要动画）
      */
-    static popToRootPage(pageInfo: Record<string, any>) {
+    static popToRootPage(pageInfo?: Record<string, any>) {
         Navigator.checkInstance();
         Navigator.instance.popToRootPage(pageInfo);
     }
@@ -68,16 +66,16 @@ export class Navigator extends HummerComponent {
      * @param count 要回退的页面级数（默认是1）
      * @param pageInfo 页面信息（是否需要动画）
      */
-    static popBack(count: number, pageInfo: Record<string, any>) {
+    static popBack(count: number, pageInfo?: Record<string, any>) {
         Navigator.checkInstance();
         Navigator.instance.popBack(count, pageInfo);
     }
 
-    protected openPage(pageInfo: Record<string, any>, callback: Function) {
+    protected openPage(pageInfo: Record<string, any>, callback?: Function) {
         this.call("openPage", pageInfo, callback);
     }
 
-    protected popPage(pageInfo: Record<string, any>) {
+    protected popPage(pageInfo?: Record<string, any>) {
         this.call("popPage", pageInfo);
     }
 
@@ -85,11 +83,11 @@ export class Navigator extends HummerComponent {
         this.call("popToPage", pageInfo);
     }
 
-    protected popToRootPage(pageInfo: Record<string, any>) {
+    protected popToRootPage(pageInfo?: Record<string, any>) {
         this.call("popToRootPage", pageInfo);
     }
 
-    protected popBack(count: number, pageInfo: Record<string, any>) {
+    protected popBack(count: number, pageInfo?: Record<string, any>) {
         this.call("popBack", count, pageInfo);
     }
 

@@ -80,7 +80,7 @@ export class Text extends HummerElement {
         return this._getAttribute('richText');
     }
 
-    set richText(value: string) {
+    set richText(value: any) {
         this._setAttribute("richText", value);
     }
 
