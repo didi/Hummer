@@ -1,6 +1,7 @@
 const path = require('path')
 const WrapFunctionPlugin = require('./generateFunction')
 const HarmonyTemplatePlugin = require('./generateHarmonyTemplate')
+const Hummer2DistFilePlugin = require('./hm2.plugin')
 
 module.exports = {
   type: 'hummer',
@@ -20,6 +21,9 @@ module.exports = {
       //   outputDir:  './template',
       //   hummerApiDir: path.resolve(__dirname, './dist')
       // }),
+      new Hummer2DistFilePlugin({
+        hummer2: true
+      })
     ]
   },
 
