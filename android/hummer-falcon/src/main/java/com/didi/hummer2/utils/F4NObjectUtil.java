@@ -32,6 +32,7 @@ public class F4NObjectUtil {
     private static Type MAP_TYPE = new TypeToken<Map<String, Object>>() {
     }.getType();
 
+
     public static <T> T toJavaModel(Object object, Type type) {
         if (object instanceof JsiObject || object instanceof JsiArray) {
             String value = ((JsiValue) object).toString();
@@ -41,8 +42,15 @@ public class F4NObjectUtil {
     }
 
 
+    /**
+     * 将JsiObject 转化为基础Map类型（通过GSON转化，支持自定义类型数据转化）
+     * <p>
+     * 仅支持转化复杂类型，基础类型不支持
+     *
+     * @param object
+     */
     public static <T> T toJavaMap(Object object) {
-        if (object instanceof JsiObject || object instanceof JsiArray) {
+        if (object instanceof JsiObject) {
             String value = ((JsiValue) object).toString();
             return F4NGsonUtil.fromJson(value, MAP_TYPE);
         }
@@ -50,7 +58,13 @@ public class F4NObjectUtil {
     }
 
 
-    public static Object toJavaObject(JsiValue object) {
+    /**
+     * 将JsiValue转化为纯java数据类型
+     *
+     * @param object
+     * @return 本身是基础类型的不做处理，是JsiValue的将被转化为Java基础数据类型
+     */
+    public static Object toJavaObject(Object object) {
         if (object != null) {
             if (object instanceof JsiNumber) {
                 Object result = ((JsiNumber) object).valueDouble();
@@ -82,11 +96,18 @@ public class F4NObjectUtil {
                 }
                 return result;
             }
+            return object;
         }
         return null;
     }
 
 
+    /**
+     * 将Java基础数据类型转化为JsiValue
+     *
+     * @param object 基础数据类型，自定义类型被忽略
+     * @return JsiValue
+     */
     public static JsiValue toJsiValue(Object object) {
         if (object instanceof JsiValue) {
             return (JsiValue) object;
