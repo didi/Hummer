@@ -9,18 +9,11 @@ export class NotifyCenter extends HummerComponent {
         super("NotifyCenter", props);
     }
 
-    protected static checkInstance() {
+
+    protected static get instance(): NotifyCenter {
         if (!HUMMER.__notifyCenter__) {
-            HUMMER.__notifyCenter__ = NotifyCenter.newInstance();
+            HUMMER.__notifyCenter__ = new NotifyCenter();
         }
-    }
-
-    protected static newInstance(): NotifyCenter {
-        return new NotifyCenter();
-    }
-
-
-    static get instance(): NotifyCenter {
         return HUMMER.__notifyCenter__
     }
 
@@ -30,8 +23,7 @@ export class NotifyCenter extends HummerComponent {
      * @param event 事件名称
      * @param callback 回调事件
      */
-    static addEventListener(event: string, callback: Function) {
-        NotifyCenter.checkInstance();
+    public static addEventListener(event: string, callback: Function) {
         NotifyCenter.instance.addEventListener(event, callback)
     }
 
@@ -41,8 +33,7 @@ export class NotifyCenter extends HummerComponent {
     * @param event 事件名称
     * @param callback 回调事件
     */
-    static removeEventListener(event: string, callback: Function) {
-        NotifyCenter.checkInstance();
+    public static removeEventListener(event: string, callback: Function) {
         if (!callback) {
             NotifyCenter.instance.call("removeAllEventListener", event)
         } else {
@@ -59,15 +50,13 @@ export class NotifyCenter extends HummerComponent {
      * @param event 事件名称
      * @param value 消息内容
      */
-    static triggerEvent(eventName: string, value: Record<string, any>) {
+    public static triggerEvent(eventName: string, value: Record<string, any>) {
         let event = {
             type: eventName,
             state: 0,
             timestamp: new Date().getTime(),
             value: value,
         };
-
-        NotifyCenter.checkInstance();
         NotifyCenter.instance.call("triggerEvent", eventName, event);
     }
 

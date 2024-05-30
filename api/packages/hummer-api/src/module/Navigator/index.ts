@@ -7,17 +7,10 @@ export class Navigator extends HummerComponent {
         super("Navigator", props);
     }
 
-    protected static newInstance(): Navigator {
-        return new Navigator();
-    }
-
-    protected static checkInstance() {
+    protected static get instance(): Navigator {
         if (!HUMMER.__navigator__) {
-            HUMMER.__navigator__ = Navigator.newInstance();
+            HUMMER.__navigator__ = new Navigator();
         }
-    }
-
-    static get instance(): Navigator {
         return HUMMER.__navigator__
     }
 
@@ -26,8 +19,7 @@ export class Navigator extends HummerComponent {
     * @param pageInfo 页面信息
     * @param callback 页面结果回调
     */
-    static openPage(pageInfo: Record<string, any>, callback?: Function) {
-        Navigator.checkInstance();
+    public static openPage(pageInfo: Record<string, any>, callback?: Function) {
         Navigator.instance.openPage(pageInfo, callback);
     }
 
@@ -36,18 +28,15 @@ export class Navigator extends HummerComponent {
      * 关闭当前页面
      * @param pageInfo 页面信息
      */
-    static popPage(pageInfo?: Record<string, any> ) {
-        Navigator.checkInstance();
+    public static popPage(pageInfo?: Record<string, any>) {
         Navigator.instance.popPage(pageInfo);
-
     }
 
     /**
      * 回退到指定页面
      * @param pageInfo 页面信息
      */
-    static popToPage(pageInfo: Record<string, any>) {
-        Navigator.checkInstance();
+    public static popToPage(pageInfo: Record<string, any>) {
         Navigator.instance.popToPage(pageInfo);
     }
 
@@ -55,8 +44,7 @@ export class Navigator extends HummerComponent {
      * 回退到首页
      * @param pageInfo 页面信息（是否需要动画）
      */
-    static popToRootPage(pageInfo?: Record<string, any>) {
-        Navigator.checkInstance();
+    public static popToRootPage(pageInfo?: Record<string, any>) {
         Navigator.instance.popToRootPage(pageInfo);
     }
 
@@ -66,8 +54,7 @@ export class Navigator extends HummerComponent {
      * @param count 要回退的页面级数（默认是1）
      * @param pageInfo 页面信息（是否需要动画）
      */
-    static popBack(count: number, pageInfo?: Record<string, any>) {
-        Navigator.checkInstance();
+    public static popBack(count: number, pageInfo?: Record<string, any>) {
         Navigator.instance.popBack(count, pageInfo);
     }
 

@@ -9,7 +9,7 @@ export class Memory extends HummerComponent {
     }
 
 
-    static get instance(): Memory {
+    protected static get instance(): Memory {
         if (!HUMMER.__memory__) {
             HUMMER.__memory__ = new Memory();
         }
@@ -23,7 +23,7 @@ export class Memory extends HummerComponent {
      * @param key 名称
      * @param value 值   不能是function，或者包含function
      */
-    static set(key: string, value: object, cb?: Function) {
+    public static set(key: string, value: object, cb?: Function) {
         Memory.instance.set(key, value, cb);
     }
 
@@ -33,7 +33,7 @@ export class Memory extends HummerComponent {
     * @param key 名称
     * @return value 值
     */
-    static get(key: string, cb?: Function): any {
+    public static get(key: string, cb?: Function): any {
         return Memory.instance.get(key, cb);
     }
 
@@ -44,7 +44,7 @@ export class Memory extends HummerComponent {
      *
      * @param key 名称
      */
-    static remove(key: string, cb?: Function) {
+    public static remove(key: string, cb?: Function) {
         Memory.instance.remove(key, cb);
     }
 

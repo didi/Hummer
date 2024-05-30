@@ -8,7 +8,7 @@ export class Storage extends HummerComponent {
         super("Storage", props);
     }
 
-    static get instance(): Storage {
+    protected static get instance(): Storage {
         if (!HUMMER.__storage__) {
             HUMMER.__storage__ = new Storage();
         }
@@ -22,7 +22,7 @@ export class Storage extends HummerComponent {
      * @param key 名称
      * @param value 值
      */
-    static set(key: string, value: string, cb?: Function) {
+    public static set(key: string, value: string, cb?: Function) {
         return Storage.instance.set(key, value, cb);
     }
 
@@ -32,7 +32,7 @@ export class Storage extends HummerComponent {
     * @param key 名称
     * @return value 值
     */
-    static get(key: string, cb: Function): any {
+    public static get(key: string, cb: Function): any {
         return Storage.instance.get(key, cb);
     }
 
@@ -43,7 +43,7 @@ export class Storage extends HummerComponent {
      *
      * @param key 名称
      */
-    static remove(key: string, cb?: Function) {
+    public static remove(key: string, cb?: Function) {
         return Storage.instance.remove(key, cb);
     }
 

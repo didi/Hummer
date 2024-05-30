@@ -99,30 +99,30 @@ export class Dialog extends HummerComponent {
     }
 
 
-    protected alert(msg: string, btnText: string, callback: () => void) {
+    public alert(msg: string, btnText: string, callback: () => void) {
         this.call("alert", msg, btnText, callback);
     }
 
 
 
 
-    protected confirm(title: string, msg: string, okBtnText: string, cancelBtnText: string, okCallback: () => void, cancelCallback: () => void) {
+    public confirm(title: string, msg: string, okBtnText: string, cancelBtnText: string, okCallback: () => void, cancelCallback: () => void) {
         this.call("confirm", title, msg, okBtnText, cancelBtnText, okCallback, cancelCallback);
     }
 
 
-    protected loading(msg: string) {
+    public loading(msg: string) {
         this.call("loading", msg);
     }
 
 
 
-    protected custom(view: View) {
+    public custom(view: View) {
         this.call("custom", view.getOriginObject());
     }
 
 
-    protected dismiss() {
+    public dismiss() {
         this.call("dismiss");
     }
 

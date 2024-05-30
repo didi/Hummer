@@ -10,60 +10,58 @@ export class Request extends HummerComponent {
     protected _param: object | undefined = undefined;
 
 
-
     public constructor(props: any = {}) {
         super("Request", props);
     }
 
 
     // API地址
-    set url(value: string) {
+    public set url(value: string) {
         this._url = value;
         this.call("setUrl", value);
     }
 
-    get url() {
+    public get url() {
         return this._url;
     }
 
     // 请求方式
-    set method(value: string) {
+    public set method(value: string) {
         this._method = value;
         this.call("setMethod", value);
     }
 
-    get method() {
+    public get method() {
         return this._method;
     }
 
     // 超时时间（单位：毫秒）
-    set timeout(value: number) {
+    public set timeout(value: number) {
         this._timeout = value;
         this.call("setTimeout", value);
     }
 
-    get timeout() {
+    public get timeout() {
         return this._timeout;
     }
 
     // 网络请求头部
-    set header(value: object | undefined) {
+    public set header(value: object | undefined) {
         this._header = value;
         this.call("setHeader", value);
     }
 
-    get header() {
+    public get header() {
         return this._header;
     }
 
     // 网络请求参数
-    set param(value: object | undefined) {
+    public set param(value: object | undefined) {
         this._param = value;
         this.call("setParam", value);
     }
 
-
-    get param() {
+    public get param() {
         return this._param;
     }
 
