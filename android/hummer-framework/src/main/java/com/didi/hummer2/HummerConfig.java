@@ -319,18 +319,17 @@ public class HummerConfig {
             return this;
         }
 
-        public Builder setJSLogger(JsConsoleHandler logger) {
+        public Builder setJsConsoleHandler(JsConsoleHandler logger) {
             this.jsConsoleHandler = logger;
             return this;
         }
 
-        @Deprecated
-        public Builder setEventTracer(EventTraceHandler trace) {
+        public Builder setEventTraceHandler(EventTraceHandler trace) {
             this.eventTraceHandler = trace;
             return this;
         }
 
-        public Builder setExceptionCallback(JsExceptionHandler callback) {
+        public Builder setJsExceptionHandler(JsExceptionHandler callback) {
             jsExceptionHandler = callback;
             return this;
         }
@@ -342,16 +341,6 @@ public class HummerConfig {
 
         public Builder setSupportBytecode(boolean supportBytecode) {
             isSupportBytecode = supportBytecode;
-            return this;
-        }
-
-        /**
-         * 方法过时
-         * {@link #setFontAdapter(IFontAdapter)}
-         */
-        @Deprecated
-        public Builder setFontsAssetsPath(String fontsAssetsPath) {
-            this.fontsAssetsPath = fontsAssetsPath;
             return this;
         }
 

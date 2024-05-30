@@ -41,8 +41,8 @@ import java.util.Map;
 public class HummerEngine {
 
 
-    private Map<String, HummerNameSpace> hummerNameSpaceMap;
-    private List<OnNotifyCenterEventListener> notifyCenterEventListeners;
+    private final Map<String, HummerNameSpace> hummerNameSpaceMap;
+    private final List<OnNotifyCenterEventListener> notifyCenterEventListeners;
 
     private boolean isInit = false;
     private Context appContext;

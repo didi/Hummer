@@ -1,18 +1,12 @@
 package com.didi.hummer2.component.hummer.input;
 
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsAttribute;
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.core.engine.JSValue;
-//import com.didi.hummer.render.style.HummerStyleUtils;
 
 import com.didi.hummer2.HummerContext;
-import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsAttribute;
 import com.didi.hummer2.engine.JSValue;
 import com.didi.hummer2.render.style.HummerStyleUtils;
 
-@Component("TextArea")
+//@Component("TextArea")
 public class TextArea extends Input {
     public TextArea(HummerContext context, JSValue jsValue, String viewID) {
         super(context, jsValue, viewID);

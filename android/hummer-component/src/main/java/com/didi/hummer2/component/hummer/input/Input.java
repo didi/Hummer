@@ -14,18 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsAttribute;
-//import com.didi.hummer.annotation.JsProperty;
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.core.engine.JSValue;
-//import com.didi.hummer.render.component.view.HMBase;
-//import com.didi.hummer.render.event.view.InputEvent;
-//import com.didi.hummer.render.style.HummerNode;
-//import com.didi.hummer.render.style.HummerStyleUtils;
-//import com.didi.hummer.render.utility.RTLUtil;
 import com.didi.hummer2.HummerContext;
-import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsAttribute;
 import com.didi.hummer2.annotationx.JsProperty;
 import com.didi.hummer2.component.hummer.text.FontManager;
@@ -36,7 +25,7 @@ import com.didi.hummer2.render.style.HummerNode;
 import com.didi.hummer2.render.style.HummerStyleUtils;
 import com.didi.hummer2.render.utility.RTLUtil;
 
-@Component("Input")
+//@Component("Input")
 public class Input extends HMBase<EditText> {
 
     protected final HMInputProperty mProperty;

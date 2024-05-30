@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.didi.hummer2.HummerContext;
 
-//import com.didi.hummer.context.HummerContext;
 
 /**
  * fixed布局的虚拟节点

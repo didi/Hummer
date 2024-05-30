@@ -1,10 +1,5 @@
 package com.didi.hummer2;
 
-//import com.didi.hummer.adapter.HummerAdapter;
-//import com.didi.hummer.adapter.tracker.ITrackerAdapter;
-//import com.didi.hummer.adapter.tracker.PerfCustomInfo;
-//import com.didi.hummer.adapter.tracker.PerfInfo;
-//import com.didi.hummer.core.util.HMLog;
 
 import com.didi.hummer2.adapter.HummerAdapter;
 import com.didi.hummer2.adapter.tracker.ITrackerAdapter;

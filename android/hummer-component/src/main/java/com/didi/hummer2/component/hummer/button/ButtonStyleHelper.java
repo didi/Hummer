@@ -4,9 +4,6 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 
-//import com.didi.hummer.render.component.view.BackgroundDrawable;
-//import com.didi.hummer.render.style.HummerStyleUtils;
-//import com.didi.hummer.render.utility.YogaAttrUtils;
 
 import com.didi.hummer2.render.component.view.BackgroundDrawable;
 import com.didi.hummer2.render.style.HummerStyleUtils;

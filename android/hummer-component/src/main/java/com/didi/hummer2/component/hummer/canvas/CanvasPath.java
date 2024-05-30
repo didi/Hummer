@@ -12,12 +12,6 @@ import com.didi.hummer2.engine.JSValue;
 import com.didi.hummer2.render.component.view.HMBase;
 import com.didi.hummer2.render.style.HummerStyleUtils;
 
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsMethod;
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.core.engine.JSValue;
-//import com.didi.hummer.render.component.view.HMBase;
-//import com.didi.hummer.render.style.HummerStyleUtils;
 
 @Component("CanvasPath")
 public class CanvasPath extends HMBase {

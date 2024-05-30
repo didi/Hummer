@@ -1,13 +1,10 @@
 package com.didi.hummer2.render.event.guesture;
 
-//import com.didi.hummer.render.event.base.Event;
 
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.render.event.base.Event;
 
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * 捏合手势事件

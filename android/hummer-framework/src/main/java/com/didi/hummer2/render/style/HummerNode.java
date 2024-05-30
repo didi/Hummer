@@ -6,11 +6,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-//import com.didi.hummer.core.engine.JSContext;
-//import com.didi.hummer.core.engine.JSValue;
-//import com.didi.hummer.core.util.DebugUtil;
-//import com.didi.hummer.render.component.view.HMBase;
-//import com.didi.hummer.render.utility.YogaNodeUtil;
 import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.render.component.view.HMBase;
 import com.didi.hummer2.render.utility.YogaNodeUtil;

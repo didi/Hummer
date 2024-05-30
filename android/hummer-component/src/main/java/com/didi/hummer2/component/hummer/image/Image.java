@@ -7,23 +7,10 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
-//import com.didi.hummer.adapter.HummerAdapter;
-//import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsAttribute;
-//import com.didi.hummer.annotation.JsMethod;
-//import com.didi.hummer.annotation.JsProperty;
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.core.engine.JSCallback;
-//import com.didi.hummer.core.engine.JSValue;
-//import com.didi.hummer.core.util.HMGsonUtil;
-//import com.didi.hummer.render.component.view.HMBase;
-//import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer2.HummerConfig;
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.HummerScriptContext;
 import com.didi.hummer2.adapter.imageloader.ImageSizeCallback;
-import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsAttribute;
 import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.annotationx.JsProperty;
@@ -37,7 +24,7 @@ import com.facebook.yoga.YogaUnit;
 import java.io.Serializable;
 import java.util.Map;
 
-@Component("Image")
+//@Component("Image")
 public class Image extends HMBase<RoundedImageView> {
 
     /**
@@ -125,7 +112,7 @@ public class Image extends HMBase<RoundedImageView> {
 
     /**
      * 处理图片宽高样式，可能需要重新调整图片控件的宽高，以自适应图片大小
-     *
+     * <p>
      * 可能有如下情况：
      * 1.宽/高：固定值 -> 'auto'
      * 2.只设置了宽/高度，高/宽度从未设置过（Yoga宽高单位是AUTO）

@@ -3,9 +3,6 @@ package com.didi.hummer2.render.event.guesture.common;
 import android.content.Context;
 import android.view.MotionEvent;
 
-//import com.didi.hummer.render.event.base.Event;
-//import com.didi.hummer.render.utility.DPUtil;
-//
 import com.didi.hummer2.render.event.base.Event;
 import com.didi.hummer2.render.utility.DPUtil;
 

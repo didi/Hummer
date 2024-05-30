@@ -19,11 +19,11 @@ import java.util.List;
 public class HummerNameSpace {
 
 
-    private String namespace;
+    private final String namespace;
 
-    private HummerConfig hummerConfig;
+    private final HummerConfig hummerConfig;
 
-    private List<HummerScriptContext> hummerScriptContexts = new ArrayList<>();
+    private final List<HummerScriptContext> hummerScriptContexts = new ArrayList<>();
 
     public HummerNameSpace(String namespace, HummerConfig hummerConfig) {
         this.namespace = namespace;

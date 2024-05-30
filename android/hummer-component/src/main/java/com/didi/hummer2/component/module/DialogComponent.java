@@ -9,7 +9,6 @@ import com.didi.hummer2.bridge.JsiFunction;
 import com.didi.hummer2.module.Component;
 import com.didi.hummer2.render.Element;
 import com.didi.hummer2.component.hummer.dialog.Dialog;
-import com.didi.hummer2.utils.UIThreadUtil;
 
 /**
  * didi Create on 2024/4/10 .
@@ -32,24 +31,20 @@ public class DialogComponent extends Component {
         delegate = new Dialog(context);
     }
 
-
     /**
      * 是否可以被取消（按返回键或者点击空白处是否可以关闭对话框，默认是true）
      */
     @HMAttribute("cancelable")
     public boolean cancelable = true;
 
-
+    /**
+     *
+     * @param cancelable
+     */
     @HMMethod("setCancelable")
     public void setCancelable(boolean cancelable) {
         this.cancelable = cancelable;
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                delegate.cancelable = cancelable;
-            }
-        });
-
+        delegate.cancelable = cancelable;
     }
 
     /**
@@ -63,13 +58,7 @@ public class DialogComponent extends Component {
     @HMMethod("setLowLayer")
     public void setLowLayer(boolean lowLayer) {
         this.lowLayer = lowLayer;
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                delegate.lowLayer = lowLayer;
-            }
-        });
-
+        delegate.lowLayer = lowLayer;
     }
 
     /**
@@ -81,12 +70,7 @@ public class DialogComponent extends Component {
      */
     @HMMethod("alert")
     public void alert(String msg, String btnText, JsiFunction callback) {
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                delegate.alert(msg, btnText, getCallback(callback));
-            }
-        });
+        delegate.alert(msg, btnText, getCallback(callback));
     }
 
     /**
@@ -101,44 +85,22 @@ public class DialogComponent extends Component {
      */
     @HMMethod("confirm")
     public void confirm(String title, String msg, String okBtnText, String cancelBtnText, JsiFunction okCallback, JsiFunction cancelCallback) {
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                delegate.confirm(title, msg, okBtnText, cancelBtnText, getCallback(okCallback), getCallback(cancelCallback));
-            }
-        });
+        delegate.confirm(title, msg, okBtnText, cancelBtnText, getCallback(okCallback), getCallback(cancelCallback));
     }
 
     @HMMethod("loading")
     public void loading(String msg) {
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                delegate.loading(msg);
-            }
-        });
-
+        delegate.loading(msg);
     }
 
     @HMMethod("custom")
     public void custom(Element element) {
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                delegate.custom(element.getView());
-            }
-        });
+        delegate.custom(element.getView());
     }
 
     @HMMethod("dismiss")
     public void dismiss() {
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                delegate.dismiss();
-            }
-        });
-
+        delegate.dismiss();
     }
 
 }

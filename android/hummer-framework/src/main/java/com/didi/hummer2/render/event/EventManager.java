@@ -1,10 +1,5 @@
 package com.didi.hummer2.render.event;
 
-//import com.didi.hummer.core.engine.JSCallback;
-//import com.didi.hummer.lifecycle.ILifeCycle;
-//import com.didi.hummer.render.event.base.Event;
-
-//import com.didi.hummer2.core.engine.JSCallback;
 import com.didi.hummer2.engine.JSCallback;
 import com.didi.hummer2.render.lifecycle.ILifeCycle;
 import com.didi.hummer2.render.event.base.Event;

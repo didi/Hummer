@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-//import com.didi.hummer.render.component.view.HMBase;
-//import com.didi.hummer.render.style.HummerLayout;
 import com.didi.hummer2.render.component.view.HMBase;
 import com.didi.hummer2.render.style.HummerLayout;
 import com.scwang.smart.refresh.layout.api.RefreshHeader;

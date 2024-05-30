@@ -10,12 +10,6 @@ import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.component.R;
 import com.didi.hummer2.engine.JSValue;
 import com.didi.hummer2.render.component.view.HMBase;
-//
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.component.R;
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.core.engine.JSValue;
-//import com.didi.hummer.render.component.view.HMBase;
 
 
 @Component("Loading")

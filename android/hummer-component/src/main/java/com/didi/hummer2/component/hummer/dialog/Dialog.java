@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 
-import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.annotationx.JsProperty;
 import com.didi.hummer2.component.R;
@@ -22,7 +21,7 @@ import com.facebook.yoga.YogaJustify;
 /**
  * Created by XiaoFeng on 2019-12-25.
  */
-@Component("Dialog")
+//@Component("Dialog")
 public class Dialog {
 
     private Context context;

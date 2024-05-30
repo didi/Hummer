@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.view.View;
 
-import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsProperty;
 import com.didi.hummer2.render.anim.KeyFrame;
 import com.didi.hummer2.render.component.view.HMBase;

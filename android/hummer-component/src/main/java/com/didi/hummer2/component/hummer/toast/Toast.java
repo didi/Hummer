@@ -3,11 +3,6 @@ package com.didi.hummer2.component.hummer.toast;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-//
-//import com.didi.hummer.HummerSDK;
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsMethod;
-//import com.didi.hummer.render.component.view.HMBase;
 
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsMethod;

@@ -11,13 +11,6 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 
-//import com.didi.hummer.annotation.Component;
-//import com.didi.hummer.annotation.JsAttribute;
-//import com.didi.hummer.annotation.JsProperty;
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.core.engine.JSValue;
-//import com.didi.hummer.render.component.view.HMBase;
-//import com.didi.hummer.render.style.HummerStyleUtils;
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsAttribute;

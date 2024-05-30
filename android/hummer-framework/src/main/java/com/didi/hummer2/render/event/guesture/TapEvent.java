@@ -1,8 +1,5 @@
 package com.didi.hummer2.render.event.guesture;
 
-//import com.didi.hummer.render.event.base.Event;
-//
-//import java.util.Map;
 
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;

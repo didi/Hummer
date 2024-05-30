@@ -1,8 +1,5 @@
 package com.didi.hummer2.render.event;
 
-//import com.didi.hummer.core.engine.JSCallback;
-
-//import com.didi.hummer2.core.engine.JSCallback;
 
 import com.didi.hummer2.engine.JSCallback;
 

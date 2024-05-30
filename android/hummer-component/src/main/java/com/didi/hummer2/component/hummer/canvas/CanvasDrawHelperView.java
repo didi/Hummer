@@ -16,8 +16,6 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-//import com.didi.hummer.render.style.HummerStyleUtils;
-
 import com.didi.hummer2.render.style.HummerStyleUtils;
 
 import java.util.ArrayList;

@@ -14,12 +14,6 @@ import com.didi.hummer2.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer2.render.component.view.BackgroundDrawable;
 import com.didi.hummer2.utils.JsSourceUtil;
 
-//import com.didi.hummer.adapter.HummerAdapter;
-//import com.didi.hummer.adapter.imageloader.DrawableCallback;
-//import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.render.component.view.BackgroundDrawable;
-//import com.didi.hummer.utils.JsSourceUtil;
 
 /**
  * Drawable帮助类

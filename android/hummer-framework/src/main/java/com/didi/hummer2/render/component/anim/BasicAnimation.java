@@ -7,7 +7,6 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.text.TextUtils;
 
-import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.annotationx.JsProperty;
 import com.didi.hummer2.engine.JSCallback;

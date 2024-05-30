@@ -8,19 +8,6 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.render.event.EventManager;
-//import com.didi.hummer.render.event.base.Event;
-//import com.didi.hummer.render.event.base.TraceEvent;
-//import com.didi.hummer.render.event.guesture.LongPressEvent;
-//import com.didi.hummer.render.event.guesture.PanEvent;
-//import com.didi.hummer.render.event.guesture.PinchEvent;
-//import com.didi.hummer.render.event.guesture.SwipeEvent;
-//import com.didi.hummer.render.event.guesture.TapEvent;
-//import com.didi.hummer.render.event.guesture.TouchEvent;
-//import com.didi.hummer.render.event.guesture.common.GestureUtils;
-//import com.didi.hummer.tools.EventTracer;
-
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.render.event.EventManager;
 import com.didi.hummer2.render.event.base.Event;

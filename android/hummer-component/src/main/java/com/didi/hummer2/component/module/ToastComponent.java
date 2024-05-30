@@ -7,7 +7,6 @@ import com.didi.hummer2.annotation.HMMethod;
 import com.didi.hummer2.module.Component;
 import com.didi.hummer2.render.Element;
 import com.didi.hummer2.component.hummer.toast.Toast;
-import com.didi.hummer2.utils.UIThreadUtil;
 
 /**
  * didi Create on 2024/4/10 .
@@ -25,7 +24,6 @@ public class ToastComponent extends Component {
 
     private HummerContext context;
 
-
     public ToastComponent(HummerContext context) {
         super(context);
         this.context = context;
@@ -33,25 +31,12 @@ public class ToastComponent extends Component {
 
     @HMMethod("show")
     public void show(String msg, int duration) {
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.show(msg, duration);
-            }
-        });
-
+        Toast.show(msg, duration);
     }
 
     @HMMethod("custom")
     public void custom(Element element, int duration) {
-
-        UIThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.custom(element.getView(), duration);
-            }
-        });
-
+        Toast.custom(element.getView(), duration);
     }
 
 }
