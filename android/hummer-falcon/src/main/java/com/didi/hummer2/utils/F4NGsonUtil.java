@@ -3,18 +3,22 @@ package com.didi.hummer2.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+//import com.google.gson.ToNumberPolicy;
 
 import java.lang.reflect.Type;
 
 public class F4NGsonUtil {
-//    private static CustomizedObjectTypeAdapter adapter = new CustomizedObjectTypeAdapter();
+    //    private static CustomizedObjectTypeAdapter adapter = new CustomizedObjectTypeAdapter();
     private static Gson sGson = new GsonBuilder()
+//            .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+//            .setObjectToNumberStrategy(ToNumberPolicy.LAZILY_PARSED_NUMBER)
 //            .registerTypeAdapter(Map.class, adapter)
 //            .registerTypeAdapter(List.class, adapter)
 //            .registerTypeAdapter(new TypeToken<Map<String, Object>>(){}.getType(), adapter)
 //            .registerTypeAdapter(new TypeToken<List<Object>>(){}.getType(), adapter)
 //            .registerTypeAdapterFactory(new GsonTypeAdapterFactory())
             .create();
+
 
     public static Gson gson() {
         return sGson;
@@ -45,14 +49,14 @@ public class F4NGsonUtil {
     public static boolean isValidJsonString(String jsonString) {
         try {
             return sGson.fromJson(jsonString, Object.class) != null;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
 
     /**
      * 判断此json字符串是否是的基本数据类型
-     * 
+     * <p>
      * 注：对"#aaa"这类字符串解析不准，会返回false
      *
      * @param strJson

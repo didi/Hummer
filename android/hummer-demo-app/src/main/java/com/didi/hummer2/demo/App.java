@@ -107,6 +107,6 @@ public class App extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-//        Hummer.release();
+        Hummer.releaseAll();
     }
 }
