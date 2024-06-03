@@ -24,6 +24,7 @@ import com.getkeepsafe.relinker.ReLinker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -257,6 +258,35 @@ public class HummerEngine {
             return hummerNameSpace.getHummerConfig();
         }
         return null;
+    }
+
+
+    public void release(String namespace) {
+        releaseByNamespace(namespace);
+    }
+
+    public void releaseAll() {
+        Iterator<HummerNameSpace> iterator = hummerNameSpaceMap.values().iterator();
+        while (iterator.hasNext()) {
+            HummerNameSpace hummerNameSpace = iterator.next();
+            releaseHummerNameSpace(hummerNameSpace);
+        }
+        hummerNameSpaceMap.clear();
+    }
+
+    private void releaseByNamespace(String namespace) {
+        if (TextUtils.isEmpty(namespace)) {
+            HMLog.w("HummerNative", "HummerEngine.release(namespace) namespace is empty.");
+            return;
+        }
+        HummerNameSpace hummerNameSpace = hummerNameSpaceMap.remove(namespace);
+        if (hummerNameSpace != null) {
+            releaseHummerNameSpace(hummerNameSpace);
+        }
+    }
+
+    private void releaseHummerNameSpace(HummerNameSpace hummerNameSpace) {
+        //暂时不清理资源，只去掉引用
     }
 
 

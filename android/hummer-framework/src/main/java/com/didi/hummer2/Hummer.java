@@ -61,4 +61,12 @@ public class Hummer {
         return null;
     }
 
+    public static void release(String namespace) {
+        hummerEngine.release(namespace);
+    }
+
+    public static void releaseAll() {
+        hummerEngine.releaseAll();
+    }
+
 }
