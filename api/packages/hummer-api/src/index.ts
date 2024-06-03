@@ -40,6 +40,8 @@ export * from "./components/HorizontalScroller"
 
 export * from "./components/Canvas"
 
+export * from "./components/CanvasView"
+
 export * from "./components/Loading"
 
 export * from "./components/Switch"

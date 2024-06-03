@@ -241,7 +241,7 @@ export class HummerElement extends Element {
      * //TODO 后续发布需要移除，并在业务代码中替换为新的方式，用“构造函数”替代
      * 已废弃/临时兼容旧版本
      */
-    protected initialize(){
+    protected initialize() {
 
     }
 
@@ -399,6 +399,10 @@ export class HummerElement extends Element {
         }
     }
 
+    public empty() {
+        this.call("empty")
+    }
+
 
     public get props() {
         return this.__propsVue__;
@@ -456,11 +460,11 @@ export class HummerElement extends Element {
             let target = childNode.findElementById(id);
             if (target) {
                 //console.info("findElementById(): this=" + this.__view_id + ",id=" + id + ",__view_id=" + target.__view_id);
-         
+
                 result = target;
                 childNode = undefined;
-            }else{
-                childNode = childNode.nextSibling?childNode.nextSibling as HummerElement :undefined;
+            } else {
+                childNode = childNode.nextSibling ? childNode.nextSibling as HummerElement : undefined;
             }
         }
         return result;
