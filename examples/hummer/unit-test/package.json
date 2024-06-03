@@ -4,9 +4,11 @@
   "description": "Hummer Project",
   "author": "realonezhang <realonezhang@didiglobal.com>",
   "scripts": {
-    "build": "hummer build",
-    "dev": "hummer dev",
-    "debug": "npm run dev & hummer debug"
+    "build": "node ./script/HummerCompat.js && hummer build",
+    "dev": "node ./script/HummerCompat.js && hummer dev",
+    "debug": "npm run dev & hummer debug",
+    "build:hummer2": "node ./script/HummerCompat.js hummer2 && hummer build",
+    "dev:hummer2": "node ./script/HummerCompat.js hummer2 &&  hummer dev"
   },
   "repository": {
     "type": "git",

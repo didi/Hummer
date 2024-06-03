@@ -22,6 +22,7 @@ class RootView extends View {
         btn1.addEventListener('tap', (event) => {
             let pageInfo = {
                 id: '222',
+                // url:'http://172.23.166.31:8030/index.js',
                 url: './Comp_Navigator_Page2.js',
                 // url: 'http://www.baidu.com',
                 // url: 'native://test',
@@ -71,7 +72,7 @@ class RootView extends View {
     onBack() {
         // 页面返回
         console.log("-- onBack");
-        return true;
+        return false;
     }
 }
 

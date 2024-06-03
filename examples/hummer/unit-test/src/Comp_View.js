@@ -1,4 +1,4 @@
-import{View, Text, Button, Input, TextArea, Scroller, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
+import { View, Text, Button, Input, TextArea, Scroller, Hummer } from './../../../../api/packages/hummer-api/dist/hummer-api.es'
 
 class RootView extends View {
     constructor() {
@@ -174,7 +174,7 @@ class RootView extends View {
             borderLeftWidth: 15,
             borderTopWidth: 6,
             borderRightWidth: 3,
-//            borderLeftColor: '#FF000080',
+            //            borderLeftColor: '#FF000080',
             borderRightColor: '#00000080',
             borderTopColor: '#00FF0080',
             borderBottomColor: '#0000FF80',
@@ -517,3 +517,16 @@ class RootView extends View {
 }
 
 Hummer.render(new RootView());
+
+
+// Hummer.loadScriptWithUrl("./daijia_home.main.js",
+//  (function () { 
+//     Hummer.loadScriptWithUrl("./common.js",
+//     (function () {
+//          Hummer.loadScriptWithUrl("./tenon.js",
+//           (function () {
+            
+//            })
+//         ) 
+//     })) 
+// }));

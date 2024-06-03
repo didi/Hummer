@@ -1,4 +1,4 @@
-import{View, Text, Button, Hummer} from '../../../../api/packages/hummer-api/dist/hummer-api.es'
+import{View, Text,Memory, Button, Hummer} from '../../../../api/packages/hummer-api/dist/hummer-api.es'
 
 
 class RootView extends View {
@@ -46,25 +46,31 @@ class RootView extends View {
         let timeCost3 = 0;
         let timeCost4 = 0;
 
+        let startTime4 = new Date().getTime();
+
         for (let i = 0; i < 1000; i++) {
-            let startTime1 = new Date().getTime();
-            let view = new View();
-            timeCost1 += new Date().getTime() - startTime1;
+            // let startTime1 = new Date().getTime();
+            // let view = new View();
+            // timeCost1 += new Date().getTime() - startTime1;
 
-            let startTime2 = new Date().getTime();
-            view.style = {
-                backgroundColor: '#FF000022',
-            }
-            timeCost2 += new Date().getTime() - startTime2;
+            // let startTime2 = new Date().getTime();
+            // view.style = {
+            //     backgroundColor: '#FF000022',
+            // }
+            // timeCost2 += new Date().getTime() - startTime2;
 
-            let startTime3 = new Date().getTime();
-            this.appendChild(view);
-            timeCost3 += new Date().getTime() - startTime3;
+            // let startTime3 = new Date().getTime();
+            // this.appendChild(view);
+            // timeCost3 += new Date().getTime() - startTime3;
 
-            let startTime4 = new Date().getTime();
-            view.empty();
-            timeCost4 += new Date().getTime() - startTime4;
+            // let startTime4 = new Date().getTime();
+            // view.empty();
+            // Memory.removeAll();
+            Memory.get("2");
+            // timeCost4 += new Date().getTime() - startTime4;
         }
+
+        timeCost4 += new Date().getTime() - startTime4;
 
         let info = 'new views, total time cost: ' + timeCost1 + ' ms\n';
         info += 'setStyle, total time cost: ' + timeCost2 + ' ms\n';

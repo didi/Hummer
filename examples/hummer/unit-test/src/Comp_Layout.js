@@ -1,4 +1,4 @@
-import{View, Text, Hummer} from '../../../../api/packages/hummer-api/dist/hummer-api.es'
+import{View, Text, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
 
 // ID Count
 let count = 0;

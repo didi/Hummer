@@ -1,4 +1,4 @@
-import{View, Text, Button, Input, TextArea, Scroller, Hummer} from '../../../../api/packages/hummer-api/dist/hummer-api.es'
+import{View, Text, Button, Input, TextArea, Scroller, Hummer} from './../../../../api/packages/hummer-api/dist/hummer-api.es'
 
 class RootView extends Scroller {
     constructor() {
