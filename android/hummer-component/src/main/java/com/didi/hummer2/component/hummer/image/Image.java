@@ -33,7 +33,7 @@ public class Image extends HMBase<RoundedImageView> {
     private boolean isWidthAuto = true;
     private boolean isHeightAuto = true;
 
-    private class ImageStyle implements Serializable {
+    public static class ImageStyle implements Serializable {
         public String src;
         public String placeholder;
         public String failedImage;
@@ -219,6 +219,34 @@ public class Image extends HMBase<RoundedImageView> {
             }
         }
     }
+
+    public void loadGif(String gifSrc, @Nullable JSCallback completeCallback) {
+        // Gif图片处理
+        this.gifSrc = gifSrc;
+        loadGif(gifSrc, gifRepeatCount);
+    }
+
+
+    public void load(String src, @Nullable JSCallback completeCallback) {
+        // 普通图片处理
+        this.src = (String) src;
+        loadImage((String) src, completeCallback);
+    }
+
+    public void load(ImageStyle style, @Nullable JSCallback completeCallback) {
+        if (style != null) {
+            if (!TextUtils.isEmpty(style.gifSrc)) {
+                // gif图片处理
+                this.gifSrc = style.gifSrc;
+                loadGif(style.gifSrc, style.placeholder, style.failedImage, style.gifRepeatCount, completeCallback);
+            } else if (!TextUtils.isEmpty(style.src)) {
+                // 普通图片处理
+                this.src = style.src;
+                loadImage(style.src, style.placeholder, style.failedImage, completeCallback);
+            }
+        }
+    }
+
 
     private void loadImage(String url) {
         loadImage(url, null, null, null);

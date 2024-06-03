@@ -1,6 +1,9 @@
 package com.didi.hummer2.adapter.imageloader.impl;
 
 import static com.bumptech.glide.load.DataSource.REMOTE;
+import static com.didi.hummer2.adapter.imageloader.OnImageLoadEvent.SRC_TYPE_APP_ID;
+import static com.didi.hummer2.adapter.imageloader.OnImageLoadEvent.SRC_TYPE_LOCAL;
+import static com.didi.hummer2.adapter.imageloader.OnImageLoadEvent.SRC_TYPE_REMOTE;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
@@ -21,6 +24,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.didi.hummer2.adapter.imageloader.DrawableCallback;
 import com.didi.hummer2.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer2.adapter.imageloader.ImageSizeCallback;
+import com.didi.hummer2.adapter.imageloader.OnImageLoadEvent;
 import com.didi.hummer2.tools.HummerGlobal;
 import com.didi.hummer2.engine.JSCallback;
 
@@ -70,16 +74,19 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
                 Glide.with(view.getContext()).load(url).apply(requestOptions).listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        completeCallback.call(FAIL_SRC, false);
+                        OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_REMOTE, -1);
+                        completeCallback.call(imageLoadEvent);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         if (dataSource.equals(REMOTE)) {
-                            completeCallback.call(REMOTE_SRC, true);
+                            OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_REMOTE, 0);
+                            completeCallback.call(imageLoadEvent);
                         } else {
-                            completeCallback.call(LOCAL_SRC, true);
+                            OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_LOCAL, 0);
+                            completeCallback.call(imageLoadEvent);
                         }
                         return false;
                     }
@@ -127,7 +134,8 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
                     if (completeCallback != null) {
-                        completeCallback.call(FAIL_SRC, false);
+                        OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_REMOTE, -1);
+                        completeCallback.call(imageLoadEvent);
                     }
                     return false;
                 }
@@ -137,9 +145,11 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
                     resource.setLoopCount(fRepeatCount);
                     if (completeCallback != null) {
                         if (dataSource.equals(REMOTE)) {
-                            completeCallback.call(REMOTE_SRC, true);
+                            OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_REMOTE, 0);
+                            completeCallback.call(imageLoadEvent);
                         } else {
-                            completeCallback.call(LOCAL_SRC, true);
+                            OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_LOCAL, 0);
+                            completeCallback.call(imageLoadEvent);
                         }
                     }
                     return false;
@@ -161,11 +171,13 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
         if (view != null) {
             view.setImageResource(resId);
             if (completeCallback != null) {
-                completeCallback.call(LOCAL_SRC, true);
+                OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_APP_ID, 0);
+                completeCallback.call(imageLoadEvent);
             }
         } else {
             if (completeCallback != null) {
-                completeCallback.call(FAIL_SRC, false);
+                OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_APP_ID, -1);
+                completeCallback.call(imageLoadEvent);
             }
         }
     }
@@ -189,7 +201,8 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
                     if (completeCallback != null) {
-                        completeCallback.call(FAIL_SRC, false);
+                        OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_REMOTE, -1);
+                        completeCallback.call(imageLoadEvent, false);
                     }
                     return false;
                 }
@@ -199,9 +212,11 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
                     resource.setLoopCount(fRepeatCount);
                     if (completeCallback != null) {
                         if (dataSource.equals(REMOTE)) {
-                            completeCallback.call(REMOTE_SRC, true);
+                            OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_REMOTE, 0);
+                            completeCallback.call(imageLoadEvent);
                         } else {
-                            completeCallback.call(LOCAL_SRC, true);
+                            OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(SRC_TYPE_LOCAL, 0);
+                            completeCallback.call(imageLoadEvent);
                         }
                     }
                     return false;
@@ -242,7 +257,8 @@ public class DefaultImageLoaderAdapter implements IImageLoaderAdapter {
         Drawable drawable = null;
         try {
             drawable = HummerGlobal.appContext.getResources().getDrawable(resId);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         if (callback != null) {
             callback.onDrawableLoaded(drawable);
         }

@@ -10,19 +10,11 @@ import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.HummerScriptContext;
 import com.didi.hummer2.adapter.imageloader.IImageLoaderAdapter;
 import com.didi.hummer2.adapter.imageloader.ImageSizeCallback;
+import com.didi.hummer2.adapter.imageloader.OnImageLoadEvent;
 import com.didi.hummer2.engine.JSCallback;
 import com.didi.hummer2.render.utility.YogaDrawableUtil;
 import com.didi.hummer2.render.utility.YogaResUtils;
 import com.didi.hummer2.utils.JsSourceUtil;
-
-//import com.didi.hummer.adapter.HummerAdapter;
-//import com.didi.hummer.adapter.imageloader.IImageLoaderAdapter;
-//import com.didi.hummer.adapter.imageloader.ImageSizeCallback;
-//import com.didi.hummer.context.HummerContext;
-//import com.didi.hummer.core.engine.JSCallback;
-//import com.didi.hummer.render.utility.YogaDrawableUtil;
-//import com.didi.hummer.render.utility.YogaResUtils;
-//import com.didi.hummer.utils.JsSourceUtil;
 
 /**
  * Created by XiaoFeng on 2020/3/20.
@@ -166,11 +158,13 @@ public class ImageRenderUtil {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
             imageView.setImageBitmap(bitmap);
             if (completeCallback != null) {
-                completeCallback.call(2, true);
+                OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(OnImageLoadEvent.SRC_TYPE_BASE64, 0);
+                completeCallback.call(imageLoadEvent);
             }
         } catch (Exception e) {
             if (completeCallback != null) {
-                completeCallback.call(0, false);
+                OnImageLoadEvent imageLoadEvent = new OnImageLoadEvent(OnImageLoadEvent.SRC_TYPE_BASE64, -1);
+                completeCallback.call(imageLoadEvent);
             }
         }
     }
