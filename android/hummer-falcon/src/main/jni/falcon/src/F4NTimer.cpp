@@ -49,7 +49,7 @@ JsiValue *F4NTimer::setInterval(size_t size, JsiValue **params) {
             function->call(0, nullptr);
 
         }, 0, interval_time_t);
-        debug("F4NTimer::setInterval() id=%d", id);
+        debug("F4NTimer::setInterval() id=%ld", id);
         return new JsiNumber(id);
     }
     return nullptr;

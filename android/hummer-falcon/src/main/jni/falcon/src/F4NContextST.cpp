@@ -38,11 +38,11 @@ void F4NContextST::onStart() {
 
 
 JsiValue *F4NContextST::evaluateJavaScript(string script, string scriptId) {
-    F4NContext::evaluateJavaScript(script, scriptId);
+   return F4NContext::evaluateJavaScript(script, scriptId);
 }
 
 JsiValue *F4NContextST::evaluateBytecode(const uint8_t *byteArray, size_t length, const char *scriptId) {
-    F4NContext::evaluateBytecode(byteArray, length, scriptId);
+   return F4NContext::evaluateBytecode(byteArray, length, scriptId);
 }
 
 

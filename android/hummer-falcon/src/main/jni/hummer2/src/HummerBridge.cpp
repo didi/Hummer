@@ -141,7 +141,7 @@ jobject HMObject_get_value_(JNIEnv *env, jobject obj, jlong identify, jstring ke
     const char *keyValue = env->GetStringUTFChars(key, nullptr);
     JsiValue *hmValue = hmObject->getValue(keyValue);
     jobject result = value2JObject(env, hmValue);
-    hmValue->obj = NULL;
+    hmValue->obj = 0;
 
     env->ReleaseStringUTFChars(key, keyValue);
 
@@ -174,8 +174,9 @@ jboolean HMObject_remove_value_(JNIEnv *env, jobject obj, jlong identify, jstrin
 
     const char *keyValue = env->GetStringUTFChars(key, nullptr);
     hmObject->removeValue(keyValue);
-
     env->ReleaseStringUTFChars(key, keyValue);
+
+    return JNI_FALSE;
 }
 
 jobject HMObject_keys_(JNIEnv *env, jobject obj, jlong identify) {
@@ -303,14 +304,14 @@ jobject HMArray_pop_(JNIEnv *env, jobject obj, jlong identify) {
 jobject HMArray_remove_value_at_(JNIEnv *env, jobject obj, jlong identify, jint index) {
     JsiArray *hmArray = (JsiArray *) identify;
     hmArray->removeValueAt(index);
-
+    return nullptr;
 }
 
 jobject HMArray_remove_value_(JNIEnv *env, jobject obj, jlong identify, jlong value) {
     JsiArray *hmArray = (JsiArray *) identify;
     JsiValue *hmValue = (JsiValue *) value;
     hmArray->removeValue(hmValue);
-
+    return nullptr;
 }
 
 void HMArray_clear_(JNIEnv *env, jobject obj, jlong identify) {
@@ -346,6 +347,12 @@ jobject value2JObject(JNIEnv *env, JsiValue *hmValue) {
             return HMArrayGetJObject_(env, (JsiArray *) hmValue);
         case TYPE_NAPIFunction:
             return HMFunctionGetJObject_(env, (JsiFunction *) hmValue);
+        case TYPE_EXT:
+        case TYPE_COMPONENT:
+        case TYPE_NAPIExternal:
+        case TYPE_NAPIUndefined:
+        case TYPE_VALUE:
+            break;
     }
 //    }
     return (jobject) hmValue->obj;

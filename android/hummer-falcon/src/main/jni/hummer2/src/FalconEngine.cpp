@@ -82,7 +82,7 @@ void FalconEngine_destroyContext_(JNIEnv *env, jclass cls, jlong contextId) {
 jboolean FalconEngine_bindContext_(JNIEnv *env, jclass cls, jlong contextId, jobject context, jobject configOption) {
     F4NContext *f4NContext = (F4NContext *) contextId;
     jobject globalContext = env->NewGlobalRef(context);
-    LOGI("FalconEngine::bindContext() contextId=%u，context=%u,globalContext=%u", contextId, context, globalContext);
+    LOGI("FalconEngine::bindContext() contextId=%ld，context=%u,globalContext=%ld", contextId, context, globalContext);
 
     f4NContext->nativeContext = (uintptr_t) globalContext;
 

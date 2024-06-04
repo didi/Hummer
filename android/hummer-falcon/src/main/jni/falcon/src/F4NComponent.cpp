@@ -181,7 +181,7 @@ void F4NComponent::onDestroy() {
 }
 
 void F4NComponent::onJsiFinalize(void *finalizeData, void *finalizeHint) {
-    info("Component::onJsiFinalize id=%u,tag=%s,props=%s", odjId, tag.c_str(), props->toString().c_str());
+    info("Component::onJsiFinalize id=%ld,tag=%s,props=%s", odjId, tag.c_str(), props->toString().c_str());
     F4NObject::onJsiFinalize(finalizeData, finalizeHint);
 //    delete this;
 }
