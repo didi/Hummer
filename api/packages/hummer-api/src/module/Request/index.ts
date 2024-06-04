@@ -11,7 +11,7 @@ export class Request extends HummerComponent {
 
 
     public constructor(props: any = {}) {
-        super("Request", props);
+        super("Request", props,false);
     }
 
 

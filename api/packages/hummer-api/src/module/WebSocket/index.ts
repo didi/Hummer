@@ -12,7 +12,7 @@ export class WebSocket extends HummerComponent {
 
 
     public constructor(url: string) {
-        super("WebSocket", {});
+        super("WebSocket", {},false);
         this.addEventListener("__onopen__", () => {
             if (this.__onopen__ != undefined) {
                 this.__onopen__();

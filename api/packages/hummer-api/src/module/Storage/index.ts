@@ -5,7 +5,7 @@ export class Storage extends HummerComponent {
 
 
     public constructor(props: any = {}) {
-        super("Storage", props);
+        super("Storage", props,false);
     }
 
     protected static get instance(): Storage {

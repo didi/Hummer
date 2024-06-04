@@ -5,7 +5,7 @@ const HUMMER = __Hummer__;
 export class Memory extends HummerComponent {
 
     public constructor(props: any = {}) {
-        super("Memory", props);
+        super("Memory", props,false);
     }
 
 

@@ -59,7 +59,7 @@ export class HummerApi extends HummerComponent {
     private _rootElement: Element | undefined = undefined
 
     public constructor(props: any = {}) {
-        super("Hummer", props);
+        super("Hummer", props,false);
     }
 
     protected static newInstance(): HummerApi {
