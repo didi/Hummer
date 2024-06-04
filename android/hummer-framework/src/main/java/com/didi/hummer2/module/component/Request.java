@@ -45,8 +45,9 @@ public class Request implements ILifeCycle {
         this.method = "POST";
         this.timeout = 10000;//单位：毫秒
         this.url = "";
-
-        httpAdapter = ((HummerScriptContext) context).getHummerConfig().getHttpAdapter();
+        if (context instanceof HummerScriptContext) {
+            httpAdapter = ((HummerScriptContext) context).getHummerConfig().getHttpAdapter();
+        }
     }
 
     @Override

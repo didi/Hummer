@@ -5,10 +5,6 @@ import android.content.Context;
 
 import com.didi.hummer2.Hummer;
 import com.didi.hummer2.HummerConfig;
-import com.didi.hummer2.register.HummerRegister;
-import com.didi.hummer2.register.HummerRegister$$hummer_framework;
-import com.didi.hummer2.register.HummerRegister$$hummer_component;
-import com.didi.hummer2.register.InvokerRegister;
 import com.didi.hummer2.utils.F4NDebugUtil;
 
 /**
@@ -37,13 +33,11 @@ public class App extends Application {
         F4NDebugUtil.setDebuggable(true);
 
 
-        HummerConfig config = new HummerConfig.Builder(this).addHummerRegister(new HummerRegister() {
-            @Override
-            public void register(InvokerRegister invokerRegister) {
-                new HummerRegister$$hummer_framework().register(invokerRegister);
-                new HummerRegister$$hummer_component().register(invokerRegister);
-            }
-        }).setFontAdapter(new TestFontAdapter()).setDebuggable(false).build();
+        HummerConfig config = new HummerConfig.Builder(this)
+                .setFontAdapter(new TestFontAdapter())
+                .setDebuggable(false)
+                .setAutoHummerRegister(true)
+                .build();
         Hummer.init(config);
 
 //        DoraemonKit.install(this, null, "cfe007137560fd511dfbcbbb3c9889c8");

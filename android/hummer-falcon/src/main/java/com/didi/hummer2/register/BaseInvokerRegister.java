@@ -2,6 +2,7 @@ package com.didi.hummer2.register;
 
 import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.invoke.Invoker;
+import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.utils.HMLog;
 
 import java.util.Map;
@@ -34,10 +35,10 @@ public class BaseInvokerRegister implements InvokerRegister {
     @Override
     public Object invoke(HummerContext hummerContext, HummerObject hummerObject, long type, long objId, long methodType, String componentName, String methodName, int argc, Object[] params) {
         Invoker invoker = hummerObject.getInvoker();
-        if (invoker!= null){
+        if (invoker != null) {
             return invoker.invoke(hummerContext, hummerObject, methodName, params);
-        }else {
-            HMLog.e("HummerNative","invoke() not found "+componentName+"."+methodName);
+        } else {
+            HMLog.e("HummerNative", "invoke() not found " + componentName + "." + methodName);
         }
         return null;
     }
@@ -45,11 +46,28 @@ public class BaseInvokerRegister implements InvokerRegister {
 
     @Override
     public void registerInvoker(Invoker invoker) {
+        if (F4NDebugUtil.isDebuggable()) {
+            if (invokers.containsKey(invoker.getName())) {
+                String className = tryFindClassName(invoker);
+                HMLog.w("HummerNative", "registerInvoker() invoker already exist. name=" + invoker.getName() + ",className=" + className);
+            }
+        }
         invokers.put(invoker.getName(), invoker);
     }
 
     @Override
     public Invoker getInvoker(String name) {
         return invokers.get(name);
+    }
+
+
+    private String tryFindClassName(Invoker invoker) {
+        String className = "unknown";
+        try {
+            className = invoker.createInstance(null).getClass().getName();
+        } catch (Exception e) {
+//            e.printStackTrace();
+        }
+        return className;
     }
 }

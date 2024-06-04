@@ -196,7 +196,7 @@ public class HummerRegisterClassCreator {
 
     public void createModuleConfigFile() {
         String value = Constant.PACKAGE_NAME + "." + Constant.PREFIX_OF_REGISTER_FILE + moduleName;
-        String resourceFile = "META-INF/services/com.didi.hummer2.HummerRegister";
+        String resourceFile = "META-INF/services/com.didi.hummer2.register.HummerRegister";
         SortedSet<String> newServices = new TreeSet<>();
         newServices.add(value);
         try {
