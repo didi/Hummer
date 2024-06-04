@@ -1,6 +1,8 @@
 package com.didi.hummer2.adapter.memory.iml;
 
 
+import android.text.TextUtils;
+
 import com.didi.hummer2.adapter.memory.IMemoryAdapter;
 
 import java.util.ArrayList;
@@ -61,15 +63,22 @@ public class DefaultMemoryAdapter implements IMemoryAdapter {
     }
 
     private void set(String namespace, String key, Object value) {
-        memoryStoreMap.put(key, value);
+        if (!TextUtils.isEmpty(key)) {
+            memoryStoreMap.put(key, value);
+        }
     }
 
     private Object get(String namespace, String key) {
-        return memoryStoreMap.get(key);
+        if (!TextUtils.isEmpty(key)) {
+            return memoryStoreMap.get(key);
+        }
+        return null;
     }
 
     private void remove(String namespace, String key) {
-        memoryStoreMap.remove(key);
+        if (!TextUtils.isEmpty(key)) {
+            memoryStoreMap.remove(key);
+        }
     }
 
     private void removeAll(String namespace) {
@@ -85,6 +94,9 @@ public class DefaultMemoryAdapter implements IMemoryAdapter {
     }
 
     private boolean exist(String namespace, String key) {
-        return memoryStoreMap.containsKey(key);
+        if (!TextUtils.isEmpty(key)) {
+            return memoryStoreMap.containsKey(key);
+        }
+        return false;
     }
 }

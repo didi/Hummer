@@ -21,19 +21,29 @@ F4NComponent::F4NComponent(long objId, JsiContext *context, F4NRenderInvoker *re
 
 void F4NComponent::onCreate(string tag, JsiValue *props) {
     F4NObject::onCreate(tag, props);
-    if (tag == "Dialog") {
-        main = true;
-    }
-    if (tag == "Toast") {
-        main = true;
-    }
-    if (tag == "Navigator") {
-        main = true;
-    }
-    if (tag == "NotifyCenter") {
-        main = true;
+    if (props != nullptr && props->getType() == TYPE_OBJECT) {
+        JsiObject *jsiObject = (JsiObject *) props;
+        JsiValue *viewType = jsiObject->getValue("viewType");
+        if (viewType != nullptr && viewType->getType() == TYPE_BOOLEAN) {
+            main = ((JsiBoolean *) viewType)->value_;
+        }
     }
 
+    if (tag == "Hummer") {
+        main = false;
+    }
+    if (tag == "Memory") {
+        main = false;
+    }
+    if (tag == "Storage") {
+        main = false;
+    }
+    if (tag == "Request") {
+        main = false;
+    }
+    if (tag == "WebSocket") {
+        main = false;
+    }
 
     object->registerFunction(MethodId_setEventTarget, "setEventTarget", componentFuncWrapper, this);
     object->registerFunction(MethodId_addEventListener, "addEventListener", componentFuncWrapper, this);
