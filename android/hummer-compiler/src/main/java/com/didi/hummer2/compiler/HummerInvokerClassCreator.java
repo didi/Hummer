@@ -3,7 +3,6 @@ package com.didi.hummer2.compiler;
 import com.didi.hummer2.annotation.HMAttribute;
 import com.didi.hummer2.annotation.HMComponent;
 import com.didi.hummer2.annotation.HMMethod;
-import com.didi.hummer2.annotation.HMProperty;
 import com.didi.hummer2.annotation.HMStyle;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
@@ -42,7 +41,7 @@ public class HummerInvokerClassCreator {
     private String className;
     private String annoClassName;
     private ClassName thisClass;
-    private TypeName baseInvokerTHmBase;
+    private TypeName baseInvoker;
 
     public HummerInvokerClassCreator(ProcessingEnvironment processingEnv) {
         elementUtils = processingEnv.getElementUtils();
@@ -58,7 +57,7 @@ public class HummerInvokerClassCreator {
         className = classElement.getSimpleName().toString();
         annoClassName = classElement.getAnnotation(HMComponent.class).value();
         thisClass = ClassName.get(packageName, className);
-        baseInvokerTHmBase = ParameterizedTypeName.get(TypeUtil.baseInvoker, thisClass); // 泛型
+        baseInvoker = ParameterizedTypeName.get(TypeUtil.baseInvoker, thisClass); // 泛型
         return this;
     }
 
@@ -72,22 +71,28 @@ public class HummerInvokerClassCreator {
     }
 
     private TypeSpec generateJavaClass() {
-        return TypeSpec.classBuilder(annoClassName + Constant.SUFFIX_OF_INVOKER_FILE)
+        TypeSpec.Builder builder = TypeSpec.classBuilder(annoClassName + Constant.SUFFIX_OF_INVOKER_FILE)
                 // public 修饰类
                 .addModifiers(Modifier.PUBLIC)
                 // 父类
-                .superclass(baseInvokerTHmBase)
+                .superclass(baseInvoker)
                 // 添加类的方法
                 .addMethod(generateGetNameMethod())
                 // 添加类的方法
                 .addMethod(generateCreateInstanceMethod())
                 // 添加类的方法
-                .addMethod(generateInvokeMethod())
-                // 添加类的方法
-                .addMethod(generateAttributeMethod())
-                .addMethod(generateInvokeStyleMethod())
-                // 构建Java类
-                .build();
+                .addMethod(generateInvokeMethod());
+
+        if (hasHummerAttribute()) {
+            // 添加类的方法
+            builder.addMethod(generateAttributeMethod());
+        }
+        if (hasHummerStyle()) {
+            // 添加类的方法
+            builder.addMethod(generateInvokeStyleMethod());
+        }
+        // 构建Java类
+        return builder.build();
     }
 
     private MethodSpec generateGetNameMethod() {
@@ -178,29 +183,74 @@ public class HummerInvokerClassCreator {
 
     private MethodSpec generateInvokeMethod() {
         MethodSpec.Builder invokeMethod = MethodSpec.methodBuilder("onInvoke").addAnnotation(Override.class).addModifiers(Modifier.PROTECTED).returns(Object.class).addParameter(TypeUtil.hummerContext, "hummerContext").addParameter(thisClass, "instance").addParameter(String.class, "methodName").addParameter(Object[].class, "params");
+        if (!hasHummerMethod()) {
+            invokeMethod.addStatement("return null");
+            return invokeMethod.build();
+        }
 
-        invokeMethod.addStatement("$T jsRet = null", Object.class).beginControlFlow("switch ($L)", "methodName");
+        invokeMethod.addStatement("$T result = null", Object.class);
+        invokeMethod.beginControlFlow("switch ($L)", "methodName");
 
         List<? extends Element> allMembers = getClassAllElements(classElement);
         for (Element member : allMembers) {
             if (member.getKind() == ElementKind.METHOD) {
-                HMMethod jsMethod = member.getAnnotation(HMMethod.class);
-                if (jsMethod != null) {
+                HMMethod annotation = member.getAnnotation(HMMethod.class);
+                if (annotation != null) {
+                    String methodName = annotation.value();
                     ExecutableElement executableElement = (ExecutableElement) member;
                     logger.info("Method: " + executableElement.getModifiers() + executableElement);
-                    generateEachFunctionCase(invokeMethod, executableElement);
+                    generateHummerMethodCase(invokeMethod, methodName, executableElement);
                 }
             }
         }
 
-        invokeMethod.endControlFlow().addStatement("return jsRet");
+        invokeMethod.endControlFlow().addStatement("return result");
         return invokeMethod.build();
     }
 
+    private boolean hasHummerMethod() {
+        List<? extends Element> allMembers = getClassAllElements(classElement);
+        for (Element member : allMembers) {
+            if (member.getKind() == ElementKind.METHOD) {
+                HMMethod annotation = member.getAnnotation(HMMethod.class);
+                if (annotation != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasHummerAttribute() {
+        List<? extends Element> allMembers = getClassAllElements(classElement);
+        for (Element member : allMembers) {
+            if (member.getKind() == ElementKind.FIELD) {
+                HMAttribute annotation = member.getAnnotation(HMAttribute.class);
+                if (annotation != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasHummerStyle() {
+        List<? extends Element> allMembers = getClassAllElements(classElement);
+        for (Element member : allMembers) {
+            if (member.getKind() == ElementKind.METHOD) {
+                HMStyle annotation = member.getAnnotation(HMStyle.class);
+                if (annotation != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     private MethodSpec generateAttributeMethod() {
         MethodSpec.Builder invokeMethod = MethodSpec.methodBuilder("onInvokeUpdateAttribute").addAnnotation(Override.class).addModifiers(Modifier.PROTECTED).returns(boolean.class).addParameter(TypeUtil.hummerContext, "hummerContext").addParameter(thisClass, "instance").addParameter(String.class, "attributeName").addParameter(Object[].class, "params");
-
-        invokeMethod.addStatement("$T jsRet = false", boolean.class).beginControlFlow("switch ($L)", "attributeName");
+        invokeMethod.addStatement("$T result = false", boolean.class).beginControlFlow("switch ($L)", "attributeName");
 
         List<? extends Element> allMembers = getClassAllElements(classElement);
         for (Element member : allMembers) {
@@ -217,7 +267,7 @@ public class HummerInvokerClassCreator {
                     // set方法
                     ExecutableElement setElement = pickMethod(allMembers, setFuncName);
                     if (setElement != null) {
-                        generateEachFunctionAttributeCase(invokeMethod, setElement,annoValue);
+                        generateHummerAttributeCase(invokeMethod, setElement, annoValue);
                     } else {
                         generateEachVariableSetCase(invokeMethod, variableElement, annoValue);
                     }
@@ -231,7 +281,7 @@ public class HummerInvokerClassCreator {
             }
         }
 
-        invokeMethod.endControlFlow().addStatement("return jsRet");
+        invokeMethod.endControlFlow().addStatement("return result");
         return invokeMethod.build();
     }
 
@@ -249,7 +299,7 @@ public class HummerInvokerClassCreator {
                     String annoValue = jsMethod.value();
                     ExecutableElement executableElement = (ExecutableElement) member;
                     logger.info("Style: " + executableElement.getModifiers() + executableElement);
-                    generateEachFunctionStyleCase(invokeMethod, executableElement,annoValue);
+                    generateHummerStyleCase(invokeMethod, executableElement, annoValue);
                 }
             }
         }
@@ -264,9 +314,9 @@ public class HummerInvokerClassCreator {
      * @param methodSpec
      * @param executableElement
      */
-    private void generateEachFunctionCase(MethodSpec.Builder methodSpec, ExecutableElement executableElement) {
+    private void generateHummerMethodCase(MethodSpec.Builder methodSpec, String methodName, ExecutableElement executableElement) {
         String funcName = executableElement.getSimpleName().toString();
-        methodSpec.beginControlFlow("case $S:", funcName);
+        methodSpec.beginControlFlow("case $S:", methodName);
 
         String params = generateEachFunctionParams(methodSpec, executableElement.getParameters());
 
@@ -277,12 +327,12 @@ public class HummerInvokerClassCreator {
         if (TypeUtil.isVoid(returnType)) {
             methodSpec.addStatement("$L.$L($L)", instance, funcName, params);
         } else {
-            methodSpec.addStatement("jsRet = $L.$L($L)", instance, funcName, params);
+            methodSpec.addStatement("result = $L.$L($L)", instance, funcName, params);
         }
         methodSpec.endControlFlow("break");
     }
 
-    private void generateEachFunctionAttributeCase(MethodSpec.Builder methodSpec, ExecutableElement executableElement, String annoValue) {
+    private void generateHummerAttributeCase(MethodSpec.Builder methodSpec, ExecutableElement executableElement, String annoValue) {
         String funcName = executableElement.getSimpleName().toString();
         methodSpec.beginControlFlow("case $S:", annoValue);
 
@@ -294,14 +344,14 @@ public class HummerInvokerClassCreator {
         String instance = isStaticMethod ? className : "instance";
         if (TypeUtil.isVoid(returnType)) {
             methodSpec.addStatement("$L.$L($L)", instance, funcName, params);
-            methodSpec.addStatement("jsRet = true");
+            methodSpec.addStatement("result = true");
         } else {
-            methodSpec.addStatement("jsRet = $L.$L($L)", instance, funcName, params);
+            methodSpec.addStatement("result = $L.$L($L)", instance, funcName, params);
         }
         methodSpec.endControlFlow("break");
     }
 
-    private void generateEachFunctionStyleCase(MethodSpec.Builder methodSpec, ExecutableElement executableElement, String styleName) {
+    private void generateHummerStyleCase(MethodSpec.Builder methodSpec, ExecutableElement executableElement, String styleName) {
         String funcName = executableElement.getSimpleName().toString();
         methodSpec.beginControlFlow("case $S:", styleName);
 
@@ -337,7 +387,7 @@ public class HummerInvokerClassCreator {
                 params.append("hummerContext,");
                 methodParameters = methodParameters.subList(1, methodParameters.size());
             } else if (TypeUtil.context.toString().equals(param0Type)) {
-                params.append("hummerContext,");
+                params.append("hummerContext.getContext(),");
                 methodParameters = methodParameters.subList(1, methodParameters.size());
             }
         }
@@ -366,7 +416,7 @@ public class HummerInvokerClassCreator {
         processSingleStatement(methodSpec, variableElement, 0);
         String varName = variableElement.getSimpleName().toString();
         methodSpec.addStatement("instance.$L = param0", varName);
-        methodSpec.addStatement("jsRet = true");
+        methodSpec.addStatement("result = true");
         methodSpec.endControlFlow("break");
     }
 

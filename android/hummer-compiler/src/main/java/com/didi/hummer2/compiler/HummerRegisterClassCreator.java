@@ -25,7 +25,6 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.FileObject;
@@ -167,23 +166,23 @@ public class HummerRegisterClassCreator {
 
         return this;
     }
-
-    private String upperCase(String str) {
-        char[] ch = str.toCharArray();
-        if (ch[0] >= 'a' && ch[0] <= 'z') {
-            ch[0] = (char) (ch[0] - 32);
-        }
-        return new String(ch);
-    }
-
-    private ExecutableElement pickFunction(List<? extends Element> allMembers, String funcName) {
-        for (Element member : allMembers) {
-            if (member.getKind() == ElementKind.METHOD && member.getSimpleName().toString().equals(funcName)) {
-                return (ExecutableElement) member;
-            }
-        }
-        return null;
-    }
+//
+//    private String upperCase(String str) {
+//        char[] ch = str.toCharArray();
+//        if (ch[0] >= 'a' && ch[0] <= 'z') {
+//            ch[0] = (char) (ch[0] - 32);
+//        }
+//        return new String(ch);
+//    }
+//
+//    private ExecutableElement pickFunction(List<? extends Element> allMembers, String funcName) {
+//        for (Element member : allMembers) {
+//            if (member.getKind() == ElementKind.METHOD && member.getSimpleName().toString().equals(funcName)) {
+//                return (ExecutableElement) member;
+//            }
+//        }
+//        return null;
+//    }
 
     public void create() {
         JavaFile javaFile = JavaFile.builder(Constant.PACKAGE_NAME, generateJavaClass()).build();
@@ -240,16 +239,14 @@ public class HummerRegisterClassCreator {
                 .build();
     }
 
-    private FieldSpec generateJsCodeField() {
-        FieldSpec.Builder field = FieldSpec.builder(String.class, "JS_CODE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
-        field.initializer("$S", jsCode);
-        return field.build();
-    }
+//    private FieldSpec generateJsCodeField() {
+//        FieldSpec.Builder field = FieldSpec.builder(String.class, "JS_CODE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
+//        field.initializer("$S", jsCode);
+//        return field.build();
+//    }
 
     private MethodSpec generateInitMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("register")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addParameter(TypeUtil.hummerContext, "hummerContext");
+        MethodSpec.Builder method = MethodSpec.methodBuilder("register").addModifiers(Modifier.PUBLIC, Modifier.STATIC).addParameter(TypeUtil.hummerContext, "hummerContext");
         for (ClassName className : invokerClassMap) {
             method.addStatement("hummerContext.registerInvoker(new $T())", className);
         }
@@ -258,10 +255,7 @@ public class HummerRegisterClassCreator {
     }
 
     private MethodSpec generateRegisterMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("register")
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Override.class)
-                .addParameter(invokerRegister, "invokerRegister");
+        MethodSpec.Builder method = MethodSpec.methodBuilder("register").addModifiers(Modifier.PUBLIC).addAnnotation(Override.class).addParameter(invokerRegister, "invokerRegister");
         for (ClassName className : invokerClassMap) {
             method.addStatement("invokerRegister.registerInvoker(new $T())", className);
         }
@@ -269,49 +263,49 @@ public class HummerRegisterClassCreator {
         return method.build();
     }
 
-    /**
-     * 判断某个方法或者属性是否是static
-     *
-     * @param element
-     * @return
-     */
-    private boolean isStaticModifier(Element element) {
-        return element.getModifiers().contains(Modifier.STATIC);
-    }
+//    /**
+//     * 判断某个方法或者属性是否是static
+//     *
+//     * @param element
+//     * @return
+//     */
+//    private boolean isStaticModifier(Element element) {
+//        return element.getModifiers().contains(Modifier.STATIC);
+//    }
 
-    /**
-     * 获取class的所有成员方法和成员变量
-     *
-     * @param typeElement
-     * @return
-     */
-    private List<? extends Element> getClassAllElements(TypeElement typeElement) {
-        List<String> allMemberNames = new ArrayList<>(); // 用于去重
-        List<Element> allMembers = new ArrayList<>();
-        TypeElement parent = typeElement;
-        while (parent != null && !parent.toString().startsWith(TypeUtil.HummerObjectClass)) {
-            // 获取class的所有成员方法和成员变量（包括父类）
-//            List<? extends Element> members = elementUtils.getAllMembers(parent);
-            // 获取class的所有成员方法和成员变量（不包括父类）
-            List<? extends Element> members = parent.getEnclosedElements();
-            for (Element e : members) {
-                if (!allMemberNames.contains(e.toString())) {
-                    allMemberNames.add(e.toString());
-                    allMembers.add(e);
-                }
-            }
-            parent = TypeUtil.getSuperClass(parent);
-        }
-        return allMembers;
-    }
+//    /**
+//     * 获取class的所有成员方法和成员变量
+//     *
+//     * @param typeElement
+//     * @return
+//     */
+//    private List<? extends Element> getClassAllElements(TypeElement typeElement) {
+//        List<String> allMemberNames = new ArrayList<>(); // 用于去重
+//        List<Element> allMembers = new ArrayList<>();
+//        TypeElement parent = typeElement;
+//        while (parent != null && !parent.toString().startsWith(TypeUtil.HummerObjectClass)) {
+//            // 获取class的所有成员方法和成员变量（包括父类）
+////            List<? extends Element> members = elementUtils.getAllMembers(parent);
+//            // 获取class的所有成员方法和成员变量（不包括父类）
+//            List<? extends Element> members = parent.getEnclosedElements();
+//            for (Element e : members) {
+//                if (!allMemberNames.contains(e.toString())) {
+//                    allMemberNames.add(e.toString());
+//                    allMembers.add(e);
+//                }
+//            }
+//            parent = TypeUtil.getSuperClass(parent);
+//        }
+//        return allMembers;
+//    }
 
-    private MethodSpec generateGetModuleNameMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("getModuleName")
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Override.class)
-                .addStatement("return $S", Constant.PACKAGE_NAME + "." + Constant.PREFIX_OF_REGISTER_FILE + moduleName)
-                .returns(String.class);
-        return method.build();
-    }
+//    private MethodSpec generateGetModuleNameMethod() {
+//        MethodSpec.Builder method = MethodSpec.methodBuilder("getModuleName")
+//                .addModifiers(Modifier.PUBLIC)
+//                .addAnnotation(Override.class)
+//                .addStatement("return $S", Constant.PACKAGE_NAME + "." + Constant.PREFIX_OF_REGISTER_FILE + moduleName)
+//                .returns(String.class);
+//        return method.build();
+//    }
 
 }
