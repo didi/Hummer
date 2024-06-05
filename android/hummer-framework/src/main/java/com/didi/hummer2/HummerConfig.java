@@ -19,6 +19,7 @@ import com.didi.hummer2.adapter.storage.IStorageAdapter;
 import com.didi.hummer2.adapter.storage.impl.DefaultStorageAdapter;
 import com.didi.hummer2.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer2.adapter.tracker.impl.EmptyTrackerAdapter;
+import com.didi.hummer2.register.FrameworkBindHummerRegister;
 import com.didi.hummer2.register.HummerInvokerRegister;
 import com.didi.hummer2.handler.DefalutLogHandler;
 import com.didi.hummer2.handler.DefaultEventTraceHandler;
@@ -28,7 +29,7 @@ import com.didi.hummer2.handler.EventTraceHandler;
 import com.didi.hummer2.handler.JsConsoleHandler;
 import com.didi.hummer2.handler.JsExceptionHandler;
 import com.didi.hummer2.handler.LogHandler;
-import com.didi.hummer2.register.AutoBindHummerRegister;
+import com.didi.hummer2.register.AllModuleAutoBindHummerRegister;
 import com.didi.hummer2.register.HummerRegister;
 
 import java.util.ArrayList;
@@ -401,7 +402,9 @@ public class HummerConfig {
 
         public HummerConfig build() {
             if (autoRegisterHummerModule) {
-                hummerRegisters.add(0, AutoBindHummerRegister.instance());
+                hummerRegisters.add(0, AllModuleAutoBindHummerRegister.instance());
+            } else {
+                hummerRegisters.add(0, FrameworkBindHummerRegister.instance());
             }
             return new HummerConfig(this);
         }
