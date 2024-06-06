@@ -45,7 +45,7 @@ public class TypeUtil {
     public static final String HummerObjectClass = "com.didi.hummer2.register.HummerObject";
 
     public static final String ElementClass = "com.didi.hummer2.render.Element";
-    public static final String ComponentClass = "com.didi.hummer2.component.Component";
+    public static final String ComponentClass = "com.didi.hummer2.module.Component";
 
     public static boolean isHummerObject(String type) {
         return type != null && (type.equals(HummerObjectClass));
