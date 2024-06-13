@@ -43,6 +43,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -52,6 +53,8 @@ import java.util.Map;
  */
 @Component("List")
 public class List extends HMBase<SmartRefreshLayout> {
+    private final static int MAX_RECYCLE_POOL_SIZE = 100;
+
     private static final int MODE_LIST = 1;
     private static final int MODE_GRID = 2;
     private static final int MODE_WATERFALL = 3;
@@ -91,6 +94,20 @@ public class List extends HMBase<SmartRefreshLayout> {
 
     private int scrollOffsetX = 0;
     private int scrollOffsetY = 0;
+
+    private HashSet<Integer> registeredViewType;
+    private RecycleViewPoolCallback recycleViewPoolCallback = new RecycleViewPoolCallback() {
+        @Override
+        public void updatePoolSize(int viewType) {
+            if(registeredViewType == null){
+                registeredViewType = new HashSet<>();
+            }
+            if(!registeredViewType.contains(viewType)){
+                recyclerView.getRecycledViewPool().setMaxRecycledViews(viewType, MAX_RECYCLE_POOL_SIZE);
+                registeredViewType.add(viewType);
+            }
+        }
+    };
 
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -171,6 +188,7 @@ public class List extends HMBase<SmartRefreshLayout> {
     protected SmartRefreshLayout createViewInstance(Context context) {
         // 这里不用代码new一个RecyclerView，而是通过xml，是为了解决设置scrollerbar显示无效的问题
         recyclerView = (RecyclerView) LayoutInflater.from(context).inflate(R.layout.recycler_view, null, false);
+
         recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         recyclerView.setClipChildren(false);
         recyclerView.setOnTouchListener((v, event) -> {
@@ -243,6 +261,7 @@ public class List extends HMBase<SmartRefreshLayout> {
         super.onCreate();
         recyclerView.addOnScrollListener(mOnScrollListener);
         adapter = new HMListAdapter(getContext(), instanceManager);
+        adapter.setRecycleViewPoolCallback(recycleViewPoolCallback);
         recyclerView.setAdapter(adapter);
 
         recyclerViewNode = YogaNodeUtil.createYogaNode();
