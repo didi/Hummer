@@ -37,35 +37,31 @@ void JNI_DetachEnv() {
     }
 }
 
-/**
- *  全局唯一
- */
-static F4NRuntime *_f4NRuntime = nullptr;
 
 void FalconEngine_createEngine_(JNIEnv *env, jclass cls) {
-    if (_f4NRuntime == nullptr) {
+    if (F4NRuntime::instance() == nullptr) {
         LOGI("FalconEngine::createEngine()");
-        F4NRuntime *runtime = new F4NRuntime();
-        runtime->init();
-        _f4NRuntime = runtime;
+//        F4NRuntime *runtime = new F4NRuntime();
+//        runtime->init();
+//        _f4NRuntime = runtime;
     }
 }
 
 void FalconEngine_releaseEngine_(JNIEnv *env, jclass cls) {
     LOGI("FalconEngine::releaseEngine()");
-    if (_f4NRuntime != nullptr) {
-        _f4NRuntime->release();
-        delete _f4NRuntime;
-    }
+//    if (_f4NRuntime != nullptr) {
+//        _f4NRuntime->release();
+//        delete _f4NRuntime;
+//    }
 }
 
 jlong FalconEngine_createContext_(JNIEnv *env, jclass cls) {
-    if (_f4NRuntime == nullptr) {
+    if (F4NRuntime::instance() == nullptr) {
         LOGD("FalconEngine::createContext() null");
     } else {
         LOGD("FalconEngine::createContext() no null");
     }
-    F4NContext *f4NContext = _f4NRuntime->createContext();
+    F4NContext *f4NContext = F4NRuntime::instance()->createContext();
 
     uintptr_t identify = reinterpret_cast<uintptr_t>(f4NContext);
     return identify;
@@ -74,13 +70,8 @@ jlong FalconEngine_createContext_(JNIEnv *env, jclass cls) {
 void FalconEngine_destroyContext_(JNIEnv *env, jclass cls, jlong contextId) {
     LOGI("FalconEngine::destroyContext()");
     F4NContext *f4NContext = (F4NContext *) contextId;
-    _f4NRuntime->destroyContext(f4NContext);
-    env->DeleteGlobalRef((jobject) f4NContext->nativeContext);
-
-//    if (_f4NRuntime->empty()){
-//        delete _f4NRuntime;
-//        _f4NRuntime = nullptr;
-//    }
+    F4NRuntime::instance()->destroyContext(f4NContext);
+//    env->DeleteGlobalRef((jobject) f4NContext->nativeContext);
 }
 
 jboolean FalconEngine_bindContext_(JNIEnv *env, jclass cls, jlong contextId, jobject context, jobject configOption) {
@@ -162,8 +153,8 @@ jobject FalconEngine_dispatchEvent_(JNIEnv *env, jclass cls, jlong contextId, js
 static JNINativeMethod _FalconEngineMethods[] = {
         {"createEngine",         "()V",                                                                               (void *) FalconEngine_createEngine_},
         {"releaseEngine",        "()V",                                                                               (void *) FalconEngine_releaseEngine_},
-        {"createFalconContext",  "()J", (void *) FalconEngine_createContext_},
-        {"destroyFalconContext", "(J)V", (void *) FalconEngine_destroyContext_},
+        {"createFalconContext",  "()J",                                                                               (void *) FalconEngine_createContext_},
+        {"destroyFalconContext", "(J)V",                                                                              (void *) FalconEngine_destroyContext_},
         {"bindFalconContext",    "(JLcom/didi/hummer2/falcon/FalconContext;Lcom/didi/hummer2/falcon/ConfigOption;)Z", (void *) FalconEngine_bindContext_},
         {"evaluateJavaScript",   "(JLjava/lang/String;Ljava/lang/String;)Ljava/lang/Object;",                         (void *) FalconEngine_evaluateJavaScript_},
         {"evaluateBytecode",     "(J[BLjava/lang/String;)Ljava/lang/Object;",                                         (void *) FalconEngine_evaluateBytecode_},

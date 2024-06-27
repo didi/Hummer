@@ -3,6 +3,7 @@
 //
 
 #include "falcon/F4NContextBase.h"
+#include <falcon/F4NRuntime.h>
 #include <falcon/F4NDocument.h>
 #include <falcon/F4NElement.h>
 #include <falcon/F4NPage.h>

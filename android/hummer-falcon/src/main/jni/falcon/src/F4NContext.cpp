@@ -180,6 +180,8 @@ F4NContext::~F4NContext() {
 
     delete _eventTraceHandler_;
     _eventTraceHandler_ = nullptr;
+
+//    error("F4NContext::~F4NContext() value::size=%d",JsiValuePools::getPoolSize());
 }
 
 

@@ -58,6 +58,9 @@ void F4NObject::unprotect() {
         info("F4NObject::unprotect tag=%s,props=%s,count=%d", tag.c_str(), props->toString().c_str(), refCount);
     }
     refCount--;
+    if (refCount <= 0) {
+
+    }
     if (refCount <= 0 && !jsBinding) {
         if (!destroyed) {
             onDestroy();
@@ -93,6 +96,8 @@ F4NObject::~F4NObject() {
     delete finalize;
     props->unprotect();
     jsiContext = nullptr;
+
+//    error("F4NObject::~F4NObject() value::size=%d",JsiValuePools::getPoolSize());
 }
 
 

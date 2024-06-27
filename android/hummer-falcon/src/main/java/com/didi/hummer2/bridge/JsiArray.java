@@ -35,12 +35,15 @@ public class JsiArray extends JsiValue implements IArray {
 
     @Override
     public boolean setValue(int index, JsiValue value) {
-        return set_value_(identify, index, value.identify);
+        set_value_(identify, index, value.identify);
+        value.unprotect();
+        return true;
     }
 
     @Override
     public void push(JsiValue value) {
         push_(identify, value.identify);
+        value.unprotect();
     }
 
     @Override

@@ -40,6 +40,7 @@ public class JsiObject extends JsiValue implements IObject {
     @Override
     public void put(String key, JsiValue value) {
         set_value_(identify, key, value.identify);
+        value.unprotect();
     }
 
     @Override

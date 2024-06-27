@@ -24,11 +24,11 @@ import java.util.Map;
 public final class JsiObjectJava extends JsiObject {
 
     private final Map<String, JsiValue> properties = new HashMap<>();
-    private JsiObject jsiObject;
+//    private JsiObject jsiObject;
 
     public JsiObjectJava(JsiObject jsiObject) {
         super(0);
-        this.jsiObject = jsiObject;
+//        this.jsiObject = jsiObject;
         parse(jsiObject);
 
     }

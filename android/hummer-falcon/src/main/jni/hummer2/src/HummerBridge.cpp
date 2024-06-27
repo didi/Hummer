@@ -66,7 +66,7 @@ jobject HMFunction_calls_(JNIEnv *env, jobject obj, jlong id, jlongArray arrValu
         // 分配本地内存来保存数组元素
         jlong *array = env->GetLongArrayElements(arrValue, NULL);
 
-        JsiValue **jsiValue = new JsiValue *[size];
+        JsiValue *jsiValue[size];
         for (int i = 0; i < size; i++) {
             jsiValue[i] = (JsiValue *) array[i];
         }

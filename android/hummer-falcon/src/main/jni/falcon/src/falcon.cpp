@@ -16,7 +16,7 @@ F4NFunction::F4NFunction(F4NContext *context, JsiFunction *jsiFunction) {
     this->id = jsiFunction->id;
     this->jsiFunction = jsiFunction;
     this->jsiFunction->protect();
-    if (FALCON_LOG_ENABLE){
+    if (FALCON_LOG_ENABLE) {
         debug("F4NFunction::F4NFunction() id=%ld", id);
     }
     F4NContextUtils::addFunction(context, this);
@@ -28,7 +28,7 @@ F4NFunction::F4NFunction(F4NContext *context, JsiFunction *jsiFunction, bool aut
     this->jsiFunction = jsiFunction;
     this->jsiFunction->protect();
     this->autoRelease = autoRelease;
-    if (FALCON_LOG_ENABLE){
+    if (FALCON_LOG_ENABLE) {
         debug("F4NFunction::F4NFunction() id=%ld", id);
     }
     F4NContextUtils::addFunction(context, this);
@@ -51,11 +51,14 @@ JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
     JsiValue *result = nullptr;
     if (!F4NUtil::isMainThread()) {
         result = jsiFunction->call(argc, argv);
-        JsiUtils::releaseJsiValue(argc,argv);
+        JsiUtils::releaseJsiValue(argc, argv);
     } else {
-        context->submitJsTask([&, argc, argv]() {
-            JsiValue *result = jsiFunction->call(argc, argv);
-            JsiUtils::releaseJsiValue(argc,argv);
+        JsiValue **params = new JsiValue *[argc];
+        JsiUtils::copyJsiValue(argv, params, argc);
+        context->submitJsTask([&, argc, params]() {
+            JsiValue *result = jsiFunction->call(argc, params);
+            JsiUtils::releaseJsiValue(argc, params);
+            delete[] params;
             if (result != nullptr) {
                 result->unprotect();
             }
@@ -71,7 +74,7 @@ JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
 }
 
 F4NFunction::~F4NFunction() {
-    if (FALCON_LOG_ENABLE){
+    if (FALCON_LOG_ENABLE) {
         debug("F4NFunction::~F4NFunction() id=%ld", id);
     }
     jsiFunction->unprotect();

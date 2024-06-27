@@ -66,6 +66,12 @@ void FalconContext::onContextStateChanged(jobject context, jint state) {
     JNIEnv *jniEnv = JNI_GetEnv();
     jniEnv->CallVoidMethod(context, J_MethodID_onContextStateChanged, state);
     clearException(jniEnv);
+
+}
+
+void FalconContext::onContextRelease(jobject context) {
+    JNIEnv *jniEnv = JNI_GetEnv();
+    jniEnv->DeleteGlobalRef(context);
 }
 
 void FalconContext::onReceivePageLifeCycle(jobject context, jint event) {

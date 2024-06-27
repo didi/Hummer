@@ -4,6 +4,7 @@
 
 
 #include "falcon/F4NContextMT.h"
+#include "falcon/F4NRuntime.h"
 #include "falcon/F4NPage.h"
 #include "falcon/F4NScriptHandler.h"
 
@@ -191,20 +192,24 @@ void F4NContextMT::stop() {
 
 
 void F4NContextMT::onStop() {
-    //TODO JNI已经销毁不能回调
-//    _contextListener_->onContextStop();
+    _contextListener_->onContextStop();
     F4NContextBase::onStop();
 
     onDestroy();
 
     jsThreadHandler_->stop();
 
+
+//    if (F4NRuntime::instance()->empty()) {
+//        error("F4NRuntime::instance()->empty()");
+//        _jsiContext_->releaseRuntime();
+//    }
+//    error("F4NRuntime::instance()->empty()  value::size=%d",JsiValuePools::getPoolSize());
     delete this;
 }
 
 void F4NContextMT::onDestroy() {
-    //TODO JNI已经销毁不能回调
-//    _contextListener_->onContextDestroy();
+    _contextListener_->onContextDestroy();
     F4NContextBase::onDestroy();
 }
 

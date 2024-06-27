@@ -24,6 +24,7 @@ void HMContextListener::onContextStop() {
 
 void HMContextListener::onContextDestroy() {
     FalconContext::onContextStateChanged((jobject) f4NContext->nativeContext, STATE_ON_CONTEXT_DESTROY);
+    FalconContext::onContextRelease((jobject) f4NContext->nativeContext);
 }
 
 HMContextListener::~HMContextListener() {

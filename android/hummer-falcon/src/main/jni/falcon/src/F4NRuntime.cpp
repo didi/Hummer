@@ -8,6 +8,9 @@
 #include "falcon/falcon.h"
 #include "falcon/F4NUtil.h"
 
+
+F4NRuntime F4NRuntime::runtime;
+
 void F4NRuntime::init() {
 
 }
@@ -15,6 +18,10 @@ void F4NRuntime::init() {
 F4NRuntime::F4NRuntime() {
     F4NUtil::makeMainThread();
     fNContexts = list<F4NContext *>();
+}
+
+F4NRuntime *F4NRuntime::instance() {
+    return &runtime;
 }
 
 F4NContext *F4NRuntime::createContext() {

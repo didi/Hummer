@@ -44,10 +44,15 @@ void ObjectManager::release() {
 
 ObjectManager::~ObjectManager() {
 
-    auto it = objectMap.begin();
-    while (it != objectMap.end()) {
-        it->second->unprotect();
-        it++;
+    if (FALCON_LOG_ENABLE) {
+        debug("ObjectManager::~ObjectManager()");
     }
+//    auto it = objectMap.begin();
+//    while (it != objectMap.end()) {
+//        it->second->onDestroy();
+//        it->second->release();
+//        it++;
+//    }
+    objectMap.clear();
 }
 
