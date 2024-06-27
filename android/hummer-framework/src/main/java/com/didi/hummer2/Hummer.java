@@ -3,6 +3,7 @@ package com.didi.hummer2;
 import android.content.Context;
 
 import com.didi.hummer2.tools.HummerGlobal;
+import com.didi.hummer2.utils.UIThreadUtil;
 
 /**
  * didi Create on 2024/3/21 .
@@ -30,11 +31,18 @@ public class Hummer {
         if (hummerConfig != null) {
             appContext = hummerConfig.getContext().getApplicationContext();
             HummerGlobal.appContext = appContext;
-            hummerEngine.initHummer(appContext);
+            hummerEngine.initHummer(appContext, hummerConfig);
             hummerEngine.registerHummerConfig(hummerConfig);
         }
     }
 
+    public static void runOnLoaderThread(Runnable runnable) {
+        hummerEngine.runOnHummerThread(runnable);
+    }
+
+    public static void runOnRenderThread(Runnable runnable) {
+        UIThreadUtil.runOnUiThread(runnable);
+    }
 
     public static Context getAppContext() {
         return appContext;

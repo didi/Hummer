@@ -15,9 +15,11 @@ import com.didi.hummer2.devtools.HummerDevTools;
 import com.didi.hummer2.devtools.HummerDevToolsFactory;
 import com.didi.hummer2.engine.ICallback;
 import com.didi.hummer2.engine.JSValue;
+import com.didi.hummer2.handler.JsExceptionHandler;
 import com.didi.hummer2.render.style.HummerLayout;
 import com.didi.hummer2.render.utils.AssetsUtil;
 import com.didi.hummer2.render.utils.FileUtil;
+import com.didi.hummer2.tracker.HummerPageTracker;
 import com.didi.hummer2.utils.F4NDebugUtil;
 import com.didi.hummer2.utils.JsSourceUtil;
 import com.didi.hummer2.utils.NetworkUtil;
@@ -35,7 +37,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class HummerScriptRender {
 
-    private HummerScriptContext scriptContext;
+    private HummerScriptContext hummerScriptContext;
     private AtomicBoolean isDestroyed = new AtomicBoolean(false);
     private HummerRenderCallback renderCallback;
     private HummerDevTools devTools;
@@ -54,25 +56,24 @@ public class HummerScriptRender {
     public HummerScriptRender(@NonNull HummerLayout hummerLayout, String namespace, DevToolsConfig config) {
         tracker = new HummerPageTracker(namespace);
         tracker.trackContextInitStart();
-        scriptContext = Hummer.getHummerEngine().createHummerContext(namespace, hummerLayout.getContext(), hummerLayout);
+        hummerScriptContext = Hummer.getHummerEngine().createHummerContext(namespace, hummerLayout.getContext(), hummerLayout);
         tracker.trackContextInitEnd();
         this.namespace = namespace;
 
         if (F4NDebugUtil.isDebuggable(namespace)) {
-            devTools = HummerDevToolsFactory.create(scriptContext, config);
+            devTools = HummerDevToolsFactory.create(hummerScriptContext, config);
         }
 
-//        ExceptionCallback cb = e -> {
-//            if (tracker != null && hmContext != null) {
-//                tracker.trackException(hmContext.getPageUrl(), e);
-//            }
-//        };
-//        if (HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_QJS
-//                || HummerSDK.getJsEngine() == HummerSDK.JsEngine.NAPI_HERMES) {
-//            JSException.addJSContextExceptionCallback(hmContext.getJsContext(), cb);
-//        } else {
-//            HummerException.addJSContextExceptionCallback(hmContext.getJsContext(), cb);
-//        }
+        JsExceptionHandler exceptionHandler = hummerScriptContext.getJsExceptionHandler();
+        hummerScriptContext.setJsExceptionHandler(new JsExceptionHandler() {
+            @Override
+            public void onCatchException(String namespace, Exception exception) {
+                if (exceptionHandler != null) {
+                    exceptionHandler.onCatchException(namespace, exception);
+                }
+                onPageCatchJsException(namespace, exception);
+            }
+        });
 
         // 设置JS主动触发渲染完成的回调，只有在公共包抽离模式下才需要真正触发回调
 //        hmContext.setRenderListener(isRenderSuccess -> {
@@ -82,76 +83,88 @@ public class HummerScriptRender {
 //        });
     }
 
+    private void onPageCatchJsException(String namespace, Exception exception) {
+        if (tracker != null && hummerScriptContext != null) {
+            tracker.trackException(hummerScriptContext.getPageUrl(), exception);
+        }
+    }
+
     public HummerContext getHummerContext() {
-        return scriptContext;
+        return hummerScriptContext;
     }
 
     public void onStart() {
-        scriptContext.onStart();
+        hummerScriptContext.onStart();
     }
 
     public void onResume() {
-        scriptContext.onResume();
+        hummerScriptContext.onResume();
     }
 
     public void onPause() {
-        scriptContext.onPause();
+        hummerScriptContext.onPause();
     }
 
     public void onStop() {
-        scriptContext.onStop();
+        hummerScriptContext.onStop();
     }
 
     public void onDestroy() {
         isDestroyed.set(true);
-        scriptContext.onDestroy();
+        hummerScriptContext.onDestroy();
         tracker.trackContextDestroy();
 
         if (F4NDebugUtil.isDebuggable(namespace)) {
-            HummerDebugger.release(scriptContext);
+            HummerDebugger.release(hummerScriptContext);
             if (devTools != null) {
-                devTools.release(scriptContext);
+                devTools.release(hummerScriptContext);
             }
         }
     }
 
     public boolean onBackPressed() {
-        return scriptContext.onBackPressed();
+        return hummerScriptContext.onBackPressed();
     }
 
     public void render(String js) {
-        render(js, scriptContext.getJsSourcePath());
+        render(js, hummerScriptContext.getJsSourcePath());
     }
 
+    /**
+     * 使用js脚本渲染
+     *
+     * @param js
+     * @param sourcePath
+     */
     public void render(String js, String sourcePath) {
         if (TextUtils.isEmpty(js) || isDestroyed.get()) {
             return;
         }
-
-        tracker.trackRenderStart(scriptContext.getPageUrl());
-        scriptContext.setJsSourcePath(sourcePath);
-
-        tracker.trackJSEvalStart(js.length(), sourcePath);
-//        if (HummerSDK.isSupportBytecode(hmContext.getNamespace())) {
-//            hmContext.evaluateJavaScriptAsync(js, sourcePath, ret -> {
-//                processRenderFinish();
-//            });
-//        } else {
-        scriptContext.evaluateJavaScript(js, sourcePath);
+        processRenderBegin(js.length(), sourcePath);
+        hummerScriptContext.setJsSourcePath(sourcePath);
+        hummerScriptContext.evaluateJavaScript(js, sourcePath);
         processRenderFinish();
-//        }
     }
 
+    /**
+     * 使用字节码渲染
+     *
+     * @param bytecode
+     * @param sourcePath
+     */
     public void render(byte[] bytecode, String sourcePath) {
-        if (bytecode == null || bytecode.length <= 0 || isDestroyed.get()) {
+        if (bytecode == null || bytecode.length == 0 || isDestroyed.get()) {
             return;
         }
-        tracker.trackRenderStart(scriptContext.getPageUrl());
-        scriptContext.setJsSourcePath(sourcePath);
-
-        tracker.trackJSEvalStart(bytecode.length, sourcePath);
-        scriptContext.evaluateBytecode(bytecode, "");
+        processRenderBegin(bytecode.length, sourcePath);
+        hummerScriptContext.setJsSourcePath(sourcePath);
+        hummerScriptContext.evaluateBytecode(bytecode, sourcePath);
         processRenderFinish();
+    }
+
+    private void processRenderBegin(long length, String sourcePath) {
+        tracker.trackRenderStart(hummerScriptContext.getPageUrl());
+        tracker.trackJSEvalStart(length, sourcePath);
     }
 
     private void processRenderFinish() {
@@ -159,15 +172,14 @@ public class HummerScriptRender {
             tracker.trackJSEvalFinish();
         }
         if (!isSplitChunksMode()) {
-            onRenderFinish(scriptContext.getJsPage() != null);
+            onRenderFinish(hummerScriptContext.getJsPage() != null);
         }
     }
 
     private void onRenderFinish(boolean isRenderSuccess) {
         if (renderCallback != null) {
             if (isRenderSuccess) {
-//                renderCallback.onSucceed(hmContext, getHummerContext().getJsPage());
-                renderCallback.onSucceed(scriptContext, null);
+                renderCallback.onSucceed(hummerScriptContext, null);
             } else {
                 renderCallback.onFailed(new RuntimeException("Page is empty!"));
             }
@@ -179,8 +191,6 @@ public class HummerScriptRender {
     }
 
     private boolean isSplitChunksMode() {
-//        JSValue hv = hmContext.getJsContext().getJSValue("Hummer");
-//        return hv != null && hv.getBoolean("isSplitChunksMode");
         return false;
     }
 
@@ -191,11 +201,11 @@ public class HummerScriptRender {
 
         if (F4NDebugUtil.isDebuggable(namespace)) {
             // 调试插件
-            HummerDebugger.init(scriptContext, url);
+            HummerDebugger.init(hummerScriptContext, url);
 
             // 热重载
             if (devTools != null) {
-                devTools.initConnection(scriptContext, url, () -> {
+                devTools.initConnection(hummerScriptContext, url, () -> {
                     requestJsBundle(url, true);
                 });
             }
@@ -234,13 +244,13 @@ public class HummerScriptRender {
 
             // 如果是刷新流程，那么在执行JS之前，需要先模拟走一遍生命周期，来做相关的清理工作
             if (F4NDebugUtil.isDebuggable(namespace) && isHotReload) {
-                scriptContext.onHotReload(url);
+                hummerScriptContext.onHotReload(url);
             }
 
             render(response.data, url);
 
             if (F4NDebugUtil.isDebuggable(namespace) && isHotReload) {
-                Toast.makeText(scriptContext, "页面已刷新", Toast.LENGTH_SHORT).show();
+                Toast.makeText(hummerScriptContext, "页面已刷新", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -265,11 +275,12 @@ public class HummerScriptRender {
         }
 
         String finalAssetsPath = assetsPath;
-        new Thread(() -> {
+
+        Hummer.runOnLoaderThread(() -> {
             String js = AssetsUtil.readFile(finalAssetsPath);
             String sourcePath = JsSourceUtil.JS_SOURCE_PREFIX_ASSETS + finalAssetsPath;
-            UIThreadUtil.runOnUiThread(() -> render(js, sourcePath));
-        }).start();
+            Hummer.runOnRenderThread(() -> render(js, sourcePath));
+        });
     }
 
     public void renderWithFile(String jsFilePath) {
@@ -292,11 +303,12 @@ public class HummerScriptRender {
         }
 
         String finalJsFilePath = jsFilePath;
-        new Thread(() -> {
+
+        Hummer.runOnLoaderThread(() -> {
             String js = FileUtil.readFile(finalJsFilePath);
             String sourcePath = JsSourceUtil.JS_SOURCE_PREFIX_FILE + finalJsFilePath;
-            UIThreadUtil.runOnUiThread(() -> render(js, sourcePath));
-        }).start();
+            Hummer.runOnRenderThread(() -> render(js, sourcePath));
+        });
     }
 
     public void renderWithFile(File jsFile) {
@@ -323,9 +335,9 @@ public class HummerScriptRender {
         if (isDestroyed.get()) {
             return;
         }
-        scriptContext.setNavPage(page);
-        scriptContext.setPageUrl(page.url);
-        scriptContext.setJsSourcePath(page.sourcePath);
+        hummerScriptContext.setNavPage(page);
+        hummerScriptContext.setPageUrl(page.url);
+        hummerScriptContext.setJsSourcePath(page.sourcePath);
         tracker.trackPageView(page.url);
     }
 
@@ -338,8 +350,8 @@ public class HummerScriptRender {
         if (isDestroyed.get()) {
             return null;
         }
-        if (scriptContext!= null){
-            return scriptContext.getPageResult();
+        if (hummerScriptContext != null) {
+            return hummerScriptContext.getPageResult();
         }
         return null;
     }
@@ -393,9 +405,8 @@ public class HummerScriptRender {
     }
 
     public void setHummerPageHandler(HummerScriptContext.HummerPageHandler hummerPageHandler) {
-        scriptContext.setHummerPageHandler(hummerPageHandler);
+        hummerScriptContext.setHummerPageHandler(hummerPageHandler);
     }
-
 
 
     public interface HummerRenderCallback {

@@ -58,16 +58,6 @@ task startRemoteSrv(type: Exec) {
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-
-    // 解决和第三方库中的support库冲突
-//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-//        def requested = details.requested
-//        if (requested.group == 'com.android.support') {
-//            if (!requested.name.startsWith("multidex")) {
-//                details.useVersion '26.1.0'
-//            }
-//        }
-//    }
 }
 
 dependencies {
@@ -82,8 +72,11 @@ dependencies {
 
     api project(':hummer-dev-tools')
 
+
     annotationProcessor project(':hummer-compiler')
-    
+
+
+    api "io.github.didi.dokit:dokitx:3.7.0"
 
 //    debugImplementation project(':v8-debugger')
 //    debugImplementation 'com.didi.hummer:v8-debugger:0.0.1-SNAPSHOT'

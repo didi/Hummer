@@ -10,20 +10,19 @@
 
 
 F4NContextMulti::F4NContextMulti() : F4NContext() {
-
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMulti::F4NContextMulti()");
+    }
 }
 
 void F4NContextMulti::init(F4NConfigOptions *configOptions, F4NRenderInvoker *componentFactory) {
-
-//    configOptions_ = configOptions;
-//    componentFactory_ = componentFactory;
-//    F4NContext::init(configOptions, componentFactory);
-
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMulti::init()");
+    }
     if (configOptions->singleThread) {
         contextDelegate_ = new F4NContext();
     } else {
         contextDelegate_ = new F4NContextMT();
-//        contextDelegate_ = new VDOMContextST();
     }
     contextDelegate_->init(configOptions, componentFactory);
 }
@@ -160,16 +159,19 @@ void F4NContextMulti::applyElementRender(size_t size, JsiValue **params) {
     contextDelegate_->applyElementRender(size, params);
 }
 
-F4NRenderInvoker *F4NContextMulti::getComponentFactory() {
-    return contextDelegate_->getComponentFactory();
+F4NRenderInvoker *F4NContextMulti::getRenderInvoker() {
+    return contextDelegate_->getRenderInvoker();
 }
 
 
+/**
+ * contextDelegate_ 需要自己释放自己，在包裹代理中不需要主动释放
+ */
 F4NContextMulti::~F4NContextMulti() {
-    if (contextDelegate_ != nullptr) {
-        delete contextDelegate_;
-        contextDelegate_ = nullptr;
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMulti::~F4NContextMulti()");
     }
+    contextDelegate_ = nullptr;
 }
 
 

@@ -6,16 +6,19 @@
 #include "jsi/jsi_utils.h"
 #include "jsi/jsi.h"
 
+#include "napi/js_native_api.h"
+#include "napi/js_native_api_types.h"
 
-NAPIErrorStatus JSUtils::createJsNumber(NAPIEnv *env, double value, NAPIValue *result) {
+
+NAPIErrorStatus JsiUtils::createJsNumber(NAPIEnv *env, double value, NAPIValue *result) {
     return napi_create_double(*env, value, result);
 }
 
-NAPIExceptionStatus JSUtils::createJsString(NAPIEnv *env, const char *value, NAPIValue *result) {
+NAPIExceptionStatus JsiUtils::createJsString(NAPIEnv *env, const char *value, NAPIValue *result) {
     return napi_create_string_utf8(*env, value, result);
 }
 
-const char *JSUtils::getJsCString(NAPIEnv *env, NAPIValue *value) {
+const char *JsiUtils::getJsCString(NAPIEnv *env, NAPIValue *value) {
     if (value == nullptr) {
         return nullptr;
     }
@@ -27,7 +30,7 @@ const char *JSUtils::getJsCString(NAPIEnv *env, NAPIValue *value) {
     return cStr;
 }
 
-double JSUtils::getJsNumber(NAPIEnv *env, NAPIValue *value, double defaultValue) {
+double JsiUtils::getJsNumber(NAPIEnv *env, NAPIValue *value, double defaultValue) {
     if (value == nullptr) {
         return defaultValue;
     }
@@ -39,7 +42,7 @@ double JSUtils::getJsNumber(NAPIEnv *env, NAPIValue *value, double defaultValue)
     return result;
 }
 
-const char *JSUtils::getPropertyToCString(NAPIEnv *env, NAPIValue *value, const char *name) {
+const char *JsiUtils::getPropertyToCString(NAPIEnv *env, NAPIValue *value, const char *name) {
     NAPIValue propertyValue;
     auto status = napi_get_named_property(*env, *value, name, &propertyValue);
     if (status != NAPIExceptionOK) {
@@ -49,7 +52,7 @@ const char *JSUtils::getPropertyToCString(NAPIEnv *env, NAPIValue *value, const 
     return stack;
 }
 
-const double JSUtils::getNumberProperty(NAPIEnv *env, NAPIValue *value, const char *name, double defaultValue) {
+const double JsiUtils::getNumberProperty(NAPIEnv *env, NAPIValue *value, const char *name, double defaultValue) {
     NAPIValue propertyValue;
     auto status = napi_get_named_property(*env, *value, name, &propertyValue);
     if (status != NAPIExceptionOK) {
@@ -58,36 +61,36 @@ const double JSUtils::getNumberProperty(NAPIEnv *env, NAPIValue *value, const ch
     return getJsNumber(env, &propertyValue, defaultValue);
 }
 
-NAPIValue JSUtils::getGlobal(NAPIEnv *env) {
+NAPIValue JsiUtils::getGlobal(NAPIEnv *env) {
     NAPIValue global;
     napi_get_global(*env, &global);
     return global;
 }
 
 
-NAPIExceptionStatus JSUtils::setProperty(NAPIEnv *env, NAPIValue *obj, const char *name, NAPIValue *value) {
+NAPIExceptionStatus JsiUtils::setProperty(NAPIEnv *env, NAPIValue *obj, const char *name, NAPIValue *value) {
     return napi_set_named_property(*env, *obj, name, *value);
 }
 
-NAPIExceptionStatus JSUtils::deleteProperty(NAPIEnv *env, NAPIValue *obj, const char *name, bool *value) {
+NAPIExceptionStatus JsiUtils::deleteProperty(NAPIEnv *env, NAPIValue *obj, const char *name, bool *value) {
     NAPIValue property;
     napi_create_string_utf8(*env, name, &property);
     return napi_delete_property(*env, *obj, property, value);
 }
 
-NAPIExceptionStatus JSUtils::setNumberProperty(NAPIEnv *env, NAPIValue *obj, const char *name, double value) {
+NAPIExceptionStatus JsiUtils::setNumberProperty(NAPIEnv *env, NAPIValue *obj, const char *name, double value) {
     NAPIValue number;
     napi_create_double(*env, value, &number);
     return setProperty(env, obj, name, &number);
 }
 
-NAPIExceptionStatus JSUtils::setGlobalProperty(NAPIEnv *env, const char *name, NAPIValue *value) {
+NAPIExceptionStatus JsiUtils::setGlobalProperty(NAPIEnv *env, const char *name, NAPIValue *value) {
     NAPIValue global;
     napi_get_global(*env, &global);
     return napi_set_named_property(*env, global, name, *value);
 }
 
-NAPIExceptionStatus JSUtils::deleteGlobalProperty(NAPIEnv *env, const char *name, bool *value) {
+NAPIExceptionStatus JsiUtils::deleteGlobalProperty(NAPIEnv *env, const char *name, bool *value) {
     NAPIValue global;
     napi_get_global(*env, &global);
     NAPIValue property;
@@ -96,12 +99,12 @@ NAPIExceptionStatus JSUtils::deleteGlobalProperty(NAPIEnv *env, const char *name
 }
 
 
-NAPIExceptionStatus JSUtils::createObject(NAPIEnv *env, NAPIValue *constructor, size_t argc, const NAPIValue *argv, NAPIValue *result) {
+NAPIExceptionStatus JsiUtils::createObject(NAPIEnv *env, NAPIValue *constructor, size_t argc, const NAPIValue *argv, NAPIValue *result) {
     return napi_new_instance(*env, *constructor, argc, argv, result);
 }
 
 
-NAPIExceptionStatus JSUtils::createObject(NAPIEnv *env, const char *clsName, size_t argc, const NAPIValue *argv, NAPIValue *result) {
+NAPIExceptionStatus JsiUtils::createObject(NAPIEnv *env, const char *clsName, size_t argc, const NAPIValue *argv, NAPIValue *result) {
     NAPIValue global;
     napi_get_global(*env, &global);
 
@@ -110,11 +113,11 @@ NAPIExceptionStatus JSUtils::createObject(NAPIEnv *env, const char *clsName, siz
     return napi_new_instance(*env, constructor, argc, argv, result);
 }
 
-NAPIExceptionStatus JSUtils::createExternal(NAPIEnv *env, void *finalizeData, JsiFinalize finalizeCB, void *finalizeHint, NAPIValue *result) {
+NAPIExceptionStatus JsiUtils::createExternal(NAPIEnv *env, void *finalizeData, JsiFinalize finalizeCB, void *finalizeHint, NAPIValue *result) {
     return napi_create_external(*env, finalizeData, finalizeCB, finalizeHint, result);
 }
 
-list<char *> JSUtils::toStringArray(NAPIEnv *env, const NAPIValue *napiValue) {
+list<char *> JsiUtils::toStringArray(NAPIEnv *env, const NAPIValue *napiValue) {
     NAPIValue object;
     napi_get_named_property(*env, *napiValue, "length", &object);
     double length;
@@ -136,7 +139,7 @@ list<char *> JSUtils::toStringArray(NAPIEnv *env, const NAPIValue *napiValue) {
     return keys;
 }
 
-JsiArray *JSUtils::toArray(NAPIEnv *env, const NAPIValue *napiValue) {
+JsiArray *JsiUtils::toArray(NAPIEnv *env, const NAPIValue *napiValue) {
     NAPIValue object;
     napi_get_named_property(*env, *napiValue, "length", &object);
     double length;
@@ -151,11 +154,12 @@ JsiArray *JSUtils::toArray(NAPIEnv *env, const NAPIValue *napiValue) {
         napi_get_property(*env, *napiValue, index, &value);
         JsiValue *hmValue = toValue(env, &value);
         hmArray->pushValue(hmValue);
+        hmValue->unprotect();
     }
     return hmArray;
 }
 
-JsiObject *JSUtils::toObject(NAPIEnv *env, const NAPIValue *napiValue) {
+JsiObject *JsiUtils::toObject(NAPIEnv *env, const NAPIValue *napiValue) {
     NAPIValue global;
     napi_get_global(*env, &global);
     NAPIValue object;
@@ -190,6 +194,7 @@ JsiObject *JSUtils::toObject(NAPIEnv *env, const NAPIValue *napiValue) {
         JsiValue *value = toValue(env, &result);
         if (value != nullptr) {
             hmObject->setValue("__finalize__", value);
+            value->unprotect();
         }
         return hmObject;
     }
@@ -204,13 +209,15 @@ JsiObject *JSUtils::toObject(NAPIEnv *env, const NAPIValue *napiValue) {
         JsiValue *value = toValue(env, &result);
         if (value != nullptr) {
             hmObject->setValue(key, value);
+            value->unprotect();
         }
+
     }
     return hmObject;
 }
 
 
-bool JSUtils::isFloatNumber(NAPIEnv *env, NAPIValue *napiValue) {
+bool JsiUtils::isFloatNumber(NAPIEnv *env, NAPIValue *napiValue) {
     NAPIValue global;
     napi_get_global(*env, &global);
     NAPIValue object;
@@ -230,11 +237,11 @@ bool JSUtils::isFloatNumber(NAPIEnv *env, NAPIValue *napiValue) {
 }
 
 
-JsiValue *JSUtils::toValue(NAPIEnv *env, NAPIValue *value) {
+JsiValue *JsiUtils::toValue(NAPIEnv *env, NAPIValue *value) {
     NAPIValueType valueType;
     if (*value == NULL) {
         error("JSUtils::toValue()  napi_typeof() error. status=%u", 100);
-        return  new JsiValue();
+        return new JsiValue(TYPE_VALUE);
     }
     NAPICommonStatus status = napi_typeof(*env, *value, &valueType);
     if (status != NAPICommonOK) {
@@ -307,7 +314,7 @@ JsiValue *JSUtils::toValue(NAPIEnv *env, NAPIValue *value) {
         }
             break;
         default:
-            jsiValue = new JsiValue();
+            jsiValue = new JsiValue(TYPE_VALUE);
     }
     return jsiValue;
 }
@@ -320,7 +327,7 @@ JsiValue *JSUtils::toValue(NAPIEnv *env, NAPIValue *value) {
  * @param jsiValue
  * @param result
  */
-void JSUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
+void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
     if (jsiValue == nullptr) {
         return;
     }
@@ -328,7 +335,7 @@ void JSUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
     switch (valueType) {
         case TYPE_OBJECT: {
             JsiObject *hmObject = (JsiObject *) jsiValue;
-            NAPIExceptionStatus status = JSUtils::createObject(env, "Object", 0, nullptr, result);
+            NAPIExceptionStatus status = JsiUtils::createObject(env, "Object", 0, nullptr, result);
             if (status != NAPIExceptionOK) {
                 JsiError *error = getAndClearLastError(env);
                 warn("JSUtils::toJSValue() error. %s", error->toString().c_str());
@@ -350,7 +357,7 @@ void JSUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
             break;
         case TYPE_ARRAY: {
             JsiArray *hmArray = (JsiArray *) jsiValue;
-            NAPIExceptionStatus status = JSUtils::createObject(env, "Array", 0, nullptr, result);
+            NAPIExceptionStatus status = JsiUtils::createObject(env, "Array", 0, nullptr, result);
             if (status != NAPIExceptionOK) {
                 JsiError *error = getAndClearLastError(env);
                 warn("JSUtils::toJSValue() TYPE_ARRAY new Array() error. %s", error->toCString());
@@ -390,7 +397,7 @@ void JSUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
         case TYPE_NUMBER: {
             JsiNumber *value = (JsiNumber *) jsiValue;
             NAPIErrorStatus status = napi_create_double(*env, value->value_, result);
-            if (status != NAPIExceptionOK) {
+            if (status != NAPIErrorOK) {
                 JsiError *error = getAndClearLastError(env);
                 warn("JSUtils::toJSValue() TYPE_NUMBER call error. %s", error->toCString());
             }
@@ -399,7 +406,7 @@ void JSUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
         case TYPE_BOOLEAN: {
             JsiBoolean *hmBoolean = (JsiBoolean *) jsiValue;
             NAPIErrorStatus status = napi_get_boolean(*env, hmBoolean->value_, result);
-            if (status != NAPIExceptionOK) {
+            if (status != NAPIErrorOK) {
                 JsiError *error = getAndClearLastError(env);
                 warn("JSUtils::toJSValue() TYPE_NUMBER call error. %s", error->toCString());
             }
@@ -422,13 +429,13 @@ void JSUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
 
 }
 
-JsiError *JSUtils::getAndClearLastError(NAPIEnv *env) {
+JsiError *JsiUtils::getAndClearLastError(NAPIEnv *env) {
     NAPIValue errorValue;
     auto status = napi_get_and_clear_last_exception(*env, &errorValue);
     if (status != NAPIErrorOK) {
         return nullptr;
     }
-    JsiError *jsError = new JsiError();
+    auto *jsError = new JsiError();
 
     const char *name = getPropertyToCString(env, &errorValue, "name");
     const char *message = getPropertyToCString(env, &errorValue, "message");
@@ -441,7 +448,7 @@ JsiError *JSUtils::getAndClearLastError(NAPIEnv *env) {
     return jsError;
 }
 
-void JSUtils::registerFunction(NAPIEnv *env, NAPIValue *target, const char *functionName, NAPICallback callback, void *data) {
+void JsiUtils::registerFunction(NAPIEnv *env, NAPIValue *target, const char *functionName, NAPICallback callback, void *data) {
     //registerFunction
     NAPIExceptionStatus status;
     NAPIValue targetFunction;
@@ -452,7 +459,7 @@ void JSUtils::registerFunction(NAPIEnv *env, NAPIValue *target, const char *func
 
 //    info("JSUtils::registerFunction() functionName=%s data=%u", functionName, (uintptr_t) data);
 
-    status = JSUtils::setProperty(env, target, functionName, &targetFunction);
+    status = JsiUtils::setProperty(env, target, functionName, &targetFunction);
     if (status != NAPIExceptionOK) {
         error("JSUtils::registerFunction() setProperty error. status=%d", status);
         JsiError *jsiError = getAndClearLastError(env);
@@ -462,15 +469,15 @@ void JSUtils::registerFunction(NAPIEnv *env, NAPIValue *target, const char *func
     }
 }
 
-void JSUtils::openHandleScope(NAPIEnv *env, NAPIHandleScope *handleScope) {
+void JsiUtils::openHandleScope(NAPIEnv *env, NAPIHandleScope *handleScope) {
     napi_open_handle_scope(*env, handleScope);
 }
 
-void JSUtils::closeHandleScope(NAPIEnv *env, NAPIHandleScope *handleScope) {
+void JsiUtils::closeHandleScope(NAPIEnv *env, NAPIHandleScope *handleScope) {
     napi_close_handle_scope(*env, *handleScope);
 }
 
-string JSUtils::buildArrayString(size_t argc, JsiValue **argv) {
+string JsiUtils::buildArrayString(size_t argc, JsiValue **argv) {
     if (argc == 0) {
         return "[]";
     }
@@ -483,6 +490,44 @@ string JSUtils::buildArrayString(size_t argc, JsiValue **argv) {
     }
     sb.append("]");
     return sb;
+}
+
+void JsiUtils::releaseJsiValue(JsiValue *argv) {
+    if (argv != nullptr) {
+        argv->unprotect();
+    }
+}
+
+void JsiUtils::releaseJsiValue(size_t argc, JsiValue **argv) {
+    if (argc > 0 && argv != nullptr) {
+        for (int i = 0; i < argc; i++) {
+            if (argv[i] != nullptr) {
+                argv[i]->unprotect();
+            }
+        }
+    }
+}
+
+void JsiUtils::copyJsiValue(JsiValue **src, JsiValue **dest, size_t size) {
+    for (int i = 0; i < size; i++) {
+        JsiValue *value = src[i];
+        if (value != nullptr) {
+            value->protect();
+        }
+        dest[i] = src[i];
+    }
+}
+
+JsiValue **JsiUtils::copyJsiValue(size_t argc, JsiValue **argv) {
+    JsiValue **result = new JsiValue *[argc];
+    for (int i = 0; i < argc; i++) {
+        JsiValue *value = argv[i];
+        if (value != nullptr) {
+            value->protect();
+        }
+        result[i] = argv[i];
+    }
+    return result;
 }
 
 

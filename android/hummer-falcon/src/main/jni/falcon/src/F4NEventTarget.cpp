@@ -15,14 +15,13 @@ F4NEventTarget::F4NEventTarget(JsiFunction *jsiFunction) {
 }
 
 void F4NEventTarget::onEvent(string eventName, JsiValue *event) {
-    auto **params = new JsiValue *[2];
+    JsiValue *params[2];
     params[0] = new JsiString(eventName.c_str());
     params[1] = event;
     jsiFunction->call(2, params);
-    delete event;
 }
 
 F4NEventTarget::~F4NEventTarget() {
-    delete jsiFunction;
+    jsiFunction->unprotect();
 }
 

@@ -1,5 +1,7 @@
 package com.didi.hummer2.bridge;
 
+import androidx.annotation.NonNull;
+
 /**
  * didi Create on 2023/11/21 .
  * <p>
@@ -12,7 +14,7 @@ package com.didi.hummer2.bridge;
  */
 
 public class JsiNumber extends JsiValue implements INumber {
-    private double value;
+    private final double value;
 
     public JsiNumber(double value) {
         this.identify = init_number_(value);
@@ -24,9 +26,10 @@ public class JsiNumber extends JsiValue implements INumber {
         this.value = value;
     }
 
-    public double getValue(){
+    public double getValue() {
         return value;
     }
+
     @Override
     public int valueInt() {
         return (int) value;
@@ -52,6 +55,30 @@ public class JsiNumber extends JsiValue implements INumber {
         return true;
     }
 
+    @Override
+    public boolean isJava() {
+        return true;
+    }
+
+    @Override
+    public int getType() {
+        return ValueType.TYPE_NUMBER;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        long v = (long) value;
+        if (v == value) {
+            return Long.toString(v);
+        }
+        return Double.toString(value);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        //not do
+    }
 
     public native long init_number_(double value);
 

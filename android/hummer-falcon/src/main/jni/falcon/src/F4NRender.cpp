@@ -39,6 +39,7 @@ void F4NRender::applyRenderElementCall() {
 
     for (auto it = targetCall->begin(); it != targetCall->end(); it++) {
         applyElementFunctionCall(*it);
+        delete *it;
     }
 }
 
@@ -90,8 +91,8 @@ void F4NRender::applyElementAttribute(F4NElement *element) {
 }
 
 void F4NRender::applyElementStyle(F4NElement *element) {
-    if (element->hmStyle_ != nullptr) {
-        renderInvoker->setStyles(element, element->hmStyle_);
+    if (element->_Style_ != nullptr) {
+        renderInvoker->setStyles(element, element->_Style_);
     }
 }
 
@@ -113,7 +114,9 @@ void F4NRender::applyElementCall(F4NElement *element) {
     auto targetCall = element->_elementFunctionCalls_;
     for (auto it = targetCall->begin(); it != targetCall->end(); it++) {
         applyElementFunctionCall(*it);
+        delete *it;
     }
+    element->_elementFunctionCalls_->clear();
 }
 
 F4NElement *F4NRender::createChildElement(F4NElement *thisElement, JsiValue *jsiValue) {
@@ -215,7 +218,7 @@ void F4NRender::applyElementFunctionCall(F4NFunctionCall *call) {
         }
             break;
         case F4NElement::MethodId_setStyles: {
-            renderInvoker->setStyles(call->thisElement, call->thisElement->hmStyle_);
+            renderInvoker->setStyles(call->thisElement, call->thisElement->_Style_);
         }
             break;
         case F4NElement::MethodId_getReact: {
@@ -306,8 +309,25 @@ void F4NRender::applyRenderTag(F4NElement *element) {
     }
 }
 
-F4NRender::~F4NRender() {
+void F4NRender::onDestroy() {
+    info("F4NRender::onDestroy()");
+    commitRenderElementCall();
 
+    for (auto it = _myFunctionCalls_->begin(); it != _myFunctionCalls_->end(); it++) {
+        delete *it;
+    }
+    _myFunctionCalls_->clear();
+
+}
+
+F4NRender::~F4NRender() {
+    info("F4NRender::~F4NRender()");
+
+    delete _renderFunctionCalls_;
+    _renderFunctionCalls_ = nullptr;
+
+    delete _myFunctionCalls_;
+    _myFunctionCalls_ = nullptr;
 }
 
 

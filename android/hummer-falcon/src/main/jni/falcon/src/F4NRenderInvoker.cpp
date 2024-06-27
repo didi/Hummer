@@ -16,7 +16,7 @@ F4NRenderInvoker::~F4NRenderInvoker() {
 }
 
 void F4NRenderInvoker::newInstance(F4NElement *thisObj) {
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = thisObj->props;
 
     invoke(FACTORY_TYPE_RENDER,
@@ -26,7 +26,6 @@ void F4NRenderInvoker::newInstance(F4NElement *thisObj) {
            "<init>",
            1,
            params);
-    delete[] params;
 }
 
 void F4NRenderInvoker::deleteInstance(F4NElement *thisObj) {
@@ -40,7 +39,7 @@ void F4NRenderInvoker::deleteInstance(F4NElement *thisObj) {
 }
 
 void F4NRenderInvoker::appendChild(F4NElement *thisObj, F4NElement *child) {
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = new JsiNumber(child->odjId);
     invoke(FACTORY_TYPE_RENDER,
            thisObj->odjId,
@@ -50,11 +49,11 @@ void F4NRenderInvoker::appendChild(F4NElement *thisObj, F4NElement *child) {
            1,
            params);
 
-    delete[] params;
+    JsiUtils::releaseJsiValue(1, params);
 }
 
 void F4NRenderInvoker::removeChild(F4NElement *thisObj, F4NElement *child) {
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = new JsiNumber(child->odjId);
     invoke(FACTORY_TYPE_RENDER,
            thisObj->odjId,
@@ -63,7 +62,8 @@ void F4NRenderInvoker::removeChild(F4NElement *thisObj, F4NElement *child) {
            "removeChild",
            1,
            params);
-    delete[] params;
+
+    JsiUtils::releaseJsiValue(1, params);
 }
 
 void F4NRenderInvoker::removeAll(F4NElement *thisObj) {
@@ -77,7 +77,7 @@ void F4NRenderInvoker::removeAll(F4NElement *thisObj) {
 }
 
 void F4NRenderInvoker::insertBefore(F4NElement *thisObj, F4NElement *child, F4NElement *anchor) {
-    auto **params = new JsiValue *[2];
+    JsiValue *params[2];
     params[0] = new JsiNumber(child->odjId);
     params[1] = new JsiNumber(anchor->odjId);
     invoke(FACTORY_TYPE_RENDER,
@@ -87,11 +87,12 @@ void F4NRenderInvoker::insertBefore(F4NElement *thisObj, F4NElement *child, F4NE
            "insertBefore",
            2,
            params);
-    delete[] params;
+
+    JsiUtils::releaseJsiValue(2, params);
 }
 
 void F4NRenderInvoker::replaceChild(F4NElement *thisObj, F4NElement *newNode, F4NElement *oldNode) {
-    auto **params = new JsiValue *[2];
+    JsiValue *params[2];
     params[0] = new JsiNumber(newNode->odjId);
     params[1] = new JsiNumber(oldNode->odjId);
     invoke(FACTORY_TYPE_RENDER,
@@ -101,11 +102,12 @@ void F4NRenderInvoker::replaceChild(F4NElement *thisObj, F4NElement *newNode, F4
            "replaceChild",
            2,
            params);
-    delete[] params;
+
+    JsiUtils::releaseJsiValue(2, params);
 }
 
 void F4NRenderInvoker::setAttributes(F4NElement *thisObj, JsiValue *jsiValue) {
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = jsiValue;
     invoke(FACTORY_TYPE_RENDER,
            thisObj->odjId,
@@ -114,7 +116,7 @@ void F4NRenderInvoker::setAttributes(F4NElement *thisObj, JsiValue *jsiValue) {
            "setAttributes",
            1,
            params);
-    delete[] params;
+
 }
 
 void F4NRenderInvoker::getAttribute(F4NElement *thisObj, string key, F4NFunction *function) {
@@ -122,7 +124,7 @@ void F4NRenderInvoker::getAttribute(F4NElement *thisObj, string key, F4NFunction
 }
 
 void F4NRenderInvoker::setStyles(F4NElement *thisObj, F4NStyle *hmStyle) {
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = hmStyle->getStyleValue();
     invoke(FACTORY_TYPE_RENDER,
            thisObj->odjId,
@@ -131,7 +133,7 @@ void F4NRenderInvoker::setStyles(F4NElement *thisObj, F4NStyle *hmStyle) {
            "setStyles",
            1,
            params);
-    delete[] params;
+
 }
 
 void F4NRenderInvoker::getReact(F4NElement *thisObj, F4NFunction *hmFunction) {
@@ -139,9 +141,9 @@ void F4NRenderInvoker::getReact(F4NElement *thisObj, F4NFunction *hmFunction) {
 }
 
 void F4NRenderInvoker::addEventListener(F4NElement *thisObj, string event) {
-    auto **params = new JsiValue *[1];
-    JsiString *jsiString = new JsiString(event.c_str());
-    params[0] = jsiString;
+    JsiValue *params[1];
+    params[0] = new JsiString(event.c_str());
+
     invoke(FACTORY_TYPE_RENDER,
            thisObj->odjId,
            METHOD_TYPE_CALL,
@@ -150,12 +152,11 @@ void F4NRenderInvoker::addEventListener(F4NElement *thisObj, string event) {
            1,
            params);
 
-    delete jsiString;
-    delete[] params;
+    JsiUtils::releaseJsiValue(1, params);
 }
 
 void F4NRenderInvoker::removeEventListener(F4NElement *thisObj, string event) {
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = new JsiString(event.c_str());
 
     invoke(FACTORY_TYPE_RENDER,
@@ -165,13 +166,13 @@ void F4NRenderInvoker::removeEventListener(F4NElement *thisObj, string event) {
            "removeEventListener",
            1,
            params);
-    delete[] params;
+
+    JsiUtils::releaseJsiValue(1, params);
 }
 
 void F4NRenderInvoker::setEventTarget(F4NComponent *thisObj, F4NEventTarget *eventTarget) {
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = eventTarget->jsiFunction;
-
     invoke(FACTORY_TYPE_RENDER,
            thisObj->odjId,
            METHOD_TYPE_CALL,
@@ -179,12 +180,11 @@ void F4NRenderInvoker::setEventTarget(F4NComponent *thisObj, F4NEventTarget *eve
            "setEventTarget",
            1,
            params);
-    delete[] params;
 }
 
 
 void F4NRenderInvoker::addAnimation(F4NComponent *thisObj, JsiValue *animation, string key) {
-    auto **params = new JsiValue *[2];
+    JsiValue *params[2];
     params[0] = animation;
     params[1] = new JsiString(key.c_str());
 
@@ -195,11 +195,12 @@ void F4NRenderInvoker::addAnimation(F4NComponent *thisObj, JsiValue *animation, 
            "addAnimation",
            2,
            params);
-    delete[] params;
+
+    params[1]->unprotect();
 }
 
 void F4NRenderInvoker::removeAnimationForKey(F4NComponent *thisObj, string key) {
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = new JsiString(key.c_str());
 
     invoke(FACTORY_TYPE_RENDER,
@@ -209,7 +210,8 @@ void F4NRenderInvoker::removeAnimationForKey(F4NComponent *thisObj, string key) 
            "removeAnimationForKey",
            1,
            params);
-    delete[] params;
+
+    JsiUtils::releaseJsiValue(1, params);
 }
 
 void F4NRenderInvoker::removeAllAnimation(F4NComponent *thisObj) {
@@ -240,7 +242,7 @@ void F4NRenderInvoker::render(F4NElement *rootElement) {
     if (!isCreateRender) {
         createRender();
     }
-    auto **params = new JsiValue *[1];
+    JsiValue *params[1];
     params[0] = new JsiNumber(rootElement->odjId);
 
     invoke(FACTORY_TYPE_RENDER,
@@ -251,14 +253,14 @@ void F4NRenderInvoker::render(F4NElement *rootElement) {
            1,
            params);
 
-    delete[] params;
+    JsiUtils::releaseJsiValue(1, params);
 }
 
 void F4NRenderInvoker::loadScriptWithUrl(string script, JsiFunction *callback) {
 
-    auto **params = new JsiValue *[2];
+    JsiValue *params[2];
     params[0] = new JsiString(script.c_str());
-    params[0] = callback;
+    params[1] = callback;
 
     invoke(FACTORY_TYPE_RENDER,
            -1,
@@ -268,5 +270,5 @@ void F4NRenderInvoker::loadScriptWithUrl(string script, JsiFunction *callback) {
            2,
            params);
 
-    delete[] params;
+    params[0]->unprotect();
 }

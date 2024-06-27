@@ -33,7 +33,7 @@ void F4NLoopHandler::stop() {
 }
 
 void F4NLoopHandler::sendMessage(const F4NMessage &message) {
-    debug("NativeThread::sendMessage() id=%d", message.messageId);
+//    debug("NativeThread::sendMessage() id=%d", message.messageId);
 //    pthread_mutex_lock(&mutex_pt);
 //    addMessageOderByTime(message);
 //    pthread_mutex_unlock(&mutex_pt);
@@ -42,12 +42,12 @@ void F4NLoopHandler::sendMessage(const F4NMessage &message) {
     lock_guard<mutex> lock(mutex_var);
     addMessageOderByTime(message);
     condition_var.notify_one();
-    debug("NativeThread::sendMessage() id=%d", message.messageId);
+//    debug("NativeThread::sendMessage() id=%d", message.messageId);
 }
 
 
 void F4NLoopHandler::removeMessage(const F4NMessage &message) {
-    debug("NativeThread::removeMessage() id=%d", message.messageId);
+//    debug("NativeThread::removeMessage() id=%d", message.messageId);
 //    pthread_mutex_lock(&mutex_pt);
 //    removeMessageById(message);
 //    pthread_mutex_unlock(&mutex_pt);
@@ -56,7 +56,7 @@ void F4NLoopHandler::removeMessage(const F4NMessage &message) {
     lock_guard<mutex> lock(mutex_var);
     removeMessageById(message);
     condition_var.notify_one();
-    debug("NativeThread::removeMessage() id=%d", message.messageId);
+//    debug("NativeThread::removeMessage() id=%d", message.messageId);
 }
 
 // 自定义比较函数，用于按照 Message 的 run_time_point 升序排序
@@ -102,18 +102,18 @@ void F4NLoopHandler::dispatchLoopEnd(long id) {
 }
 
 void F4NLoopHandler::handleMessage(const F4NMessage &message) {
-    debug("NativeThread::handleMessage() start id=%d", message.messageId);
+//    debug("NativeThread::handleMessage() start id=%d", message.messageId);
     if (message.function != nullptr) {
         message.function(message.messageId, message.content, message.data);
     }
-    debug("NativeThread::handleMessage() stop id=%d", message.messageId);
+//    debug("NativeThread::handleMessage() stop id=%d", message.messageId);
 
     long id = message.delayMessage ? message.messageId : 0;
     if (onThreadLoopEnd != nullptr) {
         onThreadLoopEnd(this, id);
     }
     dispatchLoopEnd(id);
-    debug("NativeThread::handleMessage() end id=%d", message.messageId);
+//    debug("NativeThread::handleMessage() end id=%d", message.messageId);
 }
 
 

@@ -8,10 +8,11 @@ package com.didi.hummer2.bridge;
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
  * @Date 2024/3/20 3:00 PM
- * @Description 用一句话说明文件功能
+ * @Description {@link JsiValue} 的数据类型
  */
 
 public class ValueType {
+
     public static final int TYPE_ARRAY = 1;
     public static final int TYPE_OBJECT = 2;
     public static final int TYPE_BOOLEAN = 3;

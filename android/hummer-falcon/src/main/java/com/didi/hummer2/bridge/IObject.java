@@ -20,6 +20,7 @@ public interface IObject {
     int getValueType(String key);
 
     void put(String key, JsiValue value);
+
     boolean isBoolean(String key);
 
     boolean isNumber(String key);

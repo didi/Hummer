@@ -29,12 +29,9 @@ apply from: '../upload.gradle'
 //    apply from: 'build_hermes.gradle'
 //} else if (project.COMPILE_JS_ENGINE == 'NAPI') {
 if (project.NAPI_ENGINE == 'QuickJS') {
-//        apply from: 'fetch_napi_qjs_libs.gradle'
-//    } else if (project.NAPI_ENGINE == 'Hermes') {
-//        apply from: 'fetch_napi_hermes_libs.gradle'
 }
 apply from: 'build_falcon.gradle'
-//}
+
 
 //preBuild.dependsOn pickLibs
 //clean.dependsOn cleanPickLibs

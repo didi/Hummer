@@ -1,0 +1,53 @@
+android {
+
+
+    ndkVersion "21.4.7075529"
+
+    defaultConfig {
+        externalNativeBuild {
+            cmake {
+                arguments "-DNAPI_ENGINE=" + project.NAPI_ENGINE
+                arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_shared'
+                cFlags '-std=c99', '-fstrict-aliasing'
+                cppFlags '-std=c++14', '-fstrict-aliasing'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            externalNativeBuild {
+                cmake {
+                    arguments '-DCMAKE_BUILD_TYPE=MinSizeRel'
+                    cFlags '-g0', '-Os', '-fomit-frame-pointer', '-DNDEBUG', '-fvisibility=hidden'
+                    cppFlags '-g0', '-Os', '-fomit-frame-pointer', '-DNDEBUG', '-fvisibility=hidden'
+
+                    cFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
+                    cppFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
+                }
+            }
+        }
+
+        debug {
+            externalNativeBuild {
+                cmake {
+                    arguments '-DCMAKE_BUILD_TYPE=MinSizeRel'
+                    cFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
+                    cppFlags '-g', '-DDEBUG', '-DDUMP_LEAKS'
+                }
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jni/libs']
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/jni/CMakeLists.txt"
+        }
+    }
+}

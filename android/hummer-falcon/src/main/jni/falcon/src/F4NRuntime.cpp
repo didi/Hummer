@@ -24,19 +24,27 @@ F4NContext *F4NRuntime::createContext() {
     return fnContext;
 }
 
-void F4NRuntime::destroyContext(F4NContext *vdomContext) {
-    fNContexts.remove(vdomContext);
-    vdomContext->onDestroy();
-    delete vdomContext;
+void F4NRuntime::destroyContext(F4NContext *f4NContext) {
+    fNContexts.remove(f4NContext);
+    f4NContext->stop();
+    delete f4NContext;
 }
 
 void F4NRuntime::release() {
     auto it = fNContexts.begin();
     while (it != fNContexts.end()) {
+        (*it)->stop();
         delete *it;
         ++it;
     }
     fNContexts.clear();
+}
+
+bool F4NRuntime::empty() {
+    if (fNContexts.empty()) {
+        return true;
+    }
+    return false;
 }
 
 F4NRuntime::~F4NRuntime() {

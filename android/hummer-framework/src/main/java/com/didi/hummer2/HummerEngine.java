@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 
 
 import com.didi.hummer2.adapter.navigator.impl.ActivityStackManager;
+import com.didi.hummer2.adapter.tracker.ITrackerAdapter;
+import com.didi.hummer2.adapter.tracker.SDKInfo;
 import com.didi.hummer2.module.component.notifycenter.OnNotifyCenterEventListener;
+import com.didi.hummer2.render.ResourceLoaderThread;
 import com.didi.hummer2.tools.HummerGlobal;
 import com.didi.hummer2.tools.JsEngine;
 import com.didi.hummer2.module.component.notifycenter.NotifyCenterEvent;
@@ -47,6 +50,8 @@ public class HummerEngine {
 
     private boolean isInit = false;
     private Context appContext;
+    private final SDKInfo sdkInfo = new SDKInfo();
+    private ResourceLoaderThread loaderThread;
 
     public HummerEngine() {
         hummerNameSpaceMap = new HashMap<>();
@@ -54,21 +59,39 @@ public class HummerEngine {
     }
 
 
-    public void initHummer(Context appContext) {
-        if (isInit) {
-            return;
+    public void initHummer(Context appContext, HummerConfig hummerConfig) {
+        if (!isInit) {
+            long startTime = System.currentTimeMillis();
+            this.appContext = appContext;
+            parseAppDebuggable(appContext);
+            ActivityStackManager.getInstance().register((Application) appContext);
+
+            loaderThread = new ResourceLoaderThread();
+            loaderThread.start();
+
+            loadYogaEngine();
+            loadJSEngine(appContext, JsEngine.FALCON_HERMES);
+
+            EnvUtil.initHummerEnv(appContext);
+
+            long useTime = System.currentTimeMillis() - startTime;
+            trackEngineInit(appContext, hummerConfig, useTime);
+
+            isInit = true;
         }
-        this.appContext = appContext;
-        parseAppDebuggable(appContext);
-//        Utils.init((Application) appContext);
-        ActivityStackManager.getInstance().register((Application) appContext);
+    }
 
-        loadYogaEngine();
-        loadJSEngine(appContext, JsEngine.FALCON_HERMES);
+    private void trackEngineInit(Context appContext, HummerConfig hummerConfig, long useTime) {
 
-        EnvUtil.initHummerEnv(appContext);
+        sdkInfo.jsEngine = JsEngine.FALCON_HERMES;
+        sdkInfo.isSdkInitSuccess = true;
+        sdkInfo.sdkInitTimeCost = useTime;
 
-        isInit = true;
+        ITrackerAdapter trackerAdapter = hummerConfig.getTrackerAdapter();
+        if (trackerAdapter != null) {
+            trackerAdapter.trackSDKInfo(sdkInfo);
+            trackerAdapter.trackEvent(ITrackerAdapter.EventName.SDK_INIT, null);
+        }
     }
 
 
@@ -120,6 +143,14 @@ public class HummerEngine {
         } catch (Throwable e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void runOnHummerThread(Runnable runnable) {
+        if (loaderThread != null) {
+            loaderThread.runOnHummerThread(runnable);
+        } else {
+            HMLog.w("HummerNative", "runOnHummerThread() HummerEngine is not init.");
         }
     }
 

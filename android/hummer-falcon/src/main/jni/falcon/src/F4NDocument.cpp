@@ -7,37 +7,49 @@
 #include <falcon/F4NComponent.h>
 
 F4NDocument::F4NDocument() {
-    _objectManager_ = new ObjectManager();
+    this->_objectManager_ = new ObjectManager();
 }
 
 F4NDocument::F4NDocument(JsiContext *jsiContext) {
     this->_jsiContext_ = jsiContext;
-    _objectManager_ = new ObjectManager();
+    this->_objectManager_ = new ObjectManager();
 }
 
 void F4NDocument::onCreate() {
+
+    //loadScript(),loadScriptWithUrl() 全局挂载方法
+    _global_ = _jsiContext_->getGlobalObject();
+    _global_->registerFunction(MethodId_loadScript, "loadScript", docFuncWrapper, this);
+    _global_->registerFunction(MethodId_loadScriptWithUrl, "loadScriptWithUrl", docFuncWrapper, this);
+
+    //__GLOBAL__ (兼容老版本挂载点，创建一个空的即可)
+    __global__ = _jsiContext_->createGlobalObject("Object", "__GLOBAL__");
+
+    //__Hummer__
     __Hummer__ = _jsiContext_->createGlobalObject("Object", "__Hummer__");
+
+    //__Hummer__.document
     _document_ = _jsiContext_->createObject("Object");
     __Hummer__->setProperty("document", _document_);
 
-    //兼容老版本挂载点，创建一个空的即可
-    JsiObjectEx *__global__ = _jsiContext_->createGlobalObject("Object", "__GLOBAL__");
-    __global__->release();
-
-    //全局挂载方法
-    JsiObjectEx *global = _jsiContext_->getGlobalObject();
-    global->registerFunction(MethodId_loadScript, "loadScript", docFuncWrapper, this);
-    global->registerFunction(MethodId_loadScriptWithUrl, "loadScriptWithUrl", docFuncWrapper, this);
-    global->release();
 
     //在 “__Hummer__.document” 挂载方法
     _document_->registerFunction(MethodId_createElement, "createElement", docFuncWrapper, this);
     _document_->registerFunction(MethodId_createComponent, "createComponent", docFuncWrapper, this);
     _document_->registerFunction(MethodId_render, "render", docFuncWrapper, this);
+
+    enable = true;
 }
 
 JsiValue *F4NDocument::createElement(size_t size, JsiValue **params) {
+    if (FALCON_LOG_ENABLE){
+        debug("F4NDocument::createElement() params=%s",JsiUtils::buildArrayString(size,params).c_str());
+    }
     if (size < 2) {
+        return nullptr;
+    }
+    if (!enable) {
+        warn("F4NDocument::createElement() enable=false");
         return nullptr;
     }
     string tag = static_cast<JsiString *>(params[0])->value_;
@@ -49,16 +61,21 @@ JsiValue *F4NDocument::createElement(size_t size, JsiValue **params) {
     element->context = fnContext;
     element->onCreate(tag, props);
 
-
     _objectManager_->pushObject(objId, element);
 
     JsiValueExt *valueExt = new JsiValueExt(element->getJsObject());
-    element->getJsObject()->release();
     return valueExt;
 }
 
 JsiValue *F4NDocument::createComponent(size_t size, JsiValue **params) {
+    if (FALCON_LOG_ENABLE){
+        debug("F4NDocument::createComponent() params=%s",JsiUtils::buildArrayString(size,params).c_str());
+    }
     if (size < 2) {
+        return nullptr;
+    }
+    if (!enable) {
+        warn("F4NDocument::createComponent() enable=false");
         return nullptr;
     }
     string tag = static_cast<JsiString *>(params[0])->value_;
@@ -74,7 +91,6 @@ JsiValue *F4NDocument::createComponent(size_t size, JsiValue **params) {
     _objectManager_->pushObject(objId, component);
 
     JsiValueExt *valueExt = new JsiValueExt(component->getJsObject());
-    component->getJsObject()->release();
     return valueExt;
 }
 
@@ -91,6 +107,10 @@ F4NElement *F4NDocument::convert2Element(JsiValue *jsiValue) {
 }
 
 JsiValue *F4NDocument::render(size_t size, JsiValue **params) {
+    if (!enable) {
+        warn("F4NDocument::render() enable=false");
+        return nullptr;
+    }
     if (size >= 1) {
         F4NElement *element = convert2Element(params[0]);
         fnContext->render(element);
@@ -98,13 +118,6 @@ JsiValue *F4NDocument::render(size_t size, JsiValue **params) {
     return nullptr;
 }
 
-void F4NDocument::onDestroy() {
-
-}
-
-F4NDocument::~F4NDocument() {
-
-}
 
 JsiValue *F4NDocument::loadScript(size_t size, JsiValue **params) {
     if (size > 0) {
@@ -140,7 +153,27 @@ JsiValue *F4NDocument::loadScriptWithUrl(string url, JsiFunction *jsiFunction) {
     return nullptr;
 }
 
-JsiValue *docFuncWrapper(JsiObjectEx *value, long methodId, const char *methodName, size_t size, JsiValue **params, void *data) {
+
+void F4NDocument::onDestroy() {
+    enable = false;
+
+    _document_->release();
+    _global_->release();
+    __Hummer__->release();
+    __global__->release();
+    _document_->release();
+    _objectManager_->release();
+}
+
+F4NDocument::~F4NDocument() {
+    delete _document_;
+    delete _global_;
+    delete __Hummer__;
+    delete __global__;
+    delete _objectManager_;
+}
+
+JsiValue *docFuncWrapper(JsiObjectRef *value, long methodId, const char *methodName, size_t size, JsiValue **params, void *data) {
     auto *bridge = static_cast<F4NDocument *>(data);
     switch (methodId) {
         case F4NDocument::MethodId_createElement:

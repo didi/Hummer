@@ -5,5 +5,6 @@ package com.didi.hummer2.demo;
  */
 public class Constant {
 
-    public static final String HOST = "http://" + BuildConfig.MOCK_HOST + ":8030/";
+        public static final String HOST = "http://" + BuildConfig.MOCK_HOST + ":8030/";
+//    public static final String HOST = "http://" + "172.23.166.0" + ":8020/";
 }

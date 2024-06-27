@@ -9,10 +9,9 @@
 
 static F4NLoopHandler *loopHandler = nullptr;
 
-F4NContextMT::F4NContextMT() : F4NContext() {
+F4NContextMT::F4NContextMT() : F4NContextBase() {
 
 }
-
 
 
 void F4NContextMT::init(F4NConfigOptions *configOptions, F4NRenderInvoker *componentFactory) {
@@ -25,26 +24,42 @@ void F4NContextMT::init(F4NConfigOptions *configOptions, F4NRenderInvoker *compo
     layoutThreadHandler_ = jsThreadHandler_;
     renderThreadHandler_ = jsThreadHandler_;
 
-    F4NContext::init(configOptions, componentFactory);
+    F4NContextBase::init(configOptions, componentFactory);
+    onCreate();
 }
 
 
 void F4NContextMT::onCreate() {
-    F4NContext::onCreate();
+    F4NContextBase::onCreate();
 }
 
 
 void F4NContextMT::onJsThreadStart(F4NHandler *threadHandler) {
-    F4NContext::start();
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMT::onJsThreadStart()");
+    }
+
+    //开始创建JS上下文及初始化基础环境
+    onStart();
+}
+
+
+void F4NContextMT::onJsThreadStop(F4NHandler *threadHandler) {
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMT::onJsThreadStop()");
+    }
+    //停止js引擎，销毁JS资源
+    onStop();
 }
 
 void F4NContextMT::onThreadLoopEnd(F4NHandler *threadHandler) {
-    info("F4NContextMT::commitRenderElementCall()");
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMT::onThreadLoopEnd()");
+    }
     bool render = _elementRender_->commitRenderElementCall();
     if (render) {
         F4NMessage message = F4NMessage("loop render");
         message.function = [&](int id, const string &msg, void *data) {
-            info("F4NContextMT::applyRenderElementCall()");
             _elementRender_->applyRenderElementCall();
         };
         _mainThreadHandler_->sendMessage(message);
@@ -52,36 +67,14 @@ void F4NContextMT::onThreadLoopEnd(F4NHandler *threadHandler) {
 }
 
 
-void F4NContextMT::start() {
-    info("F4NContextMT::start()");
-
-    jsThreadHandler_->setOnThreadStart([&](F4NHandler *thread) {
-        info("F4NContextMT::start onThreadStart()");
-        onJsThreadStart(thread);
-
-    });
-    jsThreadHandler_->setOnThreadLoopEnd([&](F4NHandler *thread) {
-        info("F4NContextMT::loop onThreadLoopEnd()");
-        onThreadLoopEnd(thread);
-    });
-
-    jsThreadHandler_->start();
-    prepared = true;
-}
-
-
-void F4NContextMT::onStart() {
-    F4NContext::onStart();
-}
-
 JsiValue *F4NContextMT::evaluateJavaScript(string script, string scriptId) {
     if (prepared) {
         F4NMessage message = F4NMessage("run");
         message.function = [&, script, scriptId](int id, const string &msg, void *data) {
             info("F4NContextMT::evaluateJavaScript()  scriptId=%s", scriptId.c_str());
-            JsiObjectEx *result = _jsiContext_->evaluateJavaScript(script, scriptId);
+            JsiObjectRef *result = _jsiContext_->evaluateJavaScript(script, scriptId, nullptr);
             if (result != nullptr) {
-                info("F4NContextMT::evaluateJavaScript()  result=%s", result->toJsiValue()->toCString());
+                info("F4NContextMT::evaluateJavaScript()  result=%s", result->toJsiValue()->toString().c_str());
                 delete result;
             } else {
                 info("F4NContextMT::evaluateJavaScript()  result=null");
@@ -95,14 +88,14 @@ JsiValue *F4NContextMT::evaluateJavaScript(string script, string scriptId) {
 }
 
 JsiValue *F4NContextMT::evaluateBytecode(const uint8_t *byteArray, size_t length, const char *scriptId) {
-    return F4NContext::evaluateBytecode(byteArray, length, scriptId);
+    return F4NContextBase::evaluateBytecode(byteArray, length, scriptId);
 }
 
 
 long F4NContextMT::submitJsTask(function<void()> task) {
     F4NMessage message = F4NMessage("js");
     message.function = [&, task](int id, const string &msg, void *data) {
-        F4NContext::submitJsTask(task);
+        F4NContextBase::submitJsTask(task);
     };
     jsThreadHandler_->sendMessage(message);
     return message.messageId;
@@ -112,7 +105,7 @@ long F4NContextMT::submitJsTask(function<void()> task) {
 long F4NContextMT::submitJsTask(function<void()> task, time_t delay) {
     F4NMessage message = F4NMessage("js-delay", delay);
     message.function = [&, task, delay](int id, const string &msg, void *data) {
-        F4NContext::submitJsTask(task, delay);
+        F4NContextBase::submitJsTask(task, delay);
     };
     jsThreadHandler_->sendMessage(message);
     return message.messageId;
@@ -121,7 +114,7 @@ long F4NContextMT::submitJsTask(function<void()> task, time_t delay) {
 long F4NContextMT::submitJsTask(function<void()> task, time_t delay, time_t interval) {
     F4NMessage message = F4NMessage("js-interval", delay, interval);
     message.function = [&, task, delay, interval](int id, const string &msg, void *data) {
-        F4NContext::submitJsTask(task, delay, interval);
+        F4NContextBase::submitJsTask(task, delay, interval);
     };
     jsThreadHandler_->sendMessage(message);
     return message.messageId;
@@ -134,7 +127,7 @@ void F4NContextMT::cancelJsTask(long id) {
 long F4NContextMT::submitUITask(function<void()> task) {
     F4NMessage message = F4NMessage("ui");
     message.function = [&, task](int id, const string &msg, void *data) {
-        F4NContext::submitUITask(task);
+        F4NContextBase::submitUITask(task);
     };
     _mainThreadHandler_->sendMessage(message);
     return message.messageId;
@@ -151,28 +144,83 @@ JsiValue *F4NContextMT::render(F4NElement *rootElement) {
     F4NMessage message = F4NMessage("render");
     message.function = [&, rootElement](int id, const string &msg, void *data) {
         info("VDOMContextMT::render()");
-        F4NContext::render(rootElement);
+        F4NContextBase::render(rootElement);
     };
     _mainThreadHandler_->sendMessage(message);
     return nullptr;
 }
 
-void F4NContextMT::stop() {
-    jsThreadHandler_->stop();
-    F4NContext::stop();
+void F4NContextMT::start() {
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMT::start()");
+    }
+    jsThreadHandler_->setOnThreadStart([&](F4NHandler *thread) {
+        onJsThreadStart(thread);
+    });
+    jsThreadHandler_->setOnThreadLoopEnd([&](F4NHandler *thread) {
+        onThreadLoopEnd(thread);
+    });
+
+    jsThreadHandler_->start();
+    prepared = true;
 }
 
+void F4NContextMT::onStart() {
+    //F4NContextMT创建完成
+    _contextListener_->onContextCreate();
+    F4NContextBase::onStart();
+    //F4NContextMT开始运行
+    _contextListener_->onContextStart();
+}
+
+
+void F4NContextMT::stop() {
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMT::stop()");
+    }
+    F4NContextBase::stop();
+
+    jsThreadHandler_->setOnThreadStart(nullptr);
+    jsThreadHandler_->setOnThreadLoopEnd(nullptr);
+
+    submitJsTask([&]() {
+        onJsThreadStop(nullptr);
+    });
+
+}
+
+
 void F4NContextMT::onStop() {
-    F4NContext::onStop();
+    //TODO JNI已经销毁不能回调
+//    _contextListener_->onContextStop();
+    F4NContextBase::onStop();
+
+    onDestroy();
+
+    jsThreadHandler_->stop();
+
+    delete this;
 }
 
 void F4NContextMT::onDestroy() {
-    F4NContext::onDestroy();
+    //TODO JNI已经销毁不能回调
+//    _contextListener_->onContextDestroy();
+    F4NContextBase::onDestroy();
 }
 
 F4NContextMT::~F4NContextMT() {
+    if (FALCON_LOG_ENABLE) {
+        debug("F4NContextMT::~F4NContextMT()");
+    }
+
+    delete jsThreadHandler_;
+
+    jsThreadHandler_ = nullptr;
+    layoutThreadHandler_ = nullptr;
+    renderThreadHandler_ = nullptr;
 
 }
+
 
 
 

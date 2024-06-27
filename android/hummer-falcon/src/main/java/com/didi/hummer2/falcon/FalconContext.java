@@ -4,6 +4,7 @@ package com.didi.hummer2.falcon;
 import android.text.TextUtils;
 
 import com.didi.hummer2.bridge.JsiValue;
+import com.didi.hummer2.bridge.JsiValueUtils;
 import com.didi.hummer2.register.InvokerRegister;
 import com.didi.hummer2.exception.JavaScriptException;
 import com.didi.hummer2.invoke.Invoker;
@@ -123,6 +124,7 @@ public class FalconContext implements PageLifeCycle, Serializable {
 
     // C++ 直接回调
     public Object invoke(long type, long objId, long methodType, String componentName, String methodName, int argc, JsiValue[] value) {
+        JsiValueUtils.toJavaValue(value);
         Object result = invokerRegister.invoke(null, null, type, objId, methodType, componentName, methodName, argc, value);
         if (result != null) {
             JsiValue jsiValue = F4NObjectUtil.toJsiValue(result);

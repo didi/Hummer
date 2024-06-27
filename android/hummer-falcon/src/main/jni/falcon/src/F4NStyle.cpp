@@ -22,10 +22,13 @@ void F4NStyle::mergeNewStyle(F4NStyle *hmStyle) {
 
     list<string> keys = object->allKeys();
     for (auto it: keys) {
-        _value_->setValue(it, object->getValue(it));
+        auto value = object->getValue(it);
+        _value_->setValue(it, value);
     }
 }
 
 F4NStyle::~F4NStyle() {
-    delete _value_;
+    if (_value_ != nullptr) {
+        _value_->unprotect();
+    }
 }

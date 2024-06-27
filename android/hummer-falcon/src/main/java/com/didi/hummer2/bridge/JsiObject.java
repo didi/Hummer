@@ -13,7 +13,7 @@ import java.util.List;
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
  * @Date 2023/11/21 6:11 下午
- * @Description 用一句话说明文件功能
+ * @Description 对象：类map
  */
 
 public class JsiObject extends JsiValue implements IObject {
@@ -22,7 +22,7 @@ public class JsiObject extends JsiValue implements IObject {
         identify = init_object_();
     }
 
-    private JsiObject(long identify) {
+    protected JsiObject(long identify) {
         this.identify = identify;
     }
 
@@ -134,6 +134,16 @@ public class JsiObject extends JsiValue implements IObject {
     @Override
     public boolean isObject() {
         return true;
+    }
+
+    @Override
+    public boolean isJava() {
+        return false;
+    }
+
+    @Override
+    public int getType() {
+        return ValueType.TYPE_OBJECT;
     }
 
     private native long init_object_();

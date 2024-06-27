@@ -7,16 +7,16 @@
 
 static JavaVM *_JavaVM_ = nullptr;
 
-static MainThreadHandler *mainThreadHandler_;
+//static MainThreadHandler *mainThreadHandler_;
 
 void HMUtils::init(JavaVM *vm) {
     _JavaVM_ = vm;
-    mainThreadHandler_ = new MainThreadHandler();
-    mainThreadHandler_->init();
+//    mainThreadHandler_ = new MainThreadHandler();
+//    mainThreadHandler_->init();
 }
 
 MainThreadHandler *HMUtils::getMainThreadHandler() {
-    return mainThreadHandler_;
+//    return mainThreadHandler_;
 }
 
 bool HMUtils::isMainThread() {

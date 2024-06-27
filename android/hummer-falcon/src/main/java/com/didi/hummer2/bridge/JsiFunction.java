@@ -15,11 +15,15 @@ import androidx.annotation.NonNull;
 
 public class JsiFunction extends JsiValue {
 
-    private JsiFunction() {
+    private final long functionId;
+
+    protected JsiFunction() {
+        functionId = 0;
     }
 
-    private JsiFunction(long identify) {
-        this.identify = identify;
+    protected JsiFunction(long functionId) {
+        this.identify = 0;
+        this.functionId = functionId;
     }
 
     public JsiValue call(JsiValue... args) {
@@ -31,16 +35,30 @@ public class JsiFunction extends JsiValue {
                 params[i] = args[i].getIdentify();
             }
         }
-        return calls_(identify, params);
+        return calls_(functionId, params);
     }
 
+
+    @Override
+    public boolean isJava() {
+        return true;
+    }
+
+    @Override
+    public int getType() {
+        return ValueType.TYPE_FUNCTION;
+    }
 
     @NonNull
     @Override
     public String toString() {
-        return "HMFunction{}";
+        return "\"JsiFunction\"";
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        //not do
+    }
 
     private native JsiValue calls_(long identify, long... value);
 

@@ -1,6 +1,8 @@
 package com.didi.hummer2.bridge;
 
 
+import androidx.annotation.NonNull;
+
 /**
  * didi Create on 2023/11/21 .
  * <p>
@@ -14,7 +16,7 @@ package com.didi.hummer2.bridge;
 
 public class JsiString extends JsiValue {
 
-    private String value;
+    private final String value;
 
     public JsiString(String value) {
         this.value = value == null ? "" : value;
@@ -37,6 +39,22 @@ public class JsiString extends JsiValue {
     @Override
     public boolean isString() {
         return true;
+    }
+
+    @Override
+    public boolean isJava() {
+        return true;
+    }
+
+    @Override
+    public int getType() {
+        return ValueType.TYPE_STRING;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "\"" + value + "\"";
     }
 
     private native long init_string_(String value);

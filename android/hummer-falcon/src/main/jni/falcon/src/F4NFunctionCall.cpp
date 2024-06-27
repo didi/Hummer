@@ -10,10 +10,17 @@ F4NFunctionCall::F4NFunctionCall(F4NElement *thisElement, long methodId, string 
     this->methodId = methodId;
     this->methodName = methodName;
     this->size = size;
-    this->params = params;
-
+    if (size > 0) {
+        this->params = new JsiValue *[size];
+        JsiUtils::copyJsiValue(params, this->params, size);
+    }
 }
 
 F4NFunctionCall::~F4NFunctionCall() {
-
+    this->thisElement = nullptr;
+    if (params != nullptr) {
+        JsiUtils::releaseJsiValue(size, params);
+        delete[] params;
+        params = nullptr;
+    }
 }

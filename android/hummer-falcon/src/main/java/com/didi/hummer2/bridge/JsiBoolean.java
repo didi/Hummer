@@ -1,5 +1,7 @@
 package com.didi.hummer2.bridge;
 
+import androidx.annotation.NonNull;
+
 /**
  * didi Create on 2023/11/21 .
  * <p>
@@ -13,7 +15,7 @@ package com.didi.hummer2.bridge;
 
 public class JsiBoolean extends JsiValue {
 
-    private boolean value;
+    private final boolean value;
 
     public JsiBoolean(boolean value) {
         this.value = value;
@@ -25,13 +27,35 @@ public class JsiBoolean extends JsiValue {
         this.identify = identify;
     }
 
-    public boolean getValue(){
+    public boolean getValue() {
         return value;
     }
 
     @Override
     public boolean isBoolean() {
         return true;
+    }
+
+
+    @Override
+    public boolean isJava() {
+        return true;
+    }
+
+    @Override
+    public int getType() {
+        return ValueType.TYPE_BOOLEAN;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "" + value;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        //not do
     }
 
     private native long init_boolean_(boolean value);

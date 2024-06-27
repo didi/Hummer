@@ -25,7 +25,7 @@ public abstract class JsiValue implements IValue, Serializable {
     protected long identify;
 
     public JsiValue() {
-//        this.identify = init_value_();
+
     }
 
     private JsiValue(long identify) {
@@ -70,25 +70,43 @@ public abstract class JsiValue implements IValue, Serializable {
 
     @Override
     public void protect() {
-        protect_(identify);
+        if (identify != 0) {
+            protect_(identify);
+        }
     }
 
     @Override
     public void unprotect() {
-        unprotect_(identify);
+        if (identify != 0) {
+            unprotect_(identify);
+        }
     }
 
+    @Override
+    public boolean isJava() {
+        return false;
+    }
+
+    @Override
+    public int getType() {
+        return ValueType.TYPE_VALUE;
+    }
 
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-//        unprotect_(identify);
+        if (identify != 0) {
+//            unprotect_(identify);
+        }
     }
 
     @NonNull
     @Override
     public String toString() {
-        return string_(identify);
+        if (identify != 0) {
+            return string_(identify);
+        }
+        return "";
     }
 
     private native long init_value_();

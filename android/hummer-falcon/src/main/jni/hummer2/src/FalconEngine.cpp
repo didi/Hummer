@@ -40,43 +40,47 @@ void JNI_DetachEnv() {
 /**
  *  全局唯一
  */
-static F4NRuntime *_vdomRuntime = nullptr;
+static F4NRuntime *_f4NRuntime = nullptr;
 
 void FalconEngine_createEngine_(JNIEnv *env, jclass cls) {
-    if (_vdomRuntime == nullptr) {
+    if (_f4NRuntime == nullptr) {
         LOGI("FalconEngine::createEngine()");
-        F4NRuntime *vdomRuntime = new F4NRuntime();
-        vdomRuntime->init();
-        _vdomRuntime = vdomRuntime;
+        F4NRuntime *runtime = new F4NRuntime();
+        runtime->init();
+        _f4NRuntime = runtime;
     }
 }
 
 void FalconEngine_releaseEngine_(JNIEnv *env, jclass cls) {
     LOGI("FalconEngine::releaseEngine()");
-    if (_vdomRuntime != nullptr) {
-        _vdomRuntime->release();
-        delete _vdomRuntime;
+    if (_f4NRuntime != nullptr) {
+        _f4NRuntime->release();
+        delete _f4NRuntime;
     }
 }
 
 jlong FalconEngine_createContext_(JNIEnv *env, jclass cls) {
-    if (_vdomRuntime == nullptr) {
+    if (_f4NRuntime == nullptr) {
         LOGD("FalconEngine::createContext() null");
     } else {
         LOGD("FalconEngine::createContext() no null");
     }
-    F4NContext *vdomContext = _vdomRuntime->createContext();
+    F4NContext *f4NContext = _f4NRuntime->createContext();
 
-    uintptr_t identify = reinterpret_cast<uintptr_t>(vdomContext);
+    uintptr_t identify = reinterpret_cast<uintptr_t>(f4NContext);
     return identify;
 }
 
 void FalconEngine_destroyContext_(JNIEnv *env, jclass cls, jlong contextId) {
     LOGI("FalconEngine::destroyContext()");
-    F4NContext *vdomContext = (F4NContext *) contextId;
-    vdomContext->stop();
-    _vdomRuntime->destroyContext(vdomContext);
-    env->DeleteGlobalRef((jobject) vdomContext->nativeContext);
+    F4NContext *f4NContext = (F4NContext *) contextId;
+    _f4NRuntime->destroyContext(f4NContext);
+    env->DeleteGlobalRef((jobject) f4NContext->nativeContext);
+
+//    if (_f4NRuntime->empty()){
+//        delete _f4NRuntime;
+//        _f4NRuntime = nullptr;
+//    }
 }
 
 jboolean FalconEngine_bindContext_(JNIEnv *env, jclass cls, jlong contextId, jobject context, jobject configOption) {
@@ -86,17 +90,17 @@ jboolean FalconEngine_bindContext_(JNIEnv *env, jclass cls, jlong contextId, job
 
     f4NContext->nativeContext = (uintptr_t) globalContext;
 
-    HummerInvokeFactory *componentFactory = new HummerInvokeFactory();
-    componentFactory->jniEnv = env;
-    componentFactory->contextId = (long) globalContext;
+    HummerInvokeFactory *invokeFactory = new HummerInvokeFactory();
+    invokeFactory->jniEnv = env;
+    invokeFactory->contextId = (long) globalContext;
 
-    F4NConfigOptions *vdomConfig = new F4NConfigOptions();
-    vdomConfig->singleThread = false;
+    F4NConfigOptions *configOptions = new F4NConfigOptions();
+    configOptions->singleThread = false;
 
     MainThreadHandler *threadHandler = new MainThreadHandler();
     threadHandler->init();
 
-    f4NContext->init(vdomConfig, componentFactory);
+    f4NContext->init(configOptions, invokeFactory);
     f4NContext->setMainThreadHandler(threadHandler);
 
     f4NContext->setConsoleHandler(new HMConsoleHandler(f4NContext));
@@ -113,12 +117,12 @@ jboolean FalconEngine_bindContext_(JNIEnv *env, jclass cls, jlong contextId, job
 jobject FalconEngine_evaluateJavaScript_(JNIEnv *env, jclass cls, jlong contextId, jstring script, jstring scriptId) {
     LOGI("FalconEngine::evaluateJavaScript() contextId=%u", contextId);
 
-    F4NContext *vdomContext = (F4NContext *) contextId;
+    F4NContext *f4NContext = (F4NContext *) contextId;
 
     const char *value = env->GetStringUTFChars(script, hm_false_ptr);
     const char *source = env->GetStringUTFChars(scriptId, hm_false_ptr);
 
-    vdomContext->evaluateJavaScript(value, source);
+    f4NContext->evaluateJavaScript(value, source);
 
     env->ReleaseStringUTFChars(script, value);
     env->ReleaseStringUTFChars(scriptId, source);
@@ -139,13 +143,14 @@ jobject FalconEngine_dispatchEvent_(JNIEnv *env, jclass cls, jlong contextId, js
         // 分配本地内存来保存数组元素
         jlong *array = env->GetLongArrayElements(params, NULL);
 
-        JsiValue **hmValue = new JsiValue *[size];
+        JsiValue *jsiValue[size];
         for (int i = 0; i < size; i++) {
-            hmValue[i] = (JsiValue *) array[i];
+            jsiValue[i] = (JsiValue *) array[i];
         }
         //释放本地内存
         env->ReleaseLongArrayElements(params, array, 0);
-        f4NContext->dispatchEvent(eventNameString, size, hmValue);
+        f4NContext->dispatchEvent(eventNameString, size, jsiValue);
+        JsiUtils::releaseJsiValue(size, jsiValue);
     } else {
         f4NContext->dispatchEvent(eventNameString, 0, nullptr);
     }

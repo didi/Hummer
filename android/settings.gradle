@@ -18,5 +18,6 @@ include ':hummer-demo-app',
         ':hummer-component',
         ':hummer',
         ':hummer-dev-tools',
+        ':hummer-test',
         ':hummer-debugger'
 

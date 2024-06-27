@@ -12,11 +12,11 @@ F4NComponent::F4NComponent(long objId, JsiContext *context, F4NRenderInvoker *re
     this->odjId = objId;
     this->renderInvoker = renderInvoker;
 
-    JsiObjectEx *id = jsiContext->createJsNumber(odjId);
+    JsiObjectRef *id = jsiContext->createJsNumber(odjId);
     object->setProperty("__objId__", id);
 
     //需要主动释放引用，释放引用才能触发回收资源
-    id->release();
+    delete id;
 }
 
 void F4NComponent::onCreate(string tag, JsiValue *props) {
@@ -43,6 +43,11 @@ void F4NComponent::onCreate(string tag, JsiValue *props) {
     }
     if (tag == "WebSocket") {
         main = false;
+    }
+
+
+    if (FALCON_LOG_ENABLE) {
+        info("F4NComponent::onCreate id=%ld,main=%d,tag=%s,props=%s", odjId, main, tag.c_str(), props->toString().c_str());
     }
 
     object->registerFunction(MethodId_setEventTarget, "setEventTarget", componentFuncWrapper, this);
@@ -92,6 +97,7 @@ JsiValue *F4NComponent::addEventListener(size_t size, JsiValue **params) {
 }
 
 void F4NComponent::addEventListener(string event) {
+
 }
 
 JsiValue *F4NComponent::removeEventListener(size_t size, JsiValue **params) {
@@ -116,24 +122,65 @@ JsiValue *F4NComponent::invoke(size_t size, JsiValue *params[]) {
         string methodName = F4NUtil::optString(params[0]);
         if (!methodName.empty()) {
             size_t newSize = size - 1;
-            JsiValue **newParams = nullptr;
+            JsiValue *newParams[newSize];
             if (newSize > 0) {
-                newParams = new JsiValue *[newSize];
                 for (int i = 0; i < newSize; i++) {
                     newParams[i] = params[i + 1];
                 }
             }
             JsiValue *result = invoke(methodName, newSize, newParams);
-//            delete newParams;
             return result;
         } else {
-            warn("Component::invoke() methodName is null or not string.");
+            warn("F4NComponent::invoke() methodName is null or not string.");
         }
     }
     return nullptr;
 }
 
-JsiValue *F4NComponent::invoke(F4NFunctionCall *call) {
+JsiValue *F4NComponent::invoke(string methodName, size_t size, JsiValue **params) {
+    //处理参数类型是Function的参数提供回调支持
+    for (int i = 0; i < size; i++) {
+        JsiValue *value = params[i];
+        if (value != nullptr && value->getType() == TYPE_NAPIFunction) {
+            params[i] = new F4NFunction(context, (JsiFunction *) params[i]);
+        }
+    }
+    //处理参数是Element的参数，获取Element对象
+    context->applyElementRender(size, params);
+
+    JsiValue *result = nullptr;
+    if (main) {
+        result = invokeOnMainThread(methodName, size, params);
+    } else {
+        result = invokeOnJSThread(methodName, size, params);
+    }
+    return result;
+}
+
+JsiValue *F4NComponent::invokeOnMainThread(string methodName, size_t size, JsiValue **params) {
+    F4NFunctionCall *functionCall = new F4NFunctionCall(nullptr, MethodId_invoke, methodName.c_str(), size, params);
+    context->submitUITask([&, functionCall]() {
+        JsiValue *result = invokeCall(functionCall);
+        delete functionCall;
+        if (result != nullptr) {
+            result->unprotect();
+        }
+    });
+    return nullptr;
+}
+
+JsiValue *F4NComponent::invokeOnJSThread(string methodName, size_t size, JsiValue **params) {
+    JsiValue *result = renderInvoker->invoke(FACTORY_TYPE_INVOKE,
+                                             odjId,
+                                             METHOD_TYPE_CALL,
+                                             tag,
+                                             methodName,
+                                             size,
+                                             params);
+    return result;
+}
+
+JsiValue *F4NComponent::invokeCall(F4NFunctionCall *call) {
     context->buildElementParams(call->size, call->params);
 
     JsiValue *result = renderInvoker->invoke(FACTORY_TYPE_INVOKE,
@@ -143,65 +190,46 @@ JsiValue *F4NComponent::invoke(F4NFunctionCall *call) {
                                              call->methodName,
                                              call->size,
                                              call->params);
-    delete call;
     return result;
 }
 
-JsiValue *F4NComponent::invoke(string methodName, size_t size, JsiValue **params) {
-
-    for (int i = 0; i < size; i++) {
-        JsiValue *value = params[i];
-        if (value != nullptr && value->getType() == TYPE_NAPIFunction) {
-            params[i] = new F4NFunction(context, (JsiFunction *) params[i]);
-        }
-    }
-
-    if (main) {
-        context->applyElementRender(size, params);
-        F4NFunctionCall *functionCall = new F4NFunctionCall(nullptr, MethodId_invoke, methodName, size, params);
-        context->submitUITask([&, functionCall]() {
-            invoke(functionCall);
-        });
-    } else {
-        JsiValue *result = renderInvoker->invoke(FACTORY_TYPE_INVOKE,
-                                                 odjId,
-                                                 METHOD_TYPE_CALL,
-                                                 tag,
-                                                 methodName,
-                                                 size,
-                                                 params);
-        return result;
-    }
-    return nullptr;
-}
-
-
-void F4NComponent::onDestroy() {
-    F4NObject::onDestroy();
-}
-
-void F4NComponent::onJsiFinalize(void *finalizeData, void *finalizeHint) {
-    info("Component::onJsiFinalize id=%ld,tag=%s,props=%s", odjId, tag.c_str(), props->toString().c_str());
-    F4NObject::onJsiFinalize(finalizeData, finalizeHint);
-//    delete this;
-}
 
 void *F4NComponent::getFinalizeHint() {
     return F4NObject::getFinalizeHint();
 }
 
+void F4NComponent::onJsiFinalize(void *finalizeData, void *finalizeHint) {
+    if (FALCON_LOG_ENABLE) {
+        info("F4NComponent::onJsiFinalize id=%ld,main=%d,tag=%s,props=%s", odjId, main, tag.c_str(), props->toString().c_str());
+    }
+    F4NObject::onJsiFinalize(finalizeData, finalizeHint);
+}
+
+void F4NComponent::onDestroy() {
+    F4NObject::onDestroy();
+
+    if (eventTarget != nullptr) {
+        delete eventTarget;
+        eventTarget = nullptr;
+    }
+}
+
 void F4NComponent::release() {
+    if (FALCON_LOG_ENABLE) {
+        info("F4NComponent::release() id=%ld,main=%d,tag=%s,props=%s", odjId, main, tag.c_str(), props->toString().c_str());
+    }
     F4NObject::release();
 }
 
 F4NComponent::~F4NComponent() {
+    if (FALCON_LOG_ENABLE) {
+        info("F4NComponent::~F4NComponent() id=%ld,main=%d,tag=%s,props=%s", odjId, main, tag.c_str(), props->toString().c_str());
+    }
     renderInvoker = nullptr;
-
-    delete eventTarget;
 }
 
 
-JsiValue *componentFuncWrapper(JsiObjectEx *value, long methodId, const char *methodName, size_t size, JsiValue *params[], void *data) {
+JsiValue *componentFuncWrapper(JsiObjectRef *value, long methodId, const char *methodName, size_t size, JsiValue *params[], void *data) {
     auto *bridge = static_cast<F4NComponent *>(data);
     switch (methodId) {
         case F4NComponent::MethodId_setEventTarget:

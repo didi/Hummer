@@ -32,7 +32,7 @@ export class Storage extends HummerComponent {
     * @param key 名称
     * @return value 值
     */
-    public static get(key: string, cb: Function): any {
+    public static get(key: string, cb?: Function): any {
         return Storage.instance.get(key, cb);
     }
 

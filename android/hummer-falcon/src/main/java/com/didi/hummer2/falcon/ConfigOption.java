@@ -13,12 +13,17 @@ import java.io.Serializable;
  * @Description 引擎配置选项
  */
 
-public class ConfigOption  implements Serializable {
+public class ConfigOption implements Serializable {
 
     /**
      * 命名空间
      */
     private String namespace;
+
+    /**
+     * 是否在调试状态
+     */
+    private boolean debugEnable;
 
 }
 

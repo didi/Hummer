@@ -6,6 +6,10 @@
 #include "falcon/ObjectManager.h"
 
 
+ObjectManager::ObjectManager() {
+
+}
+
 long ObjectManager::createNextId() {
     return ++object_id;
 }
@@ -32,5 +36,18 @@ F4NObject *ObjectManager::getObject(long objId) {
 
 F4NObject *ObjectManager::getObject(JsiValue *objId) {
     return nullptr;
+}
+
+void ObjectManager::release() {
+
+}
+
+ObjectManager::~ObjectManager() {
+
+    auto it = objectMap.begin();
+    while (it != objectMap.end()) {
+        it->second->unprotect();
+        it++;
+    }
 }
 

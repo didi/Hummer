@@ -8,6 +8,9 @@
 
 #include "falcon/logger.h"
 
+#include "napi/js_native_api.h"
+#include "napi/js_native_api_types.h"
+
 
 const char *getTypeValueName(ValueType type) {
     switch (type) {
@@ -27,6 +30,8 @@ const char *getTypeValueName(ValueType type) {
             return "TYPE_COMPONENT";
         case TYPE_NULL:
             return "TYPE_NULL";
+        case TYPE_EXT:
+            return "TYPE_EXT";
         case TYPE_NAPIExternal:
             return "TYPE_NAPIExternal";
         case TYPE_NAPIFunction:
@@ -49,6 +54,7 @@ JsiValue::JsiValue() {
 
 JsiValue::JsiValue(ValueType type) {
     type_ = type;
+    protect();
 }
 
 
@@ -60,31 +66,46 @@ string JsiValue::toString() const {
     return string("{\"type\":\"").append(getTypeValueName(type_)).append(+"\"}");
 }
 
-char *JsiValue::toCString() const {
-    const char *text = toString().c_str();
-    return const_cast<char *>(text);
-}
-
 
 void JsiValue::protect() {
+    if (JSI_DEBUG_MEMORY) {
+        info("HMValue::protect() addr=%p,count=%d,value=%s", this, refCount_, toString().c_str());
+        if (deleted) {
+            error("HMValue::protect() is deleted. value=%s", toString().c_str());
+        }
+    }
     if (refCount_ == 0) {
-//        objectPools->protect(this);
+        JsiValuePools::protect(this);
     }
     refCount_++;
-//    info("HMValue::protect() refCount_=%d", refCount_);
 
 }
 
+
 void JsiValue::unprotect() {
-    refCount_--;
-    if (refCount_ == 0) {
-//        objectPools->unprotect(this);
+    if (JSI_DEBUG_MEMORY) {
+        info("HMValue::unprotect() addr=%p,count=%d,value=%s", this, refCount_, toString().c_str());
+        if (deleted) {
+            error("HMValue::unprotect() is deleted. value=%s", toString().c_str());
+        }
     }
-//    info("HMValue::unprotect() refCount_=%d", refCount_);
+    refCount_--;
+    if (refCount_ <= 0) {
+        if (!deleted) {
+            deleted = true;
+            JsiValuePools::unprotect(this);
+        }
+    }
+}
+
+bool JsiValue::isDeleted() {
+    return deleted;
 }
 
 JsiValue::~JsiValue() {
-
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiValue::~JsiValue() count=%d", refCount_);
+    }
 }
 
 
@@ -93,28 +114,35 @@ JsiValue::~JsiValue() {
 //*******************************************************************************
 
 
+static long JsiFunction_ID = 100;
 
 JsiFunction::JsiFunction() {
+    id = ++JsiFunction_ID;
     type_ = TYPE_NAPIFunction;
+    enable_ = false;
+    protect();
 }
 
 JsiFunction::JsiFunction(NAPIValue *napiValue, NAPIEnv *env) {
+    id = ++JsiFunction_ID;
     env_ = *env;
     type_ = TYPE_NAPIFunction;
     createReference(napiValue);
+    enable_ = true;
+    protect();
 }
 
 
 JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue) {
-    debug("JsiFunction::call() params=%s", JSUtils::buildArrayString(argc, jsiValue).c_str());
+    debug("JsiFunction::call() params=%s", JsiUtils::buildArrayString(argc, jsiValue).c_str());
 
     NAPIHandleScope handleScope;
-    JSUtils::openHandleScope(&env_, &handleScope);
+    JsiUtils::openHandleScope(&env_, &handleScope);
 
     NAPIValue argv[argc];
 
     for (int i = 0; i < argc; i++) {
-        JSUtils::toJSValue(&env_, jsiValue[i], &argv[i]);
+        JsiUtils::toJSValue(&env_, jsiValue[i], &argv[i]);
     }
 
     NAPIValue func;
@@ -123,14 +151,14 @@ JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue) {
     NAPIValue result;
     NAPIExceptionStatus status = napi_call_function(env_, nullptr, func, argc, argv, &result);
     if (status != NAPIExceptionOK) {
-        warn("JsiFunction::call() params=%s  error status=%u", JSUtils::buildArrayString(argc, jsiValue).c_str(), status);
-        JsiError *jsiError = JSUtils::getAndClearLastError(&env_);
+        warn("JsiFunction::call() params=%s  error status=%u", JsiUtils::buildArrayString(argc, jsiValue).c_str(), status);
+        JsiError *jsiError = JsiUtils::getAndClearLastError(&env_);
         error("JsiFunction::call() error %s", jsiError->toString().c_str());
         return nullptr;
     }
 
-    JsiValue *resultValue = JSUtils::toValue(&env_, &result);
-    JSUtils::closeHandleScope(&env_, &handleScope);
+    JsiValue *resultValue = JsiUtils::toValue(&env_, &result);
+    JsiUtils::closeHandleScope(&env_, &handleScope);
     if (resultValue != nullptr && resultValue->getType() != TYPE_NAPIUndefined) {
         return resultValue;
     }
@@ -146,10 +174,15 @@ void JsiFunction::createReference(NAPIValue *napiValue) {
 }
 
 void JsiFunction::deleteReference() {
+    NAPIHandleScope handleScope;
+    JsiUtils::openHandleScope(&env_, &handleScope);
+
     NAPIExceptionStatus status = napi_delete_reference(env_, ref_);
     if (status != NAPIExceptionOK) {
         warn("JsiFunction::deleteReference() error. status=%d", status);
     }
+    JsiUtils::closeHandleScope(&env_, &handleScope);
+    enable_ = false;
 }
 
 
@@ -158,7 +191,13 @@ string JsiFunction::toString() const {
 }
 
 JsiFunction::~JsiFunction() {
-    deleteReference();
+    if (enable_) {
+        deleteReference();
+    }
+
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiFunction::~JsiFunction()");
+    }
 }
 
 
@@ -170,11 +209,13 @@ JsiFunction::~JsiFunction() {
 
 JsiString::JsiString() {
     type_ = TYPE_STRING;
+    protect();
 }
 
 JsiString::JsiString(const char *value) {
     type_ = TYPE_STRING;
     value_ = value;
+    protect();
 }
 
 string JsiString::toString() const {
@@ -182,7 +223,9 @@ string JsiString::toString() const {
 }
 
 JsiString::~JsiString() {
-
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiString::~JsiString()");
+    }
 }
 
 
@@ -193,6 +236,7 @@ JsiString::~JsiString() {
 
 JsiObject::JsiObject() {
     type_ = TYPE_OBJECT;
+    protect();
 }
 
 string JsiObject::toString() const {
@@ -227,8 +271,10 @@ void JsiObject::setValue(string key, JsiValue *hmValue) {
     // 如果key已经存在，则删除旧值
     if (existing != valueMap_.end()) {
         valueMap_.erase(existing);
+        existing->second->unprotect();
     }
     valueMap_.insert(make_pair(key, hmValue));
+    hmValue->protect();
 }
 
 
@@ -331,12 +377,21 @@ void JsiObject::removeValue(string key) {
     auto it = valueMap_.find(key);
     if (it != valueMap_.end()) {
         valueMap_.erase(it);
+        it->second->unprotect();
     }
 }
 
 
 JsiObject::~JsiObject() {
-
+    auto it = valueMap_.begin();
+    while (it != valueMap_.end()) {
+        it->second->unprotect();
+        ++it;
+    }
+    valueMap_.clear();
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiObject::~JsiObject()");
+    }
 }
 
 
@@ -348,6 +403,7 @@ JsiObject::~JsiObject() {
 
 JsiArray::JsiArray() {
     type_ = TYPE_ARRAY;
+    protect();
 }
 
 
@@ -369,9 +425,6 @@ string JsiArray::toString() const {
     return text;
 }
 
-JsiArray::~JsiArray() {
-
-}
 
 int JsiArray::length() {
     return static_cast<int>(valueList.size());
@@ -390,21 +443,25 @@ void JsiArray::setValue(int index, JsiValue *hmValue) {
     auto it = valueList.begin();
     advance(it, indexToAccess);
     valueList.insert(it, hmValue);
+    hmValue->protect();
 }
 
 void JsiArray::removeValueAt(int index) {
     size_t indexToAccess = index;
     auto it = valueList.begin();
-    std::advance(it, indexToAccess);
+    advance(it, indexToAccess);
     valueList.erase(it);
+    (*it)->unprotect();
 }
 
 void JsiArray::removeValue(JsiValue *hmValue) {
     valueList.remove(hmValue);
+    hmValue->unprotect();
 }
 
 void JsiArray::pushValue(JsiValue *hmValue) {
     valueList.push_back(hmValue);
+    hmValue->protect();
 }
 
 JsiValue *JsiArray::popValue() {
@@ -416,6 +473,18 @@ JsiValue *JsiArray::popValue() {
 
 void JsiArray::clear() {
     valueList.clear();
+}
+
+JsiArray::~JsiArray() {
+    auto it = valueList.begin();
+    while (it != valueList.end()) {
+        (*it)->unprotect();
+        it++;
+    }
+    valueList.clear();
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiArray::~JsiArray()");
+    }
 }
 
 
@@ -434,18 +503,21 @@ bool isDecimal(double value) {
 JsiNumber::JsiNumber() {
     value_ = 0;
     type_ = TYPE_NUMBER;
+    protect();
 }
 
 JsiNumber::JsiNumber(double value) {
     value_ = value;
     isFloat_ = isDecimal(value);
     type_ = TYPE_NUMBER;
+    protect();
 }
 
 JsiNumber::JsiNumber(double value, bool isFloat) {
     value_ = value;
     isFloat_ = isFloat;
     type_ = TYPE_NUMBER;
+    protect();
 }
 
 string JsiNumber::toString() const {
@@ -458,7 +530,9 @@ string JsiNumber::toString() const {
 }
 
 JsiNumber::~JsiNumber() {
-
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiNumber::~JsiNumber()");
+    }
 }
 
 //*******************************************************************************
@@ -468,11 +542,13 @@ JsiNumber::~JsiNumber() {
 JsiBoolean::JsiBoolean() {
     value_ = false;
     type_ = TYPE_BOOLEAN;
+    protect();
 }
 
 JsiBoolean::JsiBoolean(bool value) {
     value_ = value;
     type_ = TYPE_BOOLEAN;
+    protect();
 }
 
 string JsiBoolean::toString() const {
@@ -481,6 +557,9 @@ string JsiBoolean::toString() const {
 
 JsiBoolean::~JsiBoolean() {
     value_ = false;
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiBoolean::~JsiBoolean()");
+    }
 }
 
 //*******************************************************************************
@@ -492,12 +571,14 @@ JsiComponent::JsiComponent() {
     value_ = 0;
     name_ = "";
     type_ = TYPE_COMPONENT;
+    protect();
 }
 
 JsiComponent::JsiComponent(string name, long value) {
     value_ = value;
     name_ = name;
     type_ = TYPE_COMPONENT;
+    protect();
 }
 
 string JsiComponent::toString() const {
@@ -507,7 +588,9 @@ string JsiComponent::toString() const {
 }
 
 JsiComponent::~JsiComponent() {
-
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiComponent::~JsiComponent()");
+    }
 }
 
 
@@ -518,6 +601,7 @@ JsiComponent::~JsiComponent() {
 
 JsiCallback::JsiCallback() {
     type_ = TYPE_COMPONENT;
+    protect();
 }
 
 
@@ -531,7 +615,9 @@ string JsiCallback::toString() const {
 }
 
 JsiCallback::~JsiCallback() {
-
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiCallback::~JsiCallback()");
+    }
 }
 
 //*******************************************************************************
@@ -539,9 +625,10 @@ JsiCallback::~JsiCallback() {
 //*******************************************************************************
 
 
-JsiValueExt::JsiValueExt(JsiObjectEx *value) {
+JsiValueExt::JsiValueExt(JsiObjectRef *value) {
     type_ = TYPE_EXT;
     value_ = value;
+    protect();
 }
 
 string JsiValueExt::toString() const {
@@ -549,5 +636,73 @@ string JsiValueExt::toString() const {
 }
 
 JsiValueExt::~JsiValueExt() {
+    if (value_ != nullptr) {
+        value_->release();
+    }
     value_ = nullptr;
+    if (JSI_DEBUG_MEMORY) {
+        debug("JsiValueExt::~JsiValueExt()");
+    }
+
+
 }
+//*******************************************************************************
+//                                     JsiBuilder
+//*******************************************************************************
+
+
+JsiBoolean *JsiBuilder::newJsiBoolean(bool value) {
+    return new JsiBoolean(value);
+}
+
+JsiNumber *JsiBuilder::newJsiNumber(double value) {
+    return new JsiNumber(value);
+}
+
+JsiString *JsiBuilder::newJsiString(const char *value) {
+    return new JsiString(value);
+}
+
+JsiObject *JsiBuilder::newJsiObject() {
+    return new JsiObject();
+}
+
+JsiArray *JsiBuilder::newJsiArray() {
+    return new JsiArray();
+}
+
+
+//*******************************************************************************
+//                                     JsiValuePools
+//*******************************************************************************
+
+
+#include "mutex"
+
+static list<JsiValue *> pools;
+static mutex mutex_;
+
+void JsiValuePools::protect(JsiValue *value) {
+    std::unique_lock<std::mutex> lock(mutex_);
+    if (JSI_DEBUG_MEMORY) {
+        info("JsiValuePools::protect() value=%s", value->toString().c_str());
+        pools.push_back(value);
+    }
+    lock.unlock();
+}
+
+void JsiValuePools::unprotect(JsiValue *value) {
+    std::unique_lock<std::mutex> lock(mutex_);
+    if (JSI_DEBUG_MEMORY) {
+        info("JsiValuePools::unprotect() value=%s,%u", value->toString().c_str(), &value);
+        pools.remove(value);
+    }
+    lock.unlock();
+    delete value;
+
+}
+
+size_t JsiValuePools::getPoolSize() {
+    return pools.size();
+}
+

@@ -13,7 +13,9 @@ F4NPage::F4NPage(F4NContext *context) {
 }
 
 void F4NPage::setRootElement(F4NElement *rootElement) {
+    this->onReleasePageElement();
     _rootElement_ = rootElement;
+    _rootElement_->protect();
 }
 
 void F4NPage::setPageLifeCycle(PageLifeCycle *pageLifeCycle) {
@@ -39,7 +41,9 @@ void F4NPage::onCreate() {
     context->submitJsTask([&]() {
         if (_rootElement_ != nullptr) {
             JsiObject *event = new JsiObject();
-            event->setValue("type", new JsiString("__onCreate__"));
+            JsiString *jsiString = new JsiString("__onCreate__");
+            event->setValue("type", jsiString);
+            jsiString->unprotect();
             _rootElement_->eventTarget->onEvent("__onCreate__", event);
         }
         context->submitUITask([&]() {
@@ -52,7 +56,9 @@ void F4NPage::onAppear() {
     context->submitJsTask([&]() {
         if (_rootElement_ != nullptr) {
             JsiObject *event = new JsiObject();
-            event->setValue("type", new JsiString("__onAppear__"));
+            JsiString *jsiString = new JsiString("__onAppear__");
+            event->setValue("type", jsiString);
+            jsiString->unprotect();
             _rootElement_->eventTarget->onEvent("__onAppear__", event);
         }
         context->submitUITask([&]() {
@@ -66,7 +72,9 @@ void F4NPage::onDisappear() {
     context->submitJsTask([&]() {
         if (_rootElement_ != nullptr) {
             JsiObject *event = new JsiObject();
-            event->setValue("type", new JsiString("__onDisappear__"));
+            JsiString *jsiString = new JsiString("__onDisappear__");
+            event->setValue("type", jsiString);
+            jsiString->unprotect();
             _rootElement_->eventTarget->onEvent("__onDisappear__", event);
         }
         context->submitUITask([&]() {
@@ -79,7 +87,9 @@ void F4NPage::onDestroy() {
     context->submitJsTask([&]() {
         if (_rootElement_ != nullptr) {
             JsiObject *event = new JsiObject();
-            event->setValue("type", new JsiString("__onDestroy__"));
+            JsiString *jsiString = new JsiString("__onDestroy__");
+            event->setValue("type", jsiString);
+            jsiString->unprotect();
             _rootElement_->eventTarget->onEvent("__onDestroy__", event);
         }
         pageDestroy = true;
@@ -95,13 +105,24 @@ void F4NPage::onBack() {
     context->submitJsTask([&]() {
         if (_rootElement_ != nullptr) {
             JsiObject *event = new JsiObject();
-            event->setValue("type", new JsiString("__onBack__"));
+            JsiString *jsiString = new JsiString("__onBack__");
+            event->setValue("type", jsiString);
+            jsiString->unprotect();
             _rootElement_->eventTarget->onEvent("__onBack__", event);
         }
         context->submitUITask([&]() {
             pageLifeCycle->onBack();
         });
     });
+}
+
+void F4NPage::onReleasePageElement() {
+    if (_rootElement_ != nullptr) {
+        _rootElement_->onDestroy();
+        _rootElement_->release();
+        _rootElement_->unprotect();
+        _rootElement_ = nullptr;
+    }
 }
 
 F4NPage::~F4NPage() {

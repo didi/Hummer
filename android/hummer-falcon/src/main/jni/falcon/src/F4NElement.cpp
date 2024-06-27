@@ -10,7 +10,7 @@
 
 F4NElement::F4NElement(long objId, JsiContext *context, F4NRenderInvoker *componentFactory) : F4NComponent(objId, context, componentFactory) {
 
-    hmStyle_ = new F4NStyle();
+    _Style_ = new F4NStyle();
 }
 
 
@@ -55,6 +55,7 @@ JsiValue *F4NElement::appendChild(size_t size, JsiValue **params) {
 
 void F4NElement::appendChild(F4NElement *child) {
     child->_parentElement_ = this;
+    child->protect();
     _children_->push_back(child);
 
     applyRenderElement(child);
@@ -71,6 +72,7 @@ JsiValue *F4NElement::removeChild(size_t size, JsiValue **params) {
 
 void F4NElement::removeChild(F4NElement *child) {
     _children_->remove(child);
+    child->unprotect();
     child->_parentElement_ = nullptr;
 }
 
@@ -83,6 +85,7 @@ JsiValue *F4NElement::removeAll(size_t size, JsiValue **params) {
 void F4NElement::removeAll() {
     for (auto it = _children_->begin(); it != _children_->end(); it++) {
         (*it)->_parentElement_ = nullptr;
+        (*it)->unprotect();
     }
     _children_->clear();
 }
@@ -101,6 +104,7 @@ void F4NElement::insertBefore(F4NElement *child, F4NElement *anchor) {
     auto it = find(_children_->begin(), _children_->end(), anchor);
     anchor->_parentElement_ = this;
     _children_->insert(it, child);
+    child->protect();
 
     applyRenderElement(child);
 }
@@ -119,6 +123,9 @@ void F4NElement::replaceChild(F4NElement *newNode, F4NElement *oldNode) {
     oldNode->_parentElement_ = nullptr;
     replace(_children_->begin(), _children_->end(), oldNode, newNode);
 
+    oldNode->unprotect();
+    newNode->protect();
+
     applyRenderElement(newNode);
 }
 
@@ -135,7 +142,9 @@ JsiValue *F4NElement::setAttributes(size_t size, JsiValue **params) {
 }
 
 void F4NElement::setAttributes(JsiObject *jsiObject) {
-    //info("F4NElement::setAttributes() id=%u,params=%s,origin=%s", odjId, jsiObject->toString().c_str(), "");
+//    if(FALCON_LOG_ENABLE){
+//        info("F4NElement::setAttributes() id=%u,params=%s,origin=%s", odjId, jsiObject->toString().c_str(), "");
+//    }
     map<string, JsiValue *> temp = jsiObject->valueMap_;
     if (temp.size() > 0) {
         for (auto it = temp.begin(); it != temp.end(); it++) {
@@ -143,8 +152,10 @@ void F4NElement::setAttributes(JsiObject *jsiObject) {
             // 如果key已经存在，则删除旧值
             if (existing != _attributes_->end()) {
                 _attributes_->erase(existing);
+                existing->second->unprotect();
             }
             _attributes_->insert(make_pair(it->first, it->second));
+            it->second->protect();
         }
     }
 }
@@ -171,7 +182,7 @@ JsiValue *F4NElement::setStyles(size_t size, JsiValue **params) {
 }
 
 void F4NElement::setStyles(F4NStyle *hmStyle) {
-    hmStyle_->mergeNewStyle(hmStyle);
+    _Style_->mergeNewStyle(hmStyle);
 }
 
 JsiValue *F4NElement::getReact(size_t size, JsiValue **params) {
@@ -305,21 +316,98 @@ void F4NElement::applyInvoke(long methodId, string methodName, size_t size, JsiV
 }
 
 
-void F4NElement::onDestroy() {
-    F4NComponent::onDestroy();
-}
-
 void F4NElement::onJsiFinalize(void *finalizeData, void *finalizeHint) {
+    if(FALCON_LOG_ENABLE){
+        info("F4NElement::onJsiFinalize()");
+    }
     F4NComponent::onJsiFinalize(finalizeData, finalizeHint);
 }
 
-F4NElement::~F4NElement() {
+void F4NElement::onDestroy() {
+    if(FALCON_LOG_ENABLE){
+        info("F4NElement::onDestroy()");
+    }
+    F4NComponent::onDestroy();
 
+    auto child = _children_->begin();
+    while (child != _children_->end()) {
+        (*child)->onDestroy();
+        child++;
+    }
 }
 
 
+void F4NElement::release() {
+    if(FALCON_LOG_ENABLE){
+        info("F4NElement::release()");
+    }
+    F4NComponent::release();
 
-JsiValue *elementFuncWrapper(JsiObjectEx *value, long methodId, const char *methodName, size_t size, JsiValue *params[], void *data) {
+    _rootElement_ = nullptr;
+    _parentElement_ = nullptr;
+    _renderFunctionCalls_ = nullptr;
+
+    if (_Style_ != nullptr) {
+        delete _Style_;
+        _Style_ = nullptr;
+    }
+
+    auto child = _children_->begin();
+    while (child != _children_->end()) {
+        (*child)->release();
+        (*child)->unprotect();
+        child++;
+    }
+    _children_->clear();
+    delete _children_;
+    _children_ = nullptr;
+
+    auto attr = _attributes_->begin();
+    while (attr != _attributes_->end()) {
+        attr->second->unprotect();
+        attr++;
+    }
+    _attributes_->clear();
+    delete _attributes_;
+    _attributes_ = nullptr;
+
+    auto anim = _animations_->begin();
+    while (anim != _animations_->end()) {
+        anim->second->unprotect();
+        anim++;
+    }
+
+    _animations_->clear();
+    delete _animations_;
+    _animations_ = nullptr;
+
+    _events_->clear();
+    delete _events_;
+    _events_ = nullptr;
+
+    auto call = _elementFunctionCalls_->begin();
+    while (call != _elementFunctionCalls_->end()) {
+//        delete *call;
+        error("F4NElement::delete _elementFunctionCalls_");
+        call++;
+    }
+    _elementFunctionCalls_->clear();
+    delete _elementFunctionCalls_;
+    _elementFunctionCalls_ = nullptr;
+
+}
+
+/**
+ * 在release中已经释放资源
+ */
+F4NElement::~F4NElement() {
+    if(FALCON_LOG_ENABLE){
+        info("F4NElement::~F4NElement()");
+    }
+}
+
+
+JsiValue *elementFuncWrapper(JsiObjectRef *value, long methodId, const char *methodName, size_t size, JsiValue *params[], void *data) {
     auto *bridge = static_cast<F4NElement *>(data);
     JsiValue *result = nullptr;
     switch (methodId) {

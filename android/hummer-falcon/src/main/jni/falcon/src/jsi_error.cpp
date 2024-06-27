@@ -3,6 +3,8 @@
 //
 
 #include "jsi/jsi.h"
+#include "napi/js_native_api.h"
+#include "napi/js_native_api_types.h"
 
 JsiError::JsiError() {
 

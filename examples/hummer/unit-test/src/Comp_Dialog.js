@@ -42,6 +42,12 @@ class RootView extends View {
     }
 
     showAlertDialog() {
+        console.log("showAlertDialog");
+        console.debug("showAlertDialog");
+        console.info("showAlertDialog");
+        console.warn("showAlertDialog");
+        console.error("showAlertDialog");
+
         let dialog = new Dialog();
         dialog.cancelable = false;
         // dialog.alert("test");

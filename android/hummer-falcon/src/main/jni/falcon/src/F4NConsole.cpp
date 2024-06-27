@@ -9,7 +9,6 @@
 F4NConsole::F4NConsole(JsiContext *jsiContext, ConsoleHandler *consoleHandler) {
     this->jsiContext = jsiContext;
     this->consoleHandler = consoleHandler;
-
 }
 
 void F4NConsole::onCreate() {
@@ -21,6 +20,7 @@ void F4NConsole::onCreate() {
     this->console->registerFunction(MethodId_warn, "warn", consoleFuncWrapper, this);
     this->console->registerFunction(MethodId_error, "error", consoleFuncWrapper, this);
 
+    console->release();
 }
 
 JsiValue *F4NConsole::log(size_t size, JsiValue **params) {
@@ -52,20 +52,18 @@ JsiValue *F4NConsole::print(int level, size_t size, JsiValue **params) {
 }
 
 void F4NConsole::onDestroy() {
-
+    console->release();
 }
 
 F4NConsole::~F4NConsole() {
     jsiContext = nullptr;
     consoleHandler = nullptr;
-    if (console != nullptr) {
-        delete console;
-        console = nullptr;
-    }
+
+    delete console;
 }
 
 
-JsiValue *consoleFuncWrapper(JsiObjectEx *value, long methodId, const char *methodName, size_t size, JsiValue **params, void *data) {
+JsiValue *consoleFuncWrapper(JsiObjectRef *value, long methodId, const char *methodName, size_t size, JsiValue **params, void *data) {
     auto *bridge = static_cast<F4NConsole *>(data);
     switch (methodId) {
         case F4NConsole::MethodId_log:

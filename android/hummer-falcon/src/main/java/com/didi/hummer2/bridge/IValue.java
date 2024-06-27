@@ -27,8 +27,17 @@ public interface IValue {
 
     boolean isObject();
 
-//    暂不支持传递方法
-//    boolean isFunction();
+    /**
+     * 获取数据类型
+     *
+     * @return {@link ValueType}
+     */
+    int getType();
+
+    /**
+     * 是否是存Java类型
+     */
+    boolean isJava();
 
     /**
      * 引用计数+1

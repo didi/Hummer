@@ -67,3 +67,7 @@ void F4NLogger::printLog(int level, const char *msg) {
     }
 }
 
+F4NLogger::~F4NLogger() {
+
+}
+

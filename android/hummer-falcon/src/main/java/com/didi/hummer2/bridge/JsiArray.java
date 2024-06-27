@@ -19,7 +19,7 @@ public class JsiArray extends JsiValue implements IArray {
         identify = init_array_();
     }
 
-    private JsiArray(long identify) {
+    protected JsiArray(long identify) {
         this.identify = identify;
     }
 
@@ -61,6 +61,16 @@ public class JsiArray extends JsiValue implements IArray {
     @Override
     public void clear() {
         clear_(identify);
+    }
+
+    @Override
+    public boolean isJava() {
+        return false;
+    }
+
+    @Override
+    public int getType() {
+        return ValueType.TYPE_ARRAY;
     }
 
     private native long init_array_();

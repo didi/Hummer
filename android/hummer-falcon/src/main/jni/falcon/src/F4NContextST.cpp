@@ -14,7 +14,6 @@ void F4NContextST::init(F4NConfigOptions *configOptions, F4NRenderInvoker *compo
 
 }
 
-
 void F4NContextST::onCreate() {
     F4NContext::onCreate();
 }
@@ -25,10 +24,6 @@ void F4NContextST::setMainThreadHandler(F4NHandler *threadHandler) {
 
 void F4NContextST::start() {
     F4NContext::start();
-//    vdomDocument_->init(jsiContext_);
-//    vdomLayout_->init(this);
-//    vdomRender_->init(componentFactory_, mainThreadHandler_, mainThreadHandler_);
-//    vdomDocument_->vdomRender = vdomRender_;
 }
 
 
