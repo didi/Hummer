@@ -113,9 +113,19 @@ public class ScrollerElement extends Element<Scroller> implements HummerGoBack {
     public void addEventListener(String eventName) {
         if (TextUtils.equals(eventName, "onRefresh")) {
             getView().setOnRefresh(getEventTargetListener());
+            return;
         }
         if (TextUtils.equals(eventName, "onLoadMore")) {
             getView().setOnLoadMore(getEventTargetListener());
+            return;
+        }
+        if (TextUtils.equals(eventName, "onScrollTop")) {
+            getView().setOnScrollToTopListener(getEventTargetListener());
+            return;
+        }
+        if (TextUtils.equals(eventName, "onScrollBottom")) {
+            getView().setOnScrollToBottomListener(getEventTargetListener());
+            return;
         }
         super.addEventListener(eventName);
     }

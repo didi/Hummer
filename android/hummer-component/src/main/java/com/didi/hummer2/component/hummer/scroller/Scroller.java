@@ -52,7 +52,7 @@ import java.util.Map;
 
 /**
  * 垂直滚动组件
- *
+ * <p>
  * Created by XiaoFeng on 2019-12-25.
  */
 @Component("Scroller")
@@ -72,7 +72,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
     public Scroller(HummerContext context, JSValue jsValue, String viewID) {
         super(context, jsValue, viewID);
-        hummerContext = (HummerScriptContext)context;
+        hummerContext = (HummerScriptContext) context;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
                 if (refreshCallback != null) {
                     StatEvent statEvent = new StatEvent();
                     statEvent.setType("onRefresh");
-                    statEvent.setState( PullRefreshState.START_PULL_DOWN);
+                    statEvent.setState(PullRefreshState.START_PULL_DOWN);
                     statEvent.setTimestamp(System.currentTimeMillis());
                     refreshCallback.call(statEvent);
                 }
@@ -109,7 +109,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
                 if (refreshCallback != null) {
                     StatEvent statEvent = new StatEvent();
                     statEvent.setType("onRefresh");
-                    statEvent.setState( PullRefreshState.REFRESHING);
+                    statEvent.setState(PullRefreshState.REFRESHING);
                     statEvent.setTimestamp(System.currentTimeMillis());
                     refreshCallback.call(statEvent);
                 }
@@ -120,7 +120,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
                 if (refreshCallback != null) {
                     StatEvent statEvent = new StatEvent();
                     statEvent.setType("onRefresh");
-                    statEvent.setState( PullRefreshState.IDLE);
+                    statEvent.setState(PullRefreshState.IDLE);
                     statEvent.setTimestamp(System.currentTimeMillis());
                     refreshCallback.call(statEvent);
                 }
@@ -138,7 +138,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
                 if (loadMoreCallback != null) {
                     StatEvent statEvent = new StatEvent();
                     statEvent.setType("onLoadMore");
-                    statEvent.setState( LoadMoreState.LOADING);
+                    statEvent.setState(LoadMoreState.LOADING);
                     statEvent.setTimestamp(System.currentTimeMillis());
                     loadMoreCallback.call(statEvent);
                 }
@@ -247,12 +247,20 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
         scrollView.setOnScrollToTopListener(() -> {
             if (onScrollToTopListener != null) {
-                onScrollToTopListener.call();
+                StatEvent statEvent = new StatEvent();
+                statEvent.setType("onScrollTop");
+                statEvent.setState(0);
+                statEvent.setTimestamp(System.currentTimeMillis());
+                onScrollToTopListener.call(statEvent);
             }
         });
         scrollView.setOnScrollToBottomListener(() -> {
             if (onScrollToBottomListener != null) {
-                onScrollToBottomListener.call();
+                StatEvent statEvent = new StatEvent();
+                statEvent.setType("onScrollBottom");
+                statEvent.setState(0);
+                statEvent.setTimestamp(System.currentTimeMillis());
+                onScrollToBottomListener.call(statEvent);
             }
         });
     }
@@ -438,12 +446,14 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
      */
     @JsProperty("showScrollBar")
     private boolean showScrollBar;
+
     public void setShowScrollBar(boolean isShow) {
         scrollView.setVerticalScrollBarEnabled(isShow);
     }
 
     @JsProperty("refreshView")
     private HMBase refreshView;
+
     public void setRefreshView(HMBase view) {
         refreshLayout.setEnableRefresh(true);
         hummerHeader.addHeaderView(view);
@@ -451,6 +461,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
     @JsProperty("loadMoreView")
     private HMBase loadMoreView;
+
     public void setLoadMoreView(HMBase view) {
         refreshLayout.setEnableLoadMore(true);
         hummerFooter.addFooterView(view);
@@ -458,12 +469,14 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
 
     @JsProperty("onRefresh")
     private JSCallback refreshCallback;
+
     public void setOnRefresh(JSCallback callback) {
         refreshCallback = callback;
     }
 
     @JsProperty("onLoadMore")
     private JSCallback loadMoreCallback;
+
     public void setOnLoadMore(JSCallback callback) {
         loadMoreCallback = callback;
     }
@@ -496,6 +509,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
      */
     @JsProperty("bounces")
     public boolean bounces;
+
     public void setBounces(boolean bounces) {
         refreshLayout.setEnableOverScrollDrag(bounces);
     }
@@ -541,13 +555,10 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
     }
 
     @Override
-    public void dispatchChildPositionChanged(HMBase child,
-                                             HummerLayoutExtendUtils.Position origin,
-                                             HummerLayoutExtendUtils.Position replace) {
+    public void dispatchChildPositionChanged(HMBase child, HummerLayoutExtendUtils.Position origin, HummerLayoutExtendUtils.Position replace) {
 
         // 转换逻辑: position:fixed -> position:relative | position:absolute | position:none
-        if (origin == HummerLayoutExtendUtils.Position.FIXED
-                && replace == HummerLayoutExtendUtils.Position.YOGA) {
+        if (origin == HummerLayoutExtendUtils.Position.FIXED && replace == HummerLayoutExtendUtils.Position.YOGA) {
             if (fixedNoneBoxMap.containsKey(child)) {
                 FixedNoneBox fixedNoneBox = fixedNoneBoxMap.remove(child);
                 hummerContext.getContainer().removeView(child);
@@ -556,8 +567,7 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         }
 
         // 转换逻辑: position:relative | position:absolute | position:none -> position:fixed
-        if (origin == HummerLayoutExtendUtils.Position.YOGA
-                && replace == HummerLayoutExtendUtils.Position.FIXED) {
+        if (origin == HummerLayoutExtendUtils.Position.YOGA && replace == HummerLayoutExtendUtils.Position.FIXED) {
             FixedNoneBox fixedNoneBox = new FixedNoneBox(hummerContext);
             fixedNoneBoxMap.put(child, fixedNoneBox);
             layout.replaceView(fixedNoneBox, child);
