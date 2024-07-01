@@ -68,28 +68,64 @@ void F4NContextMT::onThreadLoopEnd(F4NHandler *threadHandler) {
 }
 
 
-JsiValue *F4NContextMT::evaluateJavaScript(string script, string scriptId) {
+JsiValue *F4NContextMT::evaluateJavaScript(string script, string scriptId, F4NJSCallback *callback) {
     if (prepared) {
-        F4NMessage message = F4NMessage("run");
-        message.function = [&, script, scriptId](int id, const string &msg, void *data) {
-            info("F4NContextMT::evaluateJavaScript()  scriptId=%s", scriptId.c_str());
-            JsiObjectRef *result = _jsiContext_->evaluateJavaScript(script, scriptId, nullptr);
-            if (result != nullptr) {
-                info("F4NContextMT::evaluateJavaScript()  result=%s", result->toJsiValue()->toString().c_str());
-                delete result;
-            } else {
-                info("F4NContextMT::evaluateJavaScript()  result=null");
+        F4NMessage message = F4NMessage("evaluateJavaScript");
+        F4NJsiErrorCatch *errorCatch = new F4NJsiErrorCatch(this);
+        message.function = [&, script, scriptId, callback, errorCatch](int id, const string &msg, void *data) {
+            JsiObjectRef *result = _jsiContext_->evaluateJavaScript(script, scriptId, errorCatch);
+            int status = 0;
+            string message;
+            if (errorCatch->isCatchJsiError()) {
+                status = errorCatch->status;
+                message = errorCatch->jsiError == nullptr ? "" : errorCatch->jsiError->toString();
             }
+            JsiValue *jsiValue = nullptr;
+            if (result != nullptr) {
+                jsiValue = result->toJsiValue();
+                delete result;
+            }
+            if (callback != nullptr) {
+                callback->onJavaScriptResult(status, message, jsiValue);
+                delete callback;
+            }
+            info("F4NContextMT::evaluateJavaScript() scriptId=%s, result=%s", scriptId.c_str(), jsiValue == nullptr ? "" : jsiValue->toString().c_str());
         };
         jsThreadHandler_->sendMessage(message);
     } else {
-        info("F4NContextMT::evaluateJavaScript() not prepared.");
+        info("F4NContextMT::evaluateJavaScript() scriptId=%s, not prepared.", scriptId.c_str());
     }
     return nullptr;
 }
 
-JsiValue *F4NContextMT::evaluateBytecode(const uint8_t *byteArray, size_t length, const char *scriptId) {
-    return F4NContextBase::evaluateBytecode(byteArray, length, scriptId);
+JsiValue *F4NContextMT::evaluateBytecode(const uint8_t *byteArray, size_t length, string scriptId, F4NJSCallback *callback) {
+    if (prepared) {
+        F4NMessage message = F4NMessage("evaluateBytecode");
+        F4NJsiErrorCatch *errorCatch = new F4NJsiErrorCatch(this);
+        message.function = [&, byteArray, length, scriptId, callback, errorCatch](int id, const string &msg, void *data) {
+            JsiObjectRef *result = _jsiContext_->evaluateBytecode(byteArray, length, scriptId.c_str(), errorCatch);
+            int status = 0;
+            string message;
+            if (errorCatch->isCatchJsiError()) {
+                status = errorCatch->status;
+                message = errorCatch->jsiError == nullptr ? "" : errorCatch->jsiError->toString();
+            }
+            JsiValue *jsiValue = nullptr;
+            if (result != nullptr) {
+                jsiValue = result->toJsiValue();
+                delete result;
+            }
+            if (callback != nullptr) {
+                callback->onJavaScriptResult(status, message, jsiValue);
+                delete callback;
+            }
+            info("F4NContextMT::evaluateBytecode() scriptId=%s, result=%s", scriptId.c_str(), jsiValue == nullptr ? "" : jsiValue->toString().c_str());
+        };
+        jsThreadHandler_->sendMessage(message);
+    } else {
+        info("F4NContextMT::evaluateBytecode() scriptId=%s, not prepared.", scriptId.c_str());
+    }
+    return nullptr;
 }
 
 
@@ -144,8 +180,9 @@ JsiValue *F4NContextMT::render(F4NElement *rootElement) {
 
     F4NMessage message = F4NMessage("render");
     message.function = [&, rootElement](int id, const string &msg, void *data) {
-        info("VDOMContextMT::render()");
+        info("VDOMContextMT::render() start.");
         F4NContextBase::render(rootElement);
+        info("VDOMContextMT::render() stop.");
     };
     _mainThreadHandler_->sendMessage(message);
     return nullptr;

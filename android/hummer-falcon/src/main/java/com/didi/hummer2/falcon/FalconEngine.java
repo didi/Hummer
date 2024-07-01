@@ -51,12 +51,12 @@ public class FalconEngine implements Serializable {
     /**
      * 加载js代码
      */
-    public static native Object evaluateJavaScript(long contextId, String script, String scriptId);
+    public static native Object evaluateJavaScript(long contextId, String script, String scriptId,long callbackId);
 
     /**
      * 加载js字节码
      */
-    public static native Object evaluateBytecode(long contextId, byte[] script, String scriptId);
+    public static native Object evaluateBytecode(long contextId, byte[] script, String scriptId,long callbackId);
 
     /**
      * 分发事件给Falcon引擎

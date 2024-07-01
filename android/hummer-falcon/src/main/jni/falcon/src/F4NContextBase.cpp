@@ -63,18 +63,22 @@ JsiValue *F4NContextBase::loadScript(string script, string scriptId) {
     return nullptr;
 }
 
-JsiValue *F4NContextBase::evaluateJavaScript(string script, string scriptId) {
+JsiValue *F4NContextBase::evaluateJavaScript(string script, string scriptId, F4NJSCallback *callback) {
     JsiObjectRef *object = _jsiContext_->evaluateJavaScript(script, scriptId, nullptr);
     if (object != nullptr) {
+        JsiValue *jsiValue = object->toJsiValue();
         delete object;
+        return jsiValue;
     }
     return nullptr;
 }
 
-JsiValue *F4NContextBase::evaluateBytecode(const uint8_t *byteArray, size_t length, const char *scriptId) {
-    JsiObjectRef *object = _jsiContext_->evaluateBytecode(byteArray, length, scriptId, nullptr);
+JsiValue *F4NContextBase::evaluateBytecode(const uint8_t *byteArray, size_t length, string scriptId, F4NJSCallback *callback) {
+    JsiObjectRef *object = _jsiContext_->evaluateBytecode(byteArray, length, scriptId.c_str(), nullptr);
     if (object != nullptr) {
+        JsiValue *jsiValue = object->toJsiValue();
         delete object;
+        return jsiValue;
     }
     return nullptr;
 }

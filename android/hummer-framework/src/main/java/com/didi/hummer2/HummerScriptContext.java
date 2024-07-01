@@ -21,6 +21,7 @@ import com.didi.hummer2.render.utils.EnvUtil;
 import com.didi.hummer2.utils.HMLog;
 import com.didi.hummer2.render.style.HummerLayout;
 import com.didi.hummer2.utils.HummerObjectUtil;
+import com.didi.hummer2.utils.UIThreadUtil;
 
 import java.util.Map;
 
@@ -54,6 +55,8 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
     protected NavPage navPage;
     protected HummerPageHandler hummerPageHandler;
 
+    protected OnViewRenderListener onViewRenderListener;
+
 
     public HummerScriptContext(Context context, HummerConfig hummerConfig, ViewGroup rootView) {
         super(context);
@@ -85,6 +88,24 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
 
     public void renderElement(Element element) {
         viewRender.renderElement(element);
+        dispatchRenderElement(element);
+    }
+
+
+    private void dispatchRenderElement(Element element) {
+        onViewRenderFinished();
+    }
+
+
+    private void onViewRenderFinished() {
+        UIThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (onViewRenderListener != null) {
+                    onViewRenderListener.onRenderViewFinish(true);
+                }
+            }
+        });
     }
 
     @Override
@@ -252,6 +273,9 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
         return true;
     }
 
+    public boolean isRender() {
+        return viewRender.isRenderElement();
+    }
 
     public String getJsPage() {
         return null;
@@ -261,6 +285,15 @@ public class HummerScriptContext extends HummerContext implements LifecycleOwner
     @Override
     public Lifecycle getLifecycle() {
         return null;
+    }
+
+
+    public void setViewRenderListener(OnViewRenderListener renderListener) {
+        onViewRenderListener = renderListener;
+    }
+
+    public interface OnViewRenderListener {
+        void onRenderViewFinish(boolean isRenderSuccess);
     }
 
 

@@ -47,6 +47,11 @@ public class HummerViewRender implements IFullLifeCycle {
     }
 
 
+    public boolean isRenderElement() {
+        return isPageCreated;
+    }
+
+
     public void renderElement(Element element) {
         this.rootElement = element;
         renderHummerPage();

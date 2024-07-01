@@ -55,7 +55,7 @@ NAPIValue functionWrapper(NAPIEnv env, NAPICallbackInfo callbackInfo) {
 //    info("JsiObject::functionWrapper() methodName=%s,argc=%d",jsiFunction->methodName,argc);
 
 //    JsiValue **params = new JsiValue *[argc];
-    JsiValue* params[argc];
+    JsiValue *params[argc];
     for (int i = 0; i < argc; i++) {
         params[i] = JsiUtils::toValue(&env, &argv[i]);
     }
@@ -149,7 +149,7 @@ void JsiObjectRef::toJsValue(NAPIValue *value) {
 //    JsiUtils::openHandleScope(&env_, &scope);
     if (!released) {
         napi_get_reference_value(env_, ref_, value);
-    } else{
+    } else {
         warn("JsiObjectRef::toJsValue() is released.");
     }
 //    JsiUtils::closeHandleScope(&env_, &scope);
@@ -174,5 +174,19 @@ JsiObjectRef::~JsiObjectRef() {
 }
 
 
+void JsiErrorCatch::onCatchJsiError(int status,JsiError *jsiError) {
+    this->jsiError = jsiError;
+}
+
+bool JsiErrorCatch::isCatchJsiError() {
+    return catchJsiError;
+}
+
+JsiErrorCatch::~JsiErrorCatch() {
+    if (jsiError != nullptr) {
+        delete jsiError;
+        jsiError = nullptr;
+    }
 
 
+}

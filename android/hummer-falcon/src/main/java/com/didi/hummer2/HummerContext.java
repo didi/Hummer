@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.falcon.HMEngineType;
+import com.didi.hummer2.falcon.JavaScriptCallback;
 import com.didi.hummer2.falcon.OnContextStateListener;
 import com.didi.hummer2.falcon.PageLifeCycle;
 import com.didi.hummer2.register.HummerObject;
@@ -88,7 +89,7 @@ public abstract class HummerContext extends ContextWrapper implements PageLifeCy
 
 
     public void init() {
-        falconContext.bindVdomContext(namespace, configOption);
+        falconContext.bindFalconContext(namespace, configOption);
         falconContext.registerPageLifeCycle(this);
         falconContext.setOnContextStateListener(this);
     }
@@ -214,12 +215,20 @@ public abstract class HummerContext extends ContextWrapper implements PageLifeCy
         this.falconContext.setEventTraceHandler(eventTraceHandler);
     }
 
+    public Object evaluateJavaScript(String script, String scriptId, JavaScriptCallback callback) {
+        return falconContext.evaluateJavaScript(script, scriptId, callback);
+    }
+
     public Object evaluateJavaScript(String script, String scriptId) {
-        return falconContext.evaluateJavaScript(script, scriptId);
+        return falconContext.evaluateJavaScript(script, scriptId, null);
+    }
+
+    public Object evaluateBytecode(byte[] script, String scriptId, JavaScriptCallback callback) {
+        return falconContext.evaluateBytecode(script, scriptId, callback);
     }
 
     public Object evaluateBytecode(byte[] script, String scriptId) {
-        return falconContext.evaluateBytecode(script, scriptId);
+        return falconContext.evaluateBytecode(script, scriptId, null);
     }
 
     public Object dispatchEvent(String eventName, JsiValue... params) {

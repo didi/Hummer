@@ -32,12 +32,12 @@ void F4NContextST::onStart() {
 }
 
 
-JsiValue *F4NContextST::evaluateJavaScript(string script, string scriptId) {
-   return F4NContext::evaluateJavaScript(script, scriptId);
+JsiValue *F4NContextST::evaluateJavaScript(string script, string scriptId, F4NJSCallback *callback) {
+    return F4NContext::evaluateJavaScript(script, scriptId, callback);
 }
 
-JsiValue *F4NContextST::evaluateBytecode(const uint8_t *byteArray, size_t length, const char *scriptId) {
-   return F4NContext::evaluateBytecode(byteArray, length, scriptId);
+JsiValue *F4NContextST::evaluateBytecode(const uint8_t *byteArray, size_t length, string scriptId, F4NJSCallback *callback) {
+    return F4NContext::evaluateBytecode(byteArray, length, scriptId, callback);
 }
 
 

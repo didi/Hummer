@@ -13,6 +13,7 @@ import com.didi.hummer2.handler.JsConsoleHandler;
 import com.didi.hummer2.handler.JsExceptionHandler;
 import com.didi.hummer2.handler.LogHandler;
 import com.didi.hummer2.utils.F4NObjectUtil;
+import com.didi.hummer2.utils.HMLog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ import java.util.List;
  */
 
 public class FalconContext implements PageLifeCycle, Serializable {
-
 
 
     public static final int STATE_ON_CONTEXT_CREATE = 1;
@@ -101,24 +101,54 @@ public class FalconContext implements PageLifeCycle, Serializable {
 
     protected List<PageLifeCycle> pageLifeCycles;
 
+    protected ContextCallbackManager callbackManager;
+
     public FalconContext() {
         FalconEngine.createEngine();
         identify = FalconEngine.createFalconContext();
         pageLifeCycles = new ArrayList<>();
+        callbackManager = new ContextCallbackManager();
     }
 
-    public void bindVdomContext(String namespace, ConfigOption configOption) {
+    public void bindFalconContext(String namespace, ConfigOption configOption) {
         this.namespace = namespace;
         this.configOption = configOption;
         FalconEngine.bindFalconContext(identify, this, configOption);
     }
 
-    public Object evaluateJavaScript(String script, String scriptId) {
-        return FalconEngine.evaluateJavaScript(identify, script, scriptId);
+    public Object evaluateJavaScript(String script, String scriptId, JavaScriptCallback callback) {
+        Object result = FalconEngine.evaluateJavaScript(identify, script, scriptId, callbackManager.register(callback));
+        //转化为Java数据类型，并释放C++数据
+        result = convertReleaseJsiValue(result);
+        return result;
     }
 
-    public Object evaluateBytecode(byte[] script, String scriptId) {
-        return FalconEngine.evaluateBytecode(identify, script, scriptId);
+    public Object evaluateBytecode(byte[] script, String scriptId, JavaScriptCallback callback) {
+        Object result = FalconEngine.evaluateBytecode(identify, script, scriptId, callbackManager.register(callback));
+        //转化为Java数据类型，并释放C++数据
+        result = convertReleaseJsiValue(result);
+        return result;
+    }
+
+
+    public void onJavaScriptCallback(long callbackId, int status, String message, Object value) {
+        JavaScriptCallback callback = callbackManager.unregister(callbackId);
+        if (callback != null) {
+            JsiValue params = convertReleaseJsiValue(value);
+            callback.onJavaScriptResult(status, message, params);
+        } else {
+            HMLog.w("HummerNative", "onJavaScriptCallback() callback is null id=" + callbackId);
+        }
+    }
+
+    private JsiValue convertReleaseJsiValue(Object value) {
+        JsiValue result = null;
+        if (value instanceof JsiValue) {
+            JsiValue jsiValue = (JsiValue) value;
+            result = JsiValueUtils.toJavaValue(jsiValue);
+            jsiValue.unprotect();
+        }
+        return result;
     }
 
 
@@ -311,6 +341,7 @@ public class FalconContext implements PageLifeCycle, Serializable {
 
     public void destroyFalconContext() {
         FalconEngine.destroyFalconContext(identify);
+        callbackManager.onDestroy();
     }
 
     public static void releaseEngine() {

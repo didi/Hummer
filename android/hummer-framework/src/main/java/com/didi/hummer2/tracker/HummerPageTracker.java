@@ -67,6 +67,7 @@ public class HummerPageTracker {
         }
 
         perfInfo.jsFetchTimeCost = System.currentTimeMillis() - jsFetchStartTime;
+        HMLog.v("HummerNative", "JS加载耗时：" + perfInfo.jsFetchTimeCost + " ms");
     }
 
     public void trackRenderStart(String pageUrl) {
@@ -121,8 +122,9 @@ public class HummerPageTracker {
             trackerAdapter.trackPageSuccess(pageUrl);
         }
         trackerAdapter.trackPerfInfo(pageUrl, perfInfo);
-        trackerAdapter.trackPerfCustomInfo(pageUrl, new PerfCustomInfo("whiteScreenRate", "白屏率", "%", isSuccess ? 0 : 100));
+        trackerAdapter.trackPerfCustomInfo(pageUrl, new PerfCustomInfo("whiteScreenRate2", "白屏率", "%", isSuccess ? 0 : 100));
         trackerAdapter.trackEvent(ITrackerAdapter.EventName.RENDER_FINISH, params);
+        HMLog.v("HummerNative", "页面渲染成功：" + isSuccess);
         HMLog.v("HummerNative", "页面渲染耗时：" + timeCost + " ms");
     }
 

@@ -9,6 +9,8 @@
 #include "HMEventTraceHandler.h"
 #include "HMContextListener.h"
 #include "HMPageLifeCycle.h"
+#include "HMJSCallback.h"
+#include "HummerBridge.h"
 
 
 JavaVM *_JavaVM_ = NULL;
@@ -105,23 +107,48 @@ jboolean FalconEngine_bindContext_(JNIEnv *env, jclass cls, jlong contextId, job
     return JNI_TRUE;
 }
 
-jobject FalconEngine_evaluateJavaScript_(JNIEnv *env, jclass cls, jlong contextId, jstring script, jstring scriptId) {
-    LOGI("FalconEngine::evaluateJavaScript() contextId=%u", contextId);
+jobject FalconEngine_evaluateJavaScript_(JNIEnv *env, jclass cls, jlong contextId, jstring script, jstring scriptId, jlong callbackId) {
+    LOGI("FalconEngine::evaluateJavaScript() contextId=%ld", contextId);
 
     F4NContext *f4NContext = (F4NContext *) contextId;
 
     const char *value = env->GetStringUTFChars(script, hm_false_ptr);
     const char *source = env->GetStringUTFChars(scriptId, hm_false_ptr);
 
-    f4NContext->evaluateJavaScript(value, source);
+    JsiValue *result = f4NContext->evaluateJavaScript(value, source, new HMJsCallback(f4NContext, callbackId));
 
     env->ReleaseStringUTFChars(script, value);
     env->ReleaseStringUTFChars(scriptId, source);
 
+
+    if (result != nullptr) {
+        jobject resultObject = value2JObject(env, result);
+        return resultObject;
+    }
+
     return nullptr;
 }
 
-jobject FalconEngine_evaluateBytecode_(JNIEnv *env, jclass cls, jlong contextId, jbyteArray byteArray, jstring scriptId) {
+jobject FalconEngine_evaluateBytecode_(JNIEnv *env, jclass cls, jlong contextId, jbyteArray byteArray, jstring scriptId, jlong callbackId) {
+
+    auto f4NContext = (F4NContext *) contextId;
+
+    jsize length = env->GetArrayLength(byteArray);
+    jbyte *bytes = env->GetByteArrayElements(byteArray, JNI_FALSE);
+
+    const auto *bufferArray = reinterpret_cast<const uint8_t *>(bytes);
+
+    const char *source = env->GetStringUTFChars(scriptId, hm_false_ptr);
+
+    JsiValue *result = f4NContext->evaluateBytecode(bufferArray, length, source, new HMJsCallback(f4NContext, contextId));
+
+    env->ReleaseByteArrayElements(byteArray, bytes, JNI_ABORT);
+    env->ReleaseStringUTFChars(scriptId, source);
+
+    if (result != nullptr) {
+        jobject resultObject = value2JObject(env, result);
+        return resultObject;
+    }
     return nullptr;
 }
 
@@ -156,8 +183,8 @@ static JNINativeMethod _FalconEngineMethods[] = {
         {"createFalconContext",  "()J",                                                                               (void *) FalconEngine_createContext_},
         {"destroyFalconContext", "(J)V",                                                                              (void *) FalconEngine_destroyContext_},
         {"bindFalconContext",    "(JLcom/didi/hummer2/falcon/FalconContext;Lcom/didi/hummer2/falcon/ConfigOption;)Z", (void *) FalconEngine_bindContext_},
-        {"evaluateJavaScript",   "(JLjava/lang/String;Ljava/lang/String;)Ljava/lang/Object;",                         (void *) FalconEngine_evaluateJavaScript_},
-        {"evaluateBytecode",     "(J[BLjava/lang/String;)Ljava/lang/Object;",                                         (void *) FalconEngine_evaluateBytecode_},
+        {"evaluateJavaScript",   "(JLjava/lang/String;Ljava/lang/String;J)Ljava/lang/Object;",                        (void *) FalconEngine_evaluateJavaScript_},
+        {"evaluateBytecode",     "(J[BLjava/lang/String;J)Ljava/lang/Object;",                                        (void *) FalconEngine_evaluateBytecode_},
         {"dispatchEvent",        "(JLjava/lang/String;[J)Ljava/lang/Object;",                                         (void *) FalconEngine_dispatchEvent_},
 };
 

@@ -63,12 +63,12 @@ JsiValue *F4NContextMulti::loadScript(string script, string scriptId) {
     return contextDelegate_->loadScript(script, scriptId);
 }
 
-JsiValue *F4NContextMulti::evaluateJavaScript(string script, string scriptId) {
-    return contextDelegate_->evaluateJavaScript(script, scriptId);
+JsiValue *F4NContextMulti::evaluateJavaScript(string script, string scriptId, F4NJSCallback *callback) {
+    return contextDelegate_->evaluateJavaScript(script, scriptId, callback);
 }
 
-JsiValue *F4NContextMulti::evaluateBytecode(const uint8_t *byteArray, size_t length, const char *scriptId) {
-    return contextDelegate_->evaluateBytecode(byteArray, length, scriptId);
+JsiValue *F4NContextMulti::evaluateBytecode(const uint8_t *byteArray, size_t length, string scriptId, F4NJSCallback *callback) {
+    return contextDelegate_->evaluateBytecode(byteArray, length, scriptId, callback);
 }
 
 void F4NContextMulti::dispatchEvent(string eventName, size_t size, JsiValue **params) {

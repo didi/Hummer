@@ -52,7 +52,7 @@ JsiObjectRef *JsiContext::evaluateJavaScript(string script, string scriptId, Jsi
     if (status != NAPIExceptionOK) {
         JsiError *jsError = JsiUtils::getAndClearLastError(&env_);
         if (jsiErrorCatch != nullptr) {
-            jsiErrorCatch->onCatchJsiError(jsError);
+            jsiErrorCatch->onCatchJsiError(status,jsError);
         }
         error("JsiContext::evaluateJavaScript() error! status=&d,scriptId=%s,script=\n%s", scriptId.c_str(), script.c_str());
         error("JsiContext::evaluateJavaScript() error! jsError=%s", jsError->toCString());
@@ -82,7 +82,7 @@ JsiObjectRef *JsiContext::evaluateBytecode(const uint8_t *byteArray, size_t leng
     if (status != NAPIExceptionOK) {
         JsiError *jsError = JsiUtils::getAndClearLastError(&env_);
         if (jsiErrorCatch != nullptr) {
-            jsiErrorCatch->onCatchJsiError(jsError);
+            jsiErrorCatch->onCatchJsiError(status,jsError);
         }
         error("JsiContext::evaluateBytecode() error! status=&d,scriptId=%s,length =%d", scriptId, length);
         error("JsiContext::evaluateBytecode() error! jsError=%s", jsError->toCString());

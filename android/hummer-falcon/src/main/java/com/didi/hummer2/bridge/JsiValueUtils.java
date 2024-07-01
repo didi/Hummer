@@ -16,6 +16,12 @@ public class JsiValueUtils {
     private JsiValueUtils() {
     }
 
+    public static JsiValue toJavaJsiValue(Object value) {
+        if (value instanceof JsiValue) {
+            return toJavaValue((JsiValue) value);
+        }
+        return null;
+    }
 
     public static void toJavaValue(JsiValue[] value) {
         if (value != null && value.length > 0) {
@@ -32,21 +38,21 @@ public class JsiValueUtils {
                 return jsiValue;
             } else {
                 if (jsiValue instanceof JsiObject) {
-                    return toJavaValue((JsiObject) jsiValue);
+                    return toJavaValueArr((JsiObject) jsiValue);
                 }
                 if (jsiValue instanceof JsiArray) {
-                    return toJavaValue((JsiArray) jsiValue);
+                    return toJavaValueObj((JsiArray) jsiValue);
                 }
             }
         }
         return null;
     }
 
-    public static JsiObject toJavaValue(JsiObject jsiValue) {
+    private static JsiObject toJavaValueArr(JsiObject jsiValue) {
         return new JsiObjectJava(jsiValue);
     }
 
-    public static JsiArray toJavaValue(JsiArray jsiValue) {
+    private static JsiArray toJavaValueObj(JsiArray jsiValue) {
         return new JsiArrayJava(jsiValue);
     }
 }

@@ -123,9 +123,9 @@ void F4NRenderInvoker::getAttribute(F4NElement *thisObj, string key, F4NFunction
 
 }
 
-void F4NRenderInvoker::setStyles(F4NElement *thisObj, F4NStyle *hmStyle) {
+void F4NRenderInvoker::setStyles(F4NElement *thisObj, F4NStyle *f4NStyle) {
     JsiValue *params[1];
-    params[0] = hmStyle->getStyleValue();
+    params[0] = f4NStyle->getStyleValue();
     invoke(FACTORY_TYPE_RENDER,
            thisObj->odjId,
            METHOD_TYPE_CALL,
@@ -136,8 +136,16 @@ void F4NRenderInvoker::setStyles(F4NElement *thisObj, F4NStyle *hmStyle) {
 
 }
 
-void F4NRenderInvoker::getReact(F4NElement *thisObj, F4NFunction *hmFunction) {
-
+void F4NRenderInvoker::getReact(F4NElement *thisObj, F4NFunction *function) {
+    JsiValue *params[1];
+    params[0] = function;
+    invoke(FACTORY_TYPE_RENDER,
+           thisObj->odjId,
+           METHOD_TYPE_CALL,
+           thisObj->tag,
+           "getReact",
+           1,
+           params);
 }
 
 void F4NRenderInvoker::addEventListener(F4NElement *thisObj, string event) {
@@ -257,7 +265,6 @@ void F4NRenderInvoker::render(F4NElement *rootElement) {
 }
 
 void F4NRenderInvoker::loadScriptWithUrl(string script, JsiFunction *callback) {
-
     JsiValue *params[2];
     params[0] = new JsiString(script.c_str());
     params[1] = callback;

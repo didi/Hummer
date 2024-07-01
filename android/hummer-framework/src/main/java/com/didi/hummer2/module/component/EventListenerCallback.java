@@ -21,10 +21,10 @@ import com.didi.hummer2.utils.HMLog;
 
 public class EventListenerCallback extends NoOpJSCallback {
 
-    private JsiFunction hmFunction;
+    private JsiFunction jsiFunction;
 
     public EventListenerCallback(JsiFunction hmFunction) {
-        this.hmFunction = hmFunction;
+        this.jsiFunction = hmFunction;
     }
 
     @Override
@@ -32,10 +32,10 @@ public class EventListenerCallback extends NoOpJSCallback {
         JsiValue result = null;
         if (params.length > 0 && params[0] instanceof Event) {
             String type = ((Event) params[0]).getType();
-            result = hmFunction.call(new JsiString(type), ((Event) params[0]).toJsiValue());
+            result = jsiFunction.call(new JsiString(type), ((Event) params[0]).toJsiValue());
         } else {
             JsiValue[] jsiValues = toJsiValues(params);
-            result = hmFunction.call(jsiValues);
+            result = jsiFunction.call(jsiValues);
         }
         if (result != null) {
             HMLog.w("ProxyJSCallback", "call() result= " + result);

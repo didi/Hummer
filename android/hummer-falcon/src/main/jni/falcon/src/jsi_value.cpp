@@ -153,7 +153,7 @@ JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue) {
     if (status != NAPIExceptionOK) {
         warn("JsiFunction::call() params=%s  error status=%u", JsiUtils::buildArrayString(argc, jsiValue).c_str(), status);
         JsiError *jsiError = JsiUtils::getAndClearLastError(&env_);
-        error("JsiFunction::call() error %s", jsiError->toString().c_str());
+        error("JsiFunction::call() error %s", jsiError == nullptr ? "" : jsiError->toString().c_str());
         return nullptr;
     }
 

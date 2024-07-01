@@ -58,11 +58,11 @@ JsiValue *F4NContext::loadScript(string script, string scriptId) {
     return nullptr;
 }
 
-JsiValue *F4NContext::evaluateJavaScript(string script, string scriptId) {
+JsiValue *F4NContext::evaluateJavaScript(string  script, string scriptId, F4NJSCallback *callback) {
     return nullptr;
 }
 
-JsiValue *F4NContext::evaluateBytecode(const uint8_t *byteArray, size_t length, const char *scriptId) {
+JsiValue *F4NContext::evaluateBytecode(const uint8_t *byteArray, size_t length, string scriptId, F4NJSCallback *callback) {
     return nullptr;
 }
 
@@ -185,12 +185,17 @@ F4NContext::~F4NContext() {
 }
 
 
+F4NJsiErrorCatch::F4NJsiErrorCatch(F4NContext *context) {
+    this->context = context;
+}
 
+void F4NJsiErrorCatch::onCatchJsiError(int status, JsiError *jsiError) {
+    JsiErrorCatch::onCatchJsiError(status, jsiError);
+    if (this->context != nullptr && this->context->getExceptionHandler() != nullptr) {
+        this->context->getExceptionHandler()->onThrowException(jsiError == nullptr ? "" : jsiError->toString());
+    }
+}
 
-
-
-
-
-
-
-
+F4NJsiErrorCatch::~F4NJsiErrorCatch() {
+    this->context = nullptr;
+}
