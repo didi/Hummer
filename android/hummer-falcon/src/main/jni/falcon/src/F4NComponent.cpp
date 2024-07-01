@@ -143,6 +143,7 @@ JsiValue *F4NComponent::invoke(string methodName, size_t size, JsiValue **params
         JsiValue *value = params[i];
         if (value != nullptr && value->getType() == TYPE_NAPIFunction) {
             params[i] = new F4NFunction(context, (JsiFunction *) params[i]);
+            params[i]->protect();
         }
     }
     //处理参数是Element的参数，获取Element对象

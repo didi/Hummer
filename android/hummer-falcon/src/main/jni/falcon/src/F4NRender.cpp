@@ -270,6 +270,17 @@ void F4NRender::applyElementFunctionCall(F4NFunctionCall *call) {
         }
             break;
         case F4NElement::MethodId_invoke:
+
+            //处理参数类型是Function的参数提供回调支持
+            if (call->size > 0) {
+                for (int i = 0; i < call->size; i++) {
+                    JsiValue *value = call->params[i];
+                    if (value != nullptr && value->getType() == TYPE_NAPIFunction) {
+                        call->params[i] = new F4NFunction(call->thisElement->context, (JsiFunction *) call->params[i]);
+                        call->params[i]->protect();
+                    }
+                }
+            }
             //如果参数中有Element需要转换
             if (call->size > 0) {
                 for (int i = 0; i < call->size; i++) {
@@ -323,9 +334,11 @@ void F4NRender::onDestroy() {
 F4NRender::~F4NRender() {
     info("F4NRender::~F4NRender()");
 
+    _renderFunctionCalls_->clear();
     delete _renderFunctionCalls_;
     _renderFunctionCalls_ = nullptr;
 
+    _myFunctionCalls_->clear();
     delete _myFunctionCalls_;
     _myFunctionCalls_ = nullptr;
 }

@@ -58,7 +58,7 @@ JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
         context->submitJsTask([&, argc, params]() {
             JsiValue *result = jsiFunction->call(argc, params);
             JsiUtils::releaseJsiValue(argc, params);
-            delete[] params;
+            delete params;
             if (result != nullptr) {
                 result->unprotect();
             }

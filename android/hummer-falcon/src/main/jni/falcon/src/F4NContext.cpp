@@ -58,7 +58,7 @@ JsiValue *F4NContext::loadScript(string script, string scriptId) {
     return nullptr;
 }
 
-JsiValue *F4NContext::evaluateJavaScript(string  script, string scriptId, F4NJSCallback *callback) {
+JsiValue *F4NContext::evaluateJavaScript(string script, string scriptId, F4NJSCallback *callback) {
     return nullptr;
 }
 

@@ -20,7 +20,7 @@ F4NFunctionCall::~F4NFunctionCall() {
     this->thisElement = nullptr;
     if (params != nullptr) {
         JsiUtils::releaseJsiValue(size, params);
-        delete[] params;
+        delete params;
         params = nullptr;
     }
 }

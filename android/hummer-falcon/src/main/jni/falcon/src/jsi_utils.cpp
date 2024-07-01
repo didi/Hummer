@@ -204,16 +204,49 @@ JsiObject *JsiUtils::toObject(NAPIEnv *env, const NAPIValue *napiValue) {
     JsiObject *hmObject = new JsiObject();
     for (auto it = keys.begin(); it != keys.end(); ++it) {
         char *key = *it;
-        NAPIValue result;
-        napi_get_named_property(*env, *napiValue, key, &result);
-        JsiValue *value = toValue(env, &result);
-        if (value != nullptr) {
-            hmObject->setValue(key, value);
-            value->unprotect();
+        if (isValidKey(key)) {
+            NAPIValue result;
+            napi_get_named_property(*env, *napiValue, key, &result);
+            JsiValue *value = toValue(env, &result);
+            if (value != nullptr) {
+                if (value->getType() ==TYPE_NAPIFunction){
+                    error("JSUtils::toObject() TYPE_NAPIFunction error. status=%u", status);
+                }
+                hmObject->setValue(key, value);
+                value->unprotect();
+            }
         }
 
     }
     return hmObject;
+}
+
+
+static string prefixSuffix = "___";
+
+bool JsiUtils::isValidKey(string key) {
+//    if (key.size() < 3 * prefixSuffix.size()) {
+//        // 字符串长度小于前缀和后缀的总长度，不可能满足条件
+//        return true;
+//    }
+//    // 检查是否以 prefixSuffix 开头,结尾
+//    if (key.substr(key.size() - prefixSuffix.size()) != prefixSuffix &&
+//        key.substr(0, prefixSuffix.size()) != prefixSuffix) {
+//        return false;
+//    }
+    if (key == "__startFunc__") {
+        return false;
+    }
+    if (key == "__endFunc__") {
+        return false;
+    }
+    if (key == "__startCallback__") {
+        return false;
+    }
+    if (key == "__endCallback__") {
+        return false;
+    }
+    return true;
 }
 
 
@@ -338,7 +371,7 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
             NAPIExceptionStatus status = JsiUtils::createObject(env, "Object", 0, nullptr, result);
             if (status != NAPIExceptionOK) {
                 JsiError *error = getAndClearLastError(env);
-                warn("JSUtils::toJSValue() error. %s", error->toString().c_str());
+                warn("JSUtils::toJSValue() error. %s", error == nullptr ? "" : error->toString().c_str());
             }
             map<string, JsiValue *> valueMap = hmObject->valueMap_;
             for (auto it = valueMap.begin(); it != valueMap.end(); it++) {
@@ -350,6 +383,7 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
                     napi_get_undefined(*env, &jsValue);
                     warn("JSUtils::toJSValue() %s:%s can not to JSValue", key.c_str(), value->toString().c_str());
                 }
+//                debug("JSUtils::toJSValue() %s:%s", key.c_str(), value->toString().c_str());
                 setProperty(env, result, key.c_str(), &jsValue);
             }
         }
@@ -360,7 +394,7 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
             NAPIExceptionStatus status = JsiUtils::createObject(env, "Array", 0, nullptr, result);
             if (status != NAPIExceptionOK) {
                 JsiError *error = getAndClearLastError(env);
-                warn("JSUtils::toJSValue() TYPE_ARRAY new Array() error. %s", error->toCString());
+                warn("JSUtils::toJSValue() TYPE_ARRAY new Array() error. %s", error == nullptr ? "" : error->toString().c_str());
             }
 
             list<JsiValue *> valueList = hmArray->valueList;
@@ -369,7 +403,7 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
             status = napi_get_named_property(*env, *result, "push", &pushFunc);
             if (status != NAPIExceptionOK) {
                 JsiError *error = getAndClearLastError(env);
-                warn("JSUtils::toJSValue() TYPE_ARRAY get push() error. %s", error->toCString());
+                warn("JSUtils::toJSValue() TYPE_ARRAY get push() error. %s", error == nullptr ? "" : error->toString().c_str());
             }
 
             for (auto it = valueList.begin(); it != valueList.end(); it++) {
@@ -380,7 +414,7 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
                 status = napi_call_function(*env, *result, pushFunc, 1, &jsValue, nullptr);
                 if (status != NAPIExceptionOK) {
                     JsiError *error = getAndClearLastError(env);
-                    warn("JSUtils::toJSValue() TYPE_ARRAY call push() error. %s", error->toCString());
+                    warn("JSUtils::toJSValue() TYPE_ARRAY call push() error. %s", error == nullptr ? "" : error->toString().c_str());
                 }
             }
         }
@@ -390,7 +424,7 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
             NAPIExceptionStatus status = napi_create_string_utf8(*env, hmString->value_.c_str(), result);
             if (status != NAPIExceptionOK) {
                 JsiError *error = getAndClearLastError(env);
-                warn("JSUtils::toJSValue() TYPE_STRING %s", error->toCString());
+                warn("JSUtils::toJSValue() TYPE_STRING %s", error == nullptr ? "" : error->toString().c_str());
             }
         }
             break;
@@ -399,7 +433,7 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
             NAPIErrorStatus status = napi_create_double(*env, value->value_, result);
             if (status != NAPIErrorOK) {
                 JsiError *error = getAndClearLastError(env);
-                warn("JSUtils::toJSValue() TYPE_NUMBER call error. %s", error->toCString());
+                warn("JSUtils::toJSValue() TYPE_NUMBER call error. %s", error == nullptr ? "" : error->toString().c_str());
             }
         }
             break;
@@ -408,7 +442,7 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
             NAPIErrorStatus status = napi_get_boolean(*env, hmBoolean->value_, result);
             if (status != NAPIErrorOK) {
                 JsiError *error = getAndClearLastError(env);
-                warn("JSUtils::toJSValue() TYPE_NUMBER call error. %s", error->toCString());
+                warn("JSUtils::toJSValue() TYPE_NUMBER call error. %s", error == nullptr ? "" : error->toString().c_str());
             }
         }
             break;
@@ -529,6 +563,8 @@ JsiValue **JsiUtils::copyJsiValue(size_t argc, JsiValue **argv) {
     }
     return result;
 }
+
+
 
 
 

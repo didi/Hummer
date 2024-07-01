@@ -48,7 +48,9 @@ JsiValue *F4NElement::appendChild(size_t size, JsiValue **params) {
     if (size >= 1) {
         JsiValue *jsiValue = params[0];
         F4NElement *child = convert2Element(jsiValue);
-        appendChild(child);
+        if (child != nullptr){
+            appendChild(child);
+        }
     }
     return nullptr;
 }
@@ -65,7 +67,9 @@ JsiValue *F4NElement::removeChild(size_t size, JsiValue **params) {
     if (size >= 1) {
         JsiValue *jsiValue = params[0];
         F4NElement *child = convert2Element(jsiValue);
-        removeChild(child);
+        if (child != nullptr){
+            removeChild(child);
+        }
     }
     return nullptr;
 }
@@ -95,7 +99,9 @@ JsiValue *F4NElement::insertBefore(size_t size, JsiValue **params) {
     if (size >= 2) {
         F4NElement *child = convert2Element(params[0]);
         F4NElement *anchor = convert2Element(params[1]);
-        insertBefore(child, anchor);
+        if (child != nullptr && anchor != nullptr){
+            insertBefore(child, anchor);
+        }
     }
     return nullptr;
 }
@@ -113,7 +119,9 @@ JsiValue *F4NElement::replaceChild(size_t size, JsiValue **params) {
     if (size >= 2) {
         F4NElement *newNode = convert2Element(params[0]);
         F4NElement *oldNode = convert2Element(params[1]);
-        replaceChild(newNode, oldNode);
+        if (newNode != nullptr && oldNode!= nullptr){
+            replaceChild(newNode, oldNode);
+        }
     }
     return nullptr;
 }
@@ -161,11 +169,11 @@ void F4NElement::setAttributes(JsiObject *jsiObject) {
 }
 
 JsiValue *F4NElement::getAttribute(size_t size, JsiValue **params) {
-    if (size >= 2) {
-        string key = static_cast<JsiString *>(params[0])->value_;
-        JsiFunction *jsiFunction = static_cast<JsiFunction *> (params[1]);
-        getAttribute(key, jsiFunction);
-    }
+//    if (size >= 2) {
+//        string key = static_cast<JsiString *>(params[0])->value_;
+//        JsiFunction *jsiFunction = static_cast<JsiFunction *> (params[1]);
+//        getAttribute(key, jsiFunction);
+//    }
     return nullptr;
 }
 
@@ -186,10 +194,10 @@ void F4NElement::setStyles(F4NStyle *hmStyle) {
 }
 
 JsiValue *F4NElement::getReact(size_t size, JsiValue **params) {
-    if (size >= 1) {
-        JsiFunction *jsiFunction = static_cast<JsiFunction *> (params[0]);
-        getReact(jsiFunction);
-    }
+//    if (size >= 1) {
+//        JsiFunction *jsiFunction = static_cast<JsiFunction *> (params[0]);
+//        getReact(jsiFunction);
+//    }
     return nullptr;
 }
 
@@ -227,6 +235,9 @@ void F4NElement::removeEventListener(string event) {
 }
 
 JsiValue *F4NElement::addAnimation(size_t size, JsiValue **params) {
+    if (_alreadyRender_){
+        return nullptr;
+    }
     if (size >= 2) {
         string key = static_cast<JsiString *>(params[1])->value_;
         addAnimation(params[0], key);
@@ -239,6 +250,9 @@ void F4NElement::addAnimation(JsiValue *animation, string key) {
 }
 
 JsiValue *F4NElement::removeAnimationForKey(size_t size, JsiValue **params) {
+    if (_alreadyRender_){
+        return nullptr;
+    }
     if (size >= 1) {
         string key = static_cast<JsiString *>(params[0])->value_;
         removeAnimationForKey(key);
@@ -354,8 +368,10 @@ void F4NElement::release() {
 
     auto child = _children_->begin();
     while (child != _children_->end()) {
-        (*child)->release();
-        (*child)->unprotect();
+        if (*child != nullptr){
+            (*child)->release();
+            (*child)->unprotect();
+        }
         child++;
     }
     _children_->clear();
