@@ -11,6 +11,7 @@ import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.annotationx.JsProperty;
 import com.didi.hummer2.engine.JSCallback;
 import com.didi.hummer2.render.component.view.HMBase;
+import com.didi.hummer2.render.event.guesture.StatEvent;
 
 import java.util.List;
 
@@ -158,7 +159,11 @@ public class BasicAnimation {
         public void onAnimationStart(Animator animation) {
             super.onAnimationStart(animation);
             if (animStartCallback != null) {
-                animStartCallback.call();
+                StatEvent statEvent = new StatEvent();
+                statEvent.setType("__onAnimationStart__");
+                statEvent.setState(0);
+                statEvent.setTimestamp(System.currentTimeMillis());
+                animStartCallback.call(statEvent);
             }
         }
 
@@ -166,7 +171,11 @@ public class BasicAnimation {
         public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
             if (animEndCallback != null) {
-                animEndCallback.call();
+                StatEvent statEvent = new StatEvent();
+                statEvent.setType("__onAnimationEnd__");
+                statEvent.setState(0);
+                statEvent.setTimestamp(System.currentTimeMillis());
+                animEndCallback.call(statEvent);
             }
         }
     };
