@@ -2,7 +2,6 @@ package com.didi.hummer2.module.component;
 
 import com.didi.hummer2.adapter.http.HttpResponse;
 import com.didi.hummer2.bridge.JsiFunction;
-import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.render.event.base.Event;
@@ -34,35 +33,28 @@ public class EventListenerCallback extends NoOpJSCallback {
             String type = ((Event) params[0]).getType();
             result = jsiFunction.call(new JsiString(type), ((Event) params[0]).toJsiValue());
         } else {
-            JsiValue[] jsiValues = toJsiValues(params);
-            result = jsiFunction.call(jsiValues);
+            int size = params.length;
+            Object[] callParams = new Object[size];
+            for (int i = 0; i < size; i++) {
+                callParams[i] = toJsiValue(params[i]);
+            }
+            result = jsiFunction.call(callParams);
         }
+
         if (result != null) {
-            HMLog.w("ProxyJSCallback", "call() result= " + result);
+            HMLog.w("HummerNative", "EventListenerCallback::call() result= " + result);
         }
         return null;
     }
 
-    private JsiValue[] toJsiValues(Object[] objects) {
-        if (objects != null && objects.length > 0) {
-            int size = objects.length;
-            JsiValue[] data = new JsiValue[size];
-            for (int i = 0; i < size; i++) {
-                data[i] = toJsiValue(objects[i]);
-            }
-            return data;
-        }
-        return new JsiValue[0];
-    }
-
-    private JsiValue toJsiValue(Object value) {
+    private Object toJsiValue(Object value) {
         if (value instanceof Event) {
             return ((Event) value).toJsiValue();
         }
         if (value instanceof HttpResponse) {
             return ((HttpResponse<?>) value).toJsiValue();
         }
-        return new JsiObject();
+        return value;
     }
 
 }

@@ -22,7 +22,7 @@ public abstract class JsiValue implements IValue, Serializable {
     /**
      * c++ 映射数据对象指针
      */
-    protected long identify;
+    protected long identify = 0;
 
     public JsiValue() {
 
@@ -95,9 +95,9 @@ public abstract class JsiValue implements IValue, Serializable {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        if (identify != 0) {
+//        if (identify != 0) {
 //            unprotect_(identify);
-        }
+//        }
     }
 
     @NonNull
@@ -107,6 +107,13 @@ public abstract class JsiValue implements IValue, Serializable {
             return string_(identify);
         }
         return "";
+    }
+
+    protected String string(){
+        if (identify != 0) {
+            return string_(identify);
+        }
+        return null;
     }
 
     private native long init_value_();

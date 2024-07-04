@@ -13,5 +13,7 @@ import java.io.Serializable;
  * @Description 用一句话说明文件功能
  */
 
-public enum HMEngineType implements Serializable {
+public enum FalconEngineType implements Serializable {
+    FALCON_QJS,
+    FALCON_HERMES
 }

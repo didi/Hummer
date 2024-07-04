@@ -1,97 +1,118 @@
 package com.didi.hummer2.bridge;
 
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
 
 /**
- * didi Create on 2023/11/21 .
+ * didi Create on 2024/6/26 .
  * <p>
- * Copyright (c) 2023/11/21 by didiglobal.com.
+ * Copyright (c) 2024/6/26 by didiglobal.com.
  *
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
- * @Date 2023/11/21 6:11 下午
- * @Description 数组：类list
+ * @Date 2024/6/26 10:22 AM
+ * @Description 数组：类list (纯Java数据类型)
  */
 
 public class JsiArray extends JsiValue implements IArray {
 
+    private final ArrayList<JsiValue> valueList = new ArrayList<>();
 
     public JsiArray() {
-        identify = init_array_();
+
     }
 
-    protected JsiArray(long identify) {
-        this.identify = identify;
+    public JsiArray(JsiArrayNative jsiArray) {
+        parse(jsiArray);
+    }
+
+    private void parse(JsiArrayNative jsiArray) {
+        if (jsiArray != null) {
+            int size = jsiArray.length();
+            for (int i = 0; i < size; i++) {
+                valueList.add(JsiValueUtils.toJavaValue(jsiArray.getValue(i)));
+            }
+        }
     }
 
     @Override
     public int length() {
-        return length_(identify);
+        return valueList.size();
     }
 
     @Override
     public JsiValue getValue(int index) {
-        return get_value_(identify, index);
+        return valueList.get(index);
     }
 
     @Override
     public boolean setValue(int index, JsiValue value) {
-        set_value_(identify, index, value.identify);
-        value.unprotect();
+        valueList.add(index, value);
         return true;
     }
 
     @Override
     public void push(JsiValue value) {
-        push_(identify, value.identify);
-        value.unprotect();
+        valueList.add(value);
     }
 
     @Override
     public void pop() {
-        pop_(identify);
+        valueList.remove(valueList.size() - 1);
     }
 
     @Override
     public JsiValue removeAt(int index) {
-        return remove_value_at_(identify, index);
+        return valueList.remove(index);
     }
 
     @Override
     public JsiValue remove(JsiValue value) {
-        return remove_value_(identify, value.identify);
+        boolean success = valueList.remove(value);
+        if (success) {
+            return value;
+        }
+        return null;
     }
 
     @Override
     public void clear() {
-        clear_(identify);
+        valueList.clear();
     }
 
+
     @Override
-    public boolean isJava() {
-        return false;
+    public boolean isArray() {
+        return true;
     }
+
 
     @Override
     public int getType() {
         return ValueType.TYPE_ARRAY;
     }
 
-    private native long init_array_();
+    @Override
+    public boolean isJava() {
+        return true;
+    }
 
-    private native int length_(long identify);
-
-    private native JsiValue get_value_(long identify, int index);
-
-    private native boolean set_value_(long identify, int index, long value);
-
-    private native void push_(long identify, long value);
-
-    private native JsiValue pop_(long identify);
-
-    private native JsiValue remove_value_at_(long identify, int index);
-
-    private native JsiValue remove_value_(long identify, long value);
-
-    private native void clear_(long identify);
-
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        boolean first = true;
+        for (JsiValue value : valueList) {
+            if (!first) {
+                sb.append(",");
+            }
+            JsiValue jsiValue = value;
+            sb.append(jsiValue == null ? "null" : jsiValue.toString());
+            first = false;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 }

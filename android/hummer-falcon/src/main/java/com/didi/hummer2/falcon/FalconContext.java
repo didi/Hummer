@@ -76,7 +76,7 @@ public class FalconContext implements PageLifeCycle, Serializable {
      * JS引擎类型
      * 暂时无实际用处
      */
-    private HMEngineType engineType;
+    private FalconEngineType engineType;
     /**
      * 异常处理
      */
@@ -157,7 +157,7 @@ public class FalconContext implements PageLifeCycle, Serializable {
         JsiValueUtils.toJavaValue(value);
         Object result = invokerRegister.invoke(null, null, type, objId, methodType, componentName, methodName, argc, value);
         if (result != null) {
-            JsiValue jsiValue = F4NObjectUtil.toJsiValue(result);
+            JsiValue jsiValue = JsiValueUtils.toNativeJsiValue(result);
             return jsiValue;
         }
         return null;

@@ -1,46 +1,54 @@
 package com.didi.hummer2.bridge;
 
+import androidx.annotation.NonNull;
 
 import com.didi.hummer2.exception.HummerValueException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
- * didi Create on 2023/11/21 .
+ * didi Create on 2024/6/26 .
  * <p>
- * Copyright (c) 2023/11/21 by didiglobal.com.
+ * Copyright (c) 2024/6/26 by didiglobal.com.
  *
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
- * @Date 2023/11/21 6:11 下午
- * @Description 对象：类map
+ * @Date 2024/6/26 10:06 AM
+ * @Description 对象：类map (纯Java数据类型)
  */
 
 public class JsiObject extends JsiValue implements IObject {
 
+    private final Map<String, JsiValue> properties = new HashMap<>();
+
     public JsiObject() {
-        identify = init_object_();
-    }
 
-    protected JsiObject(long identify) {
-        this.identify = identify;
     }
-
 
     @Override
     public JsiValue get(String key) {
-        return get_value_(identify, key);
+        return properties.get(key);
     }
 
     @Override
     public int getValueType(String key) {
-        return get_value_type_(identify, key);
+        return properties.get(key).getType();
     }
 
     @Override
     public void put(String key, JsiValue value) {
-        set_value_(identify, key, value.identify);
-        value.unprotect();
+        properties.put(key, value);
+    }
+
+
+    @Override
+    public boolean remove(String key) {
+        properties.remove(key);
+        return true;
     }
 
     @Override
@@ -68,68 +76,73 @@ public class JsiObject extends JsiValue implements IObject {
         return getValueType(key) == ValueType.TYPE_ARRAY;
     }
 
+
     @Override
     public boolean getBoolean(String key) {
-        JsiValue hmValue = get_value_(identify, key);
-        if (!hmValue.isBoolean()) {
+        JsiValue jsiValue = properties.get(key);
+        if (!jsiValue.isBoolean()) {
             throw new HummerValueException("value is not boolean.");
         }
-        return ((JsiBoolean) hmValue).getValue();
+        return ((JsiBoolean) jsiValue).getValue();
     }
 
     @Override
     public int getInt(String key) {
-        JsiValue hmValue = get_value_(identify, key);
-        if (!hmValue.isNumber()) {
-            throw new HummerValueException("value is not number.");
+        JsiValue jsiValue = properties.get(key);
+        if (!jsiValue.isNumber()) {
+            throw new HummerValueException("value is not int.");
         }
-        return (int) ((JsiNumber) hmValue).getValue();
+        return (int) ((JsiNumber) jsiValue).getValue();
     }
 
     @Override
     public long getLong(String key) {
-        JsiValue hmValue = get_value_(identify, key);
-        if (!hmValue.isNumber()) {
-            throw new HummerValueException("value is not number.");
+        JsiValue jsiValue = properties.get(key);
+        if (!jsiValue.isNumber()) {
+            throw new HummerValueException("value is not long.");
         }
-        return (long) ((JsiNumber) hmValue).getValue();
+        return (long) ((JsiNumber) jsiValue).getValue();
     }
 
     @Override
     public float getFloat(String key) {
-        JsiValue hmValue = get_value_(identify, key);
-        if (!hmValue.isNumber()) {
-            throw new HummerValueException("value is not number.");
+        JsiValue jsiValue = properties.get(key);
+        if (!jsiValue.isNumber()) {
+            throw new HummerValueException("value is not float.");
         }
-        return (long) ((JsiNumber) hmValue).getValue();
+        return (float) ((JsiNumber) jsiValue).getValue();
     }
 
     @Override
     public double getDouble(String key) {
-        JsiValue hmValue = get_value_(identify, key);
-        if (!hmValue.isNumber()) {
-            throw new HummerValueException("value is not number.");
+        JsiValue jsiValue = properties.get(key);
+        if (!jsiValue.isNumber()) {
+            throw new HummerValueException("value is not double.");
         }
-        return (long) ((JsiNumber) hmValue).getValue();
+        return ((JsiNumber) jsiValue).getValue();
     }
 
     @Override
     public String getString(String key) {
-        JsiValue hmValue = get_value_(identify, key);
-        if (!hmValue.isString()) {
+        JsiValue jsiValue = properties.get(key);
+        if (!jsiValue.isString()) {
             throw new HummerValueException("value is not string.");
         }
-        return ((JsiString) hmValue).getValue();
+        return ((JsiString) jsiValue).getValue();
     }
 
     @Override
     public JsiArray allKeyArray() {
-        return keys_array_(identify);
+        JsiArray jsiArray = new JsiArray();
+        for (String key : properties.keySet()) {
+            jsiArray.push(new JsiString(key));
+        }
+        return jsiArray;
     }
 
     @Override
     public List<String> keys() {
-        return keys_(identify);
+        return new ArrayList<>(properties.keySet());
     }
 
     @Override
@@ -139,26 +152,26 @@ public class JsiObject extends JsiValue implements IObject {
 
     @Override
     public boolean isJava() {
-        return false;
+        return true;
     }
 
+
+    @NonNull
     @Override
-    public int getType() {
-        return ValueType.TYPE_OBJECT;
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("{");
+        Iterator<Map.Entry<String, JsiValue>> iterator = properties.entrySet().iterator();
+        boolean first = true;
+        while (iterator.hasNext()) {
+            Map.Entry<String, JsiValue> entry = iterator.next();
+            if (!first) {
+                sb.append(",");
+            }
+            sb.append("\"").append(entry.getKey()).append("\":").append(entry.getValue() == null ? "null" : entry.getValue().toString());
+            first = false;
+        }
+        sb.append("}");
+        return sb.toString();
     }
-
-    private native long init_object_();
-
-    private native JsiValue get_value_(long identify, String key);
-
-    private native int get_value_type_(long identify, String key);
-
-    private native boolean set_value_(long identify, String key, long value);
-
-    private native boolean remove_value_(long identify, String key);
-
-    private native List<String> keys_(long identify);
-
-    private native JsiArray keys_array_(long identify);
-
 }

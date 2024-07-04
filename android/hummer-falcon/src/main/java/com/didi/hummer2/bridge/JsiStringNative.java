@@ -14,25 +14,18 @@ import androidx.annotation.NonNull;
  * @Description 不可变对象，不能为null
  */
 
-public class JsiString extends JsiValue {
+public final class JsiStringNative extends JsiString {
 
-    private final String value;
 
-    public JsiString(String value) {
-        this.value = value == null ? "" : value;
+    JsiStringNative(String value) {
+        super(value);
+        this.identify = init_string_(value);
     }
 
-    public String valueString() {
-        return value;
-    }
+    private JsiStringNative(long identify, String value) {
+        super(value);
+        this.identify = identify;
 
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public boolean isString() {
-        return true;
     }
 
     @Override
@@ -40,15 +33,12 @@ public class JsiString extends JsiValue {
         return true;
     }
 
-    @Override
-    public int getType() {
-        return ValueType.TYPE_STRING;
-    }
-
     @NonNull
     @Override
     public String toString() {
-        return "\"" + value + "\"";
+        return super.toString();
     }
+
+    private native long init_string_(String value);
 
 }

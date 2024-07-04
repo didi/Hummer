@@ -21,6 +21,8 @@ public interface IObject {
 
     void put(String key, JsiValue value);
 
+    boolean remove(String key);
+
     boolean isBoolean(String key);
 
     boolean isNumber(String key);

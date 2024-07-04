@@ -413,7 +413,7 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMString
-    _HMStringCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiString"));
+    _HMStringCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiStringNative"));
     _HMStringInit = env->GetMethodID(_HMStringCls, "<init>", "(JLjava/lang/String;)V");
 
     state = env->RegisterNatives(_HMStringCls, _HMStringMethods, 1);
@@ -422,7 +422,7 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMObject
-    _HMObjectCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiObject"));
+    _HMObjectCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiObjectNative"));
     _HMObjectInit = env->GetMethodID(_HMObjectCls, "<init>", "(J)V");
 
     state = env->RegisterNatives(_HMObjectCls, _HMObjectMethods, 7);
@@ -431,7 +431,7 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMNumber
-    _HMNumberCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiNumber"));
+    _HMNumberCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiNumberNative"));
     _HMNumberInit = env->GetMethodID(_HMNumberCls, "<init>", "(JD)V");
 
     state = env->RegisterNatives(_HMNumberCls, _HMNumberMethods, 1);
@@ -440,7 +440,7 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMBoolean
-    _HMBooleanCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiBoolean"));
+    _HMBooleanCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiBooleanNative"));
     _HMBooleanInit = env->GetMethodID(_HMBooleanCls, "<init>", "(JZ)V");
 
     state = env->RegisterNatives(_HMBooleanCls, _HMBooleanMethods, 1);
@@ -449,7 +449,7 @@ void HummerBridge::init(JNIEnv *env) {
     }
 
     //HMArray
-    _HMArrayCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiArray"));
+    _HMArrayCls = (jclass) env->NewGlobalRef(env->FindClass("com/didi/hummer2/bridge/JsiArrayNative"));
     _HMArrayInit = env->GetMethodID(_HMArrayCls, "<init>", "(J)V");
 
     state = env->RegisterNatives(_HMArrayCls, _HMArrayMethods, 9);

@@ -26,13 +26,33 @@ public class JsiFunction extends JsiValue {
         this.functionId = functionId;
     }
 
-    public JsiValue call(JsiValue... args) {
+    /**
+     * 向引擎回调数据
+     * 将Java数据转换为与C++绑定{@link JsiObjectNative}等
+     *
+     * @param args 参数
+     * @return 一般返回null，非null只在同步接口支持
+     */
+    public JsiValue call(Object... args) {
+        int size = args.length;
+        JsiValue[] jsiValues = new JsiValue[size];
+        for (int i = 0; i < size; i++) {
+            jsiValues[i] = JsiValueUtils.toNativeJsiValue(args[i]);
+        }
+        return callNative(jsiValues);
+    }
+
+    private JsiValue callNative(JsiValue... args) {
         int size = args.length;
         long[] params = null;
         if (size > 0) {
             params = new long[size];
             for (int i = 0; i < size; i++) {
-                params[i] = args[i].getIdentify();
+                if (args[i] == null) {
+                    params[i] = 0;
+                } else {
+                    params[i] = args[i].getIdentify();
+                }
             }
         }
         return calls_(functionId, params);

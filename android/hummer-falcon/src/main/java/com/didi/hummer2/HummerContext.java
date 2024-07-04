@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 
 import com.didi.hummer2.bridge.JsiValue;
-import com.didi.hummer2.falcon.HMEngineType;
+import com.didi.hummer2.falcon.FalconEngineType;
 import com.didi.hummer2.falcon.JavaScriptCallback;
 import com.didi.hummer2.falcon.OnContextStateListener;
 import com.didi.hummer2.falcon.PageLifeCycle;
@@ -55,7 +55,7 @@ public abstract class HummerContext extends ContextWrapper implements PageLifeCy
     /**
      * JS引擎类型
      */
-    private HMEngineType engineType;
+    private FalconEngineType engineType;
 
     /**
      * 普通日志:引起本身日志输出
@@ -114,7 +114,7 @@ public abstract class HummerContext extends ContextWrapper implements PageLifeCy
     }
 
 
-    public void setEngineType(HMEngineType engineType) {
+    public void setEngineType(FalconEngineType engineType) {
         this.engineType = engineType;
     }
 

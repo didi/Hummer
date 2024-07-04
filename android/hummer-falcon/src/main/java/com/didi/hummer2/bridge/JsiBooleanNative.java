@@ -13,38 +13,29 @@ import androidx.annotation.NonNull;
  * @Description 不可变对象：boolean
  */
 
-public class JsiBoolean extends JsiValue {
+public final class JsiBooleanNative extends JsiBoolean {
 
-    private final boolean value;
-
-    public JsiBoolean(boolean value) {
-        this.value = value;
+    JsiBooleanNative(boolean value) {
+        super(value);
+        identify = init_boolean_(value);
     }
 
-    public boolean getValue() {
-        return value;
+    private JsiBooleanNative(long identify, boolean value) {
+        super(value);
+        this.identify = identify;
     }
-
-    @Override
-    public boolean isBoolean() {
-        return true;
-    }
-
 
     @Override
     public boolean isJava() {
         return true;
     }
 
-    @Override
-    public int getType() {
-        return ValueType.TYPE_BOOLEAN;
-    }
-
     @NonNull
     @Override
     public String toString() {
-        return "" + value;
+        return super.toString();
     }
+
+    private native long init_boolean_(boolean value);
 
 }

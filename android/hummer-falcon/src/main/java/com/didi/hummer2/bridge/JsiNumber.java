@@ -17,12 +17,6 @@ public class JsiNumber extends JsiValue implements INumber {
     private final double value;
 
     public JsiNumber(double value) {
-        this.identify = init_number_(value);
-        this.value = value;
-    }
-
-    private JsiNumber(long identify, double value) {
-        this.identify = identify;
         this.value = value;
     }
 
@@ -65,6 +59,10 @@ public class JsiNumber extends JsiValue implements INumber {
         return ValueType.TYPE_NUMBER;
     }
 
+    public boolean isInteger() {
+        return (long) value == value;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -74,12 +72,4 @@ public class JsiNumber extends JsiValue implements INumber {
         }
         return Double.toString(value);
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        //not do
-    }
-
-    public native long init_number_(double value);
-
 }
