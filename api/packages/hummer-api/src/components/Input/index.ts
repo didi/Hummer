@@ -120,6 +120,10 @@ export class Input extends HummerElement {
         this.setStyle(value, false);
     }
 
+    public get style() {
+        return this.getStyle() || {};
+    }
+
     /**
      * 默认输入内容
      */

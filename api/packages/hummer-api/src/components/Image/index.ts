@@ -64,6 +64,10 @@ export class Image extends HummerElement {
         this.setStyle(value, false);
     }
 
+    public get style() {
+        return this.getStyle() || {};
+    }
+
 
     /**
      * 普通图片

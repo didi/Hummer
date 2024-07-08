@@ -41,6 +41,12 @@ export class View extends LifeCycleElement {
         this.setStyle(value, false);
     }
 
+    //扩展样式属性
+    public get style() {
+        return this.getStyle() || {};
+    }
+
+
     /**
      * 扩展属性:子控件超出父容器部分是否显示
      * 默认:'visible'

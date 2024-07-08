@@ -47,7 +47,7 @@ export class Text extends HummerElement {
     public constructor(id: string = "", name: string = "", props: any = {}) {
         super("Text", name, { ...props, viewId: id });
         this._initAttributes({
-            textCopyEnable: 'false'
+            textCopyEnable: false
         });
     }
 
@@ -55,6 +55,11 @@ export class Text extends HummerElement {
     //扩展样式属性：有代理时通过代理处理
     public set style(value: TextStyle | Record<string, any>) {
         this.setStyle(value, false);
+    }
+
+    //扩展样式属性
+    public get style() {
+        return this.getStyle() || {};
     }
 
 

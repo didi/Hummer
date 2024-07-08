@@ -50,7 +50,7 @@ export class TextArea extends HummerElement {
         this._initAttributes({
             text: '',
             placeholder: '',
-            focused: 'false'
+            focused: false
         });
         this.addEventListener('input', (event: any) => {
             this._setAttribute("text", event.text, false);
@@ -62,7 +62,10 @@ export class TextArea extends HummerElement {
         this.setStyle(value, false);
     }
 
-
+    //扩展样式属性
+    public get style() {
+        return this.getStyle() || {};
+    }
 
     /**
      * 默认输入内容
