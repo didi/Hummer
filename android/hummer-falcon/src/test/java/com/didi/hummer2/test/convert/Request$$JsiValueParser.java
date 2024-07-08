@@ -2,7 +2,7 @@ package com.didi.hummer2.test.convert;
 
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiValue;
-import com.didi.hummer2.bridge.convert.JsiValueAdapter;
+import com.didi.hummer2.bridge.convert.BaseAdapter;
 import com.didi.hummer2.bridge.convert.ValueParser;
 import com.google.gson.reflect.TypeToken;
 
@@ -20,7 +20,7 @@ import java.util.Map;
  * @Description 用一句话说明文件功能
  */
 
-public final class Request$$JsiValueParser implements JsiValueAdapter<Request> {
+public final class Request$$JsiValueParser extends BaseAdapter<Request> {
 
     @Override
     public Class<Request> getJavaClass() {

@@ -24,6 +24,13 @@ public class Constant {
     public static final String NAME_OF_REGISTER = "HummerRegister";
     public static final String NAME_OF_INVOKER = "Invoker";
 
+    public static final String NAME_OF_ADAPTER_REGISTER = "JsiValueAdapterRegister";
+    public static final String NAME_OF_ADAPTER = "JsiValueAdapter";
+
     public static final String PREFIX_OF_REGISTER_FILE = NAME_OF_REGISTER + SEPARATOR;
+
     public static final String SUFFIX_OF_INVOKER_FILE = SEPARATOR + NAME_OF_INVOKER;
+
+    public static final String PREFIX_OF_ADAPTER_REGISTER_FILE = NAME_OF_ADAPTER_REGISTER + SEPARATOR;
+    public static final String SUFFIX_OF_ADAPTER_FILE = SEPARATOR + NAME_OF_ADAPTER;
 }

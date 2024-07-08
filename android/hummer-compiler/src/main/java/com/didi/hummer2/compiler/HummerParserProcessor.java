@@ -20,21 +20,22 @@ import javax.lang.model.element.TypeElement;
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
  * @Date 2024/7/4 8:16 PM
- * @Description Hummer组件导出注解处理器
+ * @Description {@Link JsiValue} 类型转换代码生成器
  */
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedAnnotationTypes("com.didi.hummer2.annotation.HMComponent")
-public class HummerExportProcessor extends AbstractProcessor {
+@SupportedAnnotationTypes("com.didi.hummer2.annotation.HMJsiValue")
+public class HummerParserProcessor extends AbstractProcessor {
     private ProcessingEnvironment processingEnv;
-    private HummerInvokerClassCreator hummerInvokerClassCreator;
-    private HummerRegisterClassCreator hummerRegisterClassCreator;
+
+    private JsiValueAdapterClassCreator jsiValueAdapterClassCreator;
+    private JsiValueRegisterClassCreator jsiValueAdapterRegisterClassCreator;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
         processingEnv = processingEnvironment;
-        hummerInvokerClassCreator = new HummerInvokerClassCreator(processingEnv);
-        hummerRegisterClassCreator = new HummerRegisterClassCreator(processingEnv);
+        jsiValueAdapterClassCreator = new JsiValueAdapterClassCreator(processingEnv);
+        jsiValueAdapterRegisterClassCreator = new JsiValueRegisterClassCreator(processingEnv);
     }
 
     @Override
@@ -45,12 +46,12 @@ public class HummerExportProcessor extends AbstractProcessor {
                 if (element.getKind() == ElementKind.CLASS) {
                     TypeElement classElement = (TypeElement) element;
 
-                    hummerInvokerClassCreator.processClass(classElement).create();
-                    hummerRegisterClassCreator.processClass(classElement);
+                    jsiValueAdapterClassCreator.processClass(classElement).create();
+                    jsiValueAdapterRegisterClassCreator.processClass(classElement);
                 }
             }
-            hummerRegisterClassCreator.create();
-            hummerRegisterClassCreator.createModuleConfigFile();
+            jsiValueAdapterRegisterClassCreator.create();
+            jsiValueAdapterRegisterClassCreator.createModuleConfigFile();
         }
         return false;
     }

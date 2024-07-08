@@ -12,4 +12,6 @@ package com.didi.hummer2.test.convert;
  */
 
 public class Data {
+
+    public String id;
 }

@@ -32,10 +32,6 @@ public class TypeTest {
         }.getType();
 
 
-//        Type type = new TypeToken<Request.ViewMoX>() {
-//        }.getType();
-
-
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             System.out.println("XXX::" + type.getTypeName());
@@ -50,7 +46,6 @@ public class TypeTest {
         }
 
         Class classZ = Request.class;
-
 
         Field[] fields = classZ.getDeclaredFields();
         Type tt = fields[0].getType();

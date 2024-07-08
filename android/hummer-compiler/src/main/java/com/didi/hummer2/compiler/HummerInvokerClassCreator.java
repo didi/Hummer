@@ -29,9 +29,17 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
 /**
- * Created by XiaoFeng on 2019-09-18.
+ * didi Create on 2024/7/4 .
+ * <p>
+ * Copyright (c) 2024/7/4 by didiglobal.com.
+ *
+ * @author <a href="realonlyone@126.com">zhangjun</a>
+ * @version 1.0
+ * @Date 2024/7/4 8:16 PM
+ * @Description Hummer组件：*$$Invoker 代码生成
  */
 public class HummerInvokerClassCreator {
+
     private Elements elementUtils;
     private Types typeUtils;
     private Filer filer;

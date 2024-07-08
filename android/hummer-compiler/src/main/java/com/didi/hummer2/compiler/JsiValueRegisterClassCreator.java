@@ -1,6 +1,5 @@
 package com.didi.hummer2.compiler;
 
-import com.didi.hummer2.annotation.HMComponent;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -32,21 +31,23 @@ import javax.tools.StandardLocation;
  * @author <a href="realonlyone@126.com">zhangjun</a>
  * @version 1.0
  * @Date 2024/7/4 8:16 PM
- * @Description Hummer导出组件自动注册代码生成
+ * @Description JsiValue模型转换Adapter注册代码生成
  */
-public class HummerRegisterClassCreator {
+public class JsiValueRegisterClassCreator {
     private Elements elementUtils;
     private Types typeUtils;
     private Filer filer;
     private Logger logger;
     private String moduleName;
-    private List<ClassName> invokerClassMap = new ArrayList<>();
+    private StringBuilder jsCode = new StringBuilder();
+    private List<ClassName> adapterClassMap = new ArrayList<>();
 
-    //HummerRegister
-    private ClassName superInterface = ClassName.get("com.didi.hummer2.register", "HummerRegister");
-    private ClassName invokerRegister = ClassName.get("com.didi.hummer2.register", "InvokerRegister");
+    //JsiValueAdapterRegister
+    private ClassName superInterface = ClassName.get("com.didi.hummer2.bridge.convert", "JsiValueAdapterRegister");
+    private ClassName jsiValueRegister = ClassName.get("com.didi.hummer2.bridge.convert", "JsiValueRegister");
 
-    public HummerRegisterClassCreator(ProcessingEnvironment processingEnv) {
+
+    public JsiValueRegisterClassCreator(ProcessingEnvironment processingEnv) {
         elementUtils = processingEnv.getElementUtils();
         typeUtils = processingEnv.getTypeUtils();
         filer = processingEnv.getFiler();
@@ -68,13 +69,14 @@ public class HummerRegisterClassCreator {
         }
     }
 
-    public HummerRegisterClassCreator processClass(TypeElement classElement) {
-        logger.info("[JS] Class: " + classElement.getQualifiedName() + " extends " + classElement.getSuperclass());
+    public JsiValueRegisterClassCreator processClass(TypeElement classElement) {
+        logger.info("[adapter] Class: " + classElement.getQualifiedName() + " extends " + classElement.getSuperclass());
         String packageName = elementUtils.getPackageOf(classElement).getQualifiedName().toString();
-        String annoClassName = classElement.getAnnotation(HMComponent.class).value();
-        invokerClassMap.add(ClassName.get(packageName, annoClassName + "$$Invoker"));
+        String adapterClassName = classElement.getSimpleName().toString();
+        adapterClassMap.add(ClassName.get(packageName, adapterClassName + Constant.SUFFIX_OF_ADAPTER_FILE));
         return this;
     }
+
 
     public void create() {
         JavaFile javaFile = JavaFile.builder(Constant.PACKAGE_NAME, generateJavaClass()).build();
@@ -85,9 +87,12 @@ public class HummerRegisterClassCreator {
         }
     }
 
+    /**
+     * 构建META-INF文件用于自动加载接口实现
+     */
     public void createModuleConfigFile() {
-        String value = Constant.PACKAGE_NAME + "." + Constant.PREFIX_OF_REGISTER_FILE + moduleName;
-        String resourceFile = "META-INF/services/com.didi.hummer2.register.HummerRegister";
+        String value = Constant.PACKAGE_NAME + "." + Constant.PREFIX_OF_ADAPTER_REGISTER_FILE + moduleName;
+        String resourceFile = "META-INF/services/com.didi.hummer2.bridge.convert.JsiValueAdapterRegister";
         SortedSet<String> newServices = new TreeSet<>();
         newServices.add(value);
         try {
@@ -116,30 +121,30 @@ public class HummerRegisterClassCreator {
     }
 
     private TypeSpec generateJavaClass() {
-        return TypeSpec.classBuilder(Constant.PREFIX_OF_REGISTER_FILE + moduleName)
+        return TypeSpec.classBuilder(Constant.PREFIX_OF_ADAPTER_REGISTER_FILE + moduleName)
                 // public 修饰类
                 .addModifiers(Modifier.PUBLIC)
                 //指定实现接口
                 .addSuperinterface(superInterface)
                 // 添加类的方法
-                .addMethod(generateInitMethod())
-                .addMethod(generateRegisterMethod())
+                .addMethod(generateStaticRegisterMethod()).addMethod(generateRegisterMethod())
                 // 构建Java类
                 .build();
     }
 
-    private MethodSpec generateInitMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("register").addModifiers(Modifier.PUBLIC, Modifier.STATIC).addParameter(TypeUtil.hummerContext, "hummerContext");
-        for (ClassName className : invokerClassMap) {
-            method.addStatement("hummerContext.registerInvoker(new $T())", className);
+
+    private MethodSpec generateStaticRegisterMethod() {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("registerX").addModifiers(Modifier.PUBLIC, Modifier.STATIC).addParameter(jsiValueRegister, "invokerRegister");
+        for (ClassName className : adapterClassMap) {
+            method.addStatement("invokerRegister.register(new $T())", className);
         }
         return method.build();
     }
 
     private MethodSpec generateRegisterMethod() {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("register").addModifiers(Modifier.PUBLIC).addAnnotation(Override.class).addParameter(invokerRegister, "invokerRegister");
-        for (ClassName className : invokerClassMap) {
-            method.addStatement("invokerRegister.registerInvoker(new $T())", className);
+        MethodSpec.Builder method = MethodSpec.methodBuilder("register").addModifiers(Modifier.PUBLIC).addAnnotation(Override.class).addParameter(jsiValueRegister, "invokerRegister");
+        for (ClassName className : adapterClassMap) {
+            method.addStatement("invokerRegister.register(new $T())", className);
         }
         return method.build();
     }

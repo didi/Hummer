@@ -26,8 +26,18 @@ public class TypeUtil {
     public static final ClassName baseInvoker = ClassName.get("com.didi.hummer2.invoke", "BaseInvoker");
     public static final ClassName typeToken = ClassName.get("com.google.gson.reflect", "TypeToken");
 
+    public static final ClassName JsiValue = ClassName.get("com.didi.hummer2.bridge", "JsiValue");
+    public static final ClassName JsiFunction = ClassName.get("com.didi.hummer2.bridge", "JsiFunction");
+    public static final ClassName EventTarget = ClassName.get("com.didi.hummer2.bridge", "EventTarget");
+
     public static final ClassName hummerObjectUtil = ClassName.get("com.didi.hummer2.utils", "HummerObjectUtil");
 
+    public static final ClassName baseAdapter = ClassName.get("com.didi.hummer2.bridge.convert", "BaseAdapter");
+    public static final ClassName ValueParser = ClassName.get("com.didi.hummer2.bridge.convert", "ValueParser");
+    public static final ClassName Type = ClassName.get("java.lang.reflect", "Type");
+
+
+    public static final ClassName JsiObject = ClassName.get("com.didi.hummer2.bridge","JsiObject");
 
     public static final String JsiEventTargetClass = "com.didi.hummer2.bridge.EventTarget";
     public static final String JsiValueClass = "com.didi.hummer2.bridge.JsiValue";
@@ -38,14 +48,14 @@ public class TypeUtil {
     public static final String JsiArrayClass = "com.didi.hummer2.bridge.JsiArray";
     public static final String JsiFunctionClass = "com.didi.hummer2.bridge.JsiFunction";
 
-    public static final ClassName JsiValue = ClassName.get("com.didi.hummer2.bridge", "JsiValue");
-    public static final ClassName JsiFunction = ClassName.get("com.didi.hummer2.bridge", "JsiFunction");
-    public static final ClassName EventTarget = ClassName.get("com.didi.hummer2.bridge", "EventTarget");
 
     public static final String HummerObjectClass = "com.didi.hummer2.register.HummerObject";
 
     public static final String ElementClass = "com.didi.hummer2.render.Element";
     public static final String ComponentClass = "com.didi.hummer2.module.Component";
+
+    public static final String ObjectClass = "java.lang.Object";
+
 
     public static boolean isHummerObject(String type) {
         return type != null && (type.equals(HummerObjectClass));

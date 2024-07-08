@@ -1,1 +1,2 @@
 com.didi.hummer2.compiler.HummerExportProcessor
+com.didi.hummer2.compiler.HummerParserProcessor

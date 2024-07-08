@@ -12,9 +12,6 @@ dependencies {
     implementation 'com.squareup:javapoet:1.11.1'
     api project(':hummer-annotation')
 
-    if (project.publishArchivesType == '3') {
-        implementation 'io.github.didi.hummer:hummer-annotation:0.2.3'
-    } else {
-        implementation 'com.didi.hummer:hummer-annotation:0.2.2'
-    }
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'com.google.testing.compile:compile-testing:0.19'
 }

@@ -2,7 +2,7 @@ package com.didi.hummer2.bridge.convert.adapter;
 
 import com.didi.hummer2.bridge.JsiArray;
 import com.didi.hummer2.bridge.JsiValue;
-import com.didi.hummer2.bridge.convert.JsiValueAdapter;
+import com.didi.hummer2.bridge.convert.BaseAdapter;
 import com.didi.hummer2.bridge.convert.ValueParser;
 
 import java.lang.reflect.Type;
@@ -20,12 +20,8 @@ import java.util.List;
  * @Description 用一句话说明文件功能
  */
 
-public class List$$JsiValueAdapter implements JsiValueAdapter<List> {
+public class List$$JsiValueAdapter extends BaseAdapter<List> {
 
-    @Override
-    public Class<List> getJavaClass() {
-        return List.class;
-    }
 
     @Override
     public List toJavaValue(ValueParser parser, JsiValue jsiValue, Type type) {

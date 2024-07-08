@@ -28,8 +28,29 @@ public class HummerJsiValueRegister implements JsiValueRegister {
     @Override
     public void register(JsiValueAdapter jsiValueAdapter) {
         if (jsiValueAdapter != null) {
-            valueParserMap.put(jsiValueAdapter.getJavaClass(), jsiValueAdapter);
+            Class classV = getValueClass(jsiValueAdapter);
+            if (classV != null) {
+                valueParserMap.put(classV, jsiValueAdapter);
+            }
         }
+    }
+
+
+    private Class getValueClass(JsiValueAdapter jsiValueAdapter) {
+        Class classT = jsiValueAdapter.getJavaClass();
+        if (classT != null) {
+            return classT;
+        }
+
+        Type superclass = jsiValueAdapter.getClass().getGenericSuperclass();
+        if (superclass instanceof ParameterizedType) {
+            Type valueType = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+            if (valueType instanceof ParameterizedType) {
+                return (Class) ((ParameterizedType) valueType).getRawType();
+            }
+            return (Class) valueType;
+        }
+        return null;
     }
 
     public Object toJavaValue(ValueParser valueParser, JsiValue jsiValue, Type type) {

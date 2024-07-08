@@ -1,5 +1,10 @@
 package com.didi.hummer2.bridge.convert;
 
+import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+
+import android.text.TextUtils;
+
 import com.didi.hummer2.bridge.JsiArray;
 import com.didi.hummer2.bridge.JsiBoolean;
 import com.didi.hummer2.bridge.JsiNumber;
@@ -7,10 +12,15 @@ import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.bridge.JsiValueBuilder;
+import com.google.gson.internal.$Gson$Types;
 
+import java.io.Serializable;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -286,15 +296,86 @@ public abstract class ValueParser {
     }
 
 
+    /**
+     * @param type
+     * @param classT
+     * @param args
+     * @return
+     */
+    public Type getParameterizedType(Type type, Class classT, Object... args) {
+
+        if (type != null && classT != null) {
+            int size = args.length;
+            Type[] types = new Type[size];
+            for (int i = 0; i < size; i++) {
+                Object typeT = args[i];
+                if (typeT instanceof Type) {
+                    types[i] = (Type) typeT;
+                } else {
+                    types[i] = getArgumentType(type, (int) typeT);
+                }
+            }
+            return Types.buildParameterizedType(type, classT, types);
+        }
+        return null;
+    }
+
+
+
+    /**
+     * 根据泛型index获取泛型变量的实际类型
+     *
+     * @param type 类/类型   List.class Map.class
+     * @param index 泛型index
+     * @return 类/类型
+     */
     public Type getArgumentType(Type type, int index) {
         if (type instanceof ParameterizedType) {
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
-            if (types.length > index) {
+            if (index >= 0 && index < types.length) {
                 return types[index];
             }
         }
         return null;
     }
+
+    /**
+     * 根据泛型名称获取泛型变量的实际类型
+     *
+     * @param type 类/类型  List.class Map.class
+     * @param name 泛型名称 T,DATA
+     * @return 类/类型
+     */
+    public Type getArgumentType(Type type, String name) {
+        if (type instanceof ParameterizedType) {
+            Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+            int index = getArgumentTypeIndexOf(type, name);
+            if (index >= 0 && index < types.length) {
+                return types[index];
+            }
+        }
+        return null;
+    }
+
+    public int getArgumentTypeIndexOf(Type type, String name) {
+        if (!TextUtils.isEmpty(name)) {
+            if (type instanceof ParameterizedType) {
+                Class classT = (Class) ((ParameterizedType) type).getRawType();
+                TypeVariable[] typeVariables = classT.getTypeParameters();
+                int size = typeVariables.length;
+                for (int i = 0; i < size; i++) {
+                    TypeVariable typeVar = typeVariables[i];
+                    if (TextUtils.equals(typeVar.getName(), name)) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+
+
 
 
 }

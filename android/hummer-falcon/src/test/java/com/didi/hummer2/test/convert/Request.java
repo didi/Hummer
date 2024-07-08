@@ -13,13 +13,15 @@ import java.util.Map;
  * @Description 用一句话说明文件功能
  */
 
-public class Request<T,W> extends Data {
+public class Request<T, W> extends Data {
 
     public String url;
     public Map<String, String> headers;
 
     public T data;
     public W web;
+
+    public Map<T, W> ow;
 
 
     public class ViewMoX {
