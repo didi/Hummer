@@ -167,7 +167,6 @@ export class Scroller extends LifeCycleElement {
 
 
 
-
     /**
      * 滑动到边缘时是否有回弹效果
      */
@@ -188,6 +187,29 @@ export class Scroller extends LifeCycleElement {
 
     set showScrollBar(value: boolean) {
         this._setAttribute("showScrollBar", value);
+    }
+
+
+    /**
+     * enableLoadMore
+     */
+    get enableLoadMore() {
+        return this._getAttribute("enableLoadMore")
+    }
+
+    set enableLoadMore(value: boolean) {
+        this._setAttribute("enableLoadMore", value);
+    }
+
+    /**
+     * enableRefresh
+     */
+    get enableRefresh() {
+        return this._getAttribute("enableRefresh")
+    }
+
+    set enableRefresh(value: boolean) {
+        this._setAttribute("enableRefresh", value);
     }
 
 
