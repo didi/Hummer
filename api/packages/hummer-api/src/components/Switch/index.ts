@@ -65,10 +65,10 @@ export class Switch extends HummerElement {
         this.setStyle(value, false);
     }
 
-       //扩展样式属性
-    public get style() {
-        return this.getStyle() || {};
-    }
+    // FIXME: 鸿蒙下样式问题
+    // public get style() {
+    //     return this.getStyle() || {};
+    // }
 
     /**
      * 扩展属性

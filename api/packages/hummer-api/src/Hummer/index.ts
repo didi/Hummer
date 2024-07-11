@@ -19,6 +19,8 @@ import { NotifyCenter } from "../module/NotifyCenter"
 import { Loading } from "src/components/Loading"
 import { Switch } from "src/components/Switch"
 import { HorizontalScroller } from "src/components/HorizontalScroller"
+import { Refresh } from "src/components/Scroller/RefreshView"
+import { LoadMore } from "src/components/Scroller/LoadMoreView"
 
 
 export class Hummer {
@@ -69,6 +71,10 @@ export class Hummer {
                 return new ViewPager();
             case "scroller":
                 return new Scroller();
+            case "refresh":
+                return new Refresh();
+            case "loadmore":
+                return new LoadMore();
             case "horizontalscroller":
                 return new HorizontalScroller();
             case "switch":

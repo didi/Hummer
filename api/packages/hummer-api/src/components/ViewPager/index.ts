@@ -70,9 +70,10 @@ export class ViewPager extends HummerElement {
         this.setStyle(value, false);
     }
 
-    public get style() {
-        return this.getStyle() || {};
-    }
+    // FIXME: 鸿蒙下样式问题
+    // public get style() {
+    //     return this.getStyle() || {};
+    // }
 
     /**
      * 默认输入内容
@@ -117,9 +118,9 @@ export class ViewPager extends HummerElement {
      */
     public onItemView(callback: (position: number, view: Element) => Element) {
         this.call("onItemView", (position: number, view: any) => {
-            let thisElement = HMObject.getShadowObject(view);;
+            let thisElement = HMObject.getShadowObject(view);
             let element: Element = callback(position, thisElement);
-            return element.getOriginObject();
+            return element && element.getOriginObject() || null;
         });
     }
 }

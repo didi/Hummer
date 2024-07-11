@@ -2,6 +2,8 @@ import { LifeCycleElement } from "../../LifeCycleElement"
 import { View } from "../View"
 import { HMEvent, ViewEvent } from "../../HummerElement"
 import { HMObject } from "src/HMObject"
+import { Refresh } from "./RefreshView"
+import { LoadMore } from "./LoadMoreView"
 
 
 // state: 0 // normal（初始禁止状态）
@@ -84,12 +86,12 @@ export class Scroller extends LifeCycleElement {
         switch (type) {
             case "onRefresh":
                 if (this._onRefresh) {
-                    this._onRefresh(event?.state);
+                    this._onRefresh(event?.state, this);
                 }
                 break
             case "onLoadMore":
                 if (this._onLoadMore) {
-                    this._onLoadMore(event?.state);
+                    this._onLoadMore(event?.state, this);
                 }
                 break
             case "onScrollTop":
@@ -287,7 +289,58 @@ export class Scroller extends LifeCycleElement {
      * @param useCapture 
      */
     public override addEventListener(eventName: string, eventListener: (event: ScrollEvent | ViewEvent | any) => void | Function | EventListener, useCapture?: boolean | undefined): void {
-        super.addEventListener(eventName, eventListener, useCapture);
+        switch (eventName) {
+            case "refresh":
+                this.onRefresh = eventListener
+                break;
+            case "loadMore":
+                this.onLoadMore = eventListener
+                break;
+            case "scrollToTop":
+                this.setOnScrollToTopListener(eventListener as () => void)
+                break;
+            case "scrollToBottom":
+                this.setOnScrollToBottomListener(eventListener as () => void)
+                break;  
+            default:
+                super.addEventListener(eventName, eventListener, useCapture);
+                break;
+        }
     }
 
+    insertBefore(child: any, anchor: any) {
+        if(!child||!anchor){
+            return
+        }
+        // child is refresh
+        if(child instanceof Refresh) {
+            this.refreshView = child
+        } else if (child instanceof LoadMore) {
+            this.loadMoreView = child
+        } else {
+            // other node
+            super.insertBefore(child, anchor)
+        }
+
+    }
+    
+    
+    /**
+     * 
+     * @param child 在末尾添加节点
+     */
+    appendChild(child: any) {
+        if(!child){
+            return
+        }
+        // child is refresh
+        if(child instanceof Refresh) {
+            this.refreshView = child
+        } else if (child instanceof LoadMore) {
+            this.loadMoreView = child
+        } else {
+            // other node
+            super.appendChild(child)
+        }
+    }
 }
