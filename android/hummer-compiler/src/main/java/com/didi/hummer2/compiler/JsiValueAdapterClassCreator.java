@@ -135,6 +135,9 @@ public class JsiValueAdapterClassCreator {
         List<? extends Element> allMembers = getClassAllElements(classElement);
         for (Element member : allMembers) {
             if (member.getKind() == ElementKind.FIELD) {
+                if (isStatic(member)){
+                    continue;
+                }
                 HMJsiName annotation = member.getAnnotation(HMJsiName.class);
                 String fieldName = member.getSimpleName().toString();
                 String annotationName = "";
@@ -317,6 +320,9 @@ public class JsiValueAdapterClassCreator {
         List<? extends Element> allMembers = getClassAllElements(classElement);
         for (Element member : allMembers) {
             if (member.getKind() == ElementKind.FIELD) {
+                if (isStatic(member)){
+                    continue;
+                }
                 HMJsiName annotation = member.getAnnotation(HMJsiName.class);
                 String fieldName = member.getSimpleName().toString();
                 String annotationName = "";
@@ -347,6 +353,10 @@ public class JsiValueAdapterClassCreator {
         return myMethod.build();
     }
 
+
+    private boolean isStatic(Element element) {
+        return element.getModifiers().contains(Modifier.STATIC);
+    }
     /**
      * 首字母大写
      *

@@ -133,7 +133,7 @@ JsiFunction::JsiFunction(NAPIValue *napiValue, NAPIEnv *env) {
 }
 
 
-JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue) {
+JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue, JsiErrorCatch *jsiErrorCatch) {
     debug("JsiFunction::call() params=%s", JsiUtils::buildArrayString(argc, jsiValue).c_str());
 
     NAPIHandleScope handleScope;
@@ -153,7 +153,11 @@ JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue) {
     if (status != NAPIExceptionOK) {
         warn("JsiFunction::call() params=%s  error status=%u", JsiUtils::buildArrayString(argc, jsiValue).c_str(), status);
         JsiError *jsiError = JsiUtils::getAndClearLastError(&env_);
+        if (jsiErrorCatch != nullptr) {
+            jsiErrorCatch->onCatchJsiError(status, jsiError);
+        }
         error("JsiFunction::call() error %s", jsiError == nullptr ? "" : jsiError->toString().c_str());
+        delete jsiError;
         return nullptr;
     }
 

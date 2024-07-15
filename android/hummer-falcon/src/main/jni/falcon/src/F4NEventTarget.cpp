@@ -10,7 +10,7 @@ F4NEventTarget::F4NEventTarget() {
 
 }
 
-F4NEventTarget::F4NEventTarget(JsiFunction *jsiFunction) {
+F4NEventTarget::F4NEventTarget(F4NFunction *jsiFunction) {
     this->jsiFunction = jsiFunction;
 }
 

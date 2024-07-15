@@ -1,5 +1,6 @@
 package com.didi.hummer2.render.event;
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.render.event.base.Event;
 
 /**
@@ -13,6 +14,7 @@ import com.didi.hummer2.render.event.base.Event;
  * @Description 页面状态事件
  */
 
+@HMJsiValue
 public class PageStateEvent extends Event {
 
     public static final String PAGE_ON_CREATE = "__onCreate__";

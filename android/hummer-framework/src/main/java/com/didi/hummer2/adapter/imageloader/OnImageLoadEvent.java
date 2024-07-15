@@ -1,5 +1,6 @@
 package com.didi.hummer2.adapter.imageloader;
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.render.event.base.Event;
@@ -22,7 +23,7 @@ import com.didi.hummer2.render.event.base.Event;
 // 4、APP存储文件，绝对路径（访问截图等）
 // 5、http网络资源（线上资源）
 // 6、base64（直接数据）
-
+@HMJsiValue
 public class OnImageLoadEvent extends Event {
 
 
@@ -35,6 +36,9 @@ public class OnImageLoadEvent extends Event {
 
     private int srcType;
 
+    public OnImageLoadEvent() {
+    }
+
     public OnImageLoadEvent(int srcType, int state) {
         this.type = "__onImageLoad__";
         this.srcType = srcType;
@@ -44,6 +48,10 @@ public class OnImageLoadEvent extends Event {
 
     public void setSrcType(int srcType) {
         this.srcType = srcType;
+    }
+
+    public int getSrcType() {
+        return srcType;
     }
 
     @Override

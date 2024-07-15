@@ -55,7 +55,7 @@ JsiObjectRef *JsiContext::evaluateJavaScript(string script, string scriptId, Jsi
             jsiErrorCatch->onCatchJsiError(status,jsError);
         }
         error("JsiContext::evaluateJavaScript() error! status=&d,scriptId=%s,script=\n%s", scriptId.c_str(), script.c_str());
-        error("JsiContext::evaluateJavaScript() error! jsError=%s", jsError->toCString());
+        error("JsiContext::evaluateJavaScript() error! jsError=%s", jsError->toString().c_str());
         delete jsError;
     }
 

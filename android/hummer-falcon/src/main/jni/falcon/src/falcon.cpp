@@ -50,13 +50,16 @@ JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
 
     JsiValue *result = nullptr;
     if (!F4NUtil::isMainThread()) {
-        result = jsiFunction->call(argc, argv);
+        F4NJsiErrorCatch *errorCatch = new F4NJsiErrorCatch(context);
+        result = jsiFunction->call(argc, argv,errorCatch);
         JsiUtils::releaseJsiValue(argc, argv);
+        delete errorCatch;
     } else {
         JsiValue **params = new JsiValue *[argc];
         JsiUtils::copyJsiValue(argv, params, argc);
-        context->submitJsTask([&, argc, params]() {
-            JsiValue *result = jsiFunction->call(argc, params);
+        F4NJsiErrorCatch *errorCatch = new F4NJsiErrorCatch(context);
+        context->submitJsTask([&, argc, params,errorCatch]() {
+            JsiValue *result = jsiFunction->call(argc, params,errorCatch);
             JsiUtils::releaseJsiValue(argc, params);
             delete params;
             if (result != nullptr) {
@@ -65,6 +68,7 @@ JsiValue *F4NFunction::call(size_t argc, JsiValue **argv) {
             if (autoRelease) {
                 unprotect();
             }
+            delete errorCatch;
         });
     }
     if (autoRelease) {
@@ -87,7 +91,7 @@ F4NFunction::~F4NFunction() {
 //********************************************************
 
 
-JsiFunctionBinder::JsiFunctionBinder(F4NContext *context, JsiFunction *function) {
+JsiFunctionBinder::JsiFunctionBinder(F4NContext *context, F4NFunction *function) {
     this->context = context;
     this->function = function;
 }
@@ -113,11 +117,11 @@ JsiValue *F4NContextUtils::call(long id, long contextId, size_t argc, JsiValue *
     return nullptr;
 }
 
-void F4NContextUtils::addFunction(F4NContext *context, JsiFunction *function) {
+void F4NContextUtils::addFunction(F4NContext *context, F4NFunction *function) {
     functionBinders.insert(make_pair(function->id, new JsiFunctionBinder(context, function)));
 }
 
-void F4NContextUtils::removeFunction(F4NContext *context, JsiFunction *function) {
+void F4NContextUtils::removeFunction(F4NContext *context, F4NFunction *function) {
     auto it = functionBinders.find(function->id);
     if (it != functionBinders.end()) {
         delete it->second;

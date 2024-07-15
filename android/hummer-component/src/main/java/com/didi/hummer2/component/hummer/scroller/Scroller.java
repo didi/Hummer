@@ -451,12 +451,21 @@ public class Scroller extends HMBase<SmartRefreshLayout> implements HMBase.Posit
         scrollView.setVerticalScrollBarEnabled(isShow);
     }
 
+
+    public void setEnableRefresh(boolean enableRefresh) {
+        refreshLayout.setEnableRefresh(enableRefresh);
+    }
+
     @JsProperty("refreshView")
     private HMBase refreshView;
 
     public void setRefreshView(HMBase view) {
         refreshLayout.setEnableRefresh(true);
         hummerHeader.addHeaderView(view);
+    }
+
+    public void setEnableLoadMore(boolean enableLoadMore) {
+        refreshLayout.setEnableLoadMore(enableLoadMore);
     }
 
     @JsProperty("loadMoreView")

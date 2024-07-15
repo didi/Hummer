@@ -81,6 +81,7 @@ public class ScrollerElement extends Element<Scroller> implements HummerGoBack {
 
     public void setEnableRefresh(boolean enableRefresh) {
         this.enableRefresh = enableRefresh;
+        getView().setEnableRefresh(enableRefresh);
     }
 
     @HMAttribute("refreshView")
@@ -96,6 +97,7 @@ public class ScrollerElement extends Element<Scroller> implements HummerGoBack {
 
     public void setEnableLoadMore(boolean enableLoadMore) {
         this.enableLoadMore = enableLoadMore;
+        getView().setEnableLoadMore(enableLoadMore);
     }
 
 

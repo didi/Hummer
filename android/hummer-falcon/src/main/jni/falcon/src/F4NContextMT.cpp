@@ -89,6 +89,7 @@ JsiValue *F4NContextMT::evaluateJavaScript(string script, string scriptId, F4NJS
                 callback->onJavaScriptResult(status, message, jsiValue);
                 delete callback;
             }
+            delete errorCatch;
             info("F4NContextMT::evaluateJavaScript() scriptId=%s, result=%s", scriptId.c_str(), jsiValue == nullptr ? "" : jsiValue->toString().c_str());
         };
         jsThreadHandler_->sendMessage(message);
@@ -119,6 +120,7 @@ JsiValue *F4NContextMT::evaluateBytecode(const uint8_t *byteArray, size_t length
                 callback->onJavaScriptResult(status, message, jsiValue);
                 delete callback;
             }
+            delete errorCatch;
             info("F4NContextMT::evaluateBytecode() scriptId=%s, result=%s", scriptId.c_str(), jsiValue == nullptr ? "" : jsiValue->toString().c_str());
         };
         jsThreadHandler_->sendMessage(message);
