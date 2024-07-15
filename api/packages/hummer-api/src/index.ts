@@ -36,6 +36,10 @@ export * from "./components/Button"
 
 export * from "./components/Scroller"
 
+export * from "./components/Scroller/LoadMoreView"
+
+export * from "./components/Scroller/RefreshView"
+
 export * from "./components/HorizontalScroller"
 
 export * from "./components/Canvas"
@@ -66,6 +70,7 @@ export * from "./module/Request"
 
 export * from "./module/WebSocket"
 
+export * from "./components/ListJS"
 
 
 __GLOBAL__.Hummer = {

@@ -64,9 +64,10 @@ export class Image extends HummerElement {
         this.setStyle(value, false);
     }
 
-    public get style() {
-        return this.getStyle() || {};
-    }
+    // FIXME: 鸿蒙下样式问题
+    // public get style() {
+    //     return this.getStyle() || {};
+    // }
 
 
     /**
