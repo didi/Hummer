@@ -69,11 +69,13 @@ void F4NLoopHandler::addLoopEndListener(const function<void(F4NHandler *, long i
 
 void F4NLoopHandler::removeLoopEndListener(const function<void(F4NHandler *, long id)> function) {
     pthread_mutex_lock(&loop_mutex);
-    loopEndListeners.erase(std::remove_if(loopEndListeners.begin(), loopEndListeners.end(), [function](const std::function<void(F4NHandler *, long id)> &fun) {
-        return function.target < void(F4NHandler * , long
-        id)>() == fun.target < void(F4NHandler * , long
-        id)>();
-    }));
+    loopEndListeners.erase(
+            std::remove_if(loopEndListeners.begin(), loopEndListeners.end(), [function](const std::function<void(F4NHandler *, long id)> &fun) {
+                return function.target < void(F4NHandler * , long
+                id)>() == fun.target < void(F4NHandler * , long
+                id)>();
+            }), loopEndListeners.end()
+    );
     pthread_mutex_unlock(&loop_mutex);
 }
 

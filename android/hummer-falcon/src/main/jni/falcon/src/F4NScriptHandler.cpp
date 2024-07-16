@@ -8,7 +8,7 @@
 
 F4NScriptHandler::F4NScriptHandler(F4NLoopHandler *loopHandler) {
     this->loopHandler = loopHandler;
-    _onThreadLoopEnd_ = [&](F4NHandler *handler, long id) {
+    this->_onThreadLoopEnd_ = [&](F4NHandler *handler, long id) {
         if (onThreadLoopEndFunc != nullptr) {
             onThreadLoopEndFunc(this);
         }
@@ -36,11 +36,12 @@ void F4NScriptHandler::start() {
         }
     };
     loopHandler->sendMessage(message);
+    debug("F4NScriptHandler::start() id=%d",0);
 }
 
 void F4NScriptHandler::stop() {
     isRunning = false;
-//    debug("F4NScriptHandler::stop() end id=%d",0);
+    this->onThreadLoopEndFunc = nullptr;
     loopHandler->removeLoopEndListener(_onThreadLoopEnd_);
     pthread_mutex_lock(&loop_mutex);
     //清除延迟消息和循环消息
@@ -50,7 +51,7 @@ void F4NScriptHandler::stop() {
     loopMessages.clear();
     pthread_mutex_unlock(&loop_mutex);
 
-    debug("F4NScriptHandler::stop() end id=%d",0);
+    debug("F4NScriptHandler::stop() id=%d",0);
 }
 
 void F4NScriptHandler::sendMessage(const F4NMessage &message) {

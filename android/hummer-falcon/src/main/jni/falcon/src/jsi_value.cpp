@@ -14,8 +14,6 @@
 
 const char *getTypeValueName(ValueType type) {
     switch (type) {
-        case TYPE_VALUE:
-            return "TYPE_VALUE";
         case TYPE_BOOLEAN:
             return "TYPE_BOOLEAN";
         case TYPE_NUMBER:
@@ -26,18 +24,20 @@ const char *getTypeValueName(ValueType type) {
             return "TYPE_OBJECT";
         case TYPE_ARRAY:
             return "TYPE_ARRAY";
-        case TYPE_COMPONENT:
-            return "TYPE_COMPONENT";
         case TYPE_NULL:
             return "TYPE_NULL";
-        case TYPE_EXT:
-            return "TYPE_EXT";
         case TYPE_NAPIExternal:
             return "TYPE_NAPIExternal";
         case TYPE_NAPIFunction:
             return "TYPE_NAPIFunction";
         case TYPE_NAPIUndefined:
             return "TYPE_NAPIUndefined";
+        case TYPE_COMPONENT:
+            return "TYPE_COMPONENT";
+        case TYPE_VALUE:
+            return "TYPE_VALUE";
+        case TYPE_VALUE_REF:
+            return "TYPE_EXT";
     }
     return "";
 }
@@ -134,7 +134,7 @@ JsiFunction::JsiFunction(NAPIValue *napiValue, NAPIEnv *env) {
 
 
 JsiValue *JsiFunction::call(size_t argc, JsiValue **jsiValue, JsiErrorCatch *jsiErrorCatch) {
-    debug("JsiFunction::call() params=%s", JsiUtils::buildArrayString(argc, jsiValue).c_str());
+//    debug("JsiFunction::call() params=%s", JsiUtils::buildArrayString(argc, jsiValue).c_str());
 
     NAPIHandleScope handleScope;
     JsiUtils::openHandleScope(&env_, &handleScope);
@@ -288,6 +288,7 @@ ValueType JsiObject::getValueType(string key) {
         ValueType type = it->second->getType();
         return type;
     }
+    return TYPE_NULL;
 }
 
 bool JsiObject::isBoolean(string key) {
@@ -629,17 +630,17 @@ JsiCallback::~JsiCallback() {
 //*******************************************************************************
 
 
-JsiValueExt::JsiValueExt(JsiObjectRef *value) {
-    type_ = TYPE_EXT;
+JsiValueRef::JsiValueRef(JsiObjectRef *value) {
+    type_ = TYPE_VALUE_REF;
     value_ = value;
     protect();
 }
 
-string JsiValueExt::toString() const {
+string JsiValueRef::toString() const {
     return JsiValue::toString();
 }
 
-JsiValueExt::~JsiValueExt() {
+JsiValueRef::~JsiValueRef() {
     if (value_ != nullptr) {
         value_->release();
     }

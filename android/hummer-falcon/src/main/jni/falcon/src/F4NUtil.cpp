@@ -91,8 +91,8 @@ string F4NUtil::optString(JsiValue *value) {
 F4NElement *F4NUtil::convert2Element(JsiValue *jsiValue) {
     if (jsiValue != nullptr && jsiValue->getType() == TYPE_OBJECT) {
         JsiValue *finalize = ((JsiObject *) jsiValue)->getValue("__finalize__");
-        if (finalize != nullptr && finalize->getType() == TYPE_EXT) {
-            JsiValueExt *valueExt = (JsiValueExt *) finalize;
+        if (finalize != nullptr && finalize->getType() == TYPE_VALUE_REF) {
+            JsiValueRef *valueExt = (JsiValueRef *) finalize;
             F4NElement *element = static_cast<F4NElement *>(valueExt->data);
             return element;
         }
@@ -103,7 +103,7 @@ F4NElement *F4NUtil::convert2Element(JsiValue *jsiValue) {
 bool F4NUtil::isElement(JsiValue *jsiValue) {
     if (jsiValue != nullptr && jsiValue->getType() == TYPE_OBJECT) {
         JsiValue *finalize = ((JsiObject *) jsiValue)->getValue("__finalize__");
-        if (finalize->getType() == TYPE_EXT) {
+        if (finalize->getType() == TYPE_VALUE_REF) {
             return true;
         }
     }

@@ -20,6 +20,16 @@ class RootView extends View {
             marginTop: 50,
         };
         btn1.addEventListener('tap', (event) => {
+
+
+            // let navPage = {
+            //     url: "hummer://caimi/honey_popularize_submit_page",
+            //     params: {
+            //         popularizeModule: model,
+            //         energyModel: energyModel
+            //     }
+            // }
+
             let pageInfo = {
                 id: '222',
                 // url:'http://172.23.166.31:8030/index.js',
@@ -30,6 +40,8 @@ class RootView extends View {
                 params: {
                     aaa: 111,
                     bbb: 222,
+                    ccc:null,
+                    ccx:undefined
                 },
                 // closeSelf: true,
             };

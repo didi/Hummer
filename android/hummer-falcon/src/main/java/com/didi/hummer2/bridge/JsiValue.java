@@ -109,7 +109,7 @@ public abstract class JsiValue implements IValue, Serializable {
         return "";
     }
 
-    protected String string(){
+    protected String string() {
         if (identify != 0) {
             return string_(identify);
         }

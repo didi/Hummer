@@ -38,7 +38,7 @@ JsiValue *F4NComponentTest::createObject(size_t size, JsiValue **params) {
     }
 
 
-    JsiValueExt *valueExt = new JsiValueExt(f4NObject->getJsObject());
+    JsiValueRef *valueExt = new JsiValueRef(f4NObject->getJsObject());
     return valueExt;
 }
 

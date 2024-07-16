@@ -63,7 +63,7 @@ JsiValue *F4NDocument::createElement(size_t size, JsiValue **params) {
 
     _objectManager_->pushObject(objId, element);
 
-    JsiValueExt *valueExt = new JsiValueExt(element->getJsObject());
+    JsiValueRef *valueExt = new JsiValueRef(element->getJsObject());
     return valueExt;
 }
 
@@ -90,15 +90,15 @@ JsiValue *F4NDocument::createComponent(size_t size, JsiValue **params) {
 
     _objectManager_->pushObject(objId, component);
 
-    JsiValueExt *valueExt = new JsiValueExt(component->getJsObject());
+    JsiValueRef *valueExt = new JsiValueRef(component->getJsObject());
     return valueExt;
 }
 
 F4NElement *F4NDocument::convert2Element(JsiValue *jsiValue) {
     if (jsiValue != nullptr && jsiValue->getType() == TYPE_OBJECT) {
         JsiValue *finalize = ((JsiObject *) jsiValue)->getValue("__finalize__");
-        if (finalize->getType() == TYPE_EXT) {
-            JsiValueExt *valueExt = (JsiValueExt *) finalize;
+        if (finalize->getType() == TYPE_VALUE_REF) {
+            JsiValueRef *valueExt = (JsiValueRef *) finalize;
             F4NElement *element = static_cast<F4NElement *>(valueExt->data);
             return element;
         }
