@@ -62,7 +62,7 @@ public class JsiValueUtils {
     }
 
     private static JsiArray toJavaValueArr(JsiArrayNative jsiValue) {
-        JsiArray jsiArray = new JsiArray(jsiValue);
+        JsiArray jsiArray = new JsiArray();
         int size = jsiValue.length();
         for (int i = 0; i < size; i++) {
             jsiArray.push(toJavaValue(jsiValue.getValue(i)));

@@ -23,19 +23,6 @@ public class JsiArray extends JsiValue implements IArray {
 
     }
 
-    public JsiArray(JsiArrayNative jsiArray) {
-        parse(jsiArray);
-    }
-
-    private void parse(JsiArrayNative jsiArray) {
-        if (jsiArray != null) {
-            int size = jsiArray.length();
-            for (int i = 0; i < size; i++) {
-                valueList.add(JsiValueUtils.toJavaValue(jsiArray.getValue(i)));
-            }
-        }
-    }
-
     @Override
     public int length() {
         return valueList.size();
