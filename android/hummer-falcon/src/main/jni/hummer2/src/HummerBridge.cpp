@@ -138,8 +138,8 @@ jobject HMObject_get_value_(JNIEnv *env, jobject obj, jlong identify, jstring ke
 
     const char *keyValue = env->GetStringUTFChars(key, nullptr);
     JsiValue *hmValue = hmObject->getValue(keyValue);
-    jobject result = 0 ;
-    if(hmValue != nullptr){
+    jobject result = 0;
+    if (hmValue != nullptr) {
         result = value2JObject(env, hmValue);
         hmValue->obj = 0;
     }
@@ -329,6 +329,9 @@ jobject HMArrayGetJObject_(JNIEnv *env, JsiArray *hmArray) {
 
 jobject value2JObject(JNIEnv *env, JsiValue *hmValue) {
 //    if (hmValue->obj == NULL) {
+    if (hmValue == nullptr) {
+        return 0;
+    }
     ValueType type = hmValue->getType();
     switch (type) {
 

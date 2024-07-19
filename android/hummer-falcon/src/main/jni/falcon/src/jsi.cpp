@@ -174,8 +174,10 @@ JsiObjectRef::~JsiObjectRef() {
 }
 
 
-void JsiErrorCatch::onCatchJsiError(int status,JsiError *jsiError) {
-    this->jsiError = jsiError;
+void JsiErrorCatch::onCatchJsiError(int status, JsiError *jsiError) {
+    this->catchJsiError = true;
+    this->status = status;
+    this->message = jsiError == nullptr ? "" : jsiError->toString().c_str();
 }
 
 bool JsiErrorCatch::isCatchJsiError() {
@@ -183,10 +185,5 @@ bool JsiErrorCatch::isCatchJsiError() {
 }
 
 JsiErrorCatch::~JsiErrorCatch() {
-    if (jsiError != nullptr) {
-        delete jsiError;
-        jsiError = nullptr;
-    }
-
 
 }
