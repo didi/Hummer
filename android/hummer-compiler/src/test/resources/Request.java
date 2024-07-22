@@ -19,7 +19,7 @@ import java.util.Map;
 @HMJsiValue
 public class Request<T, W, DATA>  implements Serializable {
 
-    public static final String URL_T = "100;
+    public static final String URL_T = "100";
 
     public String url;
 

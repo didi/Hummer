@@ -7,6 +7,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.sun.tools.javac.code.Symbol;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public class JsiValueAdapterClassCreator {
     private TypeElement classElement;
     private String packageName;
     private String className;
+    private String ownerClassName;
+    private String subClassName;
     private ClassName thisClass;
     private TypeName baseInvokerT;
     private TypeMirror thisClassType;
@@ -62,7 +65,9 @@ public class JsiValueAdapterClassCreator {
         logger.info("[adapter] Class: " + classElement.getQualifiedName() + " extends " + classElement.getSuperclass());
         this.classElement = classElement;
         packageName = elementUtils.getPackageOf(classElement).getQualifiedName().toString();
-        className = classElement.getSimpleName().toString();
+        ownerClassName = getOwnerClassName(classElement);
+        subClassName = classElement.getSimpleName().toString();
+        className = getJavaClassName(classElement);
         thisClass = ClassName.get(packageName, className);
         baseInvokerT = ParameterizedTypeName.get(TypeUtil.baseAdapter, thisClass); // 泛型
 
@@ -73,6 +78,43 @@ public class JsiValueAdapterClassCreator {
         }
         return this;
     }
+
+    private String getOwnerClassName(TypeElement classElement) {
+        Symbol symbol = ((Symbol.ClassSymbol) classElement).owner;
+        if (symbol != null) {
+            String ownerName = getThisOwnerClassName(symbol, "$");
+            if (ownerName != null) {
+                return ownerName;
+            }
+        }
+        return "";
+    }
+
+    private String getJavaClassName(TypeElement classElement) {
+        Symbol symbol = ((Symbol.ClassSymbol) classElement).owner;
+        if (symbol != null) {
+            String ownerName = getThisOwnerClassName(symbol, ".");
+            if (ownerName != null) {
+                return ownerName + "." + classElement.getSimpleName().toString();
+            }
+        }
+        return classElement.getSimpleName().toString();
+    }
+
+    private String getThisOwnerClassName(Symbol symbol, String kind) {
+        if (symbol != null) {
+            if (symbol.getKind() == ElementKind.CLASS) {
+                String name = symbol.getSimpleName().toString();
+                String ownerName = getThisOwnerClassName(symbol.owner, kind);
+                if (ownerName == null) {
+                    return name;
+                }
+                return ownerName + kind + name;
+            }
+        }
+        return null;
+    }
+
 
     private int findTypeArgumentsOfIndex(TypeMirror variableType) {
         if (thisClassTypeArguments != null && thisClassTypeArguments.size() > 0) {
@@ -96,7 +138,14 @@ public class JsiValueAdapterClassCreator {
     }
 
     private TypeSpec generateJavaClass() {
-        TypeSpec.Builder builder = TypeSpec.classBuilder(className + Constant.SUFFIX_OF_ADAPTER_FILE)
+        String myClassName;
+        if (ownerClassName != null && ownerClassName.length() > 0) {
+            myClassName = ownerClassName + "$" + subClassName;
+        } else {
+            myClassName = className;
+        }
+
+        TypeSpec.Builder builder = TypeSpec.classBuilder(myClassName + Constant.SUFFIX_OF_ADAPTER_FILE)
                 // public 修饰类
                 .addModifiers(Modifier.PUBLIC).superclass(baseInvokerT)
                 // 添加类的方法
@@ -135,7 +184,7 @@ public class JsiValueAdapterClassCreator {
         List<? extends Element> allMembers = getClassAllElements(classElement);
         for (Element member : allMembers) {
             if (member.getKind() == ElementKind.FIELD) {
-                if (isStatic(member)){
+                if (isStatic(member)) {
                     continue;
                 }
                 HMJsiName annotation = member.getAnnotation(HMJsiName.class);
@@ -320,7 +369,7 @@ public class JsiValueAdapterClassCreator {
         List<? extends Element> allMembers = getClassAllElements(classElement);
         for (Element member : allMembers) {
             if (member.getKind() == ElementKind.FIELD) {
-                if (isStatic(member)){
+                if (isStatic(member)) {
                     continue;
                 }
                 HMJsiName annotation = member.getAnnotation(HMJsiName.class);
@@ -357,6 +406,7 @@ public class JsiValueAdapterClassCreator {
     private boolean isStatic(Element element) {
         return element.getModifiers().contains(Modifier.STATIC);
     }
+
     /**
      * 首字母大写
      *
