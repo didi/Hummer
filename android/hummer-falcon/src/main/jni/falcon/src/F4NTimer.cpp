@@ -31,13 +31,13 @@ JsiValue *F4NTimer::setTimeout(size_t size, JsiValue **params) {
         function->protect();
         long id = f4NContext->submitJsTask([&, function]() {
             function->call(0, nullptr, nullptr);
-            function->unprotect();
-
-            auto it = functions.find(id);
+            auto it = functions.find(function->task_id);
             if (it != functions.end()) {
                 functions.erase(it);
             }
+            function->unprotect();
         }, delay);
+        function->task_id = id;
         functions.insert(make_pair(id, function));
         if (FALCON_LOG_ENABLE) {
             debug("F4NTimer::setTimeout() id=%ld", id);
@@ -80,8 +80,8 @@ JsiValue *F4NTimer::clearTimeout(size_t size, JsiValue **params) {
         f4NContext->cancelJsTask(id);
         auto it = functions.find(id);
         if (it != functions.end()) {
-            it->second->unprotect();
             functions.erase(it);
+            it->second->unprotect();
         }
     }
     return nullptr;
@@ -97,8 +97,8 @@ JsiValue *F4NTimer::clearInterval(size_t size, JsiValue **params) {
         f4NContext->cancelJsTask(id);
         auto it = functions.find(id);
         if (it != functions.end()) {
-            it->second->unprotect();
             functions.erase(it);
+            it->second->unprotect();
         }
     }
     return nullptr;
