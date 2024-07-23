@@ -37,7 +37,7 @@ public class NavigatorComponent extends Component {
         }
         ((HummerScriptContext) context).getHummerConfig().getNavAdapter().openPage(context.getBaseContext(), page, data -> {
             if (callback != null) {
-                callback.call(F4NObjectUtil.toJsiValue(data));
+                callback.call(F4NObjectUtil.toSimpleJsiValue(data));
             }
         });
     }

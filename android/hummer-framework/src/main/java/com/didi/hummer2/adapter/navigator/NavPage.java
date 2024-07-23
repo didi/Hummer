@@ -3,6 +3,7 @@ package com.didi.hummer2.adapter.navigator;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiBoolean;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
@@ -12,6 +13,7 @@ import com.didi.hummer2.utils.F4NObjectUtil;
 import java.io.Serializable;
 import java.util.Map;
 
+@HMJsiValue
 public class NavPage implements Serializable {
 
     /**
@@ -69,7 +71,6 @@ public class NavPage implements Serializable {
     }
 
     public JsiValue toJsiValue() {
-
         JsiObject jsiObject = new JsiObject();
         jsiObject.put("id", new JsiString(id));
         jsiObject.put("url", new JsiString(url));
@@ -77,7 +78,7 @@ public class NavPage implements Serializable {
         jsiObject.put("animated", new JsiBoolean(animated));
         jsiObject.put("closeSelf", new JsiBoolean(closeSelf));
         if (params != null) {
-            JsiValue jsiValue = F4NObjectUtil.toJsiValue(params);
+            JsiValue jsiValue = F4NObjectUtil.toSimpleJsiValue(params);
             if (jsiValue != null) {
                 jsiObject.put("params", jsiValue);
             }

@@ -1,5 +1,7 @@
 package com.didi.hummer2.render.anim;
 
+import com.didi.hummer2.annotation.HMJsiValue;
+
 import java.io.Serializable;
 
 /**
@@ -13,6 +15,7 @@ import java.io.Serializable;
  * @Description KeyFrame
  */
 
+@HMJsiValue
 public class KeyFrame implements Serializable {
 
     public Object value;

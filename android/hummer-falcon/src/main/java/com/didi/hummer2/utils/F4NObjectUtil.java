@@ -6,7 +6,7 @@ import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
-import com.google.gson.reflect.TypeToken;
+import com.didi.hummer2.bridge.convert.HummerParser;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
@@ -28,35 +28,48 @@ import java.util.Map;
 
 public class F4NObjectUtil {
 
-
-    private static Type MAP_TYPE = new TypeToken<Map<String, Object>>() {
-    }.getType();
+    private static HummerParser hummerParser;
 
 
-    public static <T> T toJavaModel(Object object, Type type) {
-        if (object instanceof JsiObject || object instanceof JsiArray) {
-            String value = ((JsiValue) object).toString();
-            return F4NGsonUtil.fromJson(value, type);
+    private static HummerParser getHummerParser() {
+        if (hummerParser == null) {
+            synchronized (F4NObjectUtil.class) {
+                if (hummerParser == null) {
+                    hummerParser = new HummerParser();
+                }
+            }
         }
-        return null;
+        return hummerParser;
+    }
+
+    /**
+     * JsiValue 转换成Java数据
+     */
+    public static <T> T toHummerJavaModel(Object object, Type type) {
+        return (T) getHummerParser().toJavaValue((JsiValue) object, type);
     }
 
 
     /**
-     * 将JsiObject 转化为基础Map类型（通过GSON转化，支持自定义类型数据转化）
+     * Java数据转换成NativeJsiValue
+     */
+    public static JsiValue toHummerJsiValue(Object object) {
+        return getHummerParser().toJsiValue(object);
+    }
+
+    /**
+     * 将JsiObject 转化为基础Map类型（通过遍历转化，不支持支持自定义类型数据转化）
      * <p>
      * 仅支持转化复杂类型，基础类型不支持
      *
      * @param object
      */
-    public static <T> T toJavaMap(Object object) {
+    public static <T> T toSimpleJavaMap(Object object) {
         if (object instanceof JsiObject) {
-            String value = ((JsiValue) object).toString();
-            return F4NGsonUtil.fromJson(value, MAP_TYPE);
+            return (T) toSimpleJavaObject(object);
         }
         return null;
     }
-
 
     /**
      * 将JsiValue转化为纯java数据类型
@@ -64,14 +77,16 @@ public class F4NObjectUtil {
      * @param object
      * @return 本身是基础类型的不做处理，是JsiValue的将被转化为Java基础数据类型
      */
-    public static Object toJavaObject(Object object) {
+    public static Object toSimpleJavaObject(Object object) {
         if (object != null) {
             if (object instanceof JsiNumber) {
-                Object result = ((JsiNumber) object).valueDouble();
+                JsiNumber jsiNumber = ((JsiNumber) object);
+                boolean integer = jsiNumber.isInteger();
+                Object result = integer ? jsiNumber.valueLong() : jsiNumber.valueDouble();
                 return result;
             }
             if (object instanceof JsiString) {
-                Object result = ((JsiString) object).valueString();
+                Object result = ((JsiString) object).getValue();
                 return result;
             }
             if (object instanceof JsiBoolean) {
@@ -83,7 +98,7 @@ public class F4NObjectUtil {
                 List<String> keys = jsiObject.keys();
                 Map<String, Object> result = new HashMap<>();
                 for (String key : keys) {
-                    result.put(key, toJavaObject(jsiObject.get(key)));
+                    result.put(key, toSimpleJavaObject(jsiObject.get(key)));
                 }
                 return result;
             }
@@ -92,7 +107,7 @@ public class F4NObjectUtil {
                 int size = jsiArray.length();
                 List<Object> result = new ArrayList<>();
                 for (int i = 0; i < size; i++) {
-                    result.add(toJavaObject(jsiArray.getValue(i)));
+                    result.add(toSimpleJavaObject(jsiArray.getValue(i)));
                 }
                 return result;
             }
@@ -108,7 +123,7 @@ public class F4NObjectUtil {
      * @param object 基础数据类型，自定义类型被忽略
      * @return JsiValue
      */
-    public static JsiValue toJsiValue(Object object) {
+    public static JsiValue toSimpleJsiValue(Object object) {
         if (object instanceof JsiValue) {
             return (JsiValue) object;
         }
@@ -125,7 +140,7 @@ public class F4NObjectUtil {
             Map<String, Object> map = (Map) object;
             JsiObject jsiObject = new JsiObject();
             for (Map.Entry<String, Object> entry : map.entrySet()) {
-                JsiValue jsiValue = toJsiValue(entry.getValue());
+                JsiValue jsiValue = toSimpleJsiValue(entry.getValue());
                 if (jsiValue != null) {
                     jsiObject.put(entry.getKey(), jsiValue);
                 }
@@ -136,7 +151,7 @@ public class F4NObjectUtil {
             List<Object> list = (List) object;
             JsiArray jsiArray = new JsiArray();
             for (Object obj : list) {
-                JsiValue jsiValue = toJsiValue(obj);
+                JsiValue jsiValue = toSimpleJsiValue(obj);
                 if (jsiValue != null) {
                     jsiArray.push(jsiValue);
                 }
@@ -147,7 +162,7 @@ public class F4NObjectUtil {
             Object[] array = (Object[]) object;
             JsiArray jsiArray = new JsiArray();
             for (Object obj : array) {
-                JsiValue jsiValue = toJsiValue(obj);
+                JsiValue jsiValue = toSimpleJsiValue(obj);
                 if (jsiValue != null) {
                     jsiArray.push(jsiValue);
                 }

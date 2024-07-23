@@ -2,6 +2,8 @@ package com.didi.hummer2.bridge;
 
 import androidx.annotation.NonNull;
 
+import com.didi.hummer2.utils.F4NObjectUtil;
+
 /**
  * didi Create on 2023/12/5 .
  * <p>
@@ -37,7 +39,7 @@ public class JsiFunction extends JsiValue {
         int size = args.length;
         JsiValue[] jsiValues = new JsiValue[size];
         for (int i = 0; i < size; i++) {
-            jsiValues[i] = JsiValueUtils.toNativeJsiValue(args[i]);
+            jsiValues[i] = F4NObjectUtil.toHummerJsiValue(args[i]);
         }
         return callNative(jsiValues);
     }

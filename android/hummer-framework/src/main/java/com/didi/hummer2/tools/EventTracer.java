@@ -1,5 +1,7 @@
 package com.didi.hummer2.tools;
 
+import android.os.Trace;
+
 import java.util.Map;
 
 /**

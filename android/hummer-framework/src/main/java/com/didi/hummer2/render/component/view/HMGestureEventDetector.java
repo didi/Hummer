@@ -114,8 +114,8 @@ class HMGestureEventDetector {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // 埋点
-                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TOUCH, view, viewId);
-                EventTracer.traceEvent(hummerContext.getNamespace(), EventTracer.EventName.HUMMER_SDK_TRACE_EVENT, params);
+//                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TOUCH, view, viewId);
+//                EventTracer.traceEvent(hummerContext.getNamespace(), EventTracer.EventName.HUMMER_SDK_TRACE_EVENT, params);
 
                 TouchEvent touchEvent = null;
                 if (eventManager.contains(Event.HM_EVENT_TYPE_TOUCH)) {
@@ -195,8 +195,8 @@ class HMGestureEventDetector {
         if (eventName.equals(Event.HM_EVENT_TYPE_TAP)) {
             view.setOnClickListener((v) -> {
                 // 埋点
-                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TAP, view, viewId);
-                EventTracer.traceEvent(hummerContext.getNamespace(), EventTracer.EventName.HUMMER_SDK_TRACE_EVENT, params);
+//                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_TAP, view, viewId);
+//                EventTracer.traceEvent(hummerContext.getNamespace(), EventTracer.EventName.HUMMER_SDK_TRACE_EVENT, params);
 
                 if (eventManager.contains(Event.HM_EVENT_TYPE_TAP)) {
                     TapEvent event = makeTapEvent(view.getContext(), latestMotionEvent);
@@ -208,8 +208,8 @@ class HMGestureEventDetector {
         if (eventName.equals(Event.HM_EVENT_TYPE_LONG_PRESS)) {
             view.setOnLongClickListener((v) -> {
                 // 埋点
-                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_LONG_PRESS, view, viewId);
-                EventTracer.traceEvent(hummerContext.getNamespace(), EventTracer.EventName.HUMMER_SDK_TRACE_EVENT, params);
+//                Map<String, Object> params = TraceEvent.makeTraceGestureEvent(Event.HM_EVENT_TYPE_LONG_PRESS, view, viewId);
+//                EventTracer.traceEvent(hummerContext.getNamespace(), EventTracer.EventName.HUMMER_SDK_TRACE_EVENT, params);
 
                 if (eventManager.contains(Event.HM_EVENT_TYPE_LONG_PRESS)) {
                     LongPressEvent event = makeLongPressEvent(view.getContext(), latestMotionEvent);

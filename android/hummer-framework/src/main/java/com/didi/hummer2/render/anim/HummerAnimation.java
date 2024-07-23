@@ -2,6 +2,7 @@ package com.didi.hummer2.render.anim;
 
 import android.text.TextUtils;
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.render.component.anim.BasicAnimation;
 import com.didi.hummer2.render.component.anim.KeyframeAnimation;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * @Date 2024/4/22 3:08 PM
  * @Description HummerAnimation
  */
-
+@HMJsiValue
 public class HummerAnimation implements Serializable {
 
     /**
@@ -40,27 +41,27 @@ public class HummerAnimation implements Serializable {
      * 动画类别
      * basic/keyframe
      */
-    private String type;
+    public String type;
     /**
      * 动画类型：
      */
-    private String property;
+    public String property;
 
-    private Object from;
+    public Object from;
 
-    private Object value;
+    public Object value;
 
-    private float duration;
+    public float duration;
 
-    private float delay;
+    public float delay;
 
-    private int repeatCount;
+    public int repeatCount;
 
-    private String repeatMode;
+    public String repeatMode;
 
-    private String easing;
+    public String easing;
 
-    private List<KeyFrame> keyframes;
+    public List<KeyFrame> keyframes;
 
 
     public BasicAnimation getOriginAnimation() {

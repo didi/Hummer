@@ -1,7 +1,5 @@
 package com.didi.hummer2.bridge.convert;
 
-import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
-import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 import android.text.TextUtils;
 
@@ -12,15 +10,11 @@ import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.bridge.JsiValueBuilder;
-import com.google.gson.internal.$Gson$Types;
 
-import java.io.Serializable;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -59,8 +53,9 @@ public abstract class ValueParser {
         if (jsiValue != null) {
             Object result;
             if (type == null || type == Object.class) {
-                result = toJavaValue(jsiValue);
-            } else if (type == String.class) {
+                type = toJavaValueType(jsiValue);
+            }
+            if (type == String.class) {
                 result = optString(jsiValue);
             } else if (type == Boolean.class) {
                 result = optBoolean(jsiValue);
@@ -92,7 +87,7 @@ public abstract class ValueParser {
         return false;
     }
 
-    public Object toJavaValue(JsiValue object) {
+    public Type toJavaValueType(JsiValue object) {
         Type type = null;
         if (object instanceof JsiString) {
             type = String.class;
@@ -111,54 +106,10 @@ public abstract class ValueParser {
             }
         }
         if (type == null) {
-            return null;
+            return Object.class;
         }
-        return toJavaValue(object, type);
+        return type;
     }
-
-
-//    public static Object toJavaValue(JsiValue object) {
-//        if (object != null) {
-//            if (object instanceof JsiNumber) {
-//                JsiNumber jsiNumber = (JsiNumber) object;
-//                Object result;
-//                if (jsiNumber.isInteger()) {
-//                    result = jsiNumber.valueLong();
-//                } else {
-//                    result = jsiNumber.valueDouble();
-//                }
-//                return result;
-//            }
-//            if (object instanceof JsiString) {
-//                Object result = ((JsiString) object).valueString();
-//                return result;
-//            }
-//            if (object instanceof JsiBoolean) {
-//                Object result = ((JsiBoolean) object).getValue();
-//                return result;
-//            }
-//            if (object instanceof JsiObject) {
-//                JsiObject jsiObject = (JsiObject) object;
-//                List<String> keys = jsiObject.keys();
-//                Map<String, Object> result = new HashMap<>();
-//                for (String key : keys) {
-//                    result.put(key, toJavaValue(jsiObject.get(key)));
-//                }
-//                return result;
-//            }
-//            if (object instanceof JsiArray) {
-//                JsiArray jsiArray = (JsiArray) object;
-//                int size = jsiArray.length();
-//                List<Object> result = new ArrayList<>();
-//                for (int i = 0; i < size; i++) {
-//                    result.add(toJavaValue(jsiArray.getValue(i)));
-//                }
-//                return result;
-//            }
-//            return object;
-//        }
-//        return null;
-//    }
 
     /**
      * 将普通数据类型转换为JsiValue标准类型
@@ -373,9 +324,5 @@ public abstract class ValueParser {
         }
         return -1;
     }
-
-
-
-
 
 }
