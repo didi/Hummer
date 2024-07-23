@@ -364,7 +364,7 @@ public class JsiValueAdapterClassCreator {
         myMethod.addStatement("$T result =  null", TypeUtil.JsiObject);
         myMethod.beginControlFlow("if (value instanceof $T)", thisClass);
         myMethod.addStatement("$T param = ($T)value ", thisClass, thisClass);
-        myMethod.addStatement("result =  new $T()", TypeUtil.JsiObject);
+        myMethod.addStatement("result =  parser.newJsiObject()");
 
         List<? extends Element> allMembers = getClassAllElements(classElement);
         for (Element member : allMembers) {
