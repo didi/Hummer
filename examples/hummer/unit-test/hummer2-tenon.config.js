@@ -9,7 +9,15 @@ module.exports = {
     entries: "src/*.js",
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: "[name]hummer2.js"
+      filename: "[name]hummer2Tenon.js"
+    },
+    externals: {
+      '@hummer/hummer-front': '__GLOBAL__',
+      '@didi/hummer-front': '__GLOBAL__',
+      "@didi/hummer-api": '__GLOBAL__',
+      "@didi/djdriver-base": '__GLOBAL__',
+      "./../../../../api/packages/hummer-api/dist/hummer-api.es":'__GLOBAL__',
+      "../../../../api/packages/hummer-api/dist/hummer-api.es":'__GLOBAL__',
     },
 
     plugins: [
