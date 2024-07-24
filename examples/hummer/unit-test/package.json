@@ -4,19 +4,18 @@
   "description": "Hummer Project",
   "author": "realonezhang <realonezhang@didiglobal.com>",
   "scripts": {
-    "build": "node ./script/HummerCompat.js && hummer build",
-    "dev": "node ./script/HummerCompat.js && hummer dev",
-    "debug": "npm run dev & hummer debug",
-    "build:hummer2": "node ./script/HummerCompat.js hummer2 && hummer build",
-    "dev:hummer2": "node ./script/HummerCompat.js hummer2 &&  hummer dev"
+    "build": "node ./script/HummerCompat.js build",
+    "dev": "node ./script/HummerCompat.js dev",
+    "debug": "npm run dev & hummer debug"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:didi/Hummer.git"
   },
   "dependencies": {
+    "@hummer/cli": "^0.17.0",
     "@hummer/hummer-front": "^1.0.7",
-    "@hummer/tenon-dev-tool": "^0.2.1"
-  },
-  "devDependencies": {}
+    "@hummer/tenon-dev-tool": "^0.2.1",
+    "archiver": "^7.0.1"
+  }
 }

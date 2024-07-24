@@ -436,6 +436,11 @@ public class HummerScriptRender {
         }
     }
 
+
+    public HummerPageTracker getTracker() {
+        return tracker;
+    }
+
     public void setHummerPageHandler(HummerScriptContext.HummerPageHandler hummerPageHandler) {
         hummerScriptContext.setHummerPageHandler(hummerPageHandler);
     }

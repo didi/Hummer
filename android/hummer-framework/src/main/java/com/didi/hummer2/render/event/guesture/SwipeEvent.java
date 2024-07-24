@@ -1,6 +1,7 @@
 package com.didi.hummer2.render.event.guesture;
 
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.render.event.base.Event;
@@ -8,6 +9,7 @@ import com.didi.hummer2.render.event.base.Event;
 /**
  * 轻扫手势事件
  */
+@HMJsiValue
 public class SwipeEvent extends Event {
 
     public static final int DIRECTION_RIGHT = 1;
@@ -19,6 +21,10 @@ public class SwipeEvent extends Event {
 
     public void setDirection(int direction) {
         this.direction = direction;
+    }
+
+    public int getDirection() {
+        return direction;
     }
 
     @Override

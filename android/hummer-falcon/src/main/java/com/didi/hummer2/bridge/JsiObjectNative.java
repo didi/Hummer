@@ -41,8 +41,10 @@ public final class JsiObjectNative extends JsiObject {
 
     @Override
     public void put(String key, JsiValue value) {
-        set_value_(identify, key, value.identify);
-        value.unprotect();
+        if (value != null){
+            set_value_(identify, key, value.identify);
+            value.unprotect();
+        }
     }
 
     @Override

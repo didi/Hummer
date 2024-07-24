@@ -340,9 +340,9 @@ JsiValue *JsiUtils::toValue(NAPIEnv *env, NAPIValue *value) {
                     warn("JSUtils::toValue() napi_get_value_external error. %s", error->toCString());
                     return nullptr;
                 }
-                JsiValueExt *jsiValueExt = new JsiValueExt(nullptr);
-                jsiValueExt->data = data;
-                jsiValue = jsiValueExt;
+                JsiValueRef *jsiValueRef = new JsiValueRef(nullptr);
+                jsiValueRef->data = data;
+                jsiValue = jsiValueRef;
             }
         }
             break;
@@ -450,9 +450,9 @@ void JsiUtils::toJSValue(NAPIEnv *env, JsiValue *jsiValue, NAPIValue *result) {
             JsiFunction *jsiFunction = (JsiFunction *) jsiValue;
         }
             break;
-        case TYPE_EXT: {
+        case TYPE_VALUE_REF: {
             //JsiValueExt内部持有的NAPIValue直接返回
-            JsiValueExt *valueExt = (JsiValueExt *) jsiValue;
+            JsiValueRef *valueExt = (JsiValueRef *) jsiValue;
             valueExt->value_->toJsValue(result);
         }
             break;

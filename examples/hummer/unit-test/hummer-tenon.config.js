@@ -9,7 +9,7 @@ module.exports = {
     entries: "src/*.js",
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: "hm_[name].js"
+      filename: "tn_[name].js"
     },
     externals: {
       '@hummer/hummer-front': '__GLOBAL__',
@@ -29,13 +29,13 @@ module.exports = {
       //   hummerApiDir: path.resolve(__dirname, './dist')
       // }),
     ]
-  },    
-  buildOptions: {
-    cleanDist: false,
   },
-  devTool: {
-    enableServer: false,
-    // devServerPort: 8020, // 静态资源服务端口
-    // webServerPort: 8021  // web模拟器服务端口
-  }
+    buildOptions: {
+      cleanDist: false,
+    },
+    devTool: {
+      enableServer: false,
+      // devServerPort: 8020, // 静态资源服务端口
+      // webServerPort: 8021  // web模拟器服务端口
+    }
 }

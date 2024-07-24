@@ -1,5 +1,6 @@
 package com.didi.hummer2.adapter.http;
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
@@ -11,6 +12,7 @@ import java.util.Map;
 /**
  * Created by XiaoFeng on 2019-10-21.
  */
+@HMJsiValue
 public class HttpResponse<T> implements Serializable {
 
     public int status;
@@ -46,10 +48,14 @@ public class HttpResponse<T> implements Serializable {
         return jsiObject;
     }
 
+    @HMJsiValue
     public static class Error implements Serializable {
 
         public int code;
         public String msg;
+
+        public Error() {
+        }
 
         public Error(int code, String msg) {
             this.code = code;

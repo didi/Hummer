@@ -1,6 +1,7 @@
 package com.didi.hummer2.render.event.guesture;
 
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.render.event.base.Event;
@@ -12,12 +13,17 @@ import java.util.Map;
 /**
  * 平移手势事件
  */
+@HMJsiValue
 public class PanEvent extends Event {
 
     private HashMap<String, Float> translation;
 
     public void setTranslation(HashMap<String, Float> translation) {
         this.translation = translation;
+    }
+
+    public HashMap<String, Float> getTranslation() {
+        return translation;
     }
 
     @Override

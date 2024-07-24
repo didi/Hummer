@@ -22,21 +22,21 @@ public class JsiValueUtils {
 
     public static JsiValue toJavaJsiValue(Object value) {
         if (value instanceof JsiValue) {
-            return toJavaValue((JsiValue) value);
+            return toJavaJsiValue((JsiValue) value);
         }
         return null;
     }
 
-    public static void toJavaValue(JsiValue[] value) {
+    public static void toJavaJsiValue(JsiValue[] value) {
         if (value != null && value.length > 0) {
             int size = value.length;
             for (int i = 0; i < size; i++) {
-                value[i] = toJavaValue(value[i]);
+                value[i] = toJavaJsiValue(value[i]);
             }
         }
     }
 
-    public static JsiValue toJavaValue(JsiValue jsiValue) {
+    public static JsiValue toJavaJsiValue(JsiValue jsiValue) {
         if (jsiValue != null) {
             if (jsiValue.isJava()) {
                 return jsiValue;
@@ -56,21 +56,24 @@ public class JsiValueUtils {
         JsiObject jsiObject = new JsiObject();
         List<String> keys = jsiValue.keys();
         for (String key : keys) {
-            jsiObject.put(key, toJavaValue(jsiValue.get(key)));
+            jsiObject.put(key, toJavaJsiValue(jsiValue.get(key)));
         }
         return jsiObject;
     }
 
     private static JsiArray toJavaValueArr(JsiArrayNative jsiValue) {
-        JsiArray jsiArray = new JsiArray(jsiValue);
+        JsiArray jsiArray = new JsiArray();
         int size = jsiValue.length();
         for (int i = 0; i < size; i++) {
-            jsiArray.push(toJavaValue(jsiValue.getValue(i)));
+            jsiArray.push(toJavaJsiValue(jsiValue.getValue(i)));
         }
         return jsiArray;
     }
 
 
+    /**
+     * @param value
+     */
     public static void toNativeValue(JsiValue[] value) {
         if (value != null && value.length > 0) {
             int size = value.length;
@@ -80,6 +83,10 @@ public class JsiValueUtils {
         }
     }
 
+    /**
+     * @param value
+     * @return
+     */
     public static JsiValue toNativeValue(Object value) {
         if (value instanceof JsiValue) {
             return toNativeValue((JsiValue) value);
@@ -87,7 +94,8 @@ public class JsiValueUtils {
         return null;
     }
 
-    public static JsiValue toNativeValue(JsiValue jsiValue) {
+
+    private static JsiValue toNativeValue(JsiValue jsiValue) {
         if (jsiValue != null) {
             if (jsiValue.isJava()) {
                 if (jsiValue instanceof JsiBoolean) {
@@ -136,7 +144,7 @@ public class JsiValueUtils {
      * @param object 基础数据类型，自定义类型被忽略
      * @return JsiValue
      */
-    public static JsiValue toNativeJsiValue(Object object) {
+    private static JsiValue toNativeJsiValue(Object object) {
         if (object instanceof JsiValue) {
             return toNativeValue((JsiValue) object);
         }

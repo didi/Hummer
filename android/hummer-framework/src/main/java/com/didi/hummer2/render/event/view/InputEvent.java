@@ -1,10 +1,12 @@
 package com.didi.hummer2.render.event.view;
 
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.render.event.base.Event;
 
+@HMJsiValue
 public class InputEvent extends Event {
 
     public static final String HM_EVENT_TYPE_INPUT = "input";
@@ -19,6 +21,10 @@ public class InputEvent extends Event {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getText() {
+        return text;
     }
 
     @Override

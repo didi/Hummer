@@ -48,4 +48,17 @@ public class HMAdapterProcessorTest {
         assertThat(compilation).hadErrorCount(0);
         assertThat(compilation).generatedSourceFile("com.didi.hummer2.compiler.Request$$JsiValueAdapter");
     }
+
+
+    @Test
+    public void testSbuAnnotationHMAdapterProcessor() {
+        Compilation compilation = Compiler.javac()
+                .withProcessors(new HMAdapterProcessor())
+                .compile(forResource("MeKHttpClient.java"));
+
+        assertThat(compilation).succeeded();
+        assertThat(compilation).hadWarningCount(0);
+        assertThat(compilation).hadErrorCount(0);
+        assertThat(compilation).generatedSourceFile("com.didi.hummer2.compiler.Request$$JsiValueAdapter");
+    }
 }

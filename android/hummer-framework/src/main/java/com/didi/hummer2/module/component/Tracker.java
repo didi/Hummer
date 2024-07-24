@@ -5,6 +5,7 @@ import com.didi.hummer2.HummerContext;
 import com.didi.hummer2.HummerScriptContext;
 import com.didi.hummer2.adapter.HummerAdapter;
 import com.didi.hummer2.adapter.tracker.PerfCustomInfo;
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.annotationx.Component;
 import com.didi.hummer2.annotationx.JsMethod;
 import com.didi.hummer2.exception.JavaScriptException;
@@ -19,6 +20,7 @@ import java.io.Serializable;
 //@Component("Tracker")
 public class Tracker {
 
+    @HMJsiValue
     public static class JSPerfCustomInfo implements Serializable {
         public String label;
         public String localizableLabel;
@@ -26,6 +28,7 @@ public class Tracker {
         public String unit;
     }
 
+    @HMJsiValue
     public static class JSErrorInfo implements Serializable {
         public String name;
         public String message;

@@ -56,6 +56,8 @@ public class BasicAnimation {
     protected JSCallback animStartCallback;
     protected JSCallback animEndCallback;
 
+    public String key ="__default__";
+
     public BasicAnimation(String animType) {
         this.animType = animType;
     }
@@ -161,6 +163,7 @@ public class BasicAnimation {
             if (animStartCallback != null) {
                 StatEvent statEvent = new StatEvent();
                 statEvent.setType("__onAnimationStart__");
+                statEvent.setKey(key);
                 statEvent.setState(0);
                 statEvent.setTimestamp(System.currentTimeMillis());
                 animStartCallback.call(statEvent);
@@ -173,6 +176,7 @@ public class BasicAnimation {
             if (animEndCallback != null) {
                 StatEvent statEvent = new StatEvent();
                 statEvent.setType("__onAnimationEnd__");
+                statEvent.setKey(key);
                 statEvent.setState(0);
                 statEvent.setTimestamp(System.currentTimeMillis());
                 animEndCallback.call(statEvent);

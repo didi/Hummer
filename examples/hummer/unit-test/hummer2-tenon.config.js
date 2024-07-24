@@ -9,7 +9,15 @@ module.exports = {
     entries: "src/*.js",
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: "hm2_[name].js"
+      filename: "tn2_[name].js"
+    },
+    externals: {
+      '@hummer/hummer-front': '__GLOBAL__',
+      '@didi/hummer-front': '__GLOBAL__',
+      "@didi/hummer-api": '__GLOBAL__',
+      "@didi/djdriver-base": '__GLOBAL__',
+      "./../../../../api/packages/hummer-api/dist/hummer-api.es":'__GLOBAL__',
+      "../../../../api/packages/hummer-api/dist/hummer-api.es":'__GLOBAL__',
     },
 
     plugins: [
@@ -27,7 +35,7 @@ module.exports = {
   },
   devTool: {
     enableServer: false,
-    devServerPort: 8030, // 静态资源服务端口
-    webServerPort: 8031  // web模拟器服务端口
+    // devServerPort: 8020, // 静态资源服务端口
+    // webServerPort: 8021  // web模拟器服务端口
   }
 }

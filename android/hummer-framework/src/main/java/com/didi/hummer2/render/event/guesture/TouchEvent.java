@@ -1,5 +1,6 @@
 package com.didi.hummer2.render.event.guesture;
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.render.event.base.Event;
@@ -10,12 +11,17 @@ import java.util.Map;
 /**
  * 触摸事件
  */
+@HMJsiValue
 public class TouchEvent extends Event {
 
     private Map<String, Float> position;
 
     public void setPosition(Map<String, Float> point) {
         this.position = point;
+    }
+
+    public Map<String, Float> getPosition() {
+        return position;
     }
 
     @Override

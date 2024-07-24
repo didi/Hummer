@@ -4,6 +4,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import com.sun.tools.javac.code.Symbol;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,6 +17,7 @@ import java.util.TreeSet;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
@@ -72,9 +74,34 @@ public class JsiValueRegisterClassCreator {
     public JsiValueRegisterClassCreator processClass(TypeElement classElement) {
         logger.info("[adapter] Class: " + classElement.getQualifiedName() + " extends " + classElement.getSuperclass());
         String packageName = elementUtils.getPackageOf(classElement).getQualifiedName().toString();
-        String adapterClassName = classElement.getSimpleName().toString();
+        String adapterClassName = getMyClassName(classElement);
         adapterClassMap.add(ClassName.get(packageName, adapterClassName + Constant.SUFFIX_OF_ADAPTER_FILE));
         return this;
+    }
+
+    private String getMyClassName(TypeElement classElement) {
+        Symbol symbol = ((Symbol.ClassSymbol) classElement).owner;
+        if (symbol != null) {
+            String ownerName = getThisOwnerClassName(symbol, "$");
+            if (ownerName != null) {
+                return ownerName + "$" + classElement.getSimpleName().toString();
+            }
+        }
+        return classElement.getSimpleName().toString();
+    }
+
+    private String getThisOwnerClassName(Symbol symbol, String kind) {
+        if (symbol != null) {
+            if (symbol.getKind() == ElementKind.CLASS) {
+                String name = symbol.getSimpleName().toString();
+                String ownerName = getThisOwnerClassName(symbol.owner, kind);
+                if (ownerName == null) {
+                    return name;
+                }
+                return ownerName + kind + name;
+            }
+        }
+        return null;
     }
 
 

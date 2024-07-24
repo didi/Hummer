@@ -13,11 +13,17 @@ package com.didi.hummer2.bridge;
 
 public class ValueType {
 
-    public static final int TYPE_ARRAY = 1;
-    public static final int TYPE_OBJECT = 2;
-    public static final int TYPE_BOOLEAN = 3;
-    public static final int TYPE_NUMBER = 4;
-    public static final int TYPE_STRING = 5;
-    public static final int TYPE_VALUE = 6;
-    public static final int TYPE_FUNCTION = 7;
+    public static final int TYPE_VALUE = 0;
+    public static final int TYPE_BOOLEAN = 1;
+    public static final int TYPE_NUMBER = 2;
+    public static final int TYPE_STRING = 3;
+    public static final int TYPE_OBJECT = 4;
+    public static final int TYPE_ARRAY = 5;
+    public static final int TYPE_FUNCTION = 6;
+    public static final int TYPE_Undefined = 7;
+    public static final int TYPE_NULL = 8;
+    public static final int TYPE_External = 9;
+    public static final int TYPE_VALUE_REF = 10;
+    public static final int TYPE_COMPONENT = 11;
+
 }

@@ -145,7 +145,7 @@ public class FalconContext implements PageLifeCycle, Serializable {
         JsiValue result = null;
         if (value instanceof JsiValue) {
             JsiValue jsiValue = (JsiValue) value;
-            result = JsiValueUtils.toJavaValue(jsiValue);
+            result = JsiValueUtils.toJavaJsiValue(jsiValue);
             jsiValue.unprotect();
         }
         return result;
@@ -154,10 +154,10 @@ public class FalconContext implements PageLifeCycle, Serializable {
 
     // C++ 直接回调
     public Object invoke(long type, long objId, long methodType, String componentName, String methodName, int argc, JsiValue[] value) {
-        JsiValueUtils.toJavaValue(value);
+        JsiValueUtils.toJavaJsiValue(value);
         Object result = invokerRegister.invoke(null, null, type, objId, methodType, componentName, methodName, argc, value);
         if (result != null) {
-            JsiValue jsiValue = JsiValueUtils.toNativeJsiValue(result);
+            JsiValue jsiValue = F4NObjectUtil.toHummerJsiValue(result);
             return jsiValue;
         }
         return null;
@@ -195,7 +195,7 @@ public class FalconContext implements PageLifeCycle, Serializable {
     // C++ 直接回调
     public void onTraceEvent(String event, Object params) {
         if (eventTraceHandler != null) {
-            eventTraceHandler.onEvent(this.namespace, event, F4NObjectUtil.toJavaMap(params));
+            eventTraceHandler.onEvent(this.namespace, event, F4NObjectUtil.toSimpleJavaMap(params));
         }
     }
 

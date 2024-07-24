@@ -1,10 +1,12 @@
 package com.didi.hummer2.render.event.view;
 
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.render.event.base.Event;
 
+@HMJsiValue
 public class ScrollEvent extends Event {
 
     public static final String HM_EVENT_TYPE_SCROLL = "scroll";
@@ -36,6 +38,21 @@ public class ScrollEvent extends Event {
         this.offsetY = offsetY;
     }
 
+    public float getDx() {
+        return dx;
+    }
+
+    public float getDy() {
+        return dy;
+    }
+
+    public float getOffsetX() {
+        return offsetX;
+    }
+
+    public float getOffsetY() {
+        return offsetY;
+    }
 
     @Override
     public JsiObject toJsiValue() {

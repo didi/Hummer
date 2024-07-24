@@ -2,6 +2,8 @@ package com.didi.hummer2.tracker;
 
 
 import com.didi.hummer2.BuildConfig;
+import com.didi.hummer2.Hummer;
+import com.didi.hummer2.HummerConfig;
 import com.didi.hummer2.adapter.HummerAdapter;
 import com.didi.hummer2.adapter.tracker.ITrackerAdapter;
 import com.didi.hummer2.adapter.tracker.PerfCustomInfo;
@@ -36,7 +38,12 @@ public class HummerPageTracker {
     private long jsEvalStartTime;
 
     public HummerPageTracker(String namespace) {
-        trackerAdapter = HummerAdapter.getTrackerAdapter();
+        HummerConfig hummerConfig = Hummer.getHummerConfig(namespace);
+        if (hummerConfig != null) {
+            trackerAdapter = hummerConfig.getTrackerAdapter();
+        } else {
+            trackerAdapter = HummerAdapter.getTrackerAdapter();
+        }
     }
 
     public void trackContextInitStart() {

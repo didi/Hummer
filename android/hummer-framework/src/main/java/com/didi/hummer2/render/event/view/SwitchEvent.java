@@ -1,9 +1,11 @@
 package com.didi.hummer2.render.event.view;
 
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.bridge.JsiObject;
 import com.didi.hummer2.render.event.base.Event;
 
+@HMJsiValue
 public class SwitchEvent extends Event {
 
     public static final String HM_EVENT_TYPE_SWITCH = "switch";

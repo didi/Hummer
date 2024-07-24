@@ -30,9 +30,15 @@ JsiValue *F4NTimer::setTimeout(size_t size, JsiValue **params) {
         auto delay = (time_t) timeout->value_;
         function->protect();
         long id = f4NContext->submitJsTask([&, function]() {
-            function->call(0, nullptr);
+            function->call(0, nullptr, nullptr);
+            auto it = functions.find(function->task_id);
+            if (it != functions.end()) {
+                functions.erase(it);
+            }
             function->unprotect();
         }, delay);
+        function->task_id = id;
+        functions.insert(make_pair(id, function));
         if (FALCON_LOG_ENABLE) {
             debug("F4NTimer::setTimeout() id=%ld", id);
         }
@@ -52,10 +58,10 @@ JsiValue *F4NTimer::setInterval(size_t size, JsiValue **params) {
             if (f4NContext->_page_->pageDestroy) {
                 return;
             }
-            function->call(0, nullptr);
-            //TODO 需要在容器停止时释放function
+            function->call(0, nullptr, nullptr);
 
         }, 0, interval_time_t);
+        functions.insert(make_pair(id, function));
         if (FALCON_LOG_ENABLE) {
             debug("F4NTimer::setInterval() id=%ld", id);
         }
@@ -72,6 +78,11 @@ JsiValue *F4NTimer::clearTimeout(size_t size, JsiValue **params) {
             debug("F4NTimer::clearTimeout() id=%ld", id);
         }
         f4NContext->cancelJsTask(id);
+        auto it = functions.find(id);
+        if (it != functions.end()) {
+            functions.erase(it);
+            it->second->unprotect();
+        }
     }
     return nullptr;
 }
@@ -84,12 +95,23 @@ JsiValue *F4NTimer::clearInterval(size_t size, JsiValue **params) {
             debug("F4NTimer::clearInterval() id=%ld", id);
         }
         f4NContext->cancelJsTask(id);
+        auto it = functions.find(id);
+        if (it != functions.end()) {
+            functions.erase(it);
+            it->second->unprotect();
+        }
     }
     return nullptr;
 }
 
 void F4NTimer::onDestroy() {
     global->release();
+    auto it = functions.begin();
+    while (it != functions.end()) {
+        it->second->unprotect();
+        it++;
+    }
+    functions.clear();
 }
 
 F4NTimer::~F4NTimer() {

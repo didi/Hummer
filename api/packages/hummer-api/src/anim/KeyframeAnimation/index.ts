@@ -16,6 +16,7 @@ export class KeyframeAnimation {
     public delay: number = 0;
     public repeatCount: number = 1;
     public easing: string = 'ease';
+    public key: string = '__default__';
 
     protected type: string = 'keyframe';
     protected property: string = 'position';
@@ -25,14 +26,14 @@ export class KeyframeAnimation {
     //使用双下划线开始和结尾避免被falcon引擎处理 eg:"__***__"
     private __endFunc__: Function | undefined = undefined;
 
-    private __startCallback__: Function = () => {
-        if (this.__startFunc__) {
+    private __startCallback__: Function = (event: any) => {
+        if (this.__startFunc__ && (event == undefined ||event.key == this.key)) {
             this.__startFunc__();
         }
     }
 
-    private __endCallback__: Function = () => {
-        if (this.__endFunc__) {
+    private __endCallback__: Function = (event: any) => {
+        if (this.__endFunc__  && (event == undefined ||event.key == this.key)) {
             this.__endFunc__();
         }
     }

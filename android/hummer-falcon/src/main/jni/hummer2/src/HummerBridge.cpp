@@ -138,11 +138,12 @@ jobject HMObject_get_value_(JNIEnv *env, jobject obj, jlong identify, jstring ke
 
     const char *keyValue = env->GetStringUTFChars(key, nullptr);
     JsiValue *hmValue = hmObject->getValue(keyValue);
-    jobject result = value2JObject(env, hmValue);
-    hmValue->obj = 0;
-
+    jobject result = 0;
+    if (hmValue != nullptr) {
+        result = value2JObject(env, hmValue);
+        hmValue->obj = 0;
+    }
     env->ReleaseStringUTFChars(key, keyValue);
-
     return result;
 }
 
@@ -150,8 +151,7 @@ int HMObject_get_value_type_(JNIEnv *env, jobject obj, jlong identify, jstring k
     JsiObject *hmObject = (JsiObject *) identify;
 
     const char *keyValue = env->GetStringUTFChars(key, nullptr);
-    bool result = hmObject->isObject(keyValue);
-
+    ValueType result = hmObject->getValueType(keyValue);
     env->ReleaseStringUTFChars(key, keyValue);
     return result;
 }
@@ -329,10 +329,12 @@ jobject HMArrayGetJObject_(JNIEnv *env, JsiArray *hmArray) {
 
 jobject value2JObject(JNIEnv *env, JsiValue *hmValue) {
 //    if (hmValue->obj == NULL) {
+    if (hmValue == nullptr) {
+        return 0;
+    }
     ValueType type = hmValue->getType();
     switch (type) {
-        case TYPE_NULL:
-            return HMValueGetJObject_(env, (JsiValue *) hmValue);
+
         case TYPE_BOOLEAN:
             return HMBooleanGetJObject_(env, (JsiBoolean *) hmValue);
         case TYPE_NUMBER:
@@ -345,11 +347,13 @@ jobject value2JObject(JNIEnv *env, JsiValue *hmValue) {
             return HMArrayGetJObject_(env, (JsiArray *) hmValue);
         case TYPE_NAPIFunction:
             return HMFunctionGetJObject_(env, (JsiFunction *) hmValue);
-        case TYPE_EXT:
+        case TYPE_VALUE_REF:
         case TYPE_COMPONENT:
         case TYPE_NAPIExternal:
-        case TYPE_NAPIUndefined:
         case TYPE_VALUE:
+        case TYPE_NAPIUndefined:
+        case TYPE_NULL:
+//            return HMValueGetJObject_(env, (JsiValue *) hmValue);
             break;
     }
 //    }

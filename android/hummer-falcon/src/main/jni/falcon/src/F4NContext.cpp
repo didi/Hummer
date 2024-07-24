@@ -192,7 +192,7 @@ F4NJsiErrorCatch::F4NJsiErrorCatch(F4NContext *context) {
 void F4NJsiErrorCatch::onCatchJsiError(int status, JsiError *jsiError) {
     JsiErrorCatch::onCatchJsiError(status, jsiError);
     if (this->context != nullptr && this->context->getExceptionHandler() != nullptr) {
-        this->context->getExceptionHandler()->onThrowException(jsiError == nullptr ? "" : jsiError->toString());
+        this->context->getExceptionHandler()->onThrowException(message);
     }
 }
 

@@ -71,14 +71,14 @@ void F4NContextMT::onThreadLoopEnd(F4NHandler *threadHandler) {
 JsiValue *F4NContextMT::evaluateJavaScript(string script, string scriptId, F4NJSCallback *callback) {
     if (prepared) {
         F4NMessage message = F4NMessage("evaluateJavaScript");
-        F4NJsiErrorCatch *errorCatch = new F4NJsiErrorCatch(this);
+        auto *errorCatch = new F4NJsiErrorCatch(this);
         message.function = [&, script, scriptId, callback, errorCatch](int id, const string &msg, void *data) {
             JsiObjectRef *result = _jsiContext_->evaluateJavaScript(script, scriptId, errorCatch);
             int status = 0;
             string message;
             if (errorCatch->isCatchJsiError()) {
                 status = errorCatch->status;
-                message = errorCatch->jsiError == nullptr ? "" : errorCatch->jsiError->toString();
+                message = errorCatch->message;
             }
             JsiValue *jsiValue = nullptr;
             if (result != nullptr) {
@@ -89,6 +89,7 @@ JsiValue *F4NContextMT::evaluateJavaScript(string script, string scriptId, F4NJS
                 callback->onJavaScriptResult(status, message, jsiValue);
                 delete callback;
             }
+            delete errorCatch;
             info("F4NContextMT::evaluateJavaScript() scriptId=%s, result=%s", scriptId.c_str(), jsiValue == nullptr ? "" : jsiValue->toString().c_str());
         };
         jsThreadHandler_->sendMessage(message);
@@ -108,7 +109,7 @@ JsiValue *F4NContextMT::evaluateBytecode(const uint8_t *byteArray, size_t length
             string message;
             if (errorCatch->isCatchJsiError()) {
                 status = errorCatch->status;
-                message = errorCatch->jsiError == nullptr ? "" : errorCatch->jsiError->toString();
+                message = errorCatch->message;
             }
             JsiValue *jsiValue = nullptr;
             if (result != nullptr) {
@@ -119,6 +120,7 @@ JsiValue *F4NContextMT::evaluateBytecode(const uint8_t *byteArray, size_t length
                 callback->onJavaScriptResult(status, message, jsiValue);
                 delete callback;
             }
+            delete errorCatch;
             info("F4NContextMT::evaluateBytecode() scriptId=%s, result=%s", scriptId.c_str(), jsiValue == nullptr ? "" : jsiValue->toString().c_str());
         };
         jsThreadHandler_->sendMessage(message);

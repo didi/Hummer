@@ -246,6 +246,8 @@ JsiValue *F4NElement::addAnimation(size_t size, JsiValue **params) {
 }
 
 void F4NElement::addAnimation(JsiValue *animation, string key) {
+    animation->protect();
+    removeAnimationForKey(key);
     _animations_->insert(make_pair(key, animation));
 }
 
@@ -264,6 +266,7 @@ void F4NElement::removeAnimationForKey(string key) {
     auto it = _animations_->find(key);
     if (it != _animations_->end()) {
         _animations_->erase(it);
+        it->second->unprotect();
     }
 }
 
@@ -273,6 +276,11 @@ JsiValue *F4NElement::removeAllAnimation(size_t size, JsiValue **params) {
 }
 
 void F4NElement::removeAllAnimation() {
+    auto it = _animations_->begin();
+    while (it != _animations_->end()) {
+        it->second->unprotect();
+        it++;
+    }
     _animations_->clear();
 }
 

@@ -1,7 +1,6 @@
 package com.didi.hummer2.utils;
 
 import com.didi.hummer2.HummerContext;
-import com.didi.hummer2.bridge.JsiArray;
 import com.didi.hummer2.bridge.JsiBoolean;
 import com.didi.hummer2.bridge.JsiNumber;
 import com.didi.hummer2.bridge.JsiObject;
@@ -9,13 +8,10 @@ import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.module.Component;
 import com.didi.hummer2.render.Element;
-import com.didi.hummer2.module.component.notifycenter.NotifyCenterEvent;
 import com.didi.hummer2.register.HummerObject;
-import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +26,7 @@ import java.util.Map;
  */
 
 public class HummerObjectUtil {
+
 
     public static boolean toBoolean(Object object) {
         if (object instanceof JsiBoolean) {
@@ -119,50 +116,20 @@ public class HummerObjectUtil {
         return null;
     }
 
+
     public static <T> T toJavaModel(Object object, Type type) {
-
-        if (object instanceof JsiObject || object instanceof JsiArray) {
-            String value = ((JsiValue) object).toString();
-            Object result = HMGsonUtil.fromJson(value, type);
-            if (result instanceof NotifyCenterEvent) {
-                JsiObject event = ((JsiObject) object);
-                ((NotifyCenterEvent) result).setValue(event.get("value"));
-            }
-            return (T) result;
-        }
-        if (object instanceof JsiNumber) {
-            Object result = ((JsiNumber) object).valueDouble();
-            return (T) result;
-        }
-        if (object instanceof JsiString) {
-            Object result = ((JsiString) object).valueString();
-            return (T) result;
-        }
-        if (object instanceof JsiBoolean) {
-            Object result = ((JsiBoolean) object).getValue();
-            return (T) result;
-        }
-        return null;
+        return F4NObjectUtil.toHummerJavaModel(object, type);
     }
 
-    public static <T> T toJavaArray(Object object) {
-        if (object instanceof JsiArray) {
-            String value = ((JsiValue) object).toString();
-            return HMGsonUtil.fromJson(value, new TypeToken<List<Object>>() {
-            }.getType());
-        }
-        return null;
-    }
 
     public static <T> T toJavaMap(Object object) {
-        if (object instanceof JsiObject) {
-            String value = ((JsiValue) object).toString();
-            return HMGsonUtil.fromJson(value, new TypeToken<Map<String, Object>>() {
-            }.getType());
-        }
-        return null;
+        return F4NObjectUtil.toSimpleJavaMap(object);
     }
 
+
+    /**
+     * 仅解析一层数据
+     */
     public static Map<String, Object> toFlatJavaMap(Object object) {
         if (object instanceof JsiObject) {
             Map<String, Object> result = new HashMap<>();

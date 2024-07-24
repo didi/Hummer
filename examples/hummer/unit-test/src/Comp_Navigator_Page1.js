@@ -20,16 +20,28 @@ class RootView extends View {
             marginTop: 50,
         };
         btn1.addEventListener('tap', (event) => {
+
+
+            // let navPage = {
+            //     url: "hummer://caimi/honey_popularize_submit_page",
+            //     params: {
+            //         popularizeModule: model,
+            //         energyModel: energyModel
+            //     }
+            // }
+
             let pageInfo = {
                 id: '222',
-                // url:'http://172.23.166.31:8030/index.js',
-                url: './Comp_Navigator_Page2.js',
+                url:'http://172.23.166.45:8040/index.js',
+                // url: './hm2_Comp_Navigator_Page2.js',
                 // url: 'http://www.baidu.com',
                 // url: 'native://test',
                 animated: true,
                 params: {
                     aaa: 111,
                     bbb: 222,
+                    ccc:null,
+                    ccx:undefined
                 },
                 // closeSelf: true,
             };

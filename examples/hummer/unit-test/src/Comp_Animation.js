@@ -261,7 +261,7 @@ class RootView extends View {
             anim.on("end", function () {
                 console.log("position anim end");
             });
-            animView.addAnimation(anim, "xx");
+            animView.addAnimation(anim, "xx01");
         }
 
         // 缩放动画
@@ -288,7 +288,13 @@ class RootView extends View {
                 }];
             }
             anim.duration = 0.3;
-            animView.addAnimation(anim, "xx");
+            anim.on("start", function () {
+                console.log("animScale anim start");
+            });
+            anim.on("end", function () {
+                console.log("animScale anim end");
+            });
+            animView.addAnimation(anim, "xx02");
         }
 
         // 旋转动画

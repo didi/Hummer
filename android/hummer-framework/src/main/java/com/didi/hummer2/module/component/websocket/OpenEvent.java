@@ -1,5 +1,6 @@
 package com.didi.hummer2.module.component.websocket;
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.render.event.base.Event;
 
 /**
@@ -12,7 +13,7 @@ import com.didi.hummer2.render.event.base.Event;
  * @Date 2024/4/28 5:24 PM
  * @Description 用一句话说明文件功能
  */
-
+@HMJsiValue
 public class OpenEvent extends Event {
 
     public OpenEvent() {

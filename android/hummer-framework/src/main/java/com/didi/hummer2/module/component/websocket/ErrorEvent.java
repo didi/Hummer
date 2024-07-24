@@ -1,5 +1,6 @@
 package com.didi.hummer2.module.component.websocket;
 
+import com.didi.hummer2.annotation.HMJsiValue;
 import com.didi.hummer2.render.event.base.Event;
 
 /**
@@ -13,6 +14,7 @@ import com.didi.hummer2.render.event.base.Event;
  * @Description 用一句话说明文件功能
  */
 
+@HMJsiValue
 public class ErrorEvent extends Event {
 
     public ErrorEvent() {

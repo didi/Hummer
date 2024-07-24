@@ -76,6 +76,14 @@ public class ScrollerElement extends Element<Scroller> implements HummerGoBack {
         getView().replaceChild(child.getView(), old.getView());
     }
 
+    @HMAttribute("enableRefresh")
+    private boolean enableRefresh;
+
+    public void setEnableRefresh(boolean enableRefresh) {
+        this.enableRefresh = enableRefresh;
+        getView().setEnableRefresh(enableRefresh);
+    }
+
     @HMAttribute("refreshView")
     private Element refreshView;
 
@@ -83,6 +91,15 @@ public class ScrollerElement extends Element<Scroller> implements HummerGoBack {
         this.refreshView = refreshView;
         getView().setRefreshView(refreshView.getView());
     }
+
+    @HMAttribute("enableLoadMore")
+    private boolean enableLoadMore;
+
+    public void setEnableLoadMore(boolean enableLoadMore) {
+        this.enableLoadMore = enableLoadMore;
+        getView().setEnableLoadMore(enableLoadMore);
+    }
+
 
     @HMAttribute("loadMoreView")
     private Element loadMoreView;

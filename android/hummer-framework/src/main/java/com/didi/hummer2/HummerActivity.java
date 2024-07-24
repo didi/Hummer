@@ -26,7 +26,7 @@ public class HummerActivity extends AppCompatActivity {
     protected NavPage page;
 
     protected HummerLayout hummerLayout;
-    protected HummerScriptRender hmRender;
+    protected HummerScriptRender hummerRender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,30 +48,30 @@ public class HummerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (hmRender != null) {
-            hmRender.onResume();
+        if (hummerRender != null) {
+            hummerRender.onResume();
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (hmRender != null) {
-            hmRender.onPause();
+        if (hummerRender != null) {
+            hummerRender.onPause();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (hmRender != null) {
-            hmRender.onDestroy();
+        if (hummerRender != null) {
+            hummerRender.onDestroy();
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (hmRender != null && hmRender.onBackPressed()) {
+        if (hummerRender != null && hummerRender.onBackPressed()) {
             return;
         }
         super.onBackPressed();
@@ -84,8 +84,8 @@ public class HummerActivity extends AppCompatActivity {
     }
 
     protected void setPageResult() {
-        if (hmRender != null) {
-            setResult(Activity.RESULT_OK, hmRender.getJsPageResultIntent());
+        if (hummerRender != null) {
+            setResult(Activity.RESULT_OK, hummerRender.getJsPageResultIntent());
         }
     }
 
@@ -133,10 +133,10 @@ public class HummerActivity extends AppCompatActivity {
      * 初始化Hummer上下文，即JS运行环境
      */
     protected void initHummer() {
-        hmRender = new HummerScriptRender(hummerLayout, getNamespace(), getDevToolsConfig());
-        initHummerRegister(hmRender.getHummerContext());
-        hmRender.setJsPageInfo(page);
-        hmRender.setRenderCallback(new HummerScriptRender.HummerRenderCallback() {
+        hummerRender = new HummerScriptRender(hummerLayout, getNamespace(), getDevToolsConfig());
+        initHummerRegister(hummerRender.getHummerContext());
+        hummerRender.setJsPageInfo(page);
+        hummerRender.setRenderCallback(new HummerScriptRender.HummerRenderCallback() {
             @Override
             public void onSucceed(HummerContext hmContext, JSValue jsPage) {
                 onPageRenderSucceed(hmContext, jsPage);
@@ -147,7 +147,7 @@ public class HummerActivity extends AppCompatActivity {
                 onPageRenderFailed(e);
             }
         });
-        hmRender.setHummerPageHandler(new HummerScriptContext.HummerPageHandler() {
+        hummerRender.setHummerPageHandler(new HummerScriptContext.HummerPageHandler() {
             @Override
             public void finishPage() {
                 finish();
@@ -192,11 +192,11 @@ public class HummerActivity extends AppCompatActivity {
         }
 
         if (page.isHttpUrl()) {
-            hmRender.renderWithUrl(page.url);
+            hummerRender.renderWithUrl(page.url);
         } else if (page.url.startsWith("/")) {
-            hmRender.renderWithFile(page.url);
+            hummerRender.renderWithFile(page.url);
         } else {
-            hmRender.renderWithAssets(page.url);
+            hummerRender.renderWithAssets(page.url);
         }
     }
 
