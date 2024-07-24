@@ -553,7 +553,8 @@ export class Element extends Node {
         this.addEventListener(AnimationEndName, animation.endCallback);
 
         // 临时存储，方面后面移除监听
-        this._animationMap && this._animationMap.set(key, animation)
+        animation.key = key;
+        this._animationMap && this._animationMap.set(key, animation);
         this.getOriginObject().addAnimation(animation, key);
     }
 
@@ -586,8 +587,8 @@ export class Element extends Node {
 
     private _removeAllAnimation() {
         // 移除事件监听
-        this.removeEventListener(AnimationStartName)
-        this.removeEventListener(AnimationEndName)
+        this.removeEventListener(AnimationStartName);
+        this.removeEventListener(AnimationEndName);
         this._animationMap.clear();
         this.getOriginObject().removeAllAnimation();
     }
