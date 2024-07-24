@@ -9,7 +9,7 @@ module.exports = {
     entries: "src/*.js",
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: "hm2_[name].js"
+      filename: "[name].js"
     },
 
     plugins: [

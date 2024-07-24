@@ -22,7 +22,8 @@ class RootView extends View {
         btn1.addEventListener('tap', (event) => {
             Navigator.openPage({
                 id: "333",
-                url: "./Comp_Navigator_Page3.js"
+                url: "./hm2_Comp_Navigator_Page3.js",
+                animated: true,
             }, (result) => {
                 console.log('Page result: ' + JSON.stringify(result));
             });

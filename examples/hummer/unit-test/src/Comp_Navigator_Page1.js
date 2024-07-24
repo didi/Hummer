@@ -32,8 +32,8 @@ class RootView extends View {
 
             let pageInfo = {
                 id: '222',
-                // url:'http://172.23.166.31:8030/index.js',
-                url: './Comp_Navigator_Page2.js',
+                url:'http://172.23.166.45:8040/index.js',
+                // url: './hm2_Comp_Navigator_Page2.js',
                 // url: 'http://www.baidu.com',
                 // url: 'native://test',
                 animated: true,

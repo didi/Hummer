@@ -9,7 +9,7 @@ module.exports = {
     entries: "src/*.js",
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: "[name]hummer2Tenon.js"
+      filename: "tn2_[name].js"
     },
     externals: {
       '@hummer/hummer-front': '__GLOBAL__',
