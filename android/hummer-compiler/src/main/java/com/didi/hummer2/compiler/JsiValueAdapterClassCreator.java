@@ -179,6 +179,11 @@ public class JsiValueAdapterClassCreator {
         } else {
             myMethod.addStatement("$T result = new $T(null, null)", classElement, classElement);
         }
+
+        myMethod.beginControlFlow("if (!(jsiValue instanceof $T))", TypeUtil.JsiObject);
+        myMethod.addStatement("return null");
+        myMethod.endControlFlow();
+
         myMethod.addStatement("$T jsiObject = ($T)jsiValue", TypeUtil.JsiObject, TypeUtil.JsiObject);
 
         List<? extends Element> allMembers = getClassAllElements(classElement);
@@ -215,7 +220,7 @@ public class JsiValueAdapterClassCreator {
         TypeMirror paramType = variableElement.asType();
         logger.info("field: " + variableElement + ", paramType: " + paramType.toString());
 
-        VariableElementSetBuilder setBuilder = new VariableElementSetBuilder("result", myMethod, setElement, fieldName);
+        VariableElementSetBuilder setBuilder = new VariableElementSetBuilder("result", myMethod, setElement, fieldName, keyName);
 
         if (TypeUtil.isInt(paramType)) {
             setBuilder.buildStatement("parser.optInt(jsiObject.get($S))", keyName);
@@ -304,15 +309,17 @@ public class JsiValueAdapterClassCreator {
         private MethodSpec.Builder myMethod;
         private ExecutableElement setElement;
         private String fieldName;
+        private String keyName;
 
         private StringBuffer formatBuffer = new StringBuffer();
         private List<Object> params = new ArrayList<>();
 
-        public VariableElementSetBuilder(String ownerName, MethodSpec.Builder myMethod, ExecutableElement setElement, String fieldName) {
+        public VariableElementSetBuilder(String ownerName, MethodSpec.Builder myMethod, ExecutableElement setElement, String fieldName, String keyName) {
             this.ownerName = ownerName;
             this.myMethod = myMethod;
             this.setElement = setElement;
             this.fieldName = fieldName;
+            this.keyName = keyName;
         }
 
 
@@ -335,6 +342,16 @@ public class JsiValueAdapterClassCreator {
             return this;
         }
 
+        public VariableElementSetBuilder beginControlFlowX() {
+            formatBuffer.append("{");
+            return this;
+        }
+
+        public VariableElementSetBuilder endControlFlowX() {
+            formatBuffer.append("}");
+            return this;
+        }
+
         public void buildStatement(String format, Object... args) {
             addStatement(format, args);
             build();
@@ -342,6 +359,7 @@ public class JsiValueAdapterClassCreator {
 
         public void build() {
             StringBuffer sb = new StringBuffer();
+            myMethod.beginControlFlow("if (jsiObject.get($S)!=null)", keyName);
             sb.append(ownerName);
             if (setElement != null) {
                 sb.append(".").append(setElement.getSimpleName()).append("(");
@@ -351,8 +369,8 @@ public class JsiValueAdapterClassCreator {
                 sb.append(".").append(fieldName).append(" = ");
                 sb.append(formatBuffer.toString());
             }
-
             myMethod.addStatement(sb.toString(), params.toArray());
+            myMethod.endControlFlow();
         }
 
     }
