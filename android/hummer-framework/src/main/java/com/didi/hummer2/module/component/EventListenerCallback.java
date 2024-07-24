@@ -22,8 +22,8 @@ public class EventListenerCallback extends NoOpJSCallback {
 
     private JsiFunction jsiFunction;
 
-    public EventListenerCallback(JsiFunction hmFunction) {
-        this.jsiFunction = hmFunction;
+    public EventListenerCallback(JsiFunction jsiFunction) {
+        this.jsiFunction = jsiFunction;
     }
 
     @Override
@@ -31,30 +31,14 @@ public class EventListenerCallback extends NoOpJSCallback {
         JsiValue result = null;
         if (params.length > 0 && params[0] instanceof Event) {
             String type = ((Event) params[0]).getType();
-            result = jsiFunction.call(new JsiString(type), ((Event) params[0]).toJsiValue());
+            result = jsiFunction.call(type,  params[0]);
         } else {
-            int size = params.length;
-            Object[] callParams = new Object[size];
-            for (int i = 0; i < size; i++) {
-                callParams[i] = toJsiValue(params[i]);
-            }
-            result = jsiFunction.call(callParams);
+            result = jsiFunction.call(params);
         }
-
         if (result != null) {
             HMLog.w("HummerNative", "EventListenerCallback::call() result= " + result);
         }
         return null;
-    }
-
-    private Object toJsiValue(Object value) {
-        if (value instanceof Event) {
-            return ((Event) value).toJsiValue();
-        }
-        if (value instanceof HttpResponse) {
-            return ((HttpResponse<?>) value).toJsiValue();
-        }
-        return value;
     }
 
 }
