@@ -17,6 +17,17 @@ import com.didi.hummer2.render.event.base.Event;
 @HMJsiValue
 public class StatEvent extends Event {
 
+    private String key;
+
     public StatEvent() {
+    }
+
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

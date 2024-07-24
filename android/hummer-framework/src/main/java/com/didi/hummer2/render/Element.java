@@ -228,6 +228,7 @@ public abstract class Element<VIEW extends HMBase> extends Component {
     public void addAnimation(HummerAnimation anim, String id) {
         if (anim != null) {
             BasicAnimation animation = anim.getOriginAnimation();
+            animation.key = id;
             animation.on("start", getEventTargetListener());
             animation.on("end", getEventTargetListener());
             getView().addAnimation(animation, id);
