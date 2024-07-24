@@ -1,6 +1,7 @@
 import { EventListener } from "src/EventTarget";
 import { FlexStyle, Element } from "../Element"
 import { HummerGlobalProxy } from "./HummerGlobalProxy"
+import { handleFixedNodeByStyle, removeChildWithFixed } from "src/Utils/fixedHelper";
 
 
 /**
@@ -298,8 +299,13 @@ export class HummerElement extends Element {
         if (this.globalProxy) {
             this.globalProxy.setStyle(this, value, flag);
         } else {
-            super.setStyle(value, false);
+            this.superSetStyle(value, false)
         }
+    }
+
+    protected onDestoryed() {
+        // fixed节点处理
+        removeChildWithFixed(this);
     }
 
 
@@ -309,6 +315,8 @@ export class HummerElement extends Element {
      * @param flag 
      */
     public superSetStyle(value: FlexStyle | object, flag: boolean = false) {
+        // fixed节点处理
+        handleFixedNodeByStyle(this, value as Record<string, string>);
         super.setStyle(value, false);
     }
 
