@@ -41,12 +41,8 @@ public class UIThreadUtil {
         return Looper.getMainLooper() != Looper.myLooper();
     }
 
-    /**
-     * 给定任务添加到UI线程
-     *
-     * @param runnable
-     */
-    public static void runOnUiThread(Runnable runnable) {
+
+    private static void checkHandler() {
         if (sMainHandler == null) {
             synchronized (UIThreadUtil.class) {
                 if (sMainHandler == null) {
@@ -54,7 +50,29 @@ public class UIThreadUtil {
                 }
             }
         }
+    }
+
+    /**
+     * 给定任务添加到UI线程
+     *
+     * @param runnable
+     */
+    public static void runOnUiThread(Runnable runnable) {
+        checkHandler();
         sMainHandler.post(runnable);
+    }
+
+    public static void runOnUiThread(Runnable runnable, long delay) {
+        checkHandler();
+        sMainHandler.postDelayed(runnable, delay);
+    }
+
+    /**
+     * //TODO 临时处理，ALooper与Handler队列顺序问题
+     */
+    public static void runOnUiThreadX(Runnable runnable, long delay) {
+        checkHandler();
+        sMainHandler.postDelayed(new XRunnable(runnable), delay);
     }
 
 
@@ -79,6 +97,20 @@ public class UIThreadUtil {
             if (F4NDebugUtil.isDebuggable()) {
                 throw new HummerThreadException(message);
             }
+        }
+    }
+
+    private static class XRunnable implements Runnable {
+
+        private Runnable runnable;
+
+        public XRunnable(Runnable runnable) {
+            this.runnable = runnable;
+        }
+
+        @Override
+        public void run() {
+            runOnUiThread(runnable);
         }
     }
 }

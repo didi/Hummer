@@ -179,12 +179,12 @@ void F4NContextMT::cancelUITask(long id) {
 
 JsiValue *F4NContextMT::render(F4NElement *rootElement) {
     _elementRender_->applyRenderTag(rootElement);
-
+//    info("F4NContextMT::render() apply.");
     F4NMessage message = F4NMessage("render");
     message.function = [&, rootElement](int id, const string &msg, void *data) {
-        info("VDOMContextMT::render() start.");
+        info("F4NContextMT::render() start.");
         F4NContextBase::render(rootElement);
-        info("VDOMContextMT::render() stop.");
+        info("F4NContextMT::render() stop.");
     };
     _mainThreadHandler_->sendMessage(message);
     return nullptr;

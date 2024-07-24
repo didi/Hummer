@@ -54,7 +54,7 @@ JsiValue *HummerInvokeFactory::invoke(long type, long objId, long methodType, st
 //         methodType,
 //         objId,
 //         methodName.c_str(),
-//         JSUtils::buildArrayString(argc, argv).c_str());
+//         JsiUtils::buildArrayString(argc, argv).c_str());
 
     JNIEnv *jniEnv = JNI_GetEnv();
     jobject obj = (jobject) contextId;
@@ -90,28 +90,14 @@ JsiValue *HummerInvokeFactory::invoke(long type, long objId, long methodType, st
             jlong value = jniEnv->GetLongField(result, J_HMValue_identify);
             JsiValue *jsiValue = (JsiValue *) value;
 
-            LOGI("HummerComponentFactory::invoke() name=%s,methodType=%u,objId=%u,methodName=%s,result=%s",
-                 componentName.c_str(),
-                 methodType,
-                 objId,
-                 methodName.c_str(),
-                 jsiValue->toString().c_str());
-            return jsiValue;
-        }
-
-//        if (jniEnv->IsInstanceOf(result, J_Long)) {
-//            jlong value = jniEnv->CallLongMethod(result, J_Long_longValue);
-//            JsiValue *jsiValue = (JsiValue *) value;
-//
 //            LOGI("HummerComponentFactory::invoke() name=%s,methodType=%u,objId=%u,methodName=%s,result=%s",
 //                 componentName.c_str(),
 //                 methodType,
 //                 objId,
 //                 methodName.c_str(),
 //                 jsiValue->toString().c_str());
-//            return jsiValue;
-//        }
-
+            return jsiValue;
+        }
     }
 
     return nullptr;

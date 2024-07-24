@@ -152,12 +152,12 @@ public class HummerScriptRender {
                     HMLog.e("HummerNative", "onJavaScriptResult() status=" + status + ", message=" + message + ", jsiValue=" + jsiValue);
                 }
                 processJavascriptFinish();
-                UIThreadUtil.runOnUiThread(new Runnable() {
+                UIThreadUtil.runOnUiThreadX(new Runnable() {
                     @Override
                     public void run() {
                         processRenderFinish();
                     }
-                });
+                }, 0);
             }
         });
 
