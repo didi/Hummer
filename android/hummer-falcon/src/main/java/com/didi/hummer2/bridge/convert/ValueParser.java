@@ -58,10 +58,18 @@ public abstract class ValueParser {
             }
             if (type == String.class) {
                 result = optString(jsiValue);
-            } else if (type == Boolean.class) {
+            } else if (type == Boolean.TYPE || type == Boolean.class) {
                 result = optBoolean(jsiValue);
+            } else if (isShort(type)) {
+                result = optShort(jsiValue);
             } else if (isInteger(type)) {
+                result = optInt(jsiValue);
+            } else if (isLong(type)) {
                 result = optLong(jsiValue);
+            } else if (isFloat(type)) {
+                result = optFloat(jsiValue);
+            } else if (isDouble(type)) {
+                result = optDouble(jsiValue);
             } else if (isNumber(type)) {
                 result = optDouble(jsiValue);
             } else {
@@ -74,15 +82,44 @@ public abstract class ValueParser {
         return null;
     }
 
-    protected boolean isInteger(Type type) {
-        if (type == Integer.class || type == Long.class || type == BigInteger.class) {
+    protected boolean isShort(Type type) {
+        if (type == Short.class || type == Short.TYPE || type == Byte.class || type == Byte.TYPE || type == Character.class || type == Character.TYPE) {
             return true;
         }
         return false;
     }
 
+    protected boolean isInteger(Type type) {
+        if (type == Integer.class || type == Integer.TYPE) {
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isLong(Type type) {
+        if (type == Long.class || type == Long.TYPE) {
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isFloat(Type type) {
+        if (type == Float.class || type == Float.TYPE) {
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isDouble(Type type) {
+        if (type == Double.class || type == Double.TYPE) {
+            return true;
+        }
+        return false;
+    }
+
+
     protected boolean isNumber(Type type) {
-        if (type == Number.class || type == Float.class || type == Double.class) {
+        if (type == Number.class || type == BigInteger.class) {
             return true;
         }
         return false;
@@ -219,6 +256,13 @@ public abstract class ValueParser {
         return false;
     }
 
+    public short optShort(JsiValue jsiValue) {
+        if (jsiValue instanceof JsiNumber) {
+            return ((JsiNumber) jsiValue).valueShort();
+        }
+        return 0;
+    }
+
     public int optInt(JsiValue jsiValue) {
         if (jsiValue instanceof JsiNumber) {
             return ((JsiNumber) jsiValue).valueInt();
@@ -273,11 +317,10 @@ public abstract class ValueParser {
     }
 
 
-
     /**
      * 根据泛型index获取泛型变量的实际类型
      *
-     * @param type 类/类型   List.class Map.class
+     * @param type  类/类型   List.class Map.class
      * @param index 泛型index
      * @return 类/类型
      */

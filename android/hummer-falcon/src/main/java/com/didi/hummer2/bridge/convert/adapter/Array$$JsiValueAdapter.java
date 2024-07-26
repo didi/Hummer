@@ -31,10 +31,13 @@ public class Array$$JsiValueAdapter extends BaseAdapter<Object> {
         if (jsiValue instanceof JsiArray) {
             Type valueType = parser.getComponentType(type);
             JsiArray jsiArray = (JsiArray) jsiValue;
-            Object[] result = new Object[jsiArray.length()];
+            Object result = Array.newInstance((Class) valueType, jsiArray.length());
             int size = jsiArray.length();
             for (int i = 0; i < size; i++) {
-                result[i] = parser.toJavaValue(jsiArray.getValue(i), valueType);
+                Object value = parser.toJavaValue(jsiArray.getValue(i), valueType);
+                if (value != null) {
+                    Array.set(result, i, value);
+                }
             }
             return result;
         }

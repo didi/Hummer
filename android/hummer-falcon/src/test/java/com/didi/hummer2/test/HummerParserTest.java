@@ -75,12 +75,70 @@ public class HummerParserTest {
         Assert.assertNotNull(result1);
         Assert.assertNotNull(result2);
 
-        Assert.assertArrayEquals((Object[]) result1.get("array"),(Object[]) map.get("array"));
+        Assert.assertArrayEquals((Object[]) result1.get("array"), (Object[]) map.get("array"));
     }
 
     @Test
     public void testSimpleArrayParser() {
+        int[] intArray = new int[3];
+        long[] longArray = new long[3];
+        float[] floatArray = new float[3];
+        double[] doubleArray = new double[3];
+        String[] stringArray = new String[3];
+        Object[] objectArray = new Object[3];
 
+        intArray[0] = 1;
+        intArray[1] = 2;
+        intArray[2] = 3;
+
+        longArray[0] = 4L;
+        longArray[1] = 5L;
+        longArray[2] = 6L;
+
+        floatArray[0] = 7.1f;
+        floatArray[1] = 7.2f;
+        floatArray[2] = 7.3f;
+
+        doubleArray[0] = 8.4d;
+        doubleArray[1] = 8.5d;
+        doubleArray[2] = 8.6d;
+
+        stringArray[0] ="ns1";
+        stringArray[1] ="ns2";
+
+
+        objectArray[1] = "t1";
+        objectArray[2] = 100.20;
+
+
+        JsiValue ijsiValue = hummerParser.toJsiValue(intArray);
+        JsiValue jjsiValue = hummerParser.toJsiValue(longArray);
+        JsiValue fjsiValue = hummerParser.toJsiValue(floatArray);
+        JsiValue djsiValue = hummerParser.toJsiValue(doubleArray);
+        JsiValue sjsiValue = hummerParser.toJsiValue(stringArray);
+        JsiValue ojsiValue = hummerParser.toJsiValue(objectArray);
+
+        int[] intArrayR  = hummerParser.toJavaValue(ijsiValue, new TypeToken<int[]>() {}.getType());
+        long[] longArrayR = hummerParser.toJavaValue(jjsiValue, new TypeToken<long[]>() {}.getType());
+        float[] floatArrayR = hummerParser.toJavaValue(fjsiValue, new TypeToken<float[]>() {}.getType());
+        double[] doubleArrayR = hummerParser.toJavaValue(djsiValue, new TypeToken<double[]>() {}.getType());
+        String[] stringArrayR  = hummerParser.toJavaValue(sjsiValue, new TypeToken<String[]>() {}.getType());
+        Object[] objectArrayR  = hummerParser.toJavaValue(ojsiValue, new TypeToken<Object[]>() {}.getType());
+
+        Assert.assertNotNull(ijsiValue);
+        Assert.assertNotNull(jjsiValue);
+        Assert.assertNotNull(fjsiValue);
+        Assert.assertNotNull(djsiValue);
+        Assert.assertNotNull(sjsiValue);
+        Assert.assertNotNull(ojsiValue);
+
+
+        Assert.assertNotNull(intArrayR);
+        Assert.assertNotNull(longArrayR);
+        Assert.assertNotNull(floatArrayR);
+        Assert.assertNotNull(doubleArrayR);
+        Assert.assertNotNull(stringArrayR);
+        Assert.assertNotNull(objectArrayR);
     }
 
 

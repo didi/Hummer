@@ -24,6 +24,10 @@ public class JsiNumber extends JsiValue implements INumber {
         return value;
     }
 
+    public short valueShort() {
+        return (short) value;
+    }
+
     @Override
     public int valueInt() {
         return (int) value;
