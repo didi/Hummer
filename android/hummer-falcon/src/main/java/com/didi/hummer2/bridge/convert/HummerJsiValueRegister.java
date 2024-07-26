@@ -2,6 +2,8 @@ package com.didi.hummer2.bridge.convert;
 
 import com.didi.hummer2.bridge.JsiValue;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -66,7 +68,9 @@ public class HummerJsiValueRegister implements JsiValueRegister {
     public JsiValue toJsiValue(ValueParser valueParser, Object value) {
         if (value != null) {
             JsiValueAdapter parser = searchParser(value.getClass());
-            return parser.toJsiValue(valueParser, value);
+            if (parser != null) {
+                return parser.toJsiValue(valueParser, value);
+            }
         }
         return null;
     }
@@ -74,12 +78,18 @@ public class HummerJsiValueRegister implements JsiValueRegister {
     private JsiValueAdapter searchParser(Type type) {
         if (type instanceof ParameterizedType) {
             type = ((ParameterizedType) type).getRawType();
+        } else if (type instanceof GenericArrayType) {
+            type = Array.class;
+        } else if (type instanceof Class && ((Class<?>) type).isArray()) {
+            type = Array.class;
         }
         JsiValueAdapter parser = valueParserMap.get(type);
-        if (isInterfaceOfType(type, List.class)) {
-            parser = valueParserMap.get(List.class);
-        } else if (isInterfaceOfType(type, Map.class)) {
-            parser = valueParserMap.get(Map.class);
+        if (parser == null) {
+            if (isInterfaceOfType(type, List.class)) {
+                parser = valueParserMap.get(List.class);
+            } else if (isInterfaceOfType(type, Map.class)) {
+                parser = valueParserMap.get(Map.class);
+            }
         }
         return parser;
     }

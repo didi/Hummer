@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
 
 public interface JsiValueAdapter<T> {
 
-    Class<T> getJavaClass();
+    Class<?> getJavaClass();
 
     T toJavaValue(ValueParser parser, JsiValue jsiValue, Type type);
 

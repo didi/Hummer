@@ -14,7 +14,7 @@ package com.didi.hummer2.bridge.convert;
 public abstract class BaseAdapter<T> implements JsiValueAdapter<T> {
 
     @Override
-    public Class<T> getJavaClass() {
+    public Class<?> getJavaClass() {
         return null;
     }
 

@@ -11,6 +11,7 @@ import com.didi.hummer2.bridge.JsiString;
 import com.didi.hummer2.bridge.JsiValue;
 import com.didi.hummer2.bridge.JsiValueBuilder;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -323,6 +324,14 @@ public abstract class ValueParser {
             }
         }
         return -1;
+    }
+
+    public Type getComponentType(Type type) {
+        if (type instanceof GenericArrayType) {
+            Type comType = ((GenericArrayType) type).getGenericComponentType();
+            return comType;
+        }
+        return null;
     }
 
 }

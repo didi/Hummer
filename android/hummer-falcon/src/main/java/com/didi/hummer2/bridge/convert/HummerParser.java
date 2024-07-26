@@ -2,6 +2,7 @@ package com.didi.hummer2.bridge.convert;
 
 
 import com.didi.hummer2.bridge.JsiValueBuilder;
+import com.didi.hummer2.bridge.convert.adapter.Array$$JsiValueAdapter;
 import com.didi.hummer2.bridge.convert.adapter.List$$JsiValueAdapter;
 import com.didi.hummer2.bridge.convert.adapter.Map$$JsiValueAdapter;
 
@@ -36,6 +37,7 @@ public class HummerParser extends ValueParser {
 
     protected void initBaseAdapter() {
         hummerJsiValueRegister.register(new List$$JsiValueAdapter());
+        hummerJsiValueRegister.register(new Array$$JsiValueAdapter());
         hummerJsiValueRegister.register(new Map$$JsiValueAdapter());
     }
 

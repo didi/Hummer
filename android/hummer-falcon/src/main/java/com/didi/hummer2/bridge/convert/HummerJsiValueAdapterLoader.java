@@ -64,14 +64,4 @@ public final class HummerJsiValueAdapterLoader {
     }
 
 
-    //    public Object toJavaValue(JsiValue jsiValue, Type type) {
-//        load();
-//        return jsiValueRegister.toJavaValue(jsiValue, type);
-//    }
-//
-//    public JsiValue toJsiValue(Object value) {
-//        load();
-//        return jsiValueRegister.toJsiValue(value);
-//    }
-
 }

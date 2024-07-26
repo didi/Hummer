@@ -47,6 +47,42 @@ public class HummerParserTest {
         hummerParser = new HummerParser(new JsiValueBuilderX(), register);
     }
 
+    @Test
+    public void testArrayParser() {
+        Map<String, Object> map = new HashMap<>();
+
+        Object[] array = new Object[10];
+        array[0] = false;
+        array[1] = true;
+        array[2] = "";
+        array[3] = "name2";
+        array[4] = 1L;
+        array[5] = "1.2d";
+        array[6] = new HashMap<>();
+        array[7] = new ArrayList<>();
+//        array[8] = new long[2];
+//        array[9] = new Object[2];
+
+        map.put("array", array);
+
+        JsiValue jsiValue = hummerParser.toJsiValue(map);
+        Type type = new TypeToken<Map<String, Object[]>>() {
+        }.getType();
+
+        Map result1 = hummerParser.toJavaValue(jsiValue, type);
+        Map result2 = hummerParser.toJavaValue(jsiValue, Object.class);
+
+        Assert.assertNotNull(result1);
+        Assert.assertNotNull(result2);
+
+        Assert.assertArrayEquals((Object[]) result1.get("array"),(Object[]) map.get("array"));
+    }
+
+    @Test
+    public void testSimpleArrayParser() {
+
+    }
+
 
     @Test
     public void testRequestParser() {
