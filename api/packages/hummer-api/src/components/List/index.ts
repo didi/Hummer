@@ -80,6 +80,11 @@ export class List extends HummerElement {
         this.setStyle(value, false);
     }
 
+    //扩展样式属性
+    public get style() {
+        return this.getStyle() || {};
+    }
+
 
     /**
      * 分发资源加载结果回调

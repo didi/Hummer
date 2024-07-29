@@ -58,10 +58,9 @@ export class Text extends HummerElement {
     }
 
     //扩展样式属性
-    // FIXME: 鸿蒙下样式问题
-    // public get style() {
-    //     return this.getStyle() || {};
-    // }
+    public get style() {
+        return this.getStyle() || {};
+    }
 
     /**
      * 普通文本内容

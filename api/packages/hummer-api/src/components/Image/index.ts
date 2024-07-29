@@ -63,11 +63,11 @@ export class Image extends HummerElement {
     public set style(value: ImageStyle | Record<string, any>) {
         this.setStyle(value, false);
     }
-
-    // FIXME: 鸿蒙下样式问题
-    // public get style() {
-    //     return this.getStyle() || {};
-    // }
+    
+    //扩展样式属性
+    public get style() {
+        return this.getStyle() || {};
+    }
 
 
     /**

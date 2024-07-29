@@ -63,10 +63,9 @@ export class TextArea extends HummerElement {
     }
 
     //扩展样式属性
-    // FIXME: 鸿蒙下样式问题
-    // public get style() {
-    //     return this.getStyle() || {};
-    // }
+    public get style() {
+        return this.getStyle() || {};
+    }
 
     /**
      * 默认输入内容

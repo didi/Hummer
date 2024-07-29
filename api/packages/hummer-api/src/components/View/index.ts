@@ -42,10 +42,9 @@ export class View extends LifeCycleElement {
     }
 
     //扩展样式属性
-    // FIXME: 鸿蒙下样式问题
-    // public get style() {
-    //     return this.getStyle() || {};
-    // }
+    public get style() {
+        return this.getStyle() || {};
+    }
 
 
     /**
