@@ -374,6 +374,9 @@ void F4NElement::release() {
         _Style_ = nullptr;
     }
 
+    if(_children_ == nullptr){
+        return;
+    }
     auto child = _children_->begin();
     while (child != _children_->end()) {
         if (*child != nullptr){
