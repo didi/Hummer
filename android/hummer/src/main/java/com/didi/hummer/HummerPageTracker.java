@@ -89,6 +89,18 @@ class HummerPageTracker {
       HMLog.v("HummerNative", "JS执行耗时：" + perfInfo.jsEvalTimeCost + " ms");
    }
 
+   /**
+    * 在分包模式下，单个页面对应的所有JS均执行完后，上报首帧渲染时长
+    */
+   public void trackTotalJSEvalFinish() {
+      if (isHotReload()) {
+         return;
+      }
+
+      long timeCost = System.currentTimeMillis() - ctxInitStartTime;
+      trackerAdapter.trackPerfCustomInfo(pageUrl, new PerfCustomInfo("firstFrameRenderTime", "页面首帧渲染时长", "ms", timeCost));
+   }
+
    public void trackRenderFinish(boolean isSuccess) {
       if (isHotReload()) {
          return;

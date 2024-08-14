@@ -89,6 +89,12 @@ public class HummerRender {
                 onRenderFinish(isRenderSuccess);
             }
         });
+
+        hmContext.setTotalJsEvalListener(() -> {
+            if (tracker != null) {
+                tracker.trackTotalJSEvalFinish();
+            }
+        });
     }
 
     public HummerContext getHummerContext() {
@@ -186,6 +192,7 @@ public class HummerRender {
         }
     }
 
+    @Deprecated
     private boolean isSplitChunksMode() {
         JSValue hv = hmContext.getJsContext().getJSValue("Hummer");
         return hv != null && hv.getBoolean("isSplitChunksMode");

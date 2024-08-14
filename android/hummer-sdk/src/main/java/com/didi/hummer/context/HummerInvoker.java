@@ -42,6 +42,7 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                 mHummerContext.render(v);
                 break;
             case "onRenderFinished":
+                // JS主动调用render结束的方法（实际上目前没有用到这个方法）
                 boolean isSucceed = (boolean) params[0];
                 mHummerContext.onRenderFinished(isSucceed);
                 break;
@@ -98,6 +99,18 @@ public class HummerInvoker extends BaseInvoker<HMBase> {
                         }
                     }
                 });
+                break;
+            case "postEvent":
+                /**
+                 * 通知原生侧各种节点事件
+                 *
+                 * eventName: 事件名
+                 * eventData: 事件参数
+                 */
+                String eventName = String.valueOf(params[0]);
+                if (eventName.equals("jsEvalFinished")) {
+                    mHummerContext.onTotalJsEvalFinished();
+                }
                 break;
             case "postException":
                 Map<String, Object> errMap = HMJsonUtil.toMap(String.valueOf(params[0]));

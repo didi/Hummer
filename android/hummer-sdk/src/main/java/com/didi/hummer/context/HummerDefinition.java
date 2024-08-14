@@ -164,6 +164,10 @@ public class HummerDefinition {
             "    loadScriptWithUrl: (url, callback) => {\n" +
             "        invoke(\"Hummer\", 0, \"loadScriptWithUrl\", url, callback);\n" +
             "    },\n" +
+            "    postEvent: (eventName, eventData) => {\n" +
+            "        eventData = transSingleArg(eventData);\n" +
+            "        invoke(\"Hummer\", 0, \"postEvent\", eventName, eventData);\n" +
+            "    },\n" +
             "    postException: (err) => {\n" +
             "        err = transSingleArg(err);\n" +
             "        invoke(\"Hummer\", 0, \"postException\", err);\n" +

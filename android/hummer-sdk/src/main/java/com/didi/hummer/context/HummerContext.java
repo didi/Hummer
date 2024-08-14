@@ -60,6 +60,15 @@ public class HummerContext extends ContextWrapper {
     private OnRenderListener renderListener;
 
     /**
+     * JS主动回调所有JS执行完成（Hummer CLI编译时自动注入，为了解决公共包抽离模式下这个时机统计不准的问题）
+     */
+    public interface OnTotalJsEvalListener {
+        void onTotalJsEvalFinished();
+    }
+
+    private OnTotalJsEvalListener totalJsEvalListener;
+
+    /**
      * invoke方法分析工具（用于调试阶段）
      */
     private InvokerAnalyzer invokerAnalyzer;
@@ -269,6 +278,16 @@ public class HummerContext extends ContextWrapper {
     public void onRenderFinished(boolean isSucceed) {
         if (renderListener != null) {
             renderListener.onRenderFinished(isSucceed);
+        }
+    }
+
+    public void setTotalJsEvalListener(OnTotalJsEvalListener listener) {
+        totalJsEvalListener = listener;
+    }
+
+    public void onTotalJsEvalFinished() {
+        if (totalJsEvalListener != null) {
+            totalJsEvalListener.onTotalJsEvalFinished();
         }
     }
 
