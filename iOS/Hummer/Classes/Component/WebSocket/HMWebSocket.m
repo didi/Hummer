@@ -133,6 +133,7 @@ HM_EXPORT_METHOD(send, send:)
     }
     [webSocketSet addObject:self];
     self.context.webSocketSet = webSocketSet;
+    self.onOpen ? self.onOpen(@[@{}]) : nil;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
