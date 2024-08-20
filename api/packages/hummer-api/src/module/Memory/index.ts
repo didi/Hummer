@@ -23,7 +23,7 @@ export class Memory extends HummerComponent {
      * @param key 名称
      * @param value 值   不能是function，或者包含function
      */
-    public static set(key: string, value: object, cb?: Function) {
+    public static set(key: string, value: any, cb?: Function) {
         Memory.instance.set(key, value, cb);
     }
 
@@ -66,7 +66,7 @@ export class Memory extends HummerComponent {
     }
 
 
-    protected set(key: string, value: object, cb?: Function) {
+    protected set(key: string, value: any, cb?: Function) {
         this.call("set", key, value, cb);
     }
 

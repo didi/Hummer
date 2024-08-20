@@ -22,7 +22,7 @@ export class Storage extends HummerComponent {
      * @param key 名称
      * @param value 值
      */
-    public static set(key: string, value: string, cb?: Function) {
+    public static set(key: string, value: any, cb?: Function) {
         return Storage.instance.set(key, value, cb);
     }
 
@@ -65,7 +65,7 @@ export class Storage extends HummerComponent {
     }
 
 
-    protected set(key: string, value: string, cb?: Function) {
+    protected set(key: string, value: any, cb?: Function) {
         return this.call("set", key, value, cb);
     }
 
