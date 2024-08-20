@@ -219,6 +219,7 @@ public class HummerRender {
     }
 
     private void requestJsBundle(String url, boolean isHotReload) {
+        tracker.setHotReload(isHotReload);
         tracker.trackJSFetchStart();
         NetworkUtil.httpGet(url, (HttpCallback<String>) response -> {
             if (isDestroyed.get()) {

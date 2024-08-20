@@ -19,6 +19,7 @@ class HummerPageTracker {
    private long scriptLength;
    private String scriptId;
    private String pageUrl;
+   private boolean isHotReload = false;
    private long ctxInitStartTime;
    private long jsFetchStartTime;
    private long renderStartTime;
@@ -40,6 +41,10 @@ class HummerPageTracker {
 
    public void trackContextDestroy() {
       trackerAdapter.trackEvent(ITrackerAdapter.EventName.CONTEXT_DESTROY, null);
+   }
+
+   public void setHotReload(boolean hotReload) {
+      isHotReload = hotReload;
    }
 
    public void trackJSFetchStart() {
@@ -141,6 +146,6 @@ class HummerPageTracker {
     * 如果是开发阶段hot reload时的自动刷新页面，则不重复累加计算和埋点上报
     */
    private boolean isHotReload() {
-      return perfInfo != null && perfInfo.pageRenderTimeCost != 0;
+      return isHotReload;
    }
 }
