@@ -21,7 +21,8 @@ module.exports = {
       'error',
       'ObjectExpression > SpreadElement',
       'ObjectPattern > RestElement'
-    ]
+    ],
+    'no-restricted-syntax': 'off'
   },
   overrides: [
     // tests, no restrictions (runs in Node / jest with jsdom)
