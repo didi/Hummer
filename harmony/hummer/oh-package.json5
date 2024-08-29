@@ -1,0 +1,13 @@
+{
+  "name": "hummer",
+  "version": "0.0.1",
+  "description": "hummer 跨端sdk",
+  "main": "Index.ets",
+  "author": {"name": "shiguangyuan" , "email": "1486662452@qq.com" },
+  "license": "DiDi-license",
+  "homepage": "https://hummer.didi.cn/",
+  "repository": "https://github.com/didi/hummer",
+  "dependencies": {
+    "libohhummer.so": "file:./src/main/cpp/types/libohhummer",
+  }
+}

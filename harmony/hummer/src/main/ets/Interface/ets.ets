@@ -1,0 +1,1 @@
+export { IPageData } from './IPageData'

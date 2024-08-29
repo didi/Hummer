@@ -1,0 +1,7 @@
+node_modules/
+oh_modules/
+build/
+dependencies/
+.hvigor
+oh-package-lock.json5
+upload.sh

@@ -34,8 +34,7 @@ module.exports = {
     cleanDist: false,
   },
   devTool: {
-    enableServer: false,
-    // devServerPort: 8020, // 静态资源服务端口
-    // webServerPort: 8021  // web模拟器服务端口
+    devServerPort: 8020, // 静态资源服务端口
+    webServerPort: 8021  // web模拟器服务端口
   }
 }
