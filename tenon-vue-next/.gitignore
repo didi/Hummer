@@ -1,0 +1,13 @@
+# log
+*.log
+
+# Editor
+.DS_Store
+.idea
+# Common
+node_modules
+coverage
+explorations
+packages/*/dist/*
+package-lock.json
+report.*.json

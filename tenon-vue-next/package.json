@@ -1,0 +1,28 @@
+{
+  "name": "@hummer/tenon-vue-next",
+  "version": "0.0.6",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "author": "caoenze",
+  "license": "ISC",
+  "dependencies": {
+    "@hummer/tenon-utils": "^1.2.15",
+    "@vue/runtime-core": "3.3.9"
+  },
+  "peerDependencies": {
+    "@hummer/hummer-api": "^0.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.3"
+  }
+}
