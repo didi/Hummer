@@ -8,8 +8,8 @@ import com.didi.hummer2.HummerConfig;
 import com.didi.hummer2.adapter.navigator.NavCallback;
 import com.didi.hummer2.adapter.navigator.NavPage;
 import com.didi.hummer2.utils.F4NDebugUtil;
-import com.didichuxing.doraemonkit.DoKit;
-import com.didichuxing.doraemonkit.kit.webdoor.WebDoorManager;
+//import com.didichuxing.doraemonkit.DoKit;
+//import com.didichuxing.doraemonkit.kit.webdoor.WebDoorManager;
 
 import java.util.Map;
 
@@ -47,18 +47,18 @@ public class App extends Application {
         Hummer.init(config);
 
 
-        new DoKit.Builder(this).webDoorCallback(new WebDoorManager.WebDoorCallback() {
-            @Override
-            public void overrideUrlLoading(Context context, String url) {
-                NavPage navPage = new NavPage(url);
-                Hummer.getDefaultConfig().getNavAdapter().openPage(getApplication(), navPage, new NavCallback() {
-                    @Override
-                    public void onResult(Map<String, Object> data) {
-
-                    }
-                });
-            }
-        }).build();
+//        new DoKit.Builder(this).webDoorCallback(new WebDoorManager.WebDoorCallback() {
+//            @Override
+//            public void overrideUrlLoading(Context context, String url) {
+//                NavPage navPage = new NavPage(url);
+//                Hummer.getDefaultConfig().getNavAdapter().openPage(getApplication(), navPage, new NavCallback() {
+//                    @Override
+//                    public void onResult(Map<String, Object> data) {
+//
+//                    }
+//                });
+//            }
+//        }).build();
 
 //        DoraemonKit.install(this, null, "cfe007137560fd511dfbcbbb3c9889c8");
 

@@ -22,12 +22,15 @@
 
 
 ## Hummer
--keep @interface com.didi.hummer.annotation.*
+-keep @interface com.didi.hummer2.annotation.*
 -keep @com.didi.hummer2.annotation.HMComponent class * {*;}
--keep @com.didi.hummer2.annotation.HMConfig class * {*;}
--keep class com.didi.hummer.core.engine.jsc.jni.** {*;}
--keep class com.didi.hummer.core.engine.napi.** {*;}
--keep class com.didi.hummer2.tools.JsEngine {*;}
+-keep @com.didi.hummer2.annotation.HMJsiValue class * {*;}
+-keep class com.didi.hummer2.HummerContext{*;}
+-keep class com.didi.hummer2.engine.** {*;}
+-keep class com.didi.hummer2.bridge.** {*;}
+-keep class com.didi.hummer2.falcon.** {*;}
+-keep class com.didi.hummer2.invoke.** {*;}
+-keep class com.didi.hummer2.exception.** {*;}
 -keep class com.didi.hummer2.render.component.anim.AnimViewWrapper {*;}
 -keep class com.facebook.yoga.** {*;}
 -keep class com.facebook.jni.** {*;}
