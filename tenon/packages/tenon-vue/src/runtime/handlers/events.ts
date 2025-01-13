@@ -61,7 +61,8 @@ export function removeEventListener(el:Base, event: string, handler: EventListen
 }
 
 export function getStaticEventName(rawName: string){
-  let eventName = rawName.slice(2).toLowerCase()
+  // vue 3.3后的 compiler core 中，非native组件，事件名会以on:开头，需要去掉:
+  let eventName = rawName.replace(':', '').slice(2).toLowerCase()
   if(eventName === LongPress){
     eventName = "longPress"
   }

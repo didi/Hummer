@@ -9,11 +9,11 @@ export function patchProp(
   key: string,
   prevValue: any,
   nextValue: any,
-  isSVG = false,
-  prevChildren:any,
+  isSVG: any = false,
+  // prevChildren:any,
   parentComponent:any,
-  parentSuspense:any,
-  unmountChildren:any
+  // parentSuspense:any,
+  // unmountChildren:any
 ) {
   switch(key){
     case 'class':
