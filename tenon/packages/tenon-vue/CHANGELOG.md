@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.9.0...@hummer/tenon-vue@1.10.0) (2025-01-13)
+
+
+### Features
+
+* vue相关包升级至3.5.13 ([952d8eb](https://github.com/didi/Hummer/commit/952d8eb12ac5ac6840a89feb7a1d9e1d602db56f))
+
+
+
+
+
 # [1.9.0](https://github.com/didi/Hummer/compare/@hummer/tenon-vue@1.8.7...@hummer/tenon-vue@1.9.0) (2023-12-13)
 
 

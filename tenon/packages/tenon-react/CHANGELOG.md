@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.3.10...@hummer/tenon-react@0.4.0) (2025-01-13)
+
+
+### Features
+
+* vue相关包升级至3.5.13 ([952d8eb](https://github.com/didi/Hummer/commit/952d8eb12ac5ac6840a89feb7a1d9e1d602db56f))
+
+
+
+
+
 ## [0.3.10](https://github.com/didi/Hummer/compare/@hummer/tenon-react@0.3.7...@hummer/tenon-react@0.3.10) (2022-10-08)
 
 **Note:** Version bump only for package @hummer/tenon-react
