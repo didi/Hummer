@@ -20,6 +20,7 @@ public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder
     private JSCallback typeCallback;
     private JSCallback createCallback;
     private JSCallback updateCallback;
+    private RecycleViewPoolCallback recycleViewPoolCallback;
 
     private Context mContext;
 
@@ -42,6 +43,10 @@ public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder
         }
     }
 
+    public void setRecycleViewPoolCallback(RecycleViewPoolCallback callback){
+        recycleViewPoolCallback = callback;
+    }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -56,16 +61,19 @@ public class HMListAdapter extends RecyclerView.Adapter<HMListAdapter.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if (typeCallback == null) {
-            return super.getItemViewType(position);
+        int viewType = super.getItemViewType(position);;
+        if (typeCallback != null) {
+            Object retType = typeCallback.call(position);
+            if (retType != null) {
+                viewType = ((Number) retType).intValue();
+            }
         }
 
-        Object retType = typeCallback.call(position);
-        if (retType == null) {
-            return super.getItemViewType(position);
+        if(recycleViewPoolCallback != null){
+            recycleViewPoolCallback.updatePoolSize(viewType);
         }
 
-        return ((Number) retType).intValue();
+        return viewType;
     }
 
     @NonNull
