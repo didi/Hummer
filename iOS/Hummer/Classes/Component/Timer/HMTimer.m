@@ -6,6 +6,8 @@
 //
 
 #import "HMTimer.h"
+#import "HMJSContext.h"
+#import "NSObject+Hummer.h"
 
 @interface HMTimer ()
 
@@ -13,6 +15,7 @@
 
 @property (nonatomic, assign) BOOL isClearedTimeout;
 
+@property (nonatomic, weak) HMJSContext *context;
 @end
 
 @implementation HMTimer
@@ -25,7 +28,16 @@ HM_EXPORT_METHOD(setTimeout, setCallback:timeout:)
 HM_EXPORT_METHOD(clearTimeout, clearTimeout)
 
 - (void)dealloc {
+    
     [self clearInterval];
+}
+
+- (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values {
+    self = [super initWithHMValues:values];
+    if(self){
+        _context = [HMJSContext getCurrentContext];
+    }
+    return self;
 }
 
 - (void)setCallback:(HMFunctionType)callback interval:(NSTimeInterval)interval {
@@ -42,7 +54,7 @@ HM_EXPORT_METHOD(clearTimeout, clearTimeout)
     __weak typeof(self) weakSelf = self;
     dispatch_source_set_event_handler(self.timer, ^() {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (weakSelf && callback) {
+            if (weakSelf && weakSelf.context && callback) {
                 callback(nil);
             }
         });
@@ -68,7 +80,7 @@ HM_EXPORT_METHOD(clearTimeout, clearTimeout)
     
     __weak typeof(self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-        if (weakSelf && !weakSelf.isClearedTimeout && callback) {
+        if (weakSelf && weakSelf.context && !weakSelf.isClearedTimeout && callback) {
             callback(nil);
         }
     });

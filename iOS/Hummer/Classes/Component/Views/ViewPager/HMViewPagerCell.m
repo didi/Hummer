@@ -39,15 +39,6 @@
         
         self.clipsToBounds = YES;
         self.isHmLayoutEnabled = NO;
-        [self.contentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-            layout.flexDirection = YOGA_TYPE_WRAPPER(YGFlexDirectionColumn);
-            layout.justifyContent = YOGA_TYPE_WRAPPER(YGJustifyCenter);
-            layout.alignItems = YOGA_TYPE_WRAPPER(YGAlignStretch);
-            layout.alignContent = YOGA_TYPE_WRAPPER(YGAlignStretch);
-                        
-            layout.width = HMPointValueMake(self.bounds.size.width);
-            layout.height = HMPointValueMake(self.bounds.size.height);
-        }];
     }
     return self;
 }
@@ -86,19 +77,24 @@
     [super layoutSubviews];
     
     //固定和 contentView 大小相同
-    [self.jsContentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
-        layout.width = HMPointValueMake(self.contentView.bounds.size.width);
-        layout.height = HMPointValueMake(self.contentView.bounds.size.height);
-    }];
-
-
-    NSHashTable<id<HMLayoutStyleProtocol>> *affectedShadowViews = NSHashTable.weakObjectsHashTable;
-    [self.contentView hm_applyLayoutPreservingOrigin:NO affectedShadowViews:affectedShadowViews];
-    if (affectedShadowViews.count > 0) {
-        NSEnumerator<id<HMLayoutStyleProtocol>> *enumerator = affectedShadowViews.objectEnumerator;
-        id<HMLayoutStyleProtocol> value = nil;
-        while ((value = enumerator.nextObject)) {
-            [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+    if(self.jsContentView && !CGRectEqualToRect(self.contentView.bounds, self.jsContentView.frame)){
+        
+        [self.jsContentView hm_configureLayoutWithBlock:^(id<HMLayoutStyleProtocol>  _Nonnull layout) {
+            layout.width = HMPointValueMake(self.contentView.bounds.size.width);
+            layout.height = HMPointValueMake(self.contentView.bounds.size.height);
+        }];
+        NSHashTable<id<HMLayoutStyleProtocol>> *affectedShadowViews = NSHashTable.weakObjectsHashTable;
+        [self.jsContentView hm_applyLayoutPreservingOrigin:NO affectedShadowViews:affectedShadowViews];
+        if (affectedShadowViews.count > 0) {
+            NSEnumerator<id<HMLayoutStyleProtocol>> *enumerator = affectedShadowViews.objectEnumerator;
+            id<HMLayoutStyleProtocol> value = nil;
+            while ((value = enumerator.nextObject)) {
+                [value.view hm_layoutBackgroundColorImageBorderShadowCornerRadius];
+            }
+        }
+    }else{
+        if (!CGRectEqualToRect(self.contentView.bounds, self.imageView.frame)){
+            self.imageView.frame = self.contentView.bounds;
         }
     }
 }

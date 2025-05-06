@@ -13,6 +13,8 @@
 #import "UIView+HMDom.h"
 #import "HMBaseExecutorProtocol.h"
 #import "HMConverter.h"
+#import "NSObject+Hummer.h"
+#import "HMJSContext+PrivateVariables.h"
 #import <Hummer/HMJSGlobal.h>
 #import "HMConfigEntryManager.h"
 #import <Hummer/UIView+HMInspector.h>
@@ -279,6 +281,21 @@ HM_EXPORT_PROPERTY(lowLayer, isLowLayer, setIsLowLayer:)
     return self;
 }
 
+- (instancetype)initWithHMValues:(NSArray<__kindof HMBaseValue *> *)values {
+    self = [super initWithHMValues:values];
+    if(self){
+        __weak typeof(self) wself = self;
+        [[HMJSContext getCurrentContext] _addDestoryBlock:^{
+            if(!wself){
+                return;
+            }
+            // 只移除 popOver，移除 alert 会导致跳转失败。
+            [wself __dismissPopover];
+        }];
+    }
+    return self;
+}
+
 // MARK: - properties
 
 - (BOOL)__isCancelabled {
@@ -387,11 +404,16 @@ HM_EXPORT_PROPERTY(lowLayer, isLowLayer, setIsLowLayer:)
 {
     _isPresenting = NO;
     if (_popover) {
-        [_popover removeFromSuperview];
-        _popover = nil;
+        [self __dismissPopover];
     } else {
         [self dismissViewControllerAnimated:NO completion:nil];
     }
+}
+
+- (void)__dismissPopover{
+    _isPresenting = NO;
+    [_popover removeFromSuperview];
+    _popover = nil;
 }
 
 - (void)dismiss

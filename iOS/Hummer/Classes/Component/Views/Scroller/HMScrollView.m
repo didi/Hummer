@@ -158,20 +158,24 @@ HM_EXPORT_METHOD(setOnScrollToBottomListener, onScrollToBottom:)
     self.onScrollToBottomLisener = callback;
 }
 
-HM_EXPORT_METHOD(scrollTo, scrollToX:Y:)
+HM_EXPORT_METHOD(scrollTo, scrollToX:Y:animatedValue:)
 
-- (void)scrollToX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue {
+- (void)scrollToX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue animatedValue:(HMBaseValue *)animatedValue{
     CGFloat offsetX = HMPointWithString(xValue.toString);
     CGFloat offsetY = HMPointWithString(yValue.toString);
     CGFloat x = MIN(MAX(0, offsetX), self.contentSize.width - self.frame.size.width);
     CGFloat y = MIN(MAX(0, offsetY), self.contentSize.height - self.frame.size.height);
     CGPoint offset = CGPointMake(x, y);
-    [self setContentOffset:offset animated:YES];
+    BOOL animated = YES;
+    if(animatedValue && [animatedValue isBoolean]){
+        animated = [animatedValue toBool];
+    }
+    [self setContentOffset:offset animated:animated];
 }
 
-HM_EXPORT_METHOD(scrollBy, scrollByX:Y:)
+HM_EXPORT_METHOD(scrollBy, scrollByX:Y:animatedValue:)
 
-- (void)scrollByX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue {
+- (void)scrollByX:(HMBaseValue *)xValue Y:(HMBaseValue *)yValue animatedValue:(HMBaseValue *)animatedValue{
     CGFloat offsetX = HMPointWithString(xValue.toString);
     CGFloat offsetY = HMPointWithString(yValue.toString);
     
@@ -179,24 +183,32 @@ HM_EXPORT_METHOD(scrollBy, scrollByX:Y:)
     offset = CGPointMake(offset.x + offsetX, offset.y + offsetY);
     CGFloat x = MIN(MAX(0, offset.x), self.contentSize.width - self.frame.size.width);
     CGFloat y = MIN(MAX(0, offset.y), self.contentSize.height - self.frame.size.height);
-    [self setContentOffset:CGPointMake(x, y) animated:YES];
+    BOOL animated = YES;
+    if(animatedValue && [animatedValue isBoolean]){
+        animated = [animatedValue toBool];
+    }
+    [self setContentOffset:CGPointMake(x, y) animated:animated];
 }
 
-HM_EXPORT_METHOD(scrollToTop, scrollToTop)
+HM_EXPORT_METHOD(scrollToTop, scrollToTop:)
 
-- (void)scrollToTop {
+- (void)scrollToTop:(HMBaseValue *)animatedValue{
     CGPoint point = CGPointZero ;
     if (self.scrollDirection == HMScrollDirectionVertical) {
         point = CGPointMake(0, -self.contentInset.top);
     }else {
         point = CGPointMake(-self.contentInset.left, 0);
     }
-    [self setContentOffset:point animated:YES];
+    BOOL animated = YES;
+    if(animatedValue && [animatedValue isBoolean]){
+        animated = [animatedValue toBool];
+    }
+    [self setContentOffset:point animated:animated];
 }
 
-HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
+HM_EXPORT_METHOD(scrollToBottom, scrollToBottom:)
 
-- (void)scrollToBottom {
+- (void)scrollToBottom:(HMBaseValue *)animatedValue {
     CGPoint point = CGPointZero;
     if (self.scrollDirection == HMScrollDirectionVertical) {
         CGFloat offset = self.contentSize.height-CGRectGetHeight(self.frame) ;
@@ -211,7 +223,11 @@ HM_EXPORT_METHOD(scrollToBottom, scrollToBottom)
         }
         point = CGPointMake(offset,0);
     }
-    [self setContentOffset:point animated:YES];
+    BOOL animated = YES;
+    if(animatedValue && [animatedValue isBoolean]){
+        animated = [animatedValue toBool];
+    }
+    [self setContentOffset:point animated:animated];
 }
 
 #pragma mark - UIScrollViewDelegate

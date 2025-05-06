@@ -66,9 +66,6 @@ API_AVAILABLE(ios(13.0))
 @interface HMJSContext () 
 
 @property (nonatomic, assign, readwrite) HMEngineType engineType;
-
-@property (nonatomic, nullable, copy, readwrite) NSURL *url;
-
 @property (nonatomic, nullable, strong, readwrite) HMBaseValue *componentView;
 @property (nonatomic, nullable, weak, readwrite) UIView *nativeComponentView;
 
@@ -76,6 +73,8 @@ API_AVAILABLE(ios(13.0))
 @property (nonatomic, weak, readwrite) HMNotifyCenter *nativeNotifyCenter;
 
 @property (nonatomic, strong, readwrite) id <HMBaseExecutorProtocol>context;
+
+@property (nonatomic, strong) NSMutableArray <dispatch_block_t>*destoryBlocks;
 
 #ifdef HMDEBUG
 @property (nonatomic, nullable, strong) HMDevLocalConnection *devConnection;
@@ -100,9 +99,14 @@ NS_ASSUME_NONNULL_END
 
 @implementation HMJSContext{
     struct timespec _createTimespec;
+    struct timespec _firstEvalTimespec;
 }
 
 - (void)dealloc {
+    
+    [self.destoryBlocks enumerateObjectsUsingBlock:^(dispatch_block_t  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj();
+    }];
     [self.nativeComponentView removeFromSuperview];
     HMLogDebug(@"HMJSContext 销毁");
 #ifdef HMDEBUG
@@ -123,6 +127,7 @@ NS_ASSUME_NONNULL_END
         _createTimespec = createTimespec;
         _engineType = engineType;
         _nameSpace = namespace;
+        _destoryBlocks = [NSMutableArray new];
         if (_pageInfo == nil) {
             //兼容写法，自定义容器会把 pageInfo 注入到 HMJSGlobal 中。这里复制给 context。
             //把 pageInfo 和 context 绑定到一起。
@@ -211,36 +216,12 @@ NS_ASSUME_NONNULL_END
     NSString *classesStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [_context evaluateScript:[NSString stringWithFormat:@"(function(){hummerLoadClass(%@)})()", classesStr] withSourceURL:[NSURL URLWithString:@"https://www.didi.com/hummer/classModelMap.js"]];
 }
-
 - (void)setupExecutorCallBack {
     __weak typeof(self) weakSelf = self;
     [_context addExceptionHandler:^(HMExceptionModel * _Nonnull exception) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        NSDictionary<NSString *, NSObject *> *exceptionInfo = @{
-            @"column": exception.column ?: @0,
-            @"line": exception.line ?: @0,
-            @"message": exception.message ?: @"",
-            @"name": exception.name ?: @"",
-            @"stack": exception.stack ?: @""
-        };
-#ifdef HMDEBUG
-        //出现异常执行一次 console.error，抛给 vscode/hummer dev server
-        HMBaseValue *console = strongSelf.context.globalObject[@"console"];
-        NSString *errorString = _HMJSONStringWithObject(exceptionInfo);
-        [console invokeMethod:@"error" withArguments:@[errorString?errorString:@"发生未知异常"]];
-#endif
-        HMLogError(@"%@", exceptionInfo);
-        if (weakSelf.nameSpace) {
-            // errorName -> message
-            // errorcode -> type
-            // errorMsg -> stack / type + message + stack
-            [HMConfigEntryManager.manager.configMap[weakSelf.nameSpace].trackEventPlugin trackJavaScriptExceptionWithExceptionModel:exception pageUrl:weakSelf.hummerUrl ?: @""];
-        }
-        [HMReporterInterceptor handleJSException:exceptionInfo namespace:strongSelf.nameSpace];
-        [HMReporterInterceptor handleJSException:exceptionInfo context:strongSelf namespace:strongSelf.nameSpace];
-        if (strongSelf.exceptionHandler) {
-            strongSelf.exceptionHandler(exception);
-        }
+        if (!strongSelf) {return;}
+        [strongSelf handleException:exception];
     } key:self];
     
     
@@ -256,6 +237,35 @@ NS_ASSUME_NONNULL_END
 #endif
 
     } key:self];
+}
+
+- (void)handleException:(HMExceptionModel *)exceptionModel {
+    HMExceptionModel *exception = exceptionModel;
+    NSDictionary<NSString *, NSObject *> *exceptionInfo = @{
+        @"column": exception.column ?: @0,
+        @"line": exception.line ?: @0,
+        @"message": exception.message ?: @"",
+        @"name": exception.name ?: @"",
+        @"stack": exception.stack ?: @""
+    };
+#ifdef HMDEBUG
+    //出现异常执行一次 console.error，抛给 vscode/hummer dev server
+    HMBaseValue *console = self.context.globalObject[@"console"];
+    NSString *errorString = _HMJSONStringWithObject(exceptionInfo);
+    [console invokeMethod:@"error" withArguments:@[errorString?errorString:@"发生未知异常"]];
+#endif
+    HMLogError(@"%@", exceptionInfo);
+    if (self.nameSpace) {
+        // errorName -> message
+        // errorcode -> type
+        // errorMsg -> stack / type + message + stack
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackJavaScriptExceptionWithExceptionModel:exception pageUrl:self.hummerUrl ?: @""];
+    }
+    [HMReporterInterceptor handleJSException:exceptionInfo namespace:self.nameSpace];
+    [HMReporterInterceptor handleJSException:exceptionInfo context:self namespace:self.nameSpace];
+    if (self.exceptionHandler) {
+        self.exceptionHandler(exception);
+    }
 }
 
 #ifdef HMDEBUG
@@ -282,6 +292,9 @@ NS_ASSUME_NONNULL_END
     
     if (!self.hummerUrl && hummerUrl.length > 0) {
         self.hummerUrl = hummerUrl;
+        struct timespec timespec;
+        HMClockGetTime(&timespec);
+        _firstEvalTimespec = timespec;
         if (self.nameSpace) {
             [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPVWithPageUrl:hummerUrl ?: @""];
         }
@@ -344,9 +357,12 @@ NS_ASSUME_NONNULL_END
     HMClockGetTime(&afterTimespec);
     struct timespec resultTimespec;
     HMDiffTime(&beforeTimespec, &afterTimespec, &resultTimespec);
+    NSNumber *duration = @(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000);
     if (self.nameSpace) {
-        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackEvaluationWithDuration:@(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000)  pageUrl:self.hummerUrl ?: @""];
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackEvaluationWithDuration:duration  pageUrl:self.hummerUrl ?: @""];
         [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPerformanceWithLabel:@"whiteScreenRate" localizableLabel:@"白屏率" numberValue:@(isRenderSuccess ? 0 : 100) unit:@"%" pageUrl:self.hummerUrl ?: @""];
+        
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPerformanceJSEval:duration url:fileName pageUrl:self.hummerUrl ?: @""];
     }
     
     return returnValue;
@@ -424,4 +440,30 @@ NS_ASSUME_NONNULL_END
         self.nativeNotifyCenter = nativeNotifyCenter;
     }
 }
+
+- (void)_addDestoryBlock:(dispatch_block_t)block {
+    [self.destoryBlocks addObject:block];
+}
+
++ (nullable HMJSContext *)getCurrentContext {
+    return [[HMJSGlobal globalObject] currentContext:HMCurrentExecutor];
+}
+
+- (void)_postEvent:(NSString *)eventName data:(nullable NSDictionary *)eventData {
+    
+    if(eventName && [eventName isEqualToString:@"jsEvalFinished"]){
+        struct timespec afterTimespec;
+        HMClockGetTime(&afterTimespec);
+        struct timespec resultTimespec;
+        HMDiffTime(&self->_createTimespec, &afterTimespec, &resultTimespec);
+        NSNumber *duration = @(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000);
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPerformanceFCP:duration pageUrl:self.hummerUrl ?: @""];
+
+        
+        HMDiffTime(&self->_firstEvalTimespec, &afterTimespec, &resultTimespec);
+        NSNumber *evalDuration = @(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000);
+        [HMConfigEntryManager.manager.configMap[self.nameSpace].trackEventPlugin trackPerformanceJSEvalTotal:evalDuration pageUrl:self.hummerUrl ?: @""];
+    }
+}
+
 @end

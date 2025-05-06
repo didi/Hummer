@@ -52,64 +52,62 @@
 #pragma mark - Export Attribute visible
 
 HM_EXPORT_ATTRIBUTE(opacity, alpha, HMNumberToCGFloat:)
-HM_EXPORT_ATTRIBUTE(overflow, __clipsToBounds, HMStringToClipSubviews:)
-- (void)set__clipsToBounds:(BOOL)isClipped {
+HM_EXPORT_ATTRIBUTE(overflow, hm__clipsToBounds_legacy, HMStringToClipSubviews:)
+- (void)setHm__clipsToBounds_legacy:(BOOL)isClipped {
     self.hm_clipsToBounds = isClipped;
     [self hm_layoutBackgroundColorImageBorderShadowCornerRadius];
 }
 
-HM_EXPORT_ATTRIBUTE(visibility, __visibility, HMStringToViewHidden:)
-- (void)set__visibility:(BOOL)isHidden {
+HM_EXPORT_ATTRIBUTE(visibility, hm__visibility_legacy, HMStringToViewHidden:)
+- (void)setHm__visibility_legacy:(BOOL)isHidden {
     self.hm_visibility = isHidden;
     self.hidden = isHidden;//此处设计有问题
 }
 #pragma mark - Export Zindex
 
-HM_EXPORT_ATTRIBUTE(zIndex, __zIndex, HMNumberToNSInteger:)
-- (void)set__zIndex:(NSUInteger)index {
+HM_EXPORT_ATTRIBUTE(zIndex, hm__zIndex_legacy, HMNumberToNSInteger:)
+- (void)setHm__zIndex_legacy:(NSUInteger)index {
     self.hm_zIndex = index;
     self.layer.zPosition = index;
 }
 #pragma mark - Export Attribute Border
 
-HM_EXPORT_ATTRIBUTE(borderWidth, __borderWidth, HMStringToNumberArray:)
-HM_EXPORT_ATTRIBUTE(borderLeftWidth, __borderLeftWidth, HMStringToFloat:)
-HM_EXPORT_ATTRIBUTE(borderTopWidth, __borderTopWidth, HMStringToFloat:)
-HM_EXPORT_ATTRIBUTE(borderRightWidth, __borderRightWidth, HMStringToFloat:)
-HM_EXPORT_ATTRIBUTE(borderBottomWidth, __borderBottomWidth, HMStringToFloat:)
-
-HM_EXPORT_ATTRIBUTE(borderRadius, __borderRadius, HMStringToBorderRadiusList:)
-HM_EXPORT_ATTRIBUTE(borderTopLeftRadius, __borderTopLeftRadius, HMNumberToYGPoint:)
-HM_EXPORT_ATTRIBUTE(borderTopRightRadius, __borderTopRightRadius, HMNumberToYGPoint:)
-HM_EXPORT_ATTRIBUTE(borderBottomLeftRadius, __borderBottomLeftRadius, HMNumberToYGPoint:)
-HM_EXPORT_ATTRIBUTE(borderBottomRightRadius, __borderBottomRightRadius, HMNumberToYGPoint:)
-
-HM_EXPORT_ATTRIBUTE(borderColor, __borderColor, HMStringToBorderColorList:)
-HM_EXPORT_ATTRIBUTE(borderLeftColor, __borderLeftColor, HMStringToColor:)
-HM_EXPORT_ATTRIBUTE(borderTopColor, __borderTopColor, HMStringToColor:)
-HM_EXPORT_ATTRIBUTE(borderRightColor, __borderRightColor, HMStringToColor:)
-HM_EXPORT_ATTRIBUTE(borderBottomColor, __borderBottomColor, HMStringToColor:)
-
-HM_EXPORT_ATTRIBUTE(borderStyle, __borderStyle, HMStringToBorderStyleList:)
-HM_EXPORT_ATTRIBUTE(borderLeftStyle, __borderLeftStyle, HMStringToBorderStyle:)
-HM_EXPORT_ATTRIBUTE(borderTopStyle, __borderTopStyle, HMStringToBorderStyle:)
-HM_EXPORT_ATTRIBUTE(borderRightStyle, __borderRightStyle, HMStringToBorderStyle:)
-HM_EXPORT_ATTRIBUTE(borderBottomStyle, __borderBottomStyle, HMStringToBorderStyle:)
-
-HM_EXPORT_ATTRIBUTE(boxSizing, HMBorderBoxSizing, HMBoxSizingStringToBoolean:)
-
-- (BOOL)HMBorderBoxSizing {
-    NSNumber *borderBoxSizing = objc_getAssociatedObject(self, _cmd);
-
-    return borderBoxSizing.boolValue;
+HM_EXPORT_ATTRIBUTE(borderWidth, hm__borderWidth_legacy, HMStringToNumberArray:)
+//HMBorderPropertyListSetter(Width)
+- (void)setHm__borderWidth_legacy:(NSArray<NSNumber *> *)list {
+    if (list.count == 1) {
+        list = @[list[0], list[0], list[0], list[0]];
+    } else if (list.count == 2) {
+        list = @[list[0], list[1], list[0], list[1]];
+    } else if (list.count == 3) {
+        list = @[list[0], list[1], list[2], list[1]];
+    }
+    [self hm_saveBorderWidthWithTop:list[0] right:list[1] bottom:list[2] left:list[3]];
 }
 
-- (void)setHMBorderBoxSizing:(BOOL)hmBorderBoxSizing {
-    objc_setAssociatedObject(self, @selector(HMBorderBoxSizing), hmBorderBoxSizing ? @YES : nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+HM_EXPORT_ATTRIBUTE(borderLeftWidth, hm__borderLeftWidth_legacy, HMStringToFloat:)
+- (void)setHm__borderLeftWidth_legacy:(CGFloat)width {
+    [self hm_saveBorderWidthWithTop:nil right:nil bottom:nil left:@(width)];
 }
 
-//HMBorderPropertyListSetter(Radius)
-- (void)set__borderRadius:(NSArray<NSValue *> *)list {
+HM_EXPORT_ATTRIBUTE(borderTopWidth, hm__borderTopWidth_legacy, HMStringToFloat:)
+- (void)setHm__borderTopWidth_legacy:(CGFloat)width {
+    [self hm_saveBorderWidthWithTop:@(width) right:nil bottom:nil left:nil];
+}
+
+HM_EXPORT_ATTRIBUTE(borderRightWidth, hm__borderRightWidth_legacy, HMStringToFloat:)
+- (void)setHm__borderRightWidth_legacy:(CGFloat)width {
+    [self hm_saveBorderWidthWithTop:nil right:@(width) bottom:nil left:nil];
+}
+
+HM_EXPORT_ATTRIBUTE(borderBottomWidth, hm__borderBottomWidth_legacy, HMStringToFloat:)
+- (void)setHm__borderBottomWidth_legacy:(CGFloat)width {
+    [self hm_saveBorderWidthWithTop:nil right:nil bottom:@(width) left:nil];
+}
+
+
+HM_EXPORT_ATTRIBUTE(borderRadius, hm__borderRadius_legacy, HMStringToBorderRadiusList:)
+- (void)setHm__borderRadius_legacy:(NSArray<NSValue *> *)list {
     if (list.count == 1) {
         list = @[list[0], list[0], list[0], list[0]];
     }
@@ -129,60 +127,30 @@ HM_EXPORT_ATTRIBUTE(boxSizing, HMBorderBoxSizing, HMBoxSizingStringToBoolean:)
     [self hm_saveCornerRadiusWithTopLeft:topLeft topRight:topRight bottomLeft:bottomLeft bottomRight:bottomRight];
 }
 
-//HMBorderPropertyYGValueSetter(Radius, TopLeft, YGValue, radius)
-- (void)set__borderTopLeftRadius:(YOGA_TYPE_WRAPPER(YGValue))radius {
+HM_EXPORT_ATTRIBUTE(borderTopLeftRadius, hm__borderTopLeftRadius_legacy, HMNumberToYGPoint:)
+- (void)setHm__borderTopLeftRadius_legacy:(YOGA_TYPE_WRAPPER(YGValue))radius {
     [self hm_saveCornerRadiusWithTopLeft:radius.unit == YOGA_TYPE_WRAPPER(YGUnitPoint) ? @(radius.value) : nil topRight:nil bottomLeft:nil bottomRight:nil];
 }
 
-//HMBorderPropertyYGValueSetter(Radius, TopRight, YGValue, radius)
-- (void)set__borderTopRightRadius:(YOGA_TYPE_WRAPPER(YGValue))radius {
+HM_EXPORT_ATTRIBUTE(borderTopRightRadius, hm__borderTopRightRadius_legacy, HMNumberToYGPoint:)
+- (void)setHm__borderTopRightRadius_legacy:(YOGA_TYPE_WRAPPER(YGValue))radius {
     [self hm_saveCornerRadiusWithTopLeft:nil topRight:radius.unit == YOGA_TYPE_WRAPPER(YGUnitPoint) ? @(radius.value) : nil bottomLeft:nil bottomRight:nil];
 }
 
-//HMBorderPropertyYGValueSetter(Radius, BottomLeft, YGValue, radius)
-- (void)set__borderBottomLeftRadius:(YOGA_TYPE_WRAPPER(YGValue))radius {
+HM_EXPORT_ATTRIBUTE(borderBottomLeftRadius, hm__borderBottomLeftRadius_legacy, HMNumberToYGPoint:)
+- (void)setHm__borderBottomLeftRadius_legacy:(YOGA_TYPE_WRAPPER(YGValue))radius {
     [self hm_saveCornerRadiusWithTopLeft:nil topRight:nil bottomLeft:radius.unit == YOGA_TYPE_WRAPPER(YGUnitPoint) ? @(radius.value) : nil bottomRight:nil];
 }
 
-//HMBorderPropertyYGValueSetter(Radius, BottomRight, YGValue, radius)
-- (void)set__borderBottomRightRadius:(YOGA_TYPE_WRAPPER(YGValue))radius {
+HM_EXPORT_ATTRIBUTE(borderBottomRightRadius, hm__borderBottomRightRadius_legacy, HMNumberToYGPoint:)
+- (void)saetHm__borderBottomRightRadius_legacy:(YOGA_TYPE_WRAPPER(YGValue))radius {
     [self hm_saveCornerRadiusWithTopLeft:nil topRight:nil bottomLeft:nil bottomRight:radius.unit == YOGA_TYPE_WRAPPER(YGUnitPoint) ? @(radius.value) : nil];
 }
 
-//HMBorderPropertyListSetter(Width)
-- (void)set__borderWidth:(NSArray<NSNumber *> *)list {
-    if (list.count == 1) {
-        list = @[list[0], list[0], list[0], list[0]];
-    } else if (list.count == 2) {
-        list = @[list[0], list[1], list[0], list[1]];
-    } else if (list.count == 3) {
-        list = @[list[0], list[1], list[2], list[1]];
-    }
-    [self hm_saveBorderWidthWithTop:list[0] right:list[1] bottom:list[2] left:list[3]];
-}
 
-//HMBorderPropertyNumberSetter(Width,Left, CGFloat, width)
-- (void)set__borderLeftWidth:(CGFloat)width {
-    [self hm_saveBorderWidthWithTop:nil right:nil bottom:nil left:@(width)];
-}
 
-//HMBorderPropertyNumberSetter(Width,Top, CGFloat, width)
-- (void)set__borderTopWidth:(CGFloat)width {
-    [self hm_saveBorderWidthWithTop:@(width) right:nil bottom:nil left:nil];
-}
-
-//HMBorderPropertyNumberSetter(Width,Right, CGFloat, width)
-- (void)set__borderRightWidth:(CGFloat)width {
-    [self hm_saveBorderWidthWithTop:nil right:@(width) bottom:nil left:nil];
-}
-
-//HMBorderPropertyNumberSetter(Width,Bottom, CGFloat, width)
-- (void)set__borderBottomWidth:(CGFloat)width {
-    [self hm_saveBorderWidthWithTop:nil right:nil bottom:@(width) left:nil];
-}
-
-//HMBorderPropertyListSetter(Color)
-- (void)set__borderColor:(NSArray<UIColor *> *)list {
+HM_EXPORT_ATTRIBUTE(borderColor, hm__borderColor_legacy, HMStringToBorderColorList:)
+- (void)setHm__borderColor_legacy:(NSArray<UIColor *> *)list {
     if (list.count == 0) {
         return;
     }
@@ -196,28 +164,34 @@ HM_EXPORT_ATTRIBUTE(boxSizing, HMBorderBoxSizing, HMBoxSizingStringToBoolean:)
     [self hm_saveBorderColorWithTop:list[0] right:list[1] bottom:list[2] left:list[3]];
 }
 
-//HMBorderPropertyColorSetter(Left)
-- (void)set__borderLeftColor:(UIColor *)color {
+HM_EXPORT_ATTRIBUTE(borderLeftColor, hm__borderLeftColor_legacy, HMStringToColor:)
+- (void)setHm__borderLeftColor_legacy:(UIColor *)color {
     [self hm_saveBorderColorWithTop:nil right:nil bottom:nil left:color];
 }
 
-//HMBorderPropertyColorSetter(Top)
-- (void)set__borderTopColor:(UIColor *)color {
+HM_EXPORT_ATTRIBUTE(borderTopColor, hm__borderTopColor_legacy, HMStringToColor:)
+- (void)setHm__borderTopColor_legacy:(UIColor *)color {
     [self hm_saveBorderColorWithTop:color right:nil bottom:nil left:nil];
 }
 
-//HMBorderPropertyColorSetter(Right)
-- (void)set__borderRightColor:(UIColor *)color {
+HM_EXPORT_ATTRIBUTE(borderRightColor, hm__borderRightColor_legacy, HMStringToColor:)
+- (void)setHm__borderRightColor_legacy:(UIColor *)color {
     [self hm_saveBorderColorWithTop:nil right:color bottom:nil left:nil];
 }
 
-//HMBorderPropertyColorSetter(Bottom)
-- (void)set__borderBottomColor:(UIColor *)color {
+HM_EXPORT_ATTRIBUTE(borderBottomColor, hm__borderBottomColor_legacy, HMStringToColor:)
+- (void)setHm__borderBottomColor_legacy:(UIColor *)color {
     [self hm_saveBorderColorWithTop:nil right:nil bottom:color left:nil];
 }
 
+
+HM_EXPORT_ATTRIBUTE(borderStyle, hm__borderStyle_legacy, HMStringToBorderStyleList:)
+HM_EXPORT_ATTRIBUTE(borderLeftStyle, hm__borderLeftStyle_legacy, HMStringToBorderStyle:)
+HM_EXPORT_ATTRIBUTE(borderTopStyle, hm__borderTopStyle_legacy, HMStringToBorderStyle:)
+HM_EXPORT_ATTRIBUTE(borderRightStyle,hm__borderRightStyle_legacy, HMStringToBorderStyle:)
+HM_EXPORT_ATTRIBUTE(borderBottomStyle, hm__borderBottomStyle_legacy, HMStringToBorderStyle:)
 //HMBorderPropertyListSetter(Style)
-- (void)set__borderStyle:(NSArray*)list {
+- (void)hm__borderStyle_legacy:(NSArray*)list {
     if (list.count == 1) {
         list = @[list[0], list[0], list[0], list[0]];
     } else if (list.count == 2) {
@@ -229,30 +203,44 @@ HM_EXPORT_ATTRIBUTE(boxSizing, HMBorderBoxSizing, HMBoxSizingStringToBoolean:)
 }
 
 //HMBorderPropertyNumberSetter(Style, Left, HMBorderStyle, style)
-- (void)set__borderLeftStyle:(HMBorderStyle)style {
+- (void)setHm__borderLeftStyle_legacy:(HMBorderStyle)style {
     [self hm_saveBorderStyleWithTop:nil right:nil bottom:nil left:@(style)];
 }
 
 //HMBorderPropertyNumberSetter(Style, Top, HMBorderStyle, style)
-- (void)set__borderTopStyle:(HMBorderStyle)style {
+- (void)setHm__borderTopStyle_legacy:(HMBorderStyle)style {
     [self hm_saveBorderStyleWithTop:@(style) right:nil bottom:nil left:nil];
 }
 
 //HMBorderPropertyNumberSetter(Style, Right, HMBorderStyle, style)
-- (void)set__borderRightStyle:(HMBorderStyle)style {
+- (void)setHm__borderRightStyle_legacy:(HMBorderStyle)style {
     [self hm_saveBorderStyleWithTop:nil right:@(style) bottom:nil left:nil];
 }
 
 //HMBorderPropertyNumberSetter(Style, Bottom, HMBorderStyle, style)
-- (void)set__borderBottomStyle:(HMBorderStyle)style {
+- (void)setHm__borderBottomStyle_legacy:(HMBorderStyle)style {
     [self hm_saveBorderStyleWithTop:nil right:nil bottom:@(style) left:nil];
+}
+
+
+
+HM_EXPORT_ATTRIBUTE(boxSizing, HMBorderBoxSizing, HMBoxSizingStringToBoolean:)
+
+- (BOOL)HMBorderBoxSizing {
+    NSNumber *borderBoxSizing = objc_getAssociatedObject(self, _cmd);
+
+    return borderBoxSizing.boolValue;
+}
+
+- (void)setHMBorderBoxSizing:(BOOL)hmBorderBoxSizing {
+    objc_setAssociatedObject(self, @selector(HMBorderBoxSizing), hmBorderBoxSizing ? @YES : nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark - Export Attribute shadow
 
-HM_EXPORT_ATTRIBUTE(shadow, __shadow, HMStringToShadowAttributes:)
+HM_EXPORT_ATTRIBUTE(shadow, hm__shadow_legacy, HMStringToShadowAttributes:)
 
-- (void)set__shadow:(NSArray<NSObject *> *)shadowAttributes {
+- (void)setHm__shadow_legacy:(NSArray<NSObject *> *)shadowAttributes {
     if (shadowAttributes.count != 4) {
         return;
     }
@@ -272,11 +260,7 @@ HM_EXPORT_ATTRIBUTE(shadow, __shadow, HMStringToShadowAttributes:)
 }
 
 #pragma mark - Export Attribute background
-
-HM_EXPORT_ATTRIBUTE(backgroundColor, __backgroundColor, HMStringToColor:)
-HM_EXPORT_ATTRIBUTE(backgroundImage, __backgroundImage, HMStringOrigin:)
-
-- (void)set__backgroundColor:(UIColor *)backgroundColor {
+- (void)setHm__backgroundColor:(nullable UIColor *)backgroundColor {
     if ([backgroundColor isKindOfClass:HMGradientColor.class]) {
         [self hm_performGradientColorWithGradientColor:(HMGradientColor *) backgroundColor];
     } else {
@@ -284,6 +268,13 @@ HM_EXPORT_ATTRIBUTE(backgroundImage, __backgroundImage, HMStringOrigin:)
     }
     [self hm_cancelBackgoundImageRequest];
     [self hm_resetBackgroundImage];
+    
+}
+
+
+HM_EXPORT_ATTRIBUTE(backgroundColor, hm__backgroundColor_legacy, HMStringToColor:)
+- (void)setHm__backgroundColor_legacy:(UIColor *)backgroundColor {
+    [self setHm__backgroundColor:backgroundColor];
 }
 
 - (void)hm_cancelBackgoundImageRequest {
@@ -308,7 +299,8 @@ HM_EXPORT_ATTRIBUTE(backgroundImage, __backgroundImage, HMStringOrigin:)
     }
 }
 
-- (void)set__backgroundImage:(NSString *)imageString {
+HM_EXPORT_ATTRIBUTE(backgroundImage, hm__backgroundImage_legacy, HMStringOrigin:)
+- (void)setHm__backgroundImage_legacy:(NSString *)imageString {
     if (imageString == nil || imageString.length == 0) {
         HMLogWarning(@"URL 无效");
         [self hm_cancelBackgoundImageRequest];
@@ -328,8 +320,8 @@ HM_EXPORT_ATTRIBUTE(backgroundImage, __backgroundImage, HMStringOrigin:)
 }
 
 #pragma mark - Export Attribute transform
-HM_EXPORT_ATTRIBUTE(transform, __transform, HMValueOrigin:)
-- (void)set__transform:(id)transform
+HM_EXPORT_ATTRIBUTE(transform, hm__transform_legacy, HMValueOrigin:)
+- (void)setHm__transform_legacy:(id)transform
 {
     NSDictionary <NSString *, NSObject *> *transformValues = [HMTransitionAnimationConverter convertStyleToAnimations:@{@"transform": transform}];
     HMTransform *newTransform = [HMTransformResolver applyTransformValues:transformValues defaultValue:self.hm_transform];

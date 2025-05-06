@@ -1159,6 +1159,11 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
 
         return;
     }
+    if([value isKindOfClass:NSNull.class]){
+        HMLogError(@"set style [%@]，the value [%@] must be string or number",
+                   cssAttribute, value);
+        return;
+    }
     SEL converter = [converterManager converterWithCSSAttr:cssAttribute];
     NSMethodSignature *signature = [HMConverter.class methodSignatureForSelector:converter];
     if (signature.numberOfArguments != 3 ||
@@ -1224,9 +1229,9 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
     return NSSelectorFromString(setterSel);
 }
 // 注意 fixed 的场景下，需要 手动使用 removeChild 进行解引用(但不需要 superview 正确)
-
 - (void)hm_processFixedPositionWithContext:(HMJSContext *)context {
-    if (self.hm_isFixedPosition && self.superview) {
+    // 只有在 父视图 不是rootview 时，在进行添加，否则会打断正在响应的事件，如键盘，滑动等
+    if (self.hm_isFixedPosition && self.superview && (context.rootView != self.superview)) {
         // superview -> rootView
         self.hm_fixedPositionLastContainerView = self.superview;
         [self.superview.hm_jsValueLifeContainer removeObjectForKey:self];
@@ -1234,7 +1239,7 @@ static NSHashTable<__kindof UIView *> *viewSet = nil;
         [self.hm_fixedPositionLastContainerView hm_markDirty];
         [context.rootView addSubview:self];
         [context.rootView hm_markDirty];
-    } else if (!self.hm_isFixedPosition && self.hm_fixedPositionLastContainerView) {
+    } else if (!self.hm_isFixedPosition && self.hm_fixedPositionLastContainerView && (self.hm_fixedPositionLastContainerView != self.superview)) {
         // superview(rootView) -> superview
         UIView *superView = self.superview;
         [self removeFromSuperview];

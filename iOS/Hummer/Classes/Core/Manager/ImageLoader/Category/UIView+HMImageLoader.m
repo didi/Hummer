@@ -10,6 +10,7 @@
 #import "HMJSGlobal.h"
 #import "HMImageManager.h"
 #import "WeakPointerWrapper.h"
+#import "HMImageLoaderManager.h"
 #import <objc/runtime.h>
 #import <Hummer/HMBaseValue.h>
 
@@ -103,6 +104,8 @@
             completionBlock(image,data,error,cacheType);
         }
     }];
+
+    
 }
 
 

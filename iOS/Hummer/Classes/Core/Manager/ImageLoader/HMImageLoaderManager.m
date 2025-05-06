@@ -67,6 +67,7 @@
         cacheUrlString = [[loader fixLoadSource:source inJSBundleSource:bundleSource] hm_asString];
     }
     __weak typeof(operation) wOperation = operation;
+    __weak typeof(self) wSelf = self;
     operation.cacheOperation = [[HMImageCacheManager sharedManager] queryImageWithSource:cacheUrlString context:context result:^(UIImage * _Nullable image, NSData * _Nullable data, NSString *path, HMImageCacheType cacheType, NSError * _Nullable error) {
         //HMImageCacheManager 必定返回 解压之后的image
         if (!wOperation || wOperation.isCancel) {
@@ -78,7 +79,7 @@
             completionBlock(image, data, error, cacheType);
             return;
         }
-        [self callLoader:loader operation:operation sourace:source inJSBundleSource:bundleSource cacheKey:cacheUrlString context:context completion:completionBlock];
+        [wSelf callLoader:loader operation:operation sourace:source inJSBundleSource:bundleSource cacheKey:cacheUrlString context:context completion:completionBlock];
     }];
     return operation;
 }
@@ -86,6 +87,7 @@
 - (void)callLoader:(id<HMImageLoader>)loader operation:(HMImageCombinedOperation *)operation sourace:(nonnull id<HMURLConvertible>)source inJSBundleSource:(nullable id<HMURLConvertible>)bundleSource cacheKey:(NSString *)cacheKey context:(nullable HMImageLoaderContext *)context completion:(nonnull HMImageCompletionBlock)completionBlock {
     
     __weak typeof(operation) wOperation = operation;
+    __weak typeof(self) wSelf = self;
     operation.loaderOperation = [loader load:source inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error) {
                 
         if (!wOperation || wOperation.isCancel) {
@@ -100,7 +102,7 @@
             if([loader isKindOfClass:HMLocalImageLoader.class]){
                 [_ctx setObject:@(HMImageCacheTypeMemory) forKey:HMImageContextStoreCacheType];
             }
-            [self storeImage:image data:data source:source context:context];
+            [wSelf storeImage:image data:data source:source context:context];
         }
         completionBlock(image, data, error, HMImageCacheTypeNone);
     }];

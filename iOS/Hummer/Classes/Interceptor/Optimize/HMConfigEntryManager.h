@@ -71,15 +71,14 @@ extern NSString * const HMDefaultNamespaceUnderline;
 
 @interface HMConfigEntryManager : NSObject
 
-@property(nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, HMConfigEntry *> *configMap DEPRECATED_MSG_ATTRIBUTE("参照其他 Interceptor 做处理");;
-
+@property(nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, HMConfigEntry *> *configMap;
 + (instancetype)manager;
 
 /**
  * 注意 注解 和 addConfig 只能使用一种方式。
  */
 - (void)addConfig:(HMConfigEntry *)config;
-
+- (nullable HMConfigEntry *)getConfig:(NSString *)nameSpace;
 @end
 
 

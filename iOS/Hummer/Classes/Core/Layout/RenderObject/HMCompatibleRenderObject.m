@@ -128,7 +128,7 @@ YOGA_TYPE_WRAPPER(YGSize) HMCompatibleMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) node,
     const YOGA_TYPE_WRAPPER(YGNodeRef) node = self.yogaNode;
     if (!YOGA_TYPE_WRAPPER(YGNodeHasMeasureFunc)(node)) {
         // 还有 attach 需要置为 NULL 或者 HMCompatibleMeasure
-        YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(node, HMCompatibleMeasure);
+        YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(node, (YOGA_TYPE_WRAPPER(YGMeasureFunc))HMCompatibleMeasure);
     }
 
     YOGA_TYPE_WRAPPER(YGNodeMarkDirty)(node);

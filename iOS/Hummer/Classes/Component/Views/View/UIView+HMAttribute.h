@@ -20,51 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 HMAssociatedPropertyGetterDeclaration(decoration, HMViewDecoration)
 
-- (void)set__borderRadius:(nullable NSArray<NSValue *> *)list;
-
-- (void)set__borderTopLeftRadius:(YOGA_TYPE_WRAPPER(YGValue))radius;
-
-- (void)set__borderTopRightRadius:(YOGA_TYPE_WRAPPER(YGValue))radius;
-
-- (void)set__borderBottomLeftRadius:(YOGA_TYPE_WRAPPER(YGValue))radius;
-
-- (void)set__borderBottomRightRadius:(YOGA_TYPE_WRAPPER(YGValue))radius;
-
-- (void)set__shadow:(nullable NSArray<NSObject *> *)shadowAttributes;
-
-- (void)set__backgroundColor:(nullable UIColor *)backgroundColor;
-
-- (void)set__backgroundImage:(nullable NSString *)imageString;
-
-- (void)set__borderStyle:(nullable NSArray *)list;
-
-- (void)set__borderLeftStyle:(HMBorderStyle)style;
-
-- (void)set__borderTopStyle:(HMBorderStyle)style;
-
-- (void)set__borderRightStyle:(HMBorderStyle)style;
-
-- (void)set__borderBottomStyle:(HMBorderStyle)style;
-
-- (void)set__borderColor:(nullable NSArray<UIColor *> *)list;
-
-- (void)set__borderLeftColor:(nullable UIColor *)color;
-
-- (void)set__borderTopColor:(nullable UIColor *)color;
-
-- (void)set__borderRightColor:(nullable UIColor *)color;
-
-- (void)set__borderBottomColor:(nullable UIColor *)color;
-
-- (void)set__borderWidth:(nullable NSArray<NSNumber *> *)list;
-
-- (void)set__borderLeftWidth:(CGFloat)width;
-
-- (void)set__borderTopWidth:(CGFloat)width;
-
-- (void)set__borderRightWidth:(CGFloat)width;
-
-- (void)set__borderBottomWidth:(CGFloat)width;
+// TODO: 后续多线程版本上线后，这部分代码迁移到 commonStyle，Hummer1导出接口保留，通用样式处理迁移到 commonStyle
+- (void)setHm__backgroundColor:(nullable UIColor *)backgroundColor;
 
 - (CGFloat)hm_zIndex;
 

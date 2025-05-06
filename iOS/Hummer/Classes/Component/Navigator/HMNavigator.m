@@ -50,6 +50,10 @@ HM_EXPORT_METHOD(popToRootPage, __popToRootPage:)
 
 HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
 
+HM_EXPORT_METHOD(popToSpecificPage, __popToSpecificPage:)
+
+HM_EXPORT_METHOD(isTopPagePresented, __isTopPagePresented)
+
 + (instancetype)sharedInstance {
     static id _sharedInstance = nil;
     static dispatch_once_t onceToken;
@@ -255,6 +259,57 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
     [navigationController setViewControllers:reversedArray animated:animated];
 }
 
+/// 跳转到指定页面，可以跨多个presentVC获取导航堆栈中的页面
+/// return 0: 跳转成功， 1跳转失败
++ (NSNumber *)__popToSpecificPage:(HMBaseValue *)params {
+    NSDictionary *pageInfo = params.toDictionary;
+    if (!pageInfo) {
+        return @0;
+    }
+    NSDictionary *parameterDictioinary = params.toDictionary;
+    id pageIdObject = parameterDictioinary[@"id"];
+    if (![pageIdObject isKindOfClass:NSString.class]) {
+        return @0;
+    }
+    BOOL animated = YES;
+    id animatedObject = parameterDictioinary[@"animated"];
+    if ([animatedObject isKindOfClass:NSNumber.class]) {
+        animated = ((NSNumber *) animatedObject).boolValue;
+    }
+    NSString *pageID = pageIdObject;
+    if (pageID.length == 0) {
+        return @0;
+    }
+    return [self popToSpecificPage:pageID animated:animated];
+}
+
+/// TopVC是否为模态展示页面
+/// return 1:模态页， 0:非模态页
++ (NSNumber *)__isTopPagePresented {
+    UIViewController *topViewController = HMTopViewController();
+    if (!topViewController) {
+        return @0; // 如果传入的控制器为 nil，返回 0
+    }
+    
+    // 检查 topViewController 是否符合 UIViewController 类型
+    if (![topViewController isKindOfClass:[UIViewController class]]) {
+        return @0; // 如果不是有效的 UIViewController，返回 0
+    }
+    
+    // 检查是否有 presentingViewController
+    if (topViewController.presentingViewController != nil) {
+        return @1; // 当前控制器是模态呈现的
+    }
+    
+    // 检查导航控制器是否存在并且被模态呈现
+    UINavigationController *navController = topViewController.navigationController;
+    if (navController && navController.presentingViewController != nil) {
+        return @1; // 导航控制器是模态呈现的
+    }
+    
+    return @0; // 不是模态呈现
+}
+
 #pragma mark - Navigation
 
 + (NSString *)schemeWithURL:(NSURL *)url
@@ -437,6 +492,78 @@ HM_EXPORT_METHOD(popBack, __popBackWithCount:pageInfo:)
         }
     }
 
+    return nil;
+}
+
+/// 跳转到特定页面,并关闭所有present页面多余页面
+/// - Parameters:
+///   - pageID: 页面ID
+///   - animated: 是否动画
++ (NSNumber *)popToSpecificPage:(NSString *)pageID animated:(BOOL)animated {
+    UIViewController *viewController = [self viewControllerForSpecificPageID:pageID];
+    if (!viewController) {
+        return @0;
+    }
+
+    if (viewController.navigationController) {
+        UIViewController *topViewController = HMTopViewController();
+        if (topViewController.presentationController) {
+            [self popToRootPage:nil];
+        }
+        [viewController.navigationController popToViewController:viewController animated:animated];
+    } else if (viewController.presentingViewController) {
+        [viewController dismissViewControllerAnimated:animated completion:nil];
+    }
+    return @1;
+}
+
+/// 从堆栈中获取特定页面，支持从topVC为presenting页面获取父页面导航栈中的页面
+///  Navi(A)  push B,  B present C,  C present D.  D为TopVC的时候此方法可以通过pageID获取到A
+/// - Parameter pageID: 页面ID
++ (UIViewController *)viewControllerForSpecificPageID:(NSString *)pageID {
+    UIViewController *topViewController = HMTopViewController();
+    if ([topViewController conformsToProtocol:@protocol(HummerContainerProtocol)] && [((UIViewController <HummerContainerProtocol> *) topViewController).hm_pageID isEqualToString:pageID]) {
+        return topViewController;
+    }
+    HMContainerModel *containerModel = hm_nearest_container(topViewController);
+    return [self findSpecificPageID:pageID containerModel:containerModel];
+    
+}
+
+
++ (UIViewController *)findSpecificPageID:(NSString *)pageID containerModel:(HMContainerModel *)containerModel {
+    if (containerModel.containerType == HMContainerTypeModal) {
+        for (HMContainerModel *inlineContainerModel = hm_nearest_container(containerModel.viewController); inlineContainerModel.containerType == HMContainerTypeModal; inlineContainerModel = hm_nearest_container(inlineContainerModel.viewController)) {
+            if (inlineContainerModel.containerType == HMContainerTypeModal) {
+                if ([inlineContainerModel conformsToProtocol:@protocol(HummerContainerProtocol)] && [((UIViewController <HummerContainerProtocol> *) inlineContainerModel).hm_pageID isEqualToString:pageID]) {
+                    return inlineContainerModel.viewController;
+                }
+            }
+        }
+    }
+    
+    if ([containerModel.viewController isKindOfClass:[UINavigationController class]]) {
+        __block UIViewController *pageViewController = nil;
+        [((UINavigationController *) containerModel.viewController).viewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController *obj, NSUInteger idx, BOOL *stop) {
+            if ([obj conformsToProtocol:@protocol(HummerContainerProtocol)] && [((UIViewController <HummerContainerProtocol> *) obj).hm_pageID isEqualToString:pageID]) {
+                pageViewController = obj;
+                *stop = YES;
+            }
+        }];
+        if (pageViewController) {
+            return pageViewController;
+        }
+    }
+    
+    if (containerModel.containerType == HMContainerTypeModal) {
+        containerModel = hm_nearest_container(containerModel.viewController);
+        if (!containerModel) {
+            return nil;
+        } else {
+            return [self findSpecificPageID:pageID containerModel:containerModel];
+        }
+    }
+    
     return nil;
 }
 

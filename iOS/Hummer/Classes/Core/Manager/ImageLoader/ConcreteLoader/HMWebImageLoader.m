@@ -118,9 +118,9 @@
         self.URLOperations[imageUrl] = operation;
         __weak typeof(self) wself = self;
         operation.completionBlock = ^{
-            HM_LOCK(self.lock);
+            HM_LOCK(wself.lock);
             [wself.URLOperations removeObjectForKey:imageUrl];
-            HM_UNLOCK(self.lock);
+            HM_UNLOCK(wself.lock);
         };
         cancelToken = [operation addHandlersForCompleted:completionBlock];
         [self.downloadQueue addOperation:operation];

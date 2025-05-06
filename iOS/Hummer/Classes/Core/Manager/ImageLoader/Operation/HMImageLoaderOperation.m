@@ -6,6 +6,7 @@
 //
 
 #import "HMImageLoaderOperation.h"
+#import "HMImageLoaderManager.h"
 
 
 /// NSOperation conform to `HMWebImageOperation`.

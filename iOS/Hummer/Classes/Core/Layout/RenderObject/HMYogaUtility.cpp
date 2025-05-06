@@ -6,6 +6,7 @@
 //
 
 #include "HMYogaUtility.h"
+#include <assert.h>
 
 extern "C" {
 void HMYogaNodeFreeRecursive(const YOGA_TYPE_WRAPPER(YGNodeRef) root) {

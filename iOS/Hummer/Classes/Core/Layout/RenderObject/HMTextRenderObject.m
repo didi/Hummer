@@ -32,7 +32,7 @@ static YOGA_TYPE_WRAPPER(YGSize) HMCommonMeasure(YOGA_TYPE_WRAPPER(YGNodeRef) no
 
 - (instancetype)init {
     if (self = [super init]) {
-        YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(self.yogaNode, HMCommonMeasure);
+        YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(self.yogaNode, (YOGA_TYPE_WRAPPER(YGMeasureFunc))HMCommonMeasure);
     }
 
     return self;

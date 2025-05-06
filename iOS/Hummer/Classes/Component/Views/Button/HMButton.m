@@ -66,7 +66,7 @@ HM_EXPORT_ATTRIBUTE(fontWeight, fontWeight, HMStringToFontWeight:)
 }
 
 - (void)layoutSubviews {
-    [self hm__setBackgroundColor:[self backgroundColorForState:self.state]];
+    [super setHm__backgroundColor:[self backgroundColorForState:self.state]];
     [super layoutSubviews];
 }
 
@@ -167,9 +167,9 @@ HM_EXPORT_ATTRIBUTE(fontWeight, fontWeight, HMStringToFontWeight:)
 #pragma mark - Export Attribute
 
 // 复写父类方法
-- (void)set__backgroundColor:(UIColor *)backgroundColor {
+- (void)setHm__backgroundColor:(UIColor *)backgroundColor {
     self.normalBackgroundColor = backgroundColor;
-    [self hm__setBackgroundColor:backgroundColor];
+    [super setHm__backgroundColor:backgroundColor];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlign {
@@ -197,18 +197,6 @@ HM_EXPORT_ATTRIBUTE(fontWeight, fontWeight, HMStringToFontWeight:)
 - (void)setTextColor:(UIColor *)color {
     self.normalTitleColor = color;
 }
-
-#pragma mark - 颜色处理
-
-- (void)hm__setBackgroundColor :(UIColor *)backgroundColor {
-    struct objc_super superInfo = {
-        .receiver = self,
-        .super_class = self.superclass
-    };
-    void (*msgSend)(struct objc_super *, SEL,UIColor * color) = (__typeof__(msgSend)) objc_msgSendSuper;
-    msgSend(&superInfo,@selector(set__backgroundColor:),backgroundColor);
-}
-
 
 #pragma mark - <HMViewInspectorDescription>
 

@@ -365,6 +365,12 @@ void hummerFinalize(JSObjectRef object) {
         virtualMachineRef = JSContextGroupCreate();
     }
     _contextRef = JSGlobalContextCreateInGroup(virtualMachineRef, NULL);
+#ifdef DEBUG
+    //视图层debug调试
+   if (@available(iOS 16.4, *)) {
+       JSGlobalContextSetInspectable(_contextRef, true);
+   }
+#endif
     _exceptionHandlerMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory];
     _consoleHandlerMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory];
 

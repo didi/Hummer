@@ -482,7 +482,7 @@ static inline YOGA_TYPE_WRAPPER(YGSize) HMShadowViewMeasure(YOGA_TYPE_WRAPPER(YG
     if (CGSizeEqualToSize(_intrinsicContentSize, CGSizeMake(UIViewNoIntrinsicMetric, UIViewNoIntrinsicMetric))) {
         YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(_yogaNode, NULL);
     } else {
-        YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(_yogaNode, HMShadowViewMeasure);
+        YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(_yogaNode, (YOGA_TYPE_WRAPPER(YGMeasureFunc))HMShadowViewMeasure);
     }
 
     YOGA_TYPE_WRAPPER(YGNodeMarkDirty)(_yogaNode);

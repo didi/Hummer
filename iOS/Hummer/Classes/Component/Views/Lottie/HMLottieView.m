@@ -13,6 +13,7 @@
 #import "HMLottieView+ImageLoader.h"
 #import "UIView+HMDom.h"
 #import "HMUtility.h"
+#import "HMImageLoaderManager.h"
 
 #if __has_include(<lottie-ios/Lottie/Lottie.h>)
 #import <lottie-ios/Lottie/Lottie.h>
@@ -76,6 +77,9 @@ HM_EXPORT_CLASS(LottieView,HMLottieView)
 HM_EXPORT_PROPERTY(autoPlay, __autoPlay, __setAutoPlay:)
 HM_EXPORT_PROPERTY(src, __src, __setSrc:)
 HM_EXPORT_METHOD(playAnimation, __playAnimation)
+HM_EXPORT_METHOD(pauseAnimation, __pauseAnimation)
+HM_EXPORT_METHOD(resumeAnimation, __resumeAnimation)
+HM_EXPORT_METHOD(playToProgress, __playToProgress:)
 HM_EXPORT_METHOD(cancelAnimation, __cancelAnimation)
 HM_EXPORT_METHOD(setLoop, __setLoop:)
 HM_EXPORT_METHOD(setOnCompletionCallback, __setOnCompletionCallback:)
@@ -118,16 +122,17 @@ HM_EXPORT_METHOD(setOnDataReadyCallback, __setOnDataReadyCallback:)
         HM_SafeRunBlockAtMainThread(self.readyCallback,@[]);
         return;
     }
-        __weak typeof(self) wSelf = self;
-        self.combinedOperation = [self hm_setLottieWithSrc:src inJSBundleSource:bundle context:context completion:^(NSString * _Nonnull filePath, HMImageCacheType cacheType, NSError * _Nullable error) {
-            if(filePath){
-                [wSelf.cacheKeyMapper setObject:filePath forKey:src];
-                [wSelf setupAnimationView:filePath];
-                HM_SafeRunBlockAtMainThread(wSelf.readyCallback,@[]);
-            }else{
-                HM_SafeRunBlockAtMainThread(wSelf.failedCallback,@[]);
-            }
-        }];
+    __weak typeof(self) wSelf = self;
+    // 未开启优化
+    self.combinedOperation = [self hm_setLottieWithSrc:src inJSBundleSource:bundle context:context completion:^(NSString * _Nonnull filePath, HMImageCacheType cacheType, NSError * _Nullable error) {
+        if(filePath){
+            [wSelf.cacheKeyMapper setObject:filePath forKey:src];
+            [wSelf setupAnimationView:filePath];
+            HM_SafeRunBlockAtMainThread(wSelf.readyCallback,@[]);
+        }else{
+            HM_SafeRunBlockAtMainThread(wSelf.failedCallback,@[]);
+        }
+    }];
 }
 
 - (void)setupAnimationView:(NSString *)filePath {
@@ -171,6 +176,15 @@ HM_EXPORT_METHOD(setOnDataReadyCallback, __setOnDataReadyCallback:)
     }];
 }
 
+///暂停播放，调用 playAnimation 可恢复播放
+- (void)__pauseAnimation {
+    [self.animationView pause];
+}
+
+- (void)__resumeAnimation {
+    [self __playAnimation];
+}
+
 - (void)__cancelAnimation {
     [self.animationView stop];
     self.isPlaying = NO;
@@ -199,6 +213,23 @@ HM_EXPORT_METHOD(setOnDataReadyCallback, __setOnDataReadyCallback:)
 
 - (void)__setAutoPlay:(BOOL)autoPlay{
     self.autoPlay = autoPlay;
+}
+
+///播放到指定进度（0-1）
+- (void)__playToProgress:(HMBaseValue *)jsProgress {
+    //解析 progress 参数，默认1
+    CGFloat progress = 1;
+    if (jsProgress && jsProgress.isNumber) {
+        progress = [jsProgress.toNumber floatValue];
+    }
+    progress = MAX(0, progress);
+    
+    __weak typeof(self) wSelf = self;
+    self.isPlaying = YES;
+    [self.animationView playToProgress:progress withCompletion:^(BOOL animationFinished) {
+        wSelf.isPlaying = NO;
+        HM_SafeRunBlockAtMainThread(wSelf.completionCallback,@[])
+    }];
 }
 
 - (void)hummerSetFrame:(CGRect)frame {

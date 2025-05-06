@@ -86,6 +86,15 @@ HM_EXPORT_CLASS_METHOD(loadScriptWithUrl, evaluateScriptWithUrl:callback:)
 
 HM_EXPORT_CLASS_METHOD(postException, postException:)
 
+HM_EXPORT_CLASS_METHOD(postEvent, postEvent:data:)
+
++ (void)postEvent:(HMBaseValue *)eventName data:(nullable HMBaseValue *)eventData{
+
+    NSString *eventNameString = eventName.toString;
+    NSDictionary *data = eventData.toDictionary;
+    HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
+    [context _postEvent:eventNameString data:data];
+}
 
 + (void)postException:(HMBaseValue *)exception {
 
@@ -93,7 +102,7 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
     HMJSContext *context = [HMJSGlobal.globalObject currentContext:HMCurrentExecutor];
     if (exceptionDic && context.exceptionHandler) {
         HMExceptionModel *model = [[HMExceptionModel alloc] initWithParams:exceptionDic];
-        context.exceptionHandler(model);
+        [context handleException:model];
     }
 }
 
@@ -262,13 +271,14 @@ HM_EXPORT_CLASS_METHOD(postException, postException:)
         safeAreaBottom = round([[[UIApplication sharedApplication] delegate] window].safeAreaInsets.bottom > 0.0 ? 34.0 : 0.0);
     }
     CGFloat scale = [[UIScreen mainScreen] scale];
-
+    //Add screenHeight to adapt to Android
     return @{@"platform": platform,
             @"osVersion": sysVersion,
             @"appName": appName,
             @"appVersion": appVersion,
             @"deviceWidth": @(deviceWidth),
             @"deviceHeight": @(deviceHeight),
+            @"screenHeight": @(deviceHeight),
             @"availableWidth": @(deviceWidth),
             @"availableHeight": @(availableHeight),
             @"statusBarHeight": @(statusBarHeight),

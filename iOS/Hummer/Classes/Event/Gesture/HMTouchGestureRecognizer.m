@@ -17,6 +17,8 @@
 @property (nonatomic, assign) BOOL hasBegan;
 @property (nonatomic, weak) HMEventHandler *eventHandler;
 
+@property (nonatomic, copy) NSSet *touchesCache;
+
 @end
 @implementation HMTouchGestureRecognizer
 - (instancetype)init {
@@ -48,28 +50,32 @@
 - (void)setState:(UIGestureRecognizerState)state {
     [super setState:state];
 }
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [super touchesEnded:touches withEvent:event];
-    [self fireTouchEvent:UIGestureRecognizerStateEnded withTouches:touches];
-    [self reset];
-}
-
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [super touchesMoved:touches withEvent:event];
     [self fireTouchEvent:UIGestureRecognizerStateChanged withTouches:touches];
 }
 
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+
+    [super touchesEnded:touches withEvent:event];
+    self.state = UIGestureRecognizerStateEnded;
+    [self fireTouchEvent:UIGestureRecognizerStateEnded withTouches:touches];
+}
+
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
     [super touchesCancelled:touches withEvent:event];
     self.state = UIGestureRecognizerStateCancelled;
     [self fireTouchEvent:UIGestureRecognizerStateCancelled withTouches:touches];
 }
+
 - (void)reset {
     [super reset];
     if(self.state == UIGestureRecognizerStateFailed){
-        
+        [self fireTouchEvent:UIGestureRecognizerStateCancelled withTouches:self.touchesCache];
     }
     self.hasBegan = NO;
+    self.touchesCache = nil;
     self.state = UIGestureRecognizerStateEnded;
 }
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer {
@@ -94,7 +100,11 @@
                                 @"rawY": @(windowLocation.y)
                         }
         };
+        
         [self.eventHandler fireEvent:@"touch" withParams:params];
     }];
+    if (touches != self.touchesCache) {
+        self.touchesCache = touches;
+    }
 }
 @end

@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) HMEngineType engineType;
 
-@property (nonatomic, nullable, copy, readonly) NSURL *url;
+@property (nonatomic, nullable, copy) NSURL *url;
 
 /// 注意不要在 delloc 方法内访问该属性，如需访问请使用 nativeNotifyCenter
 @property (nonatomic, strong, readonly) HMBaseValue *notifyCenter;
@@ -112,8 +112,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// 根据 上下文 获取当前namespace，如果 当前不在 JS 执行上下文，或未设置 namespace，返回nil
 + (nullable NSString *)getCurrentNamespace;
 
-/// 根据 上下文 获取当前namespace，如果 当前不在 JS 执行上下文，则返回默认 namespace
+/// 根据 上下文 获取当前namespace，如果 当前不在 JS 执行上下文，则返回默认 namespace， 兼容 原 HMJSContext+Private getNamespace
 + (NSString *)getCurrentNamespaceWithDefault;
+
+/// 返回当前正在执行的上下文，如当前不在 JS 执行上下文，返回nil
++ (nullable HMJSContext *)getCurrentContext;
+
+- (void)handleException:(HMExceptionModel *)exceptionModel;
 NS_ASSUME_NONNULL_END
 
 @end

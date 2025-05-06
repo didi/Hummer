@@ -75,7 +75,9 @@ NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
     [self.configMap setObject:config forKey:config.namespace];
     [HMUpgradeManager upgrageStorageForNamespace:config.namespace];
 }
-
+- (nullable HMConfigEntry *)getConfig:(NSString *)nameSpace {
+    return self.configMap[nameSpace];
+}
 @end
 
 
@@ -231,14 +233,28 @@ NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
 // 不需要兼容
 
 + (BOOL)loadWithSource:(id<HMURLConvertible>)source inJSBundleSource:(id<HMURLConvertible>)bundleSource namespace:(NSString *)namespace completion:(HMJSLoaderCompleteBlock)completion {
+    struct timespec beforeTimespec;
+    HMClockGetTime(&beforeTimespec);
     
+    HMJSLoaderCompleteBlock tempCallback = ^(NSError * _Nullable error, NSString *_Nullable script){
+        struct timespec afterTimespec;
+        HMClockGetTime(&afterTimespec);
+        struct timespec resultTimespec;
+        HMDiffTime(&beforeTimespec, &afterTimespec, &resultTimespec);
+        NSNumber *duration = @(resultTimespec.tv_sec * 1000 + resultTimespec.tv_nsec / 1000000);
+        NSString *jsName = [source hm_asString];
+        if (namespace) {
+            [HMConfigEntryManager.manager.configMap[namespace].trackEventPlugin trackPerformanceJSLoad:duration url:jsName pageUrl:[bundleSource hm_asString]];
+        }
+        if(completion) completion(error, script);
+    };
     Class<HMJSLoader> loader = [HMCEMInstance.configMap objectForKey:namespace].jsLoaderInterceptor;
-    if ([loader loadWithSource:source inJSBundleSource:bundleSource completion:completion]) {
+    if ([loader loadWithSource:source inJSBundleSource:bundleSource completion:tempCallback]) {
         return YES;
     }
     Class<HMJSLoader> defaultLoader = HMCEMInstance.defaultConfig.jsLoaderInterceptor;
-    return [defaultLoader loadWithSource:source inJSBundleSource:bundleSource completion:completion];
-}    
+    return [defaultLoader loadWithSource:source inJSBundleSource:bundleSource completion:tempCallback];
+}
 
 @end
 
@@ -274,8 +290,8 @@ NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
     if (!interceptor && !hasDevTool) {
         return;
     }
-    NSObject *nativeObj = target.toObject;;
-    NSString *className = nativeObj.hm_objcClassName;
+    NSObject *nativeObj = target.toNativeObject;
+    NSString *className = [target isEqualToObject:context.context.globalObject] ? @"globalThis" : nativeObj.hm_objcClassName;
     NSString *objRefStr = @"";
     if (nativeObj) {
         objRefStr = [NSString stringWithFormat:@"%p", nativeObj];

@@ -173,7 +173,7 @@ NS_ASSUME_NONNULL_END
         const YOGA_TYPE_WRAPPER(YGNodeRef) node = yoga.yogaNode;
         if (yoga.isLeaf) {
             [yoga removeAllSubviews];
-            YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(node, HMCompatibleMeasure);
+            YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(node, (YOGA_TYPE_WRAPPER(YGMeasureFunc))HMCompatibleMeasure);
         } else {
             YOGA_TYPE_WRAPPER(YGNodeSetMeasureFunc)(node, NULL);
         }

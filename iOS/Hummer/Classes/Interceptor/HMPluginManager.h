@@ -36,6 +36,13 @@ static inline void HMClockGetTime(struct timespec *timespec) {
 //@protocol HMPluginProtocol <NSObject>
 //@end
 
+typedef enum : NSUInteger {
+    HMPageLifeCycleOnCreate,
+    HMPageLifeCycleOnAppear,
+    HMPageLifeCycleOnDisappear,
+    HMPageLifeCycleOnDestroy,
+} HMPageLifeCycle;
+
 @protocol HMTrackEventPluginProtocol
 
 @required
@@ -58,6 +65,39 @@ static inline void HMClockGetTime(struct timespec *timespec) {
 
 - (void)trackPageSuccessWithPageUrl:(NSString *)pageUrl;
 
+// 单个js加载时间
+- (void)trackPerformanceJSLoad:(NSNumber *)duration url:(NSString *)url pageUrl:(NSString *)pageUrl;
+
+// 单个js执行时间
+- (void)trackPerformanceJSEval:(NSNumber *)duration url:(NSString *)url pageUrl:(NSString *)pageUrl;
+
+// js执行总时间
+- (void)trackPerformanceJSEvalTotal:(NSNumber *)duration pageUrl:(NSString *)pageUrl;
+
+// 页面生命耗时
+- (void)trackPerformanceLifeCycle:(HMPageLifeCycle)LifeCycle duration:(NSNumber *)duration pageUrl:(NSString *)pageUrl;
+
+// 最大内容绘制耗时（近似LCP）
+- (void)trackPerformanceLCP:(NSNumber *)duration pageUrl:(NSString *)pageUrl;
+
+// 首帧渲染耗时（近似FCP）
+- (void)trackPerformanceFCP:(NSNumber *)duration pageUrl:(NSString *)pageUrl;
+
+// Hummer容器创建耗时, 从 容器 viewDidload , 到定义bridge注册完成，即将为加载/执行js
+- (void)trackPerformanceContainerInitialization:(NSNumber *)duration pageUrl:(NSString *)pageUrl;
+
+
+/**
+ * 保存bundle包信息
+ *
+ * @param pageUrl
+ * @param moduleName
+ * @param moduleVersion
+ */
+@optional
+- (void)storeBundleInfoWithPageUrl:(NSString *)pageUrl moduleName:(NSString *)moduleName moduleVersion:(NSString *)moduleVersion;
+- (void)removeBundleInfoWithPageUrl:(NSString *)pageUrl;
+- (void)clearBundleInfo;
 @end
 
 //typedef NS_ENUM(NSUInteger, HMPluginType) {
