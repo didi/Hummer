@@ -1,0 +1,22 @@
+{
+	"app": {
+		"bundleName": "com.openharmony.imageknife",
+		"debug": true,
+		"versionCode": 1000000,
+		"versionName": "2.1.1",
+		"minAPIVersion": 10,
+		"targetAPIVersion": 10,
+		"apiReleaseType": "Beta2",
+		"compileSdkVersion": "4.0.9.6",
+		"compileSdkType": "OpenHarmony"
+	},
+	"module": {
+		"name": "library",
+		"type": "har",
+		"deviceTypes": [
+			"default",
+			"tablet"
+		],
+		"uiSyntax": "ets"
+	}
+}

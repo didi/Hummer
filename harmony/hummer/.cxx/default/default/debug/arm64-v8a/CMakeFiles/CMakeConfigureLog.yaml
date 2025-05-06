@@ -1,0 +1,772 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake:228 (message)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      The target system is: OHOS - 1 - aarch64
+      The host system is: Darwin - 23.6.0 - arm64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang 
+      Build flags: -fdata-sections;-ffunction-sections;-funwind-tables;-fstack-protector-strong;-no-canonical-prefixes;-fno-addrsig;-Wa,--noexecstack;-Wformat;-Werror=format-security;-D__MUSL__
+      Id flags: -c;--target=aarch64-linux-ohos 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+      
+      The C compiler identification is Clang, found in:
+        /Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/3.28.2/CompilerIdC/CMakeCCompilerId.o
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ 
+      Build flags: -fdata-sections;-ffunction-sections;-funwind-tables;-fstack-protector-strong;-no-canonical-prefixes;-fno-addrsig;-Wa,--noexecstack;-Wformat;-Werror=format-security;-D__MUSL__
+      Id flags: -c;--target=aarch64-linux-ohos 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+      
+      The CXX compiler identification is Clang, found in:
+        /Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/3.28.2/CompilerIdCXX/CMakeCXXCompilerId.o
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-3YwHIT"
+      binary: "/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-3YwHIT"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS-NOTFOUND"
+      CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm"
+      CMAKE_CXX_COMPILER_TARGET: "aarch64-linux-ohos"
+      CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm"
+      CMAKE_C_COMPILER_TARGET: "aarch64-linux-ohos"
+      CMAKE_C_FLAGS: "-fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat  -D__MUSL__"
+      CMAKE_EXE_LINKER_FLAGS: "--rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections "
+      CMAKE_POSITION_INDEPENDENT_CODE: "TRUE"
+      CMAKE_SYSROOT: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot"
+      HMOS_SDK_NATIVE: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/hms/native"
+      OHOS_ARCH: "arm64-v8a"
+      OHOS_SDK_NATIVE: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-3YwHIT'
+        
+        Run Build Command(s): /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja -v cmTC_e50ae
+        [1/2] /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot   -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat  -D__MUSL__  -fPIE   -v -MD -MT CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCCompilerABI.c
+        OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)
+        Target: aarch64-unknown-linux-ohos
+        Thread model: posix
+        InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin
+        clang: warning: argument unused during compilation: '--gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm' [-Wunused-command-line-argument]
+         (in-process)
+         "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang" -cc1 -triple aarch64-unknown-linux-ohos -emit-obj -mrelax-all --mrelax-relocations -mnoexecstack -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=1 -target-cpu generic -target-feature +neon -target-feature +v8a -target-feature +fix-cortex-a53-835769 -target-abi aapcs -fallow-half-arguments-and-returns -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-3YwHIT -resource-dir /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4 -dependency-file CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -sys-header-deps -D __MUSL__ -isysroot /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include -Wformat -fdebug-compilation-dir=/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-3YwHIT -ferror-limit 19 -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -x c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCCompilerABI.c
+        clang -cc1 version 15.0.4 based upon LLVM 15.0.4 default target arm64-apple-darwin23.6.0
+        ignoring nonexistent directory "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include
+        End of search list.
+        [2/2] : && /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat  -D__MUSL__ --rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections  -v CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -o cmTC_e50ae   && :
+        OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)
+        Target: aarch64-unknown-linux-ohos
+        Thread model: posix
+        InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin
+         "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld" --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -pie -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=4096 --hash-style=gnu --hash-style=both --enable-new-dtags --eh-frame-hdr -m aarch64linux -dynamic-linker /lib/ld-musl-aarch64.so.1 -o cmTC_e50ae /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/ --build-id=sha1 --warn-shared-textrel --fatal-warnings -lunwind --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a -lc /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        end of search list found
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        implicit include dirs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld\\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-3YwHIT']
+        ignore line: []
+        ignore line: [Run Build Command(s): /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja -v cmTC_e50ae]
+        ignore line: [[1/2] /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot   -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa --noexecstack -Wformat  -D__MUSL__  -fPIE   -v -MD -MT CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCCompilerABI.c]
+        ignore line: [OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)]
+        ignore line: [Target: aarch64-unknown-linux-ohos]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin]
+        ignore line: [clang: warning: argument unused during compilation: '--gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm' [-Wunused-command-line-argument]]
+        ignore line: [ (in-process)]
+        ignore line: [ "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang" -cc1 -triple aarch64-unknown-linux-ohos -emit-obj -mrelax-all --mrelax-relocations -mnoexecstack -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=1 -target-cpu generic -target-feature +neon -target-feature +v8a -target-feature +fix-cortex-a53-835769 -target-abi aapcs -fallow-half-arguments-and-returns -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-3YwHIT -resource-dir /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4 -dependency-file CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -sys-header-deps -D __MUSL__ -isysroot /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include -Wformat -fdebug-compilation-dir=/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-3YwHIT -ferror-limit 19 -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -x c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCCompilerABI.c]
+        ignore line: [clang -cc1 version 15.0.4 based upon LLVM 15.0.4 default target arm64-apple-darwin23.6.0]
+        ignore line: [ignoring nonexistent directory "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        ignore line: [End of search list.]
+        ignore line: [[2/2] : && /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat  -D__MUSL__ --rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections  -v CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o -o cmTC_e50ae   && :]
+        ignore line: [OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)]
+        ignore line: [Target: aarch64-unknown-linux-ohos]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin]
+        link line: [ "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld" --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -pie -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=4096 --hash-style=gnu --hash-style=both --enable-new-dtags --eh-frame-hdr -m aarch64linux -dynamic-linker /lib/ld-musl-aarch64.so.1 -o cmTC_e50ae /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/ --build-id=sha1 --warn-shared-textrel --fatal-warnings -lunwind --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a -lc /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld] ==> ignore
+          arg [--sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-EL] ==> ignore
+          arg [--fix-cortex-a53-843419] ==> ignore
+          arg [-znow] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [-zmax-page-size=4096] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--hash-style=both] ==> ignore
+          arg [--enable-new-dtags] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [-m] ==> ignore
+          arg [aarch64linux] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-musl-aarch64.so.1] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_e50ae] ==> ignore
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/]
+          arg [--build-id=sha1] ==> ignore
+          arg [--warn-shared-textrel] ==> ignore
+          arg [--fatal-warnings] ==> ignore
+          arg [-lunwind] ==> lib [unwind]
+          arg [--no-undefined] ==> ignore
+          arg [-znoexecstack] ==> ignore
+          arg [--gc-sections] ==> ignore
+          arg [CMakeFiles/cmTC_e50ae.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a] ==> lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+          arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+          arg [-lc] ==> lib [c]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a] ==> lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+          arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+        remove lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+        remove lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/aarch64-linux-ohos]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos]
+        implicit libs: [unwind;-l:libunwind.a;c;-l:libunwind.a]
+        implicit objs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+        implicit dirs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-M0MoA7"
+      binary: "/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-M0MoA7"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS-NOTFOUND"
+      CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm"
+      CMAKE_CXX_COMPILER_TARGET: "aarch64-linux-ohos"
+      CMAKE_CXX_FLAGS: "-fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat   -D__MUSL__"
+      CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm"
+      CMAKE_C_COMPILER_TARGET: "aarch64-linux-ohos"
+      CMAKE_EXE_LINKER_FLAGS: "--rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections "
+      CMAKE_POSITION_INDEPENDENT_CODE: "TRUE"
+      CMAKE_SYSROOT: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot"
+      HMOS_SDK_NATIVE: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/hms/native"
+      OHOS_ARCH: "arm64-v8a"
+      OHOS_SDK_NATIVE: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-M0MoA7'
+        
+        Run Build Command(s): /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja -v cmTC_f86bd
+        [1/2] /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot   -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat   -D__MUSL__  -fPIE   -v -MD -MT CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
+        OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)
+        Target: aarch64-unknown-linux-ohos
+        Thread model: posix
+        InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin
+        clang++: warning: argument unused during compilation: '--gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm' [-Wunused-command-line-argument]
+         (in-process)
+         "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++" -cc1 -triple aarch64-unknown-linux-ohos -emit-obj -mrelax-all --mrelax-relocations -mnoexecstack -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=1 -target-cpu generic -target-feature +neon -target-feature +v8a -target-feature +fix-cortex-a53-835769 -target-abi aapcs -fallow-half-arguments-and-returns -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-M0MoA7 -resource-dir /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4 -dependency-file CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -D __MUSL__ -isysroot /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1 -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include -Wformat -fdeprecated-macro -fdebug-compilation-dir=/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-M0MoA7 -ferror-limit 19 -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 15.0.4 based upon LLVM 15.0.4 default target arm64-apple-darwin23.6.0
+        ignoring nonexistent directory "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include
+        End of search list.
+        [2/2] : && /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat   -D__MUSL__ --rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections  -v CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_f86bd   && :
+        OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)
+        Target: aarch64-unknown-linux-ohos
+        Thread model: posix
+        InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin
+         "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld" --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -pie -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=4096 --hash-style=gnu --hash-style=both --enable-new-dtags --eh-frame-hdr -m aarch64linux -dynamic-linker /lib/ld-musl-aarch64.so.1 -o cmTC_f86bd /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/ --build-id=sha1 --warn-shared-textrel --fatal-warnings -lunwind --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lc++abi -lunwind -lm /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a -lc /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        end of search list found
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/include/libcxx-ohos/include/c++/v1]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        implicit include dirs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/include/libcxx-ohos/include/c++/v1;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld\\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-M0MoA7']
+        ignore line: []
+        ignore line: [Run Build Command(s): /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja -v cmTC_f86bd]
+        ignore line: [[1/2] /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot   -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa --noexecstack -Wformat   -D__MUSL__  -fPIE   -v -MD -MT CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)]
+        ignore line: [Target: aarch64-unknown-linux-ohos]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin]
+        ignore line: [clang++: warning: argument unused during compilation: '--gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm' [-Wunused-command-line-argument]]
+        ignore line: [ (in-process)]
+        ignore line: [ "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++" -cc1 -triple aarch64-unknown-linux-ohos -emit-obj -mrelax-all --mrelax-relocations -mnoexecstack -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=1 -target-cpu generic -target-feature +neon -target-feature +v8a -target-feature +fix-cortex-a53-835769 -target-abi aapcs -fallow-half-arguments-and-returns -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-M0MoA7 -resource-dir /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4 -dependency-file CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -D __MUSL__ -isysroot /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1 -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include -Wformat -fdeprecated-macro -fdebug-compilation-dir=/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-M0MoA7 -ferror-limit 19 -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang -cc1 version 15.0.4 based upon LLVM 15.0.4 default target arm64-apple-darwin23.6.0]
+        ignore line: [ignoring nonexistent directory "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        ignore line: [End of search list.]
+        ignore line: [[2/2] : && /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat   -D__MUSL__ --rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections  -v CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_f86bd   && :]
+        ignore line: [OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)]
+        ignore line: [Target: aarch64-unknown-linux-ohos]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin]
+        link line: [ "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld" --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -pie -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=4096 --hash-style=gnu --hash-style=both --enable-new-dtags --eh-frame-hdr -m aarch64linux -dynamic-linker /lib/ld-musl-aarch64.so.1 -o cmTC_f86bd /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/ --build-id=sha1 --warn-shared-textrel --fatal-warnings -lunwind --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lc++abi -lunwind -lm /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a -lc /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld] ==> ignore
+          arg [--sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-EL] ==> ignore
+          arg [--fix-cortex-a53-843419] ==> ignore
+          arg [-znow] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [-zmax-page-size=4096] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--hash-style=both] ==> ignore
+          arg [--enable-new-dtags] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [-m] ==> ignore
+          arg [aarch64linux] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-musl-aarch64.so.1] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_f86bd] ==> ignore
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/]
+          arg [--build-id=sha1] ==> ignore
+          arg [--warn-shared-textrel] ==> ignore
+          arg [--fatal-warnings] ==> ignore
+          arg [-lunwind] ==> lib [unwind]
+          arg [--no-undefined] ==> ignore
+          arg [-znoexecstack] ==> ignore
+          arg [--gc-sections] ==> ignore
+          arg [CMakeFiles/cmTC_f86bd.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lc++] ==> lib [c++]
+          arg [-lc++abi] ==> lib [c++abi]
+          arg [-lunwind] ==> lib [unwind]
+          arg [-lm] ==> lib [m]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a] ==> lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+          arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+          arg [-lc] ==> lib [c]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a] ==> lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+          arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+        remove lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+        remove lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/aarch64-linux-ohos]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos]
+        implicit libs: [unwind;c++;c++abi;unwind;m;-l:libunwind.a;c;-l:libunwind.a]
+        implicit objs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+        implicit dirs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos]
+        implicit fwks: []
+      
+      
+...
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake:228 (message)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      The target system is: OHOS - 1 - aarch64
+      The host system is: Darwin - 23.6.0 - arm64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang 
+      Build flags: -fdata-sections;-ffunction-sections;-funwind-tables;-fstack-protector-strong;-no-canonical-prefixes;-fno-addrsig;-Wa,--noexecstack;-Wformat;-Werror=format-security;-D__MUSL__
+      Id flags: -c;--target=aarch64-linux-ohos 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+      
+      The C compiler identification is Clang, found in:
+        /Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/3.28.2/CompilerIdC/CMakeCCompilerId.o
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ 
+      Build flags: -fdata-sections;-ffunction-sections;-funwind-tables;-fstack-protector-strong;-no-canonical-prefixes;-fno-addrsig;-Wa,--noexecstack;-Wformat;-Werror=format-security;-D__MUSL__
+      Id flags: -c;--target=aarch64-linux-ohos 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+      
+      The CXX compiler identification is Clang, found in:
+        /Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/3.28.2/CompilerIdCXX/CMakeCXXCompilerId.o
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-CNcknz"
+      binary: "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-CNcknz"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS-NOTFOUND"
+      CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm"
+      CMAKE_CXX_COMPILER_TARGET: "aarch64-linux-ohos"
+      CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm"
+      CMAKE_C_COMPILER_TARGET: "aarch64-linux-ohos"
+      CMAKE_C_FLAGS: "-fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat  -D__MUSL__"
+      CMAKE_EXE_LINKER_FLAGS: "--rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections "
+      CMAKE_POSITION_INDEPENDENT_CODE: "TRUE"
+      CMAKE_SYSROOT: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot"
+      HMOS_SDK_NATIVE: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/hms/native"
+      OHOS_ARCH: "arm64-v8a"
+      OHOS_SDK_NATIVE: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-CNcknz'
+        
+        Run Build Command(s): /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja -v cmTC_d97f2
+        [1/2] /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot   -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat  -D__MUSL__  -fPIE   -v -MD -MT CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCCompilerABI.c
+        OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)
+        Target: aarch64-unknown-linux-ohos
+        Thread model: posix
+        InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin
+        clang: warning: argument unused during compilation: '--gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm' [-Wunused-command-line-argument]
+         (in-process)
+         "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang" -cc1 -triple aarch64-unknown-linux-ohos -emit-obj -mrelax-all --mrelax-relocations -mnoexecstack -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=1 -target-cpu generic -target-feature +neon -target-feature +v8a -target-feature +fix-cortex-a53-835769 -target-abi aapcs -fallow-half-arguments-and-returns -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-CNcknz -resource-dir /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4 -dependency-file CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -sys-header-deps -D __MUSL__ -isysroot /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include -Wformat -fdebug-compilation-dir=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-CNcknz -ferror-limit 19 -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -x c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCCompilerABI.c
+        clang -cc1 version 15.0.4 based upon LLVM 15.0.4 default target arm64-apple-darwin23.6.0
+        ignoring nonexistent directory "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include
+        End of search list.
+        [2/2] : && /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat  -D__MUSL__ --rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections  -v CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -o cmTC_d97f2   && :
+        OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)
+        Target: aarch64-unknown-linux-ohos
+        Thread model: posix
+        InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin
+         "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld" --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -pie -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=4096 --hash-style=gnu --hash-style=both --enable-new-dtags --eh-frame-hdr -m aarch64linux -dynamic-linker /lib/ld-musl-aarch64.so.1 -o cmTC_d97f2 /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/ --build-id=sha1 --warn-shared-textrel --fatal-warnings -lunwind --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a -lc /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        end of search list found
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        implicit include dirs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld\\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-CNcknz']
+        ignore line: []
+        ignore line: [Run Build Command(s): /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja -v cmTC_d97f2]
+        ignore line: [[1/2] /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot   -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa --noexecstack -Wformat  -D__MUSL__  -fPIE   -v -MD -MT CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCCompilerABI.c]
+        ignore line: [OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)]
+        ignore line: [Target: aarch64-unknown-linux-ohos]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin]
+        ignore line: [clang: warning: argument unused during compilation: '--gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm' [-Wunused-command-line-argument]]
+        ignore line: [ (in-process)]
+        ignore line: [ "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang" -cc1 -triple aarch64-unknown-linux-ohos -emit-obj -mrelax-all --mrelax-relocations -mnoexecstack -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=1 -target-cpu generic -target-feature +neon -target-feature +v8a -target-feature +fix-cortex-a53-835769 -target-abi aapcs -fallow-half-arguments-and-returns -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-CNcknz -resource-dir /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4 -dependency-file CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -sys-header-deps -D __MUSL__ -isysroot /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include -Wformat -fdebug-compilation-dir=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-CNcknz -ferror-limit 19 -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -x c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCCompilerABI.c]
+        ignore line: [clang -cc1 version 15.0.4 based upon LLVM 15.0.4 default target arm64-apple-darwin23.6.0]
+        ignore line: [ignoring nonexistent directory "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        ignore line: [End of search list.]
+        ignore line: [[2/2] : && /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat  -D__MUSL__ --rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections  -v CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o -o cmTC_d97f2   && :]
+        ignore line: [OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)]
+        ignore line: [Target: aarch64-unknown-linux-ohos]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin]
+        link line: [ "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld" --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -pie -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=4096 --hash-style=gnu --hash-style=both --enable-new-dtags --eh-frame-hdr -m aarch64linux -dynamic-linker /lib/ld-musl-aarch64.so.1 -o cmTC_d97f2 /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/ --build-id=sha1 --warn-shared-textrel --fatal-warnings -lunwind --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a -lc /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld] ==> ignore
+          arg [--sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-EL] ==> ignore
+          arg [--fix-cortex-a53-843419] ==> ignore
+          arg [-znow] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [-zmax-page-size=4096] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--hash-style=both] ==> ignore
+          arg [--enable-new-dtags] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [-m] ==> ignore
+          arg [aarch64linux] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-musl-aarch64.so.1] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_d97f2] ==> ignore
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/]
+          arg [--build-id=sha1] ==> ignore
+          arg [--warn-shared-textrel] ==> ignore
+          arg [--fatal-warnings] ==> ignore
+          arg [-lunwind] ==> lib [unwind]
+          arg [--no-undefined] ==> ignore
+          arg [-znoexecstack] ==> ignore
+          arg [--gc-sections] ==> ignore
+          arg [CMakeFiles/cmTC_d97f2.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a] ==> lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+          arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+          arg [-lc] ==> lib [c]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a] ==> lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+          arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+        remove lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+        remove lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/aarch64-linux-ohos]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos]
+        implicit libs: [unwind;-l:libunwind.a;c;-l:libunwind.a]
+        implicit objs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+        implicit dirs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-P0EjII"
+      binary: "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-P0EjII"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS-NOTFOUND"
+      CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm"
+      CMAKE_CXX_COMPILER_TARGET: "aarch64-linux-ohos"
+      CMAKE_CXX_FLAGS: "-fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat   -D__MUSL__"
+      CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm"
+      CMAKE_C_COMPILER_TARGET: "aarch64-linux-ohos"
+      CMAKE_EXE_LINKER_FLAGS: "--rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections "
+      CMAKE_POSITION_INDEPENDENT_CODE: "TRUE"
+      CMAKE_SYSROOT: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot"
+      HMOS_SDK_NATIVE: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/hms/native"
+      OHOS_ARCH: "arm64-v8a"
+      OHOS_SDK_NATIVE: "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-P0EjII'
+        
+        Run Build Command(s): /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja -v cmTC_a599a
+        [1/2] /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot   -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat   -D__MUSL__  -fPIE   -v -MD -MT CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
+        OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)
+        Target: aarch64-unknown-linux-ohos
+        Thread model: posix
+        InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin
+        clang++: warning: argument unused during compilation: '--gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm' [-Wunused-command-line-argument]
+         (in-process)
+         "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++" -cc1 -triple aarch64-unknown-linux-ohos -emit-obj -mrelax-all --mrelax-relocations -mnoexecstack -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=1 -target-cpu generic -target-feature +neon -target-feature +v8a -target-feature +fix-cortex-a53-835769 -target-abi aapcs -fallow-half-arguments-and-returns -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-P0EjII -resource-dir /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4 -dependency-file CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -D __MUSL__ -isysroot /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1 -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include -Wformat -fdeprecated-macro -fdebug-compilation-dir=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-P0EjII -ferror-limit 19 -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 15.0.4 based upon LLVM 15.0.4 default target arm64-apple-darwin23.6.0
+        ignoring nonexistent directory "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos
+         /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include
+        End of search list.
+        [2/2] : && /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat   -D__MUSL__ --rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections  -v CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_a599a   && :
+        OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)
+        Target: aarch64-unknown-linux-ohos
+        Thread model: posix
+        InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin
+         "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld" --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -pie -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=4096 --hash-style=gnu --hash-style=both --enable-new-dtags --eh-frame-hdr -m aarch64linux -dynamic-linker /lib/ld-musl-aarch64.so.1 -o cmTC_a599a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/ --build-id=sha1 --warn-shared-textrel --fatal-warnings -lunwind --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lc++abi -lunwind -lm /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a -lc /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+          add: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        end of search list found
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/include/libcxx-ohos/include/c++/v1]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+        collapse include dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        implicit include dirs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/include/libcxx-ohos/include/c++/v1;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld\\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-P0EjII']
+        ignore line: []
+        ignore line: [Run Build Command(s): /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja -v cmTC_a599a]
+        ignore line: [[1/2] /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot   -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa --noexecstack -Wformat   -D__MUSL__  -fPIE   -v -MD -MT CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)]
+        ignore line: [Target: aarch64-unknown-linux-ohos]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin]
+        ignore line: [clang++: warning: argument unused during compilation: '--gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm' [-Wunused-command-line-argument]]
+        ignore line: [ (in-process)]
+        ignore line: [ "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++" -cc1 -triple aarch64-unknown-linux-ohos -emit-obj -mrelax-all --mrelax-relocations -mnoexecstack -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=1 -target-cpu generic -target-feature +neon -target-feature +v8a -target-feature +fix-cortex-a53-835769 -target-abi aapcs -fallow-half-arguments-and-returns -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-P0EjII -resource-dir /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4 -dependency-file CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -D __MUSL__ -isysroot /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1 -internal-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include -internal-externc-isystem /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include -Wformat -fdeprecated-macro -fdebug-compilation-dir=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a/CMakeFiles/CMakeScratch/TryCompile-P0EjII -ferror-limit 19 -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang -cc1 version 15.0.4 based upon LLVM 15.0.4 default target arm64-apple-darwin23.6.0]
+        ignore line: [ignoring nonexistent directory "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../include/libcxx-ohos/include/c++/v1]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/include]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include/aarch64-linux-ohos]
+        ignore line: [ /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/include]
+        ignore line: [End of search list.]
+        ignore line: [[2/2] : && /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat   -D__MUSL__ --rtlib=compiler-rt -fuse-ld=lld -Wl,--build-id=sha1 -Wl,--warn-shared-textrel -Wl,--fatal-warnings -lunwind -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack -Wl,--gc-sections  -v CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_a599a   && :]
+        ignore line: [OHOS (dev) clang version 15.0.4 (llvm-project 862f0fa5aca667c0eb786bc145e6d9b72a63b21f)]
+        ignore line: [Target: aarch64-unknown-linux-ohos]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin]
+        link line: [ "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld" --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot -pie -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=4096 --hash-style=gnu --hash-style=both --enable-new-dtags --eh-frame-hdr -m aarch64linux -dynamic-linker /lib/ld-musl-aarch64.so.1 -o cmTC_a599a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/ -L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/ --build-id=sha1 --warn-shared-textrel --fatal-warnings -lunwind --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lc++abi -lunwind -lm /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a -lc /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a -l:libunwind.a /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/ld.lld] ==> ignore
+          arg [--sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-EL] ==> ignore
+          arg [--fix-cortex-a53-843419] ==> ignore
+          arg [-znow] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [-zmax-page-size=4096] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--hash-style=both] ==> ignore
+          arg [--enable-new-dtags] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [-m] ==> ignore
+          arg [aarch64linux] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-musl-aarch64.so.1] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_a599a] ==> ignore
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/]
+          arg [-L/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/] ==> dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/]
+          arg [--build-id=sha1] ==> ignore
+          arg [--warn-shared-textrel] ==> ignore
+          arg [--fatal-warnings] ==> ignore
+          arg [-lunwind] ==> lib [unwind]
+          arg [--no-undefined] ==> ignore
+          arg [-znoexecstack] ==> ignore
+          arg [--gc-sections] ==> ignore
+          arg [CMakeFiles/cmTC_a599a.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lc++] ==> lib [c++]
+          arg [-lc++abi] ==> lib [c++abi]
+          arg [-lunwind] ==> lib [unwind]
+          arg [-lm] ==> lib [m]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a] ==> lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+          arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+          arg [-lc] ==> lib [c]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a] ==> lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+          arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o]
+          arg [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o] ==> obj [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+        remove lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+        remove lib [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/libclang_rt.builtins.a]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/bin/../lib/aarch64-linux-ohos/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/aarch64-linux-ohos]
+        collapse library dir [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/] ==> [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos]
+        implicit libs: [unwind;c++;c++abi;unwind;m;-l:libunwind.a;c;-l:libunwind.a]
+        implicit objs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/Scrt1.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crti.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtbegin.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos/clang_rt.crtend.o;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos/crtn.o]
+        implicit dirs: [/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/clang/15.0.4/lib/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/llvm/lib/aarch64-linux-ohos;/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/sysroot/usr/lib/aarch64-linux-ohos]
+        implicit fwks: []
+      
+      
+...

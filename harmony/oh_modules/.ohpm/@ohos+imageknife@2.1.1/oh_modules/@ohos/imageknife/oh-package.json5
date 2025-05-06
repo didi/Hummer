@@ -1,0 +1,31 @@
+{
+  "types": "",
+  "keywords": [
+    "OpenHarmony",
+    "ImageKnife",
+    "glide",
+    "HarmonyOS"
+  ],
+  "author": "ohos_tpc",
+  "description": "专门为OpenHarmony打造的一款图像加载缓存库，致力于更高效、更轻便、更简单",
+  "ohos": {
+    "org": "opensource"
+  },
+  "main": "index.ets",
+  "repository": "https://gitee.com/openharmony-tpc/ImageKnife",
+  "type": "module",
+  "version": "2.1.1",
+  "dependencies": {
+    "pako": "^2.1.0",
+    "@ohos/disklrucache": "^2.0.2-rc.0",
+    "@ohos/svg": "^2.1.1-rc.0",
+    "@ohos/gpu_transform": "^1.0.0"
+  },
+  "tags": [
+    "ImageCache",
+    "UI"
+  ],
+  "license": "Apache License 2.0",
+  "devDependencies": {},
+  "name": "@ohos/imageknife"
+}

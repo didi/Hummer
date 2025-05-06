@@ -1,0 +1,3 @@
+string page_show 0x02000000
+media icon_load 0x02000001
+media icon_up 0x02000002

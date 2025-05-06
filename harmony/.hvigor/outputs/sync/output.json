@@ -1,0 +1,269 @@
+{
+  "ohos-module-entry": {
+    "SELECT_TARGET": "default",
+    "MODULE_BUILD_DIR": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build",
+    "DEPENDENCY_INFO": {
+      "hummer": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer",
+      "@ohos/imageknife": "/Users/didi/opensource/orangeLab/Hummer/harmony/oh_modules/.ohpm/@ohos+imageknife@2.1.1/oh_modules/@ohos/imageknife",
+      "@ohos/disklrucache": "/Users/didi/opensource/orangeLab/Hummer/harmony/oh_modules/.ohpm/@ohos+disklrucache@2.0.2-rc.3/oh_modules/@ohos/disklrucache",
+      "@ohos/svg": "/Users/didi/opensource/orangeLab/Hummer/harmony/oh_modules/.ohpm/@ohos+svg@2.1.1-rc.5/oh_modules/@ohos/svg",
+      "@ohos/gpu_transform": "/Users/didi/opensource/orangeLab/Hummer/harmony/oh_modules/.ohpm/@ohos+gpu_transform@1.0.1/oh_modules/@ohos/gpu_transform"
+    },
+    "TARGETS": {
+      "default": {
+        "SOURCE_ROOT": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/src/main",
+        "RESOURCES_PATH": [
+          "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/src/main/resources"
+        ],
+        "BUILD_PATH": {
+          "OUTPUT_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/outputs/default",
+          "INTERMEDIA_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates",
+          "JS_ASSETS_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/loader_out/default",
+          "JS_LITE_ASSETS_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/loader_out_lite/default",
+          "RES_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/res/default",
+          "RES_PROFILE_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/res/default/resources/base/profile",
+          "ETS_SUPER_VISUAL_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/cache/default/default@CompileArkTS/esmodule",
+          "JS_SUPER_VISUAL_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/cache/default/default@CompileJS/jsbundle",
+          "WORKER_LOADER": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/loader/default/loader.json",
+          "MANIFEST_JSON": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/manifest/default",
+          "OUTPUT_METADATA_JSON": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/hap_metadata/default/output_metadata.json"
+        },
+        "BUILD_OPTION": {
+          "debuggable": true
+        }
+      },
+      "ohosTest": {
+        "SOURCE_ROOT": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/src/ohosTest",
+        "RESOURCES_PATH": [
+          "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/src/ohosTest/resources"
+        ],
+        "BUILD_PATH": {
+          "OUTPUT_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/outputs/ohosTest",
+          "INTERMEDIA_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates",
+          "JS_ASSETS_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/loader_out/ohosTest",
+          "JS_LITE_ASSETS_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/loader_out_lite/ohosTest",
+          "RES_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/res/ohosTest",
+          "RES_PROFILE_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/res/ohosTest/resources/base/profile",
+          "ETS_SUPER_VISUAL_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/cache/ohosTest/ohosTest@OhosTestCompileArkTS/esmodule",
+          "JS_SUPER_VISUAL_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/cache/ohosTest/ohosTest@OhosTestCompileJS/jsbundle",
+          "WORKER_LOADER": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/loader/ohosTest/loader.json",
+          "MANIFEST_JSON": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/manifest/ohosTest",
+          "OUTPUT_METADATA_JSON": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry/build/default/intermediates/hap_metadata/ohosTest/output_metadata.json"
+        },
+        "BUILD_OPTION": {
+          "debuggable": true
+        }
+      }
+    },
+    "BUILD_OPTION": {
+      "default-default": {
+        "debuggable": true,
+        "copyFrom": "default",
+        "arkOptions": {},
+        "name": "debug"
+      }
+    },
+    "BUILD_PROFILE_OPT": {
+      "apiType": "stageMode",
+      "buildOption": {
+        "arkOptions": {}
+      },
+      "buildOptionSet": [
+        {
+          "name": "release",
+          "arkOptions": {
+            "obfuscation": {
+              "ruleOptions": {
+                "enable": true,
+                "files": [
+                  "./obfuscation-rules.txt"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "default"
+        },
+        {
+          "name": "debug"
+        }
+      ],
+      "targets": [
+        {
+          "name": "default"
+        },
+        {
+          "name": "ohosTest"
+        }
+      ]
+    }
+  },
+  "ohos-module-hummer": {
+    "SELECT_TARGET": "default",
+    "MODULE_BUILD_DIR": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build",
+    "DEPENDENCY_INFO": {
+      "@ohos/imageknife": "/Users/didi/opensource/orangeLab/Hummer/harmony/oh_modules/.ohpm/@ohos+imageknife@2.1.1/oh_modules/@ohos/imageknife",
+      "@ohos/disklrucache": "/Users/didi/opensource/orangeLab/Hummer/harmony/oh_modules/.ohpm/@ohos+disklrucache@2.0.2-rc.3/oh_modules/@ohos/disklrucache",
+      "@ohos/svg": "/Users/didi/opensource/orangeLab/Hummer/harmony/oh_modules/.ohpm/@ohos+svg@2.1.1-rc.5/oh_modules/@ohos/svg",
+      "@ohos/gpu_transform": "/Users/didi/opensource/orangeLab/Hummer/harmony/oh_modules/.ohpm/@ohos+gpu_transform@1.0.1/oh_modules/@ohos/gpu_transform"
+    },
+    "TARGETS": {
+      "default": {
+        "SOURCE_ROOT": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/src/main",
+        "RESOURCES_PATH": [
+          "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/src/main/resources"
+        ],
+        "BUILD_PATH": {
+          "OUTPUT_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/outputs/default",
+          "INTERMEDIA_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates",
+          "JS_ASSETS_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates/loader_out/default",
+          "JS_LITE_ASSETS_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates/loader_out_lite/default",
+          "RES_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates/res/default",
+          "RES_PROFILE_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates/res/default/resources/base/profile",
+          "ETS_SUPER_VISUAL_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/cache/default/default@HarCompileArkTS/esmodule",
+          "JS_SUPER_VISUAL_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/cache/default/default@HarCompileJS/jsbundle",
+          "WORKER_LOADER": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates/loader/default/loader.json",
+          "MANIFEST_JSON": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates/manifest/default",
+          "OUTPUT_METADATA_JSON": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates/hap_metadata/default/output_metadata.json"
+        },
+        "BUILD_OPTION": {
+          "debuggable": true
+        }
+      }
+    },
+    "BUILD_OPTION": {
+      "default-default": {
+        "debuggable": true,
+        "copyFrom": "default",
+        "externalNativeOptions": {
+          "path": "./src/main/cpp/CMakeLists.txt",
+          "arguments": "",
+          "cppFlags": ""
+        },
+        "name": "debug"
+      }
+    },
+    "BUILD_PROFILE_OPT": {
+      "apiType": "stageMode",
+      "buildOption": {
+        "externalNativeOptions": {
+          "path": "./src/main/cpp/CMakeLists.txt",
+          "arguments": "",
+          "cppFlags": ""
+        }
+      },
+      "buildOptionSet": [
+        {
+          "name": "release",
+          "arkOptions": {
+            "obfuscation": {
+              "ruleOptions": {
+                "enable": true,
+                "files": [
+                  "./obfuscation-rules.txt"
+                ]
+              },
+              "consumerFiles": [
+                "./consumer-rules.txt"
+              ]
+            }
+          },
+          "nativeLib": {
+            "debugSymbol": {
+              "strip": true,
+              "exclude": []
+            }
+          }
+        },
+        {
+          "name": "default"
+        },
+        {
+          "name": "debug"
+        }
+      ],
+      "targets": [
+        {
+          "name": "default"
+        }
+      ]
+    }
+  },
+  "ohos-project": {
+    "SELECT_PRODUCT_NAME": "default",
+    "MODULE_BUILD_DIR": "/Users/didi/opensource/orangeLab/Hummer/harmony/build",
+    "BUNDLE_NAME": "com.example.hummer",
+    "BUILD_PATH": {
+      "OUTPUT_PATH": "/Users/didi/opensource/orangeLab/Hummer/harmony/build/outputs/default"
+    },
+    "MODULES": [
+      {
+        "name": "entry",
+        "srcPath": "/Users/didi/opensource/orangeLab/Hummer/harmony/entry",
+        "targets": [
+          {
+            "name": "default",
+            "applyToProducts": [
+              "default"
+            ]
+          }
+        ],
+        "belongProjectPath": "/Users/didi/opensource/orangeLab/Hummer/harmony"
+      },
+      {
+        "name": "hummer",
+        "srcPath": "/Users/didi/opensource/orangeLab/Hummer/harmony/hummer",
+        "belongProjectPath": "/Users/didi/opensource/orangeLab/Hummer/harmony"
+      }
+    ],
+    "PROFILE_OPT": {
+      "app": {
+        "products": [
+          {
+            "name": "default",
+            "signingConfig": "default",
+            "compatibleSdkVersion": "4.1.0(11)",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "buildModeSet": [
+          {
+            "name": "debug"
+          },
+          {
+            "name": "release"
+          }
+        ],
+        "signingConfigs": []
+      },
+      "modules": [
+        {
+          "name": "entry",
+          "srcPath": "./entry",
+          "targets": [
+            {
+              "name": "default",
+              "applyToProducts": [
+                "default"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "hummer",
+          "srcPath": "./hummer"
+        }
+      ]
+    },
+    "CONFIG_PROPERTIES": {
+      "enableSignTask": true,
+      "skipNativeIncremental": false,
+      "hvigor.keepDependency": true
+    },
+    "OVERALL_PROJECT_PATHS": [
+      "/Users/didi/opensource/orangeLab/Hummer/harmony"
+    ]
+  },
+  "version": 1
+}

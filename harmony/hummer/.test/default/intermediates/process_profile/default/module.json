@@ -1,0 +1,27 @@
+{
+	"app": {
+		"bundleName": "com.example.hummer",
+		"debug": true,
+		"versionCode": 1000000,
+		"versionName": "1.0.0",
+		"minAPIVersion": 40100011,
+		"targetAPIVersion": 40100011,
+		"apiReleaseType": "Release",
+		"compileSdkVersion": "4.1.0.72",
+		"compileSdkType": "HarmonyOS",
+		"bundleType": "app"
+	},
+	"module": {
+		"name": "hummer",
+		"type": "har",
+		"deviceTypes": [
+			"default",
+			"tablet",
+			"2in1"
+		],
+		"installationFree": false,
+		"virtualMachine": "ark11.0.2.0",
+		"compileMode": "esmodule",
+		"dependencies": []
+	}
+}

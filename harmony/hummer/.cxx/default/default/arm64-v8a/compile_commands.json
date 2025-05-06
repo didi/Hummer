@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/didi/DevEcoStudioProjects/Hummer/hummer/.cxx/default/default/arm64-v8a",
+  "command": "/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB1/openharmony/native/llvm/bin/clang++ --target=aarch64-linux-ohos --gcc-toolchain=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB1/openharmony/native/llvm --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB1/openharmony/native/sysroot  -Dohhummer_EXPORTS -I/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB1/hms/native/sysroot/usr/include -I/Users/didi/DevEcoStudioProjects/Hummer/hummer/src/main/cpp -I/Users/didi/DevEcoStudioProjects/Hummer/hummer/src/main/cpp/include  -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security   -D__MUSL__ -O0 -g -fno-limit-debug-info  -fPIC   -o CMakeFiles/ohhummer.dir/hello.cpp.o -c /Users/didi/DevEcoStudioProjects/Hummer/hummer/src/main/cpp/hello.cpp",
+  "file": "/Users/didi/DevEcoStudioProjects/Hummer/hummer/src/main/cpp/hello.cpp"
+}
+]

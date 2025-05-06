@@ -1,0 +1,16 @@
+
+{
+  // ...
+  "buildOption": {
+    // ...
+    "arkOptions": {
+      // ...
+      "runtimeOnly": {
+        // ...
+        //TODO:请修改项目中build-profile.json5的这个位置,确保sources文件路径引用正确
+        "sources": ["./src/main/ets/Page/tenon/indexEntry.ets","./src/main/ets/Page/tenon/secondEntry.ets"]
+      }
+    }
+  },
+}
+      

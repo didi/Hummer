@@ -1,0 +1,17 @@
+/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/cmake
+-H/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/src/main/cpp
+-B/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/arm64-v8a
+-DOHOS_ARCH=arm64-v8a
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a
+-DCMAKE_BUILD_TYPE=Debug
+-DOHOS_SDK_NATIVE=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native
+-DCMAKE_SYSTEM_NAME=OHOS
+-DCMAKE_OHOS_ARCH_ABI=arm64-v8a
+-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+-DCMAKE_TOOLCHAIN_FILE=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/hms/native/build/cmake/hmos.toolchain.cmake
+-GNinja
+-DCMAKE_MAKE_PROGRAM=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/openharmony/native/build-tools/cmake/bin/ninja
+-DCMAKE_FIND_ROOT_PATH=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/hvigor/arm64-v8a
+-DPACKAGE_FIND_FILE=/Users/didi/opensource/orangeLab/Hummer/harmony/hummer/.cxx/default/default/debug/hvigor/arm64-v8a/summary.cmake
+--no-warn-unused-cli
+-DHMOS_SDK_NATIVE=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB5/hms/native

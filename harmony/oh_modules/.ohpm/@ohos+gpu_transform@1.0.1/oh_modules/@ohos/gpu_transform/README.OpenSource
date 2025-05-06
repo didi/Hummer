@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "android-gpuimage",
+        "License": " Apache License, Version 2.0",
+        "License File": "https://github.com/cats-oss/android-gpuimage",
+        "Version Number": "4.13.1",
+        "Owner" : "cats-oss",
+        "Upstream URL": "https://github.com/cats-oss/android-gpuimage",
+        "Description": "Android filters based on OpenGL (idea from GPUImage for iOS)"
+    }
+]

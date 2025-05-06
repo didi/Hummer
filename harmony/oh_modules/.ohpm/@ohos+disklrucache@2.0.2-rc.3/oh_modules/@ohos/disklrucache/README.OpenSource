@@ -1,0 +1,21 @@
+[
+    {
+        "Name": "DiskLruCache",
+        "License": "Apache License 2.0",
+        "License File": "LICENSE",
+        "Version Number": "2.0.2",
+        "Owner" : "xiafeng@huawei.com",
+        "Upstream URL": "https://github.com/JakeWharton/DiskLruCache",
+        "Description": "Java implementation of a Disk-based LRU cache which specifically targets Android compatibility"
+    },
+    {
+        "Name": "js-spark-md5",
+        "License": "MIT",
+        "License File": "LICENSE",
+        "Version Number": "v3.0.2",
+        "Owner" : "xiafeng@huawei.com",
+        "Upstream URL": "https://github.com/satazor/js-spark-md5",
+        "Description": "Lightning fast normal and incremental md5 for javascript"
+    }
+
+]

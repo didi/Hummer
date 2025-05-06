@@ -1,0 +1,16 @@
+# ninja log v5
+6	516	1720773150563992534	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+25	619	1720427233917901147	CMakeFiles/ohhummer.dir/hello.cpp.o	3d93f9e5c57e0d87
+0	431	1711089749943792226	CMakeFiles/ohhummer.dir/hello.cpp.obj	7215ab023b01e939
+26	152	1720773243567314407	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+5	607	1720773468593018072	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+21	848	1720773738497472327	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+5	552	1720774045973039427	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+20	148	1720774075277629877	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+2	162	1720774091626906858	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+3	128	1720774146280708916	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+26	668	1723455180279982892	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+6	468	1723455419433810542	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+2	162	1723455491577211780	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+2	153	1723455525680356890	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0
+5	728	1723455942409692701	/Users/didi/DevEcoStudioProjects/Hummer/hummer/build/default/intermediates/cmake/default/obj/arm64-v8a/libohhummer.so	5421aadcbcd130c0

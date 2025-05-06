@@ -1,0 +1,11 @@
+{
+  "name": "@ohos/hypium",
+  "version": "1.0.13",
+  "description": "A unit test framework for OpenHarmony application",
+  "main": "index.js",
+  "keywords": [],
+  "author": "huawei",
+  "license": "Apache-2.0",
+  "dependencies": {
+  }
+}

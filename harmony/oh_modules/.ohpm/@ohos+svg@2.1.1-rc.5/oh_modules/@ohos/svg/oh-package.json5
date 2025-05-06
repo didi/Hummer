@@ -1,0 +1,21 @@
+{
+  "types": "",
+  "keywords": [
+    "UI"
+  ],
+  "author": "hihope",
+  "description": "ohos-svg是一个SVG图片的解析器和渲染器，可以解析SVG图片并渲染到页面上，还可以动态改变SVG的样式。",
+  "ohos": {
+    "org": "opensource"
+  },
+  "main": "index.ets",
+  "repository": "https://gitee.com/openharmony-sig/ohos-svg",
+  "version": "2.1.1-rc.5",
+  "tags": [
+    "UI"
+  ],
+  "dependencies": {},
+  "license": "Apache License 2.0",
+  "devDependencies": {},
+  "name": "@ohos/svg"
+}

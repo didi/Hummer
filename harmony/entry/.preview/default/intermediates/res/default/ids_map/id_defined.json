@@ -1,0 +1,85 @@
+{
+    "record" : 
+    [
+        {
+            "id" : "0x01000000",
+            "name" : "app_name",
+            "type" : "string"
+        },
+        {
+            "id" : "0x01000001",
+            "name" : "app_icon",
+            "type" : "media"
+        },
+        {
+            "id" : "0x01000002",
+            "name" : "icon",
+            "type" : "media"
+        },
+        {
+            "id" : "0x01000003",
+            "name" : "EntryAbility_desc",
+            "type" : "string"
+        },
+        {
+            "id" : "0x01000004",
+            "name" : "EntryAbility_label",
+            "type" : "string"
+        },
+        {
+            "id" : "0x01000005",
+            "name" : "module_desc",
+            "type" : "string"
+        },
+        {
+            "id" : "0x01000006",
+            "name" : "start_window_background",
+            "type" : "color"
+        },
+        {
+            "id" : "0x01000007",
+            "name" : "main_pages",
+            "type" : "profile"
+        },
+        {
+            "id" : "0x01000008",
+            "name" : "startIcon",
+            "type" : "media"
+        },
+        {
+            "id" : "0x01000009",
+            "name" : "reason",
+            "type" : "string"
+        },
+        {
+            "id" : "0x0100000A",
+            "name" : "icon_up",
+            "type" : "media"
+        },
+        {
+            "id" : "0x0100000B",
+            "name" : "icon_load",
+            "type" : "media"
+        },
+        {
+            "id" : "0x0100000C",
+            "name" : "ss",
+            "type" : "media"
+        },
+        {
+            "id" : "0x0100000D",
+            "name" : "loading",
+            "type" : "media"
+        },
+        {
+            "id" : "0x0100000E",
+            "name" : "njimage_demo",
+            "type" : "media"
+        },
+        {
+            "id" : "0x02000000",
+            "name" : "page_show",
+            "type" : "string"
+        }
+    ]
+}

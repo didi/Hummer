@@ -1,0 +1,71 @@
+[
+    {
+        "Name": "glide",
+        "License": "under one or more license",
+        "License File": "https://github.com/bumptech/glide/blob/master/LICENSE",
+        "Version Number": "4.13.1",
+        "Owner" : "bumptech",
+        "Upstream URL": "https://github.com/bumptech/glide",
+        "Description": "An image loading and caching library  focused on smooth scrolling"
+    },
+
+  {
+        "Name": "glide-transformations",
+        "License": "Apache License 2.0",
+        "License File": "https://github.com/wasabeef/glide-transformations/blob/main/LICENSE",
+        "Version Number": "4.3.0",
+        "Owner" : "wasabeef",
+        "Upstream URL": "https://github.com/wasabeef/glide-transformations",
+        "Description": "  An  transformation library providing a variety of image transformations for Glide. "
+    },
+
+  {
+        "Name": "fresco",
+        "License": "MIT License",
+        "License File": "https://github.com/facebook/fresco/blob/main/LICENSE",
+        "Version Number": "2.6.0",
+        "Owner" : "facebook",
+        "Upstream URL": "https://github.com/facebook/fresco",
+        "Description": " An  library for managing images and the memory they use. "
+    },
+
+  {
+        "Name": "UPNG.js",
+        "License": "MIT License",
+        "License File": "https://github.com/photopea/UPNG.js/blob/master/LICENSE",
+        "Version Number": "1.0.0",
+        "Owner" : "photopea",
+        "Upstream URL": "https://github.com/photopea/UPNG.js",
+        "Description": "  Fast and advanced PNG (APNG) decoder and encoder (lossy / lossless)  "
+    },
+
+  {
+        "Name": "Luban",
+        "License": "Apache License 2.0",
+        "License File": "https://github.com/Curzibn/Luban/blob/master/LICENSE",
+        "Version Number": "1.1.8",
+        "Owner" : " Curzibn",
+        "Upstream URL": "https://github.com/Curzibn/Luban",
+        "Description": " Luban(鲁班)—Image compression with efficiency very close to WeChat Moments/可能是最接近微信朋友圈的图片压缩算法  "
+    },
+
+  {
+        "Name": "uCrop",
+        "License": "Apache License 2.0",
+        "License File": "https://github.com/Yalantis/uCrop/blob/develop/README.md",
+        "Version Number": "2.2.8",
+        "Owner" : " Yalantis",
+        "Upstream URL": "https://github.com/Yalantis/uCrop",
+        "Description": " Image Cropping Library "
+    },
+    {
+        "Name": "js-spark-md5",
+        "License": "MIT",
+        "License File": "https://github.com/satazor/js-spark-md5/blob/master/LICENSE",
+        "Version Number": "v3.0.2",
+        "Owner" : "satazor",
+        "Upstream URL": "https://github.com/satazor/js-spark-md5",
+        "Description": "Lightning fast normal and incremental md5 for javascript"
+    }
+
+]
