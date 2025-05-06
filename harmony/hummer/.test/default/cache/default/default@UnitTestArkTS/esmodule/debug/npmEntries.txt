@@ -1,9 +1,0 @@
-pkg_modules/.ohpm/@ohos+hypium@1.0.13/pkg_modules/@ohos/hypium:pkg_modules/.ohpm/@ohos+hypium@1.0.13/pkg_modules/@ohos/hypium/index
-pkg_modules/@ohos/hypium:pkg_modules/.ohpm/@ohos+hypium@1.0.13/pkg_modules/@ohos/hypium
-@system.app:@native.system.app
-@ohos.app:@native.ohos.app
-@system.router:@native.system.router
-@system.curves:@native.system.curves
-@ohos.curves:@native.ohos.curves
-@system.matrix4:@native.system.matrix4
-@ohos.matrix4:@native.ohos.matrix4

@@ -1,1 +1,0 @@
-string page_show 0x02000000

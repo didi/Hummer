@@ -1,9 +1,0 @@
-pkg_modules@entry/hummer:com.example.hummer/entry@hummer/Index
-hummer:@bundle.com.example.hummer/entry@hummer/Index
-@system.app:@native.system.app
-@ohos.app:@native.ohos.app
-@system.router:@native.system.router
-@system.curves:@native.system.curves
-@ohos.curves:@native.ohos.curves
-@system.matrix4:@native.system.matrix4
-@ohos.matrix4:@native.ohos.matrix4
