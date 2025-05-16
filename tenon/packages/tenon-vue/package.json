@@ -1,6 +1,6 @@
 {
   "name": "@hummer/tenon-vue",
-  "version": "1.8.6",
+  "version": "1.8.6-patch.1",
   "description": "Tenon运行时",
   "homepage": "",
   "license": "ISC",

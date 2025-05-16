@@ -166,6 +166,7 @@ export class Base {
     let tempStyle = this.hackForStyle(style, this)
     flag && (this._baseStyle = tempStyle);
     let newStyle = {
+      ...this._style,
       ...this._defaultStyle,
       ...tempStyle,
       ...this._baseStyle

@@ -24,6 +24,7 @@ export function render(rootElement: React.ReactElement | null, options:any) {
     ...options,
     ...GlobalLifeCycles
   })
+  // @ts-ignore
   let container = TenonRenderInst.createContainer(page, 0, false, null)
   TenonRenderInst.updateContainer(rootElement, container, null, () => {
     // ignore
