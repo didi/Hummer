@@ -1,6 +1,7 @@
 import { Base } from '../nodes/Base'
 import {
-  ComponentInternalInstance
+  ComponentInternalInstance,
+  callWithAsyncErrorHandling
 } from '@vue/runtime-core'
 
 const LongPress = 'longpress'
@@ -34,19 +35,27 @@ export function patchEvents(
   }
 }
 
+function patchInvokerHandler(initialValue: any, instance: ComponentInternalInstance | null, args: any) {
+  // TODO: Array.isArray兼容性测试
+  if (Array.isArray(initialValue)) {
+    return initialValue.map(func => () => func && func.apply(instance, args))
+  } else {
+    return () => initialValue.apply(instance, args)
+  }
+}
+
 function createInvoker(
   initialValue: EventValue,
   instance: ComponentInternalInstance | null
 ){
-  // TODO: Array.isArray兼容性测试
   const invoker:Invoker = (...args) => {
-    if(Array.isArray(initialValue)){
-      initialValue.forEach((func:Function) => {
-        func.apply(instance, [...args])
-      })
-    }else {
-      initialValue.apply(instance, [...args])
-    }
+    // 搜集 Error
+    callWithAsyncErrorHandling(
+      patchInvokerHandler(initialValue, instance, [...args]),
+      instance,
+      5,
+      [...args]
+    );
   }
   invoker.value = initialValue
   initialValue.invoker = invoker
