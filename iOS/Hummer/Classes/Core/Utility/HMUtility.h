@@ -7,6 +7,8 @@
 
 #import <UIKit/UIKit.h>
 #import "HMLogger.h"
+#import "HMAssertUtils.h"
+#import "HMAssertDefine.h"
 
 @class HMSourceParser, HMContainerModel;
 
@@ -15,21 +17,6 @@
 
 NSError * _Nullable HMError(NSInteger code, NSString *_Nullable fmt, ...);
 
-void _HMAssert(NSString * _Nonnull func,
-               NSString * _Nonnull file,
-               int lineNum,
-               NSString * _Nonnull format, ...);
-
-#if DEBUG
-#define HMAssert(condition, ...) \
-do{ \
-if(!(condition)){ \
-_HMAssert(@(__func__), @(__FILE__), __LINE__, __VA_ARGS__); \
-} \
-}while(0)
-#else
-#define HMAssert(condition, ...)
-#endif
 
 NSString * _Nullable _HMMD5String(NSString * _Nonnull input);
 

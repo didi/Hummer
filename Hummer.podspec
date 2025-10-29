@@ -31,9 +31,7 @@ Hummer is a dynamic solution for client.
     tar zxf napi_ios.tar.gz
     rm -f napi_ios.tar.gz
   CMD
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-  
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '10.0'
   
   s.default_subspec        = "Core"
 
@@ -58,7 +56,6 @@ Hummer is a dynamic solution for client.
     ss.library = 'c++'
     ss.framework = 'CoreFoundation'
     ss.source_files = 'iOS/Hermes/*.{h,m,mm}'
-    ss.dependency 'SocketRocket', '~> 0.1'
     ss.private_header_files = 'iOS/Hermes/RCTMessageThread.h'
     ss.preserve_path = 'iOS/jsinspector/InspectorInterfaces.h'
   end
@@ -70,55 +67,70 @@ Hummer is a dynamic solution for client.
     ss.framework = "JavaScriptCore"
   end
 
-  # s.subspec "QuickJS" do |ss|
-  #   ss.dependency 'Hummer/Core'
-  #   ss.dependency 'Hummer/N-API'
-  #   ss.vendored_library = 'libquickjs.a'
-  # end
-
   s.subspec "Core" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/**/*.{h,m,cpp}'
-    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}', 'iOS/Hummer/Classes/Component/Views/Lottie/**/*.{h,m,Swift}'
+    ss.exclude_files = 'iOS/Hummer/Classes/Engine/N-API/*.{h,m,mm}', 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}', 'iOS/Hummer/Classes/Dev/DevTools/**/*.{h,m}', 'iOS/Hummer/Classes/Export/Components/Views/Canvas/**/*.{h,m}', 'iOS/Hummer/Classes/Export/Components/Views/Lottie/**/*.{h,m,Swift}', 'iOS/Hummer/Classes/Core/*.{h,m}', 'iOS/Hummer/Classes/Components/**/*.{h,m}', 'iOS/Hummer/Classes/Base/**/*.{h,m}'
+    
     ss.resource_bundles = {
       'Hummer' => ['iOS/Hummer/Assets/Assets.xcassets']
     }
     ss.framework = 'JavaScriptCore'
+    ss.dependency 'Yoga'
+    ss.dependency 'Hummer/NativeComponents'
+    ss.dependency 'Hummer/Utils'
     ss.dependency 'SocketRocket', '~> 0.1'
   end
-
-  s.subspec "RN" do |ss|
-    ss.dependency "yoga"
+  
+  s.subspec "NativeComponents" do |ss|
+    ss.source_files = 'iOS/Hummer/Classes/Components/**/*.{h,m}'
+    ss.dependency 'Hummer/Utils'
+  end
+  
+  s.subspec "Utils" do |ss|
+    ss.source_files = 'iOS/Hummer/Classes/Utils/**/*.{h,m}'
+  end
+  
+  s.subspec "Canvas" do |ss|
+    ss.source_files = 'iOS/Hummer/Classes/Export/Components/Views/Canvas/**/*.{h,m}'
     ss.dependency 'Hummer/Core'
   end
-
-  s.subspec "OSSYoga" do |ss|
-    ss.dependency "Yoga", "~> 1.14"
-    ss.dependency 'Hummer/Core'
-  end
+#
+#  s.subspec "DCPTrack" do |ss|
+#    ss.source_files = 'DCPTrack/*.{h,m}'
+#    ss.dependency 'DCPTrack', '~> 0.1'
+#    ss.dependency 'Hummer/Core'
+#  end
 
   s.subspec "WebP" do |ss|
     ss.source_files = 'iOS/Hummer/Classes/Core/Manager/ImageLoader/Decoder/ConcreteCoder/Webp/HMWebpImageCoder.{h,m}'
     ss.dependency 'libwebp', '~> 1.2.0'
+    ss.dependency 'Hummer/Core'
   end
-  
+
   s.subspec "Lottie" do |ss|
-    ss.source_files = 'iOS/Hummer/Classes/Component/Views/Lottie/**/*.{h,m}'
-    ss.exclude_files = 'iOS/Hummer/Classes/Component/Views/Lottie/Swift/*.{h,m,Swift}'
-    ss.dependency 'lottie-ios', '>=2.5.3'#指定2.5.3
+    ss.source_files = 'iOS/Hummer/Classes/Export/Components/Views/Lottie/**/*.{h,m}'
+    ss.exclude_files = 'iOS/Hummer/Classes/Export/Components/Views/Lottie/Swift/*.{h,m,Swift}'
+    #指定2.5.3，使用 oc 版本 lottie
+    ss.dependency 'lottie-ios'
     ss.dependency 'Hummer/Core'
     ss.dependency 'SSZipArchive'
   end
 
   s.subspec "LottieSwift" do |ss|
-    ss.source_files = 'iOS/Hummer/Classes/Component/Views/Lottie/Swift/*.{h,m,Swift}'
+    ss.source_files = 'iOS/Hummer/Classes/Export/Components/Views/Lottie/Swift/*.{h,m,Swift}'
+    #使用 swift 版本 lottie
     ss.dependency 'lottie-ios', '>=4.0.0'
     ss.dependency 'Hummer/Lottie'
   end
   
+
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
-
+  
+  # ss.xcconfig = {
+  #"GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) HMDEVTOOLS=1'
+  #}
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'WARNING_CFLAGS' => [

@@ -12,18 +12,6 @@
 #import "HMSourceParser.h"
 #import "HMContainerModel.h"
 
-void _HMAssert(NSString *func, NSString *file, int lineNum, NSString *format, ...) {
-    va_list args;
-    va_start(args, format);
-    NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
-    va_end(args);
-    
-    [[NSAssertionHandler currentHandler] handleFailureInFunction:func
-                                                            file:file
-                                                      lineNumber:lineNum
-                                                     description:@"%@", message];
-}
-
 NSString *_HMMD5String(NSString *input) {
     if (!input || ![input isKindOfClass:[NSString class]] || [input length] <= 0) return nil;
     

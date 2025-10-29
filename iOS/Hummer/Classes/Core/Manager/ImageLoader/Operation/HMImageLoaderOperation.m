@@ -53,14 +53,17 @@
         if (self.cacheOperation) {
         
             [self.cacheOperation cancel];
+            self.cacheOperation = nil;
         }
     
         if (self.loaderOperation) {
             [self.loaderOperation cancel];
+            self.loaderOperation = nil;
         }
         
         if(self.coderOperation){
             [self.coderOperation cancel];
+            self.coderOperation = nil;
         }
     }
 }

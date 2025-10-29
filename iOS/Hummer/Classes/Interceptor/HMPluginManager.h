@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-
+#import <Hummer/HMTimeUtils.h>
 @class HMExceptionModel;
 
 //#define _CONCAT(a, b) a##b
@@ -11,16 +11,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 FOUNDATION_EXTERN const char *const HUMMER_CLOCK_GET_TIME_ERROR;
-
-static inline void HMClockGetTime(struct timespec *timespec) {
-    if (@available(iOS 10.0, *)) {
-        int status = clock_gettime(CLOCK_UPTIME_RAW, timespec);
-        assert(!status && HUMMER_CLOCK_GET_TIME_ERROR);
-    } else {
-        timespec->tv_sec = 0;
-        timespec->tv_nsec = 0;
-    }
-}
 
 // 注意：正常情况下，以 sizeof(void *) 为长度存储，但是如果开启 ASan，会导致长度以 32/64/128 的长度划分红区，可以通过 attribute no_sanitize 关闭插桩
 
@@ -115,14 +105,5 @@ typedef enum : NSUInteger {
 //- (void)enumeratePluginWithPluginType:(HMPluginType)pluginType nameSpace:(nullable NSString *)nameSpace usingBlock:(void (^)(id <HMPluginProtocol> obj))block;
 //
 //@end
-
-static inline void HMDiffTime(const struct timespec *beforeTimespec, const struct timespec *afterTimespec, struct timespec *resultTimeSpec) {
-    resultTimeSpec->tv_sec = afterTimespec->tv_sec - beforeTimespec->tv_sec;
-    resultTimeSpec->tv_nsec = afterTimespec->tv_nsec - beforeTimespec->tv_nsec;
-    if (resultTimeSpec->tv_nsec < 0) {
-        --resultTimeSpec->tv_sec;
-        resultTimeSpec->tv_nsec += 1000000000;
-    }
-}
 
 NS_ASSUME_NONNULL_END

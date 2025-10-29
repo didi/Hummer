@@ -60,7 +60,7 @@
                         completion:(HMImageCompletionBlock)completionBlock{
    
     HMJSContext *hummerJSContext = [HMJSGlobal.globalObject currentContext:self.hmValue.context];
-    id<HMURLConvertible> bundle = bundleSource ? : hummerJSContext.url;
+    bundleSource = bundleSource ? : hummerJSContext.url;
     NSString *namespace = hummerJSContext.nameSpace;
     if (namespace) {
         if (![context objectForKey:HMImageManagerContextNamespace]) {
@@ -76,6 +76,7 @@
 
     self.hm_webImageOperationPlaceholder = nil;
     self.hm_webImageOperationError = nil;
+    self.hm_webImageOperation = nil;
     __weak typeof(self) wSelf = self;
     if (placeholderSource) {
        self.hm_webImageOperationPlaceholder = [[HMImageManager sharedManager] load:placeholderSource inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
@@ -89,7 +90,8 @@
         }];
     }
 
-    self.hm_webImageOperation = [[HMImageManager sharedManager] load:source inJSBundleSource:bundle context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
+    self.hm_webImageOperation = [[HMImageManager sharedManager] load:source inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
+        if (!wSelf) return;
         if (error && failedImageSource) {
             wSelf.hm_webImageOperationError =  [[HMImageManager sharedManager] load:failedImageSource inJSBundleSource:bundleSource context:context completion:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, HMImageCacheType cacheType) {
                 if (!wSelf) return;

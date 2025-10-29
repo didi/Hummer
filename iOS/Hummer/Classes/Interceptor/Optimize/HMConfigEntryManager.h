@@ -21,6 +21,7 @@
 #import <Hummer/HMNetworkProtocol.h>
 #import <Hummer/HMFontProtocol.h>
 #import "HMApplicationRouterProtocol.h"
+#import "HMNotificationCenter.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -36,6 +37,8 @@ extern NSString * const HMDefaultNamespaceUnderline;
 @interface HMConfigEntry : NSObject
 
 @property (nonatomic, copy)NSString *namespace;
+
+@property (nonatomic, nullable, strong) HMNotificationCenter *notifyCenter;
 
 //替换默认 storage 实现
 @property (nonatomic, strong) id<HMStorage> storage;
@@ -148,37 +151,6 @@ extern NSString * const HMDefaultNamespaceUnderline;
 @interface HMEventTrackInterceptor : NSObject
 
 + (void)asyncHandleTrackEvent:(NSDictionary *)event namespace:(NSString *)namespace;
-@end
-
-
-
-@interface HMStorageAdaptor : NSObject
-
-/**
- * 业务线实例隔离。架构如下：
- *       HMConfigEntryManager : namespace <---> id<HMStorage>
- *         HMStorageAdaptor   : namespace <--> id<HMStorage>(HMStorageImp)
- *
- * js->call(Storage.removeAll):
- * HMConfigEntryManager.storageForNamespace(namespace) != nil ----> storage.removeAll
- * HMStorageAdaptor.storageForNamespace(namespace)            ----> storage.removeAll
- *
- * 由适配器根据业务线分配 storage 分配实例。规则如下：
- * 1. namespace 为空，则不区分业务线(使用hummer默认文件目录)，removeall 会删除默认文件目录下所有文件。
- * 2. namespace 存在，则区分业务线，removeall 只删除默认对应业务线 文件。
- * 3. namespace 存在且注册了适配器，则由对应 业务线的拦截器自己负责处理。
- */
-+ (id<HMStorage>)storageWithNamespace:(NSString *)namespace;
-
-@end
-
-@interface HMMemoryAdaptor : NSObject
-
-/**
- * 类似 HMStorageAdaptor 的设计。
- */
-+ (id<HMMemoryComponent>)memoryWithNamespace:(NSString *)namespace;
-
 @end
 
 

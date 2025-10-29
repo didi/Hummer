@@ -9,6 +9,7 @@
 #import "HMConfig.h"
 #import "HMReporter.h"
 #import <Hummer/HMPluginManager.h>
+#import <Hummer/HMTimeUtils.h>
 
 @implementation Hummer
 

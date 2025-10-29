@@ -26,6 +26,7 @@
 #import <Hummer/HMInterceptor.h>
 #import <Hummer/HMLogger.h>
 #import <Hummer/HMUpgradeManager.h>
+#import <Hummer/HMTimeUtils.h>
 
 NSString * const HMDefaultNamespace = @"namespace.hummer.default";
 NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
@@ -456,59 +457,8 @@ NSString * const HMDefaultNamespaceUnderline = @"namespace_hummer_default";
 
 @end
 
-
-
 #pragma mark <adaptor>
 
-@implementation HMStorageAdaptor
-static NSMutableDictionary<NSString *, id<HMStorage>> *__HMStorageAdaptor_map;
-
-+ (void)initialize {
-    
-    __HMStorageAdaptor_map = [NSMutableDictionary new];
-}
-
-+ (id<HMStorage>)storageWithNamespace:(NSString *)namespace {
-    
-    // 如果实现了 业务线自定义拦截器。则直接返回
-    id<HMStorage> _storage = [HMCEMInstance.configMap objectForKey:namespace].storage;
-    if (_storage) {
-        return _storage;
-    }
-    
-    // 按业务线 分配实例。
-    NSString *_namespace = [NSString hm_isValidString:namespace] ? namespace : HMDefaultNamespaceUnderline;
-    _storage = [__HMStorageAdaptor_map objectForKey:_namespace];
-    if (!_storage) {
-        _storage = [[HMStorageImp alloc] initWithPath:_namespace];
-    }
-    [__HMStorageAdaptor_map setObject:_storage forKey:_namespace];
-    return _storage;
-}
-
-@end
-
-
-
-@implementation HMMemoryAdaptor
-static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor_map;
-
-+ (void)initialize {
-    
-    __HMMemoryAdaptor_map = [NSMutableDictionary new];
-}
-
-+ (id<HMMemoryComponent>)memoryWithNamespace:(NSString *)namespace {
-    // 按业务线 分配实例。
-    NSString *_namespace = [NSString hm_isValidString:namespace] ? namespace : HMDefaultNamespaceUnderline;
-    id<HMMemoryComponent> _memory = [__HMMemoryAdaptor_map objectForKey:_namespace];
-    if (!_memory) {
-        _memory = [[HMMemoryComponent alloc] initWithNamespace:_namespace];
-    }
-    [__HMMemoryAdaptor_map setObject:_memory forKey:_namespace];
-    return _memory;
-}
-@end
 
 @implementation HMRequestAdaptor
 
@@ -565,6 +515,10 @@ static NSMutableDictionary<NSString *, id<HMMemoryComponent>> *__HMMemoryAdaptor
             return YES;
         }
     }
-    return [[UIApplication sharedApplication] openURL:url];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        return YES;
+    }
+    return NO;
 }
 @end

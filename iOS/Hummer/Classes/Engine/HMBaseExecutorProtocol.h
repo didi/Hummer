@@ -6,6 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "HMLogLevel.h"
+#import "HMThreadUtils.h"
 
 @class HMBaseValue;
 
@@ -17,14 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, HMEngineType) {
     HMEngineTypeJSC,
     HMEngineTypeNAPI
-};
-
-typedef NS_ENUM(NSUInteger, HMLogLevel) {
-  HMLogLevelTrace = 0,
-  HMLogLevelInfo,
-  HMLogLevelWarning,
-  HMLogLevelError,
-  HMLogLevelFatal
 };
 
 typedef void (^HMExceptionHandler)(HMExceptionModel *exceptionModel);
@@ -168,10 +162,6 @@ FOUNDATION_EXPORT NSArray<HMBaseValue *> *_Nullable HMOtherArguments;
 FOUNDATION_EXPORT id <HMBaseExecutorProtocol> _Nullable HMCurrentExecutor;
 
 FOUNDATION_EXPORT NSMapTable<NSValue *, id <HMBaseExecutorProtocol>> *_Nullable HMExecutorMap;
-
-FOUNDATION_EXPORT void HMAssertMainQueue(void);
-
-FOUNDATION_EXPORT void HMSafeMainThread(dispatch_block_t _Nullable block);
 
 FOUNDATION_EXPORT NSString *const HUMMER_RETAIN_TEMPLATE;
 

@@ -28,6 +28,7 @@
 #import "HMWebSocket.h"
 #import "UIView+HMRenderObject.h"
 #import "UIView+HMDom.h"
+#import <Hummer/HMTimeUtils.h>
 
 #import <Hummer/HMDebug.h>
 #import <Hummer/HMConfigEntryManager.h>
