@@ -70,10 +70,10 @@ export const getPartUrlByParam = (url: string, param: string) => {
  * @param type 
  * @returns simplenode
  */
-export const formatNode = function (node: any, type: string = 'tenon-vue') {
+export const formatNode = function (node: any, type: string = 'tenon-vue', refresh = false) {
   let formatedNode = Object.create({})
   const treeTraveler = function (node: any, rootView: any) {
-    processView(node, rootView, type)
+    processView(node, rootView, type, refresh)
     if (node.children) {
       // hummer children类型Array tenon-vue类型Set 处理一下
       let arr = Array.from(node.children)
@@ -179,7 +179,7 @@ export const getViewData = function (container: any, type: string = 'tenon-vue')
 //     return res
 //   })
 // }
-const processView = function (node: any, rootView: any, type: string = 'tenon-vue') {
+const processView = function (node: any, rootView: any, type: string = 'tenon-vue', refresh = false) {
   let nameKey = '__NAME',
     idKey = '__view_id',
     textKey = '_text',
@@ -198,6 +198,16 @@ const processView = function (node: any, rootView: any, type: string = 'tenon-vu
       srcKey = 'content'
       rootView.style = node.element.style
       break;
+    case 'tenon-vue':
+      // 刷新之后的节点要格式化一下
+      if(refresh){
+          nameKey = 'tagName';
+          idKey = 'id';
+          textKey = 'content';
+          srcKey = 'content';
+          rootView.style = node.element.style;
+      }
+      break
     default:
       break;
   }

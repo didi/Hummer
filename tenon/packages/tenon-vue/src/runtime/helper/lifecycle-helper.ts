@@ -1,3 +1,4 @@
+import { ComponentInternalInstance, callWithAsyncErrorHandling } from "@vue/runtime-core"
 interface LifeCycleMixins {
   onLoad: Array<any>,
   onReady: Array<any>,
@@ -78,14 +79,15 @@ export const initPageLifeCycle = (container: any, instance: any, config: any) =>
 
     container[lifecycle] = () => {
       globalLifeCycleMixins[lifecycle].forEach((func: Function) => {
-        applyLifeCycle(instance, func)
-      })
-      extendOptions && applyLifeCycle(instance, extendOptions[lifecycle])
+          lifecycleAsyncErrorTracker(instance, func);
+      });
+      extendOptions && lifecycleAsyncErrorTracker(instance, extendOptions[lifecycle]);
+      
       lifeCycleMixins[lifecycle].forEach((func: Function) => {
-        applyLifeCycle(instance, func)
-      })
-      applyLifeCycle(instance, config[lifecycle])
-    }
+          lifecycleAsyncErrorTracker(instance, func);
+      });
+      lifecycleAsyncErrorTracker(instance, config[lifecycle]);
+  };
   })
 }
 
@@ -115,4 +117,9 @@ function applyPageMixin(mixins: any): (LifeCycleMixins | null) {
 
 function applyLifeCycle(instance: any, func: Function) {
   return func && func.apply(instance);
+}
+function lifecycleAsyncErrorTracker(instance: any, func: Function){
+  // instance 是编译主入口的 proxy 格式数据，而 instance._ 是 createComponentInstance 实例
+  const errorInternalInstance: ComponentInternalInstance = instance._
+  func && callWithAsyncErrorHandling(() => applyLifeCycle(instance, func), errorInternalInstance, 10)
 }

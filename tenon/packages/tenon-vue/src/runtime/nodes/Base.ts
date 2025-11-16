@@ -202,7 +202,9 @@ export class Base {
   private setCacheProp(key:string, value:any){
     // 如果是 datattr 格式的属性，缓存到 dataset 中，方便事件可以获取到 dataset （Chameleon事件需求）
     if(/^data/.test(key)){
-      let dataKey = key.slice(4).toLowerCase()
+      // 父组件 data 开头就截取4个，子组件 data- 开头就截取5个
+      let cutNum = key.includes('-') ? 5 : 4
+      let dataKey = key.slice(cutNum).toLowerCase()
       if(dataKey){
         this.dataset[dataKey] = value
       }
