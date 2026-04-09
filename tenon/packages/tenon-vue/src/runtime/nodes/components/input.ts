@@ -134,6 +134,8 @@ export  class Input extends Base{
     if(this._hasInput){
       return;
     }
+    // TODO(memory): 当前使用匿名函数绑定原生 input 事件，removeEventListener 未保存/解绑该引用；
+    // TODO(memory): 组件反复挂载或事件重复绑定时可能累积监听器，建议改为可追踪的 invoker 映射并在销毁时统一解绑。
     this.element.addEventListener('input', (event:any) => {
       let {state, text} = event
       switch(state){

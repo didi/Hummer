@@ -52,6 +52,7 @@ function createConfig(format, output, plugins = []) {
   }
   const tsPlugin = ts({
     check: true,
+    include: ['**/*.ts', '**/*.tsx'],
     tsconfig: path.resolve(packageDir, 'tsconfig.json'),
     cacheRoot: path.resolve(packageDir, 'node_modules/.rts2_cache'),
     useTsconfigDeclarationDir: true,

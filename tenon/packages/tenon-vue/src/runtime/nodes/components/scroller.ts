@@ -144,6 +144,8 @@ export class Scroller extends Base{
    * @param func 
    */
   addEventListener(event: string, func:Function){
+    // TODO(memory): 这里多处使用匿名函数包装并直接绑定到原生组件，当前类未提供对应 removeEventListener 覆盖；
+    // TODO(memory): 若发生重复绑定或节点复用，监听器可能累积，建议统一保存包装函数引用并在移除/销毁时解绑。
     switch(event){
       case "scroll":
         // event单位 px

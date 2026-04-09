@@ -20,6 +20,7 @@ export class Base {
   protected _defaultStyle: Record<string, string> | null = {};
   protected _style: Record<string, string> | null = {};
   private _baseStyle: Record<string, string> | null = {};
+  private _eventHandlerMap = new Map<string, Map<Function, Function>>();
 
   constructor() {
     this.__view_id = __view_id++
@@ -73,7 +74,19 @@ export class Base {
 
   // Destoryed 生命周期
   private _onDestoryed() {
+    const descendants = Array.from(this.children)
+    descendants.forEach((child) => {
+      child._onDestoryed()
+      child.prevSibling = null
+      child.nextSibling = null
+      child.parent = undefined
+    })
+    this.children.clear()
+    this.firstChild = null
+    this.lastChild = null
+
     removeChildWithFixed(this);
+    this.clearAllEventListeners();
     this.onDestoryed();
   }
 
@@ -100,12 +113,17 @@ export class Base {
   }
 
   private unlinkSiblings() {
-    if (this.parent && this.parent.firstChild === this) {
-      this.parent.firstChild = this.nextSibling;
+    const oldParent = this.parent
+    if (oldParent && oldParent.firstChild === this) {
+      oldParent.firstChild = this.nextSibling;
     }
 
-    if (this.parent && this.parent.lastChild === this) {
-      this.parent.lastChild = this.prevSibling;
+    if (oldParent && oldParent.lastChild === this) {
+      oldParent.lastChild = this.prevSibling;
+    }
+
+    if (oldParent) {
+      oldParent.children.delete(this)
     }
 
     if (this.prevSibling) {
@@ -118,6 +136,7 @@ export class Base {
 
     this.prevSibling = null;
     this.nextSibling = null;
+    this.parent = undefined;
   }
 
   _removeChild(child: Base) {
@@ -166,7 +185,6 @@ export class Base {
     let tempStyle = this.hackForStyle(style, this)
     flag && (this._baseStyle = tempStyle);
     let newStyle = {
-      ...this._style,
       ...this._defaultStyle,
       ...tempStyle,
       ...this._baseStyle
@@ -239,16 +257,76 @@ export class Base {
     handleAnimation(this, animation)
   }
   addEventListener(event: string, func: Function) {
-    this.element.addEventListener(event, (e: any) => {
+    if (!this.element || !func) {
+      return
+    }
+    let eventMap = this._eventHandlerMap.get(event)
+    if (!eventMap) {
+      eventMap = new Map<Function, Function>()
+      this._eventHandlerMap.set(event, eventMap)
+    }
+
+    const prevWrapped = eventMap.get(func)
+    if (prevWrapped) {
+      this.element.removeEventListener(event, prevWrapped)
+    }
+
+    const wrapped = (e: any) => {
       // iOS 中 event 无法被重新赋值，不要进行 event 的深拷贝
       e.target = {
         dataset: this.dataset
       }
       func.call(this, e)
-    })
+    }
+
+    eventMap.set(func, wrapped)
+    this.element.addEventListener(event, wrapped)
   }
   removeEventListener(event: string, func?: Function) {
+    if (!this.element) {
+      return
+    }
+    const eventMap = this._eventHandlerMap.get(event)
+    if (!func) {
+      if (eventMap) {
+        eventMap.forEach((wrapped) => {
+          this.element.removeEventListener(event, wrapped)
+        })
+        eventMap.clear()
+      }
+      return
+    }
+
+    if (!eventMap) {
+      this.element.removeEventListener(event, func)
+      return
+    }
+
+    const wrapped = eventMap.get(func)
+    if (wrapped) {
+      this.element.removeEventListener(event, wrapped)
+      eventMap.delete(func)
+      if (!eventMap.size) {
+        this._eventHandlerMap.delete(event)
+      }
+      return
+    }
+
     this.element.removeEventListener(event, func)
+  }
+
+  private clearAllEventListeners() {
+    if (!this.element) {
+      return
+    }
+
+    this._eventHandlerMap.forEach((eventMap, event) => {
+      eventMap.forEach((wrapped) => {
+        this.element.removeEventListener(event, wrapped)
+      })
+      eventMap.clear()
+    })
+    this._eventHandlerMap.clear()
   }
 
   getRect(func: Function) {

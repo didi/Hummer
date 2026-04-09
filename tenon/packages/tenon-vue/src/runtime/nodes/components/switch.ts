@@ -53,6 +53,8 @@ export class Switch extends Base{
 
   addEventListener(event: string, func:Function){
     if(event === 'switch'){
+      // TODO(memory): 这里创建了 invoker 包装函数，removeEventListener 可能传入原始 func，引用不一致会导致解绑失败。
+      // TODO(memory): 建议保存 event->original->wrapped 的映射，确保 remove/销毁阶段按同一引用解绑。
       let invoker = (e:any) => {
         let {state} = e
         let value = (state === 1 || state === true)?true:false //  Android state true/false; iOS state 1/0；
