@@ -13,8 +13,8 @@ const insert = function(child:Base, parent:Base, anchor:Base) {
 }
 
 const remove = function(child:Base){
-  const parent = child.parent as Base;
-  if(parent !== null){
+  const parent = child.parent as Base | undefined;
+  if(parent){
     parent._removeChild(child);
   }
 }
