@@ -21,6 +21,7 @@ export class Base {
   protected _style: Record<string, string> | null = {};
   private _baseStyle: Record<string, string> | null = {};
   private _eventHandlerMap = new Map<string, Map<Function, Function>>();
+  private _destroyed = false;
 
   constructor() {
     this.__view_id = __view_id++
@@ -74,6 +75,11 @@ export class Base {
 
   // Destoryed 生命周期
   private _onDestoryed() {
+    if (this._destroyed) {
+      return
+    }
+    this._destroyed = true
+
     // Run fixed cleanup first while parent chain is still intact.
     removeChildWithFixed(this);
 

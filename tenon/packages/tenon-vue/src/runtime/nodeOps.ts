@@ -19,11 +19,8 @@ const remove = function(child:Base){
     return
   }
 
-  // Fallback cleanup: node may already be detached from parent chain.
-  const target = child as any
-  if (typeof target._onDestoryed === 'function') {
-    target._onDestoryed()
-  }
+  // Fallback path: child is already detached from Base tree.
+  // Avoid calling _onDestoryed here to prevent re-entrant unmount.
   child.prevSibling = null
   child.nextSibling = null
   child.parent = undefined
