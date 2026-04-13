@@ -74,6 +74,9 @@ export class Base {
 
   // Destoryed 生命周期
   private _onDestoryed() {
+    // Run fixed cleanup first while parent chain is still intact.
+    removeChildWithFixed(this);
+
     const descendants = Array.from(this.children)
     descendants.forEach((child) => {
       child._onDestoryed()
@@ -85,7 +88,6 @@ export class Base {
     this.firstChild = null
     this.lastChild = null
 
-    removeChildWithFixed(this);
     this.clearAllEventListeners();
     this.onDestoryed();
   }

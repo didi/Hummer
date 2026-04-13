@@ -16,7 +16,17 @@ const remove = function(child:Base){
   const parent = child.parent as Base | undefined;
   if(parent){
     parent._removeChild(child);
+    return
   }
+
+  // Fallback cleanup: node may already be detached from parent chain.
+  const target = child as any
+  if (typeof target._onDestoryed === 'function') {
+    target._onDestoryed()
+  }
+  child.prevSibling = null
+  child.nextSibling = null
+  child.parent = undefined
 }
 
 const createElement = function(tag:string){
