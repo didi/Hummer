@@ -96,6 +96,7 @@ export class Base {
 
     this.clearAllEventListeners();
     this.onDestoryed();
+    this.element = null; 
   }
 
   protected onDestoryed() { }
@@ -148,14 +149,14 @@ export class Base {
   }
 
   _removeChild(child: Base) {
-    child._onDestoryed();
-    child.unlinkSiblings();
-    child.parent = undefined;
-    this.children.delete(child);
     // 删除元素
     if (this.element && child.element) {
       this.element.removeChild(child.element)
     }
+    child._onDestoryed();
+    child.unlinkSiblings();
+    child.parent = undefined;
+    this.children.delete(child);
   }
 
   _insertBefore(child: Base, anchor: Base) {
