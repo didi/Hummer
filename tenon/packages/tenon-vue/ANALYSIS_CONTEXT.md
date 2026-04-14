@@ -4,10 +4,10 @@
 
 - 基线提交: `51aba5b4b4cdbd4141eddc7db94288079cf58a30`
 - 当前分支: `fix/tenon-vue-1.8.6-bugfix`
-- 当前 HEAD: `470e770d549d4c8bd77dc54a98d7cc65a5492065`
-- 相对基线前进提交数: `7`
+- 当前 HEAD: `51a165532e66376e082ad3df4167b682e1c3a566`
+- 相对基线前进提交数: `8`
 
-## 2. 这 7 个提交的演进
+## 2. 这 8 个提交的演进
 
 按时间顺序:
 
@@ -32,6 +32,9 @@
 7. `470e770d549d4c8bd77dc54a98d7cc65a5492065`
    - `chore: @hummer/tenon-vue 1.8.6-patch.4`
    - 版本号变更。
+8. `51a165532e66376e082ad3df4167b682e1c3a566`
+   - `feat: 显示释放native节点 变更native节点移除顺序`
+   - 主要涉及: `Base` 销毁链路与 `_removeChild` 执行顺序。
 
 ## 2.1 提交级细粒度结论（改动点/原因/验证）
 
@@ -118,6 +121,18 @@
 - 变更动机（推断）: 汇总并发布本轮修复。
 - 验证状态: 已确认。
 
+### `51a165532e66376e082ad3df4167b682e1c3a566`
+
+- 触达文件: `tenon/packages/tenon-vue/src/runtime/nodes/Base.ts`
+- 代码层关键变更（可确认）:
+   - `_onDestoryed()` 末尾新增 `this.element = null`，在销毁完成后主动释放 native element 引用。
+   - `_removeChild(child)` 调整为“先执行原生 `removeChild`，再执行 `child._onDestoryed()` 与链路解绑”。
+- 变更动机（推断）:
+   - 强化 native 资源释放可见性，并避免“先销毁后 remove”导致 `child.element` 可能被清空的时序问题。
+- 验证状态:
+   - 已确认（静态）: 顺序与引用释放策略清晰且互相配套。
+   - 待确认（动态）: 子类异步逻辑若在 `onDestoryed()` 后访问 `this.element`，需要确认是否存在空值依赖。
+
 ## 2.2 当前验证清单（建议直接执行）
 
 1. 重复挂载/卸载页面 100 次，观测监听器数量是否回落。
@@ -165,7 +180,9 @@
    - 待确认（必须运行验证）
 3. 如果后续提交推翻前序假设，要明确写“被哪个提交修正”。
 
-## 2.4 工作区增量变更说明（未提交）
+## 2.4 工作区增量变更说明（已提交）
+
+提交: `51a165532e66376e082ad3df4167b682e1c3a566`
 
 文件: `tenon/packages/tenon-vue/src/runtime/nodes/Base.ts`
 
@@ -193,12 +210,13 @@
 
 ## 3. 基线以来改动范围（汇总）
 
-- 改动文件数: `9`
-- 代码变更统计: `133 insertions`, `10 deletions`
+- 改动文件数: `10`
+- 代码变更统计: `394 insertions`, `14 deletions`
 
 文件清单:
 
 - `tenon/packages/tenon-vue/package.json`
+- `tenon/packages/tenon-vue/ANALYSIS_CONTEXT.md`
 - `tenon/packages/tenon-vue/src/runtime/nodeOps.ts`
 - `tenon/packages/tenon-vue/src/runtime/nodes/Base.ts`
 - `tenon/packages/tenon-vue/src/runtime/nodes/components/input.ts`
@@ -235,6 +253,8 @@
 - 基线: <commit>
 - 对比范围: <base>..HEAD
 - 提交增量: <N>
+- 本批次提交状态: <未提交|已提交>
+- 关联提交: <commit1, commit2...>
 
 ### 本批次目标
 -
@@ -245,8 +265,16 @@
 ### 仍待验证
 -
 
+### 验证证据
+- 静态证据: <关键 diff/代码路径>
+- 动态证据: <压测/复现结果/平台>
+
 ### 关键改动与原因
 - <file>: <why>
+
+### 结论分级
+- 结论: <已确认|高置信推断|待验证>
+- 可能回归点: <what>
 
 ### 回归风险
 -
